@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Aura — Holographic Theme</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: radial-gradient(ellipse at 20% 20%, #0d0d1a 0%, #050508 60%);
+  display: flex; justify-content: center; align-items: center;
+  min-height: 100vh; font-family: 'Inter', sans-serif; padding: 40px;
+  overflow: hidden;
+}
+
+.bg-particles { position: fixed; inset: 0; pointer-events: none; }
+.particle {
+  position: absolute; background: white; border-radius: 50%;
+  animation: float linear infinite;
+}
+@keyframes float {
+  from { transform: translateY(100vh); opacity: 0; }
+  10% { opacity: 0.4; }
+  90% { opacity: 0.15; }
+  to { transform: translateY(-10vh) translateX(50px); opacity: 0; }
+}
+
+/* ===== PANEL SHELL ===== */
+.panel {
+  position: relative; width: 400px;
+  background: rgba(12, 12, 24, 0.88);
+  backdrop-filter: blur(40px) saturate(180%);
+  border-radius: 18px;
+  border: 1px solid rgba(255,255,255,0.06);
+  overflow: hidden;
+  box-shadow: 0 0 80px rgba(120,80,255,0.1), 0 20px 60px rgba(0,0,0,0.7),
+    inset 0 1px 0 rgba(255,255,255,0.08);
+}
+
+/* Animated rainbow top bar */
+.holo-bar {
+  height: 2px; width: 100%;
+  background: linear-gradient(90deg, #ff0080, #ff8c00, #40e0d0, #7b2ff7, #ff0080);
+  background-size: 300%;
+  animation: holo-shift 4s linear infinite;
+}
+@keyframes holo-shift { 0% { background-position: 0%; } 100% { background-position: 300%; } }
+
+/* ===== HEADER ===== */
+.header {
+  display: flex; align-items: center; padding: 14px 18px; gap: 10px;
+  background: rgba(255,255,255,0.016);
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+.logo-outer {
+  width: 28px; height: 28px; border-radius: 8px; padding: 1.5px;
+  background: linear-gradient(135deg, #ff0080, #7b2ff7, #40e0d0);
+  box-shadow: 0 0 14px rgba(123,47,247,0.4); flex-shrink: 0;
+}
+.logo-inner {
+  width: 100%; height: 100%; border-radius: 7px;
+  background: #0d0d18; display: flex; align-items: center; justify-content: center;
+  font-size: 12px; color: #a78bfa;
+}
+.brand-txt { font-size: 15px; font-weight: 700; color: #fff; letter-spacing: -0.4px; }
+.brand-for { font-size: 12px; color: rgba(255,255,255,0.28); font-weight: 400; margin-left: 4px; }
+.holo-badge {
+  margin-left: auto; font-size: 10px; font-weight: 700; letter-spacing: 1px;
+  color: #c4b5fd; position: relative;
+}
+.holo-badge::before {
+  content: ''; position: absolute; inset: -1px; border-radius: 20px;
+  background: linear-gradient(135deg, #ff0080, #7b2ff7, #40e0d0);
+  z-index: -1; animation: holo-shift 4s linear infinite; background-size: 300%;
+}
+.holo-badge-inner { background: #0d0d18; padding: 4px 10px; border-radius: 18px; }
+
+/* ===== NAV TABS ===== */
+.nav { display: flex; padding: 10px 18px 0; gap: 2px; }
+.nav-tab {
+  flex: 1; text-align: center; padding: 8px 2px; font-size: 12px; font-weight: 500;
+  color: rgba(255,255,255,0.28); cursor: pointer; border-radius: 7px; transition: all 0.25s;
+  user-select: none;
+}
+.nav-tab:hover { color: rgba(255,255,255,0.6); background: rgba(255,255,255,0.04); }
+.nav-tab.active { color: #fff; background: rgba(255,255,255,0.07); }
+.sep { height: 1px; background: rgba(255,255,255,0.04); margin: 12px 0 0; }
+
+/* ===== TAB PANES ===== */
+.tab-pane { display: none; padding: 18px; flex-direction: column; gap: 12px; animation: fadeUp 0.25s ease; }
+.tab-pane.active { display: flex; }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ===== REUSABLE COMPONENTS ===== */
+
+/* Status banner */
+.status-row {
+  display: flex; align-items: center; gap: 10px; padding: 10px 14px;
+  border-radius: 10px; background: rgba(64,224,208,0.05); border: 1px solid rgba(64,224,208,0.18);
+}
+.live-dot {
+  width: 7px; height: 7px; border-radius: 50%; background: #40e0d0; flex-shrink: 0;
+  animation: live 2s infinite; box-shadow: 0 0 8px #40e0d0;
+}
+.offline-dot { width: 7px; height: 7px; border-radius: 50%; background: #f43f5e; flex-shrink: 0; box-shadow: 0 0 8px #f43f5e; }
+@keyframes live { 0%,100% { opacity: 1; } 50% { opacity: 0.35; } }
+.status-lbl { font-size: 12.5px; font-weight: 500; }
+.lbl-teal { color: #a7f3f0; } .lbl-red { color: #fda4af; }
+.status-port { margin-left: auto; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: rgba(255,255,255,0.2); }
+
+/* Section header */
+.sec-hdr { display: flex; flex-direction: column; gap: 4px; margin-bottom: -4px; }
+.sec-title { font-size: 14px; font-weight: 600; color: #fff; letter-spacing: -0.2px; }
+.sec-desc { font-size: 12px; color: rgba(255,255,255,0.28); line-height: 1.5; }
+
+/* Cards */
+.card {
+  background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);
+  border-radius: 12px; padding: 16px; transition: 0.25s; position: relative; overflow: hidden;
+}
+.card:hover { border-color: rgba(255,255,255,0.1); background: rgba(255,255,255,0.035); }
+
+/* Num grid */
+.nums-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.num-card { border-radius: 12px; padding: 16px; position: relative; overflow: hidden; transition: 0.3s;
+  background: rgba(255,255,255,0.025); border: 1px solid rgba(255,255,255,0.05); }
+.num-card:hover { background: rgba(255,255,255,0.045); border-color: rgba(255,255,255,0.1); }
+.num-card::before {
+  content: ''; position: absolute; top: -20px; right: -20px;
+  width: 70px; height: 70px; border-radius: 50%; opacity: 0.1; filter: blur(18px);
+}
+.nc-blue::before { background: #60a5fa; }
+.nc-rose::before { background: #f43f5e; }
+.nc-purple::before { background: #a78bfa; }
+.nc-teal::before { background: #2dd4bf; }
+.num-lbl { font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; color: rgba(255,255,255,0.25); font-weight: 600; margin-bottom: 10px; }
+.num-val { font-family: 'JetBrains Mono', monospace; font-size: 40px; font-weight: 600; line-height: 1; }
+.nc-blue .num-val { color: #93c5fd; } .nc-rose .num-val { color: #fda4af; }
+.nc-purple .num-val { color: #c4b5fd; } .nc-teal .num-val { color: #5eead4; }
+.num-sub { font-size: 11px; color: rgba(255,255,255,0.2); margin-top: 8px; }
+.num-sub code { font-family: 'JetBrains Mono', monospace; font-size: 10px; background: rgba(255,255,255,0.05); padding: 2px 5px; border-radius: 4px; }
+
+/* Project card */
+.project-card {
+  background: rgba(255,255,255,0.016); border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 12px; padding: 14px 16px; position: relative; overflow: hidden;
+}
+.project-card::after {
+  content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(123,47,247,0.5), transparent);
+}
+.proj-name { font-size: 17px; font-weight: 700; color: #fff; margin-bottom: 6px; letter-spacing: -0.3px; }
+.proj-pills { display: flex; gap: 6px; flex-wrap: wrap; }
+.pill {
+  font-family: 'JetBrains Mono', monospace; font-size: 10px;
+  padding: 3px 8px; border-radius: 20px;
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06);
+  color: rgba(255,255,255,0.38);
+}
+
+/* Ctrl rows */
+.ctrl-rows { display: flex; flex-direction: column; gap: 8px; }
+.ctrl-row {
+  display: flex; align-items: center; gap: 12px; padding: 12px 14px;
+  background: rgba(255,255,255,0.016); border: 1px solid rgba(255,255,255,0.05);
+  border-radius: 10px; transition: 0.2s;
+}
+.ctrl-row:hover { border-color: rgba(255,255,255,0.1); background: rgba(255,255,255,0.028); }
+.cr-name { font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.82); }
+.cr-desc { font-size: 11px; color: rgba(255,255,255,0.22); margin-top: 2px; }
+
+/* Toggle */
+.holo-toggle {
+  width: 40px; height: 22px; border-radius: 22px; flex-shrink: 0;
+  position: relative; cursor: pointer; transition: 0.3s;
+  background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.06);
+}
+.holo-toggle::after {
+  content: ''; position: absolute; top: 2px; left: 2px; width: 16px; height: 16px;
+  border-radius: 50%; background: rgba(255,255,255,0.3); transition: 0.3s cubic-bezier(0.5,-0.5,0.5,1.5);
+}
+.holo-toggle.on {
+  background: linear-gradient(90deg, #7b2ff7, #40e0d0); border: none;
+  box-shadow: 0 0 14px rgba(123,47,247,0.35);
+  background-size: 300%; animation: holo-shift 4s linear infinite;
+}
+.holo-toggle.on::after { transform: translateX(18px); background: #fff; box-shadow: 0 2px 6px rgba(0,0,0,0.3); }
+
+/* Buttons */
+.btn-pair { display: flex; gap: 10px; }
+.btn {
+  flex: 1; padding: 11px; border-radius: 10px; font-size: 13px; font-weight: 600;
+  cursor: pointer; border: none; font-family: 'Inter', sans-serif; transition: 0.25s;
+}
+.btn-plain { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); color: rgba(255,255,255,0.6); }
+.btn-plain:hover { background: rgba(255,255,255,0.09); color: #fff; }
+.btn-danger { background: rgba(244,63,94,0.1); border: 1px solid rgba(244,63,94,0.25); color: #fda4af; }
+.btn-danger:hover { background: rgba(244,63,94,0.2); }
+
+.btn-holo {
+  position: relative; overflow: hidden; padding: 1px; border-radius: 10px; cursor: pointer;
+  background: linear-gradient(135deg, #ff0080, #7b2ff7, #40e0d0, #ff0080);
+  background-size: 300%; animation: holo-shift 4s linear infinite;
+  box-shadow: 0 4px 20px rgba(123,47,247,0.3); flex: 1;
+}
+.btn-holo-inner {
+  background: #0f0f20; border-radius: 9px; padding: 10px;
+  font-size: 13px; font-weight: 600; color: #fff; text-align: center;
+  font-family: 'Inter', sans-serif; transition: 0.2s;
+}
+.btn-holo:hover .btn-holo-inner { background: rgba(15,15,32,0.75); }
+.btn-holo:hover { box-shadow: 0 6px 28px rgba(123,47,247,0.5); }
+
+/* IDE Cards (tab Interconnect) */
+.ide-grid { display: flex; flex-direction: column; gap: 8px; }
+.ide-row {
+  display: flex; align-items: center; padding: 12px 14px; gap: 12px;
+  background: rgba(255,255,255,0.016); border: 1px solid rgba(255,255,255,0.05);
+  border-radius: 10px; transition: 0.2s;
+}
+.ide-row:hover { border-color: rgba(255,255,255,0.1); background: rgba(255,255,255,0.028); }
+.ide-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+.ide-dot.detected { background: #40e0d0; box-shadow: 0 0 6px #40e0d0; }
+.ide-dot.undetected { background: rgba(255,255,255,0.15); }
+.ide-name { font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.82); flex: 1; }
+.ide-status { font-size: 11px; }
+.ide-status.ok { color: #5eead4; }
+.ide-status.na { color: rgba(255,255,255,0.2); }
+.inject-btn {
+  padding: 6px 12px; border-radius: 7px; font-size: 11px; font-weight: 600; cursor: pointer;
+  font-family: 'Inter', sans-serif; transition: 0.2s; border: none;
+  background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); color: rgba(255,255,255,0.6);
+}
+.inject-btn:hover { background: rgba(255,255,255,0.09); color: #fff; }
+.inject-btn.active-inject {
+  background: rgba(64,224,208,0.1); border-color: rgba(64,224,208,0.3); color: #5eead4;
+}
+
+/* Input / Select */
+.form-row {
+  display: flex; align-items: center; gap: 12px; padding: 12px 14px;
+  background: rgba(255,255,255,0.016); border: 1px solid rgba(255,255,255,0.05);
+  border-radius: 10px;
+}
+.form-info { flex: 1; }
+.form-label { font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.82); }
+.form-hint { font-size: 11px; color: rgba(255,255,255,0.22); margin-top: 2px; }
+.form-input, .form-select {
+  background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 7px; color: #fff; font-family: 'JetBrains Mono', monospace;
+  font-size: 12px; padding: 5px 8px; text-align: right; outline: none; transition: 0.2s;
+  width: 80px;
+}
+.form-input:focus, .form-select:focus { border-color: rgba(123,47,247,0.6); box-shadow: 0 0 0 2px rgba(123,47,247,0.15); }
+.form-select { width: 90px; text-align: left; }
+
+/* License card */
+.license-card {
+  background: rgba(255,255,255,0.016); border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 12px;
+}
+.license-edition {
+  display: flex; align-items: center; gap: 10px;
+}
+.edition-name { font-size: 14px; font-weight: 600; color: #fff; }
+.edition-badge {
+  font-size: 10px; font-weight: 700; letter-spacing: 1px;
+  padding: 3px 8px; border-radius: 4px;
+  background: rgba(255,165,0,0.12); border: 1px solid rgba(255,165,0,0.3); color: #fbbf24;
+}
+.key-row { display: flex; gap: 8px; }
+.key-input {
+  flex: 1; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 8px; color: rgba(255,255,255,0.4); font-family: 'JetBrains Mono', monospace;
+  font-size: 11px; padding: 8px 10px; outline: none; transition: 0.2s;
+}
+.key-input::placeholder { color: rgba(255,255,255,0.2); }
+.key-input:focus { border-color: rgba(123,47,247,0.6); color: rgba(255,255,255,0.8); }
+.activate-btn {
+  padding: 8px 14px; border-radius: 8px; font-size: 12px; font-weight: 600;
+  cursor: pointer; font-family: 'Inter', sans-serif; border: none;
+  background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.6);
+  transition: 0.2s;
+}
+.activate-btn:hover { background: rgba(255,255,255,0.1); color: #fff; }
+.license-hint { font-size: 11px; color: rgba(255,255,255,0.22); line-height: 1.5; }
+
+/* Guide */
+.guide-steps { display: flex; flex-direction: column; gap: 10px; }
+.guide-step {
+  display: flex; gap: 14px; padding: 14px;
+  background: rgba(255,255,255,0.016); border: 1px solid rgba(255,255,255,0.05);
+  border-radius: 12px;
+}
+.step-num {
+  width: 26px; height: 26px; border-radius: 50%; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 700; color: #a78bfa;
+  background: rgba(123,47,247,0.12); border: 1px solid rgba(123,47,247,0.25);
+}
+.step-body { display: flex; flex-direction: column; gap: 4px; }
+.step-title { font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.9); }
+.step-desc { font-size: 12px; color: rgba(255,255,255,0.35); line-height: 1.5; }
+
+.prompt-cards { display: flex; flex-direction: column; gap: 8px; }
+.prompt-card {
+  display: flex; align-items: flex-start; gap: 10px; padding: 12px 14px;
+  background: rgba(255,255,255,0.016); border: 1px solid rgba(255,255,255,0.05);
+  border-radius: 10px; cursor: pointer; text-align: left; font-family: 'Inter', sans-serif;
+  transition: 0.2s;
+}
+.prompt-card:hover { border-color: rgba(255,255,255,0.1); background: rgba(255,255,255,0.03); }
+.prompt-tag { font-size: 10px; font-weight: 600; letter-spacing: 0.5px; padding: 3px 7px; border-radius: 4px; flex-shrink: 0;
+  background: rgba(123,47,247,0.12); border: 1px solid rgba(123,47,247,0.25); color: #a78bfa; }
+.prompt-text { font-size: 12px; color: rgba(255,255,255,0.55); line-height: 1.5; }
+
+.info-box {
+  background: rgba(255,255,255,0.016); border: 1px solid rgba(255,255,255,0.05);
+  border-radius: 10px; padding: 12px 14px; font-size: 12px; color: rgba(255,255,255,0.3); line-height: 1.6;
+}
+
+/* Result feedback */
+.result-msg { display: flex; align-items: center; gap: 8px; padding: 10px 14px; border-radius: 8px; font-size: 12.5px; font-weight: 500; display: none; }
+.result-msg.ok { background: rgba(64,224,208,0.06); border: 1px solid rgba(64,224,208,0.2); color: #5eead4; }
+.result-msg.err { background: rgba(244,63,94,0.06); border: 1px solid rgba(244,63,94,0.2); color: #fda4af; }
+
+/* Footer */
+.footer {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 18px 14px; border-top: 1px solid rgba(255,255,255,0.04);
+}
+.v { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: rgba(255,255,255,0.14); }
+.f-row { display: flex; gap: 4px; }
+.ghost-btn {
+  background: none; border: none; font-size: 11px; font-family: 'Inter', sans-serif;
+  color: rgba(255,255,255,0.2); cursor: pointer; padding: 5px 8px; border-radius: 6px; transition: 0.2s;
+}
+.ghost-btn:hover { color: rgba(255,255,255,0.55); background: rgba(255,255,255,0.04); }
+
+</style>
+</head>
+<body>
+
+<div class="bg-particles" id="particles"></div>
+
+<div class="panel">
+  <div class="holo-bar"></div>
+
+  <!-- Header -->
+  <div class="header">
+    <div class="logo-outer"><div class="logo-inner">✦</div></div>
+    <span class="brand-txt">Aura</span>
+    <span class="brand-for">for Cocos</span>
+    <div class="holo-badge"><div class="holo-badge-inner">PRO</div></div>
+  </div>
+
+  <!-- Nav -->
+  <div class="nav" id="nav">
+    <div class="nav-tab active" data-tab="tabStatus">状态</div>
+    <div class="nav-tab" data-tab="tabControl">控制</div>
+    <div class="nav-tab" data-tab="tabIDE">互联</div>
+    <div class="nav-tab" data-tab="tabSettings">设置</div>
+    <div class="nav-tab" data-tab="tabGuide">指南</div>
+  </div>
+  <div class="sep"></div>
+
+  <!-- ===== TAB: 状态 ===== -->
+  <div class="tab-pane active" id="tabStatus">
+    <div class="status-row">
+      <div class="live-dot"></div>
+      <span class="status-lbl lbl-teal">Aura MCP Runtime Active</span>
+      <span class="status-port">:8080</span>
+    </div>
+
+    <div class="project-card">
+      <div class="proj-name">SuperCocosGame</div>
+      <div class="proj-pills">
+        <span class="pill">Cocos Creator 3.8.3</span>
+        <span class="pill">E:/dev/game</span>
+        <span class="pill">uptime 3h 21m</span>
+      </div>
+    </div>
+
+    <div class="nums-grid">
+      <div class="num-card nc-blue">
+        <div class="num-lbl">Tools</div>
+        <div class="num-val">22</div>
+        <div class="num-sub">exposed modules</div>
+      </div>
+      <div class="num-card nc-rose">
+        <div class="num-lbl">Actions</div>
+        <div class="num-val">275</div>
+        <div class="num-sub">callable by AI</div>
+      </div>
+      <div class="num-card nc-purple">
+        <div class="num-lbl">Clients</div>
+        <div class="num-val">1</div>
+        <div class="num-sub">connected</div>
+      </div>
+      <div class="num-card nc-teal">
+        <div class="num-lbl">Port</div>
+        <div class="num-val" style="font-size:28px">8080</div>
+        <div class="num-sub"><code>127.0.0.1</code></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== TAB: 控制 ===== -->
+  <div class="tab-pane" id="tabControl">
+    <div class="sec-hdr">
+      <div class="sec-title">服务管理</div>
+      <div class="sec-desc">当前服务状态：<span style="color:#5eead4;font-weight:600;">运行中</span></div>
+    </div>
+
+    <div class="btn-pair">
+      <button class="btn btn-plain">▶ 启动</button>
+      <button class="btn btn-danger">■ 停止</button>
+    </div>
+    <div class="btn-holo" style="cursor:pointer;">
+      <div class="btn-holo-inner">↻ 重启 Aura 服务</div>
+    </div>
+
+    <div style="height:1px; background:rgba(255,255,255,0.04);"></div>
+
+    <div class="sec-hdr">
+      <div class="sec-title">工具模块</div>
+      <div class="sec-desc">关闭的工具 AI 将完全无法感知，实时生效。</div>
+    </div>
+
+    <div class="ctrl-rows">
+      <div class="ctrl-row">
+        <div style="flex:1"><div class="cr-name">scene</div><div class="cr-desc">节点/场景树读写 · 48 actions</div></div>
+        <div class="holo-toggle on" onclick="this.classList.toggle('on')"></div>
+      </div>
+      <div class="ctrl-row">
+        <div style="flex:1"><div class="cr-name">assets</div><div class="cr-desc">资源增删改查 · 32 actions</div></div>
+        <div class="holo-toggle on" onclick="this.classList.toggle('on')"></div>
+      </div>
+      <div class="ctrl-row">
+        <div style="flex:1"><div class="cr-name">script</div><div class="cr-desc">代码写入/重命名 · 24 actions</div></div>
+        <div class="holo-toggle on" onclick="this.classList.toggle('on')"></div>
+      </div>
+      <div class="ctrl-row">
+        <div style="flex:1"><div class="cr-name">prefab</div><div class="cr-desc">原子预制件操作 · 28 actions</div></div>
+        <div class="holo-toggle" onclick="this.classList.toggle('on')"></div>
+      </div>
+      <div class="ctrl-row">
+        <div style="flex:1"><div class="cr-name">animation</div><div class="cr-desc">关键帧/曲线编辑 · 20 actions</div></div>
+        <div class="holo-toggle" onclick="this.classList.toggle('on')"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== TAB: 互联 ===== -->
+  <div class="tab-pane" id="tabIDE">
+    <div class="sec-hdr">
+      <div class="sec-title">IDE 互联配置</div>
+      <div class="sec-desc">将 Cocos 环境一键注入至主流 AI 编程助手。</div>
+    </div>
+
+    <div class="ide-grid">
+      <div class="ide-row">
+        <div class="ide-dot detected"></div>
+        <span class="ide-name">Cursor</span>
+        <span class="ide-status ok">已检测</span>
+        <button class="inject-btn active-inject">注入</button>
+      </div>
+      <div class="ide-row">
+        <div class="ide-dot detected"></div>
+        <span class="ide-name">Windsurf</span>
+        <span class="ide-status ok">已检测</span>
+        <button class="inject-btn active-inject">注入</button>
+      </div>
+      <div class="ide-row">
+        <div class="ide-dot undetected"></div>
+        <span class="ide-name">Claude Desktop</span>
+        <span class="ide-status na">未检测</span>
+        <button class="inject-btn">注入</button>
+      </div>
+      <div class="ide-row">
+        <div class="ide-dot undetected"></div>
+        <span class="ide-name">Trae</span>
+        <span class="ide-status na">未检测</span>
+        <button class="inject-btn">注入</button>
+      </div>
+      <div class="ide-row">
+        <div class="ide-dot undetected"></div>
+        <span class="ide-name">Gemini CLI</span>
+        <span class="ide-status na">未检测</span>
+        <button class="inject-btn">注入</button>
+      </div>
+      <div class="ide-row">
+        <div class="ide-dot undetected"></div>
+        <span class="ide-name">OpenAI Codex</span>
+        <span class="ide-status na">未检测</span>
+        <button class="inject-btn">注入</button>
+      </div>
+    </div>
+
+    <div class="result-msg ok" id="ideResult">
+      ✦ 配置已成功注入，请在 IDE 中重启生效。
+    </div>
+
+    <div class="info-box">
+      注入操作将端点 <code style="font-family:monospace;font-size:11px;color:#c4b5fd;background:rgba(123,47,247,0.12);padding:1px 5px;border-radius:4px;">http://127.0.0.1:8080</code> 写入对应 IDE 的 MCP 配置文件，注入后需在目标 IDE 中刷新生效。
+    </div>
+  </div>
+
+  <!-- ===== TAB: 设置 ===== -->
+  <div class="tab-pane" id="tabSettings">
+    <div class="sec-hdr">
+      <div class="sec-title">License 授权</div>
+      <div class="sec-desc">管理 Pro 版 License Key 激活状态。</div>
+    </div>
+
+    <div class="license-card">
+      <div class="license-edition">
+        <span class="edition-name">Pro Edition</span>
+        <span class="edition-badge">未激活</span>
+      </div>
+      <div class="key-row">
+        <input class="key-input" type="text" placeholder="COCOS-PRO-XXXXXXXX-XXXXXXXX-XXXXXXXX" spellcheck="false" />
+        <button class="activate-btn">激活</button>
+      </div>
+      <div class="license-hint">输入 License Key 后点击激活，需要重启插件使 Pro 工具生效。</div>
+    </div>
+
+    <div style="height:1px; background:rgba(255,255,255,0.04);"></div>
+
+    <div class="sec-hdr">
+      <div class="sec-title">安全与性能</div>
+      <div class="sec-desc">配置 MCP Bridge 的安全策略和性能参数。</div>
+    </div>
+
+    <div class="ctrl-rows">
+      <div class="form-row">
+        <div class="form-info">
+          <div class="form-label">Rate Limit (req/min)</div>
+          <div class="form-hint">每分钟允许的最大请求数 (10–10000)</div>
+        </div>
+        <input class="form-input" type="number" value="240" min="10" max="10000" />
+      </div>
+      <div class="form-row">
+        <div class="form-info">
+          <div class="form-label">Max Payload Size</div>
+          <div class="form-hint">单次请求/响应的最大数据体积</div>
+        </div>
+        <select class="form-select">
+          <option>256 KB</option>
+          <option selected>1 MB</option>
+          <option>5 MB</option>
+          <option>10 MB</option>
+        </select>
+      </div>
+      <div class="ctrl-row">
+        <div style="flex:1"><div class="cr-name">Localhost Restrict</div><div class="cr-desc">仅允许 127.0.0.1 访问</div></div>
+        <div class="holo-toggle on" onclick="this.classList.toggle('on')"></div>
+      </div>
+      <div class="ctrl-row">
+        <div style="flex:1"><div class="cr-name">Auto Rollback</div><div class="cr-desc">AI 操作失败时自动恢复场景</div></div>
+        <div class="holo-toggle on" onclick="this.classList.toggle('on')"></div>
+      </div>
+    </div>
+
+    <div class="btn-pair">
+      <button class="btn btn-plain">恢复默认</button>
+      <div class="btn-holo" style="cursor:pointer;">
+        <div class="btn-holo-inner">保存配置</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== TAB: 指南 ===== -->
+  <div class="tab-pane" id="tabGuide">
+    <div class="sec-hdr">
+      <div class="sec-title">使用指南</div>
+      <div class="sec-desc">推荐使用如下对话模式驱动引擎工作。</div>
+    </div>
+
+    <div class="guide-steps">
+      <div class="guide-step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <div class="step-title">确认服务连通性</div>
+          <div class="step-desc">在 IDE 中检查 MCP 状态，或提问 "请测试一下 Cocos 桥接状态"。</div>
+        </div>
+      </div>
+      <div class="guide-step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <div class="step-title">选定操作目标</div>
+          <div class="step-desc">若要修改现有节点，先在层级树选中，再对 AI 说 "把当前选中的节点..."。</div>
+        </div>
+      </div>
+      <div class="guide-step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <div class="step-title">检查执行结果</div>
+          <div class="step-desc">AI 拥有读写双向能力，修改后编辑器内实时刷新。效果不对可说 "撤销刚才的修改"。</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec-hdr" style="margin-top:4px;">
+      <div class="sec-title">示例提示词</div>
+    </div>
+
+    <div class="prompt-cards">
+      <button class="prompt-card">
+        <span class="prompt-tag">场景</span>
+        <div class="prompt-text">帮我分析当前场景的根节点结构，列出所有 Canvas 下的子节点。</div>
+      </button>
+      <button class="prompt-card">
+        <span class="prompt-tag">创建</span>
+        <div class="prompt-text">在当前选中节点下创建名为 "LoginButton" 的按钮，添加 Widget 居中显示。</div>
+      </button>
+      <button class="prompt-card">
+        <span class="prompt-tag">脚本</span>
+        <div class="prompt-text">给选中节点挂上 PlayerController.ts 脚本，并设置初始速度为 5。</div>
+      </button>
+    </div>
+
+    <div class="info-box">
+      <strong style="color:rgba(255,255,255,0.5)">建议：</strong>
+      尽量单指令单操作，避免一条对话发布多个复杂的引擎改动。AI 若提示组件未导入，请确保项目代码中已存在该 cc.Component 脚本。
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <span class="v">v1.0.10</span>
+    <div class="f-row">
+      <button class="ghost-btn">中 / EN</button>
+      <button class="ghost-btn">同步状态</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// Floating particles
+const bg = document.getElementById('particles');
+for(let i=0;i<25;i++){
+  const p = document.createElement('div');
+  p.classList.add('particle');
+  const sz = Math.random()*1.8+0.8;
+  p.style.cssText = `width:${sz}px;height:${sz}px;left:${Math.random()*100}vw;animation-duration:${7+Math.random()*9}s;animation-delay:${Math.random()*10}s;`;
+  bg.appendChild(p);
+}
+
+// Tab switching
+const navTabs = document.querySelectorAll('.nav-tab');
+const panes = document.querySelectorAll('.tab-pane');
+navTabs.forEach(tab => {
+  tab.addEventListener('click', () => {
+    navTabs.forEach(t => t.classList.remove('active'));
+    panes.forEach(p => p.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById(tab.dataset.tab).classList.add('active');
+  });
+});
+
+// IDE inject buttons — simulate feedback
+document.querySelectorAll('.inject-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const result = document.getElementById('ideResult');
+    result.style.display = 'flex';
+    btn.textContent = '✓ 已注入'; btn.classList.add('active-inject');
+    setTimeout(() => result.style.display = 'none', 3000);
+  });
+});
+</script>
+
+</body>
+</html>

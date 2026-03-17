@@ -1,0 +1,469 @@
+{
+  "metadata": {
+    "source": "ACTION_CAPABILITIES.html",
+    "extractedAt": "2026-03-09",
+    "description": "Cocos MCP Bridge 测试用例数据集",
+    "totalTools": 19,
+    "totalActions": 236
+  },
+  "testCases": {
+    "bridge_status": {
+      "toolName": "bridge_status",
+      "description": "桥接状态检查",
+      "actions": {
+        "bridge_status": [
+          {
+            "title": "基本连通性检查",
+            "input": {},
+            "expected": "返回 {connected:true, version:\"3.8.x\", uptime, port}",
+            "note": "启动后第一步调用"
+          },
+          {
+            "title": "桥接断开",
+            "input": {},
+            "expected": "返回 {connected:false, error:\"ECONNREFUSED\"}",
+            "note": "编辑器未启动或插件未加载"
+          }
+        ]
+      }
+    },
+    "scene_query": {
+      "toolName": "scene_query",
+      "description": "场景查询",
+      "actions": {
+        "tree": [
+          {
+            "title": "获取默认场景树",
+            "input": {"action": "tree"},
+            "expected": "返回过滤隐藏节点的层级树 {name,uuid,children[]}",
+            "note": "默认 includeInternal=false"
+          },
+          {
+            "title": "包含内部节点",
+            "input": {"action": "tree", "includeInternal": true},
+            "expected": "返回含 ScrollView 内部节点、Profiler 节点的完整树"
+          },
+          {
+            "title": "空场景",
+            "input": {"action": "tree"},
+            "expected": "返回仅含 Scene 根节点的树"
+          }
+        ],
+        "list": [
+          {
+            "title": "扁平节点列表",
+            "input": {"action": "list"},
+            "expected": "返回 [{uuid,name,depth,childCount},...] 数组"
+          },
+          {
+            "title": "含内部节点",
+            "input": {"action": "list", "includeInternal": true},
+            "expected": "结果数量多于默认，包含引擎隐藏节点"
+          }
+        ],
+        "stats": [
+          {
+            "title": "场景统计",
+            "input": {"action": "stats"},
+            "expected": "返回 {nodeCount,activeCount,sceneName,filteredInternalNodes}"
+          },
+          {
+            "title": "含内部统计",
+            "input": {"action": "stats", "includeInternal": true},
+            "expected": "nodeCount 包含所有运行时节点"
+          }
+        ],
+        "node_detail": [
+          {
+            "title": "查看节点详情",
+            "input": {"action": "node_detail", "uuid": "<node-uuid>"},
+            "expected": "返回 {name,position,rotation,scale,components[],active,layer}"
+          },
+          {
+            "title": "无效 UUID",
+            "input": {"action": "node_detail", "uuid": "invalid"},
+            "expected": "返回 {error:\"未找到节点\"}"
+          }
+        ],
+        "find_by_path": [
+          {
+            "title": "按路径查找",
+            "input": {"action": "find_by_path", "path": "Canvas/Panel/Button"},
+            "expected": "返回匹配节点 uuid 和详情"
+          },
+          {
+            "title": "路径不存在",
+            "input": {"action": "find_by_path", "path": "NotExist/X"},
+            "expected": "返回 {error:\"未找到路径\"}"
+          }
+        ],
+        "get_components": [
+          {
+            "title": "获取组件列表",
+            "input": {"action": "get_components", "uuid": "<uuid>"},
+            "expected": "返回 [{type:\"UITransform\",...},{type:\"Sprite\",...}]"
+          }
+        ],
+        "get_parent": [
+          {
+            "title": "获取父节点",
+            "input": {"action": "get_parent", "uuid": "<uuid>"},
+            "expected": "返回父节点 {uuid,name}"
+          },
+          {
+            "title": "根节点",
+            "input": {"action": "get_parent", "uuid": "<scene-root>"},
+            "expected": "返回 null 或 scene 根"
+          }
+        ],
+        "get_children": [
+          {
+            "title": "直接子节点",
+            "input": {"action": "get_children", "uuid": "<uuid>"},
+            "expected": "返回 [{uuid,name},...] 列表"
+          }
+        ],
+        "get_sibling": [
+          {
+            "title": "兄弟节点",
+            "input": {"action": "get_sibling", "uuid": "<uuid>"},
+            "expected": "返回同级节点列表"
+          }
+        ],
+        "get_world_position": [
+          {
+            "title": "世界坐标",
+            "input": {"action": "get_world_position", "uuid": "<uuid>"},
+            "expected": "返回 {x,y,z}"
+          }
+        ],
+        "get_world_rotation": [
+          {
+            "title": "世界旋转",
+            "input": {"action": "get_world_rotation", "uuid": "<uuid>"},
+            "expected": "返回 {x,y,z} 欧拉角"
+          }
+        ],
+        "get_world_scale": [
+          {
+            "title": "世界缩放",
+            "input": {"action": "get_world_scale", "uuid": "<uuid>"},
+            "expected": "返回 {x,y,z}"
+          }
+        ],
+        "get_active_in_hierarchy": [
+          {
+            "title": "节点激活",
+            "input": {"action": "get_active_in_hierarchy", "uuid": "<uuid>"},
+            "expected": "返回 {activeInHierarchy:true/false}"
+          },
+          {
+            "title": "父节点禁用",
+            "input": {"action": "get_active_in_hierarchy", "uuid": "<child>"},
+            "expected": "返回 false（即使自身 active=true）"
+          }
+        ],
+        "get_node_bounds": [
+          {
+            "title": "2D 边界",
+            "input": {"action": "get_node_bounds", "uuid": "<sprite>"},
+            "expected": "返回 UITransform local/world rect"
+          },
+          {
+            "title": "3D 边界",
+            "input": {"action": "get_node_bounds", "uuid": "<mesh>"},
+            "expected": "返回 AABB {min,max,center,halfExtents}"
+          }
+        ],
+        "find_nodes_by_name": [
+          {
+            "title": "按名搜索",
+            "input": {"action": "find_nodes_by_name", "name": "Button"},
+            "expected": "返回所有含 \"Button\" 的节点"
+          },
+          {
+            "title": "无匹配",
+            "input": {"action": "find_nodes_by_name", "name": "XXXXXX"},
+            "expected": "返回空数组 []"
+          }
+        ],
+        "find_nodes_by_component": [
+          {
+            "title": "按组件搜索",
+            "input": {"action": "find_nodes_by_component", "component": "Sprite"},
+            "expected": "返回所有挂 Sprite 的节点"
+          },
+          {
+            "title": "自定义脚本",
+            "input": {"action": "find_nodes_by_component", "component": "PlayerController"},
+            "expected": "返回挂该脚本的节点"
+          }
+        ],
+        "find_nodes_by_layer": [
+          {
+            "title": "精确匹配",
+            "input": {"action": "find_nodes_by_layer", "layer": 33554432},
+            "expected": "返回所有 UI_2D 层节点"
+          },
+          {
+            "title": "掩码交集",
+            "input": {"action": "find_nodes_by_layer", "layer": 1, "exact": false},
+            "expected": "返回含 DEFAULT 位的节点"
+          }
+        ],
+        "get_component_property": [
+          {
+            "title": "读 Label 文本",
+            "input": {"action": "get_component_property", "uuid": "<uuid>", "component": "Label", "property": "string"},
+            "expected": "返回 {value:\"Hello World\"}"
+          },
+          {
+            "title": "读 spriteFrame",
+            "input": {"action": "get_component_property", "uuid": "<uuid>", "component": "Sprite", "property": "spriteFrame"},
+            "expected": "返回 spriteFrame UUID"
+          }
+        ],
+        "get_node_components_properties": [
+          {
+            "title": "全部组件属性",
+            "input": {"action": "get_node_components_properties", "uuid": "<uuid>"},
+            "expected": "返回所有组件全部属性快照"
+          }
+        ],
+        "get_camera_info": [
+          {
+            "title": "查所有摄像机",
+            "input": {"action": "get_camera_info"},
+            "expected": "返回场景全部 Camera 信息列表"
+          },
+          {
+            "title": "指定摄像机",
+            "input": {"action": "get_camera_info", "uuid": "<cam>"},
+            "expected": "返回 fov/near/far/projection 等参数"
+          }
+        ],
+        "get_canvas_info": [
+          {
+            "title": "Canvas 信息",
+            "input": {"action": "get_canvas_info"},
+            "expected": "返回设计分辨率、适配模式等"
+          }
+        ],
+        "get_scene_globals": [
+          {
+            "title": "全局设置",
+            "input": {"action": "get_scene_globals"},
+            "expected": "返回 ambient/fog/shadows 原始数据"
+          }
+        ],
+        "get_scene_environment": [
+          {
+            "title": "结构化环境",
+            "input": {"action": "get_scene_environment"},
+            "expected": "返回 {ambient:{skyColor,skyIllum},shadows,fog,skybox,octree}"
+          }
+        ],
+        "get_light_info": [
+          {
+            "title": "所有灯光",
+            "input": {"action": "get_light_info"},
+            "expected": "返回全部灯光组件（类型/颜色/亮度/阴影）"
+          },
+          {
+            "title": "指定灯光",
+            "input": {"action": "get_light_info", "uuid": "<light>"},
+            "expected": "仅返回该节点灯光信息"
+          }
+        ],
+        "get_material_info": [
+          {
+            "title": "材质信息",
+            "input": {"action": "get_material_info", "uuid": "<renderer>"},
+            "expected": "返回 {effectName,technique,passes[],uniforms}"
+          }
+        ],
+        "get_animation_state": [
+          {
+            "title": "动画状态",
+            "input": {"action": "get_animation_state", "uuid": "<anim>"},
+            "expected": "返回 {playing,currentClip,currentTime,clips[]}"
+          },
+          {
+            "title": "无动画组件",
+            "input": {"action": "get_animation_state", "uuid": "<no-anim>"},
+            "expected": "返回 {error:\"没有 Animation 组件\"}"
+          }
+        ],
+        "get_collider_info": [
+          {
+            "title": "碰撞器信息",
+            "input": {"action": "get_collider_info", "uuid": "<uuid>"},
+            "expected": "返回碰撞器列表 + RigidBody 信息"
+          }
+        ],
+        "screen_to_world": [
+          {
+            "title": "屏幕转世界",
+            "input": {"action": "screen_to_world", "screenX": 400, "screenY": 300, "screenZ": 0},
+            "expected": "返回 {worldX,worldY,worldZ}"
+          },
+          {
+            "title": "指定摄像机",
+            "input": {"action": "screen_to_world", "uuid": "<cam>", "screenX": 0, "screenY": 0},
+            "expected": "使用指定摄像机转换"
+          }
+        ],
+        "world_to_screen": [
+          {
+            "title": "世界转屏幕",
+            "input": {"action": "world_to_screen", "worldX": 100, "worldY": 200, "worldZ": 0},
+            "expected": "返回 {screenX,screenY,screenZ}"
+          }
+        ],
+        "check_script_ready": [
+          {
+            "title": "脚本已编译",
+            "input": {"action": "check_script_ready", "script": "PlayerController"},
+            "expected": "返回 {ready:true, isComponent:true}"
+          },
+          {
+            "title": "未就绪",
+            "input": {"action": "check_script_ready", "script": "NewScript"},
+            "expected": "返回 {ready:false, message:\"尚未注册\"}"
+          },
+          {
+            "title": "内置组件",
+            "input": {"action": "check_script_ready", "script": "Sprite"},
+            "expected": "返回 {ready:true, isComponent:true}"
+          }
+        ],
+        "get_script_properties": [
+          {
+            "title": "获取属性",
+            "input": {"action": "get_script_properties", "script": "PlayerController"},
+            "expected": "返回 {properties:[{name:\"speed\",type:\"Float\",default:10},...]}"
+          },
+          {
+            "title": "无 @property",
+            "input": {"action": "get_script_properties", "script": "EmptyScript"},
+            "expected": "返回 {propertyCount:0, properties:[]}"
+          },
+          {
+            "title": "不存在",
+            "input": {"action": "get_script_properties", "script": "XXX"},
+            "expected": "返回 {error:\"未找到脚本类\"}"
+          }
+        ],
+        "get_current_selection": [
+          {
+            "title": "有选中",
+            "input": {"action": "get_current_selection"},
+            "expected": "返回 {selected:[\"<uuid>\"], focused:{name,...}}"
+          },
+          {
+            "title": "无选中",
+            "input": {"action": "get_current_selection"},
+            "expected": "返回 {selected:[], message:\"当前没有选中节点\"}"
+          }
+        ],
+        "get_active_scene_focus": [
+          {
+            "title": "有选中→返回详情",
+            "input": {"action": "get_active_scene_focus"},
+            "expected": "返回 {source:\"selection\", focus:{...}}"
+          },
+          {
+            "title": "无选中→返回统计",
+            "input": {"action": "get_active_scene_focus"},
+            "expected": "返回 {source:\"scene\", focus:{nodeCount,...}}"
+          }
+        ],
+        "list_all_scenes": [
+          {
+            "title": "列出场景",
+            "input": {"action": "list_all_scenes"},
+            "expected": "返回 [{url:\"db://assets/scenes/Main.scene\",...},...]"
+          }
+        ],
+        "validate_scene": [
+          {
+            "title": "场景验证",
+            "input": {"action": "validate_scene"},
+            "expected": "返回 {issues[],score:85}"
+          }
+        ],
+        "deep_validate_scene": [
+          {
+            "title": "深度验证",
+            "input": {"action": "deep_validate_scene"},
+            "expected": "返回缺失资源、孤立节点、修复建议"
+          }
+        ],
+        "detect_2d_3d": [
+          {
+            "title": "2D 场景",
+            "input": {"action": "detect_2d_3d"},
+            "expected": "返回 {mode:\"2D\"}"
+          },
+          {
+            "title": "3D 场景",
+            "input": {"action": "detect_2d_3d"},
+            "expected": "返回 {mode:\"3D\"}"
+          },
+          {
+            "title": "混合场景",
+            "input": {"action": "detect_2d_3d"},
+            "expected": "返回 {mode:\"Mixed\"}"
+          }
+        ],
+        "performance_audit": [
+          {
+            "title": "性能审计",
+            "input": {"action": "performance_audit"},
+            "expected": "返回 {issues[],metrics:{nodeCount,maxDepth},suggestions[]}"
+          }
+        ],
+        "list_available_components": [
+          {
+            "title": "组件列表",
+            "input": {"action": "list_available_components"},
+            "expected": "返回引擎内置+自定义脚本组件，按类别分组"
+          }
+        ],
+        "scene_snapshot": [
+          {
+            "title": "默认快照",
+            "input": {"action": "scene_snapshot"},
+            "expected": "返回场景状态快照（最多 500 节点）"
+          },
+          {
+            "title": "限制数量",
+            "input": {"action": "scene_snapshot", "maxNodes": 100},
+            "expected": "返回最多 100 节点快照"
+          }
+        ],
+        "scene_diff": [
+          {
+            "title": "对比快照",
+            "input": {"action": "scene_diff", "snapshotA": {}, "snapshotB": {}},
+            "expected": "返回 {added[],removed[],modified[]}"
+          }
+        ],
+        "export_scene_json": [
+          {
+            "title": "导出 JSON",
+            "input": {"action": "export_scene_json"},
+            "expected": "返回完整场景节点树 JSON"
+          }
+        ],
+        "measure_distance": [
+          {
+            "title": "测量距离",
+            "input": {"action": "measure_distance", "uuidA": "<a>", "uuidB": "<b>"},
+            "expected": "返回 {distance2D,distance3D,delta:{x,y,z}}"
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,82 @@
+---
+description: 关键编码约定 — 修改 MCP 工具和场景脚本时必须遵守
+globs: src/mcp/**,src/scene.ts,src/scene-operation-handlers.ts,src/panels/**,src/ide-config-service.ts
+alwaysApply: false
+---
+
+# 编码约定规则
+
+以下约定来自已验证的 bug 修复，**禁止回退**。
+
+## 1. 资源引用属性必须通过编辑器 IPC 设置
+
+在 `scene.ts` 的 `setComponentProperty` 中：
+- 当 value 是 `{ __uuid__: "..." }` 格式时，必须通过 `Editor.Message.request('scene', 'set-property', ...)` 设置
+- **绝对禁止**直接 `comp[property] = { __uuid__: ... }`，这会导致 Sprite._applySpriteSize 崩溃
+- 回退路径：IPC 失败后可尝试 assetManager 缓存查找
+
+## 2. 图片导入必须设置 sprite-frame 类型
+
+在 `tools-atomic-texture.ts` 的 `import_and_apply_texture` 中：
+- 导入图片后必须检查并设置 meta `userData.type = 'sprite-frame'`
+- 否则 Cocos 只生成 Texture2D 子资源，不生成 SpriteFrame，Sprite 组件无法使用
+- 设置后必须 `reimport-asset` 让 Cocos 重新生成子资源
+
+## 3. 禁止创建自动生成的子资源类型
+
+在 `tools-asset.ts` 的 `asset_operation.create` 中：
+- 必须拦截 `.spriteframe`、`.texture`、`.fbx/mesh` 等自动生成的子资源类型
+- 返回错误并提示正确做法（导入图片让 Cocos 自动生成）
+
+## 4. set_meta_property 必须支持嵌套路径
+
+在 `tools-asset.ts` 中：
+- `set_meta_property` 的 property 参数支持点号分隔路径（如 `userData.type`）
+- 必须逐层深入对象设置值，禁止将整个路径当作顶层 key
+
+## 5. MCP 调用日志不可移除
+
+在 `local-tool-server.ts` 的 `callTool` 中：
+- 入口日志：`[MCP] #N -> tool.action {params}`
+- 成功日志：`[MCP] #N ✓ tool.action Xms`
+- 业务错误：`[MCP] #N ✗ tool.action Xms — error`
+- 异常日志：`[MCP] #N ✗✗ tool.action Xms — EXCEPTION: message`
+- 这些日志被 console-capture.ts 捕获，是唯一的 MCP 调用追溯手段
+
+## 6. 面板轮询禁止同步阻塞
+
+在 `panels/default/index.ts` 和 `ide-config-service.ts` 中：
+- `refreshStatus()` 每 3 秒调用一次（POLL_INTERVAL = 3000）
+- 此调用链中**禁止任何 `execSync`、同步文件大量读取、同步网络请求**
+- 违反此规则会阻塞编辑器主进程，导致 SIGSEGV 崩溃
+
+## 7. ensure_2d_canvas 必须幂等
+
+在 `tools-scene.ts` 的 `ensure_2d_canvas` action 中：
+- 必须先检测场景中是否已有 Canvas（排除 Editor Scene Background 中的）
+- 已有则直接返回 UUID，不重复创建
+- 新建时必须配置完整：Canvas + Camera（正交/clearFlags=6/priority=1/visibility=UI_2D/orthoHeight）+ Layer
+
+## 8. 场景脚本中的 Editor.Message 使用
+
+在 `scene.ts` 中：
+- 只能使用 `Editor.Message.request`（异步，有返回值）
+- 禁止使用 `Editor.Message.send`（无返回值，无法确认执行结果）
+
+## 9. 修改后必须编译和测试
+
+对 `src/` 下任何文件的修改：
+- 必须运行 `npx tsc --noEmit` 确认类型检查通过
+- 必须运行 `npx vitest run` 确认所有测试通过
+- 必须运行 `npm run build` 生成编译产物
+
+## 10. 节点/组件引用属性必须通过专用格式设置
+
+在 `scene.ts` 的 `setComponentProperty` 及 `scene-operation-handlers.ts` 的 `set_component_properties`/`attach_script` 中：
+- 当属性期望 `cc.Node` 类型（如 ScrollView.content、ScrollView.view），value 必须为 `{ "__refType__": "cc.Node", "uuid": "target-node-uuid" }`
+- 当属性期望 `cc.Component` 类型，value 必须为 `{ "__refType__": "cc.Component", "uuid": "node-uuid", "component": "ClassName" }`
+- **禁止使用 `__type__` 作为引用标记**——`__type__` 是 Cocos Creator 序列化系统的保留字段，通过 Editor IPC 传输时会被引擎拦截/转换
+- Node 引用优先走 Editor IPC `set-property`（dump.type = `cc.Node`），IPC 失败后回退运行时 `findNodeByUuid` 解析
+- Component 引用通过运行时 `findNodeByUuid` + `getComponent` 解析
+- **绝对禁止**直接 `comp[property] = "uuid-string"`，这对引用类型属性无效
+- 检测函数 `isNodeRef`/`isComponentRef`/`isAssetRef` 定义在 `scene-types.ts`，所有属性赋值路径必须共享使用

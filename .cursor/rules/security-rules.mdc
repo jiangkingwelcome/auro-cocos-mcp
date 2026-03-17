@@ -1,0 +1,60 @@
+---
+description: 核心安全机制保护 — 修改这些文件时必须遵守
+globs: src/core.ts,src/scene.ts,src/mcp/tools-scene.ts,src/mcp/tools-shared.ts,src/bridge-settings.ts,src/ide-config-service.ts,src/token-manager.ts
+alwaysApply: false
+---
+
+# 安全机制保护规则
+
+以下安全机制经过验证，**禁止删除、绕过或弱化**。
+
+## 1. Token 认证 (core.ts, token-manager.ts)
+
+- `extractMcpToken` 提取请求中的 Token，校验失败返回 401
+- 所有非公开路由必须经过 Token 校验
+- 禁止硬编码 Token 或跳过校验逻辑
+
+## 2. 回环地址限制 (core.ts)
+
+- `isLoopbackAddress` 检查请求来源，非回环地址返回 403
+- `loopbackOnly` 默认为 `true`，禁止将默认值改为 `false`
+- `srv.listen` 在 loopbackOnly 时绑定 `127.0.0.1`
+
+## 3. 速率限制 (core.ts)
+
+- `consumeRateLimit` 实现滑动窗口速率限制，超限返回 429
+- `rateLimitPerMinute` 默认 240，范围约束 10-10000，禁止移除上下限
+
+## 4. 请求体大小限制 (core.ts)
+
+- `BodyTooLargeError` 在请求体超过 `maxBodySizeBytes` 时触发
+- 默认 1MB (1_048_576)，范围约束 64KB-50MB，禁止移除
+
+## 5. 危险操作拦截 (tools-scene.ts, tools-shared.ts)
+
+- `DANGEROUS_SCENE_ACTIONS` 集合中的操作（destroy_node, clear_children 等）必须传 `confirmDangerous=true`
+- 禁止移除此拦截逻辑或从集合中删除已有的危险操作
+
+## 6. 属性黑名单 (scene.ts)
+
+- `COMPONENT_PROPERTY_BLOCKLIST` 禁止设置 `__proto__`、`constructor` 等危险属性
+- 禁止缩减此黑名单，只允许新增
+
+## 7. AI 规则提示 (tools-shared.ts)
+
+- `AI_RULES` 常量包含对 AI 的关键行为约束（先查后改、用 UUID、确认危险操作等）
+- 禁止删除或弱化这些提示
+
+## 8. 设置默认值 (bridge-settings.ts)
+
+- `DEFAULT_SETTINGS` 中的安全相关默认值不得放宽：
+  - `loopbackOnly: true`
+  - `rateLimitPerMinute: 240`
+  - `maxBodySizeBytes: 1_048_576`
+- 范围约束（Math.max/Math.min）不得移除
+
+## 9. 禁止轮询中使用 execSync (ide-config-service.ts)
+
+- `getConfigStatus()` 在面板轮询中每 3 秒调用一次
+- 此函数及其调用链中**绝对禁止使用 `execSync`**，会阻塞编辑器主进程导致崩溃
+- `hasClaudeCodeEntry()` 必须使用异步 `exec` + 缓存模式

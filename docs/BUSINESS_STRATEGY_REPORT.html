@@ -1,0 +1,1167 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CocosDesignTool 商业策略报告 — 竞品分析·多平台上架·收益方案</title>
+<style>
+  :root {
+    --primary: #2563eb;
+    --primary-dark: #1d4ed8;
+    --accent: #f59e0b;
+    --success: #10b981;
+    --danger: #ef4444;
+    --bg: #f8fafc;
+    --card: #ffffff;
+    --text: #1e293b;
+    --text-secondary: #64748b;
+    --border: #e2e8f0;
+    --shadow: 0 1px 3px rgba(0,0,0,.1), 0 1px 2px rgba(0,0,0,.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0,0,0,.1), 0 4px 6px -4px rgba(0,0,0,.1);
+    --radius: 12px;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; }
+
+  /* ---- Hero ---- */
+  .hero {
+    background: linear-gradient(135deg, #1e3a5f 0%, #2563eb 50%, #7c3aed 100%);
+    color: #fff; padding: 60px 24px 48px; text-align: center; position: relative; overflow: hidden;
+  }
+  .hero::before { content:''; position:absolute; top:-50%; left:-50%; width:200%; height:200%; background: radial-gradient(circle, rgba(255,255,255,.06) 1px, transparent 1px); background-size: 30px 30px; animation: drift 20s linear infinite; }
+  @keyframes drift { to { transform: translate(30px, 30px); } }
+  .hero h1 { font-size: 2.4rem; font-weight: 800; margin-bottom: 8px; position: relative; }
+  .hero .subtitle { font-size: 1.1rem; opacity: .85; position: relative; }
+  .hero .meta { margin-top: 16px; font-size: .85rem; opacity: .65; position: relative; }
+
+  /* ---- Layout ---- */
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+  .toc { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 28px 32px; margin: -32px auto 32px; max-width: 900px; position: relative; z-index: 2; }
+  .toc h2 { font-size: 1.15rem; margin-bottom: 12px; color: var(--primary); }
+  .toc ol { padding-left: 20px; columns: 2; column-gap: 32px; }
+  .toc li { margin-bottom: 6px; font-size: .92rem; break-inside: avoid; }
+  .toc a { color: var(--primary); text-decoration: none; }
+  .toc a:hover { text-decoration: underline; }
+
+  section { margin-bottom: 40px; }
+  section > h2 { font-size: 1.5rem; font-weight: 700; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 3px solid var(--primary); display: inline-block; }
+  section > h3 { font-size: 1.15rem; font-weight: 600; margin: 20px 0 10px; color: var(--primary-dark); }
+
+  .card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 24px; margin-bottom: 20px; }
+  .card h4 { font-size: 1.05rem; font-weight: 600; margin-bottom: 8px; }
+
+  /* ---- Tables ---- */
+  .table-wrap { overflow-x: auto; margin-bottom: 20px; }
+  table { width: 100%; border-collapse: collapse; font-size: .88rem; }
+  th, td { padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--border); }
+  th { background: #f1f5f9; font-weight: 600; white-space: nowrap; position: sticky; top: 0; }
+  tr:hover td { background: #f8fafc; }
+
+  /* ---- Badges ---- */
+  .badge { display: inline-block; padding: 2px 10px; border-radius: 999px; font-size: .75rem; font-weight: 600; }
+  .badge-blue { background: #dbeafe; color: #1d4ed8; }
+  .badge-green { background: #d1fae5; color: #065f46; }
+  .badge-amber { background: #fef3c7; color: #92400e; }
+  .badge-red { background: #fee2e2; color: #991b1b; }
+  .badge-purple { background: #ede9fe; color: #5b21b6; }
+
+  /* ---- Grid ---- */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+  @media (max-width: 768px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } .toc ol { columns: 1; } }
+
+  /* ---- Progress ---- */
+  .progress-bar { height: 8px; background: #e2e8f0; border-radius: 4px; overflow: hidden; margin-top: 6px; }
+  .progress-fill { height: 100%; border-radius: 4px; transition: width .6s ease; }
+
+  /* ---- Stat Cards ---- */
+  .stat-card { text-align: center; padding: 20px; }
+  .stat-card .num { font-size: 2rem; font-weight: 800; color: var(--primary); }
+  .stat-card .label { font-size: .85rem; color: var(--text-secondary); margin-top: 4px; }
+
+  /* ---- Timeline ---- */
+  .timeline { position: relative; padding-left: 32px; }
+  .timeline::before { content:''; position: absolute; left: 11px; top: 4px; bottom: 4px; width: 2px; background: var(--border); }
+  .timeline-item { position: relative; margin-bottom: 24px; }
+  .timeline-item::before { content:''; position: absolute; left: -27px; top: 6px; width: 12px; height: 12px; border-radius: 50%; background: var(--primary); border: 2px solid #fff; box-shadow: 0 0 0 2px var(--primary); }
+  .timeline-item.done::before { background: var(--success); box-shadow: 0 0 0 2px var(--success); }
+  .timeline-item h4 { font-size: .95rem; font-weight: 600; }
+  .timeline-item p { font-size: .88rem; color: var(--text-secondary); margin-top: 4px; }
+
+  /* ---- Pricing Tier ---- */
+  .tier { border: 2px solid var(--border); border-radius: var(--radius); padding: 28px 24px; text-align: center; transition: transform .2s, box-shadow .2s; }
+  .tier:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+  .tier.featured { border-color: var(--primary); position: relative; }
+  .tier.featured::after { content:'推荐'; position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--primary); color: #fff; padding: 2px 16px; border-radius: 999px; font-size: .75rem; font-weight: 600; }
+  .tier .price { font-size: 2.2rem; font-weight: 800; color: var(--primary); margin: 12px 0; }
+  .tier .price span { font-size: .9rem; font-weight: 400; color: var(--text-secondary); }
+  .tier ul { list-style: none; text-align: left; margin: 16px 0; font-size: .88rem; }
+  .tier ul li { padding: 6px 0; border-bottom: 1px solid var(--border); }
+  .tier ul li::before { content:'✓ '; color: var(--success); font-weight: 700; }
+
+  /* ---- Funnel ---- */
+  .funnel { display: flex; flex-direction: column; align-items: center; gap: 4px; margin: 20px 0; }
+  .funnel-step { padding: 12px; text-align: center; color: #fff; font-weight: 600; font-size: .88rem; border-radius: 6px; }
+
+  /* ---- Misc ---- */
+  .highlight { background: linear-gradient(120deg, #fef3c7 0%, #fde68a 100%); padding: 2px 6px; border-radius: 4px; }
+  .callout { border-left: 4px solid var(--primary); background: #eff6ff; padding: 16px 20px; border-radius: 0 8px 8px 0; margin: 16px 0; font-size: .92rem; }
+  .callout.warn { border-color: var(--accent); background: #fffbeb; }
+  .callout.success { border-color: var(--success); background: #ecfdf5; }
+  .vs-bar { display: flex; align-items: center; gap: 8px; margin: 6px 0; font-size: .85rem; }
+  .vs-bar .bar { flex: 1; height: 22px; border-radius: 4px; display: flex; align-items: center; padding: 0 8px; color: #fff; font-size: .75rem; font-weight: 600; }
+  footer { text-align: center; padding: 32px 20px; color: var(--text-secondary); font-size: .82rem; border-top: 1px solid var(--border); margin-top: 40px; }
+
+  /* ---- Radar placeholder ---- */
+  .radar-wrap { display: flex; justify-content: center; margin: 20px 0; }
+  .radar-placeholder { width: 360px; height: 360px; position: relative; }
+  .radar-placeholder canvas { width: 100%; height: 100%; }
+
+  /* Print */
+  @media print { .hero { padding: 30px 20px; } .toc { box-shadow: none; border: 1px solid #ddd; } }
+</style>
+</head>
+<body>
+
+<!-- ============ HERO ============ -->
+<div class="hero">
+  <h1>CocosDesignTool 商业策略全案</h1>
+  <div class="subtitle">竞品分析 · 多平台上架 · 推广策略 · 收益模型</div>
+  <div class="meta">报告日期：2026-03-13 &nbsp;|&nbsp; 版本 v1.0 &nbsp;|&nbsp; 产品版本 Cocos Bridge 1.0.8 / GameFlowEditor 1.0.0-beta.1</div>
+</div>
+
+<!-- ============ TOC ============ -->
+<div class="container">
+<div class="toc">
+  <h2>目录</h2>
+  <ol>
+    <li><a href="#exec">执行摘要</a></li>
+    <li><a href="#product">产品概览与核心优势</a></li>
+    <li><a href="#competitor">竞品全景分析</a></li>
+    <li><a href="#radar">竞争力雷达对比</a></li>
+    <li><a href="#platform">多平台上架策略</a></li>
+    <li><a href="#pricing">定价与收益模型</a></li>
+    <li><a href="#promotion">推广与增长策略</a></li>
+    <li><a href="#timeline">执行时间线</a></li>
+    <li><a href="#revenue">收益预测（12 个月）</a></li>
+    <li><a href="#risk">风险与应对</a></li>
+    <li><a href="#action">下一步行动清单</a></li>
+  </ol>
+</div>
+
+<!-- ============ 1. 执行摘要 ============ -->
+<section id="exec">
+  <h2>1. 执行摘要</h2>
+  <div class="grid-3">
+    <div class="card stat-card">
+      <div class="num">19</div>
+      <div class="label">MCP 工具（漏斗架构）</div>
+    </div>
+    <div class="card stat-card">
+      <div class="num">230+</div>
+      <div class="label">可执行动作</div>
+    </div>
+    <div class="card stat-card">
+      <div class="num">3</div>
+      <div class="label">支持引擎（Cocos/Godot/Unity）</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <p><strong>CocosDesignTool</strong> 是一款面向游戏开发者的 AI 原生工具集，包含可视化蓝图编辑器（GameFlowEditor）和多引擎 MCP 桥接插件。产品通过 Model Context Protocol 让 AI 编码助手（Claude、Cursor、Windsurf 等）直接操控游戏项目，实现"对话式游戏开发"。</p>
+    <br>
+    <p>当前市场处于 <span class="highlight">AI + 游戏开发工具的早期爆发期</span>，竞品数量有限但增长迅速。我们的核心差异化在于：</p>
+    <ul style="margin-top:10px; padding-left:20px;">
+      <li><strong>漏斗架构</strong>：19 工具 vs 竞品 50-80 个扁平工具，Token 开销降低 60%+</li>
+      <li><strong>多引擎覆盖</strong>：唯一同时支持 Cocos + Godot + Unity 的 MCP 方案</li>
+      <li><strong>原子操作 + 自动回滚</strong>：竞品不具备的企业级可靠性</li>
+      <li><strong>向下兼容</strong>：支持 Cocos 3.4.2+（竞品要求 3.8.0+）</li>
+    </ul>
+    <br>
+    <div class="callout success">
+      <strong>核心结论：</strong>建议采用 <strong>开源核心 + 付费增值（Pro 版）</strong> 的混合模式，在 6 个平台同步上架，预计 12 个月内可实现 <strong>¥15-40 万</strong> 年收入（保守-乐观区间）。
+    </div>
+  </div>
+</section>
+
+<!-- ============ 2. 产品概览 ============ -->
+<section id="product">
+  <h2>2. 产品概览与核心优势</h2>
+
+  <div class="grid-2">
+    <div class="card">
+      <h4>GameFlowEditor — 可视化蓝图编辑器</h4>
+      <ul style="padding-left:18px; font-size:.9rem;">
+        <li>拖拽式节点编辑（START/DIALOGUE/CHOICE/EVENT/END）</li>
+        <li>实时对话预览与流程验证</li>
+        <li>自动导出为游戏引擎脚本</li>
+        <li>多关卡/场景管理</li>
+        <li>MCP Server 模式，AI 可直接编辑蓝图</li>
+        <li>撤销/重做完整操作历史</li>
+        <li>中英文双语 UI</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>Cocos MCP Bridge — AI 桥接插件（最成熟）</h4>
+      <ul style="padding-left:18px; font-size:.9rem;">
+        <li>19 工具 / 230+ 动作，漏斗架构</li>
+        <li>场景操作 ~65 动作 / 场景查询 ~40 动作</li>
+        <li>资源管理 ~31 动作 / 编辑器控制 ~42 动作</li>
+        <li>原子宏工具（create_prefab_atomic 等）</li>
+        <li>组件名自动规范化 / 路径规范化</li>
+        <li>危险操作拦截 / 错误自愈建议</li>
+        <li>一键注入 11 款 AI IDE 配置</li>
+        <li>可配置安全策略（速率限制/回环限制/自动回滚）</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>技术架构优势</h3>
+  <div class="card">
+    <div class="table-wrap">
+    <table>
+      <tr><th>维度</th><th>CocosDesignTool</th><th>竞品通常做法</th><th>优势</th></tr>
+      <tr><td>工具架构</td><td>漏斗式 19 工具 × 多动作</td><td>扁平式 50-80 个独立工具</td><td>Token 开销降低 60%+，AI 决策更精准</td></tr>
+      <tr><td>错误处理</td><td>自愈建议 + 自动回滚</td><td>简单错误返回</td><td>AI 可自主恢复，减少人工干预</td></tr>
+      <tr><td>引擎覆盖</td><td>Cocos + Godot + Unity</td><td>单引擎</td><td>3× 市场覆盖面</td></tr>
+      <tr><td>版本兼容</td><td>Cocos 3.4.2+</td><td>Cocos 3.8.0+</td><td>覆盖更多存量用户</td></tr>
+      <tr><td>依赖数量</td><td>仅 Zod</td><td>多个 npm 包</td><td>更轻量、更安全</td></tr>
+      <tr><td>IDE 支持</td><td>11 款一键配置</td><td>2-3 款手动配置</td><td>开箱即用体验</td></tr>
+    </table>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 3. 竞品全景分析 ============ -->
+<section id="competitor">
+  <h2>3. 竞品全景分析</h2>
+
+  <h3>3.1 Cocos Creator 生态</h3>
+  <div class="card">
+    <div class="table-wrap">
+    <table>
+      <tr><th>竞品</th><th>工具数</th><th>GitHub 星</th><th>定价</th><th>最低版本</th><th>核心特点</th><th>威胁等级</th></tr>
+      <tr>
+        <td><strong>daxianlee/cocos-mcp-server</strong></td>
+        <td>~80</td><td>566</td><td>免费 MIT</td><td>3.8.0+</td>
+        <td>9 大类工具，社区活跃，MCP 全球排名 #281</td>
+        <td><span class="badge badge-red">高</span></td>
+      </tr>
+      <tr>
+        <td>Cocos Log Bridge</td>
+        <td>日志同步</td><td>—</td><td>免费</td><td>—</td>
+        <td>仅同步日志到 Cursor，功能单一</td>
+        <td><span class="badge badge-green">低</span></td>
+      </tr>
+    </table>
+    </div>
+    <div class="callout">
+      <strong>分析：</strong>Cocos 生态竞争者极少，daxianlee 是唯一有影响力的开源竞品。我们在工具数量（230+ vs 80）、架构设计（漏斗 vs 扁平）、版本兼容性（3.4.2 vs 3.8.0）上全面领先。<strong>关键差距：社区影响力（566 星 vs 我们较少）。</strong>
+    </div>
+  </div>
+
+  <h3>3.2 Unity 生态</h3>
+  <div class="card">
+    <div class="table-wrap">
+    <table>
+      <tr><th>竞品</th><th>工具数</th><th>GitHub 星</th><th>定价</th><th>核心特点</th><th>威胁等级</th></tr>
+      <tr>
+        <td><strong>CoderGamester/mcp-unity</strong></td>
+        <td>30+</td><td>1,400</td><td>免费 MIT</td>
+        <td>Unity 6+，WebSocket 通信，社区最大</td>
+        <td><span class="badge badge-red">高</span></td>
+      </tr>
+      <tr>
+        <td>Unity 官方 AI Gateway</td>
+        <td>内置</td><td>—</td><td>Unity Pro 订阅</td>
+        <td>2026 年推出，官方支持第三方 AI Agent 连接</td>
+        <td><span class="badge badge-red">极高</span></td>
+      </tr>
+      <tr>
+        <td>IvanMurzak/Unity-MCP</td>
+        <td>—</td><td>—</td><td>免费 MIT</td>
+        <td>编辑器 + 运行时双模式</td>
+        <td><span class="badge badge-amber">中</span></td>
+      </tr>
+      <tr>
+        <td>nuskey8/UnityAgentClient</td>
+        <td>—</td><td>—</td><td>免费</td>
+        <td>支持 Gemini CLI/Claude Code/Codex CLI</td>
+        <td><span class="badge badge-amber">中</span></td>
+      </tr>
+    </table>
+    </div>
+    <div class="callout warn">
+      <strong>警告：</strong>Unity 官方将在 2026 年推出 AI Gateway，这是最大的潜在威胁。建议 Unity Bridge 定位为"轻量级替代方案"，强调免费、开源、多 IDE 支持的差异化。
+    </div>
+  </div>
+
+  <h3>3.3 Godot 生态</h3>
+  <div class="card">
+    <div class="table-wrap">
+    <table>
+      <tr><th>竞品</th><th>工具数</th><th>定价</th><th>核心特点</th><th>威胁等级</th></tr>
+      <tr>
+        <td><strong>Godot MCP Pro</strong></td>
+        <td>162</td><td>$5 一次性</td>
+        <td>23 大类，3D/物理/粒子/音频/着色器/自动化测试</td>
+        <td><span class="badge badge-red">高</span></td>
+      </tr>
+      <tr>
+        <td><strong>GDAI MCP</strong></td>
+        <td>~10 大功能</td><td>$19 一次性</td>
+        <td>Godot 4.2+，调试器/GDScript 辅助/截图</td>
+        <td><span class="badge badge-amber">中</span></td>
+      </tr>
+      <tr>
+        <td>Coding-Solo/godot-mcp</td>
+        <td>5</td><td>免费 MIT</td>
+        <td>基础功能：启动/运行/调试输出</td>
+        <td><span class="badge badge-green">低</span></td>
+      </tr>
+    </table>
+    </div>
+    <div class="callout success">
+      <strong>机会：</strong>Godot 生态已验证付费意愿（$5-$19），且竞品功能集中在单引擎。我们的多引擎 + 蓝图编辑器组合是独特卖点。
+    </div>
+  </div>
+
+  <h3>3.4 竞争格局总结</h3>
+  <div class="card">
+    <div class="table-wrap">
+    <table>
+      <tr><th>引擎</th><th>竞品数量</th><th>付费产品</th><th>我们的定位</th><th>市场机会</th></tr>
+      <tr><td>Cocos Creator</td><td>2 个</td><td>0</td><td>功能最全的 AI 桥接方案</td><td><span class="badge badge-green">大 — 蓝海</span></td></tr>
+      <tr><td>Unity</td><td>5+ 个</td><td>0（官方即将入场）</td><td>轻量免费替代方案</td><td><span class="badge badge-amber">中 — 红海趋势</span></td></tr>
+      <tr><td>Godot</td><td>5 个</td><td>2 个（$5-$19）</td><td>多引擎差异化 + 蓝图编辑器</td><td><span class="badge badge-green">大 — 已验证付费</span></td></tr>
+      <tr><td>跨引擎</td><td>0</td><td>0</td><td><strong>唯一的多引擎统一方案</strong></td><td><span class="badge badge-purple">极大 — 无竞品</span></td></tr>
+    </table>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 4. 竞争力雷达 ============ -->
+<section id="radar">
+  <h2>4. 竞争力雷达对比</h2>
+  <div class="card">
+    <div class="radar-wrap">
+      <canvas id="radarChart" width="420" height="420"></canvas>
+    </div>
+    <p style="text-align:center; font-size:.85rem; color:var(--text-secondary); margin-top:8px;">
+      评分标准：1-10 分，基于功能完整度、社区规模、文档质量、易用性、创新性、安全性六个维度
+    </p>
+
+    <div style="margin-top:20px;">
+      <h4>各维度详细对比</h4>
+      <div style="margin-top:12px;">
+        <div class="vs-bar"><span style="width:100px;">功能完整度</span><div class="bar" style="width:92%; background:var(--primary);">CocosDesignTool 9.2</div></div>
+        <div class="vs-bar"><span style="width:100px;"></span><div class="bar" style="width:70%; background:#94a3b8;">daxianlee 7.0</div></div>
+        <div class="vs-bar"><span style="width:100px;"></span><div class="bar" style="width:75%; background:#f59e0b;">Godot MCP Pro 7.5</div></div>
+      </div>
+      <div style="margin-top:12px;">
+        <div class="vs-bar"><span style="width:100px;">社区规模</span><div class="bar" style="width:35%; background:var(--primary);">CocosDesignTool 3.5</div></div>
+        <div class="vs-bar"><span style="width:100px;"></span><div class="bar" style="width:75%; background:#94a3b8;">daxianlee 7.5</div></div>
+        <div class="vs-bar"><span style="width:100px;"></span><div class="bar" style="width:50%; background:#f59e0b;">Godot MCP Pro 5.0</div></div>
+      </div>
+      <div style="margin-top:12px;">
+        <div class="vs-bar"><span style="width:100px;">架构创新</span><div class="bar" style="width:95%; background:var(--primary);">CocosDesignTool 9.5</div></div>
+        <div class="vs-bar"><span style="width:100px;"></span><div class="bar" style="width:50%; background:#94a3b8;">daxianlee 5.0</div></div>
+        <div class="vs-bar"><span style="width:100px;"></span><div class="bar" style="width:60%; background:#f59e0b;">Godot MCP Pro 6.0</div></div>
+      </div>
+      <div style="margin-top:12px;">
+        <div class="vs-bar"><span style="width:100px;">安全性</span><div class="bar" style="width:90%; background:var(--primary);">CocosDesignTool 9.0</div></div>
+        <div class="vs-bar"><span style="width:100px;"></span><div class="bar" style="width:40%; background:#94a3b8;">daxianlee 4.0</div></div>
+        <div class="vs-bar"><span style="width:100px;"></span><div class="bar" style="width:55%; background:#f59e0b;">Godot MCP Pro 5.5</div></div>
+      </div>
+      <div style="margin-top:12px;">
+        <div class="vs-bar"><span style="width:100px;">易用性</span><div class="bar" style="width:85%; background:var(--primary);">CocosDesignTool 8.5</div></div>
+        <div class="vs-bar"><span style="width:100px;"></span><div class="bar" style="width:65%; background:#94a3b8;">daxianlee 6.5</div></div>
+        <div class="vs-bar"><span style="width:100px;"></span><div class="bar" style="width:70%; background:#f59e0b;">Godot MCP Pro 7.0</div></div>
+      </div>
+      <div style="margin-top:12px;">
+        <div class="vs-bar"><span style="width:100px;">文档质量</span><div class="bar" style="width:80%; background:var(--primary);">CocosDesignTool 8.0</div></div>
+        <div class="vs-bar"><span style="width:100px;"></span><div class="bar" style="width:60%; background:#94a3b8;">daxianlee 6.0</div></div>
+        <div class="vs-bar"><span style="width:100px;"></span><div class="bar" style="width:65%; background:#f59e0b;">Godot MCP Pro 6.5</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 5. 多平台上架策略 ============ -->
+<section id="platform">
+  <h2>5. 多平台上架策略</h2>
+
+  <div class="card">
+    <div class="table-wrap">
+    <table>
+      <tr>
+        <th>平台</th><th>类型</th><th>受众规模</th><th>抽成</th><th>上架难度</th><th>优先级</th><th>预计上架时间</th>
+      </tr>
+      <tr>
+        <td><strong>GitHub</strong></td><td>开源仓库</td><td>1 亿+ 开发者</td><td>0%</td>
+        <td><span class="badge badge-green">低</span></td>
+        <td><span class="badge badge-red">P0 — 立即</span></td>
+        <td>已上架，需优化</td>
+      </tr>
+      <tr>
+        <td><strong>npm Registry</strong></td><td>包管理器</td><td>1700 万+ 开发者</td><td>0%</td>
+        <td><span class="badge badge-green">低</span></td>
+        <td><span class="badge badge-red">P0 — 立即</span></td>
+        <td>1-2 天</td>
+      </tr>
+      <tr>
+        <td><strong>MCP 目录站</strong><br>(mcp.so / pulsemcp / glama.ai / mcpmarket)</td><td>MCP 工具目录</td><td>AI 开发者群体</td><td>0%</td>
+        <td><span class="badge badge-green">低</span></td>
+        <td><span class="badge badge-red">P0 — 立即</span></td>
+        <td>1-3 天</td>
+      </tr>
+      <tr>
+        <td><strong>Cocos Store</strong></td><td>官方插件商店</td><td>Cocos 开发者</td><td>30%</td>
+        <td><span class="badge badge-amber">中</span></td>
+        <td><span class="badge badge-amber">P1 — 第 1 月</span></td>
+        <td>1-2 周（审核）</td>
+      </tr>
+      <tr>
+        <td><strong>Godot Asset Library</strong></td><td>官方资源库</td><td>Godot 开发者</td><td>0%（免费平台）</td>
+        <td><span class="badge badge-amber">中</span></td>
+        <td><span class="badge badge-amber">P1 — 第 1 月</span></td>
+        <td>1-2 周</td>
+      </tr>
+      <tr>
+        <td><strong>itch.io</strong></td><td>独立开发者平台</td><td>800 万+ 用户</td><td>自定义（建议 10%）</td>
+        <td><span class="badge badge-green">低</span></td>
+        <td><span class="badge badge-amber">P1 — 第 1 月</span></td>
+        <td>1-3 天</td>
+      </tr>
+      <tr>
+        <td><strong>Gumroad / LemonSqueezy</strong></td><td>数字产品销售</td><td>独立开发者</td><td>5-10%</td>
+        <td><span class="badge badge-green">低</span></td>
+        <td><span class="badge badge-blue">P2 — 第 2 月</span></td>
+        <td>1-2 天</td>
+      </tr>
+      <tr>
+        <td><strong>Product Hunt</strong></td><td>产品发布平台</td><td>科技早期采用者</td><td>0%</td>
+        <td><span class="badge badge-amber">中（需准备）</span></td>
+        <td><span class="badge badge-blue">P2 — 第 2 月</span></td>
+        <td>需提前 2 周准备</td>
+      </tr>
+      <tr>
+        <td><strong>Unity Asset Store</strong></td><td>官方资源商店</td><td>Unity 开发者</td><td>30%</td>
+        <td><span class="badge badge-red">高（审核严格）</span></td>
+        <td><span class="badge badge-purple">P3 — 第 3 月</span></td>
+        <td>2-4 周（审核）</td>
+      </tr>
+    </table>
+    </div>
+  </div>
+
+  <h3>5.1 各平台上架详细要求</h3>
+
+  <div class="grid-2">
+    <div class="card">
+      <h4>GitHub 优化清单</h4>
+      <ul style="padding-left:18px; font-size:.88rem;">
+        <li>完善 README：添加 GIF 演示、架构图、快速开始</li>
+        <li>添加 GitHub Topics：mcp, cocos-creator, godot, unity, ai-tools, game-dev</li>
+        <li>创建 Release 页面，附带预编译包</li>
+        <li>添加 GitHub Actions CI/CD 徽章</li>
+        <li>创建 CONTRIBUTING.md 引导社区贡献</li>
+        <li>设置 GitHub Discussions 社区讨论</li>
+        <li>添加 GitHub Sponsors 赞助入口</li>
+        <li>提交到 awesome-mcp、awesome-cocos 等列表</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>npm 发布清单</h4>
+      <ul style="padding-left:18px; font-size:.88rem;">
+        <li>包名建议：<code>@cocosdesigntool/mcp-bridge</code></li>
+        <li>确保 package.json 的 description、keywords 完善</li>
+        <li>添加 bin 入口支持 <code>npx cocos-mcp-bridge</code></li>
+        <li>编写 npm README（与 GitHub 可不同）</li>
+        <li>设置 .npmignore 排除测试/文档</li>
+        <li>发布 scoped package 避免命名冲突</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>Cocos Store 上架要求</h4>
+      <ul style="padding-left:18px; font-size:.88rem;">
+        <li>需要 Cocos 开发者账号</li>
+        <li>插件需符合 Cocos 插件规范</li>
+        <li>提供至少 3 张截图 + 1 个演示视频</li>
+        <li>详细的中英文描述</li>
+        <li>标注支持的 Cocos Creator 版本范围</li>
+        <li>审核周期约 3-7 个工作日</li>
+        <li>可选免费或付费（30% 抽成）</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>Product Hunt 发布准备</h4>
+      <ul style="padding-left:18px; font-size:.88rem;">
+        <li>提前 2 周准备 Maker 页面</li>
+        <li>制作 1 分钟产品演示视频</li>
+        <li>准备 5 张高质量产品截图</li>
+        <li>撰写简洁有力的 Tagline（≤60 字符）</li>
+        <li>建议 Tagline：<em>"AI-native game dev toolkit for Cocos, Godot & Unity"</em></li>
+        <li>选择周二/周三发布（流量最高）</li>
+        <li>提前联系 5-10 个 Hunter 帮忙推荐</li>
+        <li>发布当天在社交媒体同步宣传</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>5.2 中国市场特殊渠道</h3>
+  <div class="card">
+    <div class="table-wrap">
+    <table>
+      <tr><th>渠道</th><th>类型</th><th>目标受众</th><th>操作方式</th></tr>
+      <tr><td><strong>Cocos 官方论坛</strong></td><td>社区</td><td>Cocos 中国开发者</td><td>发布技术文章 + 插件介绍帖</td></tr>
+      <tr><td><strong>Gitee</strong></td><td>代码托管</td><td>中国开发者</td><td>镜像仓库，提升国内访问速度</td></tr>
+      <tr><td><strong>掘金 / CSDN</strong></td><td>技术博客</td><td>中国技术社区</td><td>系列教程文章（AI + 游戏开发）</td></tr>
+      <tr><td><strong>B 站</strong></td><td>视频平台</td><td>游戏开发学习者</td><td>教程视频 + 实战演示</td></tr>
+      <tr><td><strong>微信公众号</strong></td><td>自媒体</td><td>游戏开发者</td><td>技术文章 + 更新日志</td></tr>
+      <tr><td><strong>知乎</strong></td><td>问答社区</td><td>技术决策者</td><td>回答 AI 游戏开发相关问题</td></tr>
+      <tr><td><strong>即刻 / X (Twitter)</strong></td><td>社交媒体</td><td>独立开发者</td><td>产品动态 + 开发日志</td></tr>
+    </table>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 6. 定价与收益模型 ============ -->
+<section id="pricing">
+  <h2>6. 定价与收益模型</h2>
+
+  <div class="callout">
+    <strong>定价策略：开源核心 + 付费增值（Open Core）</strong><br>
+    核心 MCP Bridge 功能保持 MIT 开源，通过 Pro 版增值功能、企业授权和增值服务实现商业化。这是 AI 开发工具领域最成功的商业模式（参考 Cursor、Windsurf、n8n）。
+  </div>
+
+  <h3>6.1 产品分层</h3>
+  <div class="grid-3">
+    <div class="tier">
+      <h4>Community（社区版）</h4>
+      <div class="price">免费</div>
+      <p style="font-size:.85rem; color:var(--text-secondary);">永久免费，MIT 开源</p>
+      <ul>
+        <li>Cocos MCP Bridge 全部 19 工具</li>
+        <li>Godot / Unity Bridge 基础功能</li>
+        <li>GameFlowEditor 蓝图编辑器</li>
+        <li>11 款 IDE 一键配置</li>
+        <li>社区支持（GitHub Issues）</li>
+        <li>基础文档</li>
+      </ul>
+    </div>
+    <div class="tier featured">
+      <h4>Pro（专业版）</h4>
+      <div class="price">¥99<span>/年</span></div>
+      <p style="font-size:.85rem; color:var(--text-secondary);">约 $13.5/年，低于竞品 Godot MCP Pro 的 $5 一次性</p>
+      <ul>
+        <li>社区版全部功能</li>
+        <li>高级原子宏工具包（批量操作）</li>
+        <li>AI 工作流模板库（20+ 预设）</li>
+        <li>多项目并行管理</li>
+        <li>高级安全策略（IP 白名单/审计日志）</li>
+        <li>优先邮件支持（48h 响应）</li>
+        <li>Pro 专属 Discord 频道</li>
+        <li>提前体验新功能</li>
+      </ul>
+    </div>
+    <div class="tier">
+      <h4>Team（团队版）</h4>
+      <div class="price">¥299<span>/人/年</span></div>
+      <p style="font-size:.85rem; color:var(--text-secondary);">3 人起购，适合工作室和团队</p>
+      <ul>
+        <li>Pro 版全部功能</li>
+        <li>团队协作蓝图编辑</li>
+        <li>操作审计与权限管理</li>
+        <li>自定义工具扩展 SDK</li>
+        <li>私有部署支持</li>
+        <li>专属技术支持（24h 响应）</li>
+        <li>季度产品路线图沟通</li>
+        <li>定制功能开发（按需报价）</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>6.2 补充收入来源</h3>
+  <div class="card">
+    <div class="table-wrap">
+    <table>
+      <tr><th>收入来源</th><th>模式</th><th>预估单价</th><th>目标客户</th><th>启动时间</th></tr>
+      <tr>
+        <td><strong>GitHub Sponsors</strong></td><td>赞助/捐赠</td><td>$1-$50/月</td><td>开源用户</td><td>立即</td>
+      </tr>
+      <tr>
+        <td><strong>付费教程课程</strong></td><td>一次性购买</td><td>¥49-¥199/课</td><td>学习者</td><td>第 2 月</td>
+      </tr>
+      <tr>
+        <td><strong>技术咨询</strong></td><td>按小时计费</td><td>¥500-¥1000/h</td><td>企业客户</td><td>第 3 月</td>
+      </tr>
+      <tr>
+        <td><strong>定制开发</strong></td><td>项目制</td><td>¥5000-¥50000/项目</td><td>游戏工作室</td><td>第 3 月</td>
+      </tr>
+      <tr>
+        <td><strong>工具模板市场</strong></td><td>抽成 30%</td><td>¥9-¥49/模板</td><td>社区开发者</td><td>第 6 月</td>
+      </tr>
+    </table>
+    </div>
+  </div>
+
+  <h3>6.3 定价对标分析</h3>
+  <div class="card">
+    <div class="table-wrap">
+    <table>
+      <tr><th>产品</th><th>定价</th><th>模式</th><th>我们的对标策略</th></tr>
+      <tr><td>Godot MCP Pro</td><td>$5 一次性</td><td>买断</td><td>我们 Pro 版 ¥99/年 提供更多功能 + 持续更新</td></tr>
+      <tr><td>GDAI MCP</td><td>$19 一次性</td><td>买断</td><td>我们覆盖 3 个引擎，性价比更高</td></tr>
+      <tr><td>daxianlee/cocos-mcp</td><td>免费</td><td>开源</td><td>社区版同样免费，Pro 版提供差异化增值</td></tr>
+      <tr><td>Cursor Pro</td><td>$20/月</td><td>订阅</td><td>我们是 Cursor 的补充工具，定价远低于此</td></tr>
+    </table>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 7. 推广与增长策略 ============ -->
+<section id="promotion">
+  <h2>7. 推广与增长策略</h2>
+
+  <h3>7.1 增长漏斗</h3>
+  <div class="card">
+    <div class="funnel">
+      <div class="funnel-step" style="width:90%; background: linear-gradient(90deg, #3b82f6, #2563eb);">认知层：GitHub / 技术博客 / 社交媒体 / MCP 目录 → 目标 10,000 月访问</div>
+      <div class="funnel-step" style="width:75%; background: linear-gradient(90deg, #6366f1, #4f46e5);">兴趣层：README 演示 / 教程视频 / 在线 Demo → 目标 30% 点击率</div>
+      <div class="funnel-step" style="width:60%; background: linear-gradient(90deg, #8b5cf6, #7c3aed);">试用层：npm install / GitHub Clone / 一键配置 → 目标 15% 安装率</div>
+      <div class="funnel-step" style="width:45%; background: linear-gradient(90deg, #a855f7, #9333ea);">活跃层：日常使用 / 社区参与 / 反馈 → 目标 40% 周活</div>
+      <div class="funnel-step" style="width:30%; background: linear-gradient(90deg, #c084fc, #a855f7);">付费层：Pro 升级 / 赞助 / 课程购买 → 目标 5-8% 转化率</div>
+    </div>
+  </div>
+
+  <h3>7.2 内容营销策略</h3>
+  <div class="grid-2">
+    <div class="card">
+      <h4>技术博客系列（中文）</h4>
+      <ol style="padding-left:18px; font-size:.88rem;">
+        <li><strong>《用 AI 10 分钟搭建一个 Cocos 游戏场景》</strong> — 入门引流</li>
+        <li><strong>《MCP 漏斗架构：为什么 19 个工具比 80 个更好》</strong> — 技术深度</li>
+        <li><strong>《从零开始：AI 驱动的游戏对话系统》</strong> — 蓝图编辑器教程</li>
+        <li><strong>《Cocos + Claude：自动化游戏 UI 布局实战》</strong> — 实战案例</li>
+        <li><strong>《多引擎 AI 开发：一套工具通吃 Cocos/Godot/Unity》</strong> — 差异化宣传</li>
+        <li><strong>《游戏开发者的 MCP 入门指南》</strong> — 科普教育</li>
+      </ol>
+      <p style="font-size:.82rem; color:var(--text-secondary); margin-top:8px;">发布平台：掘金、CSDN、知乎、Cocos 论坛、微信公众号</p>
+    </div>
+    <div class="card">
+      <h4>技术博客系列（英文）</h4>
+      <ol style="padding-left:18px; font-size:.88rem;">
+        <li><strong>"Build a Game Scene in 10 Min with AI + Cocos Creator"</strong></li>
+        <li><strong>"Why Funnel Architecture Beats Flat Tools for AI Game Dev"</strong></li>
+        <li><strong>"The Only Multi-Engine MCP Bridge: Cocos + Godot + Unity"</strong></li>
+        <li><strong>"Atomic Operations: Making AI Game Dev Reliable"</strong></li>
+        <li><strong>"From Blueprint to Playable: AI-Powered Dialogue Systems"</strong></li>
+      </ol>
+      <p style="font-size:.82rem; color:var(--text-secondary); margin-top:8px;">发布平台：Dev.to、Medium、Hashnode、Reddit (r/gamedev, r/godot, r/cocos2d)</p>
+    </div>
+  </div>
+
+  <h3>7.3 视频内容策略</h3>
+  <div class="card">
+    <div class="table-wrap">
+    <table>
+      <tr><th>视频类型</th><th>时长</th><th>平台</th><th>频率</th><th>目标</th></tr>
+      <tr><td>产品演示 Demo</td><td>1-3 分钟</td><td>B 站 / YouTube</td><td>发布时 1 个</td><td>快速展示核心价值</td></tr>
+      <tr><td>快速教程</td><td>5-10 分钟</td><td>B 站 / YouTube</td><td>每周 1 个</td><td>教用户上手使用</td></tr>
+      <tr><td>实战项目</td><td>20-40 分钟</td><td>B 站 / YouTube</td><td>每月 2 个</td><td>展示完整工作流</td></tr>
+      <tr><td>短视频/Reels</td><td>30-60 秒</td><td>抖音 / X / 即刻</td><td>每周 2-3 个</td><td>病毒式传播</td></tr>
+      <tr><td>直播 Coding</td><td>1-2 小时</td><td>B 站 / Twitch</td><td>每月 1 次</td><td>社区互动 + 信任建立</td></tr>
+    </table>
+    </div>
+  </div>
+
+  <h3>7.4 社区建设策略</h3>
+  <div class="grid-2">
+    <div class="card">
+      <h4>Discord 社区（国际）</h4>
+      <ul style="padding-left:18px; font-size:.88rem;">
+        <li>#general — 通用讨论</li>
+        <li>#cocos-bridge — Cocos 专区</li>
+        <li>#godot-bridge — Godot 专区</li>
+        <li>#unity-bridge — Unity 专区</li>
+        <li>#blueprint-editor — 蓝图编辑器</li>
+        <li>#showcase — 用户作品展示</li>
+        <li>#feature-requests — 功能建议</li>
+        <li>#pro-lounge — Pro 用户专属（付费激励）</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>微信群 / QQ 群（中国）</h4>
+      <ul style="padding-left:18px; font-size:.88rem;">
+        <li>CocosDesignTool 用户群（开放）</li>
+        <li>AI 游戏开发交流群（泛主题引流）</li>
+        <li>Pro 用户 VIP 群（付费专属）</li>
+        <li>定期群内分享会（每月 1 次）</li>
+        <li>新版本内测群（培养核心用户）</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>7.5 合作与联动</h3>
+  <div class="card">
+    <div class="table-wrap">
+    <table>
+      <tr><th>合作方</th><th>合作形式</th><th>预期收益</th></tr>
+      <tr><td>Cocos 官方</td><td>申请官方推荐插件 / 联合技术文章</td><td>品牌背书 + 流量</td></tr>
+      <tr><td>Cursor / Windsurf</td><td>MCP 生态合作 / 官方推荐列表</td><td>精准用户获取</td></tr>
+      <tr><td>Anthropic (Claude)</td><td>MCP 生态展示案例</td><td>全球曝光</td></tr>
+      <tr><td>游戏开发 KOL</td><td>赞助评测 / 联合教程</td><td>信任传递 + 用户增长</td></tr>
+      <tr><td>游戏开发培训机构</td><td>课程合作 / 工具推荐</td><td>批量用户获取</td></tr>
+      <tr><td>独立游戏工作室</td><td>免费 Pro 授权换案例</td><td>真实案例 + 口碑</td></tr>
+    </table>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 8. 执行时间线 ============ -->
+<section id="timeline">
+  <h2>8. 执行时间线（6 个月）</h2>
+  <div class="card">
+    <div class="timeline">
+      <div class="timeline-item">
+        <h4>第 0-2 周：基础建设</h4>
+        <p>
+          优化 GitHub README（GIF 演示 + 架构图）· 发布 npm 包 · 提交到 4 个 MCP 目录站 ·
+          创建 Discord 服务器 · 设置 GitHub Sponsors · 创建 Gitee 镜像 · 准备产品截图和演示视频素材
+        </p>
+      </div>
+      <div class="timeline-item">
+        <h4>第 3-4 周（第 1 月）：首批平台上架</h4>
+        <p>
+          提交 Cocos Store 审核 · 提交 Godot Asset Library · 上架 itch.io ·
+          发布第 1 篇技术博客（中英文）· 发布第 1 个教程视频 · 建立微信/QQ 用户群
+        </p>
+      </div>
+      <div class="timeline-item">
+        <h4>第 5-8 周（第 2 月）：Product Hunt 发布 + 内容爆发</h4>
+        <p>
+          Product Hunt 正式发布 · 上架 Gumroad/LemonSqueezy（Pro 版）·
+          发布 4 篇技术博客 · 发布 4 个教程视频 · 2 个短视频 ·
+          联系 5 个游戏开发 KOL · 提交 awesome-mcp 等列表 · 首次直播 Coding
+        </p>
+      </div>
+      <div class="timeline-item">
+        <h4>第 9-12 周（第 3 月）：Pro 版正式发售 + 社区增长</h4>
+        <p>
+          Pro 版功能开发完成并发售 · 提交 Unity Asset Store 审核 ·
+          发布付费教程课程 · 开始技术咨询服务 · 联系 Cocos 官方合作 ·
+          社区达到 200+ 成员 · GitHub 星标目标 300+
+        </p>
+      </div>
+      <div class="timeline-item">
+        <h4>第 13-18 周（第 4-5 月）：规模化增长</h4>
+        <p>
+          Team 版发布 · 工具模板市场 Beta · 与培训机构合作 ·
+          持续内容输出（每周 1 博客 + 1 视频）· 社区达到 500+ 成员 ·
+          GitHub 星标目标 800+ · 首批企业客户
+        </p>
+      </div>
+      <div class="timeline-item">
+        <h4>第 19-24 周（第 6 月）：生态成熟</h4>
+        <p>
+          工具模板市场正式版 · 社区贡献者计划 · 年度用户大会/线上活动 ·
+          评估 A 轮融资可能性 · 社区达到 1000+ 成员 · GitHub 星标目标 1500+
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 9. 收益预测 ============ -->
+<section id="revenue">
+  <h2>9. 收益预测（12 个月）</h2>
+
+  <h3>9.1 用户增长预测</h3>
+  <div class="card">
+    <div class="table-wrap">
+    <table>
+      <tr><th>月份</th><th>GitHub 星</th><th>npm 周下载</th><th>活跃用户</th><th>Pro 付费用户</th><th>Team 付费用户</th></tr>
+      <tr><td>M1</td><td>100</td><td>50</td><td>80</td><td>0</td><td>0</td></tr>
+      <tr><td>M2</td><td>250</td><td>150</td><td>200</td><td>5</td><td>0</td></tr>
+      <tr><td>M3</td><td>500</td><td>300</td><td>400</td><td>20</td><td>0</td></tr>
+      <tr><td>M4</td><td>700</td><td>450</td><td>550</td><td>40</td><td>3</td></tr>
+      <tr><td>M5</td><td>900</td><td>600</td><td>700</td><td>65</td><td>6</td></tr>
+      <tr><td>M6</td><td>1200</td><td>800</td><td>900</td><td>95</td><td>10</td></tr>
+      <tr><td>M7</td><td>1500</td><td>1000</td><td>1100</td><td>130</td><td>15</td></tr>
+      <tr><td>M8</td><td>1800</td><td>1200</td><td>1300</td><td>165</td><td>20</td></tr>
+      <tr><td>M9</td><td>2100</td><td>1400</td><td>1500</td><td>200</td><td>25</td></tr>
+      <tr><td>M10</td><td>2500</td><td>1600</td><td>1700</td><td>240</td><td>30</td></tr>
+      <tr><td>M11</td><td>2800</td><td>1800</td><td>1900</td><td>280</td><td>35</td></tr>
+      <tr><td>M12</td><td>3200</td><td>2000</td><td>2100</td><td>320</td><td>40</td></tr>
+    </table>
+    </div>
+  </div>
+
+  <h3>9.2 收入预测（三种场景）</h3>
+  <div class="card">
+    <div class="table-wrap">
+    <table>
+      <tr><th>收入来源</th><th>保守（年）</th><th>基准（年）</th><th>乐观（年）</th></tr>
+      <tr>
+        <td>Pro 订阅（¥99/年）</td>
+        <td>150 人 × ¥99 = ¥14,850</td>
+        <td>320 人 × ¥99 = ¥31,680</td>
+        <td>500 人 × ¥99 = ¥49,500</td>
+      </tr>
+      <tr>
+        <td>Team 订阅（¥299/人/年）</td>
+        <td>20 人 × ¥299 = ¥5,980</td>
+        <td>40 人 × ¥299 = ¥11,960</td>
+        <td>80 人 × ¥299 = ¥23,920</td>
+      </tr>
+      <tr>
+        <td>GitHub Sponsors</td>
+        <td>¥3,000</td>
+        <td>¥8,000</td>
+        <td>¥15,000</td>
+      </tr>
+      <tr>
+        <td>付费教程课程</td>
+        <td>100 份 × ¥99 = ¥9,900</td>
+        <td>300 份 × ¥99 = ¥29,700</td>
+        <td>600 份 × ¥99 = ¥59,400</td>
+      </tr>
+      <tr>
+        <td>技术咨询</td>
+        <td>20h × ¥500 = ¥10,000</td>
+        <td>50h × ¥700 = ¥35,000</td>
+        <td>100h × ¥800 = ¥80,000</td>
+      </tr>
+      <tr>
+        <td>定制开发</td>
+        <td>2 项 × ¥10,000 = ¥20,000</td>
+        <td>5 项 × ¥15,000 = ¥75,000</td>
+        <td>10 项 × ¥20,000 = ¥200,000</td>
+      </tr>
+      <tr>
+        <td>模板市场抽成</td>
+        <td>¥2,000</td>
+        <td>¥8,000</td>
+        <td>¥20,000</td>
+      </tr>
+      <tr style="font-weight:700; background:#f0fdf4;">
+        <td>年度总收入</td>
+        <td style="color:var(--success);">¥65,730</td>
+        <td style="color:var(--primary);">¥199,340</td>
+        <td style="color:#7c3aed;">¥447,820</td>
+      </tr>
+      <tr style="font-weight:600;">
+        <td>折合美元（约）</td>
+        <td>$9,000</td>
+        <td>$27,300</td>
+        <td>$61,300</td>
+      </tr>
+    </table>
+    </div>
+
+    <div style="margin-top:16px;">
+      <h4>月度收入趋势（基准场景）</h4>
+      <div style="display:flex; align-items:flex-end; gap:8px; height:200px; margin-top:12px; padding: 0 10px;">
+        <div style="flex:1; display:flex; flex-direction:column; align-items:center;">
+          <span style="font-size:.7rem; color:var(--text-secondary);">¥0</span>
+          <div style="width:100%; height:2px; background:var(--primary); border-radius:4px; margin-top:auto;"></div>
+          <span style="font-size:.7rem; margin-top:4px;">M1</span>
+        </div>
+        <div style="flex:1; display:flex; flex-direction:column; align-items:center;">
+          <span style="font-size:.7rem; color:var(--text-secondary);">¥1k</span>
+          <div style="width:100%; height:10px; background:var(--primary); border-radius:4px; margin-top:auto;"></div>
+          <span style="font-size:.7rem; margin-top:4px;">M2</span>
+        </div>
+        <div style="flex:1; display:flex; flex-direction:column; align-items:center;">
+          <span style="font-size:.7rem; color:var(--text-secondary);">¥4k</span>
+          <div style="width:100%; height:30px; background:var(--primary); border-radius:4px; margin-top:auto;"></div>
+          <span style="font-size:.7rem; margin-top:4px;">M3</span>
+        </div>
+        <div style="flex:1; display:flex; flex-direction:column; align-items:center;">
+          <span style="font-size:.7rem; color:var(--text-secondary);">¥7k</span>
+          <div style="width:100%; height:50px; background:var(--primary); border-radius:4px; margin-top:auto;"></div>
+          <span style="font-size:.7rem; margin-top:4px;">M4</span>
+        </div>
+        <div style="flex:1; display:flex; flex-direction:column; align-items:center;">
+          <span style="font-size:.7rem; color:var(--text-secondary);">¥11k</span>
+          <div style="width:100%; height:70px; background:var(--primary); border-radius:4px; margin-top:auto;"></div>
+          <span style="font-size:.7rem; margin-top:4px;">M5</span>
+        </div>
+        <div style="flex:1; display:flex; flex-direction:column; align-items:center;">
+          <span style="font-size:.7rem; color:var(--text-secondary);">¥14k</span>
+          <div style="width:100%; height:90px; background:var(--primary); border-radius:4px; margin-top:auto;"></div>
+          <span style="font-size:.7rem; margin-top:4px;">M6</span>
+        </div>
+        <div style="flex:1; display:flex; flex-direction:column; align-items:center;">
+          <span style="font-size:.7rem; color:var(--text-secondary);">¥17k</span>
+          <div style="width:100%; height:110px; background:#6366f1; border-radius:4px; margin-top:auto;"></div>
+          <span style="font-size:.7rem; margin-top:4px;">M7</span>
+        </div>
+        <div style="flex:1; display:flex; flex-direction:column; align-items:center;">
+          <span style="font-size:.7rem; color:var(--text-secondary);">¥19k</span>
+          <div style="width:100%; height:125px; background:#6366f1; border-radius:4px; margin-top:auto;"></div>
+          <span style="font-size:.7rem; margin-top:4px;">M8</span>
+        </div>
+        <div style="flex:1; display:flex; flex-direction:column; align-items:center;">
+          <span style="font-size:.7rem; color:var(--text-secondary);">¥21k</span>
+          <div style="width:100%; height:140px; background:#6366f1; border-radius:4px; margin-top:auto;"></div>
+          <span style="font-size:.7rem; margin-top:4px;">M9</span>
+        </div>
+        <div style="flex:1; display:flex; flex-direction:column; align-items:center;">
+          <span style="font-size:.7rem; color:var(--text-secondary);">¥24k</span>
+          <div style="width:100%; height:155px; background:#7c3aed; border-radius:4px; margin-top:auto;"></div>
+          <span style="font-size:.7rem; margin-top:4px;">M10</span>
+        </div>
+        <div style="flex:1; display:flex; flex-direction:column; align-items:center;">
+          <span style="font-size:.7rem; color:var(--text-secondary);">¥27k</span>
+          <div style="width:100%; height:175px; background:#7c3aed; border-radius:4px; margin-top:auto;"></div>
+          <span style="font-size:.7rem; margin-top:4px;">M11</span>
+        </div>
+        <div style="flex:1; display:flex; flex-direction:column; align-items:center;">
+          <span style="font-size:.7rem; color:var(--text-secondary);">¥30k</span>
+          <div style="width:100%; height:195px; background:#7c3aed; border-radius:4px; margin-top:auto;"></div>
+          <span style="font-size:.7rem; margin-top:4px;">M12</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 10. 风险与应对 ============ -->
+<section id="risk">
+  <h2>10. 风险与应对</h2>
+  <div class="card">
+    <div class="table-wrap">
+    <table>
+      <tr><th>风险</th><th>概率</th><th>影响</th><th>应对策略</th></tr>
+      <tr>
+        <td><strong>Unity 官方 AI Gateway 发布</strong></td>
+        <td><span class="badge badge-red">高</span></td>
+        <td><span class="badge badge-red">高</span></td>
+        <td>
+          提前将 Unity Bridge 定位为"轻量免费替代"；<br>
+          强调多引擎统一体验的差异化；<br>
+          官方方案发布后快速适配，做兼容层
+        </td>
+      </tr>
+      <tr>
+        <td><strong>daxianlee 快速迭代追赶</strong></td>
+        <td><span class="badge badge-amber">中</span></td>
+        <td><span class="badge badge-amber">中</span></td>
+        <td>
+          保持技术领先（原子操作、漏斗架构）；<br>
+          加速社区建设弥补星标差距；<br>
+          考虑合作而非对抗（互补生态）
+        </td>
+      </tr>
+      <tr>
+        <td><strong>MCP 协议标准变更</strong></td>
+        <td><span class="badge badge-amber">中</span></td>
+        <td><span class="badge badge-amber">中</span></td>
+        <td>
+          紧跟 @modelcontextprotocol/sdk 更新；<br>
+          参与 MCP 社区讨论，提前获知变更；<br>
+          架构设计保持协议层可替换
+        </td>
+      </tr>
+      <tr>
+        <td><strong>付费转化率低于预期</strong></td>
+        <td><span class="badge badge-amber">中</span></td>
+        <td><span class="badge badge-amber">中</span></td>
+        <td>
+          降低 Pro 定价或改为一次性买断；<br>
+          增加免费试用期（14 天 → 30 天）；<br>
+          加大咨询和定制开发收入比重
+        </td>
+      </tr>
+      <tr>
+        <td><strong>Cocos Creator 市场份额下降</strong></td>
+        <td><span class="badge badge-green">低</span></td>
+        <td><span class="badge badge-red">高</span></td>
+        <td>
+          多引擎策略天然对冲；<br>
+          加速 Godot Bridge 成熟度（Godot 增长最快）；<br>
+          关注新兴引擎（如 Bevy）
+        </td>
+      </tr>
+      <tr>
+        <td><strong>AI 编码助手格局变化</strong></td>
+        <td><span class="badge badge-amber">中</span></td>
+        <td><span class="badge badge-green">低</span></td>
+        <td>
+          MCP 是开放协议，不绑定特定 AI 助手；<br>
+          已支持 11 款 IDE，风险分散；<br>
+          持续适配新的 AI 编码工具
+        </td>
+      </tr>
+      <tr>
+        <td><strong>开源项目维护倦怠</strong></td>
+        <td><span class="badge badge-amber">中</span></td>
+        <td><span class="badge badge-amber">中</span></td>
+        <td>
+          通过 Pro 收入实现可持续发展；<br>
+          培养社区贡献者分担维护；<br>
+          设定合理的发布节奏（月度而非周度）
+        </td>
+      </tr>
+    </table>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 11. 行动清单 ============ -->
+<section id="action">
+  <h2>11. 下一步行动清单</h2>
+
+  <div class="grid-2">
+    <div class="card" style="border-left: 4px solid var(--danger);">
+      <h4 style="color:var(--danger);">本周必做（P0）</h4>
+      <ol style="padding-left:18px; font-size:.88rem;">
+        <li>优化 GitHub README — 添加 GIF 演示、架构图、快速开始指南</li>
+        <li>添加 GitHub Topics 和 Description</li>
+        <li>设置 GitHub Sponsors 赞助页面</li>
+        <li>准备 npm 发布（包名、README、.npmignore）</li>
+        <li>提交到 mcp.so / pulsemcp.com / glama.ai 目录</li>
+        <li>创建 Gitee 镜像仓库</li>
+      </ol>
+    </div>
+    <div class="card" style="border-left: 4px solid var(--accent);">
+      <h4 style="color:var(--accent);">第 1 月必做（P1）</h4>
+      <ol style="padding-left:18px; font-size:.88rem;">
+        <li>发布 npm 包 <code>@cocosdesigntool/mcp-bridge</code></li>
+        <li>提交 Cocos Store 审核</li>
+        <li>上架 itch.io</li>
+        <li>创建 Discord 服务器 + 微信群</li>
+        <li>发布第 1 篇技术博客（掘金 + Dev.to）</li>
+        <li>录制第 1 个产品演示视频</li>
+        <li>提交到 awesome-mcp 列表</li>
+      </ol>
+    </div>
+    <div class="card" style="border-left: 4px solid var(--primary);">
+      <h4 style="color:var(--primary);">第 2 月必做（P2）</h4>
+      <ol style="padding-left:18px; font-size:.88rem;">
+        <li>Product Hunt 发布</li>
+        <li>上架 Gumroad（Pro 版预售）</li>
+        <li>发布 4 篇技术博客</li>
+        <li>发布 4 个教程视频</li>
+        <li>联系 5 个游戏开发 KOL</li>
+        <li>首次直播 Coding</li>
+        <li>开始 Pro 版功能开发</li>
+      </ol>
+    </div>
+    <div class="card" style="border-left: 4px solid #7c3aed;">
+      <h4 style="color:#7c3aed;">第 3 月必做（P3）</h4>
+      <ol style="padding-left:18px; font-size:.88rem;">
+        <li>Pro 版正式发售</li>
+        <li>提交 Unity Asset Store</li>
+        <li>发布付费教程课程</li>
+        <li>联系 Cocos 官方合作</li>
+        <li>开始技术咨询服务</li>
+        <li>评估首批企业客户需求</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="callout success" style="margin-top:20px;">
+    <strong>关键成功指标（KPI）：</strong><br>
+    <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap:12px; margin-top:10px;">
+      <div>
+        <div style="font-size:.82rem; color:var(--text-secondary);">3 个月 GitHub 星</div>
+        <div style="font-size:1.3rem; font-weight:700; color:var(--primary);">500+</div>
+        <div class="progress-bar"><div class="progress-fill" style="width:0%; background:var(--primary);"></div></div>
+      </div>
+      <div>
+        <div style="font-size:.82rem; color:var(--text-secondary);">6 个月活跃用户</div>
+        <div style="font-size:1.3rem; font-weight:700; color:var(--primary);">900+</div>
+        <div class="progress-bar"><div class="progress-fill" style="width:0%; background:var(--success);"></div></div>
+      </div>
+      <div>
+        <div style="font-size:.82rem; color:var(--text-secondary);">6 个月 Pro 用户</div>
+        <div style="font-size:1.3rem; font-weight:700; color:var(--primary);">95+</div>
+        <div class="progress-bar"><div class="progress-fill" style="width:0%; background:var(--accent);"></div></div>
+      </div>
+      <div>
+        <div style="font-size:.82rem; color:var(--text-secondary);">12 个月年收入</div>
+        <div style="font-size:1.3rem; font-weight:700; color:var(--primary);">¥20 万+</div>
+        <div class="progress-bar"><div class="progress-fill" style="width:0%; background:#7c3aed;"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>CocosDesignTool 商业策略报告 v1.0 &nbsp;|&nbsp; 生成日期：2026-03-13 &nbsp;|&nbsp; 作者：jiangking &lt;jiangkingwelcome@vip.qq.com&gt;</p>
+  <p style="margin-top:4px;">本报告基于公开市场数据和产品分析生成，收益预测仅供参考，实际结果取决于执行力和市场变化。</p>
+</footer>
+
+<!-- ============ Radar Chart Script ============ -->
+<script>
+(function() {
+  const canvas = document.getElementById('radarChart');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  const cx = W / 2, cy = H / 2, R = 160;
+  const labels = ['功能完整度', '社区规模', '架构创新', '安全性', '易用性', '文档质量'];
+  const datasets = [
+    { name: 'CocosDesignTool', data: [9.2, 3.5, 9.5, 9.0, 8.5, 8.0], color: '#2563eb', fill: 'rgba(37,99,235,.15)' },
+    { name: 'daxianlee', data: [7.0, 7.5, 5.0, 4.0, 6.5, 6.0], color: '#94a3b8', fill: 'rgba(148,163,184,.1)' },
+    { name: 'Godot MCP Pro', data: [7.5, 5.0, 6.0, 5.5, 7.0, 6.5], color: '#f59e0b', fill: 'rgba(245,158,11,.1)' }
+  ];
+  const n = labels.length;
+  const step = (Math.PI * 2) / n;
+  const offset = -Math.PI / 2;
+
+  function toXY(i, v) {
+    const a = offset + step * i;
+    const r = (v / 10) * R;
+    return [cx + r * Math.cos(a), cy + r * Math.sin(a)];
+  }
+
+  // grid
+  ctx.strokeStyle = '#e2e8f0'; ctx.lineWidth = 1;
+  for (let lv = 2; lv <= 10; lv += 2) {
+    ctx.beginPath();
+    for (let i = 0; i <= n; i++) { const [x, y] = toXY(i % n, lv); i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y); }
+    ctx.stroke();
+  }
+  // axes
+  for (let i = 0; i < n; i++) {
+    const [x, y] = toXY(i, 10);
+    ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(x, y); ctx.stroke();
+  }
+  // labels
+  ctx.fillStyle = '#1e293b'; ctx.font = '13px sans-serif'; ctx.textAlign = 'center';
+  for (let i = 0; i < n; i++) {
+    const [x, y] = toXY(i, 11.5);
+    ctx.fillText(labels[i], x, y + 4);
+  }
+  // datasets
+  datasets.forEach(ds => {
+    ctx.beginPath();
+    ds.data.forEach((v, i) => { const [x, y] = toXY(i, v); i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y); });
+    ctx.closePath();
+    ctx.fillStyle = ds.fill; ctx.fill();
+    ctx.strokeStyle = ds.color; ctx.lineWidth = 2; ctx.stroke();
+    ds.data.forEach((v, i) => {
+      const [x, y] = toXY(i, v);
+      ctx.beginPath(); ctx.arc(x, y, 4, 0, Math.PI * 2); ctx.fillStyle = ds.color; ctx.fill();
+    });
+  });
+  // legend
+  let ly = H - 20;
+  ctx.font = '12px sans-serif'; ctx.textAlign = 'left';
+  let lx = cx - 140;
+  datasets.forEach(ds => {
+    ctx.fillStyle = ds.color;
+    ctx.fillRect(lx, ly - 8, 12, 12);
+    ctx.fillStyle = '#1e293b';
+    ctx.fillText(ds.name, lx + 16, ly + 2);
+    lx += 120;
+  });
+})();
+</script>
+</div>
+</body>
+</html>

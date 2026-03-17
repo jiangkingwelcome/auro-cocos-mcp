@@ -1,0 +1,175 @@
+{
+  "package_version": 2,
+  "name": "auro-cocos-mcp",
+  "version": "1.0.14",
+  "title": "Aura for Cocos Creator",
+  "icon": "assets/aura-brand-icon.png",
+  "description": "AI-powered Cocos Creator editor plugin — query, modify, and control your project via MCP",
+  "author": "GameFlowEditor",
+  "editor": ">=3.6.0",
+  "main": "./dist/main.js",
+  "panels": {
+    "default": {
+      "title": "Aura",
+      "type": "dockable",
+      "main": "./dist/panels/default/index.js",
+      "size": {
+        "min-width": 360,
+        "min-height": 500,
+        "width": 430,
+        "height": 660
+      }
+    }
+  },
+  "contributions": {
+    "menu": [
+      {
+        "path": "扩展",
+        "label": "Aura",
+        "message": "open-panel"
+      }
+    ],
+    "messages": {
+      "start-server": {
+        "public": true,
+        "description": "Start standalone MCP HTTP service",
+        "methods": [
+          "startServer"
+        ]
+      },
+      "stop-server": {
+        "public": true,
+        "description": "Stop standalone MCP HTTP service",
+        "methods": [
+          "stopServer"
+        ]
+      },
+      "restart-server": {
+        "public": true,
+        "description": "Restart standalone MCP HTTP service",
+        "methods": [
+          "restartServer"
+        ]
+      },
+      "open-panel": {
+        "public": true,
+        "description": "Open status panel",
+        "methods": [
+          "openPanel"
+        ]
+      },
+      "get-service-info": {
+        "public": true,
+        "description": "Get current service status info",
+        "methods": [
+          "getServiceInfo"
+        ]
+      },
+      "configure-ide": {
+        "public": true,
+        "description": "One-click configure IDE (Cursor/Windsurf) MCP",
+        "methods": [
+          "configureIDE"
+        ]
+      },
+      "get-settings": {
+        "public": true,
+        "description": "Get bridge settings",
+        "methods": [
+          "getSettings"
+        ]
+      },
+      "update-settings": {
+        "public": true,
+        "description": "Update bridge settings",
+        "methods": [
+          "updateSettings"
+        ]
+      },
+      "set-tool-enabled": {
+        "public": true,
+        "description": "Enable or disable a specific MCP tool",
+        "methods": [
+          "setToolEnabled"
+        ]
+      },
+      "reset-settings": {
+        "public": true,
+        "description": "Reset bridge settings to defaults",
+        "methods": [
+          "resetSettings"
+        ]
+      },
+      "get-license-status": {
+        "public": true,
+        "description": "Get Pro license activation status",
+        "methods": [
+          "getLicenseStatus"
+        ]
+      },
+      "activate-license": {
+        "public": true,
+        "description": "Activate Pro license with a key",
+        "methods": [
+          "activateLicense"
+        ]
+      },
+      "scene:ready": {
+        "methods": [
+          "onSceneReady"
+        ]
+      }
+    },
+    "scene": {
+      "script": "./dist/scene.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -b && npm run copy-panels",
+    "copy-panels": "node -e \"const fs = require('fs'); const path = require('path'); function copyDir(src, dest) { fs.mkdirSync(dest, {recursive: true}); fs.readdirSync(src).forEach(file => { const srcPath = path.join(src, file); const destPath = path.join(dest, file); if (fs.statSync(srcPath).isDirectory()) { copyDir(srcPath, destPath); } else if (file.endsWith('.js')) { fs.copyFileSync(srcPath, destPath); } }); } copyDir('src/panels', 'dist/panels');\"",
+    "watch": "tsc -w",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "lint": "eslint src/ tests/",
+    "lint:fix": "eslint src/ tests/ --fix",
+    "format": "prettier --write \"src/**/*.ts\" \"tests/**/*.ts\"",
+    "format:check": "prettier --check \"src/**/*.ts\" \"tests/**/*.ts\"",
+    "ci": "npm run typecheck && npm run lint && npm run test:coverage",
+    "build:release": "node scripts/build-release.mjs",
+    "build:release:analyze": "node scripts/build-release.mjs --analyze",
+    "build:protected": "node scripts/build-release.mjs && node scripts/build-protected.mjs",
+    "build:protected:obfuscate-only": "node scripts/build-release.mjs && node scripts/build-protected.mjs --obfuscate-only",
+    "build:native": "node scripts/build-native.mjs",
+    "build:native:release": "node scripts/build-native.mjs --release",
+    "package:win": "scripts\\package-win.bat",
+    "package:mac": "bash ./scripts/package-mac.sh",
+    "package:release:win": "scripts\\package-release-win.bat",
+    "package:release:win:compat": "scripts\\package-release-win.bat --no-bytenode",
+    "package:release:mac": "bash ./scripts/package-release-mac.sh",
+    "package:release:mac:compat": "bash ./scripts/package-release-mac.sh --no-bytenode",
+    "package:pro": "node scripts/package-pro.mjs",
+    "package:pro:skip-rust": "node scripts/package-pro.mjs --skip-rust",
+    "package:pro:win": "scripts\\package-pro-win.bat",
+    "package:pro:mac": "bash ./scripts/package-pro-mac.sh",
+    "verify": "node ./scripts/verify-local.mjs",
+    "install:global": "node ./scripts/install-global.js"
+  },
+  "dependencies": {
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^22.14.0",
+    "@vitest/coverage-v8": "^4.0.18",
+    "bytenode": "^1.5.7",
+    "esbuild": "^0.27.3",
+    "eslint": "^10.0.0",
+    "javascript-obfuscator": "^5.3.0",
+    "prettier": "^3.8.1",
+    "typescript": "~5.8.2",
+    "typescript-eslint": "^8.55.0",
+    "vitest": "^4.0.0"
+  }
+}

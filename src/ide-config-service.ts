@@ -1,0 +1,251 @@
+import fs from 'fs';
+import os from 'os';
+import path from 'path';
+import { execSync } from 'child_process';
+import { ErrorCategory, logIgnored } from './error-utils';
+
+export const IDE_NAMES = [
+  'cursor', 'windsurf', 'claude', 'trae', 'kiro', 'antigravity',
+  'gemini-cli', 'codex', 'claude-code', 'codebuddy', 'comate',
+] as const;
+
+export type IdeName = (typeof IDE_NAMES)[number];
+
+const TOML_IDES: ReadonlySet<string> = new Set(['codex']);
+const CLI_IDES: ReadonlySet<string> = new Set(['claude-code']);
+
+function getAppDataPath(appName: string, fileName: string): string {
+  return process.platform === 'win32'
+    ? path.join(process.env.APPDATA || path.join(os.homedir(), 'AppData', 'Roaming'), appName, fileName)
+    : path.join(os.homedir(), 'Library', 'Application Support', appName, fileName);
+}
+
+export function getIdeConfigPath(ide: string): string {
+  switch (ide) {
+    case 'cursor': return path.join(os.homedir(), '.cursor', 'mcp.json');
+    case 'windsurf': return path.join(os.homedir(), '.codeium', 'windsurf', 'mcp_config.json');
+    case 'claude': return getAppDataPath('Claude', 'claude_desktop_config.json');
+    case 'trae': return getAppDataPath('Trae', 'mcp.json');
+    case 'kiro': return path.join(os.homedir(), '.kiro', 'mcp.json');
+    case 'antigravity': return path.join(os.homedir(), '.gemini', 'antigravity', 'mcp_config.json');
+    case 'gemini-cli': return path.join(os.homedir(), '.gemini', 'settings.json');
+    case 'codex': return path.join(os.homedir(), '.codex', 'config.toml');
+    case 'claude-code': return '';
+    case 'codebuddy': return getAppDataPath('CodeBuddy', 'codebuddy_mcp_settings.json');
+    case 'comate': return path.join(os.homedir(), '.baidu-comate', 'mcp.json');
+    default: return '';
+  }
+}
+
+export function hasOurEntry(filePath: string): boolean {
+  if (!filePath) return false;
+  try {
+    if (!fs.existsSync(filePath)) return false;
+    const raw = fs.readFileSync(filePath, 'utf-8');
+    return raw.includes('aura-cocos') || raw.includes('aura-for-cocos') || raw.includes('cocos-bridge-ai-mcp') || raw.includes('cocos-mcp-bridge');
+  } catch (e) {
+    logIgnored(ErrorCategory.CONFIG, `检查文件 "${filePath}" 是否包含插件入口失败`, e);
+    return false;
+  }
+}
+
+let _claudeCodeCached: boolean | null = null;
+let _claudeCodeCacheTs = 0;
+const CLAUDE_CODE_CACHE_TTL = 60_000;
+
+function hasClaudeCodeEntry(): boolean {
+  const now = Date.now();
+  if (_claudeCodeCached !== null && now - _claudeCodeCacheTs < CLAUDE_CODE_CACHE_TTL) {
+    return _claudeCodeCached;
+  }
+  try {
+    const { exec } = require('child_process');
+    exec('claude mcp list', { encoding: 'utf-8', timeout: 5000 }, (err: Error | null, stdout: string) => {
+      _claudeCodeCached = !err && typeof stdout === 'string' && (stdout.includes('aura-cocos') || stdout.includes('aura-cocos'));
+      _claudeCodeCacheTs = Date.now();
+    });
+  } catch {
+    _claudeCodeCached = false;
+    _claudeCodeCacheTs = now;
+  }
+  return _claudeCodeCached ?? false;
+}
+
+let _configStatusCache: Record<string, boolean> | null = null;
+let _configStatusCacheTs = 0;
+const CONFIG_STATUS_CACHE_TTL = 30_000;
+
+export function getConfigStatus(): Record<string, boolean> {
+  const now = Date.now();
+  if (_configStatusCache && now - _configStatusCacheTs < CONFIG_STATUS_CACHE_TTL) {
+    return _configStatusCache;
+  }
+
+  const configStatus: Record<string, boolean> = {};
+  for (const ide of IDE_NAMES) {
+    if (ide === 'claude-code') {
+      configStatus[ide] = hasClaudeCodeEntry();
+    } else {
+      configStatus[ide] = hasOurEntry(getIdeConfigPath(ide));
+    }
+  }
+
+  _configStatusCache = configStatus;
+  _configStatusCacheTs = now;
+  return configStatus;
+}
+
+export function invalidateConfigStatusCache(): void {
+  _configStatusCache = null;
+  _configStatusCacheTs = 0;
+}
+
+function getShimPath(): string {
+  return path.join(__dirname, '..', 'stdio-shim', 'mcp-stdio-shim.cjs').replace(/\\/g, '/');
+}
+
+function writeJsonConfig(configPath: string, targetIDE: string, activePort: number): { success: boolean; message: string; configPath?: string } {
+  const dirPath = path.dirname(configPath);
+  if (!fs.existsSync(dirPath)) {
+    try {
+      fs.mkdirSync(dirPath, { recursive: true });
+    } catch (_e) {
+      return { success: false, message: `无法创建目录: ${dirPath}。您是否安装了该应用？` };
+    }
+  }
+
+  let config: Record<string, unknown> = {};
+  if (fs.existsSync(configPath)) {
+    try {
+      config = JSON.parse(fs.readFileSync(configPath, 'utf-8'));
+    } catch (_e) {
+      console.warn('[Aura] 旧的配置文件解析失败，将重新生成');
+    }
+  }
+
+  if (!config.mcpServers) {
+    config.mcpServers = {};
+  }
+
+  const servers = config.mcpServers as Record<string, unknown>;
+  const shimPath = getShimPath();
+
+  servers['aura-cocos'] = {
+    command: 'node',
+    args: [shimPath],
+    env: {
+      COCOS_BRIDGE_PORT: String(activePort),
+    },
+  };
+
+  fs.writeFileSync(configPath, JSON.stringify(config, null, 2), 'utf-8');
+
+  console.log(`[Aura] 已写入 ${targetIDE} MCP 配置 (stdio 模式): ${configPath}`);
+  return {
+    success: true,
+    message: `配置成功！已写入 ${targetIDE} (stdio 模式):\n${configPath}\n\n请重启该 IDE 以生效。\n\n✅ 使用 stdio 模式，端口变化和 Cocos 重启都能自动适应。`,
+    configPath,
+  };
+}
+
+function writeTomlConfig(configPath: string, targetIDE: string, activePort: number): { success: boolean; message: string; configPath?: string } {
+  const dirPath = path.dirname(configPath);
+  if (!fs.existsSync(dirPath)) {
+    try {
+      fs.mkdirSync(dirPath, { recursive: true });
+    } catch (_e) {
+      return { success: false, message: `无法创建目录: ${dirPath}。您是否安装了该应用？` };
+    }
+  }
+
+  let existing = '';
+  if (fs.existsSync(configPath)) {
+    try {
+      existing = fs.readFileSync(configPath, 'utf-8');
+    } catch (_e) {
+      console.warn('[Aura] 旧的配置文件读取失败，将追加配置');
+    }
+  }
+
+  const shimPath = getShimPath();
+  const sectionHeader = '[mcp_servers.aura-cocos]';
+
+  if (existing.includes(sectionHeader)) {
+    const sectionRegex = /\[mcp_servers\.aura-cocos\][\s\S]*?(?=\n\[|$)/;
+    const newSection =
+      `${sectionHeader}\n` +
+      `command = "node"\n` +
+      `args = ["${shimPath}"]\n` +
+      `\n` +
+      `[mcp_servers.aura-cocos.env]\n` +
+      `COCOS_BRIDGE_PORT = "${activePort}"\n`;
+    existing = existing.replace(sectionRegex, newSection);
+  } else {
+    const newSection =
+      `\n${sectionHeader}\n` +
+      `command = "node"\n` +
+      `args = ["${shimPath}"]\n` +
+      `\n` +
+      `[mcp_servers.aura-cocos.env]\n` +
+      `COCOS_BRIDGE_PORT = "${activePort}"\n`;
+    existing += newSection;
+  }
+
+  fs.writeFileSync(configPath, existing, 'utf-8');
+
+  console.log(`[Aura] 已写入 ${targetIDE} MCP 配置 (TOML stdio 模式): ${configPath}`);
+  return {
+    success: true,
+    message: `配置成功！已写入 ${targetIDE} (TOML stdio 模式):\n${configPath}\n\n请重启该 IDE 以生效。\n\n✅ 使用 stdio 模式，端口变化和 Cocos 重启都能自动适应。`,
+    configPath,
+  };
+}
+
+function configureClaudeCode(activePort: number): { success: boolean; message: string } {
+  const shimPath = getShimPath();
+  try {
+    try {
+      execSync('claude mcp remove aura-cocos', { encoding: 'utf-8', timeout: 10000, stdio: ['pipe', 'pipe', 'pipe'] });
+    } catch { /* may not exist yet */ }
+
+    execSync(
+      `claude mcp add aura-cocos -e COCOS_BRIDGE_PORT=${activePort} -- node "${shimPath}"`,
+      { encoding: 'utf-8', timeout: 10000, stdio: ['pipe', 'pipe', 'pipe'] },
+    );
+
+    console.log('[Aura] 已通过 claude mcp add 注册 Claude Code MCP 配置');
+    return {
+      success: true,
+      message: `配置成功！已通过 claude mcp add 注册到 Claude Code。\n\n下次启动 Claude Code 时将自动加载。\n\n✅ 使用 stdio 模式，端口变化和 Cocos 重启都能自动适应。`,
+    };
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : String(e);
+    return {
+      success: false,
+      message: `Claude Code 配置失败。请确保已安装 Claude Code CLI (npm install -g @anthropic-ai/claude-code)。\n\n错误: ${msg}`,
+    };
+  }
+}
+
+export function configureIDE(targetIDE: string, activePort: number, isRunning: boolean) {
+  if (!isRunning || !activePort) {
+    return { success: false, message: '服务未启动，请先启动 Aura 服务' };
+  }
+
+  let result;
+  if (CLI_IDES.has(targetIDE)) {
+    result = configureClaudeCode(activePort);
+  } else {
+    const configPath = getIdeConfigPath(targetIDE);
+    if (!configPath) {
+      return { success: false, message: `不支持的 IDE: ${targetIDE}` };
+    }
+
+    result = TOML_IDES.has(targetIDE)
+      ? writeTomlConfig(configPath, targetIDE, activePort)
+      : writeJsonConfig(configPath, targetIDE, activePort);
+  }
+
+  if (result.success) invalidateConfigStatusCache();
+  return result;
+}

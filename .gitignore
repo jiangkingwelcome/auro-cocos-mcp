@@ -1,0 +1,27 @@
+node_modules/
+dist/
+dist-release/
+dist-plugin/
+dist-plugin-pro/
+dist-plugin-release/
+*.tsbuildinfo
+*.log
+.DS_Store
+coverage/
+tmp-test-home/
+.mcp-token
+.mcp-license
+.mcp-settings.json
+
+# License keys & generation tools (NEVER commit)
+keys/
+tools/
+licenses.csv
+# Exception: native Rust tools module (Pro 源码)
+!native/src/tools/
+!native/src/tools/**
+
+# Native Rust Pro module
+native/target/
+native/*.node
+# native/src/, Cargo.toml, Cargo.lock, build.rs, index.js — committed

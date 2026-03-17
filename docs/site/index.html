@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aura — AI Bridge for Game Engines</title>
+    <meta name="description" content="Aura bridges AI to your game engine. MCP-powered tools for Cocos Creator, Godot, and Unity. Natural language game development.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root{--bg:#06060a;--surface:#0c0c14;--card:rgba(255,255,255,0.03);--border:rgba(255,255,255,0.07);--text:#f0f0f5;--text2:#8a8a9a;--accent:#7c5cfc;--accent2:#a78bfa;--accent-glow:rgba(124,92,252,0.15);--blue:#38bdf8;--blue-glow:rgba(56,189,248,0.12);--green:#10b981;--gold:#f59e0b;--cocos:#07c160;--godot:#478cbf;--unity:#222;--radius:16px;--blur:blur(16px)}
+        *{box-sizing:border-box;margin:0;padding:0}
+        body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+        .container{max-width:1200px;margin:0 auto;padding:0 24px}
+        .glow-1{position:fixed;top:-200px;left:-200px;width:800px;height:800px;background:radial-gradient(circle,var(--accent-glow) 0%,transparent 70%);z-index:-1;pointer-events:none}
+        .glow-2{position:fixed;bottom:-200px;right:-200px;width:700px;height:700px;background:radial-gradient(circle,var(--blue-glow) 0%,transparent 70%);z-index:-1;pointer-events:none}
+        /* Nav */
+        header{position:fixed;top:0;left:0;width:100%;padding:16px 0;border-bottom:1px solid var(--border);background:rgba(6,6,10,0.8);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);z-index:100}
+        .navbar{display:flex;justify-content:space-between;align-items:center}
+        .logo{font-size:1.2rem;font-weight:700;letter-spacing:-.5px;display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--text)}
+        .logo-icon{width:28px;height:28px;border-radius:6px;object-fit:cover}
+        .nav-links{display:flex;gap:24px;align-items:center}
+        .nav-links a{color:var(--text2);text-decoration:none;font-size:.9rem;transition:color .2s;font-weight:500}
+        .nav-links a:hover{color:var(--text)}
+        .btn{padding:10px 20px;border-radius:8px;font-size:.9rem;font-weight:600;cursor:pointer;transition:all .2s;text-decoration:none;display:inline-flex;align-items:center;gap:8px;border:none}
+        .btn-primary{background:var(--accent);color:#fff}
+        .btn-primary:hover{background:var(--accent2);transform:translateY(-1px)}
+        .btn-outline{background:transparent;color:var(--text);border:1px solid var(--border)}
+        .btn-outline:hover{background:rgba(255,255,255,0.05);border-color:rgba(255,255,255,0.15)}
+        .btn-gold{background:linear-gradient(135deg,#f59e0b,#d97706);color:#000}
+        .btn-gold:hover{transform:translateY(-1px);box-shadow:0 4px 20px rgba(245,158,11,0.3)}
+        .btn-green{background:var(--cocos);color:#fff}
+        .btn-green:hover{opacity:.9;transform:translateY(-1px)}
+        /* Lang */
+        .lang-toggle{display:flex;align-items:center;background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:20px;padding:3px;cursor:pointer;width:68px;height:30px;position:relative}
+        .lang-toggle div{flex:1;text-align:center;font-size:.7rem;font-weight:600;z-index:2;color:var(--text2);transition:color .3s}
+        .lang-toggle div.active{color:var(--text)}
+        .lang-slider{position:absolute;top:3px;left:3px;width:28px;height:22px;background:var(--accent);border-radius:16px;z-index:1;transition:transform .3s cubic-bezier(.4,0,.2,1)}
+        html[lang="zh"] .lang-slider{transform:translateX(30px)}
+        [data-lang="en"],[data-lang="zh"]{display:none}
+        html[lang="en"] [data-lang="en"]{display:inline-block}
+        html[lang="en"] p[data-lang="en"],html[lang="en"] h1[data-lang="en"],html[lang="en"] h2[data-lang="en"],html[lang="en"] h3[data-lang="en"],html[lang="en"] div[data-lang="en"],html[lang="en"] li[data-lang="en"]{display:block}
+        html[lang="zh"] [data-lang="zh"]{display:inline-block}
+        html[lang="zh"] p[data-lang="zh"],html[lang="zh"] h1[data-lang="zh"],html[lang="zh"] h2[data-lang="zh"],html[lang="zh"] h3[data-lang="zh"],html[lang="zh"] div[data-lang="zh"],html[lang="zh"] li[data-lang="zh"]{display:block}
+        /* Hero */
+        .hero{padding:150px 0 80px;text-align:center;display:flex;flex-direction:column;align-items:center}
+        .hero-badge{display:inline-flex;align-items:center;gap:8px;padding:6px 16px;border-radius:20px;background:rgba(124,92,252,0.1);border:1px solid rgba(124,92,252,0.2);font-size:.8rem;color:var(--accent2);font-weight:600;margin-bottom:24px}
+        .hero h1{font-size:clamp(2.5rem,5vw,4.5rem);font-weight:900;letter-spacing:-2px;line-height:1.05;margin-bottom:24px;max-width:900px;background:linear-gradient(180deg,#fff 0%,rgba(255,255,255,.45) 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+        .hero p{font-size:1.15rem;color:var(--text2);max-width:640px;margin-bottom:36px}
+        .hero p strong{color:var(--text);font-weight:600}
+        .hero-buttons{display:flex;gap:14px;flex-wrap:wrap;justify-content:center}
+        .ide-support{margin-top:56px;text-align:center}
+        .ide-support p{font-size:.78rem;color:var(--text2);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:16px;font-weight:600}
+        .ide-logos{display:flex;justify-content:center;gap:36px;opacity:.5;flex-wrap:wrap}
+        .ide-logos span{font-size:1rem;font-weight:600}
+        /* Sections */
+        .section{padding:100px 0}
+        .section-label{text-align:center;font-size:.78rem;color:var(--accent2);text-transform:uppercase;letter-spacing:2px;font-weight:700;margin-bottom:12px}
+        .section-title{text-align:center;font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:700;letter-spacing:-1px;margin-bottom:16px}
+        .section-desc{text-align:center;color:var(--text2);max-width:600px;margin:0 auto 56px;font-size:1rem}
+        /* Engine Cards */
+        .engines-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:24px}
+        .engine-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:36px;position:relative;backdrop-filter:var(--blur);transition:all .3s;overflow:hidden}
+        .engine-card:hover{transform:translateY(-3px);box-shadow:0 12px 40px rgba(0,0,0,.3)}
+        .engine-card.available{border-color:rgba(7,193,96,0.3)}
+        .engine-card.available::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--cocos)}
+        .engine-card.coming-godot:hover{border-color:rgba(71,140,191,0.3)}
+        .engine-card.coming-unity:hover{border-color:rgba(255,255,255,0.15)}
+        .engine-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+        .engine-name{font-size:1.5rem;font-weight:700;letter-spacing:-.5px}
+        .engine-status{padding:4px 12px;border-radius:12px;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:1px}
+        .status-live{background:rgba(7,193,96,.12);color:var(--cocos)}
+        .status-soon{background:rgba(255,255,255,.06);color:var(--text2)}
+        .engine-stats{font-size:.85rem;color:var(--text2);margin-bottom:16px}
+        .engine-stats strong{color:var(--text)}
+        .engine-desc{color:var(--text2);font-size:.92rem;line-height:1.5;margin-bottom:24px}
+        .engine-features{list-style:none;margin-bottom:24px}
+        .engine-features li{padding:5px 0;font-size:.85rem;color:var(--text2);display:flex;align-items:center;gap:8px}
+        .engine-features li::before{content:'—';color:var(--text2);opacity:.4}
+        .engine-card.available .engine-features li::before{content:'✓';color:var(--cocos);opacity:1}
+        /* Feature cards */
+        .features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:20px}
+        .feature-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:28px;transition:all .3s;overflow:hidden;backdrop-filter:var(--blur)}
+        .feature-card:hover{border-color:rgba(255,255,255,.18);transform:translateY(-2px);background:rgba(255,255,255,.05);box-shadow:0 8px 32px rgba(0,0,0,.2)}
+        .feature-card h3{font-size:1.3rem;margin-bottom:10px;font-weight:600;letter-spacing:-.3px}
+        .feature-card p{color:var(--text2);font-size:.92rem;line-height:1.5}
+        .pro-tag{color:var(--accent2);font-weight:600;font-size:.85rem}
+        /* Pricing */
+        .pricing-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px;max-width:1050px;margin:0 auto}
+        .price-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:36px;position:relative;backdrop-filter:var(--blur);transition:all .3s}
+        .price-card:hover{transform:translateY(-3px);box-shadow:0 12px 40px rgba(0,0,0,.3)}
+        .price-card.featured{border-color:rgba(124,92,252,.4);background:linear-gradient(180deg,rgba(124,92,252,.06) 0%,rgba(6,6,10,.5) 100%)}
+        .price-card.featured::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),var(--blue))}
+        .price-badge{display:inline-block;padding:4px 12px;border-radius:12px;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:16px}
+        .price-badge.free{background:rgba(16,185,129,.12);color:var(--green)}
+        .price-badge.pro{background:rgba(124,92,252,.12);color:var(--accent2)}
+        .price-badge.ent{background:rgba(245,158,11,.12);color:var(--gold)}
+        .price-card h3{font-size:1.5rem;font-weight:700;margin-bottom:8px}
+        .price-amount{font-size:2.5rem;font-weight:800;margin:16px 0 4px}
+        .price-amount span{font-size:.9rem;font-weight:400;color:var(--text2)}
+        .price-desc{color:var(--text2);font-size:.85rem;margin-bottom:24px}
+        .price-features{list-style:none;margin-bottom:28px}
+        .price-features li{padding:5px 0;font-size:.85rem;color:var(--text2);display:flex;align-items:flex-start;gap:8px}
+        .price-features li::before{content:'✓';color:var(--green);font-weight:700;flex-shrink:0}
+        .price-features li.highlight::before{content:'★';color:var(--gold)}
+        /* ROI */
+        .roi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;max-width:900px;margin:0 auto}
+        .roi-card{text-align:center;padding:32px 20px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius)}
+        .roi-number{font-size:2.8rem;font-weight:800;background:linear-gradient(135deg,var(--accent),var(--blue));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;line-height:1}
+        .roi-label{color:var(--text2);font-size:.85rem;margin-top:8px}
+        /* Workflow */
+        .workflow-demo{display:flex;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;min-height:340px;box-shadow:0 32px 64px rgba(0,0,0,.4)}
+        .demo-left,.demo-right{flex:1;padding:28px;display:flex;flex-direction:column}
+        .demo-left{border-right:1px solid var(--border);background:linear-gradient(180deg,#0e0e16 0%,var(--bg) 100%)}
+        .demo-right{background:url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCI+PGNpcmNsZSBjeD0iMSIgY3k9IjEiIHI9IjEiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4wNCkiLz48L3N2Zz4=') repeat,#16161e}
+        .demo-header{font-size:.8rem;color:var(--text2);font-weight:600;margin-bottom:20px}
+        .chat-bubble{background:var(--card);border:1px solid var(--border);padding:14px;border-radius:12px;color:var(--text);font-size:.9rem;max-width:90%;margin-bottom:14px;animation:fadeIn 1s ease forwards}
+        .chat-bubble.ai{background:rgba(124,92,252,.08);border-color:rgba(124,92,252,.18);color:#c7d2fe;animation-delay:1.5s;opacity:0}
+        .system-notification{background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.18);padding:14px 18px;border-radius:8px;color:#34d399;font-size:.85rem;display:flex;align-items:center;gap:10px;margin:auto 0;animation:slideIn .5s ease forwards;animation-delay:2.5s;opacity:0;transform:translateY(10px)}
+        /* Activation */
+        .activation-steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px;max-width:900px;margin:0 auto 40px}
+        .step-card{text-align:center;padding:28px 20px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius)}
+        .step-num{width:36px;height:36px;border-radius:50%;background:var(--accent);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-weight:700;font-size:.9rem;margin-bottom:14px}
+        .step-card h3{font-size:1.1rem;margin-bottom:8px;font-weight:600}
+        .step-card p{color:var(--text2);font-size:.85rem}
+        .key-demo{text-align:center;padding:20px;background:rgba(124,92,252,.06);border:1px dashed rgba(124,92,252,.25);border-radius:12px;font-family:monospace;font-size:1rem;color:var(--accent2);letter-spacing:1px;max-width:500px;margin:0 auto 36px}
+        .cta-buttons{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+        /* Footer */
+        footer{border-top:1px solid var(--border);padding:48px 0;margin-top:40px}
+        .footer-content{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
+        .footer-text{color:var(--text2);font-size:.85rem}
+        .footer-links{display:flex;gap:20px}
+        .footer-links a{color:var(--text2);text-decoration:none;font-size:.85rem;transition:color .2s}
+        .footer-links a:hover{color:var(--text)}
+        /* Anim */
+        @keyframes fadeIn{to{opacity:1}}
+        @keyframes slideIn{to{opacity:1;transform:translateY(0)}}
+        .fade-in{opacity:0;transform:translateY(20px);transition:all .6s ease}
+        .fade-in.visible{opacity:1;transform:translateY(0)}
+        /* Responsive */
+        @media(max-width:768px){
+            .nav-links a:not(.btn):not(.lang-toggle){display:none}
+            .workflow-demo{flex-direction:column}
+            .demo-left{border-right:none;border-bottom:1px solid var(--border)}
+            .footer-content{flex-direction:column;text-align:center}
+            .pricing-grid,.features-grid,.engines-grid{grid-template-columns:1fr}
+        }
+    </style>
+</head>
+<body>
+    <div class="glow-1"></div><div class="glow-2"></div>
+
+    <header>
+        <div class="container navbar">
+            <a href="#" class="logo">
+                <img src="aura-icon.png" alt="Aura" class="logo-icon">
+                Aura
+            </a>
+            <div class="nav-links">
+                <a href="#engines"><span data-lang="en">Engines</span><span data-lang="zh">引擎</span></a>
+                <a href="#pricing"><span data-lang="en">Pricing</span><span data-lang="zh">定价</span></a>
+                <a href="https://github.com/jiangkingwelcome/cocos-mcp-bridge" target="_blank">GitHub</a>
+                <a href="#activate" class="btn btn-primary">
+                    <span data-lang="en">Get Aura</span><span data-lang="zh">获取 Aura</span>
+                </a>
+                <div class="lang-toggle" onclick="toggleLanguage()">
+                    <div class="lang-slider"></div>
+                    <div class="en-label active">EN</div>
+                    <div class="zh-label">中</div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero -->
+        <section class="hero container">
+            <div class="hero-badge"><span data-lang="en">MCP-Powered · Multi-Engine</span><span data-lang="zh">MCP 协议驱动 · 多引擎支持</span></div>
+            <h1 data-lang="en">Bridge AI to Your<br>Game Engine</h1>
+            <h1 data-lang="zh">将 AI 接入<br>你的游戏引擎</h1>
+            <p data-lang="en"><strong>Aura</strong> is an MCP bridge that lets AI assistants read, manipulate, and generate content directly inside your game editor. One protocol, multiple engines.</p>
+            <p data-lang="zh"><strong>Aura</strong> 是一个 MCP 协议桥接工具，让 AI 助手直接在游戏编辑器中读取、操控和生成内容。一个协议，多个引擎。</p>
+            <div class="hero-buttons">
+                <a href="#engines" class="btn btn-primary"><span data-lang="en">Explore Engines</span><span data-lang="zh">浏览引擎</span></a>
+                <a href="https://github.com/jiangkingwelcome/cocos-mcp-bridge" class="btn btn-outline" target="_blank">GitHub</a>
+            </div>
+            <div class="ide-support">
+                <p data-lang="en">Works with</p><p data-lang="zh">兼容以下 AI 工具</p>
+                <div class="ide-logos">
+                    <span>Claude Desktop</span><span>Cursor</span><span>Windsurf</span><span>Cline</span><span>Gemini CLI</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Engines -->
+        <section class="section container fade-in" id="engines">
+            <div class="section-label" data-lang="en">Supported Engines</div>
+            <div class="section-label" data-lang="zh">支持的引擎</div>
+            <h2 class="section-title" data-lang="en">One Protocol, Multiple Engines</h2>
+            <h2 class="section-title" data-lang="zh">一个协议，多个引擎</h2>
+            <p class="section-desc" data-lang="en">Aura adapts to each engine's architecture. Same AI workflow, native integration.</p>
+            <p class="section-desc" data-lang="zh">Aura 适配每个引擎的架构。相同的 AI 工作流，原生集成。</p>
+            <div class="engines-grid">
+                <!-- Cocos -->
+                <div class="engine-card available">
+                    <div class="engine-head">
+                        <div class="engine-name">Cocos Creator</div>
+                        <div class="engine-status status-live" data-lang="en">Available</div>
+                        <div class="engine-status status-live" data-lang="zh">已上线</div>
+                    </div>
+                    <div class="engine-stats" data-lang="en"><strong>22 tools · 270+ actions</strong> · Funnel architecture · Rust Pro</div>
+                    <div class="engine-stats" data-lang="zh"><strong>22 个工具 · 270+ 操作</strong> · 漏斗架构 · Rust Pro</div>
+                    <p class="engine-desc" data-lang="en">The most mature Aura integration. Full scene awareness, generative actions, AI scene generator, batch engine, and scene audit — all through natural language.</p>
+                    <p class="engine-desc" data-lang="zh">最成熟的 Aura 集成。完整场景感知、生成式操作、AI 场景生成器、批量引擎和场景审计——全部通过自然语言完成。</p>
+                    <ul class="engine-features">
+                        <li data-lang="en">Scene query & manipulation (108 actions)</li><li data-lang="zh">场景查询与操控 (108 actions)</li>
+                        <li data-lang="en">Asset management (32 actions)</li><li data-lang="zh">资源管理 (32 actions)</li>
+                        <li data-lang="en">Editor control (45 actions)</li><li data-lang="zh">编辑器控制 (45 actions)</li>
+                        <li data-lang="en">AI scene generator & batch engine</li><li data-lang="zh">AI 场景生成器 & 批量引擎</li>
+                        <li data-lang="en">Community (free) + Pro editions</li><li data-lang="zh">社区版 (免费) + Pro 版</li>
+                    </ul>
+                    <a href="#pricing" class="btn btn-green" style="width:100%;justify-content:center">
+                        <span data-lang="en">Get Aura for Cocos</span><span data-lang="zh">获取 Aura for Cocos</span>
+                    </a>
+                </div>
+                <!-- Godot -->
+                <div class="engine-card coming-godot">
+                    <div class="engine-head">
+                        <div class="engine-name">Godot</div>
+                        <div class="engine-status status-soon" data-lang="en">Coming Soon</div>
+                        <div class="engine-status status-soon" data-lang="zh">即将推出</div>
+                    </div>
+                    <div class="engine-stats" data-lang="en">Targeting <strong>Godot 4.x</strong> · GDScript & C# support</div>
+                    <div class="engine-stats" data-lang="zh">目标 <strong>Godot 4.x</strong> · 支持 GDScript 和 C#</div>
+                    <p class="engine-desc" data-lang="en">Aura for Godot will bring the same AI-powered workflow to the open-source engine loved by indie developers worldwide.</p>
+                    <p class="engine-desc" data-lang="zh">Aura for Godot 将把同样的 AI 驱动工作流带给全球独立开发者喜爱的开源引擎。</p>
+                    <ul class="engine-features">
+                        <li data-lang="en">Scene tree read & write</li><li data-lang="zh">场景树读写</li>
+                        <li data-lang="en">Node creation & manipulation</li><li data-lang="zh">节点创建与操控</li>
+                        <li data-lang="en">Resource & script management</li><li data-lang="zh">资源与脚本管理</li>
+                        <li data-lang="en">GDScript code generation</li><li data-lang="zh">GDScript 代码生成</li>
+                        <li data-lang="en">Editor plugin integration</li><li data-lang="zh">编辑器插件集成</li>
+                    </ul>
+                    <a href="mailto:aura@cocos-mcp.dev" class="btn btn-outline" style="width:100%;justify-content:center">
+                        <span data-lang="en">Join Waitlist</span><span data-lang="zh">加入等待列表</span>
+                    </a>
+                </div>
+                <!-- Unity -->
+                <div class="engine-card coming-unity">
+                    <div class="engine-head">
+                        <div class="engine-name">Unity</div>
+                        <div class="engine-status status-soon" data-lang="en">Coming Soon</div>
+                        <div class="engine-status status-soon" data-lang="zh">即将推出</div>
+                    </div>
+                    <div class="engine-stats" data-lang="en">Targeting <strong>Unity 6+</strong> · C# scripting</div>
+                    <div class="engine-stats" data-lang="zh">目标 <strong>Unity 6+</strong> · C# 脚本</div>
+                    <p class="engine-desc" data-lang="en">Aura for Unity will integrate with the world's most widely-used game engine, covering scene hierarchy, prefabs, and asset pipeline.</p>
+                    <p class="engine-desc" data-lang="zh">Aura for Unity 将集成全球使用最广泛的游戏引擎，覆盖场景层级、预制体和资源管线。</p>
+                    <ul class="engine-features">
+                        <li data-lang="en">GameObject hierarchy access</li><li data-lang="zh">GameObject 层级访问</li>
+                        <li data-lang="en">Component & prefab control</li><li data-lang="zh">组件与预制体控制</li>
+                        <li data-lang="en">Asset database operations</li><li data-lang="zh">Asset 数据库操作</li>
+                        <li data-lang="en">C# script scaffolding</li><li data-lang="zh">C# 脚本脚手架</li>
+                        <li data-lang="en">Editor window integration</li><li data-lang="zh">编辑器窗口集成</li>
+                    </ul>
+                    <a href="mailto:aura@cocos-mcp.dev" class="btn btn-outline" style="width:100%;justify-content:center">
+                        <span data-lang="en">Join Waitlist</span><span data-lang="zh">加入等待列表</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Aura for Cocos Features -->
+        <section class="section container fade-in">
+            <div class="section-label" data-lang="en">Aura for Cocos</div>
+            <div class="section-label" data-lang="zh">Aura for Cocos</div>
+            <h2 class="section-title" data-lang="en">Deep Cocos Integration</h2>
+            <h2 class="section-title" data-lang="zh">深度 Cocos 集成</h2>
+            <p class="section-desc" data-lang="en">The flagship Aura product. From scene queries to AI-powered generation.</p>
+            <p class="section-desc" data-lang="zh">Aura 旗舰产品。从场景查询到 AI 智能生成。</p>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <h3 data-lang="en">AI Scene Awareness</h3><h3 data-lang="zh">AI 场景感知</h3>
+                    <p data-lang="en">43 query actions give LLMs direct access to read your Cocos Scene and Hierarchy. End the era of "AI writing blind code".</p>
+                    <p data-lang="zh">43 种查询操作让大模型直接读取 Cocos 场景和层级树。终结"AI 瞎写代码"的时代。</p>
+                </div>
+                <div class="feature-card">
+                    <h3 data-lang="en">Generative Actions</h3><h3 data-lang="zh">生成式操作</h3>
+                    <p data-lang="en">65 scene operations to create nodes, attach components, and modify materials. Full CRUD with batch processing.</p>
+                    <p data-lang="zh">65 种场景操作指令，创建节点、挂载组件、修改材质，支持批处理。</p>
+                </div>
+                <div class="feature-card">
+                    <h3 data-lang="en">Atomic Macros</h3><h3 data-lang="zh">原子化宏指令</h3>
+                    <p data-lang="en">Prefab creation with auto-rollback, texture import, UI layout setup, and physics collider auto-fit in a single call.</p>
+                    <p data-lang="zh">带事务回滚的预制体创建、一键贴图引入、UI 布局搭建、物理碰撞体自动贴合。</p>
+                </div>
+                <div class="feature-card">
+                    <h3 data-lang="en">AI Scene Generator <span class="pro-tag">PRO</span></h3><h3 data-lang="zh">AI 场景生成器 <span class="pro-tag">PRO</span></h3>
+                    <p data-lang="en">Natural language → complete scenes. Create UI pages, game levels, menus with a single prompt.</p>
+                    <p data-lang="zh">自然语言 → 完整场景。一句话创建 UI 页面、游戏关卡、菜单界面。</p>
+                </div>
+                <div class="feature-card">
+                    <h3 data-lang="en">Scene Audit <span class="pro-tag">PRO</span></h3><h3 data-lang="zh">场景审计 <span class="pro-tag">PRO</span></h3>
+                    <p data-lang="en">9 audit actions auto-detect performance issues, hierarchy problems, and generate fix suggestions.</p>
+                    <p data-lang="zh">9 种审计操作自动检测性能问题、层级错误，生成修复建议。</p>
+                </div>
+                <div class="feature-card">
+                    <h3 data-lang="en">AI-Native Security</h3><h3 data-lang="zh">原生 AI 安全</h3>
+                    <p data-lang="en">5 behavioral strictures via JSON Schema. Component name auto-correction, dangerous action interception, token auth.</p>
+                    <p data-lang="zh">JSON Schema 强制 5 大行为准则。组件名纠错、高危操作拦截、Token 鉴权。</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pricing -->
+        <section class="section container fade-in" id="pricing">
+            <div class="section-label" data-lang="en">Pricing</div><div class="section-label" data-lang="zh">定价</div>
+            <h2 class="section-title" data-lang="en">Aura for Cocos — Editions</h2>
+            <h2 class="section-title" data-lang="zh">Aura for Cocos — 版本</h2>
+            <p class="section-desc" data-lang="en">Start free. Upgrade when you need the full power.</p>
+            <p class="section-desc" data-lang="zh">免费起步。需要时升级解锁全部能力。</p>
+            <div class="pricing-grid">
+                <div class="price-card">
+                    <div class="price-badge free">Community</div>
+                    <h3 data-lang="en">Community</h3><h3 data-lang="zh">社区版</h3>
+                    <div class="price-amount" data-lang="en">Free</div><div class="price-amount" data-lang="zh">免费</div>
+                    <p class="price-desc" data-lang="en">Open source · Pure JS · GitHub</p>
+                    <p class="price-desc" data-lang="zh">开源 · 纯 JS · GitHub</p>
+                    <ul class="price-features">
+                        <li data-lang="en">~158 actions, 17 tools</li><li data-lang="zh">约 158 个操作，17 个工具</li>
+                        <li data-lang="en">Scene query (43 actions)</li><li data-lang="zh">场景查询 (43 actions)</li>
+                        <li data-lang="en">Scene operations (30 actions)</li><li data-lang="zh">场景操作 (30 actions)</li>
+                        <li data-lang="en">Asset management (17 actions)</li><li data-lang="zh">资源管理 (17 actions)</li>
+                        <li data-lang="en">Editor actions (21 actions)</li><li data-lang="zh">编辑器操作 (21 actions)</li>
+                        <li data-lang="en">5 atomic macros</li><li data-lang="zh">5 个原子宏</li>
+                        <li data-lang="en">Security baseline</li><li data-lang="zh">安全底座</li>
+                    </ul>
+                    <a href="https://github.com/jiangkingwelcome/cocos-mcp-bridge" class="btn btn-outline" style="width:100%;justify-content:center" target="_blank">
+                        <span data-lang="en">GitHub</span><span data-lang="zh">GitHub 获取</span>
+                    </a>
+                </div>
+                <div class="price-card featured">
+                    <div class="price-badge pro" data-lang="en">Recommended</div><div class="price-badge pro" data-lang="zh">推荐</div>
+                    <h3 data-lang="en">Pro</h3><h3 data-lang="zh">Pro 专业版</h3>
+                    <div class="price-amount">¥99<span>/yr ($15)</span></div>
+                    <p class="price-desc" data-lang="en">Rust binary · 270+ actions · AI tools</p>
+                    <p class="price-desc" data-lang="zh">Rust 二进制 · 270+ 操作 · AI 工具</p>
+                    <ul class="price-features">
+                        <li data-lang="en">Everything in Community (Rust)</li><li data-lang="zh">社区版全部 (Rust 重写)</li>
+                        <li class="highlight" data-lang="en">Scene ops expanded to 65</li><li class="highlight" data-lang="zh">场景操作扩展至 65</li>
+                        <li class="highlight" data-lang="en">Asset ops expanded to 32</li><li class="highlight" data-lang="zh">资源操作扩展至 32</li>
+                        <li class="highlight" data-lang="en">AI Scene Generator (5)</li><li class="highlight" data-lang="zh">AI 场景生成器 (5)</li>
+                        <li class="highlight" data-lang="en">Batch Engine (10)</li><li class="highlight" data-lang="zh">批量引擎 (10)</li>
+                        <li class="highlight" data-lang="en">Scene Audit (9)</li><li class="highlight" data-lang="zh">场景审计 (9)</li>
+                        <li class="highlight" data-lang="en">4-layer code protection</li><li class="highlight" data-lang="zh">4 层代码保护</li>
+                    </ul>
+                    <a href="#activate" class="btn btn-primary" style="width:100%;justify-content:center">
+                        <span data-lang="en">Get Pro</span><span data-lang="zh">获取 Pro</span>
+                    </a>
+                </div>
+                <div class="price-card">
+                    <div class="price-badge ent">Enterprise</div>
+                    <h3 data-lang="en">Enterprise</h3><h3 data-lang="zh">企业版</h3>
+                    <div class="price-amount">¥999<span>/yr ($150)</span></div>
+                    <p class="price-desc" data-lang="en">Pro + private deploy + SLA</p>
+                    <p class="price-desc" data-lang="zh">Pro + 私有部署 + SLA</p>
+                    <ul class="price-features">
+                        <li data-lang="en">Everything in Pro</li><li data-lang="zh">Pro 全部功能</li>
+                        <li class="highlight" data-lang="en">Private deployment</li><li class="highlight" data-lang="zh">私有部署</li>
+                        <li class="highlight" data-lang="en">SLA guarantee</li><li class="highlight" data-lang="zh">SLA 保障</li>
+                        <li class="highlight" data-lang="en">Custom development</li><li class="highlight" data-lang="zh">定制开发</li>
+                        <li class="highlight" data-lang="en">Priority support</li><li class="highlight" data-lang="zh">优先支持</li>
+                        <li class="highlight" data-lang="en">Bulk licenses</li><li class="highlight" data-lang="zh">批量授权</li>
+                    </ul>
+                    <a href="mailto:aura@cocos-mcp.dev" class="btn btn-outline" style="width:100%;justify-content:center">
+                        <span data-lang="en">Contact Sales</span><span data-lang="zh">联系商务</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- ROI -->
+        <section class="section container fade-in">
+            <div class="section-label" data-lang="en">ROI</div><div class="section-label" data-lang="zh">投资回报</div>
+            <h2 class="section-title" data-lang="en">156x Return on Investment</h2>
+            <h2 class="section-title" data-lang="zh">156 倍投资回报率</h2>
+            <p class="section-desc" data-lang="en">Pro pays for itself in the first week.</p>
+            <p class="section-desc" data-lang="zh">Pro 在第一周就能回本。</p>
+            <div class="roi-grid">
+                <div class="roi-card"><div class="roi-number">33→2</div><div class="roi-label" data-lang="en">Days saved per project</div><div class="roi-label" data-lang="zh">每项目节省天数</div></div>
+                <div class="roi-card"><div class="roi-number">¥15.5k</div><div class="roi-label" data-lang="en">Value saved</div><div class="roi-label" data-lang="zh">节省价值</div></div>
+                <div class="roi-card"><div class="roi-number">156x</div><div class="roi-label" data-lang="en">ROI vs ¥99/yr</div><div class="roi-label" data-lang="zh">投资回报率</div></div>
+                <div class="roi-card"><div class="roi-number">270+</div><div class="roi-label" data-lang="en">Actions</div><div class="roi-label" data-lang="zh">可用操作</div></div>
+            </div>
+        </section>
+
+        <!-- Workflow -->
+        <section class="section container fade-in">
+            <div class="section-label" data-lang="en">How It Works</div><div class="section-label" data-lang="zh">工作流</div>
+            <h2 class="section-title" data-lang="en">Natural Language → Game Engine</h2>
+            <h2 class="section-title" data-lang="zh">自然语言 → 游戏引擎</h2>
+            <p class="section-desc" data-lang="en">Tell AI what you want. Aura makes it happen.</p>
+            <p class="section-desc" data-lang="zh">告诉 AI 你想要什么，Aura 帮你实现。</p>
+            <div class="workflow-demo">
+                <div class="demo-left">
+                    <div class="demo-header">Cursor / Claude Chat</div>
+                    <div class="chat-bubble"><span data-lang="en">Add a Player node with a RigidBody component to the scene.</span><span data-lang="zh">在当前场景中添加一个挂载着刚体的 Player 节点。</span></div>
+                    <div class="chat-bubble ai">Calling MCP tool <code>cocos-scene-operation</code> → create_node + add_component...</div>
+                </div>
+                <div class="demo-right">
+                    <div class="demo-header" style="color:#9ca3af">Cocos Creator Editor</div>
+                    <div class="system-notification">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                        <span data-lang="en">Created 'Player' node. Attached: cc.RigidBody.</span>
+                        <span data-lang="zh">已创建 'Player' 节点并挂载 cc.RigidBody。</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Activate -->
+        <section class="section container fade-in" id="activate">
+            <div class="section-label" data-lang="en">Get Started</div><div class="section-label" data-lang="zh">开始使用</div>
+            <h2 class="section-title" data-lang="en">Activate in 3 Steps</h2>
+            <h2 class="section-title" data-lang="zh">3 步完成激活</h2>
+            <p class="section-desc" data-lang="en">Purchase Pro, get your License Key, unlock full power.</p>
+            <p class="section-desc" data-lang="zh">购买 Pro，获取 License Key，解锁全部能力。</p>
+            <div class="activation-steps">
+                <div class="step-card"><div class="step-num">1</div>
+                    <h3 data-lang="en">Purchase</h3><h3 data-lang="zh">购买</h3>
+                    <p data-lang="en">Buy on Cocos Store or Gumroad.</p><p data-lang="zh">通过 Cocos Store 或 Gumroad 购买。</p>
+                </div>
+                <div class="step-card"><div class="step-num">2</div>
+                    <h3 data-lang="en">Get Key</h3><h3 data-lang="zh">获取密钥</h3>
+                    <p data-lang="en">Receive your License Key via email within 24h.</p><p data-lang="zh">24 小时内通过邮件收到 License Key。</p>
+                </div>
+                <div class="step-card"><div class="step-num">3</div>
+                    <h3 data-lang="en">Activate</h3><h3 data-lang="zh">激活</h3>
+                    <p data-lang="en">Enter key in plugin Settings tab. Offline activation.</p><p data-lang="zh">在插件设置面板输入密钥。离线激活。</p>
+                </div>
+            </div>
+            <div class="key-demo">COCOS-PRO-XXXXXXXX-XXXXXXXX-XXXXXXXX</div>
+            <div class="cta-buttons">
+                <a href="https://store.cocos.com/" class="btn btn-primary" target="_blank"><span data-lang="en">Cocos Store</span><span data-lang="zh">Cocos 商店</span></a>
+                <a href="https://gumroad.com/" class="btn btn-gold" target="_blank"><span data-lang="en">Gumroad (International)</span><span data-lang="zh">Gumroad (国际)</span></a>
+                <a href="https://github.com/jiangkingwelcome/cocos-mcp-bridge" class="btn btn-outline" target="_blank"><span data-lang="en">Free Community Edition</span><span data-lang="zh">免费社区版</span></a>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container footer-content">
+            <div class="footer-text">
+                <span data-lang="en">© 2026 Aura. AI Bridge for Game Engines.</span>
+                <span data-lang="zh">© 2026 Aura. 游戏引擎的 AI 桥梁。</span>
+            </div>
+            <div class="footer-links">
+                <a href="https://github.com/jiangkingwelcome/cocos-mcp-bridge" target="_blank">GitHub</a>
+                <a href="https://store.cocos.com/" target="_blank"><span data-lang="en">Cocos Store</span><span data-lang="zh">Cocos 商店</span></a>
+                <a href="mailto:aura@cocos-mcp.dev"><span data-lang="en">Contact</span><span data-lang="zh">联系</span></a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const htmlEl=document.documentElement,enLabel=document.querySelector('.en-label'),zhLabel=document.querySelector('.zh-label');
+        function setLanguage(l){
+            htmlEl.setAttribute('lang',l);
+            document.querySelectorAll('[data-lang]').forEach(e=>{e.style.display=e.getAttribute('data-lang')===l?'':'none'});
+            if(l==='zh'){enLabel.classList.remove('active');zhLabel.classList.add('active')}
+            else{zhLabel.classList.remove('active');enLabel.classList.add('active')}
+            localStorage.setItem('userLang',l);
+        }
+        function toggleLanguage(){setLanguage((htmlEl.getAttribute('lang')||'en')==='en'?'zh':'en')}
+        const observer=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')})},{threshold:0.1});
+        document.querySelectorAll('.fade-in').forEach(el=>observer.observe(el));
+        document.addEventListener('DOMContentLoaded',()=>{
+            const s=localStorage.getItem('userLang');
+            if(s){setLanguage(s)}else{
+                fetch('https://ipapi.co/json/').then(r=>r.json()).then(d=>{
+                    setLanguage(['CN','TW','HK','MO'].includes(d.country_code)?'zh':'en');
+                }).catch(()=>{setLanguage(navigator.language&&navigator.language.toLowerCase().startsWith('zh')?'zh':'en')});
+            }
+        });
+    </script>
+</body>
+</html>

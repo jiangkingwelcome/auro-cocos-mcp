@@ -1,0 +1,673 @@
+{
+  "timestamp": "2026-03-10T12:34:04.980Z",
+  "endpoint": "http://127.0.0.1:7779",
+  "summary": {
+    "total": 132,
+    "passed": 131,
+    "failed": 0,
+    "skipped": 1
+  },
+  "results": [
+    {
+      "name": "bridge_status",
+      "status": "PASS",
+      "ms": 6
+    },
+    {
+      "name": "mcp_initialize",
+      "status": "PASS",
+      "ms": 2
+    },
+    {
+      "name": "mcp_tools_list",
+      "status": "PASS",
+      "ms": 5
+    },
+    {
+      "name": "scene_query.tree",
+      "status": "PASS",
+      "ms": 5
+    },
+    {
+      "name": "scene_query.list",
+      "status": "PASS",
+      "ms": 2
+    },
+    {
+      "name": "scene_query.stats",
+      "status": "PASS",
+      "ms": 4
+    },
+    {
+      "name": "scene_query.node_detail",
+      "status": "PASS",
+      "ms": 9
+    },
+    {
+      "name": "scene_query.find_by_path",
+      "status": "PASS",
+      "ms": 6
+    },
+    {
+      "name": "scene_query.get_components",
+      "status": "PASS",
+      "ms": 2
+    },
+    {
+      "name": "scene_query.get_parent",
+      "status": "PASS",
+      "ms": 6
+    },
+    {
+      "name": "scene_query.get_children",
+      "status": "PASS",
+      "ms": 2
+    },
+    {
+      "name": "scene_query.get_sibling",
+      "status": "PASS",
+      "ms": 5
+    },
+    {
+      "name": "scene_query.get_world_position",
+      "status": "PASS",
+      "ms": 6
+    },
+    {
+      "name": "scene_query.get_world_rotation",
+      "status": "PASS",
+      "ms": 4
+    },
+    {
+      "name": "scene_query.get_world_scale",
+      "status": "PASS",
+      "ms": 3
+    },
+    {
+      "name": "scene_query.get_active_in_hierarchy",
+      "status": "PASS",
+      "ms": 5
+    },
+    {
+      "name": "scene_query.find_nodes_by_name",
+      "status": "PASS",
+      "ms": 3
+    },
+    {
+      "name": "scene_query.find_nodes_by_component",
+      "status": "PASS",
+      "ms": 2
+    },
+    {
+      "name": "scene_query.get_component_property",
+      "status": "PASS",
+      "ms": 6
+    },
+    {
+      "name": "scene_query.get_node_components_properties",
+      "status": "PASS",
+      "ms": 15
+    },
+    {
+      "name": "scene_query.get_camera_info",
+      "status": "PASS",
+      "ms": 4
+    },
+    {
+      "name": "scene_query.get_canvas_info",
+      "status": "PASS",
+      "ms": 6
+    },
+    {
+      "name": "scene_query.get_scene_globals",
+      "status": "PASS",
+      "ms": 7
+    },
+    {
+      "name": "scene_query.get_current_selection",
+      "status": "PASS",
+      "ms": 1
+    },
+    {
+      "name": "scene_query.get_active_scene_focus",
+      "status": "PASS",
+      "ms": 5
+    },
+    {
+      "name": "scene_query.list_all_scenes",
+      "status": "PASS",
+      "ms": 10
+    },
+    {
+      "name": "scene_query.validate_scene",
+      "status": "PASS",
+      "ms": 10
+    },
+    {
+      "name": "scene_query.detect_2d_3d",
+      "status": "PASS",
+      "ms": 2
+    },
+    {
+      "name": "scene_query.list_available_components",
+      "status": "PASS",
+      "ms": 5
+    },
+    {
+      "name": "scene_query.measure_distance",
+      "status": "PASS",
+      "ms": 6
+    },
+    {
+      "name": "scene_query.scene_snapshot",
+      "status": "PASS",
+      "ms": 65
+    },
+    {
+      "name": "scene_query.scene_diff",
+      "status": "PASS",
+      "ms": 8
+    },
+    {
+      "name": "scene_query.performance_audit",
+      "status": "PASS",
+      "ms": 3
+    },
+    {
+      "name": "scene_query.export_scene_json",
+      "status": "PASS",
+      "ms": 45
+    },
+    {
+      "name": "scene_operation.create_node",
+      "status": "PASS",
+      "ms": 5
+    },
+    {
+      "name": "scene_operation.create_node_2",
+      "status": "PASS",
+      "ms": 7
+    },
+    {
+      "name": "scene_operation.set_name",
+      "status": "PASS",
+      "ms": 20
+    },
+    {
+      "name": "scene_operation.set_position",
+      "status": "PASS",
+      "ms": 7
+    },
+    {
+      "name": "scene_operation.set_rotation",
+      "status": "PASS",
+      "ms": 5
+    },
+    {
+      "name": "scene_operation.set_scale",
+      "status": "PASS",
+      "ms": 6
+    },
+    {
+      "name": "scene_operation.set_active",
+      "status": "PASS",
+      "ms": 17
+    },
+    {
+      "name": "scene_operation.set_world_position",
+      "status": "PASS",
+      "ms": 7
+    },
+    {
+      "name": "scene_operation.set_world_rotation",
+      "status": "PASS",
+      "ms": 9
+    },
+    {
+      "name": "scene_operation.set_world_scale",
+      "status": "PASS",
+      "ms": 40
+    },
+    {
+      "name": "scene_operation.add_component",
+      "status": "PASS",
+      "ms": 16
+    },
+    {
+      "name": "scene_operation.set_property",
+      "status": "PASS",
+      "ms": 5
+    },
+    {
+      "name": "scene_operation.reset_property",
+      "status": "PASS",
+      "ms": 5
+    },
+    {
+      "name": "scene_operation.remove_component",
+      "status": "PASS",
+      "ms": 6
+    },
+    {
+      "name": "scene_operation.duplicate_node",
+      "status": "PASS",
+      "ms": 14
+    },
+    {
+      "name": "scene_operation.reparent",
+      "status": "PASS",
+      "ms": 33
+    },
+    {
+      "name": "scene_operation.move_node_up",
+      "status": "PASS",
+      "ms": 11
+    },
+    {
+      "name": "scene_operation.move_node_down",
+      "status": "PASS",
+      "ms": 10
+    },
+    {
+      "name": "scene_operation.set_sibling_index",
+      "status": "PASS",
+      "ms": 3
+    },
+    {
+      "name": "scene_operation.hide_node",
+      "status": "PASS",
+      "ms": 4
+    },
+    {
+      "name": "scene_operation.unhide_node",
+      "status": "PASS",
+      "ms": 2
+    },
+    {
+      "name": "scene_operation.set_layer",
+      "status": "PASS",
+      "ms": 4
+    },
+    {
+      "name": "scene_operation.lock_node",
+      "status": "PASS",
+      "ms": 4
+    },
+    {
+      "name": "scene_operation.unlock_node",
+      "status": "PASS",
+      "ms": 4
+    },
+    {
+      "name": "scene_operation.call_component_method",
+      "status": "PASS",
+      "ms": 6
+    },
+    {
+      "name": "scene_operation.clear_children",
+      "status": "PASS",
+      "ms": 5
+    },
+    {
+      "name": "scene_operation.clipboard_copy",
+      "status": "PASS",
+      "ms": 2
+    },
+    {
+      "name": "scene_operation.clipboard_paste",
+      "status": "PASS",
+      "ms": 6
+    },
+    {
+      "name": "scene_operation.create_prefab",
+      "status": "PASS",
+      "ms": 26
+    },
+    {
+      "name": "scene_operation.validate_prefab",
+      "status": "PASS",
+      "ms": 3
+    },
+    {
+      "name": "scene_operation.instantiate_prefab",
+      "status": "PASS",
+      "ms": 5
+    },
+    {
+      "name": "scene_operation.enter_prefab_edit",
+      "status": "PASS",
+      "ms": 2
+    },
+    {
+      "name": "scene_operation.exit_prefab_edit",
+      "status": "PASS",
+      "ms": 2
+    },
+    {
+      "name": "scene_operation.apply_prefab",
+      "status": "PASS",
+      "ms": 2
+    },
+    {
+      "name": "scene_operation.revert_prefab",
+      "status": "PASS",
+      "ms": 3
+    },
+    {
+      "name": "scene_operation.batch",
+      "status": "PASS",
+      "ms": 7
+    },
+    {
+      "name": "scene_operation.create_ui_widget",
+      "status": "PASS",
+      "ms": 20
+    },
+    {
+      "name": "scene_operation.setup_particle",
+      "status": "PASS",
+      "ms": 12
+    },
+    {
+      "name": "scene_operation.align_nodes",
+      "status": "PASS",
+      "ms": 6
+    },
+    {
+      "name": "scene_operation.audio_setup",
+      "status": "PASS",
+      "ms": 5
+    },
+    {
+      "name": "scene_operation.setup_physics_world",
+      "status": "PASS",
+      "ms": 10
+    },
+    {
+      "name": "scene_operation.create_skeleton_node",
+      "status": "PASS",
+      "ms": 7
+    },
+    {
+      "name": "scene_operation.generate_tilemap",
+      "status": "PASS",
+      "ms": 13
+    },
+    {
+      "name": "scene_operation.create_primitive_cube",
+      "status": "PASS",
+      "ms": 13
+    },
+    {
+      "name": "scene_operation.set_camera_look_at",
+      "status": "PASS",
+      "ms": 13
+    },
+    {
+      "name": "editor_action.preview_after_cube",
+      "status": "PASS",
+      "ms": 5
+    },
+    {
+      "name": "asset_operation.list",
+      "status": "PASS",
+      "ms": 14
+    },
+    {
+      "name": "asset_operation.create",
+      "status": "PASS",
+      "ms": 16
+    },
+    {
+      "name": "asset_operation.info",
+      "status": "PASS",
+      "ms": 4
+    },
+    {
+      "name": "asset_operation.save",
+      "status": "PASS",
+      "ms": 5
+    },
+    {
+      "name": "asset_operation.refresh",
+      "status": "PASS",
+      "ms": 543
+    },
+    {
+      "name": "asset_operation.search_by_type",
+      "status": "PASS",
+      "ms": 17
+    },
+    {
+      "name": "asset_operation.get_meta",
+      "status": "PASS",
+      "ms": 4
+    },
+    {
+      "name": "asset_operation.uuid_to_url",
+      "status": "PASS",
+      "ms": 5
+    },
+    {
+      "name": "asset_operation.url_to_uuid",
+      "status": "PASS",
+      "ms": 3
+    },
+    {
+      "name": "asset_operation.get_dependencies",
+      "status": "PASS",
+      "ms": 3
+    },
+    {
+      "name": "asset_operation.get_dependents",
+      "status": "PASS",
+      "ms": 2
+    },
+    {
+      "name": "asset_operation.get_animation_clips",
+      "status": "PASS",
+      "ms": 16
+    },
+    {
+      "name": "asset_operation.get_materials",
+      "status": "PASS",
+      "ms": 17
+    },
+    {
+      "name": "asset_operation.validate_asset",
+      "status": "PASS",
+      "ms": 5
+    },
+    {
+      "name": "asset_operation.export_asset_manifest",
+      "status": "PASS",
+      "ms": 18
+    },
+    {
+      "name": "asset_operation.create_folder",
+      "status": "PASS",
+      "ms": 21
+    },
+    {
+      "name": "asset_operation.copy",
+      "status": "PASS",
+      "ms": 46
+    },
+    {
+      "name": "asset_operation.rename",
+      "status": "PASS",
+      "ms": 43
+    },
+    {
+      "name": "asset_operation.reimport",
+      "status": "PASS",
+      "ms": 30
+    },
+    {
+      "name": "asset_operation.set_meta_property",
+      "status": "PASS",
+      "ms": 8
+    },
+    {
+      "name": "asset_operation.clean_unused",
+      "status": "PASS",
+      "ms": 18
+    },
+    {
+      "name": "asset_operation.create_material",
+      "status": "PASS",
+      "ms": 547
+    },
+    {
+      "name": "asset_operation.generate_script",
+      "status": "PASS",
+      "ms": 536
+    },
+    {
+      "name": "editor_action.project_info",
+      "status": "PASS",
+      "ms": 2
+    },
+    {
+      "name": "editor_action.get_selection",
+      "status": "PASS",
+      "ms": 2
+    },
+    {
+      "name": "editor_action.clear_selection",
+      "status": "PASS",
+      "ms": 3
+    },
+    {
+      "name": "editor_action.log",
+      "status": "PASS",
+      "ms": 4
+    },
+    {
+      "name": "editor_action.warn",
+      "status": "PASS",
+      "ms": 3
+    },
+    {
+      "name": "editor_action.error",
+      "status": "PASS",
+      "ms": 5
+    },
+    {
+      "name": "editor_action.clear_console",
+      "status": "PASS",
+      "ms": 5
+    },
+    {
+      "name": "editor_action.query_panels",
+      "status": "PASS",
+      "ms": 4
+    },
+    {
+      "name": "editor_action.get_packages",
+      "status": "PASS",
+      "ms": 7
+    },
+    {
+      "name": "editor_action.set_transform_tool",
+      "status": "PASS",
+      "ms": 4
+    },
+    {
+      "name": "editor_action.set_coordinate",
+      "status": "PASS",
+      "ms": 10
+    },
+    {
+      "name": "editor_action.show_notification",
+      "status": "PASS",
+      "ms": 5
+    },
+    {
+      "name": "editor_action.save_scene",
+      "status": "PASS",
+      "ms": 35
+    },
+    {
+      "name": "editor_action.undo",
+      "status": "PASS",
+      "ms": 14
+    },
+    {
+      "name": "editor_action.redo",
+      "status": "PASS",
+      "ms": 93
+    },
+    {
+      "name": "engine_action.get_system_info",
+      "status": "PASS",
+      "ms": 18
+    },
+    {
+      "name": "engine_action.set_frame_rate",
+      "status": "PASS",
+      "ms": 10
+    },
+    {
+      "name": "engine_action.pause_engine",
+      "status": "PASS",
+      "ms": 32
+    },
+    {
+      "name": "engine_action.resume_engine",
+      "status": "PASS",
+      "ms": 10
+    },
+    {
+      "name": "engine_action.dump_texture_cache",
+      "status": "PASS",
+      "ms": 9
+    },
+    {
+      "name": "create_prefab_atomic",
+      "status": "PASS",
+      "ms": 1940
+    },
+    {
+      "name": "setup_ui_layout",
+      "status": "PASS",
+      "ms": 48
+    },
+    {
+      "name": "create_tween_animation_atomic",
+      "status": "PASS",
+      "ms": 21
+    },
+    {
+      "name": "auto_fit_physics_collider",
+      "status": "PASS",
+      "ms": 23
+    },
+    {
+      "name": "import_and_apply_texture",
+      "status": "SKIP",
+      "reason": "no test image available",
+      "ms": 0
+    },
+    {
+      "name": "preferences.get",
+      "status": "PASS",
+      "ms": 3
+    },
+    {
+      "name": "broadcast.poll",
+      "status": "PASS",
+      "ms": 2
+    },
+    {
+      "name": "broadcast.history",
+      "status": "PASS",
+      "ms": 2
+    },
+    {
+      "name": "reference_image.set",
+      "status": "PASS",
+      "ms": 3
+    }
+  ]
+}

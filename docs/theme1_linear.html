@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+/* Theme 1: Vercel / Linear (Minimalist, Glass, Soft Dark) */
+:root {
+  --bg-base: #000000;
+  --bg-panel: #0a0a0a;
+  --bg-hover: #171717;
+  --border-color: #262626;
+  --text-main: #ededed;
+  --text-muted: #888888;
+  --accent-color: #ffffff;
+  --success: #171717;
+  --success-border: #14532d;
+  --success-text: #4ade80;
+  --primary: #ffffff;
+  --primary-text: #000000;
+}
+
+body {
+  background: var(--bg-base);
+  color: var(--text-main);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.mcp-panel {
+  width: 400px; /* Cocos panel typical width */
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: var(--bg-panel);
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.mcp-tabs-header {
+  display: flex;
+  border-bottom: 1px solid var(--border-color);
+  background: rgba(10, 10, 10, 0.8);
+  backdrop-filter: blur(10px);
+}
+
+.mcp-tab {
+  flex: 1; text-align: center; padding: 12px 0; font-size: 13px;
+  color: var(--text-muted); cursor: pointer; transition: 0.2s;
+}
+.mcp-tab.active { color: var(--accent-color); font-weight: 500; }
+
+.mcp-tabs-container { padding: 20px; }
+
+.s3-bento { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.s3-tile {
+  background: var(--bg-base); border: 1px solid var(--border-color);
+  border-radius: 6px; padding: 16px; display: flex; flex-direction: column;
+  transition: 0.2s; box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+.s3-tile:hover { border-color: #404040; background: var(--bg-hover); }
+.s3-tile.wide { grid-column: span 2; }
+
+.s3-tile-label { font-size: 11px; color: var(--text-muted); margin-bottom: 8px; font-weight: 500; }
+.s3-tile-value { font-size: 24px; font-weight: 600; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; letter-spacing: -0.5px; }
+
+.val-blue { color: #60a5fa; }
+.val-green { color: #34d399; }
+.val-purple { color: #a78bfa; }
+.val-amber { color: #fbbf24; }
+
+.s3-tile-sub { font-size: 12px; color: var(--text-muted); margin-top: 12px; display: flex; align-items: center; gap: 6px; }
+
+.btn {
+  width: 100%; padding: 8px 12px; border-radius: 6px; font-size: 13px; font-weight: 500;
+  cursor: pointer; border: 1px solid var(--border-color); background: var(--bg-base); color: var(--text-main);
+  transition: 0.2s;
+}
+.btn:hover { background: var(--bg-hover); }
+.btn-primary { background: var(--primary); color: var(--primary-text); border: none; }
+.btn-primary:hover { opacity: 0.9; background: #e5e5e5; }
+
+.status-dot { width: 8px; height: 8px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 8px rgba(34,197,94,0.6); }
+.status-text { color: #22c55e; font-weight: 500; }
+code { background: #262626; padding: 2px 6px; border-radius: 4px; font-family: monospace; font-size: 11px; color: #a3a3a3; }
+
+</style>
+</head>
+<body>
+<div class="mcp-panel">
+  <div class="mcp-tabs-header">
+    <div class="mcp-tab active">状态</div>
+    <div class="mcp-tab">控制</div>
+    <div class="mcp-tab">设置</div>
+  </div>
+  <div class="mcp-tabs-container">
+    <h3 style="font-size:14px; margin-top:0; font-weight:500; letter-spacing:-0.2px;">Dashboard Overview</h3>
+    <div class="s3-bento">
+      <div class="s3-tile wide">
+        <div class="s3-tile-label">Project</div>
+        <div class="s3-tile-value" style="color:var(--text-main)">SuperCocosGame</div>
+        <div class="s3-tile-sub"><span>Cocos 3.8.3</span> &nbsp;·&nbsp; <code style="margin-left:auto">/Users/dev/game</code></div>
+      </div>
+      <div class="s3-tile">
+        <div class="s3-tile-label">Tools</div>
+        <div class="s3-tile-value val-blue">22</div>
+        <div class="s3-tile-sub">exposed</div>
+      </div>
+      <div class="s3-tile">
+        <div class="s3-tile-label">Actions</div>
+        <div class="s3-tile-value val-green">275</div>
+        <div class="s3-tile-sub">available</div>
+      </div>
+      <div class="s3-tile wide">
+        <div class="s3-tile-label">Connection</div>
+        <div class="s3-tile-value val-purple">Active</div>
+        <div class="s3-tile-sub">
+          <span class="status-dot"></span><span class="status-text">Connected to Cursor</span>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top: 20px; display:flex; gap:10px;">
+      <button class="btn btn-primary">Restart Server</button>
+      <button class="btn">Settings</button>
+    </div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <title>MCP Panel Preview - macOS Pro Dark</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            background: #000000;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        /* macOS Window Frame */
+        .window-frame {
+            width: 440px;
+            height: 740px;
+            border-radius: 10px;
+            background: #1c1c1e;
+            border: 1px solid #333336;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* macOS Top Header (Traffic Lights simulation omitted for simplicity, focusing on Tabs) */
+        .mcp-tabs-header {
+            display: flex;
+            background: #1c1c1e;
+            border-bottom: 1px solid #333336;
+            padding: 12px 16px 0;
+            gap: 16px;
+        }
+
+        .mcp-tab {
+            padding: 8px 4px 10px;
+            font-size: 13px;
+            font-weight: 500;
+            color: rgba(235, 235, 245, 0.6);
+            cursor: pointer;
+            transition: color 0.2s;
+            position: relative;
+        }
+
+        .mcp-tab:hover {
+            color: #ffffff;
+        }
+
+        .mcp-tab.active {
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        .mcp-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: #0a84ff;
+            border-radius: 2px 2px 0 0;
+        }
+
+        /* Container */
+        .mcp-tabs-container {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background: #000000;
+        }
+
+        .mcp-tabs-container::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .mcp-tabs-container::-webkit-scrollbar-thumb {
+            background: #48484a;
+            border-radius: 4px;
+            border: 2px solid #000;
+        }
+
+        /* Typographic Headers */
+        .section-title {
+            font-size: 15px;
+            font-weight: 600;
+            margin: 0 0 4px 0;
+            color: #ffffff;
+        }
+
+        .section-desc {
+            font-size: 13px;
+            color: rgba(235, 235, 245, 0.6);
+            margin: 0 0 16px 0;
+        }
+
+        /* Bento Grid */
+        .s3-bento {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .s3-tile {
+            background: #1c1c1e;
+            border-radius: 12px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .s3-tile.wide {
+            grid-column: span 2;
+        }
+
+        .s3-tile-label {
+            font-size: 12px;
+            color: rgba(235, 235, 245, 0.6);
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .s3-tile-value {
+            font-family: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
+            font-size: 28px;
+            font-weight: 600;
+            line-height: 1.1;
+            margin-bottom: 4px;
+        }
+
+        .val-blue {
+            color: #0a84ff;
+        }
+
+        .val-green {
+            color: #30d158;
+        }
+
+        .val-purple {
+            color: #bf5af2;
+        }
+
+        .val-amber {
+            color: #ffd60a;
+        }
+
+        .val-white {
+            color: #ffffff;
+        }
+
+        .s3-tile-sub {
+            font-size: 12px;
+            color: rgba(235, 235, 245, 0.6);
+            margin-top: auto;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Buttons */
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .btn {
+            flex: 1;
+            border: none;
+            border-radius: 6px;
+            padding: 8px 12px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            font-family: inherit;
+            transition: background 0.1s;
+        }
+
+        .btn-primary {
+            background: #0a84ff;
+            color: #fff;
+        }
+
+        .btn-primary:active {
+            background: #0066d6;
+        }
+
+        .btn-outline {
+            background: #2c2c2e;
+            color: #ffffff;
+        }
+
+        .btn-outline:active {
+            background: #3a3a3c;
+        }
+
+        .btn-danger {
+            background: rgba(255, 69, 58, 0.15);
+            color: #ff453a;
+        }
+
+        .btn-danger:active {
+            background: rgba(255, 69, 58, 0.25);
+        }
+
+        /* Lists & Cards */
+        .card-list {
+            display: flex;
+            flex-direction: column;
+            background: #1c1c1e;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .list-item {
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #333336;
+        }
+
+        .list-item:last-child {
+            border-bottom: none;
+        }
+
+        .item-info {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .item-title {
+            font-size: 14px;
+            font-weight: 500;
+            color: #ffffff;
+        }
+
+        .item-desc {
+            font-size: 12px;
+            color: rgba(235, 235, 245, 0.6);
+        }
+
+        .badge {
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        .badge.success {
+            background: #30d158;
+            color: #000;
+        }
+
+        .badge.warning {
+            background: #ffd60a;
+            color: #000;
+        }
+
+        /* macOS Toggle */
+        .toggle {
+            appearance: none;
+            -webkit-appearance: none;
+            width: 40px;
+            height: 24px;
+            background: #39393d;
+            border-radius: 12px;
+            position: relative;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .toggle:checked {
+            background: #30d158;
+        }
+
+        .toggle::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            background: #ffffff;
+            border-radius: 50%;
+            transition: 0.2s;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        }
+
+        .toggle:checked::after {
+            transform: translateX(16px);
+        }
+
+        /* Forms */
+        .input {
+            background: #2c2c2e;
+            border: 1px solid transparent;
+            border-radius: 6px;
+            color: #ffffff;
+            padding: 6px 10px;
+            font-size: 13px;
+            width: 100px;
+            text-align: right;
+            outline: none;
+        }
+
+        .input:focus {
+            border-color: #0a84ff;
+            background: #1c1c1e;
+        }
+
+        /* Tab switching logic */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fade 0.2s ease;
+        }
+
+        @keyframes fade {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        hr {
+            border: none;
+            height: 1px;
+            background: #333336;
+            margin: 24px 0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="window-frame">
+        <div class="mcp-tabs-header">
+            <div class="mcp-tab active" onclick="switchTab(0, this)">Status</div>
+            <div class="mcp-tab" onclick="switchTab(1, this)">Control</div>
+            <div class="mcp-tab" onclick="switchTab(2, this)">Config</div>
+            <div class="mcp-tab" onclick="switchTab(3, this)">Settings</div>
+        </div>
+
+        <div class="mcp-tabs-container">
+            <!-- Tab 1: Status -->
+            <div class="tab-content active" id="tab-0">
+                <div class="s3-bento">
+                    <div class="s3-tile">
+                        <div class="s3-tile-label">Tools Exposed</div>
+                        <div class="s3-tile-value val-blue">19</div>
+                        <div class="s3-tile-sub">Active interfaces</div>
+                    </div>
+                    <div class="s3-tile">
+                        <div class="s3-tile-label">Total Actions</div>
+                        <div class="s3-tile-value val-green">249</div>
+                        <div class="s3-tile-sub">Operations ready</div>
+                    </div>
+                    <div class="s3-tile">
+                        <div class="s3-tile-label">AI Clients</div>
+                        <div class="s3-tile-value val-purple">1</div>
+                        <div class="s3-tile-sub"><span style="color:#30d158">●</span> Cursor</div>
+                    </div>
+                    <div class="s3-tile">
+                        <div class="s3-tile-label">Listen Port</div>
+                        <div class="s3-tile-value val-amber">7779</div>
+                        <div class="s3-tile-sub">Up: 04:22:10</div>
+                    </div>
+                    <div class="s3-tile wide">
+                        <div class="s3-tile-label">Current Project</div>
+                        <div class="s3-tile-value val-white" style="font-size: 22px; font-family: inherit;">
+                            CocosDesignTool</div>
+                        <div class="s3-tile-sub" style="margin-top: 8px;">
+                            <span>Engine: 3.8.8</span> <span style="opacity:0.3">|</span> <code>E:\gitproject\...</code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab 2: Control -->
+            <div class="tab-content" id="tab-1">
+                <h3 class="section-title">Service Operations</h3>
+                <p class="section-desc">Manage the underlying MCP relay service.</p>
+
+                <div class="btn-group">
+                    <button class="btn btn-outline">Start</button>
+                    <button class="btn btn-danger">Stop</button>
+                </div>
+                <button class="btn btn-primary" style="width: 100%;">Restart Service</button>
+
+                <hr>
+
+                <h3 class="section-title">Tool Availability</h3>
+                <div class="card-list" style="margin-top: 12px;">
+                    <div class="list-item">
+                        <div class="item-info">
+                            <span class="item-title">bridge_status</span>
+                            <span class="item-desc">Hardware & connections</span>
+                        </div>
+                        <input type="checkbox" class="toggle" checked disabled>
+                    </div>
+                    <div class="list-item">
+                        <div class="item-info">
+                            <span class="item-title">scene_query</span>
+                            <span class="item-desc">Read-only hierarchy</span>
+                        </div>
+                        <input type="checkbox" class="toggle" checked>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab 3 & 4 Omitted for simplicity in alternate preview, but keeping basic structure -->
+            <div class="tab-content" id="tab-2">
+                <h3 class="section-title">IDE Integration</h3>
+                <div class="card-list" style="margin-top: 12px;">
+                    <div class="list-item">
+                        <span class="item-title">Cursor</span>
+                        <span class="badge success">Ready</span>
+                    </div>
+                    <div class="list-item">
+                        <span class="item-title">Windsurf</span>
+                        <button class="btn btn-primary" style="padding: 4px 10px; font-size: 12px;">Inject</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-content" id="tab-3">
+                <h3 class="section-title">Limits</h3>
+                <div class="card-list" style="margin-top: 12px;">
+                    <div class="list-item">
+                        <span class="item-title">Rate Limit</span>
+                        <input type="number" class="input" value="240">
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        function switchTab(index, el) {
+            document.querySelectorAll('.mcp-tab').forEach(t => t.classList.remove('active'));
+            el.classList.add('active');
+
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.getElementById('tab-' + index).classList.add('active');
+        }
+    </script>
+</body>
+
+</html>

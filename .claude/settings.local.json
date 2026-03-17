@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(wc -l tests/unit/*.test.ts)",
+      "Bash(curl -s http://127.0.0.1:7779/api/status)",
+      "Bash(curl -s -X POST http://127.0.0.1:7779/mcp -H \"Content-Type: application/json\" -H \"X-MCP-Token: 194a94658a93c212aa9143a3f4f0e97c88f59c67196627c4\" -d '{:*)",
+      "Bash(python -m json.tool)",
+      "Bash(curl -s http://127.0.0.1:7779/api/editor/info)",
+      "Bash(python -c \"import sys, json; data=json.load\\(sys.stdin\\); print\\(''\\\\n''.join\\([t[''name''] for t in data.get\\(''result'', {}\\).get\\(''tools'', []\\)]\\)\\)\")",
+      "Bash(curl -s -X POST http://127.0.0.1:7779/api/ipc/send -H \"Content-Type: application/json\" -H \"X-MCP-Token: 194a94658a93c212aa9143a3f4f0e97c88f59c67196627c4\" -d '{:*)",
+      "WebSearch",
+      "WebFetch(domain:godot-mcp.abyo.net)",
+      "WebFetch(domain:gdaimcp.com)",
+      "WebFetch(domain:mcpmarket.com)",
+      "WebFetch(domain:www.pulsemcp.com)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:www.cocos.com)",
+      "WebFetch(domain:generalistprogrammer.com)",
+      "mcp__sequential-thinking__sequentialthinking",
+      "mcp__filesystem__search_files"
+    ]
+  }
+}

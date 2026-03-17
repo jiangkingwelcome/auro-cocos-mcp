@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cocos MCP Bridge — 代码质量分析报告 v2</title>
+<style>
+  :root {
+    --bg: #0d1117; --surface: #161b22; --border: #30363d;
+    --text: #e6edf3; --muted: #8b949e; --accent: #58a6ff;
+    --green: #3fb950; --yellow: #d29922; --red: #f85149; --purple: #bc8cff;
+    --orange: #d18616;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; line-height: 1.6; }
+  .container { max-width: 1200px; margin: 0 auto; padding: 32px 24px; }
+
+  /* Header */
+  .header { text-align: center; padding: 48px 0 32px; border-bottom: 1px solid var(--border); margin-bottom: 40px; }
+  .header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+  .header .subtitle { color: var(--muted); font-size: 15px; }
+  .header .date { color: var(--muted); font-size: 13px; margin-top: 12px; }
+  .badge { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 12px; font-weight: 600; }
+  .badge-green { background: rgba(63,185,80,0.15); color: var(--green); border: 1px solid rgba(63,185,80,0.3); }
+  .badge-yellow { background: rgba(210,153,34,0.15); color: var(--yellow); border: 1px solid rgba(210,153,34,0.3); }
+  .badge-red { background: rgba(248,81,73,0.15); color: var(--red); border: 1px solid rgba(248,81,73,0.3); }
+  .badge-blue { background: rgba(88,166,255,0.15); color: var(--accent); border: 1px solid rgba(88,166,255,0.3); }
+  .badge-purple { background: rgba(188,140,255,0.15); color: var(--purple); border: 1px solid rgba(188,140,255,0.3); }
+
+  /* Section */
+  .section { margin-bottom: 40px; }
+  .section h2 { font-size: 20px; font-weight: 600; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+  .section h3 { font-size: 16px; font-weight: 600; margin: 20px 0 10px; color: var(--accent); }
+
+  /* Dashboard Grid */
+  .dashboard { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-bottom: 32px; }
+  .metric-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 20px; text-align: center; }
+  .metric-card .value { font-size: 32px; font-weight: 700; margin-bottom: 4px; }
+  .metric-card .label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+  .metric-card.green .value { color: var(--green); }
+  .metric-card.yellow .value { color: var(--yellow); }
+  .metric-card.red .value { color: var(--red); }
+  .metric-card.blue .value { color: var(--accent); }
+  .metric-card.purple .value { color: var(--purple); }
+
+  /* Table */
+  table { width: 100%; border-collapse: collapse; margin: 12px 0; }
+  th, td { padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--border); font-size: 13px; }
+  th { background: var(--surface); color: var(--muted); font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; position: sticky; top: 0; }
+  td { color: var(--text); }
+  tr:hover td { background: rgba(88,166,255,0.04); }
+  td code { background: rgba(110,118,129,0.15); padding: 2px 6px; border-radius: 4px; font-size: 12px; font-family: 'SF Mono', Consolas, monospace; }
+  td.mono { font-family: 'SF Mono', Consolas, monospace; font-size: 12px; }
+
+  /* Score badges */
+  .score { display: inline-block; width: 28px; height: 28px; line-height: 28px; text-align: center; border-radius: 6px; font-weight: 700; font-size: 13px; }
+  .score-a { background: rgba(63,185,80,0.2); color: var(--green); }
+  .score-b { background: rgba(88,166,255,0.2); color: var(--accent); }
+  .score-c { background: rgba(210,153,34,0.2); color: var(--yellow); }
+
+  /* Progress bar */
+  .progress-bar { height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; margin-top: 6px; }
+  .progress-fill { height: 100%; border-radius: 4px; transition: width 0.3s; }
+
+  /* Architecture diagram */
+  .arch-box { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 24px; font-family: 'SF Mono', Consolas, monospace; font-size: 12px; line-height: 1.8; overflow-x: auto; white-space: pre; color: var(--muted); }
+  .arch-box .hl { color: var(--accent); font-weight: 600; }
+  .arch-box .g { color: var(--green); }
+  .arch-box .y { color: var(--yellow); }
+  .arch-box .p { color: var(--purple); }
+
+  /* Info box */
+  .info-box { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 16px 20px; margin: 12px 0; }
+  .info-box p { margin: 4px 0; font-size: 13px; }
+  .info-box .label { color: var(--muted); min-width: 100px; display: inline-block; }
+
+  /* Issue list */
+  .issue { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 14px 18px; margin: 8px 0; display: flex; gap: 12px; align-items: flex-start; }
+  .issue .severity { flex-shrink: 0; width: 24px; height: 24px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; }
+  .issue .severity.p0 { background: rgba(248,81,73,0.2); color: var(--red); }
+  .issue .severity.p1 { background: rgba(210,153,34,0.2); color: var(--yellow); }
+  .issue .severity.p2 { background: rgba(88,166,255,0.2); color: var(--accent); }
+  .issue .severity.ok { background: rgba(63,185,80,0.2); color: var(--green); }
+  .issue .content { flex: 1; }
+  .issue .title { font-weight: 600; font-size: 13px; }
+  .issue .desc { color: var(--muted); font-size: 12px; margin-top: 2px; }
+
+  /* Comparison */
+  .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 16px 0; }
+  .compare-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 16px; }
+  .compare-card h4 { font-size: 13px; color: var(--muted); margin-bottom: 10px; }
+  .compare-card .items { font-size: 13px; }
+  .compare-card .items li { margin: 4px 0; list-style: none; }
+  .compare-card .items li::before { content: ''; display: inline-block; width: 6px; height: 6px; border-radius: 50%; margin-right: 8px; }
+  .compare-card.before .items li::before { background: var(--red); }
+  .compare-card.after .items li::before { background: var(--green); }
+
+  /* Footer */
+  .footer { text-align: center; padding: 32px 0; border-top: 1px solid var(--border); margin-top: 40px; color: var(--muted); font-size: 12px; }
+
+  @media (max-width: 768px) {
+    .dashboard { grid-template-columns: repeat(2, 1fr); }
+    .compare-grid { grid-template-columns: 1fr; }
+    th, td { padding: 8px 10px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- ==================== HEADER ==================== -->
+<div class="header">
+  <h1>Cocos MCP Bridge — 代码质量分析报告</h1>
+  <div class="subtitle">全量代码审查 · 架构评估 · 安全分析 · 改进追踪</div>
+  <div class="date">
+    生成时间: 2026-03-05 &nbsp;|&nbsp;
+    <span class="badge badge-green">TypeScript 0 Errors</span>&nbsp;
+    <span class="badge badge-green">254 Tests Passed</span>&nbsp;
+    <span class="badge badge-green">0 any</span>&nbsp;
+    <span class="badge badge-blue">整体评分 B+</span>
+  </div>
+</div>
+
+<!-- ==================== DASHBOARD ==================== -->
+<div class="section">
+  <h2>📊 核心指标仪表盘</h2>
+  <div class="dashboard">
+    <div class="metric-card blue">
+      <div class="value">17</div>
+      <div class="label">源文件数</div>
+    </div>
+    <div class="metric-card purple">
+      <div class="value">4,166</div>
+      <div class="label">源码总行数</div>
+    </div>
+    <div class="metric-card green">
+      <div class="value">0</div>
+      <div class="label">TypeScript 错误</div>
+    </div>
+    <div class="metric-card green">
+      <div class="value">254</div>
+      <div class="label">单元测试数</div>
+    </div>
+    <div class="metric-card green">
+      <div class="value">0</div>
+      <div class="label">as any / : any</div>
+    </div>
+    <div class="metric-card green">
+      <div class="value">0</div>
+      <div class="label">(Editor as any)</div>
+    </div>
+    <div class="metric-card blue">
+      <div class="value">16</div>
+      <div class="label">MCP 工具数</div>
+    </div>
+    <div class="metric-card purple">
+      <div class="value">10</div>
+      <div class="label">测试文件数</div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== ARCHITECTURE ==================== -->
+<div class="section">
+  <h2>🏗️ 架构总览</h2>
+  <div class="arch-box"><span class="hl">AI Client (Cursor / Claude / Windsurf / Trae / Kiro)</span>
+    │
+    │  stdio (JSON-RPC 2.0)
+    ▼
+<span class="y">stdio-shim/mcp-stdio-shim.cjs</span>  ← 自动发现 · 断线重连 · 帧格式检测 · 日志轮转
+    │
+    │  HTTP POST /mcp
+    ▼
+<span class="hl">src/core.ts</span>  ← HTTP 服务器 · 安全层 (Token/Rate-Limit/Loopback) · 路由
+    │
+    ├──→ <span class="g">src/mcp/standalone-host.ts</span>   JSON-RPC 协议宿主
+    │       │
+    │       └──→ <span class="g">src/mcp/local-tool-server.ts</span>   工具注册 · Schema 验证 · 调用分发
+    │               │
+    │               └──→ <span class="p">src/mcp/tools.ts</span>  ← 薄编排层 (34 行)
+    │                       ├── <span class="p">tools-scene.ts</span>    scene_query (26 actions) + scene_operation (35 actions)
+    │                       ├── <span class="p">tools-asset.ts</span>    asset_operation (27 actions)
+    │                       ├── <span class="p">tools-editor.ts</span>   editor_action (38 actions) + engine_action (5 actions)
+    │                       ├── <span class="p">tools-atomic.ts</span>   create_prefab_atomic + import_texture + setup_ui + 2 stubs
+    │                       ├── <span class="p">tools-script.ts</span>   execute_script + register_custom_macro
+    │                       ├── <span class="p">tools-misc.ts</span>     preferences + broadcast + reference_image
+    │                       └── <span class="p">tools-shared.ts</span>   共享类型 · 组件名规范化 · 路径规范化 · Guardrails
+    │
+    ├──→ <span class="y">src/scene.ts</span>  ← 场景脚本 (IPC 调用) · Map 策略模式分发
+    │
+    └──→ <span class="y">src/main.ts</span>   ← 插件入口 · 热更新壳
+
+<span class="hl">src/panels/default/index.ts</span>  ← 编辑器面板 UI (状态/控制/互联)
+<span class="hl">src/editor.d.ts</span>              ← Editor API 类型声明 (Project/Profile/Message/Panel/Selection)</div>
+</div>
+
+<!-- ==================== FILE ANALYSIS ==================== -->
+<div class="section">
+  <h2>📁 逐文件质量评估</h2>
+  <table>
+    <thead>
+      <tr><th>文件</th><th>行数</th><th>评分</th><th>职责</th><th>关键发现</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>main.ts</code></td><td class="mono">104</td>
+        <td><span class="score score-a">A</span></td>
+        <td>插件入口 · 热更新壳</td>
+        <td>职责单一，代码简洁</td>
+      </tr>
+      <tr>
+        <td><code>core.ts</code></td><td class="mono">843</td>
+        <td><span class="score score-b">B</span></td>
+        <td>HTTP 服务器 · 安全 · 路由 · IDE 配置</td>
+        <td>文件较大；configureIDE ~70 行可拆分</td>
+      </tr>
+      <tr>
+        <td><code>scene.ts</code></td><td class="mono">861</td>
+        <td><span class="score score-b">B</span></td>
+        <td>场景图操作 · Map 策略分发</td>
+        <td>已用 Map 替代 switch；handler 密度高</td>
+      </tr>
+      <tr>
+        <td><code>editor.d.ts</code></td><td class="mono">38</td>
+        <td><span class="score score-b">B+</span></td>
+        <td>Editor API 类型声明</td>
+        <td>覆盖主要 API；Function 类型可改进</td>
+      </tr>
+      <tr>
+        <td><code>mcp/tools.ts</code></td><td class="mono">34</td>
+        <td><span class="score score-a">A</span></td>
+        <td>工具注册编排层</td>
+        <td>纯粹的组装层，零业务逻辑</td>
+      </tr>
+      <tr>
+        <td><code>mcp/tools-shared.ts</code></td><td class="mono">108</td>
+        <td><span class="score score-a">A-</span></td>
+        <td>共享类型 · 规范化函数</td>
+        <td>CASE_NORMALIZE_MAP 为空（死代码）</td>
+      </tr>
+      <tr>
+        <td><code>mcp/tools-scene.ts</code></td><td class="mono">244</td>
+        <td><span class="score score-b">B</span></td>
+        <td>scene_query + scene_operation</td>
+        <td>Guardrail 机制好；handler 较长</td>
+      </tr>
+      <tr>
+        <td><code>mcp/tools-asset.ts</code></td><td class="mono">162</td>
+        <td><span class="score score-b">B</span></td>
+        <td>asset_operation (27 actions)</td>
+        <td>路径规范化好；switch 分支多</td>
+      </tr>
+      <tr>
+        <td><code>mcp/tools-editor.ts</code></td><td class="mono">201</td>
+        <td><span class="score score-b">B-</span></td>
+        <td>editor_action + engine_action</td>
+        <td>38 个 case 分支，圈复杂度高</td>
+      </tr>
+      <tr>
+        <td><code>mcp/tools-atomic.ts</code></td><td class="mono">395</td>
+        <td><span class="score score-b">B</span></td>
+        <td>5 个原子宏工具</td>
+        <td>阶段追踪+回滚设计好；2 个 stub</td>
+      </tr>
+      <tr>
+        <td><code>mcp/tools-script.ts</code></td><td class="mono">76</td>
+        <td><span class="score score-a">A-</span></td>
+        <td>execute_script + 宏注册</td>
+        <td>白名单机制好；审计日志可加强</td>
+      </tr>
+      <tr>
+        <td><code>mcp/tools-misc.ts</code></td><td class="mono">91</td>
+        <td><span class="score score-a">A</span></td>
+        <td>preferences · broadcast · reference_image</td>
+        <td>简洁清晰，职责明确</td>
+      </tr>
+      <tr>
+        <td><code>mcp/local-tool-server.ts</code></td><td class="mono">197</td>
+        <td><span class="score score-b">B+</span></td>
+        <td>工具注册 · Schema 验证 · 调用分发</td>
+        <td>两套 Zod→JSON Schema 转换可统一</td>
+      </tr>
+      <tr>
+        <td><code>mcp/standalone-host.ts</code></td><td class="mono">136</td>
+        <td><span class="score score-a">A</span></td>
+        <td>JSON-RPC 2.0 协议宿主</td>
+        <td>协议实现干净，连接计数机制完善</td>
+      </tr>
+      <tr>
+        <td><code>panels/default/index.ts</code></td><td class="mono">747</td>
+        <td><span class="score score-c">C+</span></td>
+        <td>编辑器面板 UI</td>
+        <td>@ts-nocheck；HTML/CSS/JS 内联（受 Cocos 约束）</td>
+      </tr>
+      <tr>
+        <td><code>stdio-shim/mcp-stdio-shim.cjs</code></td><td class="mono">385</td>
+        <td><span class="score score-a">A-</span></td>
+        <td>stdio↔HTTP 桥接 · 自动重连</td>
+        <td>健壮的重连机制；日志轮转好</td>
+      </tr>
+      <tr>
+        <td><code>stdio-shim/shim-logic.cjs</code></td><td class="mono">77</td>
+        <td><span class="score score-a">A</span></td>
+        <td>纯函数：端口解析 · 帧格式检测</td>
+        <td>可测试性极佳</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ==================== SECURITY ==================== -->
+<div class="section">
+  <h2>🔒 安全机制分析</h2>
+  <table>
+    <thead><tr><th>安全层</th><th>实现</th><th>状态</th></tr></thead>
+    <tbody>
+      <tr><td>网络隔离</td><td>仅允许 127.0.0.1 / ::1 回环地址访问</td><td><span class="badge badge-green">✓ 已实现</span></td></tr>
+      <tr><td>Token 认证</td><td>24 字节随机 Token，X-MCP-Token 头 / Authorization: Bearer</td><td><span class="badge badge-green">✓ 已实现</span></td></tr>
+      <tr><td>速率限制</td><td>Per-IP 滑动窗口，200-240 req/min</td><td><span class="badge badge-green">✓ 已实现</span></td></tr>
+      <tr><td>IPC 白名单</td><td>IPC_ALLOWED_MODULES 限制可调用的编辑器模块</td><td><span class="badge badge-green">✓ 已实现</span></td></tr>
+      <tr><td>宏注册白名单</td><td>ALLOWED_MACRO_METHODS 限制可注册的场景方法</td><td><span class="badge badge-green">✓ 已实现</span></td></tr>
+      <tr><td>组件属性黑名单</td><td>COMPONENT_PROPERTY_BLOCKLIST 阻止设置 __proto__ 等</td><td><span class="badge badge-green">✓ 已实现</span></td></tr>
+      <tr><td>请求体限制</td><td>最大 1MB</td><td><span class="badge badge-green">✓ 已实现</span></td></tr>
+      <tr><td>请求超时</td><td>15-20 秒</td><td><span class="badge badge-green">✓ 已实现</span></td></tr>
+      <tr><td>危险操作确认</td><td>destroy_node / clear_children 需要 confirm: true</td><td><span class="badge badge-green">✓ 已实现</span></td></tr>
+      <tr><td>XSS 防护</td><td>面板使用 createElement + textContent 替代 innerHTML</td><td><span class="badge badge-green">✓ 已实现</span></td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ==================== TYPE SAFETY ==================== -->
+<div class="section">
+  <h2>🛡️ 类型安全分析</h2>
+  <div class="dashboard" style="grid-template-columns: repeat(4, 1fr);">
+    <div class="metric-card green">
+      <div class="value">0</div>
+      <div class="label">as any</div>
+    </div>
+    <div class="metric-card green">
+      <div class="value">0</div>
+      <div class="label">: any</div>
+    </div>
+    <div class="metric-card green">
+      <div class="value">0</div>
+      <div class="label">(Editor as any)</div>
+    </div>
+    <div class="metric-card green">
+      <div class="value">0</div>
+      <div class="label">err: any</div>
+    </div>
+  </div>
+
+  <h3>类型安全策略</h3>
+  <table>
+    <thead><tr><th>策略</th><th>实现方式</th><th>覆盖范围</th></tr></thead>
+    <tbody>
+      <tr><td>IPC 返回值</td><td><code>as Record&lt;string, unknown&gt;</code> 显式断言</td><td>所有 Editor.Message.request 调用</td></tr>
+      <tr><td>错误处理</td><td><code>catch (err: unknown)</code> + <code>instanceof Error</code></td><td>所有 catch 块</td></tr>
+      <tr><td>参数提取</td><td><code>String(p.x ?? '')</code> / <code>Number(p.x ?? 0)</code></td><td>所有 MCP 工具参数</td></tr>
+      <tr><td>空值处理</td><td><code>??</code> 替代 <code>||</code></td><td>全局</td></tr>
+      <tr><td>Editor API</td><td>完整 <code>editor.d.ts</code> 声明 (Project/Profile/Message)</td><td>消除所有 (Editor as any)</td></tr>
+      <tr><td>场景节点</td><td><code>CocosNode</code> / <code>CocosComponent</code> 接口</td><td>scene.ts 全部节点操作</td></tr>
+      <tr><td>Zod 验证</td><td>工具参数 Schema 定义 + 运行时验证</td><td>所有 16 个 MCP 工具</td></tr>
+    </tbody>
+  </table>
+
+  <h3>合理的 z.any() 使用 (11 处)</h3>
+  <p style="color: var(--muted); font-size: 13px; margin: 8px 0;">
+    用于 MCP 工具的动态参数 (value, args, content, properties 等)，因为需要接受任意 JSON 值传递给 Cocos 引擎。这是合理的设计选择。
+  </p>
+</div>
+
+<!-- ==================== TEST COVERAGE ==================== -->
+<div class="section">
+  <h2>🧪 测试覆盖</h2>
+  <div class="dashboard" style="grid-template-columns: repeat(3, 1fr);">
+    <div class="metric-card green">
+      <div class="value">254</div>
+      <div class="label">测试用例</div>
+    </div>
+    <div class="metric-card green">
+      <div class="value">10</div>
+      <div class="label">测试文件</div>
+    </div>
+    <div class="metric-card green">
+      <div class="value">100%</div>
+      <div class="label">通过率</div>
+    </div>
+  </div>
+  <table>
+    <thead><tr><th>测试文件</th><th>测试数</th><th>覆盖模块</th></tr></thead>
+    <tbody>
+      <tr><td><code>tools-new-features.test.ts</code></td><td class="mono">38</td><td>新功能集成测试</td></tr>
+      <tr><td><code>stdio-shim.test.ts</code></td><td class="mono">29</td><td>stdio 桥接 · 帧格式 · 端口解析</td></tr>
+      <tr><td><code>tools-asset-operation.test.ts</code></td><td class="mono">27</td><td>资源操作 27 个 actions</td></tr>
+      <tr><td><code>tools-normalizer.test.ts</code></td><td class="mono">26</td><td>组件名/路径规范化</td></tr>
+      <tr><td><code>tools-competitive-features.test.ts</code></td><td class="mono">26</td><td>竞品功能对标测试</td></tr>
+      <tr><td><code>tools-editor-action.test.ts</code></td><td class="mono">26</td><td>编辑器操作 38 个 actions</td></tr>
+      <tr><td><code>standalone-host.test.ts</code></td><td class="mono">24</td><td>JSON-RPC 协议 · 连接管理</td></tr>
+      <tr><td><code>tools-atomic.test.ts</code></td><td class="mono">23</td><td>原子宏 · 回滚机制</td></tr>
+      <tr><td><code>local-tool-server.test.ts</code></td><td class="mono">18</td><td>工具注册 · Schema 验证</td></tr>
+      <tr><td><code>tools-builder.test.ts</code></td><td class="mono">17</td><td>工具构建 · 上下文注入</td></tr>
+    </tbody>
+  </table>
+
+  <h3>测试覆盖空白</h3>
+  <div class="issue">
+    <div class="severity p2">!</div>
+    <div class="content">
+      <div class="title">core.ts — 无专属单元测试</div>
+      <div class="desc">HTTP 路由、安全层、IDE 配置逻辑缺少直接测试。部分功能通过集成测试间接覆盖。</div>
+    </div>
+  </div>
+  <div class="issue">
+    <div class="severity p2">!</div>
+    <div class="content">
+      <div class="title">scene.ts — 无专属单元测试</div>
+      <div class="desc">场景脚本的 Map handler 逻辑缺少直接测试。受限于 Cocos 引擎运行时依赖。</div>
+    </div>
+  </div>
+  <div class="issue">
+    <div class="severity p2">!</div>
+    <div class="content">
+      <div class="title">panels/default/index.ts — 无测试</div>
+      <div class="desc">面板 UI 逻辑无测试覆盖。受限于 Cocos Panel API 的 webview 环境。</div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== TOOLS INVENTORY ==================== -->
+<div class="section">
+  <h2>🔧 MCP 工具清单</h2>
+  <table>
+    <thead><tr><th>工具名</th><th>Actions</th><th>模块</th><th>类型</th></tr></thead>
+    <tbody>
+      <tr><td><code>bridge_status</code></td><td class="mono">-</td><td>tools.ts</td><td><span class="badge badge-green">核心</span></td></tr>
+      <tr><td><code>scene_query</code></td><td class="mono">26</td><td>tools-scene.ts</td><td><span class="badge badge-blue">只读</span></td></tr>
+      <tr><td><code>scene_operation</code></td><td class="mono">35</td><td>tools-scene.ts</td><td><span class="badge badge-yellow">写入</span></td></tr>
+      <tr><td><code>asset_operation</code></td><td class="mono">27</td><td>tools-asset.ts</td><td><span class="badge badge-yellow">写入</span></td></tr>
+      <tr><td><code>editor_action</code></td><td class="mono">38</td><td>tools-editor.ts</td><td><span class="badge badge-yellow">写入</span></td></tr>
+      <tr><td><code>engine_action</code></td><td class="mono">5</td><td>tools-editor.ts</td><td><span class="badge badge-yellow">写入</span></td></tr>
+      <tr><td><code>execute_script</code></td><td class="mono">-</td><td>tools-script.ts</td><td><span class="badge badge-red">逃生舱</span></td></tr>
+      <tr><td><code>create_prefab_atomic</code></td><td class="mono">-</td><td>tools-atomic.ts</td><td><span class="badge badge-purple">原子宏</span></td></tr>
+      <tr><td><code>import_and_apply_texture</code></td><td class="mono">-</td><td>tools-atomic.ts</td><td><span class="badge badge-purple">原子宏</span></td></tr>
+      <tr><td><code>setup_ui_layout</code></td><td class="mono">-</td><td>tools-atomic.ts</td><td><span class="badge badge-purple">原子宏</span></td></tr>
+      <tr><td><code>create_tween_animation_atomic</code></td><td class="mono">-</td><td>tools-atomic.ts</td><td><span class="badge badge-yellow">Stub</span></td></tr>
+      <tr><td><code>auto_fit_physics_collider</code></td><td class="mono">-</td><td>tools-atomic.ts</td><td><span class="badge badge-yellow">Stub</span></td></tr>
+      <tr><td><code>register_custom_macro</code></td><td class="mono">-</td><td>tools-script.ts</td><td><span class="badge badge-purple">扩展</span></td></tr>
+      <tr><td><code>preferences</code></td><td class="mono">-</td><td>tools-misc.ts</td><td><span class="badge badge-blue">读写</span></td></tr>
+      <tr><td><code>broadcast</code></td><td class="mono">-</td><td>tools-misc.ts</td><td><span class="badge badge-blue">只读</span></td></tr>
+      <tr><td><code>reference_image</code></td><td class="mono">-</td><td>tools-misc.ts</td><td><span class="badge badge-yellow">写入</span></td></tr>
+    </tbody>
+  </table>
+  <p style="color: var(--muted); font-size: 13px; margin-top: 8px;">
+    共 <strong>16 个工具</strong>，覆盖 <strong>131+ 个 actions</strong>。
+  </p>
+</div>
+
+<!-- ==================== IMPROVEMENTS DONE ==================== -->
+<div class="section">
+  <h2>✅ 已完成的改进 (本轮)</h2>
+
+  <div class="compare-grid">
+    <div class="compare-card before">
+      <h4>改进前</h4>
+      <ul class="items">
+        <li>tools.ts 单文件 1365 行</li>
+        <li>10 处 (Editor as any) 断言</li>
+        <li>dispatchQuery/Operation 巨型 switch-case</li>
+        <li>多处 as any / : any 类型逃逸</li>
+        <li>(body as any).text 不安全访问</li>
+        <li>err: any 错误处理</li>
+        <li>broadcast 监听器使用 Editor.Message as any</li>
+      </ul>
+    </div>
+    <div class="compare-card after">
+      <h4>改进后</h4>
+      <ul class="items">
+        <li>tools.ts 拆分为 8 个模块 (最大 395 行)</li>
+        <li>完整 editor.d.ts 声明，0 处 (Editor as any)</li>
+        <li>Map&lt;string, Handler&gt; 策略模式分发</li>
+        <li>src/ 目录 0 个 as any / : any</li>
+        <li>显式 { text?: string } 类型断言</li>
+        <li>catch (err: unknown) + instanceof Error</li>
+        <li>Editor.Message.addBroadcastListener 类型安全调用</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>改进详情</h3>
+  <div class="issue">
+    <div class="severity ok">✓</div>
+    <div class="content">
+      <div class="title">P1: tools.ts 模块化拆分</div>
+      <div class="desc">1365 行 → 8 个职责单一的模块。tools.ts 精简为 34 行编排层。所有测试保持通过。</div>
+    </div>
+  </div>
+  <div class="issue">
+    <div class="severity ok">✓</div>
+    <div class="content">
+      <div class="title">P1: Editor API 类型声明完善</div>
+      <div class="desc">新增 Editor.Project (path/name)、Editor.Profile (getConfig/setConfig)、Editor.Message (addBroadcastListener/removeBroadcastListener)。消除全部 10 处 (Editor as any)。</div>
+    </div>
+  </div>
+  <div class="issue">
+    <div class="severity ok">✓</div>
+    <div class="content">
+      <div class="title">P2: scene.ts 策略模式重构</div>
+      <div class="desc">dispatchQuery (24 case) + dispatchOperation (27 case) 的 switch-case 替换为 Map&lt;string, Handler&gt;。新增 requireNode() 辅助函数消除重复代码。</div>
+    </div>
+  </div>
+  <div class="issue">
+    <div class="severity ok">✓</div>
+    <div class="content">
+      <div class="title">P2: 消除全部 any 类型</div>
+      <div class="desc">src/ 目录下 0 个 as any 和 0 个 : any。IPC 返回值使用 Record&lt;string, unknown&gt;，错误处理使用 err: unknown。</div>
+    </div>
+  </div>
+  <div class="issue">
+    <div class="severity ok">✓</div>
+    <div class="content">
+      <div class="title">P2: core.ts 路由类型安全</div>
+      <div class="desc">console/*, focus-node, preferences/* 等路由的 (body as any).text 全部改为显式类型断言 { text?: string }。</div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== REMAINING ISSUES ==================== -->
+<div class="section">
+  <h2>⚠️ 当前遗留问题</h2>
+
+  <h3>P1 — 建议优先处理</h3>
+  <div class="issue">
+    <div class="severity p1">1</div>
+    <div class="content">
+      <div class="title">core.ts 仍然 843 行，路由定义占大量篇幅</div>
+      <div class="desc">建议将 API 路由拆分为 routes-api.ts、routes-asset.ts 等子模块，core.ts 仅保留服务器启动和安全层。</div>
+    </div>
+  </div>
+  <div class="issue">
+    <div class="severity p1">2</div>
+    <div class="content">
+      <div class="title">tools-editor.ts editor_action 有 38 个 case 分支</div>
+      <div class="desc">圈复杂度极高。建议参照 scene.ts 的 Map 策略模式重构，或按功能拆分为 editor-scene、editor-panel、editor-build 等子处理器。</div>
+    </div>
+  </div>
+
+  <h3>P2 — 可后续处理</h3>
+  <div class="issue">
+    <div class="severity p2">3</div>
+    <div class="content">
+      <div class="title">core.ts / scene.ts 缺少专属单元测试</div>
+      <div class="desc">HTTP 路由逻辑和场景脚本的 Map handler 缺少直接测试。建议为纯逻辑部分（安全检查、路由匹配）编写可独立测试的函数。</div>
+    </div>
+  </div>
+  <div class="issue">
+    <div class="severity p2">4</div>
+    <div class="content">
+      <div class="title">tools-atomic.ts 中 2 个 stub 工具</div>
+      <div class="desc">create_tween_animation_atomic 和 auto_fit_physics_collider 返回 success: false。建议实现或标注为 @experimental。</div>
+    </div>
+  </div>
+  <div class="issue">
+    <div class="severity p2">5</div>
+    <div class="content">
+      <div class="title">local-tool-server.ts 存在两套 Zod→JSON Schema 转换</div>
+      <div class="desc">zodToJsonSchemaProp (手写) 与 tools-shared.ts 的 toInputSchema (使用 z.toJSONSchema) 功能重复。建议统一。</div>
+    </div>
+  </div>
+  <div class="issue">
+    <div class="severity p2">6</div>
+    <div class="content">
+      <div class="title">tools-shared.ts 中 CASE_NORMALIZE_MAP 为空对象</div>
+      <div class="desc">normalizeDbUrl 实际上永远不会做任何规范化。应移除死代码或实现功能。</div>
+    </div>
+  </div>
+  <div class="issue">
+    <div class="severity p2">7</div>
+    <div class="content">
+      <div class="title">panels/default/index.ts 使用 @ts-nocheck</div>
+      <div class="desc">整个面板文件跳过类型检查（747 行）。受限于 Cocos Panel API 的 webview 约束，短期内难以改善。</div>
+    </div>
+  </div>
+  <div class="issue">
+    <div class="severity p2">8</div>
+    <div class="content">
+      <div class="title">editor.d.ts 中 Function 类型过于宽泛</div>
+      <div class="desc">PanelDefineOptions.methods 使用 Record&lt;string, Function&gt;。建议改为更具体的签名。</div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== SCORE SUMMARY ==================== -->
+<div class="section">
+  <h2>📈 评分总览</h2>
+  <table>
+    <thead><tr><th>维度</th><th>评分</th><th>说明</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>类型安全</strong></td>
+        <td><span class="score score-a">A</span></td>
+        <td>零 any，完整 Editor 类型声明，Zod 运行时验证</td>
+      </tr>
+      <tr>
+        <td><strong>安全机制</strong></td>
+        <td><span class="score score-a">A</span></td>
+        <td>10 层安全防护，白名单/黑名单/速率限制全覆盖</td>
+      </tr>
+      <tr>
+        <td><strong>错误处理</strong></td>
+        <td><span class="score score-a">A</span></td>
+        <td>统一 err: unknown + instanceof Error 模式，errorMessage 工具函数</td>
+      </tr>
+      <tr>
+        <td><strong>模块化</strong></td>
+        <td><span class="score score-b">B+</span></td>
+        <td>tools 已拆分为 8 模块；core.ts 和 scene.ts 仍较大</td>
+      </tr>
+      <tr>
+        <td><strong>测试覆盖</strong></td>
+        <td><span class="score score-b">B</span></td>
+        <td>254 测试覆盖 MCP 工具层；core/scene/panel 缺少直接测试</td>
+      </tr>
+      <tr>
+        <td><strong>代码复杂度</strong></td>
+        <td><span class="score score-b">B</span></td>
+        <td>scene.ts 已用 Map 优化；editor_action 38 分支仍需处理</td>
+      </tr>
+      <tr>
+        <td><strong>文档与可读性</strong></td>
+        <td><span class="score score-b">B+</span></td>
+        <td>架构清晰，命名规范，关键安全决策有注释</td>
+      </tr>
+      <tr>
+        <td style="font-weight: 700; font-size: 14px;">综合评分</td>
+        <td><span class="score score-b" style="width: 36px; height: 36px; line-height: 36px; font-size: 16px;">B+</span></td>
+        <td style="font-weight: 600;">类型安全和安全机制达到 A 级；模块化和测试覆盖是主要提升空间</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ==================== RECOMMENDATIONS ==================== -->
+<div class="section">
+  <h2>🚀 后续改进路线图</h2>
+  <table>
+    <thead><tr><th>优先级</th><th>改进项</th><th>预期收益</th><th>工作量</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><span class="badge badge-yellow">P1</span></td>
+        <td>core.ts 路由拆分为子模块</td>
+        <td>可维护性 ↑，单文件 843→~300 行</td>
+        <td>中</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-yellow">P1</span></td>
+        <td>editor_action switch → Map 策略模式</td>
+        <td>圈复杂度 ↓，可扩展性 ↑</td>
+        <td>低</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-blue">P2</span></td>
+        <td>core.ts / scene.ts 纯逻辑函数单元测试</td>
+        <td>测试覆盖 ↑，回归风险 ↓</td>
+        <td>中</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-blue">P2</span></td>
+        <td>实现 2 个 stub 原子工具</td>
+        <td>功能完整性 ↑</td>
+        <td>中</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-blue">P2</span></td>
+        <td>统一 Zod→JSON Schema 转换逻辑</td>
+        <td>消除冗余，减少维护成本</td>
+        <td>低</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-blue">P2</span></td>
+        <td>清理 CASE_NORMALIZE_MAP 死代码</td>
+        <td>代码整洁度 ↑</td>
+        <td>低</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-purple">P3</span></td>
+        <td>execute_script 添加审计日志</td>
+        <td>安全可追溯性 ↑</td>
+        <td>低</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-purple">P3</span></td>
+        <td>editor.d.ts Function 类型细化</td>
+        <td>类型安全微调</td>
+        <td>低</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ==================== MODULE MAP ==================== -->
+<div class="section">
+  <h2>📦 模块依赖关系</h2>
+  <div class="arch-box"><span class="hl">tools.ts</span> (34 行 · 编排层)
+  ├── import <span class="g">tools-scene.ts</span> (244 行)     → registerSceneTools()
+  ├── import <span class="g">tools-asset.ts</span> (162 行)     → registerAssetTools()
+  ├── import <span class="g">tools-editor.ts</span> (201 行)    → registerEditorTools()
+  ├── import <span class="g">tools-atomic.ts</span> (395 行)    → registerAtomicTools()
+  ├── import <span class="g">tools-script.ts</span> (76 行)     → registerScriptTools()
+  ├── import <span class="g">tools-misc.ts</span> (91 行)       → registerMiscTools()
+  └── import <span class="p">tools-shared.ts</span> (108 行)    → 共享类型 + 工具函数
+
+<span class="y">所有 tools-*.ts 模块</span> 共同依赖:
+  ├── <span class="p">tools-shared.ts</span>        BridgeToolContext · toInputSchema · normalize* · errorMessage
+  └── <span class="p">local-tool-server.ts</span>   LocalToolServer class
+
+<span class="hl">core.ts</span> (843 行)
+  ├── import <span class="g">tools.ts</span>              buildCocosToolServer()
+  ├── import <span class="g">standalone-host.ts</span>    StandaloneMcpHost class
+  └── uses   <span class="y">Editor.*</span>              via editor.d.ts declarations
+
+<span class="hl">scene.ts</span> (861 行)
+  ├── queryHandlers Map      (24 handlers)
+  ├── operationHandlers Map  (27 handlers)
+  └── uses   <span class="y">require('cc')</span>        Cocos Creator 引擎 API</div>
+</div>
+
+<!-- ==================== ENGINEERING HIGHLIGHTS ==================== -->
+<div class="section">
+  <h2>💡 工程亮点</h2>
+  <div class="issue">
+    <div class="severity ok">★</div>
+    <div class="content">
+      <div class="title">零 any 类型安全</div>
+      <div class="desc">整个 src/ 目录实现了零 as any / : any，在与动态 IPC API 交互的场景下尤其难得。通过 Record&lt;string, unknown&gt; + 显式类型断言 + Zod 运行时验证三层保障。</div>
+    </div>
+  </div>
+  <div class="issue">
+    <div class="severity ok">★</div>
+    <div class="content">
+      <div class="title">10 层纵深安全防护</div>
+      <div class="desc">从网络层（回环限制）到应用层（Token/速率限制）到业务层（IPC 白名单/属性黑名单/危险操作确认），形成完整的安全纵深。</div>
+    </div>
+  </div>
+  <div class="issue">
+    <div class="severity ok">★</div>
+    <div class="content">
+      <div class="title">原子宏的阶段追踪 + 自动回滚</div>
+      <div class="desc">create_prefab_atomic 等原子工具实现了 8 阶段追踪，任一阶段失败自动回滚已完成的操作，并在响应中报告每个阶段的状态。</div>
+    </div>
+  </div>
+  <div class="issue">
+    <div class="severity ok">★</div>
+    <div class="content">
+      <div class="title">AI 友好的 Guardrail 系统</div>
+      <div class="desc">组件名自动纠正（sprite→Sprite）、路径规范化、错误时附带建议（"可尝试组件名: ..."）、危险操作需要 confirm: true。让 AI 客户端更容易正确使用。</div>
+    </div>
+  </div>
+  <div class="issue">
+    <div class="severity ok">★</div>
+    <div class="content">
+      <div class="title">stdio-shim 的健壮重连机制</div>
+      <div class="desc">自动发现 MCP Host、帧格式自动检测（JSON-Lines/Content-Length）、断线自动重连 + 补发 initialize、项目切换检测 + 警告注入、日志轮转（2MB 限制）。</div>
+    </div>
+  </div>
+  <div class="issue">
+    <div class="severity ok">★</div>
+    <div class="content">
+      <div class="title">模块化工具注册架构</div>
+      <div class="desc">tools.ts 从 1365 行精简为 34 行编排层，8 个子模块各司其职。新增工具只需创建模块 + 在 tools.ts 中添加一行 register 调用。</div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== FOOTER ==================== -->
+<div class="footer">
+  <p>Cocos MCP Bridge v1.0.8 · 代码质量分析报告 · 生成于 2026-03-05</p>
+  <p style="margin-top: 4px;">TypeScript 0 errors · 254 tests passed · 0 any · 整体评分 B+</p>
+</div>
+
+</div>
+</body>
+</html>

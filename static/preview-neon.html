@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <title>MCP Panel Preview - Cyberpunk Neon</title>
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Teko:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            background: #030303;
+            background-image: linear-gradient(0deg, transparent 24%, rgba(0, 255, 204, 0.03) 25%, rgba(0, 255, 204, 0.03) 26%, transparent 27%, transparent 74%, rgba(0, 255, 204, 0.03) 75%, rgba(0, 255, 204, 0.03) 76%, transparent 77%, transparent), linear-gradient(90deg, transparent 24%, rgba(0, 255, 204, 0.03) 25%, rgba(0, 255, 204, 0.03) 26%, transparent 27%, transparent 74%, rgba(0, 255, 204, 0.03) 75%, rgba(0, 255, 204, 0.03) 76%, transparent 77%, transparent);
+            background-size: 30px 30px;
+            font-family: 'Share Tech Mono', monospace;
+            color: #e0e0e0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        /* Window Frame */
+        .window-frame {
+            width: 440px;
+            height: 740px;
+            background: rgba(5, 5, 10, 0.9);
+            border: 1px solid #00ffcc;
+            box-shadow: 0 0 20px rgba(0, 255, 204, 0.2), inset 0 0 15px rgba(0, 255, 204, 0.1);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            clip-path: polygon(0 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%);
+        }
+
+        .window-frame::before {
+            content: 'MCP_BRIDGE_V1.5.4';
+            position: absolute;
+            top: -1px;
+            right: -1px;
+            background: #00ffcc;
+            color: #000;
+            font-size: 10px;
+            padding: 2px 8px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        /* Tabs Header */
+        .mcp-tabs-header {
+            display: flex;
+            border-bottom: 1px solid rgba(0, 255, 204, 0.3);
+            padding: 20px 10px 0;
+            background: rgba(0, 255, 204, 0.05);
+        }
+
+        .mcp-tab {
+            flex: 1;
+            text-align: center;
+            padding: 10px 0;
+            font-size: 14px;
+            color: rgba(0, 255, 204, 0.5);
+            font-family: 'Teko', sans-serif;
+            font-size: 20px;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: 0.2s;
+            text-transform: uppercase;
+        }
+
+        .mcp-tab:hover {
+            color: #00ffcc;
+            text-shadow: 0 0 8px #00ffcc;
+        }
+
+        .mcp-tab.active {
+            color: #00ffcc;
+            text-shadow: 0 0 8px #00ffcc;
+            border-bottom: 2px solid #00ffcc;
+        }
+
+        /* Container */
+        .mcp-tabs-container {
+            flex: 1;
+            padding: 24px;
+            overflow-y: auto;
+        }
+
+        .mcp-tabs-container::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .mcp-tabs-container::-webkit-scrollbar-thumb {
+            background: #00ffcc;
+        }
+
+        /* Section Titles */
+        .section-title {
+            font-size: 24px;
+            font-family: 'Teko', sans-serif;
+            color: #ff0055;
+            text-shadow: 0 0 8px rgba(255, 0, 85, 0.4);
+            margin: 0 0 4px 0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Bento Grid */
+        .s3-bento {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .s3-tile {
+            background: rgba(0, 255, 204, 0.03);
+            border: 1px solid rgba(0, 255, 204, 0.2);
+            padding: 16px;
+            position: relative;
+            clip-path: polygon(0 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%);
+            transition: 0.2s;
+        }
+
+        .s3-tile:hover {
+            background: rgba(0, 255, 204, 0.1);
+            border-color: #00ffcc;
+            box-shadow: 0 0 15px rgba(0, 255, 204, 0.2);
+        }
+
+        .s3-tile.wide {
+            grid-column: span 2;
+        }
+
+        .s3-tile-label {
+            font-size: 10px;
+            color: #00ffcc;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            opacity: 0.8;
+            margin-bottom: 8px;
+        }
+
+        .s3-tile-value {
+            font-size: 32px;
+            color: #fff;
+            text-shadow: 2px 2px 0 #ff0055, -2px -2px 0 #00ffcc;
+            line-height: 1;
+        }
+
+        .val-blue,
+        .val-green,
+        .val-purple,
+        .val-amber,
+        .val-white {
+            color: #fff;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        .s3-tile-sub {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.5);
+            margin-top: 12px;
+        }
+
+        .s3-tile-sub span {
+            color: #00ffcc;
+        }
+
+        /* Buttons */
+        .btn-group {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+            margin-top: 16px;
+        }
+
+        .btn {
+            flex: 1;
+            background: transparent;
+            border: 1px solid #00ffcc;
+            color: #00ffcc;
+            padding: 10px;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 14px;
+            text-transform: uppercase;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: 0.2s;
+            clip-path: polygon(0 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%);
+        }
+
+        .btn:hover {
+            background: #00ffcc;
+            color: #000;
+            box-shadow: 0 0 15px #00ffcc;
+        }
+
+        .btn-primary {
+            background: rgba(255, 0, 85, 0.1);
+            border-color: #ff0055;
+            color: #ff0055;
+            width: 100%;
+            margin-bottom: 24px;
+        }
+
+        .btn-primary:hover {
+            background: #ff0055;
+            color: #fff;
+            box-shadow: 0 0 20px #ff0055;
+        }
+
+        /* Lists */
+        .card-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .list-item {
+            border-left: 3px solid #00ffcc;
+            background: rgba(0, 255, 204, 0.05);
+            padding: 12px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .item-title {
+            font-size: 14px;
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Toggles */
+        .toggle {
+            appearance: none;
+            width: 40px;
+            height: 16px;
+            background: rgba(255, 0, 85, 0.2);
+            border: 1px solid #ff0055;
+            position: relative;
+            cursor: pointer;
+            outline: none;
+        }
+
+        .toggle:checked {
+            background: rgba(0, 255, 204, 0.2);
+            border-color: #00ffcc;
+        }
+
+        .toggle::after {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            width: 18px;
+            height: 18px;
+            background: #ff0055;
+            transition: 0.2s;
+        }
+
+        .toggle:checked::after {
+            background: #00ffcc;
+            transform: translateX(24px);
+            box-shadow: 0 0 10px #00ffcc;
+        }
+
+        /* Tab switching logic */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: glitch 0.3s;
+        }
+
+        @keyframes glitch {
+            0% {
+                opacity: 0;
+                transform: translate(-5px, 2px);
+            }
+
+            20% {
+                opacity: 1;
+                transform: translate(5px, -2px);
+            }
+
+            40% {
+                transform: translate(-2px, 5px);
+            }
+
+            60% {
+                transform: translate(2px, -5px);
+            }
+
+            80% {
+                transform: translate(-5px, -2px);
+            }
+
+            100% {
+                transform: translate(0, 0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="window-frame">
+        <div class="mcp-tabs-header">
+            <div class="mcp-tab active" onclick="switchTab(0, this)">System</div>
+            <div class="mcp-tab" onclick="switchTab(1, this)">Bypass</div>
+            <div class="mcp-tab" onclick="switchTab(2, this)">Core</div>
+        </div>
+
+        <div class="mcp-tabs-container">
+            <div class="tab-content active" id="tab-0">
+                <div class="s3-bento">
+                    <div class="s3-tile">
+                        <div class="s3-tile-label">Node Access</div>
+                        <div class="s3-tile-value">19/19</div>
+                        <div class="s3-tile-sub"><span>[SECURE]</span> Access Granted</div>
+                    </div>
+                    <div class="s3-tile">
+                        <div class="s3-tile-label">Total Ops</div>
+                        <div class="s3-tile-value">249</div>
+                        <div class="s3-tile-sub">Ready...</div>
+                    </div>
+                    <div class="s3-tile wide">
+                        <div class="s3-tile-label">Target Environment</div>
+                        <div class="s3-tile-value" style="font-size:24px; text-shadow:none; color:#00ffcc">
+                            CocosDesignTool</div>
+                        <div class="s3-tile-sub"><span>[PORT]</span> 7779 <span>[ENG]</span> 3.8.8</div>
+                    </div>
+                </div>
+
+                <div class="btn-group">
+                    <button class="btn">Initialize</button>
+                    <button class="btn" style="border-color:#ff0055; color:#ff0055">Abort</button>
+                </div>
+                <button class="btn-primary btn">Override Limits</button>
+
+                <h3 class="section-title">Security Overrides</h3>
+                <div class="card-list">
+                    <div class="list-item">
+                        <span class="item-title">Bridge Status</span>
+                        <input type="checkbox" class="toggle" checked>
+                    </div>
+                    <div class="list-item">
+                        <span class="item-title">Scene Mutation</span>
+                        <input type="checkbox" class="toggle">
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-content" id="tab-1">
+                <h3 class="section-title">Proxy Injection</h3>
+                <div class="card-list">
+                    <div class="list-item">
+                        <span class="item-title">Cursor.exe</span>
+                        <button class="btn" style="padding:4px 8px; font-size:12px;">Inject payload</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-content" id="tab-2">
+                <h3 class="section-title">System Metrics</h3>
+                <div class="s3-bento">
+                    <div class="s3-tile wide">
+                        <div class="s3-tile-label">Bandwidth</div>
+                        <div class="s3-tile-value" style="color:#00ffcc; text-shadow:none;">1 MB/s</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function switchTab(index, el) {
+            document.querySelectorAll('.mcp-tab').forEach(t => t.classList.remove('active'));
+            el.classList.add('active');
+
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.getElementById('tab-' + index).classList.add('active');
+        }
+    </script>
+</body>
+
+</html>

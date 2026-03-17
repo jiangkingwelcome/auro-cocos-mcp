@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cocos Prefab Preview</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #0a0a0a;
+      color: #e0e0e0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, monospace;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+    #gameCanvas {
+      display: none;
+      border: 1px solid #333;
+      border-radius: 4px;
+    }
+    #status {
+      text-align: center;
+      font-size: 12px;
+      color: #888;
+      padding: 20px;
+    }
+    #status .icon {
+      font-size: 32px;
+      margin-bottom: 10px;
+      opacity: 0.3;
+    }
+    #status .spinner {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 2px solid #333;
+      border-top: 2px solid #3b82f6;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin-bottom: 8px;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    #status.error { color: #ef4444; }
+    #status.success { color: #22c55e; }
+    #prefabTree {
+      display: none;
+      width: 90%;
+      max-width: 400px;
+      max-height: 60vh;
+      overflow-y: auto;
+      background: #111;
+      border: 1px solid #333;
+      border-radius: 6px;
+      padding: 12px;
+      font-size: 11px;
+    }
+    #prefabTree .node-item {
+      padding: 2px 0;
+      padding-left: 16px;
+      border-left: 1px solid #333;
+      margin-left: 4px;
+    }
+    #prefabTree .node-name {
+      color: #93c5fd;
+      font-weight: 500;
+    }
+    #prefabTree .node-type {
+      color: #666;
+      font-size: 10px;
+      margin-left: 6px;
+    }
+    #prefabTree .comp-list {
+      color: #6ee7b7;
+      font-size: 10px;
+      margin-left: 8px;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="gameCanvas" width="400" height="300"></canvas>
+  <div id="status">
+    <div class="icon">📦</div>
+    <div>等待预览指令...</div>
+    <div style="font-size:10px; color:#555; margin-top:8px;">
+      在属性面板中选择预制体后，点击"预览"按钮
+    </div>
+  </div>
+  <div id="prefabTree"></div>
+
+  <script>
+    // ---------------------------------------------------------------------------
+    // Prefab Preview Runtime
+    // ---------------------------------------------------------------------------
+    // This page runs inside an iframe in the Blueprint Editor.
+    // It communicates via postMessage with the parent window.
+    // 
+    // Supported messages from parent:
+    //   { type: 'preview-prefab', bundleUrl: string, prefabName: string }
+    //   { type: 'preview-tree', tree: PrefabNodeInfo }
+    //   { type: 'load-engine', engineUrl: string }
+    //
+    // Messages sent to parent:
+    //   { type: 'preview-ready' }
+    //   { type: 'preview-loaded', prefabName: string }
+    //   { type: 'preview-error', error: string }
+    // ---------------------------------------------------------------------------
+
+    const statusEl = document.getElementById('status');
+    const canvasEl = document.getElementById('gameCanvas');
+    const treeEl = document.getElementById('prefabTree');
+
+    let engineLoaded = false;
+
+    function setStatus(html, cls = '') {
+      statusEl.className = cls;
+      statusEl.innerHTML = html;
+      statusEl.style.display = 'block';
+    }
+
+    function showSpinner(text) {
+      setStatus(`<div class="spinner"></div><div>${text}</div>`);
+    }
+
+    function showError(msg) {
+      setStatus(`<div style="font-size:18px;margin-bottom:8px;">⚠️</div><div>${msg}</div>`, 'error');
+    }
+
+    // --- Render prefab tree (fallback when no engine available) ---
+    function renderTree(node, depth = 0) {
+      if (!node) return '';
+      let html = `<div class="node-item">`;
+      html += `<span class="node-name">${node.name}</span>`;
+      html += `<span class="node-type">${node.type}</span>`;
+      if (node.components && node.components.length > 0) {
+        html += `<span class="comp-list">[${node.components.join(', ')}]</span>`;
+      }
+      if (node.children && node.children.length > 0) {
+        for (const child of node.children) {
+          html += renderTree(child, depth + 1);
+        }
+      }
+      html += `</div>`;
+      return html;
+    }
+
+    // --- Cocos Engine loading (dynamic) ---
+    async function loadEngine(engineUrl) {
+      if (engineLoaded) return true;
+      showSpinner('正在加载 Cocos 引擎...');
+      try {
+        const script = document.createElement('script');
+        script.src = engineUrl;
+        await new Promise((resolve, reject) => {
+          script.onload = resolve;
+          script.onerror = () => reject(new Error('引擎加载失败'));
+          document.head.appendChild(script);
+        });
+        engineLoaded = true;
+        return true;
+      } catch (err) {
+        showError(`引擎加载失败: ${err.message}`);
+        return false;
+      }
+    }
+
+    // --- Load and render a prefab from a bundle ---
+    async function previewPrefab(bundleUrl, prefabName) {
+      if (!engineLoaded || typeof cc === 'undefined') {
+        showError('Cocos 引擎未加载。请先配置 Creator 路径并构建 Bundle。');
+        window.parent.postMessage({ type: 'preview-error', error: 'Engine not loaded' }, '*');
+        return;
+      }
+
+      showSpinner(`正在加载预制体: ${prefabName}...`);
+      canvasEl.style.display = 'block';
+      statusEl.style.display = 'block';
+
+      try {
+        // Init Cocos game if not already
+        if (!cc.game._inited) {
+          await new Promise((resolve) => {
+            cc.game.init({
+              width: 400,
+              height: 300,
+              id: 'gameCanvas',
+              debugMode: cc.debug.DebugMode.NONE,
+            }, resolve);
+          });
+          cc.game.run();
+        }
+
+        // Load bundle
+        const bundle = await new Promise((resolve, reject) => {
+          cc.assetManager.loadBundle(bundleUrl, (err, bundle) => {
+            if (err) reject(new Error(`Bundle 加载失败: ${err.message || err}`));
+            else resolve(bundle);
+          });
+        });
+
+        // Load prefab from bundle
+        const prefab = await new Promise((resolve, reject) => {
+          bundle.load(prefabName, cc.Prefab, (err, prefab) => {
+            if (err) reject(new Error(`预制体加载失败: ${err.message || err}`));
+            else resolve(prefab);
+          });
+        });
+
+        // Clear existing scene children
+        const scene = cc.director.getScene();
+        scene.removeAllChildren();
+
+        // Instantiate and add to scene
+        const node = cc.instantiate(prefab);
+        scene.addChild(node);
+
+        setStatus(`<div style="color:#22c55e;">✓ ${prefabName} 已加载</div>`, 'success');
+        setTimeout(() => { statusEl.style.display = 'none'; }, 2000);
+
+        window.parent.postMessage({ type: 'preview-loaded', prefabName }, '*');
+      } catch (err) {
+        showError(err.message);
+        window.parent.postMessage({ type: 'preview-error', error: err.message }, '*');
+      }
+    }
+
+    // --- Message handler ---
+    window.addEventListener('message', async (event) => {
+      const msg = event.data;
+      if (!msg || !msg.type) return;
+
+      switch (msg.type) {
+        case 'load-engine':
+          await loadEngine(msg.engineUrl);
+          window.parent.postMessage({ type: 'preview-ready' }, '*');
+          break;
+
+        case 'preview-prefab':
+          await previewPrefab(msg.bundleUrl, msg.prefabName);
+          break;
+
+        case 'preview-tree':
+          treeEl.style.display = 'block';
+          canvasEl.style.display = 'none';
+          statusEl.style.display = 'none';
+          treeEl.innerHTML = `
+            <div style="font-size:12px;font-weight:bold;margin-bottom:8px;color:#ccc;">
+              📋 预制体结构
+            </div>
+            ${renderTree(msg.tree)}
+          `;
+          break;
+
+        case 'clear':
+          treeEl.style.display = 'none';
+          treeEl.innerHTML = '';
+          canvasEl.style.display = 'none';
+          setStatus(`<div class="icon">📦</div><div>等待预览指令...</div>`);
+          break;
+      }
+    });
+
+    // Notify parent we're ready
+    window.parent.postMessage({ type: 'preview-ready' }, '*');
+  </script>
+</body>
+</html>

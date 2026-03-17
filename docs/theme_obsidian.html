@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Theme: Obsidian</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --deep: #0c0c0c;
+  --surface: #141414;
+  --raised: #1c1c1c;
+  --border: #262626;
+  --border-hi: #333;
+  --txt: #e8e8e8;
+  --txt-dim: #888;
+  --amber: #f59e0b;
+  --amber-dim: rgba(245,158,11,0.15);
+  --amber-glow: rgba(245,158,11,0.25);
+}
+
+body {
+  background: var(--deep);
+  display: flex; justify-content: center; align-items: center;
+  min-height: 100vh;
+  font-family: 'Inter', sans-serif;
+  padding: 40px;
+}
+
+.panel {
+  width: 400px;
+  background: var(--surface);
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.02),
+    0 20px 60px rgba(0,0,0,0.8),
+    0 4px 12px rgba(0,0,0,0.5);
+  overflow: hidden;
+}
+
+/* Subtle amber top bar - Aura identity */
+.topper {
+  height: 2px;
+  background: linear-gradient(90deg, transparent 5%, var(--amber) 30%, #fcd34d 50%, var(--amber) 70%, transparent 95%);
+  opacity: 0.7;
+}
+
+/* Header */
+.header {
+  background: #0f0f0f;
+  padding: 14px 18px;
+  display: flex; align-items: center; gap: 10px;
+  border-bottom: 1px solid var(--border);
+}
+.logo-box {
+  width: 26px; height: 26px; border-radius: 7px;
+  background: linear-gradient(145deg, #1c1c1c, #0a0a0a);
+  border: 1px solid var(--border-hi);
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.06);
+}
+.logo-txt { font-size: 14px; color: var(--amber); }
+.brand-name { font-size: 14px; font-weight: 600; color: var(--txt); letter-spacing: -0.2px; }
+.ver { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--txt-dim); margin-left: 4px; }
+.pro-badge {
+  margin-left: auto; font-size: 10px; font-weight: 700; letter-spacing: 1px;
+  background: var(--amber-dim); color: var(--amber);
+  border: 1px solid rgba(245,158,11,0.3);
+  padding: 3px 8px; border-radius: 4px;
+}
+
+/* Tabs */
+.tabs { display: flex; background: #0f0f0f; border-bottom: 1px solid var(--border); }
+.tab {
+  flex: 1; text-align: center; padding: 11px 4px; font-size: 12.5px; font-weight: 500;
+  color: var(--txt-dim); cursor: pointer; transition: all 0.2s;
+  border-bottom: 2px solid transparent; margin-bottom: -1px;
+}
+.tab:hover { color: #aaa; }
+.tab.active { color: var(--amber); border-bottom-color: var(--amber); }
+
+/* Body */
+.body { padding: 18px; display: flex; flex-direction: column; gap: 14px; }
+
+/* Status */
+.status-strip {
+  display: flex; align-items: center; gap: 10px; padding: 10px 14px;
+  background: rgba(34, 197, 94, 0.05); border: 1px solid rgba(34,197,94,0.15);
+  border-radius: 8px;
+}
+.dot-wrap { position: relative; width: 8px; height: 8px; flex-shrink: 0; }
+.dot { position: absolute; inset: 0; border-radius: 50%; background: #22c55e; }
+.dot-ring {
+  position: absolute; inset: -3px; border-radius: 50%;
+  border: 1.5px solid rgba(34,197,94,0.4);
+  animation: ring-expand 2s infinite;
+}
+@keyframes ring-expand {
+  0% { transform: scale(0.8); opacity: 1; }
+  100% { transform: scale(1.8); opacity: 0; }
+}
+.status-label { font-size: 12.5px; color: #4ade80; font-weight: 500; }
+.port-label { margin-left: auto; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--txt-dim); }
+
+/* Cards */
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.card {
+  background: var(--raised); border: 1px solid var(--border);
+  border-radius: 10px; padding: 15px;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.03);
+  transition: 0.2s;
+}
+.card:hover { border-color: var(--border-hi); background: #1e1e1e; }
+.card-full { grid-column: span 2; }
+.lbl { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--txt-dim); margin-bottom: 8px; font-weight: 600; }
+.val {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 34px; font-weight: 500; line-height: 1;
+  color: var(--txt);
+}
+.val.amber { color: var(--amber); }
+.val.blue { color: #60a5fa; }
+.val.teal { color: #2dd4bf; }
+.sub { font-size: 11px; color: var(--txt-dim); margin-top: 8px; }
+
+.project-row { display: flex; align-items: baseline; gap: 8px; margin-bottom: 6px; }
+.project-nm { font-size: 17px; font-weight: 600; color: var(--txt); }
+.project-badge {
+  font-size: 10px; padding: 2px 7px; border-radius: 4px;
+  background: var(--raised); border: 1px solid var(--border-hi);
+  color: var(--txt-dim); font-family: 'JetBrains Mono', monospace;
+}
+.path { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #555; }
+
+/* Controls */
+.ctrl-section { display: flex; flex-direction: column; gap: 8px; }
+
+.row {
+  display: flex; align-items: center; gap: 12px;
+  padding: 11px 14px; background: var(--raised); border: 1px solid var(--border);
+  border-radius: 8px; transition: 0.2s;
+}
+.row:hover { border-color: var(--border-hi); }
+.row-info { flex: 1; }
+.row-name { font-size: 12.5px; font-weight: 500; color: var(--txt); }
+.row-desc { font-size: 11px; color: var(--txt-dim); margin-top: 2px; }
+
+/* Toggle: Obsidian style */
+.tog {
+  width: 36px; height: 20px; border-radius: 20px;
+  background: #222; border: 1px solid var(--border-hi);
+  position: relative; cursor: pointer; flex-shrink: 0; transition: 0.25s;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.4);
+}
+.tog::after {
+  content: ''; position: absolute; top: 2px; left: 2px;
+  width: 14px; height: 14px; border-radius: 50%; background: #555; transition: 0.25s;
+}
+.tog.on { background: var(--amber-dim); border-color: rgba(245,158,11,0.5); box-shadow: 0 0 10px var(--amber-glow); }
+.tog.on::after { transform: translateX(16px); background: var(--amber); }
+
+/* Buttons */
+.btns { display: flex; gap: 10px; }
+.btn {
+  flex: 1; padding: 11px; font-size: 13px; font-weight: 600;
+  border-radius: 8px; cursor: pointer; font-family: 'Inter', sans-serif;
+  transition: all 0.2s; border: none;
+}
+.btn-stop {
+  background: transparent; border: 1px solid var(--border-hi);
+  color: var(--txt-dim);
+}
+.btn-stop:hover { background: #1e1e1e; color: var(--txt); }
+.btn-start {
+  background: linear-gradient(to bottom, #1a1a1a, #111);
+  border: 1px solid var(--border-hi);
+  color: var(--amber);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.04), 0 0 0 1px rgba(0,0,0,0.2);
+  position: relative; overflow: hidden;
+}
+.btn-start::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent 10%, rgba(245,158,11,0.5) 50%, transparent 90%);
+}
+.btn-start:hover { background: linear-gradient(to bottom, #1f1f1f, #161616); box-shadow: 0 0 16px var(--amber-glow), inset 0 1px 0 rgba(255,255,255,0.04); }
+
+/* Footer */
+.footer {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 18px 14px;
+  border-top: 1px solid var(--border);
+}
+.v-num { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #3a3a3a; }
+.f-btns { display: flex; gap: 6px; }
+.ghost { background: none; border: none; font-size: 11px; font-family: 'Inter', sans-serif; color: #444; cursor: pointer; padding: 4px 8px; border-radius: 5px; transition: 0.2s; }
+.ghost:hover { background: var(--raised); color: var(--txt-dim); }
+</style>
+</head>
+<body>
+<div class="panel">
+  <div class="topper"></div>
+  <div class="header">
+    <div class="logo-box"><span class="logo-txt">✦</span></div>
+    <span class="brand-name">Aura</span>
+    <span class="ver">for Cocos</span>
+    <span class="pro-badge">PRO</span>
+  </div>
+
+  <div class="tabs">
+    <div class="tab active">状态</div>
+    <div class="tab">控制</div>
+    <div class="tab">互联</div>
+    <div class="tab">设置</div>
+    <div class="tab">指南</div>
+  </div>
+
+  <div class="body">
+    <div class="status-strip">
+      <div class="dot-wrap"><div class="dot"></div><div class="dot-ring"></div></div>
+      <span class="status-label">MCP Runtime Active</span>
+      <span class="port-label">:8080</span>
+    </div>
+
+    <div class="grid2">
+      <div class="card card-full">
+        <div class="lbl">Active Project</div>
+        <div class="project-row">
+          <span class="project-nm">SuperCocosGame</span>
+          <span class="project-badge">cc 3.8.3</span>
+        </div>
+        <div class="path">E:/dev/SuperCocosGame</div>
+      </div>
+      <div class="card">
+        <div class="lbl">Tools</div>
+        <div class="val blue">22</div>
+        <div class="sub">exposed</div>
+      </div>
+      <div class="card">
+        <div class="lbl">Actions</div>
+        <div class="val teal">275</div>
+        <div class="sub">callable</div>
+      </div>
+    </div>
+
+    <div class="ctrl-section">
+      <div class="row">
+        <div class="row-info">
+          <div class="row-name">Auto Rollback</div>
+          <div class="row-desc">Restore scene if AI operation fails</div>
+        </div>
+        <div class="tog on" onclick="this.classList.toggle('on')"></div>
+      </div>
+      <div class="row">
+        <div class="row-info">
+          <div class="row-name">Localhost Restrict</div>
+          <div class="row-desc">Allow 127.0.0.1 only</div>
+        </div>
+        <div class="tog on" onclick="this.classList.toggle('on')"></div>
+      </div>
+    </div>
+
+    <div class="btns">
+      <button class="btn btn-stop">■ Stop</button>
+      <button class="btn btn-start">↻ Restart Aura</button>
+    </div>
+  </div>
+
+  <div class="footer">
+    <span class="v-num">v1.0.10</span>
+    <div class="f-btns">
+      <button class="ghost">中/EN</button>
+      <button class="ghost">同步状态</button>
+    </div>
+  </div>
+</div>
+</body>
+</html>

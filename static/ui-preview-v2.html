@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<title>Cocos MCP Bridge - UI Style Preview v2</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #0a0a0a;
+    color: #eee;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+    padding: 40px 20px;
+  }
+  .page-title {
+    text-align: center; font-size: 28px; font-weight: 700; margin-bottom: 8px;
+    background: linear-gradient(135deg, #00f0ff, #a78bfa); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .page-subtitle { text-align: center; color: #888; font-size: 14px; margin-bottom: 48px; }
+  .showcase { max-width: 900px; margin: 0 auto; display: flex; flex-direction: column; gap: 64px; }
+  .style-card { display: flex; flex-direction: column; gap: 16px; }
+  .style-header { display: flex; align-items: baseline; gap: 12px; }
+  .style-label { font-size: 22px; font-weight: 700; }
+  .style-badge { font-size: 11px; padding: 3px 10px; border-radius: 10px; font-weight: 500; }
+  .style-desc { font-size: 14px; color: #999; line-height: 1.6; margin-bottom: 8px; }
+  .style-tags { display: flex; gap: 8px; margin-bottom: 12px; }
+  .style-tag { font-size: 11px; padding: 2px 8px; border-radius: 4px; background: rgba(255,255,255,0.06); color: #888; }
+  .divider-line { height: 1px; background: #222; margin: 16px 0; }
+
+  /* =============================================
+     STYLE 1: Light Mode macOS System Preferences
+     ============================================= */
+  .s1-panel {
+    background: #f5f5f7;
+    border-radius: 14px;
+    overflow: hidden;
+    color: #1d1d1f;
+    font-size: 13px;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.15), 0 0 0 1px rgba(0,0,0,0.05);
+  }
+  .s1-titlebar {
+    background: linear-gradient(180deg, #e8e8ea 0%, #d4d4d6 100%);
+    padding: 10px 16px;
+    display: flex; align-items: center; gap: 8px;
+    border-bottom: 1px solid #c0c0c2;
+  }
+  .s1-dot { width: 12px; height: 12px; border-radius: 50%; }
+  .s1-dot.red { background: #ff5f57; }
+  .s1-dot.yellow { background: #ffbd2e; }
+  .s1-dot.green { background: #28c840; }
+  .s1-titlebar-text { flex:1; text-align: center; font-size: 13px; font-weight: 600; color: #333; }
+  .s1-tabs {
+    display: flex; background: #ededef; padding: 4px 12px; gap: 2px;
+    border-bottom: 1px solid #d1d1d3;
+  }
+  .s1-tab {
+    flex: 1; text-align: center; padding: 7px 0; font-size: 12px; font-weight: 500;
+    color: #6e6e73; border-radius: 6px; cursor: pointer;
+  }
+  .s1-tab.active { background: #fff; color: #1d1d1f; font-weight: 600; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+  .s1-body { padding: 20px; background: #fff; }
+  .s1-card {
+    background: #f9f9fb; border: 1px solid #e5e5e7; border-radius: 10px; padding: 16px; margin-bottom: 12px;
+  }
+  .s1-row { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; }
+  .s1-label { color: #86868b; font-size: 12px; }
+  .s1-value { color: #1d1d1f; font-size: 12px; font-weight: 500; }
+  .s1-value.mono { font-family: 'SF Mono', Menlo, monospace; color: #0071e3; font-size: 11px; }
+  .s1-dot-status { width: 8px; height: 8px; border-radius: 50%; background: #34c759; display: inline-block; margin-right: 6px; }
+  .s1-divider { height: 1px; background: #e5e5e7; margin: 4px 0; }
+  .s1-btn { padding: 8px 20px; border-radius: 8px; border: none; font-size: 12px; font-weight: 500; cursor: pointer; }
+  .s1-btn-primary { background: #0071e3; color: #fff; }
+  .s1-btn-outline { background: #fff; border: 1px solid #d1d1d3; color: #1d1d1f; }
+  .s1-btn-grid { display: flex; gap: 10px; }
+  .s1-footer { padding: 8px 16px; background: #f5f5f7; border-top: 1px solid #e5e5e7; font-size: 11px; color: #86868b; display: flex; justify-content: space-between; }
+
+  .s1-step { display: flex; gap: 12px; align-items: flex-start; padding: 10px; background: #f2f2f7; border-radius: 8px; margin-bottom: 8px; }
+  .s1-step-num { width: 24px; height: 24px; border-radius: 50%; background: #0071e3; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; flex-shrink: 0; }
+  .s1-step-title { font-size: 13px; font-weight: 600; color: #1d1d1f; }
+  .s1-step-desc { font-size: 11px; color: #86868b; margin-top: 2px; }
+
+  .s1-prompt { display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: #f2f2f7; border-radius: 6px; margin-bottom: 6px; }
+  .s1-prompt-tag { font-size: 10px; font-weight: 600; color: #0071e3; background: rgba(0,113,227,0.1); padding: 2px 6px; border-radius: 4px; }
+  .s1-prompt-text { flex: 1; font-size: 11.5px; color: #333; }
+
+  /* =============================================
+     STYLE 2: Terminal / CLI Console
+     ============================================= */
+  .s2-panel {
+    background: #000;
+    border-radius: 10px;
+    overflow: hidden;
+    font-family: 'SF Mono', 'Cascadia Code', 'Fira Code', Consolas, monospace;
+    font-size: 12px;
+    color: #00ff41;
+    box-shadow: 0 4px 30px rgba(0,255,65,0.08);
+    position: relative;
+  }
+  .s2-panel::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,255,65,0.015) 2px, rgba(0,255,65,0.015) 4px);
+    pointer-events: none; z-index: 1;
+  }
+  .s2-titlebar {
+    background: #111; padding: 8px 14px; border-bottom: 1px solid #1a3a1a;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .s2-titlebar span { color: #00ff41; font-size: 11px; opacity: 0.6; }
+  .s2-titlebar .s2-title { flex: 1; text-align: center; color: #00ff41; font-size: 11px; }
+  .s2-body { padding: 16px; position: relative; z-index: 2; min-height: 460px; }
+  .s2-line { padding: 2px 0; line-height: 1.6; }
+  .s2-prompt-sign { color: #00ff41; }
+  .s2-cmd { color: #fff; }
+  .s2-comment { color: #555; }
+  .s2-key { color: #888; }
+  .s2-val { color: #00ff41; }
+  .s2-val-highlight { color: #00ffaa; text-shadow: 0 0 6px rgba(0,255,170,0.3); }
+  .s2-val-url { color: #5af; }
+  .s2-val-num { color: #ffcc00; }
+  .s2-section { color: #00ccff; margin-top: 12px; margin-bottom: 4px; }
+  .s2-bar { display: inline-block; width: 8px; height: 14px; background: #00ff41; animation: blink 1s step-end infinite; vertical-align: middle; }
+  @keyframes blink { 0%,50% { opacity: 1; } 51%,100% { opacity: 0; } }
+  .s2-divider { border: none; border-top: 1px dashed #1a3a1a; margin: 8px 0; }
+  .s2-footer { padding: 6px 14px; background: #111; border-top: 1px solid #1a3a1a; color: #555; font-size: 10px; display: flex; justify-content: space-between; }
+  .s2-tab-bar { display: flex; gap: 0; background: #0a0a0a; border-bottom: 1px solid #1a3a1a; }
+  .s2-tab-item { padding: 6px 14px; color: #555; cursor: pointer; border-right: 1px solid #1a3a1a; font-size: 11px; }
+  .s2-tab-item.active { color: #00ff41; background: #000; border-bottom: 1px solid #00ff41; margin-bottom: -1px; }
+
+  /* =============================================
+     STYLE 3: Bento Grid Dashboard
+     ============================================= */
+  .s3-panel {
+    background: #0c0c0f;
+    border-radius: 16px;
+    overflow: hidden;
+    font-size: 13px;
+    color: #e4e4e7;
+    border: 1px solid #1c1c22;
+  }
+  .s3-header {
+    padding: 16px 20px;
+    display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 1px solid #1c1c22;
+  }
+  .s3-header-title { font-size: 15px; font-weight: 700; }
+  .s3-header-status { display: flex; align-items: center; gap: 6px; font-size: 12px; }
+  .s3-header-dot { width: 8px; height: 8px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 8px rgba(34,197,94,0.4); }
+  .s3-body { padding: 16px; }
+  .s3-bento {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto;
+    gap: 12px;
+  }
+  .s3-tile {
+    background: #16161a;
+    border: 1px solid #27272e;
+    border-radius: 12px;
+    padding: 16px;
+    transition: all 0.2s;
+  }
+  .s3-tile:hover { border-color: #3f3f4a; }
+  .s3-tile.wide { grid-column: span 2; }
+  .s3-tile-label { font-size: 11px; color: #71717a; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+  .s3-tile-value { font-size: 24px; font-weight: 700; font-family: 'SF Mono', Consolas, monospace; }
+  .s3-tile-value.blue { color: #60a5fa; }
+  .s3-tile-value.green { color: #34d399; }
+  .s3-tile-value.purple { color: #a78bfa; }
+  .s3-tile-value.amber { color: #fbbf24; }
+  .s3-tile-sub { font-size: 11px; color: #52525b; margin-top: 4px; font-family: 'SF Mono', Consolas, monospace; }
+
+  .s3-section-title { font-size: 13px; font-weight: 600; margin-bottom: 10px; color: #e4e4e7; }
+  .s3-ide-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 14px; background: #16161a; border: 1px solid #27272e; border-radius: 8px;
+    margin-bottom: 8px;
+  }
+  .s3-ide-name { font-weight: 600; font-size: 13px; }
+  .s3-ide-status { font-size: 11px; color: #22c55e; }
+  .s3-ide-btn { background: #27272e; border: none; color: #a1a1aa; padding: 6px 12px; border-radius: 6px; font-size: 11px; cursor: pointer; }
+
+  .s3-step-row { display: flex; gap: 10px; align-items: flex-start; padding: 12px; background: #16161a; border: 1px solid #27272e; border-radius: 10px; margin-bottom: 8px; }
+  .s3-step-icon { width: 28px; height: 28px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; flex-shrink: 0; color: #fff; }
+  .s3-step-icon.i1 { background: linear-gradient(135deg, #3b82f6, #6366f1); }
+  .s3-step-icon.i2 { background: linear-gradient(135deg, #8b5cf6, #ec4899); }
+  .s3-step-icon.i3 { background: linear-gradient(135deg, #10b981, #06b6d4); }
+  .s3-step-t { font-size: 13px; font-weight: 600; }
+  .s3-step-d { font-size: 11px; color: #71717a; margin-top: 2px; }
+
+  .s3-prompt-item { display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: #16161a; border: 1px solid #27272e; border-radius: 6px; margin-bottom: 6px; }
+  .s3-prompt-tag { font-size: 10px; font-weight: 600; padding: 2px 6px; border-radius: 4px; }
+  .s3-prompt-tag.t1 { background: rgba(96,165,250,0.12); color: #60a5fa; }
+  .s3-prompt-tag.t2 { background: rgba(52,211,153,0.12); color: #34d399; }
+  .s3-prompt-tag.t3 { background: rgba(167,139,250,0.12); color: #a78bfa; }
+  .s3-prompt-text { flex: 1; font-size: 11.5px; color: #a1a1aa; }
+
+  .s3-footer { padding: 10px 20px; border-top: 1px solid #1c1c22; display: flex; justify-content: space-between; font-size: 11px; color: #52525b; }
+
+  .s3-nav { display: flex; gap: 4px; padding: 6px; }
+  .s3-nav-item { padding: 6px 14px; border-radius: 8px; font-size: 12px; color: #71717a; cursor: pointer; font-weight: 500; }
+  .s3-nav-item.active { background: #27272e; color: #fafafa; }
+
+  /* =============================================
+     STYLE 4: Sidebar Navigation + Content Pane
+     ============================================= */
+  .s4-panel {
+    background: #111113;
+    border-radius: 14px;
+    overflow: hidden;
+    font-size: 13px;
+    color: #e4e4e7;
+    display: flex;
+    min-height: 520px;
+    border: 1px solid #1e1e24;
+  }
+  .s4-sidebar {
+    width: 54px;
+    background: #0a0a0c;
+    border-right: 1px solid #1e1e24;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 12px 0;
+    gap: 4px;
+    flex-shrink: 0;
+  }
+  .s4-sidebar-item {
+    width: 38px; height: 38px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 10px;
+    font-size: 18px;
+    cursor: pointer;
+    color: #52525b;
+    transition: all 0.15s;
+  }
+  .s4-sidebar-item:hover { background: #1c1c22; color: #a1a1aa; }
+  .s4-sidebar-item.active { background: linear-gradient(135deg, #6366f1, #8b5cf6); color: #fff; box-shadow: 0 2px 12px rgba(99,102,241,0.3); }
+  .s4-sidebar-spacer { flex: 1; }
+  .s4-sidebar-bottom { width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; font-size: 14px; color: #52525b; border-radius: 10px; cursor: pointer; }
+  .s4-sidebar-bottom:hover { background: #1c1c22; color: #a1a1aa; }
+  .s4-main { flex: 1; display: flex; flex-direction: column; }
+  .s4-topbar { padding: 14px 20px; border-bottom: 1px solid #1e1e24; font-size: 15px; font-weight: 700; display: flex; align-items: center; justify-content: space-between; }
+  .s4-topbar-status { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 400; color: #22c55e; }
+  .s4-content { flex: 1; padding: 20px; overflow-y: auto; }
+  .s4-card { background: #18181c; border: 1px solid #27272e; border-radius: 10px; padding: 16px; margin-bottom: 14px; }
+  .s4-row { display: flex; justify-content: space-between; align-items: center; padding: 5px 0; }
+  .s4-label { color: #71717a; font-size: 12px; }
+  .s4-value { font-size: 12px; font-family: 'SF Mono', Consolas, monospace; color: #c084fc; }
+  .s4-divider { height: 1px; background: #27272e; margin: 6px 0; }
+
+  .s4-step { display: flex; gap: 12px; align-items: flex-start; padding: 12px 14px; background: #18181c; border: 1px solid #27272e; border-radius: 10px; margin-bottom: 10px; }
+  .s4-step-num { width: 28px; height: 28px; border-radius: 8px; background: linear-gradient(135deg, #6366f1, #8b5cf6); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; flex-shrink: 0; }
+  .s4-step-title { font-weight: 600; font-size: 13px; color: #e4e4e7; }
+  .s4-step-desc { font-size: 11px; color: #71717a; margin-top: 2px; }
+
+  .s4-prompt { display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: #18181c; border: 1px solid #27272e; border-radius: 8px; margin-bottom: 8px; }
+  .s4-prompt-tag { font-size: 10px; font-weight: 600; padding: 2px 6px; border-radius: 4px; background: rgba(139,92,246,0.12); color: #a78bfa; }
+  .s4-prompt-text { flex: 1; font-size: 11.5px; color: #a1a1aa; }
+  .s4-prompt-copy { font-size: 12px; color: #52525b; cursor: pointer; }
+
+  .s4-footer-bar { padding: 8px 20px; border-top: 1px solid #1e1e24; font-size: 11px; color: #52525b; display: flex; justify-content: space-between; }
+
+  /* Panel tab logic */
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+</style>
+</head>
+<body>
+
+<div class="page-title">Cocos MCP Bridge — UI 风格对比 v2</div>
+<div class="page-subtitle">4 种本质不同的 UI 方案：布局、交互、视觉隐喻完全不同。点击 Tab/导航 切换各页面。</div>
+
+<div class="showcase">
+
+<!-- ==========================================
+     STYLE 1: Light macOS System Preferences
+     ========================================== -->
+<div class="style-card">
+  <div class="style-header">
+    <div class="style-label">方案一：macOS Light</div>
+    <span class="style-badge" style="background:rgba(0,113,227,0.1);color:#0071e3">浅色主题</span>
+  </div>
+  <div class="style-desc">仿 macOS 系统偏好设置，浅色背景，窗口标题栏带红绿灯，iOS 风格的分段控件 Tab。<br>适合追求「原生感」、不想让插件面板过于突兀的用户。</div>
+  <div class="style-tags">
+    <span class="style-tag">浅色背景</span>
+    <span class="style-tag">红绿灯标题栏</span>
+    <span class="style-tag">分段控件 Tab</span>
+    <span class="style-tag">系统原生感</span>
+  </div>
+
+  <div class="s1-panel" data-group="s1">
+    <div class="s1-titlebar">
+      <span class="s1-dot red"></span><span class="s1-dot yellow"></span><span class="s1-dot green"></span>
+      <span class="s1-titlebar-text">Cocos MCP Bridge</span>
+    </div>
+    <div class="s1-tabs">
+      <div class="s1-tab active" data-tab="s1-status">状态</div>
+      <div class="s1-tab" data-tab="s1-connect">互联</div>
+      <div class="s1-tab" data-tab="s1-guide">指南</div>
+      <div class="s1-tab" data-tab="s1-settings">设置</div>
+      <div class="s1-tab" data-tab="s1-control">控制</div>
+    </div>
+    <div class="s1-body">
+      <div class="tab-panel active" id="s1-status">
+        <div class="s1-card">
+          <div class="s1-row"><span class="s1-label">连接状态</span><span class="s1-value"><span class="s1-dot-status"></span>Online</span></div>
+          <div class="s1-divider"></div>
+          <div class="s1-row"><span class="s1-label">服务端点</span><span class="s1-value mono">http://127.0.0.1:7779/mcp</span></div>
+          <div class="s1-row"><span class="s1-label">监听端口</span><span class="s1-value mono">7779</span></div>
+          <div class="s1-divider"></div>
+          <div class="s1-row"><span class="s1-label">项目名称</span><span class="s1-value">MyGame</span></div>
+          <div class="s1-row"><span class="s1-label">引擎版本</span><span class="s1-value">3.8.6</span></div>
+          <div class="s1-divider"></div>
+          <div class="s1-row"><span class="s1-label">AI 客户端</span><span class="s1-value">1</span></div>
+          <div class="s1-row"><span class="s1-label">工具 / 动作</span><span class="s1-value mono">13 / 167</span></div>
+          <div class="s1-row"><span class="s1-label">运行时长</span><span class="s1-value mono">01:23:45</span></div>
+        </div>
+      </div>
+      <div class="tab-panel" id="s1-guide">
+        <div class="s1-step"><div class="s1-step-num">1</div><div><div class="s1-step-title">确认服务在线</div><div class="s1-step-desc">切到「状态」Tab，确认绿灯亮起。</div></div></div>
+        <div class="s1-step"><div class="s1-step-num">2</div><div><div class="s1-step-title">连接你的 AI IDE</div><div class="s1-step-desc">切到「互联」Tab，点击注入配置。</div></div></div>
+        <div class="s1-step"><div class="s1-step-num">3</div><div><div class="s1-step-title">开始对话</div><div class="s1-step-desc">在 AI IDE 中用自然语言描述操作。</div></div></div>
+        <div style="height:12px"></div>
+        <div class="s1-prompt"><span class="s1-prompt-tag">场景</span><span class="s1-prompt-text">查看当前场景的节点树结构</span></div>
+        <div class="s1-prompt"><span class="s1-prompt-tag">创建</span><span class="s1-prompt-text">在 Canvas 下创建一个按钮，文字为「开始游戏」</span></div>
+        <div class="s1-prompt"><span class="s1-prompt-tag">UI</span><span class="s1-prompt-text">创建一个 ScrollView 列表，包含 5 个子项</span></div>
+      </div>
+      <div class="tab-panel" id="s1-connect">
+        <div class="s1-card"><div class="s1-row"><span class="s1-label">Cursor</span><span class="s1-value" style="color:#34c759">已就绪</span></div></div>
+        <div class="s1-card"><div class="s1-row"><span class="s1-label">Windsurf</span><span class="s1-value" style="color:#34c759">已就绪</span></div></div>
+        <div class="s1-card"><div class="s1-row"><span class="s1-label">Claude Desktop</span><span class="s1-value" style="color:#34c759">已就绪</span></div></div>
+        <div class="s1-card"><div class="s1-row"><span class="s1-label">Trae</span><span class="s1-value" style="color:#ff3b30">未配置</span></div></div>
+      </div>
+      <div class="tab-panel" id="s1-settings">
+        <div class="s1-card">
+          <div class="s1-row"><span class="s1-label">速率限制</span><span class="s1-value mono">240 req/min</span></div>
+          <div class="s1-divider"></div>
+          <div class="s1-row"><span class="s1-label">回环限制</span><span class="s1-value">ON</span></div>
+          <div class="s1-divider"></div>
+          <div class="s1-row"><span class="s1-label">请求体限制</span><span class="s1-value">1 MB</span></div>
+        </div>
+        <div class="s1-btn-grid"><button class="s1-btn s1-btn-primary">保存设置</button><button class="s1-btn s1-btn-outline">恢复默认</button></div>
+      </div>
+      <div class="tab-panel" id="s1-control">
+        <div class="s1-btn-grid" style="margin-bottom:12px"><button class="s1-btn s1-btn-outline">▶ 启动</button><button class="s1-btn s1-btn-outline" style="color:#ff3b30;border-color:#ffc7c7">■ 停止</button></div>
+        <button class="s1-btn s1-btn-primary" style="width:100%">↻ 重启服务</button>
+      </div>
+    </div>
+    <div class="s1-footer"><span>v1.0.8</span><span>中 / EN</span></div>
+  </div>
+</div>
+
+<div class="divider-line"></div>
+
+<!-- ==========================================
+     STYLE 2: Terminal / CLI
+     ========================================== -->
+<div class="style-card">
+  <div class="style-header">
+    <div class="style-label">方案二：Terminal CLI</div>
+    <span class="style-badge" style="background:rgba(0,255,65,0.1);color:#00ff41">终端风</span>
+  </div>
+  <div class="style-desc">整个面板就是一个终端窗口，所有信息以命令行输出形式呈现，扫描线效果，光标闪烁。<br>适合硬核开发者，与 Cocos 的「开发工具」定位高度吻合。没有卡片、没有按钮，纯粹的文本流。</div>
+  <div class="style-tags">
+    <span class="style-tag">全终端 UI</span>
+    <span class="style-tag">扫描线特效</span>
+    <span class="style-tag">命令行输出格式</span>
+    <span class="style-tag">等宽字体</span>
+  </div>
+
+  <div class="s2-panel" data-group="s2">
+    <div class="s2-titlebar">
+      <span>●</span><span>●</span><span>●</span>
+      <span class="s2-title">cocos-mcp-bridge — bash</span>
+    </div>
+    <div class="s2-tab-bar">
+      <div class="s2-tab-item active" data-tab="s2-status">status</div>
+      <div class="s2-tab-item" data-tab="s2-guide">guide</div>
+      <div class="s2-tab-item" data-tab="s2-connect">connect</div>
+      <div class="s2-tab-item" data-tab="s2-settings">config</div>
+    </div>
+    <div class="s2-body">
+      <div class="tab-panel active" id="s2-status">
+        <div class="s2-line"><span class="s2-prompt-sign">$ </span><span class="s2-cmd">mcp-bridge status</span></div>
+        <div class="s2-line">&nbsp;</div>
+        <div class="s2-line"><span class="s2-section">══ Bridge Status ══════════════════════</span></div>
+        <div class="s2-line"><span class="s2-key">  state      </span> <span class="s2-val-highlight">● ONLINE</span></div>
+        <div class="s2-line"><span class="s2-key">  endpoint   </span> <span class="s2-val-url">http://127.0.0.1:7779/mcp</span></div>
+        <div class="s2-line"><span class="s2-key">  port       </span> <span class="s2-val-num">7779</span></div>
+        <div class="s2-line"><span class="s2-key">  uptime     </span> <span class="s2-val-num">01:23:45</span></div>
+        <hr class="s2-divider">
+        <div class="s2-line"><span class="s2-section">══ Project ════════════════════════════</span></div>
+        <div class="s2-line"><span class="s2-key">  name       </span> <span class="s2-val">MyGame</span></div>
+        <div class="s2-line"><span class="s2-key">  engine     </span> <span class="s2-val">Cocos Creator 3.8.6</span></div>
+        <hr class="s2-divider">
+        <div class="s2-line"><span class="s2-section">══ Capabilities ═══════════════════════</span></div>
+        <div class="s2-line"><span class="s2-key">  clients    </span> <span class="s2-val-num">1</span></div>
+        <div class="s2-line"><span class="s2-key">  tools      </span> <span class="s2-val-num">13</span></div>
+        <div class="s2-line"><span class="s2-key">  actions    </span> <span class="s2-val-num">167</span></div>
+        <div class="s2-line">&nbsp;</div>
+        <div class="s2-line"><span class="s2-prompt-sign">$ </span><span class="s2-bar"></span></div>
+      </div>
+      <div class="tab-panel" id="s2-guide">
+        <div class="s2-line"><span class="s2-prompt-sign">$ </span><span class="s2-cmd">mcp-bridge --help quickstart</span></div>
+        <div class="s2-line">&nbsp;</div>
+        <div class="s2-line"><span class="s2-section">══ Quick Start ════════════════════════</span></div>
+        <div class="s2-line"><span class="s2-val-num">  [1]</span> <span class="s2-val">确认服务在线</span> <span class="s2-comment"># 查看 status → ● ONLINE</span></div>
+        <div class="s2-line"><span class="s2-val-num">  [2]</span> <span class="s2-val">连接 AI IDE</span>  <span class="s2-comment"># connect → inject config</span></div>
+        <div class="s2-line"><span class="s2-val-num">  [3]</span> <span class="s2-val">开始对话</span>    <span class="s2-comment"># 自然语言 → MCP 自动调用</span></div>
+        <div class="s2-line">&nbsp;</div>
+        <div class="s2-line"><span class="s2-section">══ Example Prompts ════════════════════</span></div>
+        <div class="s2-line"><span class="s2-comment">  # 场景查询</span></div>
+        <div class="s2-line"><span class="s2-val">  &gt; 查看当前场景的节点树结构</span></div>
+        <div class="s2-line"><span class="s2-comment">  # 创建节点</span></div>
+        <div class="s2-line"><span class="s2-val">  &gt; 在 Canvas 下创建一个按钮</span></div>
+        <div class="s2-line"><span class="s2-comment">  # UI 布局</span></div>
+        <div class="s2-line"><span class="s2-val">  &gt; 创建一个 ScrollView 列表</span></div>
+        <div class="s2-line"><span class="s2-comment">  # 预制体</span></div>
+        <div class="s2-line"><span class="s2-val">  &gt; 创建名为 Enemy 的预制体</span></div>
+        <div class="s2-line">&nbsp;</div>
+        <div class="s2-line"><span class="s2-prompt-sign">$ </span><span class="s2-bar"></span></div>
+      </div>
+      <div class="tab-panel" id="s2-connect">
+        <div class="s2-line"><span class="s2-prompt-sign">$ </span><span class="s2-cmd">mcp-bridge connect --list</span></div>
+        <div class="s2-line">&nbsp;</div>
+        <div class="s2-line"><span class="s2-val-highlight">  ✓ </span><span class="s2-val">Cursor       </span> <span class="s2-comment">configured</span></div>
+        <div class="s2-line"><span class="s2-val-highlight">  ✓ </span><span class="s2-val">Windsurf     </span> <span class="s2-comment">configured</span></div>
+        <div class="s2-line"><span class="s2-val-highlight">  ✓ </span><span class="s2-val">Claude       </span> <span class="s2-comment">configured</span></div>
+        <div class="s2-line"><span style="color:#ff4444">  ✗ </span><span class="s2-val">Trae         </span> <span class="s2-comment">not found</span></div>
+        <div class="s2-line">&nbsp;</div>
+        <div class="s2-line"><span class="s2-prompt-sign">$ </span><span class="s2-bar"></span></div>
+      </div>
+      <div class="tab-panel" id="s2-settings">
+        <div class="s2-line"><span class="s2-prompt-sign">$ </span><span class="s2-cmd">mcp-bridge config --show</span></div>
+        <div class="s2-line">&nbsp;</div>
+        <div class="s2-line"><span class="s2-key">  rate_limit     </span> <span class="s2-val-num">240</span> <span class="s2-comment">req/min</span></div>
+        <div class="s2-line"><span class="s2-key">  loopback_only  </span> <span class="s2-val-highlight">true</span></div>
+        <div class="s2-line"><span class="s2-key">  body_limit     </span> <span class="s2-val-num">1048576</span> <span class="s2-comment">bytes (1 MB)</span></div>
+        <div class="s2-line"><span class="s2-key">  auto_rollback  </span> <span class="s2-val-highlight">true</span></div>
+        <div class="s2-line">&nbsp;</div>
+        <div class="s2-line"><span class="s2-prompt-sign">$ </span><span class="s2-bar"></span></div>
+      </div>
+    </div>
+    <div class="s2-footer"><span>cocos-mcp-bridge v1.0.8</span><span>PID 12847 | 127.0.0.1:7779</span></div>
+  </div>
+</div>
+
+<div class="divider-line"></div>
+
+<!-- ==========================================
+     STYLE 3: Bento Grid Dashboard
+     ========================================== -->
+<div class="style-card">
+  <div class="style-header">
+    <div class="style-label">方案三：Bento Dashboard</div>
+    <span class="style-badge" style="background:rgba(99,102,241,0.1);color:#818cf8">数据仪表盘</span>
+  </div>
+  <div class="style-desc">数据优先的 Bento Grid 布局，状态页用大字号数字磁贴展示关键指标，彩色区分不同维度。<br>适合需要一眼看清全局状态的用户，信息密度高但不拥挤。</div>
+  <div class="style-tags">
+    <span class="style-tag">Bento 网格</span>
+    <span class="style-tag">大字号数字</span>
+    <span class="style-tag">彩色指标磁贴</span>
+    <span class="style-tag">信息密度优先</span>
+  </div>
+
+  <div class="s3-panel" data-group="s3">
+    <div class="s3-header">
+      <div class="s3-header-title">Cocos MCP Bridge</div>
+      <div class="s3-header-status"><span class="s3-header-dot"></span> Online · 01:23:45</div>
+    </div>
+    <div class="s3-nav">
+      <div class="s3-nav-item active" data-tab="s3-status">概览</div>
+      <div class="s3-nav-item" data-tab="s3-guide">指南</div>
+      <div class="s3-nav-item" data-tab="s3-connect">互联</div>
+      <div class="s3-nav-item" data-tab="s3-settings">设置</div>
+    </div>
+    <div class="s3-body">
+      <div class="tab-panel active" id="s3-status">
+        <div class="s3-bento">
+          <div class="s3-tile"><div class="s3-tile-label">暴露工具</div><div class="s3-tile-value blue">13</div><div class="s3-tile-sub">scene · asset · editor ...</div></div>
+          <div class="s3-tile"><div class="s3-tile-label">总 Actions</div><div class="s3-tile-value green">167</div><div class="s3-tile-sub">query · operation · macro</div></div>
+          <div class="s3-tile"><div class="s3-tile-label">AI 客户端</div><div class="s3-tile-value purple">1</div><div class="s3-tile-sub">connected via HTTP</div></div>
+          <div class="s3-tile"><div class="s3-tile-label">监听端口</div><div class="s3-tile-value amber">7779</div><div class="s3-tile-sub">127.0.0.1 loopback</div></div>
+          <div class="s3-tile wide"><div class="s3-tile-label">项目</div><div class="s3-tile-value" style="font-size:16px;color:#e4e4e7">MyGame</div><div class="s3-tile-sub">Cocos Creator 3.8.6 · http://127.0.0.1:7779/mcp</div></div>
+        </div>
+      </div>
+      <div class="tab-panel" id="s3-guide">
+        <div class="s3-section-title">快速上手</div>
+        <div class="s3-step-row"><div class="s3-step-icon i1">1</div><div><div class="s3-step-t">确认服务在线</div><div class="s3-step-d">查看「概览」页面，确认 Online 状态。</div></div></div>
+        <div class="s3-step-row"><div class="s3-step-icon i2">2</div><div><div class="s3-step-t">连接你的 AI IDE</div><div class="s3-step-d">切到「互联」页面，点击注入配置。</div></div></div>
+        <div class="s3-step-row"><div class="s3-step-icon i3">3</div><div><div class="s3-step-t">开始对话</div><div class="s3-step-d">在 IDE 中用自然语言描述操作。</div></div></div>
+        <div style="height:10px"></div>
+        <div class="s3-section-title">AI 提示词示例</div>
+        <div class="s3-prompt-item"><span class="s3-prompt-tag t1">场景</span><span class="s3-prompt-text">查看当前场景的节点树结构</span></div>
+        <div class="s3-prompt-item"><span class="s3-prompt-tag t2">创建</span><span class="s3-prompt-text">在 Canvas 下创建一个按钮</span></div>
+        <div class="s3-prompt-item"><span class="s3-prompt-tag t3">UI</span><span class="s3-prompt-text">创建一个 ScrollView 列表</span></div>
+      </div>
+      <div class="tab-panel" id="s3-connect">
+        <div class="s3-section-title">IDE 连接状态</div>
+        <div class="s3-ide-row"><div><div class="s3-ide-name">Cursor</div><div class="s3-ide-status">已就绪</div></div><button class="s3-ide-btn">注入配置</button></div>
+        <div class="s3-ide-row"><div><div class="s3-ide-name">Windsurf</div><div class="s3-ide-status">已就绪</div></div><button class="s3-ide-btn">注入配置</button></div>
+        <div class="s3-ide-row"><div><div class="s3-ide-name">Claude Desktop</div><div class="s3-ide-status">已就绪</div></div><button class="s3-ide-btn">注入配置</button></div>
+        <div class="s3-ide-row"><div><div class="s3-ide-name">Trae</div><div class="s3-ide-status" style="color:#ef4444">未配置</div></div><button class="s3-ide-btn">注入配置</button></div>
+      </div>
+      <div class="tab-panel" id="s3-settings">
+        <div class="s3-bento" style="grid-template-columns:1fr 1fr">
+          <div class="s3-tile"><div class="s3-tile-label">速率限制</div><div class="s3-tile-value blue" style="font-size:20px">240</div><div class="s3-tile-sub">requests / min</div></div>
+          <div class="s3-tile"><div class="s3-tile-label">请求体限制</div><div class="s3-tile-value green" style="font-size:20px">1 MB</div><div class="s3-tile-sub">max body size</div></div>
+          <div class="s3-tile"><div class="s3-tile-label">回环限制</div><div class="s3-tile-value purple" style="font-size:20px">ON</div><div class="s3-tile-sub">127.0.0.1 only</div></div>
+          <div class="s3-tile"><div class="s3-tile-label">自动回滚</div><div class="s3-tile-value amber" style="font-size:20px">ON</div><div class="s3-tile-sub">atomic ops rollback</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="s3-footer"><span>v1.0.8</span><span>中 / EN · 🔄 Sync</span></div>
+  </div>
+</div>
+
+<div class="divider-line"></div>
+
+<!-- ==========================================
+     STYLE 4: Sidebar Navigation
+     ========================================== -->
+<div class="style-card">
+  <div class="style-header">
+    <div class="style-label">方案四：Sidebar 导航</div>
+    <span class="style-badge" style="background:rgba(139,92,246,0.1);color:#8b5cf6">图标侧栏</span>
+  </div>
+  <div class="style-desc">左侧图标导航栏 + 右侧内容区，类似 VS Code / Discord 的布局模式。<br>适合功能多的面板，侧栏不占内容空间，内容区更宽敞。</div>
+  <div class="style-tags">
+    <span class="style-tag">左侧图标栏</span>
+    <span class="style-tag">宽内容区</span>
+    <span class="style-tag">渐变图标高亮</span>
+    <span class="style-tag">VS Code 布局</span>
+  </div>
+
+  <div class="s4-panel" data-group="s4">
+    <div class="s4-sidebar">
+      <div class="s4-sidebar-item active" data-tab="s4-status" title="状态">📊</div>
+      <div class="s4-sidebar-item" data-tab="s4-guide" title="指南">📖</div>
+      <div class="s4-sidebar-item" data-tab="s4-connect" title="互联">🔗</div>
+      <div class="s4-sidebar-item" data-tab="s4-settings" title="设置">⚙️</div>
+      <div class="s4-sidebar-item" data-tab="s4-control" title="控制">🎛️</div>
+      <div class="s4-sidebar-spacer"></div>
+      <div class="s4-sidebar-bottom" title="语言">中</div>
+    </div>
+    <div class="s4-main">
+      <div class="s4-topbar">
+        <span>服务状态</span>
+        <div class="s4-topbar-status"><span class="s3-header-dot"></span> Online</div>
+      </div>
+      <div class="s4-content">
+        <div class="tab-panel active" id="s4-status">
+          <div class="s4-card">
+            <div class="s4-row"><span class="s4-label">服务端点</span><span class="s4-value">http://127.0.0.1:7779/mcp</span></div>
+            <div class="s4-divider"></div>
+            <div class="s4-row"><span class="s4-label">端口</span><span class="s4-value">7779</span></div>
+            <div class="s4-divider"></div>
+            <div class="s4-row"><span class="s4-label">项目</span><span class="s4-value">MyGame</span></div>
+            <div class="s4-row"><span class="s4-label">引擎</span><span class="s4-value">3.8.6</span></div>
+            <div class="s4-divider"></div>
+            <div class="s4-row"><span class="s4-label">AI 客户端</span><span class="s4-value">1</span></div>
+            <div class="s4-row"><span class="s4-label">工具 / Actions</span><span class="s4-value">13 / 167</span></div>
+            <div class="s4-row"><span class="s4-label">运行时长</span><span class="s4-value">01:23:45</span></div>
+          </div>
+        </div>
+        <div class="tab-panel" id="s4-guide">
+          <div class="s4-step"><div class="s4-step-num">1</div><div><div class="s4-step-title">确认服务在线</div><div class="s4-step-desc">查看左上角状态为 Online。</div></div></div>
+          <div class="s4-step"><div class="s4-step-num">2</div><div><div class="s4-step-title">连接你的 AI IDE</div><div class="s4-step-desc">点击左侧 🔗 图标，进入互联页注入配置。</div></div></div>
+          <div class="s4-step"><div class="s4-step-num">3</div><div><div class="s4-step-title">开始对话</div><div class="s4-step-desc">在 AI IDE 中用自然语言描述操作。</div></div></div>
+          <div style="height:12px"></div>
+          <div class="s4-prompt"><span class="s4-prompt-tag">场景</span><span class="s4-prompt-text">查看当前场景的节点树结构</span><span class="s4-prompt-copy">📋</span></div>
+          <div class="s4-prompt"><span class="s4-prompt-tag">创建</span><span class="s4-prompt-text">在 Canvas 下创建一个按钮</span><span class="s4-prompt-copy">📋</span></div>
+          <div class="s4-prompt"><span class="s4-prompt-tag">UI</span><span class="s4-prompt-text">创建一个 ScrollView 列表</span><span class="s4-prompt-copy">📋</span></div>
+          <div class="s4-prompt"><span class="s4-prompt-tag">预制体</span><span class="s4-prompt-text">创建名为 Enemy 的预制体</span><span class="s4-prompt-copy">📋</span></div>
+        </div>
+        <div class="tab-panel" id="s4-connect">
+          <div class="s4-card"><div class="s4-row"><span class="s4-label" style="font-weight:600;color:#e4e4e7">Cursor</span><span class="s4-value" style="color:#22c55e">已就绪</span></div></div>
+          <div class="s4-card"><div class="s4-row"><span class="s4-label" style="font-weight:600;color:#e4e4e7">Windsurf</span><span class="s4-value" style="color:#22c55e">已就绪</span></div></div>
+          <div class="s4-card"><div class="s4-row"><span class="s4-label" style="font-weight:600;color:#e4e4e7">Claude Desktop</span><span class="s4-value" style="color:#22c55e">已就绪</span></div></div>
+          <div class="s4-card"><div class="s4-row"><span class="s4-label" style="font-weight:600;color:#e4e4e7">Trae</span><span class="s4-value" style="color:#ef4444">未配置</span></div></div>
+        </div>
+        <div class="tab-panel" id="s4-settings">
+          <div class="s4-card">
+            <div class="s4-row"><span class="s4-label">速率限制</span><span class="s4-value">240 req/min</span></div>
+            <div class="s4-divider"></div>
+            <div class="s4-row"><span class="s4-label">回环限制</span><span class="s4-value" style="color:#22c55e">ON</span></div>
+            <div class="s4-divider"></div>
+            <div class="s4-row"><span class="s4-label">请求体限制</span><span class="s4-value">1 MB</span></div>
+            <div class="s4-divider"></div>
+            <div class="s4-row"><span class="s4-label">自动回滚</span><span class="s4-value" style="color:#22c55e">ON</span></div>
+          </div>
+        </div>
+        <div class="tab-panel" id="s4-control">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
+            <button class="s1-btn s1-btn-outline" style="background:#18181c;border-color:#27272e;color:#a1a1aa;border-radius:8px;width:100%">▶ 启动</button>
+            <button class="s1-btn s1-btn-outline" style="background:#18181c;border-color:#27272e;color:#ef4444;border-radius:8px;width:100%">■ 停止</button>
+          </div>
+          <button class="s1-btn" style="width:100%;background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;border:none;border-radius:8px;font-weight:600">↻ 重启服务</button>
+        </div>
+      </div>
+      <div class="s4-footer-bar"><span>v1.0.8</span><span>🔄 Sync</span></div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<script>
+// Generic tab switching
+function setupTabs(group, tabSelector, panelPrefix, titleSelector) {
+  const container = document.querySelector(`[data-group="${group}"]`);
+  if (!container) return;
+  const tabs = container.querySelectorAll(tabSelector);
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      const target = tab.getAttribute('data-tab');
+      // Deactivate all tabs and panels within this group
+      tabs.forEach(t => t.classList.remove('active'));
+      container.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      tab.classList.add('active');
+      const panel = document.getElementById(target);
+      if (panel) panel.classList.add('active');
+      // Update title for sidebar style
+      if (titleSelector) {
+        const titleEl = container.querySelector(titleSelector);
+        if (titleEl) {
+          const titles = { status: '服务状态', guide: '使用指南', connect: 'IDE 互联', settings: '安全设置', control: '服务控制' };
+          const key = target.replace(/^s\d+-/, '');
+          titleEl.textContent = titles[key] || '';
+        }
+      }
+    });
+  });
+}
+
+setupTabs('s1', '.s1-tab', 's1');
+setupTabs('s2', '.s2-tab-item', 's2');
+setupTabs('s3', '.s3-nav-item', 's3');
+setupTabs('s4', '.s4-sidebar-item', 's4', '.s4-topbar > span:first-child');
+</script>
+</body>
+</html>

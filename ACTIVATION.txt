@@ -1,0 +1,98 @@
+============================================
+  Aura Pro — Activation Guide
+============================================
+
+Thank you for purchasing Aura Pro!
+
+To activate your Pro license, follow ONE of these methods:
+
+
+Method 1: Plugin Panel (Recommended)
+-------------------------------------
+1. Open Cocos Creator with the plugin installed
+2. Open the plugin panel: Menu → 扩展 → Aura
+3. Go to the "Settings" tab (设置)
+4. Enter your License Key in the input field
+5. Click "Activate" (激活)
+6. Restart the plugin (Control tab → Restart)
+
+
+Method 2: License File
+-----------------------
+1. Create a file named ".mcp-license" in the plugin directory:
+     extensions/aura-for-cocos/.mcp-license
+2. Write your License Key as the only content:
+     COCOS-PRO-XXXXXXXX-XXXXXXXX-XXXXXXXX
+3. Restart Cocos Creator
+
+
+Method 3: Environment Variable
+-------------------------------
+Set the environment variable before launching Cocos Creator:
+
+  Windows (PowerShell):
+    $env:COCOS_MCP_LICENSE = "COCOS-PRO-XXXXXXXX-XXXXXXXX-XXXXXXXX"
+
+  macOS / Linux:
+    export COCOS_MCP_LICENSE="COCOS-PRO-XXXXXXXX-XXXXXXXX-XXXXXXXX"
+
+
+Priority Order
+--------------
+If multiple methods are used, the priority is:
+  Environment Variable > .mcp-license file > Panel setting
+
+
+Verification
+------------
+After activation, the plugin panel "Settings" tab will show:
+  "Pro Edition — 已激活 (Licensed to: xx...xx)"
+
+All 230+ Pro actions and AI smart tools will be available.
+
+
+Troubleshooting
+---------------
+- "License key signature verification failed"
+  → Double-check the key for typos. Keys are case-sensitive.
+
+- "License expired"
+  → Contact the seller for a renewal key.
+
+- Pro tools not appearing after activation
+  → Restart the plugin: Control tab → Restart Service
+  → Or restart Cocos Creator entirely.
+
+- macOS: "cocos_pro.*.node cannot be opened"
+  → Run: xattr -cr extensions/aura-for-cocos/
+
+
+Support
+-------
+- Email: (your support email)
+- GitHub Issues: (your repo URL)
+
+
+============================================
+  感谢购买 Aura Pro！
+============================================
+
+激活方式一：插件面板（推荐）
+1. 打开 Cocos Creator，确保插件已安装
+2. 菜单 → 扩展 → Aura 打开面板
+3. 切换到「设置」标签页
+4. 在 License Key 输入框中输入密钥
+5. 点击「激活」
+6. 重启插件（控制 → 重启服务）
+
+激活方式二：License 文件
+1. 在插件目录下创建 .mcp-license 文件：
+     extensions/aura-for-cocos/.mcp-license
+2. 文件内容仅写入 License Key：
+     COCOS-PRO-XXXXXXXX-XXXXXXXX-XXXXXXXX
+3. 重启 Cocos Creator
+
+激活方式三：环境变量
+启动 Cocos Creator 前设置环境变量：
+  Windows: $env:COCOS_MCP_LICENSE = "COCOS-PRO-XXXXXXXX-XXXXXXXX-XXXXXXXX"
+  macOS:   export COCOS_MCP_LICENSE="COCOS-PRO-XXXXXXXX-XXXXXXXX-XXXXXXXX"

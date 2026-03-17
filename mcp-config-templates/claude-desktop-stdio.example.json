@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "aura-cocos": {
+      "command": "node",
+      "args": [
+        "/ABSOLUTE/PATH/TO/aura-for-cocos/stdio-shim/mcp-stdio-shim.cjs"
+      ],
+      "env": {
+        "COCOS_BRIDGE_PORT": "7779",
+        "COCOS_MCP_TOKEN": "REPLACE_WITH_TOKEN_FROM_API_MCP_CONNECTION_INFO"
+      }
+    }
+  }
+}

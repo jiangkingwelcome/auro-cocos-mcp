@@ -1,0 +1,1219 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<title>Cocos MCP Bridge - UI Style Preview</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #111;
+    color: #eee;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+    padding: 40px 20px;
+  }
+  .page-title {
+    text-align: center;
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    background: linear-gradient(135deg, #00f0ff, #a78bfa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .page-subtitle {
+    text-align: center;
+    color: #888;
+    font-size: 14px;
+    margin-bottom: 48px;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+    gap: 40px;
+    max-width: 1680px;
+    margin: 0 auto;
+  }
+  .style-card {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .style-label {
+    font-size: 18px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .style-label .badge {
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-weight: 500;
+  }
+  .style-desc {
+    font-size: 13px;
+    color: #999;
+    line-height: 1.5;
+  }
+
+  /* ==============================
+     Panel Frame (shared structure)
+     ============================== */
+  .panel {
+    width: 100%;
+    min-height: 580px;
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    font-size: 13px;
+    user-select: none;
+  }
+  .panel-tabs {
+    display: flex;
+    flex-shrink: 0;
+    position: relative;
+  }
+  .panel-tab {
+    flex: 1;
+    text-align: center;
+    padding: 12px 0;
+    font-size: 12.5px;
+    font-weight: 500;
+    cursor: default;
+    transition: all 0.2s;
+  }
+  .panel-body {
+    flex: 1;
+    padding: 16px;
+    overflow-y: auto;
+  }
+  .panel-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 16px;
+    flex-shrink: 0;
+    font-size: 11px;
+  }
+
+  .p-divider { height: 1px; margin: 12px 0; }
+
+  .p-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 28px;
+  }
+  .p-label { font-size: 12px; }
+  .p-value { font-size: 12px; display: flex; align-items: center; gap: 6px; }
+  .p-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+
+  .p-card { border-radius: 8px; padding: 12px 16px; }
+
+  .p-btn {
+    border: none; border-radius: 6px; padding: 9px 16px;
+    font-size: 12.5px; font-weight: 500; cursor: default;
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+    width: 100%;
+  }
+  .p-btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+  .p-ide-card {
+    border-radius: 6px; padding: 12px 16px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .p-ide-title { font-weight: 600; font-size: 13px; }
+  .p-ide-status { font-size: 11px; margin-top: 3px; }
+  .p-ide-btn {
+    border: none; border-radius: 4px; padding: 6px 12px;
+    font-size: 11.5px; cursor: default;
+  }
+
+  .p-section-title { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+  .p-section-desc { font-size: 12px; margin-bottom: 12px; line-height: 1.5; }
+
+  .p-step {
+    display: flex; align-items: flex-start; gap: 12px;
+    border-radius: 6px; padding: 12px 14px;
+  }
+  .p-step-num {
+    width: 24px; height: 24px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700; flex-shrink: 0;
+  }
+  .p-step-title { font-size: 13px; font-weight: 600; margin-bottom: 3px; }
+  .p-step-desc { font-size: 11px; line-height: 1.5; }
+
+  .p-prompt-card {
+    display: flex; align-items: center; gap: 8px;
+    border-radius: 4px; padding: 8px 10px;
+  }
+  .p-prompt-tag {
+    display: inline-block; padding: 2px 6px; border-radius: 3px;
+    font-size: 10px; font-weight: 600; min-width: 32px; text-align: center;
+  }
+  .p-prompt-text { flex: 1; font-size: 11.5px; line-height: 1.4; }
+  .p-prompt-copy { font-size: 12px; cursor: default; opacity: 0.6; }
+
+  /* ==========================================
+     STYLE A: Cyberpunk Geek (current, refined)
+     ========================================== */
+  .style-a .badge { background: rgba(0,240,255,0.15); color: #00f0ff; }
+  .style-a .panel {
+    background: radial-gradient(circle at 50% 0%, #1a1e36 0%, #090a0f 60%);
+    border: 1px solid rgba(0,240,255,0.12);
+    box-shadow: 0 0 40px rgba(0,240,255,0.06);
+  }
+  .style-a .panel-tabs {
+    background: rgba(20,22,33,0.6); border-bottom: 1px solid rgba(0,240,255,0.15);
+    backdrop-filter: blur(12px);
+  }
+  .style-a .panel-tab { color: #7dd3fc; }
+  .style-a .panel-tab.active { color: #00f0ff; font-weight: 600; text-shadow: 0 0 8px rgba(0,240,255,0.3); }
+  .style-a .tab-indicator { position: absolute; bottom: -1px; height: 2px; width: 20%; background: #00f0ff; box-shadow: 0 -1px 6px #00f0ff; }
+  .style-a .p-card { background: rgba(16,20,34,0.4); border: 1px solid rgba(0,240,255,0.1); box-shadow: 0 4px 24px -4px rgba(0,240,255,0.08); }
+  .style-a .p-divider { background: rgba(0,240,255,0.15); }
+  .style-a .p-label { color: #7dd3fc; }
+  .style-a .p-value { color: #bae6fd; font-family: 'SF Mono', Consolas, monospace; font-size: 11.5px; }
+  .style-a .p-dot.on { background: #34d399; box-shadow: 0 0 6px #34d399; }
+  .style-a .p-status-text { color: #34d399; text-shadow: 0 0 8px rgba(16,185,129,0.4); font-weight: 500; }
+  .style-a .p-value.mono { color: #a78bfa; }
+  .style-a .panel-footer { background: rgba(20,22,33,0.6); border-top: 1px solid rgba(0,240,255,0.15); color: #7dd3fc; }
+  .style-a .p-btn-primary { background: #00f0ff; color: #000; font-weight: 600; box-shadow: 0 0 12px rgba(0,240,255,0.4); }
+  .style-a .p-btn-outline { background: transparent; border: 1px solid rgba(0,240,255,0.2); color: #bae6fd; }
+  .style-a .p-ide-card { background: rgba(16,20,34,0.4); border: 1px solid rgba(0,240,255,0.1); }
+  .style-a .p-ide-title { color: #e0f2fe; }
+  .style-a .p-ide-status { color: #34d399; }
+  .style-a .p-ide-btn { background: transparent; border: 1px solid rgba(0,240,255,0.2); color: #bae6fd; }
+  .style-a .p-section-title { color: #e0f2fe; }
+  .style-a .p-section-desc { color: #7dd3fc; }
+  .style-a .p-step { background: rgba(16,20,34,0.4); border: 1px solid rgba(0,240,255,0.1); }
+  .style-a .p-step-num { background: #00f0ff; color: #000; box-shadow: 0 0 10px #00f0ff; }
+  .style-a .p-step-title { color: #e0f2fe; }
+  .style-a .p-step-desc { color: #7dd3fc; }
+  .style-a .p-prompt-card { background: rgba(16,20,34,0.4); border: 1px solid rgba(0,240,255,0.1); }
+  .style-a .p-prompt-tag { background: rgba(0,240,255,0.1); color: #00f0ff; }
+  .style-a .p-prompt-text { color: #bae6fd; }
+
+  /* =======================================
+     STYLE B: Frosted Glass / Apple-style
+     ======================================= */
+  .style-b .badge { background: rgba(147,130,255,0.15); color: #9382ff; }
+  .style-b .panel {
+    background: linear-gradient(165deg, rgba(40,38,60,0.95) 0%, rgba(22,20,38,0.98) 100%);
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.05);
+  }
+  .style-b .panel-tabs {
+    background: rgba(255,255,255,0.03); border-bottom: 1px solid rgba(255,255,255,0.06);
+    backdrop-filter: blur(20px);
+  }
+  .style-b .panel-tab { color: rgba(255,255,255,0.4); }
+  .style-b .panel-tab.active { color: #fff; font-weight: 600; }
+  .style-b .tab-indicator { position: absolute; bottom: 0; height: 2px; width: 20%; background: linear-gradient(90deg, #9382ff, #c084fc); border-radius: 2px; }
+  .style-b .p-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06); backdrop-filter: blur(10px); border-radius: 12px; }
+  .style-b .p-divider { background: rgba(255,255,255,0.06); }
+  .style-b .p-label { color: rgba(255,255,255,0.45); }
+  .style-b .p-value { color: rgba(255,255,255,0.85); font-family: 'SF Mono', Consolas, monospace; font-size: 11.5px; }
+  .style-b .p-dot.on { background: #34d399; box-shadow: 0 0 8px rgba(52,211,153,0.4); }
+  .style-b .p-status-text { color: #34d399; font-weight: 500; }
+  .style-b .p-value.mono { color: #c084fc; }
+  .style-b .panel-footer { background: rgba(255,255,255,0.02); border-top: 1px solid rgba(255,255,255,0.06); color: rgba(255,255,255,0.35); }
+  .style-b .p-btn-primary { background: linear-gradient(135deg, #9382ff, #c084fc); color: #fff; font-weight: 600; border-radius: 8px; }
+  .style-b .p-btn-outline { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.7); border-radius: 8px; }
+  .style-b .p-ide-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06); border-radius: 10px; }
+  .style-b .p-ide-title { color: rgba(255,255,255,0.9); }
+  .style-b .p-ide-status { color: #34d399; }
+  .style-b .p-ide-btn { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.7); border-radius: 6px; }
+  .style-b .p-section-title { color: rgba(255,255,255,0.9); }
+  .style-b .p-section-desc { color: rgba(255,255,255,0.45); }
+  .style-b .p-step { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06); border-radius: 10px; }
+  .style-b .p-step-num { background: linear-gradient(135deg, #9382ff, #c084fc); color: #fff; }
+  .style-b .p-step-title { color: rgba(255,255,255,0.9); }
+  .style-b .p-step-desc { color: rgba(255,255,255,0.45); }
+  .style-b .p-prompt-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 8px; }
+  .style-b .p-prompt-tag { background: rgba(147,130,255,0.12); color: #b4a8ff; }
+  .style-b .p-prompt-text { color: rgba(255,255,255,0.75); }
+
+  /* =======================================
+     STYLE C: Warm Terminal / Monokai-inspired
+     ======================================= */
+  .style-c .badge { background: rgba(249,115,22,0.15); color: #f97316; }
+  .style-c .panel {
+    background: #1e1e1e;
+    border: 1px solid #333;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  }
+  .style-c .panel-tabs {
+    background: #252526; border-bottom: 2px solid #333;
+  }
+  .style-c .panel-tab { color: #888; font-family: 'SF Mono', Consolas, monospace; font-size: 12px; }
+  .style-c .panel-tab.active { color: #f97316; font-weight: 600; border-bottom: none; }
+  .style-c .tab-indicator { position: absolute; bottom: -2px; height: 2px; width: 20%; background: #f97316; }
+  .style-c .p-card { background: #252526; border: 1px solid #3c3c3c; border-radius: 4px; }
+  .style-c .p-divider { background: #3c3c3c; }
+  .style-c .p-label { color: #75715e; font-family: 'SF Mono', Consolas, monospace; }
+  .style-c .p-value { color: #e6db74; font-family: 'SF Mono', Consolas, monospace; font-size: 11.5px; }
+  .style-c .p-dot.on { background: #a6e22e; box-shadow: 0 0 4px #a6e22e; }
+  .style-c .p-status-text { color: #a6e22e; font-family: 'SF Mono', Consolas, monospace; font-weight: 500; }
+  .style-c .p-value.mono { color: #ae81ff; }
+  .style-c .panel-footer { background: #252526; border-top: 1px solid #3c3c3c; color: #75715e; font-family: 'SF Mono', Consolas, monospace; }
+  .style-c .p-btn-primary { background: #f97316; color: #1e1e1e; font-weight: 600; border-radius: 4px; }
+  .style-c .p-btn-outline { background: transparent; border: 1px solid #555; color: #ccc; border-radius: 4px; }
+  .style-c .p-ide-card { background: #252526; border: 1px solid #3c3c3c; border-radius: 4px; }
+  .style-c .p-ide-title { color: #f8f8f2; }
+  .style-c .p-ide-status { color: #a6e22e; font-family: 'SF Mono', Consolas, monospace; }
+  .style-c .p-ide-btn { background: transparent; border: 1px solid #555; color: #ccc; border-radius: 3px; }
+  .style-c .p-section-title { color: #f8f8f2; }
+  .style-c .p-section-desc { color: #75715e; }
+  .style-c .p-step { background: #252526; border: 1px solid #3c3c3c; border-radius: 4px; }
+  .style-c .p-step-num { background: #f97316; color: #1e1e1e; }
+  .style-c .p-step-title { color: #f8f8f2; }
+  .style-c .p-step-desc { color: #75715e; }
+  .style-c .p-prompt-card { background: #252526; border: 1px solid #3c3c3c; border-radius: 3px; }
+  .style-c .p-prompt-tag { background: rgba(249,115,22,0.15); color: #f97316; font-family: 'SF Mono', Consolas, monospace; }
+  .style-c .p-prompt-text { color: #e6db74; font-family: 'SF Mono', Consolas, monospace; }
+
+  /* =======================================
+     STYLE D: Gradient Aurora / Modern SaaS
+     ======================================= */
+  .style-d .badge { background: rgba(56,189,248,0.15); color: #38bdf8; }
+  .style-d .panel {
+    background: linear-gradient(180deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
+    border: 1px solid rgba(99,102,241,0.2);
+    box-shadow: 0 0 60px rgba(99,102,241,0.08), 0 8px 32px rgba(0,0,0,0.3);
+  }
+  .style-d .panel-tabs {
+    background: rgba(15,23,42,0.6); border-bottom: 1px solid rgba(99,102,241,0.15);
+    backdrop-filter: blur(12px);
+  }
+  .style-d .panel-tab { color: #64748b; }
+  .style-d .panel-tab.active { color: #e2e8f0; font-weight: 600; }
+  .style-d .tab-indicator { position: absolute; bottom: -1px; height: 2px; width: 20%; background: linear-gradient(90deg, #6366f1, #06b6d4); border-radius: 2px; box-shadow: 0 0 12px rgba(99,102,241,0.5); }
+  .style-d .p-card { background: rgba(30,27,75,0.4); border: 1px solid rgba(99,102,241,0.12); border-radius: 10px; }
+  .style-d .p-divider { background: rgba(99,102,241,0.12); }
+  .style-d .p-label { color: #94a3b8; }
+  .style-d .p-value { color: #e2e8f0; font-family: 'SF Mono', Consolas, monospace; font-size: 11.5px; }
+  .style-d .p-dot.on { background: #22d3ee; box-shadow: 0 0 8px rgba(34,211,238,0.5); }
+  .style-d .p-status-text { color: #22d3ee; font-weight: 500; }
+  .style-d .p-value.mono { color: #a78bfa; }
+  .style-d .panel-footer { background: rgba(15,23,42,0.6); border-top: 1px solid rgba(99,102,241,0.12); color: #64748b; }
+  .style-d .p-btn-primary { background: linear-gradient(135deg, #6366f1, #06b6d4); color: #fff; font-weight: 600; border-radius: 8px; box-shadow: 0 4px 16px rgba(99,102,241,0.3); }
+  .style-d .p-btn-outline { background: rgba(99,102,241,0.08); border: 1px solid rgba(99,102,241,0.2); color: #c7d2fe; border-radius: 8px; }
+  .style-d .p-ide-card { background: rgba(30,27,75,0.4); border: 1px solid rgba(99,102,241,0.12); border-radius: 8px; }
+  .style-d .p-ide-title { color: #e2e8f0; }
+  .style-d .p-ide-status { color: #22d3ee; }
+  .style-d .p-ide-btn { background: rgba(99,102,241,0.1); border: 1px solid rgba(99,102,241,0.2); color: #c7d2fe; border-radius: 6px; }
+  .style-d .p-section-title { color: #e2e8f0; }
+  .style-d .p-section-desc { color: #94a3b8; }
+  .style-d .p-step { background: rgba(30,27,75,0.4); border: 1px solid rgba(99,102,241,0.12); border-radius: 8px; }
+  .style-d .p-step-num { background: linear-gradient(135deg, #6366f1, #06b6d4); color: #fff; box-shadow: 0 0 12px rgba(99,102,241,0.4); }
+  .style-d .p-step-title { color: #e2e8f0; }
+  .style-d .p-step-desc { color: #94a3b8; }
+  .style-d .p-prompt-card { background: rgba(30,27,75,0.3); border: 1px solid rgba(99,102,241,0.12); border-radius: 6px; }
+  .style-d .p-prompt-tag { background: rgba(6,182,212,0.12); color: #22d3ee; }
+  .style-d .p-prompt-text { color: #cbd5e1; }
+
+  /* =======================================
+     STYLE E: Linear Minimal / Clean Pro
+     ======================================= */
+  .style-e .badge { background: rgba(99,102,241,0.12); color: #6366f1; }
+  .style-e .panel {
+    background: #161618;
+    border: 1px solid #27272a;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+  }
+  .style-e .panel-tabs {
+    background: #161618; border-bottom: 1px solid #27272a;
+  }
+  .style-e .panel-tab { color: #71717a; font-size: 12px; font-weight: 500; }
+  .style-e .panel-tab.active { color: #fafafa; font-weight: 600; }
+  .style-e .tab-indicator { position: absolute; bottom: -1px; height: 2px; width: 20%; background: #6366f1; border-radius: 2px; }
+  .style-e .p-card { background: #1c1c1f; border: 1px solid #27272a; border-radius: 10px; }
+  .style-e .p-divider { background: #27272a; }
+  .style-e .p-label { color: #71717a; font-size: 12px; }
+  .style-e .p-value { color: #d4d4d8; font-family: 'SF Mono', Consolas, monospace; font-size: 11.5px; }
+  .style-e .p-dot.on { background: #22c55e; box-shadow: 0 0 6px rgba(34,197,94,0.4); }
+  .style-e .p-status-text { color: #22c55e; font-weight: 500; }
+  .style-e .p-value.mono { color: #a78bfa; }
+  .style-e .panel-footer { background: #161618; border-top: 1px solid #27272a; color: #52525b; }
+  .style-e .p-btn-primary { background: #6366f1; color: #fff; font-weight: 600; border-radius: 8px; }
+  .style-e .p-btn-outline { background: transparent; border: 1px solid #3f3f46; color: #a1a1aa; border-radius: 8px; }
+  .style-e .p-ide-card { background: #1c1c1f; border: 1px solid #27272a; border-radius: 8px; }
+  .style-e .p-ide-title { color: #fafafa; }
+  .style-e .p-ide-status { color: #22c55e; }
+  .style-e .p-ide-btn { background: transparent; border: 1px solid #3f3f46; color: #a1a1aa; border-radius: 6px; }
+  .style-e .p-section-title { color: #fafafa; }
+  .style-e .p-section-desc { color: #71717a; }
+  .style-e .p-step { background: #1c1c1f; border: 1px solid #27272a; border-radius: 8px; }
+  .style-e .p-step-num { background: #6366f1; color: #fff; }
+  .style-e .p-step-title { color: #fafafa; }
+  .style-e .p-step-desc { color: #71717a; }
+  .style-e .p-prompt-card { background: #1c1c1f; border: 1px solid #27272a; border-radius: 6px; }
+  .style-e .p-prompt-tag { background: rgba(99,102,241,0.12); color: #818cf8; }
+  .style-e .p-prompt-text { color: #d4d4d8; }
+
+  /* =======================================
+     STYLE F: Emerald Matrix / Hacker
+     ======================================= */
+  .style-f .badge { background: rgba(16,185,129,0.15); color: #10b981; }
+  .style-f .panel {
+    background: #0a0a0a;
+    border: 1px solid #1a3a2a;
+    box-shadow: 0 0 30px rgba(16,185,129,0.05);
+  }
+  .style-f .panel-tabs {
+    background: #0d0d0d; border-bottom: 1px solid #1a3a2a;
+  }
+  .style-f .panel-tab { color: #2d6a4f; font-family: 'SF Mono', Consolas, monospace; font-size: 12px; }
+  .style-f .panel-tab.active { color: #10b981; font-weight: 600; text-shadow: 0 0 6px rgba(16,185,129,0.4); }
+  .style-f .tab-indicator { position: absolute; bottom: -1px; height: 2px; width: 20%; background: #10b981; box-shadow: 0 0 8px #10b981; }
+  .style-f .p-card { background: #0d1117; border: 1px solid #1a3a2a; border-radius: 6px; }
+  .style-f .p-divider { background: #1a3a2a; }
+  .style-f .p-label { color: #2d6a4f; font-family: 'SF Mono', Consolas, monospace; }
+  .style-f .p-value { color: #34d399; font-family: 'SF Mono', Consolas, monospace; font-size: 11.5px; }
+  .style-f .p-dot.on { background: #10b981; box-shadow: 0 0 8px #10b981; }
+  .style-f .p-status-text { color: #10b981; font-family: 'SF Mono', Consolas, monospace; font-weight: 500; text-shadow: 0 0 8px rgba(16,185,129,0.4); }
+  .style-f .p-value.mono { color: #6ee7b7; }
+  .style-f .panel-footer { background: #0d0d0d; border-top: 1px solid #1a3a2a; color: #2d6a4f; font-family: 'SF Mono', Consolas, monospace; }
+  .style-f .p-btn-primary { background: #10b981; color: #000; font-weight: 700; border-radius: 4px; box-shadow: 0 0 12px rgba(16,185,129,0.4); font-family: 'SF Mono', Consolas, monospace; }
+  .style-f .p-btn-outline { background: transparent; border: 1px solid #1a3a2a; color: #34d399; border-radius: 4px; font-family: 'SF Mono', Consolas, monospace; }
+  .style-f .p-ide-card { background: #0d1117; border: 1px solid #1a3a2a; border-radius: 4px; }
+  .style-f .p-ide-title { color: #34d399; font-family: 'SF Mono', Consolas, monospace; }
+  .style-f .p-ide-status { color: #10b981; font-family: 'SF Mono', Consolas, monospace; }
+  .style-f .p-ide-btn { background: transparent; border: 1px solid #1a3a2a; color: #34d399; border-radius: 3px; font-family: 'SF Mono', Consolas, monospace; }
+  .style-f .p-section-title { color: #34d399; font-family: 'SF Mono', Consolas, monospace; }
+  .style-f .p-section-desc { color: #2d6a4f; font-family: 'SF Mono', Consolas, monospace; }
+  .style-f .p-step { background: #0d1117; border: 1px solid #1a3a2a; border-radius: 4px; }
+  .style-f .p-step-num { background: #10b981; color: #000; box-shadow: 0 0 8px #10b981; }
+  .style-f .p-step-title { color: #34d399; font-family: 'SF Mono', Consolas, monospace; }
+  .style-f .p-step-desc { color: #2d6a4f; font-family: 'SF Mono', Consolas, monospace; }
+  .style-f .p-prompt-card { background: #0d1117; border: 1px solid #1a3a2a; border-radius: 3px; }
+  .style-f .p-prompt-tag { background: rgba(16,185,129,0.12); color: #10b981; font-family: 'SF Mono', Consolas, monospace; }
+  .style-f .p-prompt-text { color: #34d399; font-family: 'SF Mono', Consolas, monospace; }
+
+  /* =======================================
+     STYLE G: Sunset Warm / Cozy Dark
+     ======================================= */
+  .style-g .badge { background: rgba(251,146,60,0.15); color: #fb923c; }
+  .style-g .panel {
+    background: linear-gradient(180deg, #1c1917 0%, #1a1510 100%);
+    border: 1px solid #362f28;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+  }
+  .style-g .panel-tabs {
+    background: rgba(28,25,23,0.8); border-bottom: 1px solid #362f28;
+  }
+  .style-g .panel-tab { color: #78716c; }
+  .style-g .panel-tab.active { color: #fbbf24; font-weight: 600; }
+  .style-g .tab-indicator { position: absolute; bottom: -1px; height: 2px; width: 20%; background: linear-gradient(90deg, #f59e0b, #ef4444); border-radius: 2px; }
+  .style-g .p-card { background: rgba(41,37,33,0.6); border: 1px solid #44403c; border-radius: 10px; }
+  .style-g .p-divider { background: #44403c; }
+  .style-g .p-label { color: #a8a29e; }
+  .style-g .p-value { color: #e7e5e4; font-family: 'SF Mono', Consolas, monospace; font-size: 11.5px; }
+  .style-g .p-dot.on { background: #fbbf24; box-shadow: 0 0 8px rgba(251,191,36,0.5); }
+  .style-g .p-status-text { color: #fbbf24; font-weight: 500; }
+  .style-g .p-value.mono { color: #fb923c; }
+  .style-g .panel-footer { background: rgba(28,25,23,0.8); border-top: 1px solid #362f28; color: #78716c; }
+  .style-g .p-btn-primary { background: linear-gradient(135deg, #f59e0b, #ef4444); color: #fff; font-weight: 600; border-radius: 8px; }
+  .style-g .p-btn-outline { background: transparent; border: 1px solid #44403c; color: #d6d3d1; border-radius: 8px; }
+  .style-g .p-ide-card { background: rgba(41,37,33,0.6); border: 1px solid #44403c; border-radius: 8px; }
+  .style-g .p-ide-title { color: #fafaf9; }
+  .style-g .p-ide-status { color: #fbbf24; }
+  .style-g .p-ide-btn { background: transparent; border: 1px solid #44403c; color: #d6d3d1; border-radius: 6px; }
+  .style-g .p-section-title { color: #fafaf9; }
+  .style-g .p-section-desc { color: #a8a29e; }
+  .style-g .p-step { background: rgba(41,37,33,0.6); border: 1px solid #44403c; border-radius: 8px; }
+  .style-g .p-step-num { background: linear-gradient(135deg, #f59e0b, #ef4444); color: #fff; }
+  .style-g .p-step-title { color: #fafaf9; }
+  .style-g .p-step-desc { color: #a8a29e; }
+  .style-g .p-prompt-card { background: rgba(41,37,33,0.5); border: 1px solid #44403c; border-radius: 6px; }
+  .style-g .p-prompt-tag { background: rgba(251,146,60,0.12); color: #fb923c; }
+  .style-g .p-prompt-text { color: #e7e5e4; }
+
+  /* =======================================
+     STYLE H: Rose Neon / Gaming Chic
+     ======================================= */
+  .style-h .badge { background: rgba(244,63,94,0.15); color: #f43f5e; }
+  .style-h .panel {
+    background: linear-gradient(165deg, #18061a 0%, #0f0a1a 50%, #0a0612 100%);
+    border: 1px solid rgba(244,63,94,0.15);
+    box-shadow: 0 0 40px rgba(244,63,94,0.06);
+  }
+  .style-h .panel-tabs {
+    background: rgba(24,6,26,0.6); border-bottom: 1px solid rgba(244,63,94,0.15);
+    backdrop-filter: blur(12px);
+  }
+  .style-h .panel-tab { color: #6b3a5a; }
+  .style-h .panel-tab.active { color: #fb7185; font-weight: 600; text-shadow: 0 0 8px rgba(244,63,94,0.3); }
+  .style-h .tab-indicator { position: absolute; bottom: -1px; height: 2px; width: 20%; background: linear-gradient(90deg, #f43f5e, #a855f7); box-shadow: 0 0 10px rgba(244,63,94,0.4); }
+  .style-h .p-card { background: rgba(30,10,35,0.5); border: 1px solid rgba(244,63,94,0.1); border-radius: 10px; }
+  .style-h .p-divider { background: rgba(244,63,94,0.12); }
+  .style-h .p-label { color: #a3537a; }
+  .style-h .p-value { color: #fda4af; font-family: 'SF Mono', Consolas, monospace; font-size: 11.5px; }
+  .style-h .p-dot.on { background: #f43f5e; box-shadow: 0 0 8px rgba(244,63,94,0.6); }
+  .style-h .p-status-text { color: #fb7185; font-weight: 500; text-shadow: 0 0 6px rgba(244,63,94,0.3); }
+  .style-h .p-value.mono { color: #c084fc; }
+  .style-h .panel-footer { background: rgba(24,6,26,0.6); border-top: 1px solid rgba(244,63,94,0.12); color: #6b3a5a; }
+  .style-h .p-btn-primary { background: linear-gradient(135deg, #f43f5e, #a855f7); color: #fff; font-weight: 600; border-radius: 8px; box-shadow: 0 4px 16px rgba(244,63,94,0.3); }
+  .style-h .p-btn-outline { background: rgba(244,63,94,0.06); border: 1px solid rgba(244,63,94,0.2); color: #fda4af; border-radius: 8px; }
+  .style-h .p-ide-card { background: rgba(30,10,35,0.5); border: 1px solid rgba(244,63,94,0.1); border-radius: 8px; }
+  .style-h .p-ide-title { color: #fce7f3; }
+  .style-h .p-ide-status { color: #fb7185; }
+  .style-h .p-ide-btn { background: rgba(244,63,94,0.08); border: 1px solid rgba(244,63,94,0.2); color: #fda4af; border-radius: 6px; }
+  .style-h .p-section-title { color: #fce7f3; }
+  .style-h .p-section-desc { color: #a3537a; }
+  .style-h .p-step { background: rgba(30,10,35,0.5); border: 1px solid rgba(244,63,94,0.1); border-radius: 8px; }
+  .style-h .p-step-num { background: linear-gradient(135deg, #f43f5e, #a855f7); color: #fff; box-shadow: 0 0 10px rgba(244,63,94,0.4); }
+  .style-h .p-step-title { color: #fce7f3; }
+  .style-h .p-step-desc { color: #a3537a; }
+  .style-h .p-prompt-card { background: rgba(30,10,35,0.4); border: 1px solid rgba(244,63,94,0.1); border-radius: 6px; }
+  .style-h .p-prompt-tag { background: rgba(168,85,247,0.12); color: #c084fc; }
+  .style-h .p-prompt-text { color: #fda4af; }
+
+  /* Tab switching */
+  .panel-tab { position: relative; z-index: 1; }
+  .panel-content { display: none; }
+  .panel-content.active { display: block; }
+  .steps-list { display: flex; flex-direction: column; gap: 10px; }
+  .prompts-list { display: flex; flex-direction: column; gap: 8px; }
+  .ide-list { display: flex; flex-direction: column; gap: 10px; margin-top: 8px; }
+</style>
+</head>
+<body>
+
+<div class="page-title">Cocos MCP Bridge — UI Style Preview</div>
+<div class="page-subtitle">以下 8 种 UI 风格方案，点击各面板 Tab 可浏览不同页面。请挑选你喜欢的风格。</div>
+
+<div class="grid">
+
+<!-- ========== STYLE A: Cyberpunk Geek ========== -->
+<div class="style-card style-a">
+  <div class="style-label">
+    A. Cyberpunk Geek
+    <span class="badge">当前风格 (优化版)</span>
+  </div>
+  <div class="style-desc">赛博朋克霓虹风，青蓝主色调，发光边框+毛玻璃质感，适合科技感强的开发工具。</div>
+  <div class="panel" data-panel="a">
+    <div class="panel-tabs">
+      <div class="panel-tab active" data-tab="status">状态</div>
+      <div class="panel-tab" data-tab="connect">互联</div>
+      <div class="panel-tab" data-tab="guide">📖 指南</div>
+      <div class="panel-tab" data-tab="settings">设置</div>
+      <div class="panel-tab" data-tab="control">控制</div>
+      <div class="tab-indicator" style="left:0"></div>
+    </div>
+    <div class="panel-body">
+      <div class="panel-content active" data-content="status">
+        <div class="p-card">
+          <div class="p-row"><span class="p-label">连接状态</span><span class="p-value"><span class="p-dot on"></span><span class="p-status-text">Online</span></span></div>
+          <div class="p-divider"></div>
+          <div class="p-row"><span class="p-label">服务端点</span><span class="p-value mono">http://127.0.0.1:7779/mcp</span></div>
+          <div class="p-row"><span class="p-label">监听端口</span><span class="p-value mono">7779</span></div>
+          <div class="p-divider"></div>
+          <div class="p-row"><span class="p-label">项目名称</span><span class="p-value mono">MyGame</span></div>
+          <div class="p-row"><span class="p-label">Cocos 引擎版本</span><span class="p-value mono">3.8.6</span></div>
+          <div class="p-divider"></div>
+          <div class="p-row"><span class="p-label">已连接 AI 客户端</span><span class="p-value mono">1</span></div>
+          <div class="p-row"><span class="p-label">暴露可用工具数</span><span class="p-value mono">13</span></div>
+          <div class="p-row"><span class="p-label">可调用总 Action 数</span><span class="p-value mono">167</span></div>
+          <div class="p-row"><span class="p-label">连续运行时长</span><span class="p-value mono">01:23:45</span></div>
+        </div>
+      </div>
+      <div class="panel-content" data-content="connect">
+        <div class="p-section-title">IDE 协同配置</div>
+        <div class="p-section-desc">将当前 Cocos 环境桥接至 AI 编程助手。</div>
+        <div class="ide-list">
+          <div class="p-ide-card"><div><div class="p-ide-title">Cursor</div><div class="p-ide-status">配置已就绪</div></div><button class="p-ide-btn">注入配置</button></div>
+          <div class="p-ide-card"><div><div class="p-ide-title">Windsurf</div><div class="p-ide-status">配置已就绪</div></div><button class="p-ide-btn">注入配置</button></div>
+          <div class="p-ide-card"><div><div class="p-ide-title">Claude Desktop</div><div class="p-ide-status">配置已就绪</div></div><button class="p-ide-btn">注入配置</button></div>
+          <div class="p-ide-card"><div><div class="p-ide-title">Trae</div><div class="p-ide-status">未检测到配置</div></div><button class="p-ide-btn">注入配置</button></div>
+        </div>
+      </div>
+      <div class="panel-content" data-content="guide">
+        <div class="p-section-title">快速上手</div>
+        <div class="p-section-desc">3 步完成从安装到 AI 驱动开发。</div>
+        <div class="steps-list">
+          <div class="p-step"><div class="p-step-num">1</div><div><div class="p-step-title">确认服务在线</div><div class="p-step-desc">切到「状态」Tab，确认绿灯亮起。</div></div></div>
+          <div class="p-step"><div class="p-step-num">2</div><div><div class="p-step-title">连接你的 AI IDE</div><div class="p-step-desc">切到「互联」Tab，点击注入配置。</div></div></div>
+          <div class="p-step"><div class="p-step-num">3</div><div><div class="p-step-title">开始对话</div><div class="p-step-desc">在 AI IDE 中用自然语言描述操作。</div></div></div>
+        </div>
+        <div class="p-divider"></div>
+        <div class="p-section-title">💬 AI 提示词示例</div>
+        <div class="prompts-list" style="margin-top:8px">
+          <div class="p-prompt-card"><span class="p-prompt-tag">场景</span><span class="p-prompt-text">查看当前场景的节点树结构</span><span class="p-prompt-copy">📋</span></div>
+          <div class="p-prompt-card"><span class="p-prompt-tag">创建</span><span class="p-prompt-text">在 Canvas 下创建一个按钮</span><span class="p-prompt-copy">📋</span></div>
+          <div class="p-prompt-card"><span class="p-prompt-tag">UI</span><span class="p-prompt-text">创建一个 ScrollView 列表</span><span class="p-prompt-copy">📋</span></div>
+        </div>
+      </div>
+      <div class="panel-content" data-content="settings">
+        <div class="p-section-title">安全与性能</div>
+        <div class="p-section-desc">配置 MCP Bridge 的安全策略。</div>
+        <div class="p-card" style="margin-bottom:12px">
+          <div class="p-row"><span class="p-label">速率限制 (请求/分钟)</span><span class="p-value mono">240</span></div>
+          <div class="p-divider"></div>
+          <div class="p-row"><span class="p-label">本地回环限制</span><span class="p-value mono">ON</span></div>
+          <div class="p-divider"></div>
+          <div class="p-row"><span class="p-label">请求体大小限制</span><span class="p-value mono">1 MB</span></div>
+        </div>
+        <div class="p-btn-grid">
+          <button class="p-btn p-btn-primary">保存设置</button>
+          <button class="p-btn p-btn-outline">恢复默认</button>
+        </div>
+      </div>
+      <div class="panel-content" data-content="control">
+        <div class="p-section-title">服务管理</div>
+        <div class="p-section-desc">管理底层的 MCP 中继服务节点。</div>
+        <div class="p-btn-grid" style="margin-bottom:12px">
+          <button class="p-btn p-btn-outline">▶ 启动服务</button>
+          <button class="p-btn p-btn-outline" style="border-color:rgba(251,113,133,0.3);color:#fb7185">■ 停止服务</button>
+        </div>
+        <button class="p-btn p-btn-primary">↻ 重启服务</button>
+      </div>
+    </div>
+    <div class="panel-footer"><span>v1.0.8</span><span>中 / EN  🔄 同步状态</span></div>
+  </div>
+</div>
+
+<!-- ========== STYLE B: Frosted Glass ========== -->
+<div class="style-card style-b">
+  <div class="style-label">
+    B. Frosted Glass
+    <span class="badge">Apple 风格</span>
+  </div>
+  <div class="style-desc">磨砂玻璃质感，紫色渐变主色调，圆润边角，柔和透明层叠，高级感十足。</div>
+  <div class="panel" data-panel="b">
+    <div class="panel-tabs">
+      <div class="panel-tab active" data-tab="status">状态</div>
+      <div class="panel-tab" data-tab="connect">互联</div>
+      <div class="panel-tab" data-tab="guide">📖 指南</div>
+      <div class="panel-tab" data-tab="settings">设置</div>
+      <div class="panel-tab" data-tab="control">控制</div>
+      <div class="tab-indicator" style="left:0"></div>
+    </div>
+    <div class="panel-body">
+      <div class="panel-content active" data-content="status">
+        <div class="p-card">
+          <div class="p-row"><span class="p-label">连接状态</span><span class="p-value"><span class="p-dot on"></span><span class="p-status-text">Online</span></span></div>
+          <div class="p-divider"></div>
+          <div class="p-row"><span class="p-label">服务端点</span><span class="p-value mono">http://127.0.0.1:7779/mcp</span></div>
+          <div class="p-row"><span class="p-label">监听端口</span><span class="p-value mono">7779</span></div>
+          <div class="p-divider"></div>
+          <div class="p-row"><span class="p-label">项目名称</span><span class="p-value mono">MyGame</span></div>
+          <div class="p-row"><span class="p-label">Cocos 引擎版本</span><span class="p-value mono">3.8.6</span></div>
+          <div class="p-divider"></div>
+          <div class="p-row"><span class="p-label">已连接 AI 客户端</span><span class="p-value mono">1</span></div>
+          <div class="p-row"><span class="p-label">暴露可用工具数</span><span class="p-value mono">13</span></div>
+          <div class="p-row"><span class="p-label">可调用总 Action 数</span><span class="p-value mono">167</span></div>
+          <div class="p-row"><span class="p-label">连续运行时长</span><span class="p-value mono">01:23:45</span></div>
+        </div>
+      </div>
+      <div class="panel-content" data-content="connect">
+        <div class="p-section-title">IDE 协同配置</div>
+        <div class="p-section-desc">将当前 Cocos 环境桥接至 AI 编程助手。</div>
+        <div class="ide-list">
+          <div class="p-ide-card"><div><div class="p-ide-title">Cursor</div><div class="p-ide-status">配置已就绪</div></div><button class="p-ide-btn">注入配置</button></div>
+          <div class="p-ide-card"><div><div class="p-ide-title">Windsurf</div><div class="p-ide-status">配置已就绪</div></div><button class="p-ide-btn">注入配置</button></div>
+          <div class="p-ide-card"><div><div class="p-ide-title">Claude Desktop</div><div class="p-ide-status">配置已就绪</div></div><button class="p-ide-btn">注入配置</button></div>
+          <div class="p-ide-card"><div><div class="p-ide-title">Trae</div><div class="p-ide-status" style="color:rgba(255,255,255,0.35)">未检测到配置</div></div><button class="p-ide-btn">注入配置</button></div>
+        </div>
+      </div>
+      <div class="panel-content" data-content="guide">
+        <div class="p-section-title">快速上手</div>
+        <div class="p-section-desc">3 步完成从安装到 AI 驱动开发。</div>
+        <div class="steps-list">
+          <div class="p-step"><div class="p-step-num">1</div><div><div class="p-step-title">确认服务在线</div><div class="p-step-desc">切到「状态」Tab，确认绿灯亮起。</div></div></div>
+          <div class="p-step"><div class="p-step-num">2</div><div><div class="p-step-title">连接你的 AI IDE</div><div class="p-step-desc">切到「互联」Tab，点击注入配置。</div></div></div>
+          <div class="p-step"><div class="p-step-num">3</div><div><div class="p-step-title">开始对话</div><div class="p-step-desc">在 AI IDE 中用自然语言描述操作。</div></div></div>
+        </div>
+        <div class="p-divider"></div>
+        <div class="p-section-title">💬 AI 提示词示例</div>
+        <div class="prompts-list" style="margin-top:8px">
+          <div class="p-prompt-card"><span class="p-prompt-tag">场景</span><span class="p-prompt-text">查看当前场景的节点树结构</span><span class="p-prompt-copy">📋</span></div>
+          <div class="p-prompt-card"><span class="p-prompt-tag">创建</span><span class="p-prompt-text">在 Canvas 下创建一个按钮</span><span class="p-prompt-copy">📋</span></div>
+          <div class="p-prompt-card"><span class="p-prompt-tag">UI</span><span class="p-prompt-text">创建一个 ScrollView 列表</span><span class="p-prompt-copy">📋</span></div>
+        </div>
+      </div>
+      <div class="panel-content" data-content="settings">
+        <div class="p-section-title">安全与性能</div>
+        <div class="p-section-desc">配置 MCP Bridge 的安全策略。</div>
+        <div class="p-card" style="margin-bottom:12px">
+          <div class="p-row"><span class="p-label">速率限制</span><span class="p-value mono">240</span></div>
+          <div class="p-divider"></div>
+          <div class="p-row"><span class="p-label">本地回环限制</span><span class="p-value mono">ON</span></div>
+          <div class="p-divider"></div>
+          <div class="p-row"><span class="p-label">请求体大小限制</span><span class="p-value mono">1 MB</span></div>
+        </div>
+        <div class="p-btn-grid">
+          <button class="p-btn p-btn-primary">保存设置</button>
+          <button class="p-btn p-btn-outline">恢复默认</button>
+        </div>
+      </div>
+      <div class="panel-content" data-content="control">
+        <div class="p-section-title">服务管理</div>
+        <div class="p-section-desc">管理底层的 MCP 中继服务节点。</div>
+        <div class="p-btn-grid" style="margin-bottom:12px">
+          <button class="p-btn p-btn-outline">▶ 启动服务</button>
+          <button class="p-btn p-btn-outline">■ 停止服务</button>
+        </div>
+        <button class="p-btn p-btn-primary">↻ 重启服务</button>
+      </div>
+    </div>
+    <div class="panel-footer"><span>v1.0.8</span><span>中 / EN  🔄 同步状态</span></div>
+  </div>
+</div>
+
+<!-- ========== STYLE C: Warm Terminal ========== -->
+<div class="style-card style-c">
+  <div class="style-label">
+    C. Warm Terminal
+    <span class="badge">Monokai 风格</span>
+  </div>
+  <div class="style-desc">经典终端/Monokai 配色，橙黄绿色系，等宽字体贯穿，适合硬核开发者。</div>
+  <div class="panel" data-panel="c">
+    <div class="panel-tabs">
+      <div class="panel-tab active" data-tab="status">状态</div>
+      <div class="panel-tab" data-tab="connect">互联</div>
+      <div class="panel-tab" data-tab="guide">📖 指南</div>
+      <div class="panel-tab" data-tab="settings">设置</div>
+      <div class="panel-tab" data-tab="control">控制</div>
+      <div class="tab-indicator" style="left:0"></div>
+    </div>
+    <div class="panel-body">
+      <div class="panel-content active" data-content="status">
+        <div class="p-card">
+          <div class="p-row"><span class="p-label">连接状态</span><span class="p-value"><span class="p-dot on"></span><span class="p-status-text">Online</span></span></div>
+          <div class="p-divider"></div>
+          <div class="p-row"><span class="p-label">服务端点</span><span class="p-value mono">http://127.0.0.1:7779/mcp</span></div>
+          <div class="p-row"><span class="p-label">监听端口</span><span class="p-value mono">7779</span></div>
+          <div class="p-divider"></div>
+          <div class="p-row"><span class="p-label">项目名称</span><span class="p-value mono">MyGame</span></div>
+          <div class="p-row"><span class="p-label">Cocos 引擎版本</span><span class="p-value mono">3.8.6</span></div>
+          <div class="p-divider"></div>
+          <div class="p-row"><span class="p-label">已连接 AI 客户端</span><span class="p-value mono">1</span></div>
+          <div class="p-row"><span class="p-label">暴露可用工具数</span><span class="p-value mono">13</span></div>
+          <div class="p-row"><span class="p-label">可调用总 Action 数</span><span class="p-value mono">167</span></div>
+          <div class="p-row"><span class="p-label">连续运行时长</span><span class="p-value mono">01:23:45</span></div>
+        </div>
+      </div>
+      <div class="panel-content" data-content="connect">
+        <div class="p-section-title">IDE 协同配置</div>
+        <div class="p-section-desc">将当前 Cocos 环境桥接至 AI 编程助手。</div>
+        <div class="ide-list">
+          <div class="p-ide-card"><div><div class="p-ide-title">Cursor</div><div class="p-ide-status">配置已就绪</div></div><button class="p-ide-btn">注入配置</button></div>
+          <div class="p-ide-card"><div><div class="p-ide-title">Windsurf</div><div class="p-ide-status">配置已就绪</div></div><button class="p-ide-btn">注入配置</button></div>
+          <div class="p-ide-card"><div><div class="p-ide-title">Claude Desktop</div><div class="p-ide-status">配置已就绪</div></div><button class="p-ide-btn">注入配置</button></div>
+          <div class="p-ide-card"><div><div class="p-ide-title">Trae</div><div class="p-ide-status" style="color:#f92672">未检测到配置</div></div><button class="p-ide-btn">注入配置</button></div>
+        </div>
+      </div>
+      <div class="panel-content" data-content="guide">
+        <div class="p-section-title">快速上手</div>
+        <div class="p-section-desc">3 步完成从安装到 AI 驱动开发。</div>
+        <div class="steps-list">
+          <div class="p-step"><div class="p-step-num">1</div><div><div class="p-step-title">确认服务在线</div><div class="p-step-desc">切到「状态」Tab，确认绿灯亮起。</div></div></div>
+          <div class="p-step"><div class="p-step-num">2</div><div><div class="p-step-title">连接你的 AI IDE</div><div class="p-step-desc">切到「互联」Tab，点击注入配置。</div></div></div>
+          <div class="p-step"><div class="p-step-num">3</div><div><div class="p-step-title">开始对话</div><div class="p-step-desc">在 AI IDE 中用自然语言描述操作。</div></div></div>
+        </div>
+        <div class="p-divider"></div>
+        <div class="p-section-title">💬 AI 提示词示例</div>
+        <div class="prompts-list" style="margin-top:8px">
+          <div class="p-prompt-card"><span class="p-prompt-tag">场景</span><span class="p-prompt-text">查看当前场景的节点树结构</span><span class="p-prompt-copy">📋</span></div>
+          <div class="p-prompt-card"><span class="p-prompt-tag">创建</span><span class="p-prompt-text">在 Canvas 下创建一个按钮</span><span class="p-prompt-copy">📋</span></div>
+          <div class="p-prompt-card"><span class="p-prompt-tag">UI</span><span class="p-prompt-text">创建一个 ScrollView 列表</span><span class="p-prompt-copy">📋</span></div>
+        </div>
+      </div>
+      <div class="panel-content" data-content="settings">
+        <div class="p-section-title">安全与性能</div>
+        <div class="p-section-desc">配置 MCP Bridge 的安全策略。</div>
+        <div class="p-card" style="margin-bottom:12px">
+          <div class="p-row"><span class="p-label">速率限制</span><span class="p-value mono">240</span></div>
+          <div class="p-divider"></div>
+          <div class="p-row"><span class="p-label">本地回环限制</span><span class="p-value mono">ON</span></div>
+          <div class="p-divider"></div>
+          <div class="p-row"><span class="p-label">请求体大小限制</span><span class="p-value mono">1 MB</span></div>
+        </div>
+        <div class="p-btn-grid">
+          <button class="p-btn p-btn-primary">保存设置</button>
+          <button class="p-btn p-btn-outline">恢复默认</button>
+        </div>
+      </div>
+      <div class="panel-content" data-content="control">
+        <div class="p-section-title">服务管理</div>
+        <div class="p-section-desc">管理底层的 MCP 中继服务节点。</div>
+        <div class="p-btn-grid" style="margin-bottom:12px">
+          <button class="p-btn p-btn-outline">▶ 启动服务</button>
+          <button class="p-btn p-btn-outline" style="border-color:rgba(249,39,114,0.3);color:#f92672">■ 停止服务</button>
+        </div>
+        <button class="p-btn p-btn-primary">↻ 重启服务</button>
+      </div>
+    </div>
+    <div class="panel-footer"><span>v1.0.8</span><span>中 / EN  🔄 同步状态</span></div>
+  </div>
+</div>
+
+<!-- ========== STYLE D: Gradient Aurora ========== -->
+<div class="style-card style-d">
+  <div class="style-label">
+    D. Gradient Aurora
+    <span class="badge">现代 SaaS 风格</span>
+  </div>
+  <div class="style-desc">极光渐变背景，靛蓝+青色双色渐变，按钮发光效果，兼具专业与现代感。</div>
+  <div class="panel" data-panel="d">
+    <div class="panel-tabs">
+      <div class="panel-tab active" data-tab="status">状态</div>
+      <div class="panel-tab" data-tab="connect">互联</div>
+      <div class="panel-tab" data-tab="guide">📖 指南</div>
+      <div class="panel-tab" data-tab="settings">设置</div>
+      <div class="panel-tab" data-tab="control">控制</div>
+      <div class="tab-indicator" style="left:0"></div>
+    </div>
+    <div class="panel-body">
+      <div class="panel-content active" data-content="status">
+        <div class="p-card">
+          <div class="p-row"><span class="p-label">连接状态</span><span class="p-value"><span class="p-dot on"></span><span class="p-status-text">Online</span></span></div>
+          <div class="p-divider"></div>
+          <div class="p-row"><span class="p-label">服务端点</span><span class="p-value mono">http://127.0.0.1:7779/mcp</span></div>
+          <div class="p-row"><span class="p-label">监听端口</span><span class="p-value mono">7779</span></div>
+          <div class="p-divider"></div>
+          <div class="p-row"><span class="p-label">项目名称</span><span class="p-value mono">MyGame</span></div>
+          <div class="p-row"><span class="p-label">Cocos 引擎版本</span><span class="p-value mono">3.8.6</span></div>
+          <div class="p-divider"></div>
+          <div class="p-row"><span class="p-label">已连接 AI 客户端</span><span class="p-value mono">1</span></div>
+          <div class="p-row"><span class="p-label">暴露可用工具数</span><span class="p-value mono">13</span></div>
+          <div class="p-row"><span class="p-label">可调用总 Action 数</span><span class="p-value mono">167</span></div>
+          <div class="p-row"><span class="p-label">连续运行时长</span><span class="p-value mono">01:23:45</span></div>
+        </div>
+      </div>
+      <div class="panel-content" data-content="connect">
+        <div class="p-section-title">IDE 协同配置</div>
+        <div class="p-section-desc">将当前 Cocos 环境桥接至 AI 编程助手。</div>
+        <div class="ide-list">
+          <div class="p-ide-card"><div><div class="p-ide-title">Cursor</div><div class="p-ide-status">配置已就绪</div></div><button class="p-ide-btn">注入配置</button></div>
+          <div class="p-ide-card"><div><div class="p-ide-title">Windsurf</div><div class="p-ide-status">配置已就绪</div></div><button class="p-ide-btn">注入配置</button></div>
+          <div class="p-ide-card"><div><div class="p-ide-title">Claude Desktop</div><div class="p-ide-status">配置已就绪</div></div><button class="p-ide-btn">注入配置</button></div>
+          <div class="p-ide-card"><div><div class="p-ide-title">Trae</div><div class="p-ide-status" style="color:#64748b">未检测到配置</div></div><button class="p-ide-btn">注入配置</button></div>
+        </div>
+      </div>
+      <div class="panel-content" data-content="guide">
+        <div class="p-section-title">快速上手</div>
+        <div class="p-section-desc">3 步完成从安装到 AI 驱动开发。</div>
+        <div class="steps-list">
+          <div class="p-step"><div class="p-step-num">1</div><div><div class="p-step-title">确认服务在线</div><div class="p-step-desc">切到「状态」Tab，确认绿灯亮起。</div></div></div>
+          <div class="p-step"><div class="p-step-num">2</div><div><div class="p-step-title">连接你的 AI IDE</div><div class="p-step-desc">切到「互联」Tab，点击注入配置。</div></div></div>
+          <div class="p-step"><div class="p-step-num">3</div><div><div class="p-step-title">开始对话</div><div class="p-step-desc">在 AI IDE 中用自然语言描述操作。</div></div></div>
+        </div>
+        <div class="p-divider"></div>
+        <div class="p-section-title">💬 AI 提示词示例</div>
+        <div class="prompts-list" style="margin-top:8px">
+          <div class="p-prompt-card"><span class="p-prompt-tag">场景</span><span class="p-prompt-text">查看当前场景的节点树结构</span><span class="p-prompt-copy">📋</span></div>
+          <div class="p-prompt-card"><span class="p-prompt-tag">创建</span><span class="p-prompt-text">在 Canvas 下创建一个按钮</span><span class="p-prompt-copy">📋</span></div>
+          <div class="p-prompt-card"><span class="p-prompt-tag">UI</span><span class="p-prompt-text">创建一个 ScrollView 列表</span><span class="p-prompt-copy">📋</span></div>
+        </div>
+      </div>
+      <div class="panel-content" data-content="settings">
+        <div class="p-section-title">安全与性能</div>
+        <div class="p-section-desc">配置 MCP Bridge 的安全策略。</div>
+        <div class="p-card" style="margin-bottom:12px">
+          <div class="p-row"><span class="p-label">速率限制</span><span class="p-value mono">240</span></div>
+          <div class="p-divider"></div>
+          <div class="p-row"><span class="p-label">本地回环限制</span><span class="p-value mono">ON</span></div>
+          <div class="p-divider"></div>
+          <div class="p-row"><span class="p-label">请求体大小限制</span><span class="p-value mono">1 MB</span></div>
+        </div>
+        <div class="p-btn-grid">
+          <button class="p-btn p-btn-primary">保存设置</button>
+          <button class="p-btn p-btn-outline">恢复默认</button>
+        </div>
+      </div>
+      <div class="panel-content" data-content="control">
+        <div class="p-section-title">服务管理</div>
+        <div class="p-section-desc">管理底层的 MCP 中继服务节点。</div>
+        <div class="p-btn-grid" style="margin-bottom:12px">
+          <button class="p-btn p-btn-outline">▶ 启动服务</button>
+          <button class="p-btn p-btn-outline">■ 停止服务</button>
+        </div>
+        <button class="p-btn p-btn-primary">↻ 重启服务</button>
+      </div>
+    </div>
+    <div class="panel-footer"><span>v1.0.8</span><span>中 / EN  🔄 同步状态</span></div>
+  </div>
+</div>
+
+</div>
+
+<!-- ========== STYLE E: Linear Minimal ========== -->
+<div class="style-card style-e">
+  <div class="style-label">
+    E. Linear Minimal
+    <span class="badge">Linear / Notion 风格</span>
+  </div>
+  <div class="style-desc">极简纯净暗色，靛蓝点缀，干净利落的边界和间距，专注内容本身，适合追求简约的用户。</div>
+  <div class="panel" data-panel="e">
+    <div class="panel-tabs">
+      <div class="panel-tab active" data-tab="status">状态</div>
+      <div class="panel-tab" data-tab="connect">互联</div>
+      <div class="panel-tab" data-tab="guide">📖 指南</div>
+      <div class="panel-tab" data-tab="settings">设置</div>
+      <div class="panel-tab" data-tab="control">控制</div>
+      <div class="tab-indicator" style="left:0"></div>
+    </div>
+    <div class="panel-body">
+      <div class="panel-content active" data-content="status">
+        <div class="p-card">
+          <div class="p-row"><span class="p-label">连接状态</span><span class="p-value"><span class="p-dot on"></span><span class="p-status-text">Online</span></span></div>
+          <div class="p-divider"></div>
+          <div class="p-row"><span class="p-label">服务端点</span><span class="p-value mono">http://127.0.0.1:7779/mcp</span></div>
+          <div class="p-row"><span class="p-label">监听端口</span><span class="p-value mono">7779</span></div>
+          <div class="p-divider"></div>
+          <div class="p-row"><span class="p-label">项目名称</span><span class="p-value mono">MyGame</span></div>
+          <div class="p-row"><span class="p-label">Cocos 引擎版本</span><span class="p-value mono">3.8.6</span></div>
+          <div class="p-divider"></div>
+          <div class="p-row"><span class="p-label">已连接 AI 客户端</span><span class="p-value mono">1</span></div>
+          <div class="p-row"><span class="p-label">暴露可用工具数</span><span class="p-value mono">13</span></div>
+          <div class="p-row"><span class="p-label">可调用总 Action 数</span><span class="p-value mono">167</span></div>
+          <div class="p-row"><span class="p-label">连续运行时长</span><span class="p-value mono">01:23:45</span></div>
+        </div>
+      </div>
+      <div class="panel-content" data-content="connect">
+        <div class="p-section-title">IDE 协同配置</div>
+        <div class="p-section-desc">将当前 Cocos 环境桥接至 AI 编程助手。</div>
+        <div class="ide-list">
+          <div class="p-ide-card"><div><div class="p-ide-title">Cursor</div><div class="p-ide-status">配置已就绪</div></div><button class="p-ide-btn">注入配置</button></div>
+          <div class="p-ide-card"><div><div class="p-ide-title">Windsurf</div><div class="p-ide-status">配置已就绪</div></div><button class="p-ide-btn">注入配置</button></div>
+          <div class="p-ide-card"><div><div class="p-ide-title">Claude Desktop</div><div class="p-ide-status">配置已就绪</div></div><button class="p-ide-btn">注入配置</button></div>
+          <div class="p-ide-card"><div><div class="p-ide-title">Trae</div><div class="p-ide-status" style="color:#52525b">未检测到配置</div></div><button class="p-ide-btn">注入配置</button></div>
+        </div>
+      </div>
+      <div class="panel-content" data-content="guide">
+        <div class="p-section-title">快速上手</div>
+        <div class="p-section-desc">3 步完成从安装到 AI 驱动开发。</div>
+        <div class="steps-list">
+          <div class="p-step"><div class="p-step-num">1</div><div><div class="p-step-title">确认服务在线</div><div class="p-step-desc">切到「状态」Tab，确认绿灯亮起。</div></div></div>
+          <div class="p-step"><div class="p-step-num">2</div><div><div class="p-step-title">连接你的 AI IDE</div><div class="p-step-desc">切到「互联」Tab，点击注入配置。</div></div></div>
+          <div class="p-step"><div class="p-step-num">3</div><div><div class="p-step-title">开始对话</div><div class="p-step-desc">在 AI IDE 中用自然语言描述操作。</div></div></div>
+        </div>
+        <div class="p-divider"></div>
+        <div class="p-section-title">💬 AI 提示词示例</div>
+        <div class="prompts-list" style="margin-top:8px">
+          <div class="p-prompt-card"><span class="p-prompt-tag">场景</span><span class="p-prompt-text">查看当前场景的节点树结构</span><span class="p-prompt-copy">📋</span></div>
+          <div class="p-prompt-card"><span class="p-prompt-tag">创建</span><span class="p-prompt-text">在 Canvas 下创建一个按钮</span><span class="p-prompt-copy">📋</span></div>
+          <div class="p-prompt-card"><span class="p-prompt-tag">UI</span><span class="p-prompt-text">创建一个 ScrollView 列表</span><span class="p-prompt-copy">📋</span></div>
+        </div>
+      </div>
+      <div class="panel-content" data-content="settings">
+        <div class="p-section-title">安全与性能</div>
+        <div class="p-section-desc">配置 MCP Bridge 的安全策略。</div>
+        <div class="p-card" style="margin-bottom:12px">
+          <div class="p-row"><span class="p-label">速率限制</span><span class="p-value mono">240</span></div>
+          <div class="p-divider"></div>
+          <div class="p-row"><span class="p-label">本地回环限制</span><span class="p-value mono">ON</span></div>
+          <div class="p-divider"></div>
+          <div class="p-row"><span class="p-label">请求体大小限制</span><span class="p-value mono">1 MB</span></div>
+        </div>
+        <div class="p-btn-grid">
+          <button class="p-btn p-btn-primary">保存设置</button>
+          <button class="p-btn p-btn-outline">恢复默认</button>
+        </div>
+      </div>
+      <div class="panel-content" data-content="control">
+        <div class="p-section-title">服务管理</div>
+        <div class="p-section-desc">管理底层的 MCP 中继服务节点。</div>
+        <div class="p-btn-grid" style="margin-bottom:12px">
+          <button class="p-btn p-btn-outline">▶ 启动服务</button>
+          <button class="p-btn p-btn-outline">■ 停止服务</button>
+        </div>
+        <button class="p-btn p-btn-primary">↻ 重启服务</button>
+      </div>
+    </div>
+    <div class="panel-footer"><span>v1.0.8</span><span>中 / EN  🔄 同步状态</span></div>
+  </div>
+</div>
+
+<!-- ========== STYLE F: Emerald Matrix ========== -->
+<div class="style-card style-f">
+  <div class="style-label">
+    F. Emerald Matrix
+    <span class="badge">黑客风格</span>
+  </div>
+  <div class="style-desc">纯黑底色 + 翡翠绿终端配色，全等宽字体，满满的 Matrix 黑客电影感。</div>
+  <div class="panel" data-panel="f">
+    <div class="panel-tabs">
+      <div class="panel-tab active" data-tab="status">状态</div>
+      <div class="panel-tab" data-tab="connect">互联</div>
+      <div class="panel-tab" data-tab="guide">📖 指南</div>
+      <div class="panel-tab" data-tab="settings">设置</div>
+      <div class="panel-tab" data-tab="control">控制</div>
+      <div class="tab-indicator" style="left:0"></div>
+    </div>
+    <div class="panel-body">
+      <div class="panel-content active" data-content="status">
+        <div class="p-card">
+          <div class="p-row"><span class="p-label">连接状态</span><span class="p-value"><span class="p-dot on"></span><span class="p-status-text">Online</span></span></div>
+          <div class="p-divider"></div>
+          <div class="p-row"><span class="p-label">服务端点</span><span class="p-value mono">http://127.0.0.1:7779/mcp</span></div>
+          <div class="p-row"><span class="p-label">监听端口</span><span class="p-value mono">7779</span></div>
+          <div class="p-divider"></div>
+          <div class="p-row"><span class="p-label">项目名称</span><span class="p-value mono">MyGame</span></div>
+          <div class="p-row"><span class="p-label">Cocos 引擎版本</span><span class="p-value mono">3.8.6</span></div>
+          <div class="p-divider"></div>
+          <div class="p-row"><span class="p-label">已连接 AI 客户端</span><span class="p-value mono">1</span></div>
+          <div class="p-row"><span class="p-label">暴露可用工具数</span><span class="p-value mono">13</span></div>
+          <div class="p-row"><span class="p-label">可调用总 Action 数</span><span class="p-value mono">167</span></div>
+          <div class="p-row"><span class="p-label">连续运行时长</span><span class="p-value mono">01:23:45</span></div>
+        </div>
+      </div>
+      <div class="panel-content" data-content="connect">
+        <div class="p-section-title">IDE 协同配置</div>
+        <div class="p-section-desc">将当前 Cocos 环境桥接至 AI 编程助手。</div>
+        <div class="ide-list">
+          <div class="p-ide-card"><div><div class="p-ide-title">Cursor</div><div class="p-ide-status">配置已就绪</div></div><button class="p-ide-btn">注入配置</button></div>
+          <div class="p-ide-card"><div><div class="p-ide-title">Windsurf</div><div class="p-ide-status">配置已就绪</div></div><button class="p-ide-btn">注入配置</button></div>
+          <div class="p-ide-card"><div><div class="p-ide-title">Claude Desktop</div><div class="p-ide-status">配置已就绪</div></div><button class="p-ide-btn">注入配置</button></div>
+          <div class="p-ide-card"><div><div class="p-ide-title">Trae</div><div class="p-ide-status" style="color:#7a3a3a">未检测到配置</div></div><button class="p-ide-btn">注入配置</button></div>
+        </div>
+      </div>
+      <div class="panel-content" data-content="guide">
+        <div class="p-section-title">快速上手</div>
+        <div class="p-section-desc">3 步完成从安装到 AI 驱动开发。</div>
+        <div class="steps-list">
+          <div class="p-step"><div class="p-step-num">1</div><div><div class="p-step-title">确认服务在线</div><div class="p-step-desc">切到「状态」Tab，确认绿灯亮起。</div></div></div>
+          <div class="p-step"><div class="p-step-num">2</div><div><div class="p-step-title">连接你的 AI IDE</div><div class="p-step-desc">切到「互联」Tab，点击注入配置。</div></div></div>
+          <div class="p-step"><div class="p-step-num">3</div><div><div class="p-step-title">开始对话</div><div class="p-step-desc">在 AI IDE 中用自然语言描述操作。</div></div></div>
+        </div>
+        <div class="p-divider"></div>
+        <div class="p-section-title">💬 AI 提示词示例</div>
+        <div class="prompts-list" style="margin-top:8px">
+          <div class="p-prompt-card"><span class="p-prompt-tag">场景</span><span class="p-prompt-text">查看当前场景的节点树结构</span><span class="p-prompt-copy">📋</span></div>
+          <div class="p-prompt-card"><span class="p-prompt-tag">创建</span><span class="p-prompt-text">在 Canvas 下创建一个按钮</span><span class="p-prompt-copy">📋</span></div>
+          <div class="p-prompt-card"><span class="p-prompt-tag">UI</span><span class="p-prompt-text">创建一个 ScrollView 列表</span><span class="p-prompt-copy">📋</span></div>
+        </div>
+      </div>
+      <div class="panel-content" data-content="settings">
+        <div class="p-section-title">安全与性能</div>
+        <div class="p-section-desc">配置 MCP Bridge 的安全策略。</div>
+        <div class="p-card" style="margin-bottom:12px">
+          <div class="p-row"><span class="p-label">速率限制</span><span class="p-value mono">240</span></div>
+          <div class="p-divider"></div>
+          <div class="p-row"><span class="p-label">本地回环限制</span><span class="p-value mono">ON</span></div>
+          <div class="p-divider"></div>
+          <div class="p-row"><span class="p-label">请求体大小限制</span><span class="p-value mono">1 MB</span></div>
+        </div>
+        <div class="p-btn-grid">
+          <button class="p-btn p-btn-primary">保存设置</button>
+          <button class="p-btn p-btn-outline">恢复默认</button>
+        </div>
+      </div>
+      <div class="panel-content" data-content="control">
+        <div class="p-section-title">服务管理</div>
+        <div class="p-section-desc">管理底层的 MCP 中继服务节点。</div>
+        <div class="p-btn-grid" style="margin-bottom:12px">
+          <button class="p-btn p-btn-outline">▶ 启动服务</button>
+          <button class="p-btn p-btn-outline">■ 停止服务</button>
+        </div>
+        <button class="p-btn p-btn-primary">↻ 重启服务</button>
+      </div>
+    </div>
+    <div class="panel-footer"><span>v1.0.8</span><span>中 / EN  🔄 同步状态</span></div>
+  </div>
+</div>
+
+<!-- ========== STYLE G: Sunset Warm ========== -->
+<div class="style-card style-g">
+  <div class="style-label">
+    G. Sunset Warm
+    <span class="badge">暖色调</span>
+  </div>
+  <div class="style-desc">暖黄橙红渐变配色，温暖的深棕底色，石质纹理感，适合喜欢柔和视觉的用户。</div>
+  <div class="panel" data-panel="g">
+    <div class="panel-tabs">
+      <div class="panel-tab active" data-tab="status">状态</div>
+      <div class="panel-tab" data-tab="connect">互联</div>
+      <div class="panel-tab" data-tab="guide">📖 指南</div>
+      <div class="panel-tab" data-tab="settings">设置</div>
+      <div class="panel-tab" data-tab="control">控制</div>
+      <div class="tab-indicator" style="left:0"></div>
+    </div>
+    <div class="panel-body">
+      <div class="panel-content active" data-content="status">
+        <div class="p-card">
+          <div class="p-row"><span class="p-label">连接状态</span><span class="p-value"><span class="p-dot on"></span><span class="p-status-text">Online</span></span></div>
+          <div class="p-divider"></div>
+          <div class="p-row"><span class="p-label">服务端点</span><span class="p-value mono">http://127.0.0.1:7779/mcp</span></div>
+          <div class="p-row"><span class="p-label">监听端口</span><span class="p-value mono">7779</span></div>
+          <div class="p-divider"></div>
+          <div class="p-row"><span class="p-label">项目名称</span><span class="p-value mono">MyGame</span></div>
+          <div class="p-row"><span class="p-label">Cocos 引擎版本</span><span class="p-value mono">3.8.6</span></div>
+          <div class="p-divider"></div>
+          <div class="p-row"><span class="p-label">已连接 AI 客户端</span><span class="p-value mono">1</span></div>
+          <div class="p-row"><span class="p-label">暴露可用工具数</span><span class="p-value mono">13</span></div>
+          <div class="p-row"><span class="p-label">可调用总 Action 数</span><span class="p-value mono">167</span></div>
+          <div class="p-row"><span class="p-label">连续运行时长</span><span class="p-value mono">01:23:45</span></div>
+        </div>
+      </div>
+      <div class="panel-content" data-content="connect">
+        <div class="p-section-title">IDE 协同配置</div>
+        <div class="p-section-desc">将当前 Cocos 环境桥接至 AI 编程助手。</div>
+        <div class="ide-list">
+          <div class="p-ide-card"><div><div class="p-ide-title">Cursor</div><div class="p-ide-status">配置已就绪</div></div><button class="p-ide-btn">注入配置</button></div>
+          <div class="p-ide-card"><div><div class="p-ide-title">Windsurf</div><div class="p-ide-status">配置已就绪</div></div><button class="p-ide-btn">注入配置</button></div>
+          <div class="p-ide-card"><div><div class="p-ide-title">Claude Desktop</div><div class="p-ide-status">配置已就绪</div></div><button class="p-ide-btn">注入配置</button></div>
+          <div class="p-ide-card"><div><div class="p-ide-title">Trae</div><div class="p-ide-status" style="color:#78716c">未检测到配置</div></div><button class="p-ide-btn">注入配置</button></div>
+        </div>
+      </div>
+      <div class="panel-content" data-content="guide">
+        <div class="p-section-title">快速上手</div>
+        <div class="p-section-desc">3 步完成从安装到 AI 驱动开发。</div>
+        <div class="steps-list">
+          <div class="p-step"><div class="p-step-num">1</div><div><div class="p-step-title">确认服务在线</div><div class="p-step-desc">切到「状态」Tab，确认绿灯亮起。</div></div></div>
+          <div class="p-step"><div class="p-step-num">2</div><div><div class="p-step-title">连接你的 AI IDE</div><div class="p-step-desc">切到「互联」Tab，点击注入配置。</div></div></div>
+          <div class="p-step"><div class="p-step-num">3</div><div><div class="p-step-title">开始对话</div><div class="p-step-desc">在 AI IDE 中用自然语言描述操作。</div></div></div>
+        </div>
+        <div class="p-divider"></div>
+        <div class="p-section-title">💬 AI 提示词示例</div>
+        <div class="prompts-list" style="margin-top:8px">
+          <div class="p-prompt-card"><span class="p-prompt-tag">场景</span><span class="p-prompt-text">查看当前场景的节点树结构</span><span class="p-prompt-copy">📋</span></div>
+          <div class="p-prompt-card"><span class="p-prompt-tag">创建</span><span class="p-prompt-text">在 Canvas 下创建一个按钮</span><span class="p-prompt-copy">📋</span></div>
+          <div class="p-prompt-card"><span class="p-prompt-tag">UI</span><span class="p-prompt-text">创建一个 ScrollView 列表</span><span class="p-prompt-copy">📋</span></div>
+        </div>
+      </div>
+      <div class="panel-content" data-content="settings">
+        <div class="p-section-title">安全与性能</div>
+        <div class="p-section-desc">配置 MCP Bridge 的安全策略。</div>
+        <div class="p-card" style="margin-bottom:12px">
+          <div class="p-row"><span class="p-label">速率限制</span><span class="p-value mono">240</span></div>
+          <div class="p-divider"></div>
+          <div class="p-row"><span class="p-label">本地回环限制</span><span class="p-value mono">ON</span></div>
+          <div class="p-divider"></div>
+          <div class="p-row"><span class="p-label">请求体大小限制</span><span class="p-value mono">1 MB</span></div>
+        </div>
+        <div class="p-btn-grid">
+          <button class="p-btn p-btn-primary">保存设置</button>
+          <button class="p-btn p-btn-outline">恢复默认</button>
+        </div>
+      </div>
+      <div class="panel-content" data-content="control">
+        <div class="p-section-title">服务管理</div>
+        <div class="p-section-desc">管理底层的 MCP 中继服务节点。</div>
+        <div class="p-btn-grid" style="margin-bottom:12px">
+          <button class="p-btn p-btn-outline">▶ 启动服务</button>
+          <button class="p-btn p-btn-outline">■ 停止服务</button>
+        </div>
+        <button class="p-btn p-btn-primary">↻ 重启服务</button>
+      </div>
+    </div>
+    <div class="panel-footer"><span>v1.0.8</span><span>中 / EN  🔄 同步状态</span></div>
+  </div>
+</div>
+
+<!-- ========== STYLE H: Rose Neon ========== -->
+<div class="style-card style-h">
+  <div class="style-label">
+    H. Rose Neon
+    <span class="badge">玫红霓虹</span>
+  </div>
+  <div class="style-desc">玫红+紫色双色霓虹，深邃暗底，发光渐变按钮，前卫且张扬的游戏风视觉。</div>
+  <div class="panel" data-panel="h">
+    <div class="panel-tabs">
+      <div class="panel-tab active" data-tab="status">状态</div>
+      <div class="panel-tab" data-tab="connect">互联</div>
+      <div class="panel-tab" data-tab="guide">📖 指南</div>
+      <div class="panel-tab" data-tab="settings">设置</div>
+      <div class="panel-tab" data-tab="control">控制</div>
+      <div class="tab-indicator" style="left:0"></div>
+    </div>
+    <div class="panel-body">
+      <div class="panel-content active" data-content="status">
+        <div class="p-card">
+          <div class="p-row"><span class="p-label">连接状态</span><span class="p-value"><span class="p-dot on"></span><span class="p-status-text">Online</span></span></div>
+          <div class="p-divider"></div>
+          <div class="p-row"><span class="p-label">服务端点</span><span class="p-value mono">http://127.0.0.1:7779/mcp</span></div>
+          <div class="p-row"><span class="p-label">监听端口</span><span class="p-value mono">7779</span></div>
+          <div class="p-divider"></div>
+          <div class="p-row"><span class="p-label">项目名称</span><span class="p-value mono">MyGame</span></div>
+          <div class="p-row"><span class="p-label">Cocos 引擎版本</span><span class="p-value mono">3.8.6</span></div>
+          <div class="p-divider"></div>
+          <div class="p-row"><span class="p-label">已连接 AI 客户端</span><span class="p-value mono">1</span></div>
+          <div class="p-row"><span class="p-label">暴露可用工具数</span><span class="p-value mono">13</span></div>
+          <div class="p-row"><span class="p-label">可调用总 Action 数</span><span class="p-value mono">167</span></div>
+          <div class="p-row"><span class="p-label">连续运行时长</span><span class="p-value mono">01:23:45</span></div>
+        </div>
+      </div>
+      <div class="panel-content" data-content="connect">
+        <div class="p-section-title">IDE 协同配置</div>
+        <div class="p-section-desc">将当前 Cocos 环境桥接至 AI 编程助手。</div>
+        <div class="ide-list">
+          <div class="p-ide-card"><div><div class="p-ide-title">Cursor</div><div class="p-ide-status">配置已就绪</div></div><button class="p-ide-btn">注入配置</button></div>
+          <div class="p-ide-card"><div><div class="p-ide-title">Windsurf</div><div class="p-ide-status">配置已就绪</div></div><button class="p-ide-btn">注入配置</button></div>
+          <div class="p-ide-card"><div><div class="p-ide-title">Claude Desktop</div><div class="p-ide-status">配置已就绪</div></div><button class="p-ide-btn">注入配置</button></div>
+          <div class="p-ide-card"><div><div class="p-ide-title">Trae</div><div class="p-ide-status" style="color:#6b3a5a">未检测到配置</div></div><button class="p-ide-btn">注入配置</button></div>
+        </div>
+      </div>
+      <div class="panel-content" data-content="guide">
+        <div class="p-section-title">快速上手</div>
+        <div class="p-section-desc">3 步完成从安装到 AI 驱动开发。</div>
+        <div class="steps-list">
+          <div class="p-step"><div class="p-step-num">1</div><div><div class="p-step-title">确认服务在线</div><div class="p-step-desc">切到「状态」Tab，确认绿灯亮起。</div></div></div>
+          <div class="p-step"><div class="p-step-num">2</div><div><div class="p-step-title">连接你的 AI IDE</div><div class="p-step-desc">切到「互联」Tab，点击注入配置。</div></div></div>
+          <div class="p-step"><div class="p-step-num">3</div><div><div class="p-step-title">开始对话</div><div class="p-step-desc">在 AI IDE 中用自然语言描述操作。</div></div></div>
+        </div>
+        <div class="p-divider"></div>
+        <div class="p-section-title">💬 AI 提示词示例</div>
+        <div class="prompts-list" style="margin-top:8px">
+          <div class="p-prompt-card"><span class="p-prompt-tag">场景</span><span class="p-prompt-text">查看当前场景的节点树结构</span><span class="p-prompt-copy">📋</span></div>
+          <div class="p-prompt-card"><span class="p-prompt-tag">创建</span><span class="p-prompt-text">在 Canvas 下创建一个按钮</span><span class="p-prompt-copy">📋</span></div>
+          <div class="p-prompt-card"><span class="p-prompt-tag">UI</span><span class="p-prompt-text">创建一个 ScrollView 列表</span><span class="p-prompt-copy">📋</span></div>
+        </div>
+      </div>
+      <div class="panel-content" data-content="settings">
+        <div class="p-section-title">安全与性能</div>
+        <div class="p-section-desc">配置 MCP Bridge 的安全策略。</div>
+        <div class="p-card" style="margin-bottom:12px">
+          <div class="p-row"><span class="p-label">速率限制</span><span class="p-value mono">240</span></div>
+          <div class="p-divider"></div>
+          <div class="p-row"><span class="p-label">本地回环限制</span><span class="p-value mono">ON</span></div>
+          <div class="p-divider"></div>
+          <div class="p-row"><span class="p-label">请求体大小限制</span><span class="p-value mono">1 MB</span></div>
+        </div>
+        <div class="p-btn-grid">
+          <button class="p-btn p-btn-primary">保存设置</button>
+          <button class="p-btn p-btn-outline">恢复默认</button>
+        </div>
+      </div>
+      <div class="panel-content" data-content="control">
+        <div class="p-section-title">服务管理</div>
+        <div class="p-section-desc">管理底层的 MCP 中继服务节点。</div>
+        <div class="p-btn-grid" style="margin-bottom:12px">
+          <button class="p-btn p-btn-outline">▶ 启动服务</button>
+          <button class="p-btn p-btn-outline">■ 停止服务</button>
+        </div>
+        <button class="p-btn p-btn-primary">↻ 重启服务</button>
+      </div>
+    </div>
+    <div class="panel-footer"><span>v1.0.8</span><span>中 / EN  🔄 同步状态</span></div>
+  </div>
+</div>
+
+</div>
+
+<script>
+// Tab switching for all panels
+document.querySelectorAll('.panel').forEach(panel => {
+  const tabs = panel.querySelectorAll('.panel-tab');
+  const contents = panel.querySelectorAll('.panel-content');
+  const indicator = panel.querySelector('.tab-indicator');
+  tabs.forEach((tab, i) => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      contents.forEach(c => c.classList.remove('active'));
+      tab.classList.add('active');
+      indicator.style.left = (i * 20) + '%';
+      const target = tab.getAttribute('data-tab');
+      panel.querySelector(`.panel-content[data-content="${target}"]`)?.classList.add('active');
+    });
+  });
+});
+</script>
+</body>
+</html>

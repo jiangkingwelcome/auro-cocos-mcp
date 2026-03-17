@@ -1,0 +1,254 @@
+---
+description: Hybrid JS + Rust architecture rules for Community / Pro editions
+globs: src/**/*.ts, native/**/*.rs, native/**/*.js, scripts/**
+alwaysApply: true
+---
+
+# 混合架构规则 — JS 社区版 (冻结) + Rust Pro 版 (持续迭代)
+
+## 1. 核心原则
+
+**社区版 (JS)** 和 **Pro 版 (Rust)** 是两套互斥的工具实现，不会同时运行。
+
+```
+Pro 版用户:   .node 存在 + License 有效
+              → Rust 提供全部工具 (270+ actions + AI 智能工具)
+              → JS 社区版工具不注册
+
+社区版用户:   .node 不存在 或 License 无效
+              → JS 提供社区版工具 (~158 actions)
+              → Rust 不参与
+```
+
+## 2. 版本职责
+
+### 社区版 (JS, 开源, 冻结)
+
+- **代码位置**: `src/mcp/tools-scene.ts`, `tools-asset.ts`, `tools-editor.ts`, `tools-misc.ts`, `tools-atomic*.ts`, `tools-script.ts`, `tools-animation.ts`, `tools-physics.ts`
+- **许可证**: BSL 1.1 (GitHub 公开)
+- **维护策略**: 冻结，只修 bug，不加新功能
+- **功能范围**: ~158 actions，覆盖 80% 日常工作流
+
+### Pro 版 (Rust, 闭源, 持续迭代)
+
+- **代码位置**: `native/src/` 全部 `.rs` 文件
+- **许可证**: 商业许可 (Cocos Store / Gumroad)
+- **维护策略**: 所有新功能都在 Rust 中开发
+- **功能范围**: 270+ actions + AI 智能工具，持续增长
+
+### 共享基础设施 (JS, 开源)
+
+以下文件被两个版本共享，不属于任何一个版本：
+
+| 文件 | 职责 |
+|------|------|
+| `main.ts` | Cocos 插件入口 |
+| `core.ts` | HTTP 服务器 + 路由 + 安全层 |
+| `scene.ts` | 场景脚本 (运行在 Cocos 引擎内) |
+| `mcp/local-tool-server.ts` | 工具注册框架 |
+| `mcp/standalone-host.ts` | MCP JSON-RPC 宿主 |
+| `mcp/tools.ts` | 版本切换入口 (Pro or Community) |
+| `mcp/tools-shared.ts` | 共享类型和工具函数 |
+| `mcp/executor.ts` | 执行 Rust 返回的 ExecutionPlan |
+| `mcp/tools-pro-bridge.ts` | 加载 .node + 注册 Pro 工具 |
+| `panels/` | 面板 UI |
+
+## 3. 数据流
+
+### 社区版
+
+```
+AI 请求 → MCP 协议 → tools.ts (社区版分支)
+  → JS handler 直接调用 ctx.sceneMethod / bridgeGet / editorMsg
+  → Cocos Editor IPC
+```
+
+### Pro 版
+
+```
+AI 请求 → MCP 协议 → tools.ts (Pro 分支)
+  → tools-pro-bridge.ts 调用 Rust processToolCall(name, args)
+  → Rust 验证参数 + 路由 action + 生成 ExecutionPlan
+  → executor.ts 执行 plan.calls[] → ctx.sceneMethod / bridgeGet / editorMsg
+  → Cocos Editor IPC
+```
+
+### Pro AI 智能工具 (场景生成器/批量引擎/审计)
+
+```
+AI 请求 "创建一个横版过关场景"
+  → Rust scene_generator 解析意图
+  → 生成包含 10-50 个 CallInstruction 的 ExecutionPlan
+  → executor.ts 依次执行: create_node → add_component → set_property → ...
+  → 全部通过底层 Cocos IPC 完成
+  → 失败时自动执行 rollback
+```
+
+## 4. 开发规则
+
+### 4.1 新增功能 → 只在 Rust 中开发
+
+所有新工具、新 action、新 AI 功能都在 `native/src/tools/` 中实现。
+
+步骤:
+1. 在 `native/src/tools/` 下新建 `.rs` 文件
+2. 实现 `definitions()` 返回 ToolDefinition
+3. 实现 `process()` 返回 ExecutionPlan
+4. 在 `native/src/tools/mod.rs` 中注册
+5. `cargo build --release` 编译
+
+**禁止在 JS 社区版工具文件中添加新功能。**
+
+### 4.2 修复社区版 bug → 在 JS 中修复
+
+社区版的 bug 在 JS 文件中修复，不需要同步到 Rust。
+两套代码独立维护，互不影响。
+
+### 4.3 ExecutionPlan 规范
+
+Rust 返回的 ExecutionPlan 必须遵循以下格式:
+
+```json
+{
+  "calls": [
+    { "type": "sceneMethod", "method": "dispatchQuery", "args": [...] },
+    { "type": "sceneMethod", "method": "dispatchOperation", "args": [...] },
+    { "type": "bridgeGet", "path": "/api/status" },
+    { "type": "bridgePost", "path": "/api/some-endpoint", "body": {...} },
+    { "type": "editorMsg", "module": "asset-db", "message": "query-assets", "args": [...] }
+  ],
+  "rollback": [...],
+  "error": null,
+  "suggestion": null
+}
+```
+
+Rust 的 AI 智能工具可以生成调用任何底层 action 的 ExecutionPlan，
+包括社区版中存在的所有 action（create_node, add_component, set_property 等）。
+executor.ts 直接调用 Cocos IPC，不经过 MCP 工具层的版本限制。
+
+### 4.4 禁止事项
+
+- **禁止**在 JS 社区版工具中添加新功能（冻结）
+- **禁止**在 Rust 中直接调用 Cocos IPC（必须通过 ExecutionPlan）
+- **禁止**在开源仓库中包含 .node 二进制文件
+- **禁止**在开源仓库中包含 native/src/ 的 Rust 源码
+- **禁止**修改 executor.ts 的 CallInstruction 类型而不同步更新 Rust types.rs
+
+### 4.5 版本切换逻辑 (tools.ts)
+
+```typescript
+const proLoaded = tryRegisterProTools(server, ctx);
+if (proLoaded) {
+    // Pro: Rust 提供全部工具，JS 工具不注册
+    return server;
+}
+// Community: 注册 JS 工具
+registerSceneTools(server, ctx);
+registerAssetTools(server, ctx);
+// ...
+```
+
+## 5. Rust 项目结构
+
+```
+native/src/
+├── lib.rs              napi 导出入口 (4 个函数)
+├── types.rs            CallInstruction, ExecutionPlan, ToolDefinition
+├── validate.rs         参数验证工具函数
+├── license.rs          License 验证 (HMAC-SHA256)
+└── tools/
+    ├── mod.rs           汇总定义 + 路由分发
+    ├── engine.rs        engine_action (8 actions)
+    ├── script.rs        execute_script + register_custom_macro
+    ├── animation.rs     animation_tool (10 actions)
+    ├── physics.rs       physics_tool (10 actions)
+    ├── reference.rs     reference_image (7 actions)
+    ├── atomic.rs        5 个原子宏工具
+    ├── scene.rs         scene_query (43) + scene_operation (65)
+    ├── asset.rs         asset_operation (32)
+    ├── editor.rs        editor_action (45)
+    ├── misc.rs          preferences (7) + broadcast (5) + tool_management (4)
+    ├── generator.rs     AI 场景生成器 (5 actions)
+    ├── batch.rs         批量操作引擎 (10 actions)
+    └── audit.rs         场景审计 (9 actions)
+```
+
+## 6. 构建命令
+
+| 命令 | 说明 |
+|------|------|
+| `npm run build` | TypeScript 编译 (社区版 + 共享基础设施) |
+| `npm run build:native:release` | Rust release 编译 |
+| `npm run package:pro` | 完整 Pro 版构建 (TS + Rust + 混淆 + 字节码 + 打包) |
+| `npm run package:release:win` | 社区版发行打包 (不含 .node) |
+
+## 7. 发行包结构
+
+### 社区版 (GitHub)
+
+```
+aura-for-cocos/
+├── dist/                    JS 编译产物
+├── native/index.js          加载器 (返回 null → 走社区版)
+├── stdio-shim/
+├── package.json
+└── LICENSE                  BSL 1.1
+```
+
+### Pro 版 (Cocos Store / Gumroad)
+
+```
+aura-for-cocos/
+├── dist/                    JS (混淆+字节码，仅共享基础设施)
+├── native/
+│   ├── index.js             平台加载器
+│   └── cocos_pro.*.node     Rust 二进制 (全部工具逻辑 + License 验证)
+├── stdio-shim/              (混淆)
+├── .mcp-license             用户填写 License Key
+├── ACTIVATION.txt           激活说明
+├── package.json
+└── LICENSE                  商业许可
+```
+
+## 8. License Key 系统
+
+### 验证流程
+
+```
+插件启动 → tools-pro-bridge.ts
+  → .node 存在？
+    → 否 → 社区版（JS 工具）
+    → 是 → 读取 License Key（环境变量 > .mcp-license > 面板设置）
+      → Rust validateLicense(key)
+        → HMAC-SHA256 离线验证（密钥编译在二进制中）
+        → 检查版本 (PRO/ENT) + 过期时间
+        → 返回 { valid, edition, features, expiry, licensedTo }
+      → valid=true → 注册全部 Pro 工具
+      → valid=false → 降级为社区版 + 面板提示"请输入 License Key"
+```
+
+### 开发规则
+
+- **License 验证逻辑只在 Rust 中实现**，JS 侧只负责读取 Key 和传递给 Rust
+- **HMAC 密钥 (hmac.key) 编译进 Rust 二进制**，不在任何源码仓库中
+- **同一把 HMAC 密钥用于生成和验证**，安全性依赖 Rust 二进制不可逆向 (strip+LTO)
+- **Key 生成工具不在开源仓库中**，不在 Pro 发行包中
+- **面板 UI 需要显示激活状态**: 未激活/已激活/已过期
+- **面板 UI 需要 License Key 输入框**: 输入 → 保存到 .mcp-license → 重启生效
+
+### Key 内部结构
+
+```
+COCOS-{edition}-{seg1}-{seg2}-{seg3}
+
+编码内容: email_hash(4B) + edition(1B) + expiry(4B) + hmac_sig(6B) = 15B
+  → Base32 编码为 24 字符 → 3 段 8 字符
+```
+
+### 禁止事项
+
+- **禁止**在 JS 代码中实现 License 验证逻辑
+- **禁止**在任何仓库中存放签名密钥 (SECRET_KEY)
+- **禁止**在日志中输出完整 License Key（只输出前 10 字符 + "..."）
+- **禁止**在网络请求中传输 License Key

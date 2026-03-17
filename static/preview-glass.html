@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<title>MCP Bridge — Glassmorphism Preview</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    height: 100%; width: 100%;
+    background: #050510;
+    font-family: 'Inter', system-ui, sans-serif;
+    color: #e2e8f0;
+    overflow: hidden;
+  }
+
+  /* ===== Animated Background ===== */
+  .bg-canvas {
+    position: fixed; inset: 0; z-index: 0; overflow: hidden;
+    background: radial-gradient(ellipse at 20% 50%, #0f0a2e 0%, #050510 70%);
+  }
+  .bg-canvas::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: 
+      radial-gradient(circle at 70% 20%, rgba(120, 80, 255, 0.08) 0%, transparent 50%),
+      radial-gradient(circle at 30% 80%, rgba(6, 182, 212, 0.06) 0%, transparent 50%);
+  }
+
+  /* Floating Orbs */
+  .orb {
+    position: absolute; border-radius: 50%;
+    filter: blur(80px); opacity: 0.5;
+    will-change: transform;
+  }
+  .orb-1 {
+    width: 420px; height: 420px;
+    background: radial-gradient(circle, #7c3aed 0%, #4f46e5 40%, transparent 70%);
+    top: -10%; left: -5%;
+    animation: orbit1 18s ease-in-out infinite alternate;
+  }
+  .orb-2 {
+    width: 350px; height: 350px;
+    background: radial-gradient(circle, #06b6d4 0%, #0891b2 40%, transparent 70%);
+    bottom: -8%; right: -3%;
+    animation: orbit2 22s ease-in-out infinite alternate;
+  }
+  .orb-3 {
+    width: 200px; height: 200px;
+    background: radial-gradient(circle, #f472b6 0%, #ec4899 40%, transparent 70%);
+    top: 40%; left: 55%;
+    animation: orbit3 15s ease-in-out infinite alternate;
+    opacity: 0.3;
+  }
+  .orb-4 {
+    width: 160px; height: 160px;
+    background: radial-gradient(circle, #34d399 0%, #10b981 40%, transparent 70%);
+    top: 15%; right: 20%;
+    animation: orbit4 20s ease-in-out infinite alternate;
+    opacity: 0.25;
+  }
+
+  /* Small decorative spheres */
+  .sphere {
+    position: absolute; border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.3), rgba(255,255,255,0.05));
+    box-shadow: inset 0 -4px 8px rgba(0,0,0,0.3), 0 0 20px rgba(120, 80, 255, 0.15);
+    will-change: transform;
+  }
+  .sphere-1 { width: 60px; height: 60px; top: 8%; left: 12%; animation: bob 6s ease-in-out infinite; }
+  .sphere-2 { width: 40px; height: 40px; top: 70%; left: 8%; animation: bob 8s ease-in-out infinite reverse; background: radial-gradient(circle at 30% 30%, rgba(6,182,212,0.4), rgba(6,182,212,0.08)); box-shadow: inset 0 -4px 8px rgba(0,0,0,0.3), 0 0 20px rgba(6,182,212,0.2); }
+  .sphere-3 { width: 28px; height: 28px; top: 25%; right: 8%; animation: bob 7s ease-in-out infinite; background: radial-gradient(circle at 30% 30%, rgba(244,114,182,0.4), rgba(244,114,182,0.08)); box-shadow: inset 0 -4px 8px rgba(0,0,0,0.3), 0 0 20px rgba(244,114,182,0.2); }
+  .sphere-4 { width: 50px; height: 50px; bottom: 15%; right: 12%; animation: bob 9s ease-in-out infinite reverse; background: radial-gradient(circle at 30% 30%, rgba(52,211,153,0.3), rgba(52,211,153,0.06)); box-shadow: inset 0 -4px 8px rgba(0,0,0,0.3), 0 0 20px rgba(52,211,153,0.15); }
+
+  /* Stars */
+  .star {
+    position: absolute; width: 2px; height: 2px; background: #fff; border-radius: 50%;
+    animation: twinkle 3s ease-in-out infinite alternate;
+  }
+
+  @keyframes orbit1 { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(60px, 40px) scale(1.15); } }
+  @keyframes orbit2 { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(-50px, -60px) scale(1.1); } }
+  @keyframes orbit3 { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(-40px, 30px) scale(0.9); } }
+  @keyframes orbit4 { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(30px, -50px) scale(1.2); } }
+  @keyframes bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+  @keyframes twinkle { 0% { opacity: 0.2; } 100% { opacity: 0.8; } }
+  @keyframes pulse-ring { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(2.5); opacity: 0; } }
+  @keyframes slideUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes countUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* ===== Glass Panel ===== */
+  .panel-frame {
+    position: relative; z-index: 1;
+    width: 460px; height: 760px;
+    margin: 30px auto;
+    border-radius: 28px;
+    background: rgba(12, 10, 30, 0.45);
+    backdrop-filter: blur(40px) saturate(1.4);
+    -webkit-backdrop-filter: blur(40px) saturate(1.4);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 
+      0 30px 60px -12px rgba(0, 0, 0, 0.7),
+      0 0 0 1px rgba(255, 255, 255, 0.05),
+      inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    display: flex; flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* ===== Top Bar ===== */
+  .top-bar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 20px;
+    background: rgba(255, 255, 255, 0.02);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    flex-shrink: 0;
+  }
+  .top-bar-brand {
+    display: flex; align-items: center; gap: 10px;
+  }
+  .brand-icon {
+    width: 32px; height: 32px; border-radius: 10px;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; font-weight: 800; color: #fff;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+    letter-spacing: -1px;
+  }
+  .brand-name {
+    font-weight: 700; font-size: 15px; letter-spacing: -0.3px;
+    background: linear-gradient(135deg, #e2e8f0, #94a3b8);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .top-bar-status {
+    display: flex; align-items: center; gap: 8px;
+  }
+  .live-badge {
+    display: flex; align-items: center; gap: 6px;
+    padding: 5px 12px; border-radius: 20px;
+    background: rgba(52, 211, 153, 0.1);
+    border: 1px solid rgba(52, 211, 153, 0.2);
+    font-size: 12px; font-weight: 600; color: #34d399;
+  }
+  .live-dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: #34d399; position: relative;
+  }
+  .live-dot::after {
+    content: ''; position: absolute; inset: -3px;
+    border-radius: 50%; border: 1.5px solid #34d399;
+    animation: pulse-ring 2s ease-out infinite;
+  }
+
+  /* ===== Tabs ===== */
+  .tabs-nav {
+    display: flex; padding: 0 16px;
+    background: rgba(255, 255, 255, 0.015);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    position: relative; flex-shrink: 0;
+  }
+  .tab-btn {
+    flex: 1; text-align: center; padding: 14px 0;
+    font-size: 12.5px; font-weight: 500;
+    color: rgba(255, 255, 255, 0.4);
+    cursor: pointer; transition: all 0.3s ease;
+    position: relative;
+  }
+  .tab-btn:hover { color: rgba(255, 255, 255, 0.7); }
+  .tab-btn.active { color: #fff; font-weight: 600; }
+  .tab-line {
+    position: absolute; bottom: 0; left: 16px;
+    height: 2px; border-radius: 2px;
+    width: calc((100% - 32px) / 5);
+    background: linear-gradient(90deg, #818cf8, #c084fc, #f472b6);
+    box-shadow: 0 0 12px rgba(168, 85, 247, 0.6), 0 0 30px rgba(168, 85, 247, 0.2);
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* ===== Content Area ===== */
+  .tabs-body {
+    flex: 1; overflow-y: auto; padding: 20px;
+  }
+  .tabs-body::-webkit-scrollbar { width: 4px; }
+  .tabs-body::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 2px; }
+  .tabs-body::-webkit-scrollbar-track { background: transparent; }
+
+  .tab-pane { display: none; animation: slideUp 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); }
+  .tab-pane.active { display: block; }
+
+  /* ===== Bento Grid ===== */
+  .bento { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+  .glass-tile {
+    position: relative;
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 20px;
+    padding: 18px;
+    display: flex; flex-direction: column;
+    transition: all 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+    overflow: hidden;
+  }
+  .glass-tile::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+  }
+  .glass-tile:hover {
+    transform: translateY(-3px);
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.12);
+    box-shadow: 0 12px 30px -8px rgba(0, 0, 0, 0.5);
+  }
+  .glass-tile.span { grid-column: span 2; }
+
+  .tile-label {
+    font-size: 10.5px; text-transform: uppercase; letter-spacing: 1.5px;
+    color: rgba(255, 255, 255, 0.35); font-weight: 600; margin-bottom: 12px;
+  }
+  .tile-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 36px; font-weight: 700; line-height: 1;
+    margin-bottom: 6px;
+    background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    animation: countUp 0.6s ease-out;
+  }
+  .tile-num.c-blue    { background-image: linear-gradient(135deg, #60a5fa, #3b82f6); filter: drop-shadow(0 0 12px rgba(96,165,250,0.3)); }
+  .tile-num.c-emerald { background-image: linear-gradient(135deg, #34d399, #10b981); filter: drop-shadow(0 0 12px rgba(52,211,153,0.3)); }
+  .tile-num.c-violet  { background-image: linear-gradient(135deg, #c084fc, #8b5cf6); filter: drop-shadow(0 0 12px rgba(192,132,252,0.3)); }
+  .tile-num.c-amber   { background-image: linear-gradient(135deg, #fbbf24, #f59e0b); filter: drop-shadow(0 0 12px rgba(251,191,36,0.3)); }
+
+  .tile-sub {
+    font-size: 12px; color: rgba(255, 255, 255, 0.4);
+    display: flex; align-items: center; gap: 6px; margin-top: auto;
+  }
+  .tile-sub code {
+    background: rgba(0, 0, 0, 0.3); padding: 3px 8px; border-radius: 6px;
+    color: #a78bfa; font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    border: 1px solid rgba(167, 139, 250, 0.15);
+  }
+
+  .status-chip {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 4px 10px; border-radius: 20px;
+    font-size: 11px; font-weight: 600;
+  }
+  .status-chip.online {
+    background: rgba(52, 211, 153, 0.12); color: #34d399;
+    border: 1px solid rgba(52, 211, 153, 0.2);
+  }
+  .chip-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: currentColor;
+    box-shadow: 0 0 8px currentColor;
+    animation: pulse-dot 2s ease-in-out infinite;
+  }
+  @keyframes pulse-dot { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+  .tile-project-name {
+    font-size: 20px; font-weight: 700; letter-spacing: -0.5px;
+    color: #f1f5f9; margin-bottom: 8px;
+  }
+  .tile-meta {
+    display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font-size: 12px;
+  }
+  .meta-tag {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 3px 10px; border-radius: 8px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    color: rgba(255, 255, 255, 0.6); font-size: 11px;
+  }
+  .meta-tag .hl-blue { color: #60a5fa; }
+  .meta-tag .hl-green { color: #34d399; }
+
+  /* ===== Section Headers ===== */
+  .sec-title { font-size: 16px; font-weight: 700; letter-spacing: -0.3px; margin-bottom: 4px; }
+  .sec-desc { font-size: 12.5px; color: rgba(255,255,255,0.4); margin-bottom: 18px; line-height: 1.5; }
+
+  /* ===== Glass Card ===== */
+  .glass-card {
+    background: rgba(255, 255, 255, 0.025);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 18px;
+    padding: 16px; margin-bottom: 12px;
+    position: relative; overflow: hidden;
+    transition: all 0.3s ease;
+  }
+  .glass-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+  }
+  .glass-card:hover {
+    background: rgba(255, 255, 255, 0.04);
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+
+  /* ===== Buttons ===== */
+  .btn-row { display: flex; gap: 12px; margin-bottom: 14px; }
+  .g-btn {
+    flex: 1; border: none; border-radius: 14px;
+    padding: 12px 16px; font-size: 13px; font-weight: 600;
+    cursor: pointer; font-family: inherit;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+    position: relative; overflow: hidden;
+  }
+  .g-btn::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+  }
+
+  .g-btn-primary {
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    color: #fff;
+    box-shadow: 0 4px 16px rgba(99, 102, 241, 0.3), inset 0 1px 0 rgba(255,255,255,0.15);
+  }
+  .g-btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px rgba(99, 102, 241, 0.4), inset 0 1px 0 rgba(255,255,255,0.15);
+    filter: brightness(1.1);
+  }
+  .g-btn-primary:active { transform: translateY(1px) scale(0.98); }
+
+  .g-btn-ghost {
+    background: rgba(255, 255, 255, 0.04);
+    color: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  .g-btn-ghost:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.15);
+  }
+
+  .g-btn-danger {
+    background: rgba(239, 68, 68, 0.08);
+    color: #fca5a5;
+    border: 1px solid rgba(239, 68, 68, 0.15);
+  }
+  .g-btn-danger:hover {
+    background: rgba(239, 68, 68, 0.15);
+    border-color: rgba(239, 68, 68, 0.25);
+    color: #f87171;
+  }
+
+  .g-btn-sm {
+    padding: 7px 14px; font-size: 12px; border-radius: 10px;
+    flex: 0;
+  }
+
+  /* ===== Toggle ===== */
+  .g-toggle {
+    appearance: none; -webkit-appearance: none;
+    width: 44px; height: 24px; border-radius: 12px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    position: relative; cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+    flex-shrink: 0;
+  }
+  .g-toggle:checked {
+    background: linear-gradient(135deg, #10b981, #34d399);
+    border-color: rgba(52, 211, 153, 0.3);
+    box-shadow: 0 0 16px rgba(52, 211, 153, 0.3), inset 0 2px 4px rgba(0, 0, 0, 0.15);
+  }
+  .g-toggle::after {
+    content: ''; position: absolute; top: 2px; left: 2px;
+    width: 18px; height: 18px; border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .g-toggle:checked::after { transform: translateX(20px); }
+  .g-toggle:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  /* ===== Tool Row ===== */
+  .tool-item {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  }
+  .tool-item:last-child { border-bottom: none; }
+  .tool-meta { display: flex; flex-direction: column; gap: 3px; }
+  .tool-name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px; font-weight: 600; color: #e2e8f0;
+  }
+  .tool-desc { font-size: 11.5px; color: rgba(255, 255, 255, 0.35); }
+
+  /* ===== IDE Cards ===== */
+  .ide-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 16px; margin-bottom: 10px;
+    transition: all 0.25s ease;
+  }
+  .ide-row:hover {
+    background: rgba(255, 255, 255, 0.04);
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+  .ide-row:last-child { margin-bottom: 0; }
+  .ide-meta { display: flex; flex-direction: column; gap: 6px; }
+  .ide-name { font-size: 14px; font-weight: 600; }
+  .ide-badge {
+    display: inline-flex; align-items: center; gap: 5px; width: fit-content;
+    padding: 3px 10px; border-radius: 8px;
+    font-size: 11px; font-weight: 600;
+  }
+  .ide-badge.ok {
+    background: rgba(52, 211, 153, 0.1); color: #34d399;
+    border: 1px solid rgba(52, 211, 153, 0.2);
+  }
+  .ide-badge.no {
+    background: rgba(251, 191, 36, 0.08); color: #fbbf24;
+    border: 1px solid rgba(251, 191, 36, 0.15);
+  }
+
+  /* ===== Settings ===== */
+  .setting-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  }
+  .setting-row:last-child { border-bottom: none; }
+  .setting-meta { display: flex; flex-direction: column; gap: 3px; flex: 1; }
+  .setting-label { font-size: 13px; font-weight: 500; color: #e2e8f0; }
+  .setting-hint { font-size: 11px; color: rgba(255, 255, 255, 0.3); }
+  .g-input {
+    background: rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px; color: #fff; padding: 8px 12px;
+    font-family: 'JetBrains Mono', monospace; font-size: 13px;
+    width: 90px; text-align: right; outline: none;
+    transition: all 0.3s;
+  }
+  .g-input:focus {
+    border-color: rgba(129, 140, 248, 0.5);
+    box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.15);
+    background: rgba(0, 0, 0, 0.4);
+  }
+  .g-select {
+    background: rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px; color: #fff; padding: 8px 12px;
+    font-size: 12.5px; outline: none; cursor: pointer;
+    -webkit-appearance: none; appearance: none;
+  }
+
+  /* ===== Guide Steps ===== */
+  .step-row {
+    display: flex; gap: 14px; align-items: flex-start;
+    padding: 16px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 16px; margin-bottom: 10px;
+    transition: all 0.25s ease;
+  }
+  .step-row:hover {
+    background: rgba(255, 255, 255, 0.04);
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+  .step-num {
+    width: 28px; height: 28px; border-radius: 10px;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700; color: #fff; flex-shrink: 0;
+    box-shadow: 0 4px 10px rgba(99, 102, 241, 0.35);
+  }
+  .step-body { flex: 1; }
+  .step-title { font-size: 13.5px; font-weight: 600; margin-bottom: 4px; }
+  .step-desc { font-size: 12px; color: rgba(255, 255, 255, 0.4); line-height: 1.6; }
+
+  /* ===== Prompt Cards ===== */
+  .prompt-row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 14px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 12px; margin-bottom: 8px;
+    transition: all 0.25s ease; cursor: pointer;
+  }
+  .prompt-row:hover {
+    background: rgba(99, 102, 241, 0.06);
+    border-color: rgba(99, 102, 241, 0.2);
+  }
+  .prompt-tag {
+    padding: 3px 8px; border-radius: 6px;
+    background: linear-gradient(135deg, rgba(99,102,241,0.15), rgba(168,85,247,0.15));
+    border: 1px solid rgba(139, 92, 246, 0.2);
+    color: #c4b5fd; font-size: 10px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.5px;
+    flex-shrink: 0;
+  }
+  .prompt-txt {
+    flex: 1; font-size: 12px; color: #e2e8f0;
+    font-family: 'JetBrains Mono', monospace; line-height: 1.4;
+  }
+  .prompt-copy {
+    background: none; border: none; color: rgba(255,255,255,0.3);
+    cursor: pointer; font-size: 14px; padding: 4px;
+    transition: color 0.2s;
+  }
+  .prompt-copy:hover { color: #c084fc; }
+
+  /* ===== Info Box ===== */
+  .info-glass {
+    background: rgba(99, 102, 241, 0.04);
+    border: 1px solid rgba(99, 102, 241, 0.1);
+    border-radius: 14px; padding: 14px 16px;
+    font-size: 12px; color: rgba(255, 255, 255, 0.5); line-height: 1.7;
+  }
+  .info-glass code {
+    background: rgba(0, 0, 0, 0.3); padding: 2px 6px; border-radius: 5px;
+    color: #a78bfa; font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    border: 1px solid rgba(167, 139, 250, 0.12);
+  }
+  .info-glass .tip-title {
+    font-size: 13px; font-weight: 600; color: #e2e8f0; margin-bottom: 8px;
+  }
+  .info-glass ul {
+    margin: 0; padding-left: 16px; list-style: none;
+  }
+  .info-glass li {
+    position: relative; padding-left: 4px; margin-bottom: 4px;
+  }
+  .info-glass li::before {
+    content: '›'; position: absolute; left: -12px;
+    color: rgba(139, 92, 246, 0.6); font-weight: 700;
+  }
+
+  /* ===== Divider ===== */
+  .g-divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent);
+    margin: 20px 0;
+  }
+
+  /* ===== Footer ===== */
+  .panel-footer {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 20px;
+    background: rgba(255, 255, 255, 0.015);
+    border-top: 1px solid rgba(255, 255, 255, 0.04);
+    flex-shrink: 0;
+  }
+  .footer-ver {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; color: rgba(255, 255, 255, 0.25);
+  }
+  .footer-actions { display: flex; gap: 4px; }
+  .footer-btn {
+    background: none; border: none; border-radius: 8px;
+    padding: 5px 10px; font-size: 11px; color: rgba(255, 255, 255, 0.35);
+    cursor: pointer; font-family: inherit; transition: all 0.2s;
+  }
+  .footer-btn:hover { color: #c084fc; background: rgba(139, 92, 246, 0.08); }
+</style>
+</head>
+<body>
+
+<div class="bg-canvas">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+  <div class="orb orb-4"></div>
+  <div class="sphere sphere-1"></div>
+  <div class="sphere sphere-2"></div>
+  <div class="sphere sphere-3"></div>
+  <div class="sphere sphere-4"></div>
+</div>
+
+<div class="panel-frame">
+
+  <!-- Top Bar -->
+  <div class="top-bar">
+    <div class="top-bar-brand">
+      <div class="brand-icon">M</div>
+      <span class="brand-name">MCP Bridge</span>
+    </div>
+    <div class="top-bar-status">
+      <div class="live-badge">
+        <span class="live-dot"></span>
+        Online
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs-nav">
+    <div class="tab-btn active" onclick="switchTab(0, this)">状态</div>
+    <div class="tab-btn" onclick="switchTab(1, this)">控制</div>
+    <div class="tab-btn" onclick="switchTab(2, this)">互联</div>
+    <div class="tab-btn" onclick="switchTab(3, this)">设置</div>
+    <div class="tab-btn" onclick="switchTab(4, this)">📖 指南</div>
+    <div class="tab-line" id="tabLine"></div>
+  </div>
+
+  <!-- Body -->
+  <div class="tabs-body">
+
+    <!-- 状态 -->
+    <div class="tab-pane active" id="pane-0">
+      <div class="bento">
+        <div class="glass-tile">
+          <div class="tile-label">暴露工具数</div>
+          <div class="tile-num c-blue">19</div>
+          <div class="tile-sub">tools exposed</div>
+        </div>
+        <div class="glass-tile">
+          <div class="tile-label">可调用行为</div>
+          <div class="tile-num c-emerald">249</div>
+          <div class="tile-sub">total actions</div>
+        </div>
+        <div class="glass-tile">
+          <div class="tile-label">已连接 AI</div>
+          <div class="tile-num c-violet">1</div>
+          <div class="tile-sub">
+            <span class="status-chip online"><span class="chip-dot"></span> Online</span>
+          </div>
+        </div>
+        <div class="glass-tile">
+          <div class="tile-label">监听端口</div>
+          <div class="tile-num c-amber">7779</div>
+          <div class="tile-sub">00:04:22</div>
+        </div>
+        <div class="glass-tile span">
+          <div class="tile-label">当前项目</div>
+          <div class="tile-project-name">McpTestProject</div>
+          <div class="tile-meta">
+            <span class="meta-tag">引擎 <span class="hl-blue">3.8.8</span></span>
+            <span class="meta-tag">端点 <span class="hl-green">127.0.0.1:7779/mcp</span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 控制 -->
+    <div class="tab-pane" id="pane-1">
+      <div class="sec-title">服务管理</div>
+      <div class="sec-desc">管理底层的 MCP 中继服务节点。</div>
+
+      <div class="btn-row">
+        <button class="g-btn g-btn-ghost">▶ 启动服务</button>
+        <button class="g-btn g-btn-danger">■ 停止服务</button>
+      </div>
+      <button class="g-btn g-btn-primary" style="width:100%; margin-bottom: 6px;">↻ 重启服务</button>
+
+      <div class="g-divider"></div>
+
+      <div class="sec-title">工具开关</div>
+      <div class="sec-desc">控制 AI 可调用的 MCP 工具。关闭后 AI 将无法看到该工具。</div>
+
+      <div class="glass-card">
+        <div class="tool-item">
+          <div class="tool-meta"><span class="tool-name">bridge_status</span><span class="tool-desc">桥接状态检测（不可关闭）</span></div>
+          <input type="checkbox" class="g-toggle" checked disabled />
+        </div>
+        <div class="tool-item">
+          <div class="tool-meta"><span class="tool-name">scene_query</span><span class="tool-desc">场景只读查询</span></div>
+          <input type="checkbox" class="g-toggle" checked />
+        </div>
+        <div class="tool-item">
+          <div class="tool-meta"><span class="tool-name">scene_operation</span><span class="tool-desc">场景写操作</span></div>
+          <input type="checkbox" class="g-toggle" checked />
+        </div>
+        <div class="tool-item">
+          <div class="tool-meta"><span class="tool-name">asset_operation</span><span class="tool-desc">资产管理</span></div>
+          <input type="checkbox" class="g-toggle" />
+        </div>
+      </div>
+    </div>
+
+    <!-- 互联 -->
+    <div class="tab-pane" id="pane-2">
+      <div class="sec-title">IDE 协同配置</div>
+      <div class="sec-desc">将当前 Cocos 环境桥接至 AI 编程助手。</div>
+
+      <div class="ide-row">
+        <div class="ide-meta">
+          <span class="ide-name">Cursor</span>
+          <span class="ide-badge ok"><span class="chip-dot" style="width:5px;height:5px;"></span> 已就绪</span>
+        </div>
+        <button class="g-btn g-btn-ghost g-btn-sm">注入配置</button>
+      </div>
+      <div class="ide-row">
+        <div class="ide-meta">
+          <span class="ide-name">Windsurf</span>
+          <span class="ide-badge no">未配置</span>
+        </div>
+        <button class="g-btn g-btn-primary g-btn-sm">注入配置</button>
+      </div>
+      <div class="ide-row">
+        <div class="ide-meta">
+          <span class="ide-name">Claude Desktop</span>
+          <span class="ide-badge no">未配置</span>
+        </div>
+        <button class="g-btn g-btn-ghost g-btn-sm">注入配置</button>
+      </div>
+
+      <div class="info-glass" style="margin-top: 14px;">
+        本操作会将当前工作空间的端点合并写入对应 IDE 的 <code>mcp.json</code>，您需要在目标 IDE 中刷新或重启生效。
+      </div>
+    </div>
+
+    <!-- 设置 -->
+    <div class="tab-pane" id="pane-3">
+      <div class="sec-title">安全与性能</div>
+      <div class="sec-desc">配置 MCP Bridge 的安全策略和性能参数。</div>
+
+      <div class="glass-card">
+        <div class="setting-row">
+          <div class="setting-meta"><span class="setting-label">速率限制 (请求/分钟)</span><span class="setting-hint">每分钟允许的最大请求数</span></div>
+          <input type="number" class="g-input" value="240" />
+        </div>
+        <div class="setting-row">
+          <div class="setting-meta"><span class="setting-label">本地回环限制</span><span class="setting-hint">开启时仅允许 127.0.0.1 访问</span></div>
+          <input type="checkbox" class="g-toggle" checked />
+        </div>
+        <div class="setting-row">
+          <div class="setting-meta"><span class="setting-label">请求体大小限制</span><span class="setting-hint">单次请求最大体积</span></div>
+          <select class="g-select"><option>64 KB</option><option selected>1 MB</option><option>10 MB</option></select>
+        </div>
+      </div>
+
+      <div class="btn-row" style="margin-top: 8px;">
+        <button class="g-btn g-btn-primary">保存设置</button>
+        <button class="g-btn g-btn-ghost">恢复默认</button>
+      </div>
+    </div>
+
+    <!-- 指南 -->
+    <div class="tab-pane" id="pane-4">
+      <div class="sec-title">快速上手</div>
+      <div class="sec-desc">3 步完成从安装到 AI 驱动开发。</div>
+
+      <div class="step-row">
+        <div class="step-num">1</div>
+        <div class="step-body"><div class="step-title">确认服务在线</div><div class="step-desc">切到「状态」Tab，确认连接状态为 Online（绿灯）。若离线，切到「控制」Tab 点击启动。</div></div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">2</div>
+        <div class="step-body"><div class="step-title">连接你的 AI IDE</div><div class="step-desc">切到「互联」Tab，点击你使用的 IDE 旁的「注入配置」按钮。</div></div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">3</div>
+        <div class="step-body"><div class="step-title">开始对话</div><div class="step-desc">在 AI IDE 中直接用自然语言描述你想做的操作。</div></div>
+      </div>
+
+      <div class="g-divider"></div>
+
+      <div class="sec-title">💬 AI 提示词示例</div>
+      <div class="sec-desc">复制以下提示词到 AI IDE 中试试看。</div>
+
+      <div class="prompt-row">
+        <span class="prompt-tag">场景</span>
+        <span class="prompt-txt">查看当前场景的节点树结构</span>
+        <button class="prompt-copy">📋</button>
+      </div>
+      <div class="prompt-row">
+        <span class="prompt-tag">创建</span>
+        <span class="prompt-txt">在 Canvas 下创建一个按钮，文字为「开始游戏」</span>
+        <button class="prompt-copy">📋</button>
+      </div>
+      <div class="prompt-row">
+        <span class="prompt-tag">UI</span>
+        <span class="prompt-txt">创建一个 ScrollView 列表，包含 5 个子项</span>
+        <button class="prompt-copy">📋</button>
+      </div>
+
+      <div class="g-divider"></div>
+
+      <div class="info-glass">
+        <div class="tip-title">💡 使用小贴士</div>
+        <ul>
+          <li>先选中节点再描述操作，AI 会自动作用于选中对象</li>
+          <li>遇到报错时 AI 会自动重试，无需手动干预</li>
+          <li>所有写操作仅限本地 127.0.0.1，不会泄漏到外网</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <div class="panel-footer">
+    <span class="footer-ver">v1.0.8</span>
+    <div class="footer-actions">
+      <button class="footer-btn">中 / EN</button>
+      <button class="footer-btn">🔄 同步</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// Generate stars
+(function() {
+  const canvas = document.querySelector('.bg-canvas');
+  for (let i = 0; i < 60; i++) {
+    const star = document.createElement('div');
+    star.className = 'star';
+    star.style.left = Math.random() * 100 + '%';
+    star.style.top = Math.random() * 100 + '%';
+    star.style.animationDelay = Math.random() * 3 + 's';
+    star.style.animationDuration = (2 + Math.random() * 3) + 's';
+    star.style.width = star.style.height = (1 + Math.random() * 2) + 'px';
+    canvas.appendChild(star);
+  }
+})();
+
+// Tab switching
+function switchTab(index, el) {
+  document.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+  document.getElementById('pane-' + index).classList.add('active');
+  document.getElementById('tabLine').style.transform = 'translateX(' + (index * 100) + '%)';
+}
+</script>
+</body>
+</html>

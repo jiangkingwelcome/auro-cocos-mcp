@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+/* AURA ULTRA PREMIUM THEME */
+:root {
+  --bg-base: #030308;
+  --panel-bg: rgba(255, 255, 255, 0.02);
+  --panel-border: rgba(255, 255, 255, 0.07);
+  --text-main: #f3f4f6;
+  --text-muted: #9ca3af;
+  --primary-gradient: linear-gradient(135deg, #3b82f6, #8b5cf6, #ec4899);
+  --success: #10b981;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0; padding: 20px;
+  background-color: var(--bg-base);
+  background-image: 
+    radial-gradient(circle at 15% 50%, rgba(59, 130, 246, 0.1), transparent 40%),
+    radial-gradient(circle at 85% 30%, rgba(139, 92, 246, 0.1), transparent 40%);
+  color: var(--text-main);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  display: flex; justify-content: center; align-items: center;
+  min-height: 100vh;
+}
+
+/* Panel Container */
+.aura-panel {
+  width: 420px;
+  height: 600px;
+  background: rgba(10, 10, 15, 0.6);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  border: 1px solid var(--panel-border);
+  border-radius: 16px;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  display: flex; flex-direction: column;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Animated Border Glow */
+.aura-panel::before {
+  content: ''; position: absolute; top: -2px; left: -2px; right: -2px; height: 2px;
+  background: var(--primary-gradient);
+  z-index: 10; opacity: 0.8;
+}
+
+/* Tabs */
+.tabs-header {
+  display: flex; gap: 8px; padding: 16px 20px 4px; border-bottom: 1px solid var(--panel-border);
+  background: rgba(0,0,0,0.2);
+}
+
+.tab {
+  padding: 8px 16px; font-size: 13px; font-weight: 500; color: var(--text-muted);
+  cursor: pointer; border-radius: 20px; transition: all 0.3s ease;
+}
+.tab:hover { color: var(--text-main); background: rgba(255, 255, 255, 0.05); }
+.tab.active {
+  color: #fff; background: rgba(255, 255, 255, 0.1);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.tab-content { padding: 20px; flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; }
+.tab-content::-webkit-scrollbar { width: 4px; }
+.tab-content::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
+
+/* Bento Grid */
+.bento-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.bento-card {
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  border-radius: 12px; padding: 16px;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative; overflow: hidden;
+}
+
+/* Mouse Hover Glow Effect */
+.bento-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+  background: radial-gradient(400px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255,255,255,0.06), transparent 40%);
+  opacity: 0; transition: opacity 0.3s; pointer-events: none;
+}
+.bento-card:hover::before { opacity: 1; }
+.bento-card:hover { 
+  transform: translateY(-2px); 
+  border-color: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.bento-wide { grid-column: span 2; }
+.card-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 8px; }
+.card-value { 
+  font-size: 32px; font-weight: 700; font-family: ui-monospace, 'SF Mono', 'JetBrains Mono', monospace; 
+  letter-spacing: -1px; line-height: 1.1; margin-bottom: 4px;
+}
+
+/* Gradient Texts & Tags */
+.text-gradient-blue { background: linear-gradient(to right, #60a5fa, #3b82f6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.text-gradient-purple { background: linear-gradient(to right, #c084fc, #9333ea); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.text-white { color: #fff; }
+.card-sub { font-size: 12px; color: var(--text-muted); display: flex; align-items: center; justify-content: space-between; margin-top: auto; }
+.tag { font-family: ui-monospace, monospace; font-size: 10px; padding: 4px 8px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.05); border-radius: 6px; color: #d1d5db; }
+
+/* Status Dot Component */
+.status-indicator { display: flex; align-items: center; gap: 10px; background: rgba(16, 185, 129, 0.08); padding: 10px 14px; border-radius: 10px; border: 1px solid rgba(16, 185, 129, 0.15); }
+.status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--success); box-shadow: 0 0 12px var(--success); animation: pulse 2s infinite; }
+@keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); } 70% { box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); } 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); } }
+
+/* Controls/List Items */
+.list-item {
+  display: flex; align-items: center; justify-content: space-between;
+  background: var(--panel-bg); border: 1px solid var(--panel-border);
+  padding: 14px 16px; border-radius: 10px; transition: 0.2s;
+}
+.list-item:hover { background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.12); }
+.item-info { display: flex; flex-direction: column; gap: 4px; }
+.item-title { font-size: 13px; font-weight: 500; color: #fff; }
+.item-desc { font-size: 11px; color: var(--text-muted); }
+
+/* Vercel/Apple Style Switch Toggle */
+.switch {
+  position: relative; width: 38px; height: 22px; 
+  background: rgba(255,255,255,0.1); border-radius: 20px; border: 1px solid rgba(255,255,255,0.05);
+  cursor: pointer; transition: 0.3s; box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
+}
+.switch::after {
+  content: ''; position: absolute; top: 1px; left: 1px;
+  width: 18px; height: 18px; background: #fff; border-radius: 50%;
+  transition: 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+.switch.on { background: #3b82f6; border-color: #3b82f6; box-shadow: inset 0 1px 2px rgba(0,0,0,0.2), 0 0 12px rgba(59, 130, 246, 0.4); }
+.switch.on::after { transform: translateX(16px); }
+
+/* Premium Buttons */
+.btn-group { display: flex; gap: 10px; margin-top: 4px; }
+.btn-premium {
+  flex: 1; padding: 12px; border-radius: 10px; font-size: 13px; font-weight: 600;
+  cursor: pointer; border: none; position: relative; overflow: hidden;
+  color: #fff; transition: 0.3s;
+  background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+}
+.btn-premium:hover { background: rgba(255,255,255,0.08); transform: translateY(-1px); border-color: rgba(255,255,255,0.2); }
+
+/* Gradient Primary Button with Sweep effect */
+.btn-primary {
+  background: var(--primary-gradient);
+  border: none; box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
+}
+.btn-primary::after {
+  content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
+  background: linear-gradient(to right, transparent, rgba(255,255,255,0.3), transparent);
+  transform: skewX(-20deg); transition: left 0.5s ease;
+}
+.btn-primary:hover::after { left: 150%; }
+.btn-primary:hover { box-shadow: 0 6px 20px rgba(139, 92, 246, 0.6); transform: translateY(-1px); }
+
+.section-title { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin: 8px 0 0; font-weight: 600; }
+</style>
+</head>
+<body>
+
+<div class="aura-panel" id="panel">
+  <!-- Aura Top Border Glow -->
+  <div class="tabs-header">
+    <div class="tab active">Status</div>
+    <div class="tab">Control</div>
+    <div class="tab">IDE Config</div>
+    <div class="tab">Settings</div>
+  </div>
+
+  <div class="tab-content" id="tabContent">
+    
+    <div class="status-indicator">
+      <div class="status-dot"></div>
+      <div style="font-size:13px; font-weight: 500; color:var(--success);">Aura MCP Runtime Active</div>
+      <div style="margin-left:auto; font-size:11px; color:var(--text-muted);">Port 8080</div>
+    </div>
+
+    <div class="bento-grid">
+      <div class="bento-card bento-wide card-hoverable">
+        <div class="card-label">Current Attached Project</div>
+        <div class="card-value text-white" style="font-size: 24px;">SuperCocosGame</div>
+        <div class="card-sub" style="margin-top:10px;">
+          <span class="tag">Cocos Creator 3.8.3</span>
+          <span style="font-family:monospace; color:#6b7280; font-size:11px;">e:/dev/game</span>
+        </div>
+      </div>
+
+      <div class="bento-card card-hoverable">
+        <div class="card-label">Tools</div>
+        <div class="card-value text-gradient-blue">22</div>
+        <div class="card-sub">Exposed</div>
+      </div>
+
+      <div class="bento-card card-hoverable">
+        <div class="card-label">Actions</div>
+        <div class="card-value text-gradient-purple">275</div>
+        <div class="card-sub">Callable</div>
+      </div>
+    </div>
+
+    <div class="section-title" style="margin-top: 8px;">Core Services</div>
+    
+    <div class="list-item">
+      <div class="item-info">
+        <span class="item-title">Auto Rollback Protection</span>
+        <span class="item-desc">Safely recovers scene state on LLM syntax failure</span>
+      </div>
+      <div class="switch on" onclick="this.classList.toggle('on')"></div>
+    </div>
+
+    <div class="list-item" style="margin-bottom: auto;">
+      <div class="item-info">
+        <span class="item-title">Localhost Bound</span>
+        <span class="item-desc">Restrict incoming traffic to 127.0.0.1 for security</span>
+      </div>
+      <div class="switch on" onclick="this.classList.toggle('on')"></div>
+    </div>
+
+    <div class="btn-group">
+      <button class="btn-premium">Stop Server</button>
+      <button class="btn-premium btn-primary">Restart Aura</button>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  // Add hover effect for cards to track mouse and create a custom gradient spot glow
+  const tabContent = document.getElementById('tabContent');
+  tabContent.addEventListener('mousemove', e => {
+    for(const card of document.getElementsByClassName("card-hoverable")) {
+      const rect = card.getBoundingClientRect(),
+            x = e.clientX - rect.left,
+            y = e.clientY - rect.top;
+      card.style.setProperty("--mouse-x", `${x}px`);
+      card.style.setProperty("--mouse-y", `${y}px`);
+    }
+  });
+</script>
+
+</body>
+</html>

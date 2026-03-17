@@ -1,0 +1,13 @@
+{
+  "name": "aura-pro-native",
+  "version": "1.0.0",
+  "napi": {
+    "name": "cocos_pro",
+    "triples": {
+      "defaults": true,
+      "additional": [
+        "aarch64-apple-darwin"
+      ]
+    }
+  }
+}

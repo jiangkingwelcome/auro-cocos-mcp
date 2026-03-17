@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+/* Theme 3: Modern Game Engine (Rounded, Vibrant, Clear Hierarchy) */
+:root {
+  --bg-base: #1e1e1e;
+  --bg-panel: #252526;
+  --bg-card: #2d2d30;
+  --bg-hover: #3e3e42;
+  --border-color: #3e3e42;
+  --text-main: #cccccc;
+  --text-title: #ffffff;
+  --accent: #0e639c; /* VSCode Blue */
+  --cocos-green: #07c160;
+  --warning: #cc6633;
+}
+
+body {
+  background: var(--bg-base);
+  color: var(--text-main);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.mcp-panel {
+  width: 400px;
+  background: var(--bg-panel);
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  overflow: hidden;
+  border: 1px solid #333;
+}
+
+.mcp-tabs-header {
+  display: flex;
+  background: #1e1e1e;
+  padding: 5px 10px 0;
+  gap: 5px;
+}
+
+.mcp-tab {
+  padding: 8px 16px; font-size: 13px; font-weight: 500;
+  color: #999; cursor: pointer; border-radius: 6px 6px 0 0;
+  transition: 0.2s; background: transparent;
+}
+.mcp-tab:hover { background: #2d2d30; color: #ccc; }
+.mcp-tab.active { background: var(--bg-panel); color: var(--text-title); border-top: 2px solid var(--accent); }
+
+.mcp-tabs-container { padding: 16px; }
+
+.s3-bento { display: flex; flex-direction: column; gap: 12px; }
+.s3-row { display: flex; gap: 12px; }
+
+.s3-tile {
+  flex: 1; background: var(--bg-card); border-radius: 8px; padding: 16px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1); border: 1px solid transparent;
+  transition: 0.2s;
+}
+.s3-tile:hover { border-color: var(--border-color); transform: translateY(-1px); }
+
+.s3-tile-label { font-size: 12px; color: #aaa; margin-bottom: 6px; font-weight: 500; }
+.s3-tile-value { font-size: 26px; font-weight: 600; color: var(--text-title); }
+
+.val-blue { color: #569cd6; } /* VSCode light blue */
+.val-green { color: #4ec9b0; } /* VSCode teal */
+.tag { background: #000; padding: 2px 6px; border-radius: 10px; font-size: 11px; }
+
+.s3-tile-sub { font-size: 12px; color: #888; margin-top: 8px; display: flex; align-items: center; justify-content: space-between; }
+
+.btn {
+  width: 100%; padding: 10px; border-radius: 6px; font-size: 13px; font-weight: bold;
+  cursor: pointer; border: none; background: #3a3a3a; color: var(--text-title);
+  transition: 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+.btn:hover { background: #4a4a4a; }
+.btn-primary { background: var(--accent); color: white; }
+.btn-primary:hover { background: #1177bb; }
+
+.status-box { display: flex; align-items: center; gap: 8px; background: rgba(7,193,96,0.1); border: 1px solid rgba(7,193,96,0.2); padding: 8px 12px; border-radius: 6px; }
+.status-dot { width: 10px; height: 10px; border-radius: 5px; background: var(--cocos-green); }
+.status-text { color: var(--cocos-green); font-weight: bold; font-size: 13px; }
+
+</style>
+</head>
+<body>
+<div class="mcp-panel">
+  <div class="mcp-tabs-header">
+    <div class="mcp-tab active">Overview</div>
+    <div class="mcp-tab">Control</div>
+    <div class="mcp-tab">Settings</div>
+  </div>
+  <div class="mcp-tabs-container">
+    <div class="s3-bento">
+      
+      <div class="status-box">
+        <span class="status-dot"></span>
+        <span class="status-text">Server Running on Port 8080</span>
+      </div>
+
+      <div class="s3-tile">
+        <div class="s3-tile-sub" style="margin-top:0; margin-bottom:8px;">Current Project <span class="tag">Cocos 3.8.3</span></div>
+        <div class="s3-tile-value" style="font-size:18px;">SuperCocosGame</div>
+        <div class="s3-tile-sub" style="color:#569cd6">E:/Projects/Game</div>
+      </div>
+
+      <div class="s3-row">
+        <div class="s3-tile">
+          <div class="s3-tile-label">Registered Tools</div>
+          <div class="s3-tile-value val-blue">22</div>
+        </div>
+        <div class="s3-tile">
+          <div class="s3-tile-label">Total Actions</div>
+          <div class="s3-tile-value val-green">275</div>
+        </div>
+      </div>
+      
+    </div>
+    <div style="margin-top: 16px; display:flex; gap:10px;">
+      <button class="btn btn-primary">Restart Bridge</button>
+      <button class="btn">Configure</button>
+    </div>
+  </div>
+</div>
+</body>
+</html>

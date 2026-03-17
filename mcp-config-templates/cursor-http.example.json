@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "cocos-creator-bridge": {
+      "transport": "http",
+      "url": "http://127.0.0.1:7779/mcp",
+      "headers": {
+        "X-MCP-Token": "REPLACE_WITH_TOKEN_FROM_API_MCP_CONNECTION_INFO"
+      }
+    }
+  }
+}
