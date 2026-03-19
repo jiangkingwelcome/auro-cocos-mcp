@@ -2,6 +2,7 @@
 
 > 来源：Cocos Creator 3.8.8 编辑器 - 开发者 → 消息管理  
 > 仅包含截图中的 7 个模块：project, preferences, asset-db, scene, server, builder, reference-image
+> ⚠️ 部分 IPC（如 prefab 相关、builder 扩展功能）编辑器界面未展示，但实际可用，详见代码验证。
 
 ---
 
@@ -115,6 +116,11 @@
 | `query-classes` | 查询所有在引擎中注册的类 |
 | `query-components` | 查询当前场景的所有组件 |
 | `query-component-has-script` | 查询引擎组件列表是否含有指定类名的脚本 |
+| `create-prefab` | 创建预制体资源（传入节点 UUID 和保存路径） |
+| `apply-prefab` | 将预制体实例的修改应用到预制体资源 |
+| `restore-prefab` | 使用预制体资源还原对应预制件节点（内置撤销记录） |
+| `enter-prefab-edit-mode` | 进入预制体编辑模式 |
+| `exit-prefab-edit-mode` | 退出预制体编辑模式 |
 
 ---
 
@@ -138,6 +144,7 @@
 |---------|------|
 | `open` | 打开构建面板 |
 | `query-worker-ready` | 查询构建进程是否启动 |
+| `query-build-options` | 查询当前构建配置选项 |
 
 ---
 
