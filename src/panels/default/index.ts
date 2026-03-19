@@ -11,8 +11,12 @@ module.exports = Editor.Panel.define({
   template: /* html */ `\n
     <div class="mcp-panel" id="app">
 
+      <!-- Brand Line -->
+      <div class="brand-line"></div>
+
       <!-- Header -->
       <div class="panel-header">
+        <div class="logo-icon"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP+gvaeTAAABqklEQVRIie2UPU/CQADH/3ctFBQSE4cujm5u+gUcnfwEji5+AhcXFxc/gYuLi5OJiYmDg4ODMTExMRoTE6MxGl9iKFB67V17vBTjwE1N7v+7/+/u2gP+e6j+DZcAqAAUgCIiLYBuALqIaI8A9wC4BcBtAN4A8AaANwC8AeANAG8AeAPAGwDeAPAGgDcAvAHgDQBvAHgDwBsA3gDwBoA3ALwB4A0AbwB4A8AbAN4A8AaANwC8AeANAG8AeAPAGwDeAPAGgDcAvAHgDQBvAHgDwBsA3gDwBoA3ALwB4A0AbwB4A8AbAN4A8AaAN/4A8AaANwC8AeANAG8AeAPAGwDeAPAGgDcAvAHgDQBvAHgDwBsA3gDwBoA3ALwB4A0AbwB4A8AbAN4A8AaANwC8AeANAG8AeAPAGwDeAPAGgDcAvAHgDQBvAHgDwBsA3gDwBoA3ALwB4A0AbwB4A8AbAN4A8AaANwC8AeANAG/8AeANAG8AeAPAGwDeAPAGgDcAvAHgDQBvAHgDwBsA3gDwBoA3ALwB4A0AbwB4A8AbAN4A8AaAN/6/8Q3SaGv8FjMJHwAAAABJRU5ErkJggg==" /></div>
         <span class="brand-txt">Aura</span>
         <div class="holo-badge" id="holoBadge"><div class="holo-badge-inner" data-i18n="badge.community">Community</div></div>
         <div class="header-actions">
@@ -326,6 +330,12 @@ module.exports = Editor.Panel.define({
       user-select: none; position: relative; overflow: hidden;
     }
 
+    /* ===== BRAND LINE ===== */
+    .brand-line {
+      height: 2px; width: 100%; flex-shrink: 0;
+      background: #7c3aed;
+    }
+
     /* ===== HEADER ===== */
     .panel-header {
       display: flex; align-items: center; padding: 10px 16px; gap: 8px;
@@ -333,15 +343,19 @@ module.exports = Editor.Panel.define({
       border-bottom: 1px solid #2d2d2d;
       flex-shrink: 0;
     }
+    .logo-icon {
+      width: 22px; height: 22px; flex-shrink: 0; border-radius: 5px; overflow: hidden;
+    }
+    .logo-icon img { width: 100%; height: 100%; display: block; }
     .brand-txt { font-size: 14px; font-weight: 700; color: #e0e0e0; letter-spacing: -0.3px; }
     .holo-badge {
       display: inline-block; font-size: 10px; font-weight: 600; letter-spacing: 0.5px;
     }
     .holo-badge-inner {
       display: inline-block;
-      background: #2d2d2d; color: #858585;
+      background: #2d2d2d; color: #a78bfa;
       padding: 2px 8px; border-radius: 3px;
-      font-size: 10px; border: 1px solid #3c3c3c;
+      font-size: 10px; border: 1px solid rgba(124,58,237,0.3);
     }
     .header-actions {
       margin-left: auto; display: flex; gap: 4px;
@@ -369,7 +383,7 @@ module.exports = Editor.Panel.define({
     .mcp-tab:hover { color: #cccccc; }
     .mcp-tab.active {
       color: #ffffff;
-      border-bottom-color: #0078d4;
+      border-bottom-color: #7c3aed;
     }
 
     /* ===== CONTENT AREA ===== */
@@ -406,10 +420,10 @@ module.exports = Editor.Panel.define({
     .status-dot {
       display: inline-block; width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
     }
-    .status-dot.online { background: #89d185; }
+    .status-dot.online { background: #5eead4; }
     .status-dot.offline { background: #f14c4c; }
     .status-lbl { font-size: 12.5px; font-weight: 500; }
-    .status-text.online { color: #89d185; font-weight: 600; }
+    .status-text.online { color: #5eead4; font-weight: 600; }
     .status-text.offline { color: #f14c4c; }
     .status-port {
       margin-left: auto;
@@ -437,7 +451,7 @@ module.exports = Editor.Panel.define({
     }
     .value-changed { animation: valueFlash 0.5s ease-out; }
     @keyframes valueFlash {
-      0% { color: #dcdcaa; }
+      0% { color: #a78bfa; }
       100% { color: #e0e0e0; }
     }
 
@@ -469,7 +483,7 @@ module.exports = Editor.Panel.define({
       color: #999;
       white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     }
-    .proj-uptime { color: #89d185; }
+    .proj-uptime { color: #5eead4; }
 
     /* ===== SECTION HEADERS ===== */
     .control-header { display: flex; flex-direction: column; gap: 4px; }
@@ -491,18 +505,18 @@ module.exports = Editor.Panel.define({
     }
     .btn:hover { background: #2d2d2d; border-color: #555; color: #e0e0e0; }
     .btn:active { background: #333; }
-    .btn-primary { background: #0078d4; color: #fff; border-color: #0078d4; font-weight: 600; }
-    .btn-primary:hover { background: #006cbd; border-color: #006cbd; color: #fff; }
-    .btn-success { background: rgba(137,209,133,0.12); color: #89d185; border-color: rgba(137,209,133,0.3); }
-    .btn-success:hover { background: rgba(137,209,133,0.2); border-color: rgba(137,209,133,0.5); }
+    .btn-primary { background: #7c3aed; color: #fff; border-color: #7c3aed; font-weight: 600; }
+    .btn-primary:hover { background: #6d28d9; border-color: #6d28d9; color: #fff; }
+    .btn-success { background: rgba(94,234,212,0.12); color: #5eead4; border-color: rgba(94,234,212,0.3); }
+    .btn-success:hover { background: rgba(94,234,212,0.2); border-color: rgba(94,234,212,0.5); }
     .btn-danger { background: rgba(241,76,76,0.12); color: #f14c4c; border-color: rgba(241,76,76,0.3); }
     .btn-danger:hover { background: rgba(241,76,76,0.2); border-color: rgba(241,76,76,0.5); }
     .btn-holo-btn {
-      background: rgba(0,120,212,0.08); color: #4fc1ff;
-      border: 1px solid rgba(0,120,212,0.3);
+      background: rgba(124,58,237,0.08); color: #a78bfa;
+      border: 1px solid rgba(124,58,237,0.3);
     }
     .btn-holo-btn:hover {
-      background: rgba(0,120,212,0.16); border-color: rgba(0,120,212,0.5); color: #4fc1ff;
+      background: rgba(124,58,237,0.16); border-color: rgba(124,58,237,0.5); color: #c4b5fd;
     }
     .btn-disabled { opacity: 0.35; pointer-events: none; }
     .button-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
@@ -521,8 +535,8 @@ module.exports = Editor.Panel.define({
     .ide-title { font-size: 12px; font-weight: 500; color: #cccccc; }
     .ide-status { font-size: 11px; color: #858585; }
     .ide-status.ready {
-      color: #89d185; background: rgba(137,209,133,0.1);
-      border: 1px solid rgba(137,209,133,0.25); padding: 2px 8px; border-radius: 3px;
+      color: #5eead4; background: rgba(94,234,212,0.1);
+      border: 1px solid rgba(94,234,212,0.25); padding: 2px 8px; border-radius: 3px;
     }
     .ide-status.unready { color: #858585; }
     .config-ide-btn { padding: 5px 10px !important; font-size: 11px !important; }
@@ -538,7 +552,7 @@ module.exports = Editor.Panel.define({
       background: #858585; border-radius: 50%; transition: 0.2s;
     }
     .tool-toggle:checked {
-      background: #0078d4; border-color: #0078d4;
+      background: #7c3aed; border-color: #7c3aed;
     }
     .tool-toggle:checked::after { transform: translateX(16px); background: #fff; }
     .tool-toggle:disabled { opacity: 0.4; cursor: not-allowed; }
@@ -553,7 +567,7 @@ module.exports = Editor.Panel.define({
     .setting-input { width: 84px; height: 28px; text-align: right; }
     .setting-select { height: 28px; cursor: pointer; }
     .setting-input:focus, .setting-select:focus, .license-input:focus {
-      border-color: #0078d4;
+      border-color: #7c3aed;
     }
     .license-input { flex: 1; height: 32px; padding: 0 10px; font-size: 11px; letter-spacing: 0.5px; }
     .license-input::placeholder { color: #555; }
@@ -582,7 +596,7 @@ module.exports = Editor.Panel.define({
       border-left: 2px solid transparent; transition: border-color 0.15s, background 0.15s;
     }
     .tool-row:hover { border-color: #555; border-left-color: #555; background: #2a2a2a; }
-    .tool-row.expanded { border-left-color: #0078d4; background: #2a2a2a; }
+    .tool-row.expanded { border-left-color: #7c3aed; background: #2a2a2a; }
     .tool-info { display: flex; flex-direction: column; gap: 3px; flex: 1; }
     .tool-name-row { display: flex; align-items: center; gap: 8px; }
     .tool-name { font-size: 12px; font-weight: 500; color: #cccccc; font-family: 'SF Mono', Consolas, 'Courier New', monospace; }
@@ -596,12 +610,12 @@ module.exports = Editor.Panel.define({
       display: inline-flex; align-items: center;
       padding: 1px 6px; border-radius: 3px;
       font-size: 9px; font-weight: 700; letter-spacing: 0.5px;
-      background: #0078d4; color: #fff;
+      background: #7c3aed; color: #fff;
     }
     .pro-extra-badge {
       display: inline-flex; align-items: center;
       padding: 1px 6px; border-radius: 3px; font-size: 9px; font-weight: 600;
-      background: rgba(0,120,212,0.12); color: #4fc1ff; border: 1px solid rgba(0,120,212,0.3);
+      background: rgba(124,58,237,0.12); color: #a78bfa; border: 1px solid rgba(124,58,237,0.3);
     }
     .pro-lock-icon { font-size: 14px; opacity: 0.5; flex-shrink: 0; }
     .pro-locked { opacity: 0.45; }
@@ -636,8 +650,8 @@ module.exports = Editor.Panel.define({
     .step-number {
       width: 24px; height: 24px; border-radius: 50%; flex-shrink: 0;
       display: flex; align-items: center; justify-content: center;
-      font-size: 11px; font-weight: 700; color: #4fc1ff;
-      background: rgba(0,120,212,0.15); border: 1px solid rgba(0,120,212,0.3);
+      font-size: 11px; font-weight: 700; color: #a78bfa;
+      background: rgba(124,58,237,0.15); border: 1px solid rgba(124,58,237,0.3);
     }
     .step-content { display: flex; flex-direction: column; gap: 4px; flex: 1; }
     .step-title { font-size: 13px; font-weight: 600; color: #e0e0e0; }
@@ -654,14 +668,14 @@ module.exports = Editor.Panel.define({
     .prompt-tag {
       font-size: 10px; font-weight: 600; letter-spacing: 0.5px; flex-shrink: 0;
       padding: 3px 7px; border-radius: 3px;
-      background: rgba(0,120,212,0.12); border: 1px solid rgba(0,120,212,0.3); color: #4fc1ff;
+      background: rgba(124,58,237,0.12); border: 1px solid rgba(124,58,237,0.3); color: #a78bfa;
     }
     .prompt-text { font-size: 12px; color: #999; line-height: 1.5; flex: 1; }
     .prompt-copy {
       color: #555; font-size: 13px; cursor: pointer;
       padding: 2px 5px; transition: color 0.15s; background: none; border: none;
     }
-    .prompt-copy:hover, .prompt-copy.copied { color: #89d185; }
+    .prompt-copy:hover, .prompt-copy.copied { color: #5eead4; }
     .guide-tips .tips-title { font-size: 12px; font-weight: 600; color: #cccccc; margin-bottom: 8px; }
     .tips-list { margin: 0; padding-left: 18px; list-style: disc; }
     .tips-list li { font-size: 11px; color: #858585; margin-bottom: 4px; line-height: 1.5; }
@@ -677,7 +691,7 @@ module.exports = Editor.Panel.define({
       border-radius: 4px; font-size: 12px;
       border: 1px solid #3c3c3c; background: #252526;
     }
-    .config-result.success { background: rgba(137,209,133,0.08); border-color: rgba(137,209,133,0.25); color: #89d185; }
+    .config-result.success { background: rgba(94,234,212,0.08); border-color: rgba(94,234,212,0.25); color: #5eead4; }
     .config-result.error { background: rgba(241,76,76,0.08); border-color: rgba(241,76,76,0.25); color: #f14c4c; }
 
     /* ===== LICENSE CARD ===== */
@@ -689,9 +703,9 @@ module.exports = Editor.Panel.define({
     .license-edition { font-size: 14px; font-weight: 600; color: #e0e0e0; font-family: 'SF Mono', Consolas, 'Courier New', monospace; }
     .license-state { padding: 3px 8px; border-radius: 3px; font-size: 11px; font-weight: 500; }
     .license-state.community { border: 1px solid #3c3c3c; color: #858585; }
-    .license-state.active { border: 1px solid rgba(137,209,133,0.35); color: #89d185; background: rgba(137,209,133,0.08); }
+    .license-state.active { border: 1px solid rgba(94,234,212,0.35); color: #5eead4; background: rgba(94,234,212,0.08); }
     .license-state.expired { border: 1px solid rgba(241,76,76,0.35); color: #f14c4c; background: rgba(241,76,76,0.08); }
-    .license-state.no-key { border: 1px solid rgba(220,220,170,0.35); color: #dcdcaa; background: rgba(220,220,170,0.08); }
+    .license-state.no-key { border: 1px solid rgba(167,139,250,0.35); color: #a78bfa; background: rgba(167,139,250,0.08); }
     .license-detail { font-size: 12px; color: #858585; display: flex; gap: 12px; }
     .license-error { font-size: 12px; color: #f14c4c; }
     .license-input-row { display: flex; gap: 8px; }
@@ -715,7 +729,7 @@ module.exports = Editor.Panel.define({
     .copyable:hover { opacity: 0.75; }
     .copy-toast {
       position: absolute; top: -22px; left: 50%; transform: translateX(-50%);
-      background: #89d185; color: #000; font-size: 10px; padding: 2px 8px; border-radius: 3px;
+      background: #5eead4; color: #000; font-size: 10px; padding: 2px 8px; border-radius: 3px;
       white-space: nowrap; pointer-events: none; animation: toastFade 1s ease forwards;
     }
     @keyframes toastFade {
@@ -724,7 +738,7 @@ module.exports = Editor.Panel.define({
     }
 
     /* ===== INJECT BUTTON FEEDBACK ===== */
-    .config-ide-btn.inject-success { background: rgba(137,209,133,0.12) !important; border-color: rgba(137,209,133,0.3) !important; color: #89d185 !important; }
+    .config-ide-btn.inject-success { background: rgba(94,234,212,0.12) !important; border-color: rgba(94,234,212,0.3) !important; color: #5eead4 !important; }
     .config-ide-btn.inject-fail { background: rgba(241,76,76,0.12) !important; border-color: rgba(241,76,76,0.3) !important; color: #f14c4c !important; }
 
     /* ===== REFRESH SPIN ===== */
