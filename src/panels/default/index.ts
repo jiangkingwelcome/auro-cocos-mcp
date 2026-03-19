@@ -1039,6 +1039,7 @@ module.exports = Editor.Panel.define({
         'add_component','remove_component','set_property','reset_property','call_component_method',
         'ensure_2d_canvas','set_anchor_point','set_content_size',
         'create_prefab','instantiate_prefab',
+        'enter_prefab_edit','exit_prefab_edit',
         'apply_prefab','restore_prefab','validate_prefab',
         'copy_node','paste_node','cut_node',
         'move_array_element','remove_array_element','execute_component_method',

@@ -226,7 +226,7 @@ Common errors: "没有打开的场景"=no scene open; "未找到节点: uuid"=in
     },
   );
 
-  // 3. scene_operation (37 actions — Community Edition)
+  // 3. scene_operation (39 actions — Community Edition)
   server.tool(
     'scene_operation',
     `Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.
@@ -256,6 +256,8 @@ Actions & required parameters:
 - call_component_method: uuid(REQUIRED), component(REQUIRED), methodName(REQUIRED), args(optional).
 - create_prefab: uuid(REQUIRED), savePath(recommended, e.g. "db://assets/prefabs/X.prefab").
 - instantiate_prefab: prefabUrl(REQUIRED, db:// path to .prefab file), parentUuid(optional).
+- enter_prefab_edit: prefabUrl(REQUIRED). Enter prefab editing mode (opens prefab as a scene). Use asset-db open-asset internally.
+- exit_prefab_edit: sceneUrl(optional). Exit prefab editing mode and return to the previous scene. If sceneUrl omitted, opens the most recently opened scene.
 - apply_prefab: uuid(REQUIRED). Apply changes to prefab asset.
 - restore_prefab: uuid(REQUIRED). Restore prefab instance to original.
 - validate_prefab: prefabUrl(REQUIRED). Check prefab file integrity.
@@ -291,8 +293,9 @@ Common errors: "未找到节点"=bad UUID; "未找到父节点"=parent not found
         'add_component', 'remove_component', 'set_property', 'reset_property', 'call_component_method',
         // Basic UI (3)
         'ensure_2d_canvas', 'set_anchor_point', 'set_content_size',
-        // Prefab (5)
+        // Prefab (7)
         'create_prefab', 'instantiate_prefab',
+        'enter_prefab_edit', 'exit_prefab_edit',
         'apply_prefab', 'restore_prefab', 'validate_prefab',
         // Clipboard (3)
         'copy_node', 'paste_node', 'cut_node',
@@ -387,8 +390,12 @@ Common errors: "未找到节点"=bad UUID; "未找到父节点"=parent not found
         'If omitted, these actions are BLOCKED to prevent accidental data loss.'
       ),
       prefabUrl: z.string().optional().describe(
-        'db:// URL of a .prefab asset. REQUIRED for: instantiate_prefab, validate_prefab. ' +
+        'db:// URL of a .prefab asset. REQUIRED for: instantiate_prefab, validate_prefab, enter_prefab_edit. ' +
         'Example: "db://assets/prefabs/Player.prefab".'
+      ),
+      sceneUrl: z.string().optional().describe(
+        'db:// URL of a .scene asset. Optional for: exit_prefab_edit (return to this scene). ' +
+        'If omitted, returns to the most recently opened scene.'
       ),
       // ensure_2d_canvas
       confirmCreateCanvas: z.boolean().optional().describe(
@@ -499,6 +506,37 @@ Common errors: "未找到节点"=bad UUID; "未找到父节点"=parent not found
             return text({ success: true, action: 'instantiate_prefab', prefabUrl, result: result ?? 'instantiated', method: 'scene-script' });
           } catch (err: unknown) {
             return text({ error: `实例化预制体失败: ${errorMessage(err)}` }, true);
+          }
+        }
+        if (p.action === 'enter_prefab_edit') {
+          const prefabUrl = String(p.prefabUrl || p.url || '');
+          try {
+            const prefabUuid = await editorMsg('asset-db', 'query-uuid', prefabUrl);
+            if (!prefabUuid) return text({ error: `预制体不存在: ${prefabUrl}` }, true);
+            await editorMsg('asset-db', 'open-asset', String(prefabUuid));
+            return text({ success: true, action: 'enter_prefab_edit', prefabUrl, prefabUuid: String(prefabUuid) });
+          } catch (err: unknown) {
+            return text({ error: `进入预制体编辑模式失败: ${errorMessage(err)}` }, true);
+          }
+        }
+        if (p.action === 'exit_prefab_edit') {
+          try {
+            const sceneUrl = String(p.sceneUrl || '');
+            if (sceneUrl) {
+              const sceneUuid = await editorMsg('asset-db', 'query-uuid', sceneUrl);
+              if (!sceneUuid) return text({ error: `场景不存在: ${sceneUrl}` }, true);
+              await editorMsg('asset-db', 'open-asset', String(sceneUuid));
+              return text({ success: true, action: 'exit_prefab_edit', sceneUrl });
+            }
+            const scenes = await editorMsg('asset-db', 'query-assets', { pattern: 'db://assets/**/*.scene' }) as Array<{ uuid?: string; url?: string }> | null;
+            if (scenes && scenes.length > 0) {
+              const first = scenes[0];
+              await editorMsg('asset-db', 'open-asset', String(first.uuid));
+              return text({ success: true, action: 'exit_prefab_edit', sceneUrl: first.url });
+            }
+            return text({ error: '没有找到可用的场景文件' }, true);
+          } catch (err: unknown) {
+            return text({ error: `退出预制体编辑模式失败: ${errorMessage(err)}` }, true);
           }
         }
         if (p.action === 'apply_prefab') {

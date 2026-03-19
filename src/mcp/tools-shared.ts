@@ -315,6 +315,7 @@ export const REQUIRED_PARAMS: Record<string, string[]> = {
   'scene_operation.create_prefab': ['uuid'],
   'scene_operation.clipboard_copy': ['uuid'],
   'scene_operation.instantiate_prefab': ['prefabUrl'],
+  'scene_operation.enter_prefab_edit': ['prefabUrl'],
   'scene_operation.apply_prefab': ['uuid'],
   'scene_operation.restore_prefab': ['uuid'],
   'scene_operation.validate_prefab': ['prefabUrl'],
