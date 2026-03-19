@@ -121,9 +121,9 @@ describe('buildCocosToolServer — scene_operation 危险操作守卫', () => {
     expect(sceneMethod).not.toHaveBeenCalled();
   });
 
-  it('destroy_node confirmDangerous=true → 调用 sceneMethod', async () => {
-    const sceneMethod = vi.fn().mockResolvedValue({ success: true });
-    const server = buildCocosToolServer(makeCtx({ sceneMethod }));
+  it('destroy_node confirmDangerous=true → 调用 editorMsg remove-node', async () => {
+    const editorMsg = vi.fn().mockResolvedValue({});
+    const server = buildCocosToolServer(makeCtx({ editorMsg }));
 
     const result = await server.callTool('scene_operation', {
       action: 'destroy_node',
@@ -132,7 +132,7 @@ describe('buildCocosToolServer — scene_operation 危险操作守卫', () => {
     });
 
     expect(result.isError).toBeFalsy();
-    expect(sceneMethod).toHaveBeenCalledWith('dispatchOperation', expect.any(Array));
+    expect(editorMsg).toHaveBeenCalledWith('scene', 'remove-node', { uuid: 'some-node-uuid' });
   });
 
   it('clear_children 没有 confirmDangerous → 被拦截', async () => {

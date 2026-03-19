@@ -239,12 +239,12 @@ describe('scene_operation — standard dispatchOperation actions', () => {
     expect(data.error).toContain('危险操作');
   });
 
-  it('destroy_node calls dispatchOperation with confirmDangerous=true', async () => {
-    const sceneMethod = vi.fn().mockResolvedValue({ success: true });
-    const server = buildCocosToolServer(makeCtx({ sceneMethod }));
+  it('destroy_node calls editorMsg remove-node with confirmDangerous=true', async () => {
+    const editorMsg = vi.fn().mockResolvedValue({});
+    const server = buildCocosToolServer(makeCtx({ editorMsg }));
     const result = await server.callTool('scene_operation', { action: 'destroy_node', uuid: 'u1', confirmDangerous: true });
     expect(result.isError).toBeFalsy();
-    expect(sceneMethod).toHaveBeenCalledWith('dispatchOperation', [expect.objectContaining({ action: 'destroy_node', uuid: 'u1' })]);
+    expect(editorMsg).toHaveBeenCalledWith('scene', 'remove-node', { uuid: 'u1' });
   });
 
   it('reparent calls dispatchOperation', async () => {
@@ -313,12 +313,12 @@ describe('scene_operation — standard dispatchOperation actions', () => {
     expect(sceneMethod).toHaveBeenCalledWith('dispatchOperation', [expect.objectContaining({ action: 'set_property' })]);
   });
 
-  it('reset_property calls dispatchOperation', async () => {
-    const sceneMethod = vi.fn().mockResolvedValue({ success: true });
-    const server = buildCocosToolServer(makeCtx({ sceneMethod }));
+  it('reset_property calls editorMsg reset-property', async () => {
+    const editorMsg = vi.fn().mockResolvedValue({});
+    const server = buildCocosToolServer(makeCtx({ editorMsg }));
     const result = await server.callTool('scene_operation', { action: 'reset_property', uuid: 'u1', component: 'Label', property: 'string' });
     expect(result.isError).toBeFalsy();
-    expect(sceneMethod).toHaveBeenCalledWith('dispatchOperation', [expect.objectContaining({ action: 'reset_property' })]);
+    expect(editorMsg).toHaveBeenCalledWith('scene', 'reset-property', { uuid: 'u1', path: 'Label.string' });
   });
 
   it('duplicate_node calls dispatchOperation', async () => {
@@ -376,12 +376,14 @@ describe('scene_operation — standard dispatchOperation actions', () => {
     expect(sceneMethod).toHaveBeenCalledWith('dispatchOperation', [expect.objectContaining({ action: 'set_layer' })]);
   });
 
-  it('call_component_method calls dispatchOperation', async () => {
-    const sceneMethod = vi.fn().mockResolvedValue({ success: true });
-    const server = buildCocosToolServer(makeCtx({ sceneMethod }));
+  it('call_component_method calls editorMsg execute-component-method', async () => {
+    const editorMsg = vi.fn().mockResolvedValue({});
+    const server = buildCocosToolServer(makeCtx({ editorMsg }));
     const result = await server.callTool('scene_operation', { action: 'call_component_method', uuid: 'u1', component: 'Animation', methodName: 'play' });
     expect(result.isError).toBeFalsy();
-    expect(sceneMethod).toHaveBeenCalledWith('dispatchOperation', [expect.objectContaining({ action: 'call_component_method' })]);
+    expect(editorMsg).toHaveBeenCalledWith('scene', 'execute-component-method', {
+      uuid: 'u1', component: 'Animation', method: 'play', args: [],
+    });
   });
 
   it('clear_children blocked without confirmDangerous', async () => {
@@ -390,12 +392,15 @@ describe('scene_operation — standard dispatchOperation actions', () => {
     expect(result.isError).toBe(true);
   });
 
-  it('clear_children calls dispatchOperation with confirmDangerous=true', async () => {
-    const sceneMethod = vi.fn().mockResolvedValue({ success: true });
-    const server = buildCocosToolServer(makeCtx({ sceneMethod }));
+  it('clear_children queries children then calls editorMsg remove-node for each', async () => {
+    const sceneMethod = vi.fn().mockResolvedValue({ children: [{ uuid: 'c1' }, { uuid: 'c2' }] });
+    const editorMsg = vi.fn().mockResolvedValue({});
+    const server = buildCocosToolServer(makeCtx({ sceneMethod, editorMsg }));
     const result = await server.callTool('scene_operation', { action: 'clear_children', uuid: 'u1', confirmDangerous: true });
     expect(result.isError).toBeFalsy();
-    expect(sceneMethod).toHaveBeenCalledWith('dispatchOperation', [expect.objectContaining({ action: 'clear_children' })]);
+    expect(sceneMethod).toHaveBeenCalledWith('dispatchQuery', [{ action: 'get_children', uuid: 'u1' }]);
+    expect(editorMsg).toHaveBeenCalledWith('scene', 'remove-node', { uuid: 'c1' });
+    expect(editorMsg).toHaveBeenCalledWith('scene', 'remove-node', { uuid: 'c2' });
   });
 });
 
@@ -466,8 +471,7 @@ describe('scene_operation — NEW_SCENE_OPS (dispatchOperation with fallback)', 
     { action: 'bind_event', params: { uuid: 'u1', eventType: 'click', component: 'MyScript', handler: 'onClick' } },
     { action: 'unbind_event', params: { uuid: 'u1', eventType: 'click' } },
     { action: 'list_events', params: { uuid: 'u1' } },
-    { action: 'reset_transform', params: { uuid: 'u1' } },
-    { action: 'reset_node_properties', params: { uuid: 'u1' } },
+    // reset_transform and reset_node_properties use editorMsg IPC — tested separately below
     { action: 'set_anchor_point', params: { uuid: 'u1' } },
     { action: 'set_content_size', params: { uuid: 'u1', width: 100, height: 50 } },
     { action: 'batch_set_property', params: { uuids: ['a', 'b'], component: 'Label', property: 'string', value: 'Hi' } },
@@ -496,6 +500,25 @@ describe('scene_operation — NEW_SCENE_OPS (dispatchOperation with fallback)', 
       expect(sceneMethod).toHaveBeenCalledWith('dispatchOperation', [expect.objectContaining({ action })]);
     });
   }
+
+  it('reset_transform calls editorMsg reset-node', async () => {
+    const editorMsg = vi.fn().mockResolvedValue({});
+    const server = buildCocosToolServer(makeCtx({ editorMsg }));
+    const result = await server.callTool('scene_operation', { action: 'reset_transform', uuid: 'u1' });
+    expect(result.isError).toBeFalsy();
+    expect(editorMsg).toHaveBeenCalledWith('scene', 'reset-node', { uuid: 'u1' });
+  });
+
+  it('reset_node_properties queries components then calls editorMsg reset-component', async () => {
+    const sceneMethod = vi.fn().mockResolvedValue({ components: [{ type: 'cc.Sprite' }, { type: 'cc.Label' }] });
+    const editorMsg = vi.fn().mockResolvedValue({});
+    const server = buildCocosToolServer(makeCtx({ sceneMethod, editorMsg }));
+    const result = await server.callTool('scene_operation', { action: 'reset_node_properties', uuid: 'u1' });
+    expect(result.isError).toBeFalsy();
+    expect(sceneMethod).toHaveBeenCalledWith('dispatchQuery', [{ action: 'get_components', uuid: 'u1' }]);
+    expect(editorMsg).toHaveBeenCalledWith('scene', 'reset-component', { uuid: 'u1', component: 'cc.Sprite' });
+    expect(editorMsg).toHaveBeenCalledWith('scene', 'reset-component', { uuid: 'u1', component: 'cc.Label' });
+  });
 
   it('exception in scene_operation returns error', async () => {
     const sceneMethod = vi.fn().mockRejectedValue(new Error('scene crashed'));

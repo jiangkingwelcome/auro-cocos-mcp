@@ -275,14 +275,12 @@ describe('竞品功能验证 — 危险操作拦截 (我们的优势)', () => {
   });
 
   it('destroy_node 有确认 → 放行', async () => {
-    const sceneMethod = vi.fn().mockResolvedValue({ success: true, uuid: 'node-1', name: 'Deleted' });
     const editorMsg = vi.fn().mockResolvedValue({});
-    const bridgePost = vi.fn().mockResolvedValue({});
-    const server = buildCocosToolServer(makeCtx({ sceneMethod, editorMsg, bridgePost }));
+    const server = buildCocosToolServer(makeCtx({ editorMsg }));
 
     const result = await server.callTool('scene_operation', { action: 'destroy_node', uuid: 'node-1', confirmDangerous: true });
     expect(result.isError).toBeFalsy();
-    expect(sceneMethod).toHaveBeenCalled();
+    expect(editorMsg).toHaveBeenCalledWith('scene', 'remove-node', { uuid: 'node-1' });
   });
 });
 

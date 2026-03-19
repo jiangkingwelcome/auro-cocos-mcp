@@ -89,18 +89,15 @@ describe('新增功能 — 2D/3D 类型检测', () => {
 // 4. 属性重置 (reset_property)
 // ═════════════════════════════════════════════════════════════════════════════
 describe('新增功能 — 属性重置', () => {
-    it('reset_property 路由到 sceneMethod("dispatchOperation")', async () => {
-        const mockResult = { success: true, uuid: 'n1', component: 'Label', property: 'fontSize', oldValue: 30, newValue: 40 };
-        const sceneMethod = vi.fn().mockResolvedValue(mockResult);
+    it('reset_property 路由到 editorMsg reset-property', async () => {
         const editorMsg = vi.fn().mockResolvedValue({});
-        const bridgePost = vi.fn().mockResolvedValue({});
-        const server = buildCocosToolServer(makeCtx({ sceneMethod, editorMsg, bridgePost }));
+        const server = buildCocosToolServer(makeCtx({ editorMsg }));
 
         const result = await server.callTool('scene_operation', {
             action: 'reset_property', uuid: 'n1', component: 'Label', property: 'fontSize',
         });
         expect(result.isError).toBeFalsy();
-        expect(sceneMethod).toHaveBeenCalledWith('dispatchOperation', expect.any(Array));
+        expect(editorMsg).toHaveBeenCalledWith('scene', 'reset-property', { uuid: 'n1', path: 'Label.fontSize' });
     });
 });
 

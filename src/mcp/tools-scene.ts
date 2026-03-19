@@ -583,10 +583,75 @@ Common errors: "未找到节点"=bad UUID; "未找到父节点"=parent not found
           }
         }
 
+        // ── IPC-only operations (bypass scene-script runtime) ──
+        if (p.action === 'destroy_node') {
+          try {
+            const result = await editorMsg('scene', 'remove-node', { uuid: p.uuid });
+            return text({ success: true, uuid: p.uuid, result: result ?? 'removed', _editorIPC: true });
+          } catch (err: unknown) {
+            return text({ error: `删除节点失败: ${errorMessage(err)}` }, true);
+          }
+        }
+        if (p.action === 'clear_children') {
+          try {
+            const tree = await sceneMethod('dispatchQuery', [{ action: 'get_children', uuid: p.uuid }]) as { children?: Array<{ uuid: string }> };
+            const children = tree?.children ?? [];
+            let removed = 0;
+            for (const child of children) {
+              try { await editorMsg('scene', 'remove-node', { uuid: child.uuid }); removed++; } catch { /* skip */ }
+            }
+            return text({ success: true, uuid: p.uuid, removedCount: removed, totalChildren: children.length, _editorIPC: true });
+          } catch (err: unknown) {
+            return text({ error: `清除子节点失败: ${errorMessage(err)}` }, true);
+          }
+        }
+        if (p.action === 'reset_property') {
+          try {
+            const result = await editorMsg('scene', 'reset-property', { uuid: p.uuid, path: `${p.component}.${p.property}` });
+            return text({ success: true, uuid: p.uuid, component: p.component, property: p.property, result: result ?? 'reset', _editorIPC: true });
+          } catch (err: unknown) {
+            return text({ error: `重置属性失败: ${errorMessage(err)}` }, true);
+          }
+        }
+        if (p.action === 'reset_node_properties') {
+          try {
+            const comps = await sceneMethod('dispatchQuery', [{ action: 'get_components', uuid: p.uuid }]) as { components?: Array<{ type: string }> };
+            const components = comps?.components ?? [];
+            const targetComp = p.component ? String(p.component) : '';
+            let resetCount = 0;
+            for (const comp of components) {
+              if (targetComp && comp.type !== targetComp && comp.type !== `cc.${targetComp}`) continue;
+              try { await editorMsg('scene', 'reset-component', { uuid: p.uuid, component: comp.type }); resetCount++; } catch { /* skip */ }
+            }
+            return text({ success: true, uuid: p.uuid, componentsReset: resetCount, _editorIPC: true });
+          } catch (err: unknown) {
+            return text({ error: `重置节点属性失败: ${errorMessage(err)}` }, true);
+          }
+        }
+        if (p.action === 'reset_transform') {
+          try {
+            const result = await editorMsg('scene', 'reset-node', { uuid: p.uuid });
+            return text({ success: true, uuid: p.uuid, result: result ?? 'reset', _editorIPC: true });
+          } catch (err: unknown) {
+            return text({ error: `重置变换失败: ${errorMessage(err)}` }, true);
+          }
+        }
+        if (p.action === 'call_component_method') {
+          try {
+            const result = await editorMsg('scene', 'execute-component-method', {
+              uuid: p.uuid, component: p.component, method: p.methodName,
+              args: Array.isArray(p.args) ? p.args : [],
+            });
+            return text({ success: true, uuid: p.uuid, component: p.component, method: p.methodName, result: result ?? 'executed', _editorIPC: true });
+          } catch (err: unknown) {
+            return text({ error: `调用组件方法失败: ${errorMessage(err)}` }, true);
+          }
+        }
+
         // ── New actions: try dispatchOperation first, fallback to MCP-layer implementation ──
         const NEW_SCENE_OPS = new Set([
           'ensure_2d_canvas',
-          'reset_transform', 'set_anchor_point', 'set_content_size',
+          'set_anchor_point', 'set_content_size',
         ]);
         const COMPONENT_CHANGING_OPS = new Set([
           'ensure_2d_canvas',
@@ -606,7 +671,6 @@ Common errors: "未找到节点"=bad UUID; "未找到父节点"=parent not found
           return text(await fallbackSceneOperation(String(p.action), p, { sceneMethod, editorMsg, bridgePost, text }));
         }
 
-        // reset_property is handled by scene script dispatchOperation
         const result = withGuardrailHints(await sceneMethod('dispatchOperation', [p])) as Record<string, unknown>;
         // 如果有路径规范化警告，附加到返回值
         if (guardrailWarnings.length && result && typeof result === 'object') {

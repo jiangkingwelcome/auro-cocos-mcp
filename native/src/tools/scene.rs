@@ -288,6 +288,45 @@ pub fn process_operation(args: &serde_json::Value) -> ExecutionPlan {
     }
 
     match action.as_str() {
+        "destroy_node" => ExecutionPlan::single(CallInstruction::EditorMsg {
+            module: "scene".into(),
+            message: "remove-node".into(),
+            args: vec![json!({"uuid": args["uuid"]})],
+        }),
+        "clear_children" => ExecutionPlan::single(CallInstruction::SceneMethod {
+            method: "dispatchOperation".into(),
+            args: vec![args.clone()],
+        }),
+        "reset_property" => ExecutionPlan::single(CallInstruction::EditorMsg {
+            module: "scene".into(),
+            message: "reset-property".into(),
+            args: vec![json!({
+                "uuid": args["uuid"],
+                "path": format!("{}.{}",
+                    args["component"].as_str().unwrap_or(""),
+                    args["property"].as_str().unwrap_or(""))
+            })],
+        }),
+        "reset_node_properties" => ExecutionPlan::single(CallInstruction::EditorMsg {
+            module: "scene".into(),
+            message: "reset-component".into(),
+            args: vec![json!({"uuid": args["uuid"], "component": args.get("component").cloned().unwrap_or(json!(null))})],
+        }),
+        "reset_transform" => ExecutionPlan::single(CallInstruction::EditorMsg {
+            module: "scene".into(),
+            message: "reset-node".into(),
+            args: vec![json!({"uuid": args["uuid"]})],
+        }),
+        "call_component_method" => ExecutionPlan::single(CallInstruction::EditorMsg {
+            module: "scene".into(),
+            message: "execute-component-method".into(),
+            args: vec![json!({
+                "uuid": args["uuid"],
+                "component": args["component"],
+                "method": args["methodName"],
+                "args": args.get("args").cloned().unwrap_or(json!([]))
+            })],
+        }),
         "copy_node" => ExecutionPlan::single(CallInstruction::EditorMsg {
             module: "scene".into(),
             message: "copy-node".into(),
