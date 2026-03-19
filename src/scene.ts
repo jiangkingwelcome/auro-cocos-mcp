@@ -131,6 +131,93 @@ async function notifyEditorComponentProperty(
   return notifyEditorProperty(nodeUuid, propPath, dump);
 }
 
+// ─── Undo recording helpers ─────────────────────────────────────────────────
+// Wrap all structural modifications with begin-recording / end-recording so
+// the editor records Undo entries. Safe to call on versions that don't support
+// these IPC messages (silently ignored).
+
+let _recordingDepth = 0;
+
+async function beginRecording(): Promise<boolean> {
+  _recordingDepth++;
+  if (_recordingDepth > 1) return true; // nested — already recording
+  try {
+    await Editor.Message.request('scene', 'begin-recording');
+    return true;
+  } catch (e) {
+    logIgnored(ErrorCategory.EDITOR_IPC, 'begin-recording 不可用，Undo 记录跳过', e);
+    return false;
+  }
+}
+
+async function endRecording(): Promise<boolean> {
+  _recordingDepth = Math.max(0, _recordingDepth - 1);
+  if (_recordingDepth > 0) return true; // still nested
+  try {
+    await Editor.Message.request('scene', 'end-recording');
+    return true;
+  } catch (e) {
+    logIgnored(ErrorCategory.EDITOR_IPC, 'end-recording 失败', e);
+    return false;
+  }
+}
+
+// ─── Structural IPC helpers ─────────────────────────────────────────────────
+// These call the editor's own IPC messages for structural scene operations,
+// which ensures full Undo support, proper serialization, and Inspector sync.
+// These IPCs exist in Cocos 3.8.8 — if they fail, it's a bug, not a fallback.
+
+async function ipcCreateNode(parentUuid: string, name: string): Promise<string> {
+  const result = await Editor.Message.request('scene', 'create-node', {
+    parent: parentUuid,
+    name,
+  });
+  // IPC returns various formats — normalize to UUID string
+  if (result && typeof result === 'object') {
+    const uuid = (result as Record<string, unknown>).uuid ?? (result as Record<string, unknown>)._id;
+    if (uuid) return String(uuid);
+  }
+  if (typeof result === 'string') return result;
+  throw new Error(`create-node IPC 返回了无法识别的格式: ${JSON.stringify(result)}`);
+}
+
+async function ipcCreateComponent(nodeUuid: string, componentName: string): Promise<void> {
+  await Editor.Message.request('scene', 'create-component', {
+    uuid: nodeUuid,
+    component: componentName.startsWith('cc.') ? componentName : `cc.${componentName}`,
+  });
+}
+
+async function ipcRemoveComponent(nodeUuid: string, componentName: string): Promise<void> {
+  await Editor.Message.request('scene', 'remove-component', {
+    uuid: nodeUuid,
+    component: componentName.startsWith('cc.') ? componentName : `cc.${componentName}`,
+  });
+}
+
+async function ipcSetParent(nodeUuid: string, parentUuid: string): Promise<void> {
+  await Editor.Message.request('scene', 'set-parent', {
+    uuid: nodeUuid,
+    parentUuid,
+  });
+}
+
+async function ipcDuplicateNode(nodeUuid: string): Promise<string> {
+  const result = await Editor.Message.request('scene', 'duplicate-node', {
+    uuids: [nodeUuid],
+  });
+  // IPC may return an array of new UUIDs or an object
+  if (Array.isArray(result) && result.length > 0) {
+    return String(result[0]);
+  }
+  if (result && typeof result === 'object') {
+    const uuid = (result as Record<string, unknown>).uuid ?? (result as Record<string, unknown>)._id;
+    if (uuid) return String(uuid);
+  }
+  if (typeof result === 'string') return result;
+  throw new Error(`duplicate-node IPC 返回了无法识别的格式: ${JSON.stringify(result)}`);
+}
+
 const SPRITE_NAMES = new Set(['Sprite', 'cc.Sprite']);
 
 function getCC(): CocosCC {
@@ -219,7 +306,7 @@ function requireNode(scene: CocosNode, uuid: string): { node: CocosNode } | { er
   return { node };
 }
 
-const deps = { getCC, getNodePath, findNodeByUuid, findNodeByName, resolveParent, requireNode, notifyEditorProperty, notifyEditorRemoveNode, notifyEditorComponentProperty };
+const deps = { getCC, getNodePath, findNodeByUuid, findNodeByName, resolveParent, requireNode, notifyEditorProperty, notifyEditorRemoveNode, notifyEditorComponentProperty, ipcDuplicateNode };
 const queryHandlers = buildQueryHandlers(deps);
 const operationHandlers = buildOperationHandlers(deps);
 
@@ -412,21 +499,17 @@ export const methods = {
   },
 
   createChildNode(parentRef: string, name: string) {
-    const { Node } = getCC();
     const scene = getScene();
     if (!scene) return { error: '没有打开的场景' };
     const resolved = resolveParent(scene, parentRef);
     if ('error' in resolved) return resolved;
     const parent = resolved.node;
-    const node = new Node(name || 'New Node');
-    parent.addChild(node);
-    const nodeUuid = node.uuid ?? node._id;
-    const result: Record<string, unknown> = { success: true, uuid: nodeUuid, name: node.name, parent: parent.name };
+    const parentUuid = parent.uuid ?? parent._id ?? '';
+    const nodeName = name || 'New Node';
+
     return (async () => {
-      if (await notifyEditorProperty(nodeUuid, 'active', { type: 'boolean', value: node.active })) {
-        result._inspectorRefreshed = true;
-      }
-      return result;
+      const newUuid = await ipcCreateNode(parentUuid, nodeName);
+      return { success: true, uuid: newUuid, name: nodeName, parent: parent.name };
     })();
   },
 
@@ -452,17 +535,12 @@ export const methods = {
     if (!node) return { error: `未找到节点: ${uuid}` };
     const resolved = resolveParent(scene, parentRef);
     if ('error' in resolved) return resolved;
-    node.setParent(resolved.node);
-    const result: Record<string, unknown> = { success: true, uuid, parent: resolved.node.name };
+    const newParent = resolved.node;
+    const newParentUuid = newParent.uuid ?? newParent._id ?? '';
+
     return (async () => {
-      const pos = node.position ?? { x: 0, y: 0, z: 0 };
-      if (await notifyEditorProperty(uuid, 'position', {
-        type: 'cc.Vec3',
-        value: { x: pos.x, y: pos.y, z: pos.z },
-      })) {
-        result._inspectorRefreshed = true;
-      }
-      return result;
+      await ipcSetParent(uuid, newParentUuid);
+      return { success: true, uuid, parent: newParent.name };
     })();
   },
 
@@ -474,26 +552,12 @@ export const methods = {
     if (!node) return { error: `未找到节点: ${uuid}` };
     const compClass = js.getClassByName(componentName) || js.getClassByName('cc.' + componentName);
     if (!compClass) return { error: `未找到组件类: ${componentName}` };
-    const comp = node.addComponent(compClass);
-    const result: Record<string, unknown> = { success: !!comp, uuid, component: componentName };
-    if (comp && SPRITE_NAMES.has(componentName)) {
-      result.warning = 'Sprite 组件已添加但未设置 spriteFrame。Cocos 3.8.x 存在引擎缺陷：场景重新激活时 Sprite.onEnable 会在 updateUVs 中访问空 UV 数据导致 TypeError。建议通过 set_property 设置 spriteFrame 后再使用。';
-    }
-    if (!comp) return result;
-
-    const compIndex = (node._components ?? []).indexOf(comp);
-    if (compIndex < 0) return result;
 
     return (async () => {
-      try {
-        await Editor.Message.request('scene', 'set-property', {
-          uuid,
-          path: `__comps__.${compIndex}.enabled`,
-          dump: { type: 'boolean', value: true },
-        });
-        result._inspectorRefreshed = true;
-      } catch (e) {
-        logIgnored(ErrorCategory.EDITOR_IPC, 'addComponent 后 set-property 通知失败', e);
+      await ipcCreateComponent(uuid, componentName);
+      const result: Record<string, unknown> = { success: true, uuid, component: componentName };
+      if (SPRITE_NAMES.has(componentName)) {
+        result.warning = 'Sprite 组件已添加但未设置 spriteFrame。Cocos 3.8.x 存在引擎缺陷：场景重新激活时 Sprite.onEnable 会在 updateUVs 中访问空 UV 数据导致 TypeError。建议通过 set_property 设置 spriteFrame 后再使用。';
       }
       return result;
     })();
@@ -509,21 +573,10 @@ export const methods = {
     if (!compClass) return { error: `未找到组件类: ${componentName}` };
     const comp = node.getComponent(compClass);
     if (!comp) return { success: false, uuid, component: componentName };
-    node.removeComponent(comp);
 
     return (async () => {
-      const result: Record<string, unknown> = { success: true, uuid, component: componentName };
-      try {
-        await Editor.Message.request('scene', 'set-property', {
-          uuid,
-          path: 'active',
-          dump: { type: 'boolean', value: node.active },
-        });
-        result._inspectorRefreshed = true;
-      } catch (e) {
-        logIgnored(ErrorCategory.EDITOR_IPC, 'removeComponent 后 set-property 通知失败', e);
-      }
-      return result;
+      await ipcRemoveComponent(uuid, componentName);
+      return { success: true, uuid, component: componentName };
     })();
   },
 
@@ -765,7 +818,18 @@ export const methods = {
     const action = toStr(params.action);
     const handler = operationHandlers.get(action);
     if (!handler) return { error: `未知的操作 action: ${action}` };
-    return handler(this, scene, params);
+
+    // Wrap ALL operations with begin-recording / end-recording for Undo
+    return (async () => {
+      await beginRecording();
+      try {
+        const result = handler(this, scene, params);
+        // handler may return a promise (async operations) or a plain value
+        return await Promise.resolve(result);
+      } finally {
+        await endRecording();
+      }
+    })();
   },
 
   dispatchEngineAction(params: Record<string, unknown>) {

@@ -11,6 +11,7 @@ export interface SceneOperationDeps {
   notifyEditorProperty: (uuid: string, path: string, dump: { type: string; value: unknown }) => Promise<boolean>;
   notifyEditorRemoveNode: (uuid: string) => Promise<boolean>;
   notifyEditorComponentProperty: (nodeUuid: string, node: CocosNode, comp: unknown, property: string, dump: { type: string; value: unknown }) => Promise<boolean>;
+  ipcDuplicateNode: (uuid: string) => Promise<string>;
 }
 
 export function buildOperationHandlers(deps: SceneOperationDeps): Map<string, OperationHandler> {
@@ -18,24 +19,21 @@ export function buildOperationHandlers(deps: SceneOperationDeps): Map<string, Op
 
   const handlers = new Map<string, OperationHandler>([
     ['create_node', (self, _s, p) => {
-      const result = self.createChildNode(String(p.parentUuid ?? ''), String(p.name ?? 'New Node'));
-      if (result && typeof result === 'object' && 'success' in result && (result as Record<string, unknown>).success && p.siblingIndex !== undefined) {
-        const uuid = String((result as Record<string, unknown>).uuid ?? '');
-        const cc = getCC();
-        const scene = cc.director.getScene();
-        if (scene) {
-          const node = deps.findNodeByUuid(scene, uuid);
-          if (node) {
-            node.setSiblingIndex(Number(p.siblingIndex));
-            return (async () => {
-              const baseResult = await Promise.resolve(result) as Record<string, unknown>;
-              await deps.notifyEditorProperty(uuid, 'active', { type: 'boolean', value: node.active });
-              return baseResult;
-            })();
+      return (async () => {
+        const result = await Promise.resolve(self.createChildNode(String(p.parentUuid ?? ''), String(p.name ?? 'New Node')));
+        if (result && typeof result === 'object' && 'success' in result && (result as Record<string, unknown>).success && p.siblingIndex !== undefined) {
+          const uuid = String((result as Record<string, unknown>).uuid ?? '');
+          const cc = getCC();
+          const scene = cc.director.getScene();
+          if (scene) {
+            const node = deps.findNodeByUuid(scene, uuid);
+            if (node) {
+              node.setSiblingIndex(Number(p.siblingIndex));
+            }
           }
         }
-      }
-      return result;
+        return result;
+      })();
     }],
     ['destroy_node', (self, _s, p) => self.destroyNode(String(p.uuid ?? ''))],
     ['reparent', (self, _s, p) => self.reparentNode(String(p.uuid ?? ''), String(p.parentUuid ?? ''))],
@@ -48,18 +46,23 @@ export function buildOperationHandlers(deps: SceneOperationDeps): Map<string, Op
     ['remove_component', (self, _s, p) => self.removeComponent(String(p.uuid ?? ''), String(p.component ?? ''))],
     ['set_property', (self, _s, p) => self.setComponentProperty(String(p.uuid ?? ''), String(p.component ?? ''), String(p.property ?? ''), p.value)],
     ['duplicate_node', (_self, scene, p) => {
-      const { instantiate, Node } = getCC();
       const r = requireNode(scene, String(p.uuid ?? ''));
       if ('error' in r) return r;
       if (!r.node.parent) return { error: `节点无父节点，无法复制: ${p.uuid}` };
       const includeChildren = p.includeChildren !== false;
-      let clone: CocosNode;
-      if (includeChildren) {
-        clone = instantiate(r.node);
-        r.node.parent.addChild(clone);
-      } else {
-        clone = new Node(r.node.name + '_copy');
-        r.node.parent.addChild(clone);
+      const sourceUuid = String(p.uuid ?? '');
+
+      return (async () => {
+        if (includeChildren) {
+          // ── Editor IPC duplicate-node (full-children duplication) ──
+          const clonedUuid = await deps.ipcDuplicateNode(sourceUuid);
+          return { success: true, clonedUuid, name: r.node.name + ' (clone)', includeChildren };
+        }
+
+        // ── includeChildren=false: no IPC equivalent, use runtime ──
+        const { Node } = getCC();
+        const clone = new Node(r.node.name + '_copy');
+        r.node.parent!.addChild(clone);
         if (r.node.position) clone.setPosition(r.node.position);
         if (r.node.scale) clone.setScale(r.node.scale);
         if (r.node.worldRotation) {
@@ -71,10 +74,8 @@ export function buildOperationHandlers(deps: SceneOperationDeps): Map<string, Op
         }
         clone.active = r.node.active;
         clone.layer = r.node.layer;
-      }
-      const clonedUuid = clone.uuid || clone._id || '';
-      const result: Record<string, unknown> = { success: true, clonedUuid, name: clone.name, includeChildren };
-      return (async () => {
+        const clonedUuid = clone.uuid || clone._id || '';
+        const result: Record<string, unknown> = { success: true, clonedUuid, name: clone.name, includeChildren };
         if (clonedUuid && await deps.notifyEditorProperty(clonedUuid, 'active', { type: 'boolean', value: clone.active })) {
           result._inspectorRefreshed = true;
         }
