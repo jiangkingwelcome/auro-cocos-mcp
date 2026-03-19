@@ -16,6 +16,7 @@ mod anim_workflow;
 mod ui_gen;
 mod linter;
 mod oplog;
+mod knowledge;
 #[cfg(test)]
 mod tests;
 
@@ -52,6 +53,9 @@ pub fn get_definitions() -> Vec<Value> {
     defs.extend(linter::definitions());
     defs.extend(oplog::definitions());
 
+    // Phase 5 tools (Knowledge & Extensions)
+    defs.extend(knowledge::definitions());
+
     defs.into_iter()
         .map(|d| serde_json::to_value(d).unwrap())
         .collect()
@@ -73,6 +77,7 @@ pub fn process_call(tool_name: &str, args: &Value) -> Value {
         "setup_ui_layout" => atomic::process_ui_layout(args),
         "create_tween_animation_atomic" => atomic::process_tween(args),
         "auto_fit_physics_collider" => atomic::process_physics_collider(args),
+        "prefab_operation" => atomic::process_prefab_operation(args),
         // Phase 2 tools
         "scene_query" => scene::process_query(args),
         "scene_operation" => scene::process_operation(args),
@@ -91,6 +96,8 @@ pub fn process_call(tool_name: &str, args: &Value) -> Value {
         "ui_generator" => ui_gen::process(args),
         "project_linter" => linter::process(args),
         "operation_log" => oplog::process(args),
+        // Phase 5 knowledge base
+        "knowledge_base" => knowledge::process(args),
         _ => ExecutionPlan::error(&format!("Unknown Pro tool: {}", tool_name)),
     };
 

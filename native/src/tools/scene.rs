@@ -21,6 +21,10 @@ const QUERY_ACTIONS: &[&str] = &[
     "get_light_info", "get_scene_environment",
     "screen_to_world", "world_to_screen",
     "check_script_ready", "get_script_properties",
+    // New query actions in 1.7.3
+    "find_similar_nodes", "find_nodes_by_tag", "find_nodes_by_script",
+    "get_node_hierarchy", "get_node_path", "get_node_depth",
+    "list_node_templates", "get_clipboard_content",
 ];
 
 // ─── scene_operation ────────────────────────────────────────────────────────
@@ -57,6 +61,14 @@ const OPERATION_ACTIONS: &[&str] = &[
     "bind_event", "unbind_event", "list_events",
     "attach_script", "detach_script",
     "set_component_properties",
+    // New operations in 1.7.3
+    "copy_node", "paste_node", "cut_node",
+    "group_nodes_advanced", "ungroup_nodes",
+    "find_similar_nodes", "find_nodes_by_tag",
+    "serialize_node", "deserialize_node",
+    "create_node_from_template", "save_as_template",
+    "swap_nodes", "align_to_node",
+    "mirror_node", "flip_node",
 ];
 
 const OPERATION_UUID_REQUIRED: &[&str] = &[
@@ -79,6 +91,14 @@ const OPERATION_UUID_REQUIRED: &[&str] = &[
     "swap_technique", "sprite_grayscale",
     "set_light_property",
     "bind_event", "unbind_event", "list_events",
+    // New in 1.7.3
+    "copy_node", "cut_node", "paste_node",
+    "group_nodes_advanced", "ungroup_nodes",
+    "find_similar_nodes", "find_nodes_by_tag",
+    "serialize_node", "deserialize_node",
+    "create_node_from_template", "save_as_template",
+    "swap_nodes", "align_to_node",
+    "mirror_node", "flip_node",
 ];
 
 pub fn definitions() -> Vec<ToolDefinition> {
@@ -91,10 +111,10 @@ pub fn definitions() -> Vec<ToolDefinition> {
                 "1. ALWAYS query before modifying (e.g., tree → find target → modify).\n",
                 "2. Use UUID from query results for subsequent operations.\n",
                 "3. Use find_by_path or find_nodes_by_name to locate nodes.\n\n",
-                "Actions (43): tree, list, stats, node_detail, find_by_path, ",
+                "Actions (51): tree, list, stats, node_detail, find_by_path, ",
                 "get_components, get_parent, get_children, get_sibling, ",
                 "get_world_position/rotation/scale, get_active_in_hierarchy, ",
-                "find_nodes_by_name, find_nodes_by_component, ",
+                "find_nodes_by_name, find_nodes_by_component, find_similar_nodes, find_nodes_by_tag, find_nodes_by_script, ",
                 "get_component_property, get_node_components_properties, ",
                 "get_camera_info, get_canvas_info, get_scene_globals, ",
                 "get_current_selection, get_active_scene_focus, ",
@@ -102,11 +122,12 @@ pub fn definitions() -> Vec<ToolDefinition> {
                 "list_available_components, measure_distance, ",
                 "scene_snapshot, scene_diff, performance_audit, ",
                 "export_scene_json, deep_validate_scene, ",
-                "get_node_bounds, find_nodes_by_layer, ",
+                "get_node_bounds, find_nodes_by_layer, get_node_hierarchy, get_node_path, get_node_depth, ",
                 "get_animation_state, get_collider_info, get_material_info, ",
                 "get_light_info, get_scene_environment, ",
                 "screen_to_world, world_to_screen, ",
-                "check_script_ready, get_script_properties",
+                "check_script_ready, get_script_properties, ",
+                "list_node_templates, get_clipboard_content",
             ).into(),
             schema: json!({
                 "type": "object",
@@ -127,7 +148,11 @@ pub fn definitions() -> Vec<ToolDefinition> {
                     "x": { "type": "number", "description": "X coordinate for screen_to_world." },
                     "y": { "type": "number", "description": "Y coordinate for screen_to_world." },
                     "z": { "type": "number", "description": "Z coordinate for world_to_screen." },
-                    "scriptName": { "type": "string", "description": "Script name for check_script_ready." }
+                    "scriptName": { "type": "string", "description": "Script name for check_script_ready." },
+                    // New parameters in 1.7.3
+                    "tag": { "type": "string", "description": "Node tag for find_nodes_by_tag." },
+                    "templateName": { "type": "string", "description": "Template name for list_node_templates." },
+                    "similarity": { "type": "number", "description": "Similarity threshold for find_similar_nodes (0-1)." }
                 },
                 "required": ["action"]
             }),
@@ -142,7 +167,7 @@ pub fn definitions() -> Vec<ToolDefinition> {
                 "1. ALWAYS query the scene first to get target UUIDs.\n",
                 "2. For destructive ops (destroy_node, clear_children), set confirmDangerous=true.\n",
                 "3. Use batch for multi-step operations with $N.uuid cross-references.\n\n",
-                "Actions (65): create_node, destroy_node, reparent, ",
+                "Actions (79): create_node, destroy_node, reparent, ",
                 "set_position/rotation/scale, set_world_position/rotation/scale, ",
                 "set_name, set_active, duplicate_node, move_node_up/down, set_sibling_index, reset_transform, ",
                 "add_component, remove_component, set_property, reset_property, call_component_method, ",
@@ -155,7 +180,11 @@ pub fn definitions() -> Vec<ToolDefinition> {
                 "create/set_camera, camera_screenshot, ",
                 "set/assign/clone_material, swap_technique, sprite_grayscale, ",
                 "create/set_light, set_scene_environment, ",
-                "bind/unbind/list_events, attach/detach_script, set_component_properties",
+                "bind/unbind/list_events, attach/detach_script, set_component_properties, ",
+                // New in 1.7.3
+                "copy_node, paste_node, cut_node, group_nodes_advanced, ungroup_nodes, ",
+                "find_similar_nodes, find_nodes_by_tag, serialize_node, deserialize_node, ",
+                "create_node_from_template, save_as_template, swap_nodes, align_to_node, mirror_node, flip_node",
             ).into(),
             schema: json!({
                 "type": "object",
@@ -183,7 +212,15 @@ pub fn definitions() -> Vec<ToolDefinition> {
                     "widgetType": { "type": "string", "description": "UI widget type for create_ui_widget." },
                     "materialPath": { "type": "string", "description": "Material path for assign_material." },
                     "lightType": { "type": "string", "description": "Light type for create_light." },
-                    "eventName": { "type": "string", "description": "Event name for bind/unbind_event." }
+                    "eventName": { "type": "string", "description": "Event name for bind/unbind_event." },
+                    // New parameters in 1.7.3
+                    "targetUuid": { "type": "string", "description": "Target node UUID for swap_nodes, align_to_node, mirror_node, flip_node." },
+                    "templateName": { "type": "string", "description": "Template name for create_node_from_template, save_as_template." },
+                    "templateData": { "type": "string", "description": "Template data (JSON) for deserialize_node." },
+                    "axis": { "type": "string", "description": "Axis for mirror_node (x, y, z)." },
+                    "direction": { "type": "string", "description": "Direction for flip_node (horizontal, vertical)." },
+                    "groupConfig": { "type": "object", "description": "Group configuration for group_nodes_advanced." },
+                    "uuids": { "type": "array", "description": "Array of node UUIDs for batch operations." }
                 },
                 "required": ["action"]
             }),

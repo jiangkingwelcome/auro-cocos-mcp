@@ -16,6 +16,9 @@ const ACTIONS: &[&str] = &[
     "validate_asset", "export_asset_manifest",
     "create_material", "generate_script",
     "batch_import", "get_asset_size", "slice_sprite",
+    // New actions in 1.7.3
+    "batch_move", "batch_reimport", "refresh_force", "get_asset_info",
+    "move_to_folder", "duplicate_as", "get_asset_hash",
 ];
 
 const URL_REQUIRED: &[&str] = &[
@@ -24,6 +27,9 @@ const URL_REQUIRED: &[&str] = &[
     "uuid_to_url", "reimport", "get_dependencies", "get_dependents",
     "show_in_explorer", "validate_asset", "get_asset_size",
     "get_animation_clips", "get_materials", "slice_sprite",
+    // New in 1.7.3
+    "batch_move", "batch_reimport", "refresh_force", "get_asset_info",
+    "move_to_folder", "duplicate_as", "get_asset_hash",
 ];
 
 pub fn definitions() -> Vec<ToolDefinition> {
@@ -35,13 +41,14 @@ pub fn definitions() -> Vec<ToolDefinition> {
             "1. Use db:// paths (e.g., db://assets/textures/hero.png).\n",
             "2. NEVER create auto-generated sub-asset types (.spriteframe, .texture).\n",
             "3. After import, use refresh to update the asset database.\n\n",
-            "Actions (32): list, info, create, save, delete, move, copy, rename, ",
-            "import, open, refresh, create_folder, get_meta, set_meta_property, ",
+            "Actions (39): list, info, create, save, delete, move, copy, rename, ",
+            "import, open, refresh, refresh_force, create_folder, get_meta, set_meta_property, ",
             "uuid_to_url, url_to_uuid, search_by_type, ",
-            "reimport, get_dependencies, get_dependents, show_in_explorer, ",
+            "reimport, batch_reimport, get_dependencies, get_dependents, show_in_explorer, ",
             "clean_unused, pack_atlas, get_animation_clips, get_materials, ",
             "validate_asset, export_asset_manifest, create_material, generate_script, ",
-            "batch_import, get_asset_size, slice_sprite",
+            "batch_import, batch_move, get_asset_size, get_asset_info, get_asset_hash, ",
+            "slice_sprite, move_to_folder, duplicate_as",
         ).into(),
         schema: json!({
             "type": "object",
@@ -61,9 +68,15 @@ pub fn definitions() -> Vec<ToolDefinition> {
                 "value": { "description": "Value for set_meta_property." },
                 "sourcePath": { "type": "string", "description": "OS path for import." },
                 "paths": { "type": "array", "description": "Array of OS paths for batch_import." },
+                "urls": { "type": "array", "description": "Array of db:// URLs for batch_move, batch_reimport." },
                 "scriptName": { "type": "string", "description": "Class name for generate_script." },
                 "materialName": { "type": "string", "description": "Material name for create_material." },
-                "confirmDangerous": { "type": "boolean", "description": "REQUIRED=true for delete." }
+                "confirmDangerous": { "type": "boolean", "description": "REQUIRED=true for delete." },
+                // New parameters in 1.7.3
+                "folderUrl": { "type": "string", "description": "Target folder db:// URL for move_to_folder." },
+                "newName": { "type": "string", "description": "New name for duplicate_as." },
+                "force": { "type": "boolean", "description": "Force refresh. For refresh_force." },
+                "deep": { "type": "boolean", "description": "Deep reimport. For batch_reimport." }
             },
             "required": ["action"]
         }),

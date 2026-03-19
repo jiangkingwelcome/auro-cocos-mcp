@@ -129,6 +129,35 @@ pub fn definitions() -> Vec<ToolDefinition> {
             actions: vec!["auto_fit".into()],
             edition: "pro".into(),
         },
+        // New prefab tool in 1.7.3
+        ToolDefinition {
+            name: "prefab_operation".into(),
+            description: concat!(
+                "Advanced prefab operations - sync, unpack, find references and usages.\n\n",
+                "Actions (new in 1.7.3):\n",
+                "- prefab_sync: uuid(REQUIRED). Sync prefab instance with its source.\n",
+                "- prefab_unpack: uuid(REQUIRED). Unpack a prefab instance into regular nodes.\n",
+                "- prefab_get_references: url(REQUIRED). Get all references to a prefab.\n",
+                "- prefab_find_usages: url(REQUIRED). Find all usages of a prefab in the scene.\n",
+                "- prefab_pack: uuid(REQUIRED). Pack nodes into a prefab.\n",
+                "- prefab_compare: uuid(REQUIRED). Compare prefab instance with source.\n",
+            ).into(),
+            schema: json!({
+                "type": "object",
+                "properties": {
+                    "action": {
+                        "type": "string",
+                        "enum": ["prefab_sync", "prefab_unpack", "prefab_get_references", "prefab_find_usages", "prefab_pack", "prefab_compare"],
+                        "description": "Prefab action to perform."
+                    },
+                    "uuid": { "type": "string", "description": "Node UUID. REQUIRED for sync, unpack, pack, compare." },
+                    "url": { "type": "string", "description": "Prefab db:// URL. REQUIRED for get_references, find_usages." }
+                },
+                "required": ["action"]
+            }),
+            actions: vec!["prefab_sync".into(), "prefab_unpack".into(), "prefab_get_references".into(), "prefab_find_usages".into(), "prefab_pack".into(), "prefab_compare".into()],
+            edition: "pro".into(),
+        },
     ]
 }
 
@@ -178,6 +207,38 @@ pub fn process_physics_collider(args: &serde_json::Value) -> ExecutionPlan {
     }
     ExecutionPlan::single(CallInstruction::BridgePost {
         path: "/api/mcp/atomic/auto-fit-collider".into(),
+        body: Some(args.clone()),
+    })
+}
+
+pub fn process_prefab_operation(args: &serde_json::Value) -> ExecutionPlan {
+    let action = match args.get("action").and_then(|v| v.as_str()) {
+        Some(a) => a,
+        None => return ExecutionPlan::error("Missing required parameter: action"),
+    };
+
+    let valid_actions = ["prefab_sync", "prefab_unpack", "prefab_get_references", "prefab_find_usages", "prefab_pack", "prefab_compare"];
+    if !valid_actions.contains(&action) {
+        return ExecutionPlan::error(&format!("Invalid action: {}", action));
+    }
+
+    // Validate required parameters
+    match action {
+        "prefab_sync" | "prefab_unpack" | "prefab_pack" | "prefab_compare" => {
+            if let Err(plan) = validate::require_string(args, "uuid") {
+                return plan;
+            }
+        }
+        "prefab_get_references" | "prefab_find_usages" => {
+            if let Err(plan) = validate::require_string(args, "url") {
+                return plan;
+            }
+        }
+        _ => {}
+    }
+
+    ExecutionPlan::single(CallInstruction::BridgePost {
+        path: "/api/mcp/prefab-operation".into(),
         body: Some(args.clone()),
     })
 }

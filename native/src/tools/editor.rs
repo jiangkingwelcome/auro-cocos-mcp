@@ -23,6 +23,18 @@ const ACTIONS: &[&str] = &[
     "toggle_grid", "toggle_snap",
     "get_console_logs", "search_logs",
     "set_view_mode", "zoom_to_fit",
+    // New actions in 1.7.3
+    "open_recent_project", "get_recent_projects",
+    "get_project_settings", "set_project_settings",
+    "get_editor_preferences", "set_editor_preferences",
+    "get_editor_info", "get_system_info",
+    "install_package", "uninstall_package",
+    "toggle_inspector_lock", "toggle_hierarchy_lock",
+    "refresh_assets", "clear_cache",
+    // Builder actions (new in 1.7.3)
+    "get_build_platforms", "get_build_configs",
+    "set_build_config", "build_progress",
+    "cancel_build", "get_build_result",
 ];
 
 pub fn definitions() -> Vec<ToolDefinition> {
@@ -34,7 +46,7 @@ pub fn definitions() -> Vec<ToolDefinition> {
             "1. save_scene before switching scenes.\n",
             "2. Use undo/redo for quick corrections.\n",
             "3. Use focus_node after creating nodes to center the view.\n\n",
-            "Actions (45): save_scene, open_scene, new_scene, undo, redo, ",
+            "Actions (63): save_scene, open_scene, new_scene, undo, redo, ",
             "get_selection, select, clear_selection, project_info, ",
             "preview, preview_refresh, build, build_query, ",
             "play/pause/stop/step_in_editor, ",
@@ -44,7 +56,17 @@ pub fn definitions() -> Vec<ToolDefinition> {
             "inspect_asset, open_preferences, open_project_settings, ",
             "move_scene_camera, take_scene_screenshot, ",
             "set_transform_tool, set_coordinate, toggle_grid, toggle_snap, ",
-            "get_console_logs, search_logs, set_view_mode, zoom_to_fit",
+            "get_console_logs, search_logs, set_view_mode, zoom_to_fit, ",
+            // New in 1.7.3
+            "open_recent_project, get_recent_projects, ",
+            "get_project_settings, set_project_settings, ",
+            "get_editor_preferences, set_editor_preferences, ",
+            "get_editor_info, get_system_info, ",
+            "install_package, uninstall_package, ",
+            "toggle_inspector_lock, toggle_hierarchy_lock, ",
+            "refresh_assets, clear_cache, ",
+            // Builder in 1.7.3
+            "get_build_platforms, get_build_configs, set_build_config, build_progress, cancel_build, get_build_result",
         ).into(),
         schema: json!({
             "type": "object",
@@ -66,7 +88,17 @@ pub fn definitions() -> Vec<ToolDefinition> {
                 "keyword": { "type": "string", "description": "Search keyword for search_logs." },
                 "pluginName": { "type": "string", "description": "Plugin name for reload_plugin." },
                 "position": { "type": "object", "description": "Camera position for move_scene_camera." },
-                "uuids": { "type": "array", "description": "Array of UUIDs for select." }
+                "uuids": { "type": "array", "description": "Array of UUIDs for select." },
+                // New parameters in 1.7.3
+                "projectPath": { "type": "string", "description": "Project path for open_recent_project." },
+                "settings": { "type": "object", "description": "Settings object for set_project_settings, set_editor_preferences." },
+                "preferences": { "type": "object", "description": "Preferences object for set_editor_preferences." },
+                "packageName": { "type": "string", "description": "Package name for install_package, uninstall_package." },
+                "packageUrl": { "type": "string", "description": "Package URL for install_package." },
+                // Builder parameters in 1.7.3
+                "platform": { "type": "string", "description": "Build platform for get_build_configs, set_build_config." },
+                "config": { "type": "object", "description": "Build configuration object for set_build_config." },
+                "buildId": { "type": "string", "description": "Build task ID for build_progress, cancel_build, get_build_result." }
             },
             "required": ["action"]
         }),
