@@ -30,7 +30,6 @@ describe('stability fixes — editor_action semantics', () => {
     const result = await server.callTool('editor_action', { action: 'play_in_editor' });
     expect(result.isError).toBeFalsy();
     expect(bridgePost).toHaveBeenCalledWith('/api/preview/open');
-    expect(editorMsg).not.toHaveBeenCalledWith('scene', 'enter-prefab-edit-mode');
   });
 });
 

@@ -419,22 +419,6 @@ describe('scene_operation — prefab & clipboard actions (editorMsg)', () => {
     expect(editorMsg).toHaveBeenCalledWith('asset-db', 'query-uuid', 'db://assets/prefabs/P.prefab');
   });
 
-  it('enter_prefab_edit calls editorMsg', async () => {
-    const editorMsg = vi.fn().mockResolvedValue({});
-    const server = buildCocosToolServer(makeCtx({ editorMsg }));
-    const result = await server.callTool('scene_operation', { action: 'enter_prefab_edit', uuid: 'u1' });
-    expect(result.isError).toBeFalsy();
-    expect(editorMsg).toHaveBeenCalledWith('scene', 'enter-prefab-edit-mode', 'u1');
-  });
-
-  it('exit_prefab_edit calls editorMsg', async () => {
-    const editorMsg = vi.fn().mockResolvedValue({});
-    const server = buildCocosToolServer(makeCtx({ editorMsg }));
-    const result = await server.callTool('scene_operation', { action: 'exit_prefab_edit' });
-    expect(result.isError).toBeFalsy();
-    expect(editorMsg).toHaveBeenCalledWith('scene', 'exit-prefab-edit-mode');
-  });
-
   it('apply_prefab calls editorMsg', async () => {
     const editorMsg = vi.fn().mockResolvedValue({});
     const server = buildCocosToolServer(makeCtx({ editorMsg }));

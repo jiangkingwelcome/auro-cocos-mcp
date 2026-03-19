@@ -9,8 +9,19 @@ const ACTIONS: &[&str] = &[
     "project_info",
     "preview", "preview_refresh",
     "build", "build_query",
-    "play_in_editor", "pause_in_editor", "stop_in_editor", "step_in_editor",
+    "play_in_editor",
     "focus_node", "log", "warn", "error", "clear_console", "show_notification",
+    // Gizmo / View / Camera align / Scene management / Undo
+    "change_gizmo_tool", "query_gizmo_tool_name",
+    "change_gizmo_pivot", "query_gizmo_pivot",
+    "change_gizmo_coordinate", "query_gizmo_coordinate",
+    "change_is2D", "query_is2D",
+    "set_grid_visible", "query_is_grid_visible",
+    "set_icon_gizmo_3d", "query_is_icon_gizmo_3d",
+    "set_icon_gizmo_size", "query_icon_gizmo_size",
+    "align_node_with_view", "align_view_with_node",
+    "soft_reload", "query_dirty",
+    "snapshot", "snapshot_abort", "cancel_recording",
     // Pro-only extended actions
     "build_with_config", "build_status", "preview_status",
     "send_message",
@@ -112,11 +123,90 @@ pub fn process(args: &serde_json::Value) -> ExecutionPlan {
     };
 
     match action.as_str() {
-        "save_scene" | "undo" | "redo" | "new_scene" => {
+        "save_scene" | "undo" | "redo" | "new_scene"
+        | "soft_reload" | "snapshot" | "snapshot_abort" | "cancel_recording" => {
             ExecutionPlan::single(CallInstruction::EditorMsg {
                 module: "scene".into(),
                 message: action.replace('_', "-"),
                 args: vec![],
+            })
+        }
+        // No-arg scene IPC queries
+        "query_gizmo_tool_name" | "query_gizmo_pivot" | "query_gizmo_coordinate"
+        | "query_is2D" | "query_is_grid_visible" | "query_is_icon_gizmo_3d"
+        | "query_icon_gizmo_size" | "query_dirty" => {
+            ExecutionPlan::single(CallInstruction::EditorMsg {
+                module: "scene".into(),
+                message: action.replace('_', "-"),
+                args: vec![],
+            })
+        }
+        // No-arg scene IPC commands
+        "align_node_with_view" => {
+            ExecutionPlan::single(CallInstruction::EditorMsg {
+                module: "scene".into(),
+                message: "align-with-view".into(),
+                args: vec![],
+            })
+        }
+        "align_view_with_node" => {
+            ExecutionPlan::single(CallInstruction::EditorMsg {
+                module: "scene".into(),
+                message: "align-view-with-node".into(),
+                args: vec![],
+            })
+        }
+        // Single-arg scene IPC commands
+        "change_gizmo_tool" => {
+            if let Err(plan) = validate::require_string(args, "tool") { return plan; }
+            ExecutionPlan::single(CallInstruction::EditorMsg {
+                module: "scene".into(),
+                message: "change-gizmo-tool".into(),
+                args: vec![args["tool"].clone()],
+            })
+        }
+        "change_gizmo_pivot" => {
+            if let Err(plan) = validate::require_string(args, "pivot") { return plan; }
+            ExecutionPlan::single(CallInstruction::EditorMsg {
+                module: "scene".into(),
+                message: "change-gizmo-pivot".into(),
+                args: vec![args["pivot"].clone()],
+            })
+        }
+        "change_gizmo_coordinate" => {
+            if let Err(plan) = validate::require_string(args, "coordinate") { return plan; }
+            ExecutionPlan::single(CallInstruction::EditorMsg {
+                module: "scene".into(),
+                message: "change-gizmo-coordinate".into(),
+                args: vec![args["coordinate"].clone()],
+            })
+        }
+        "change_is2D" => {
+            ExecutionPlan::single(CallInstruction::EditorMsg {
+                module: "scene".into(),
+                message: "change-is2D".into(),
+                args: vec![args["is2D"].clone()],
+            })
+        }
+        "set_grid_visible" => {
+            ExecutionPlan::single(CallInstruction::EditorMsg {
+                module: "scene".into(),
+                message: "set-grid-visible".into(),
+                args: vec![args["visible"].clone()],
+            })
+        }
+        "set_icon_gizmo_3d" => {
+            ExecutionPlan::single(CallInstruction::EditorMsg {
+                module: "scene".into(),
+                message: "set-icon-gizmo-3d".into(),
+                args: vec![args["is3D"].clone()],
+            })
+        }
+        "set_icon_gizmo_size" => {
+            ExecutionPlan::single(CallInstruction::EditorMsg {
+                module: "scene".into(),
+                message: "set-icon-gizmo-size".into(),
+                args: vec![args["size"].clone()],
             })
         }
         "open_scene" => {

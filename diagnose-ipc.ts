@@ -14,28 +14,38 @@
 // 需要测试的 scene 模块 IPC 消息列表
 const SCENE_MESSAGES = [
   // 场景操作
-  'new-scene',
-  'save-scene', 
-  'query-scene',
-  'undo',
-  'redo',
-  
+  'save-scene', 'undo', 'redo', 'soft-reload', 'query-dirty',
+  // Undo 系统
+  'snapshot', 'snapshot-abort', 'begin-recording', 'end-recording', 'cancel-recording',
   // 节点操作
-  'set-property',
-  'remove-node',
-  
+  'set-property', 'reset-property', 'remove-node', 'create-node', 'duplicate-node',
+  'set-parent', 'create-component', 'remove-component',
+  // 剪贴板
+  'copy-node', 'paste-node', 'cut-node',
+  // 数组操作
+  'move-array-element', 'remove-array-element',
+  // 组件方法
+  'execute-component-method',
   // 预制操作
-  'create-prefab',
-  'create-node-by-prefab',
-  'enter-prefab-edit-mode',
-  'exit-prefab-edit-mode',
-  'apply-prefab',
-  'restore-prefab',
-  
+  'create-prefab', 'apply-prefab', 'restore-prefab',
   // 预览控制
-  'pause',
-  'stop',
-  'step',
+  'editor-preview-set-play',
+  // Gizmo
+  'change-gizmo-tool', 'query-gizmo-tool-name',
+  'change-gizmo-pivot', 'query-gizmo-pivot',
+  'change-gizmo-coordinate', 'query-gizmo-coordinate',
+  // 视图
+  'change-is2D', 'query-is2D',
+  'set-grid-visible', 'query-is-grid-visible',
+  'set-icon-gizmo-3d', 'query-is-icon-gizmo-3d',
+  'set-icon-gizmo-size', 'query-icon-gizmo-size',
+  // 相机对齐
+  'align-with-view', 'align-view-with-node',
+  'focus-camera',
+  // 查询
+  'query-is-ready', 'query-node', 'query-component', 'query-node-tree',
+  'query-nodes-by-asset-uuid', 'query-classes', 'query-component-has-script',
+  'execute-scene-script',
 ];
 
 // 需要测试的 asset-db 模块 IPC 消息列表

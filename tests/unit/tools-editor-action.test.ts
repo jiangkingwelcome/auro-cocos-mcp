@@ -227,11 +227,11 @@ describe('editor_action — 异常处理', () => {
     expect(data.error).toContain('保存失败');
   });
 
-  it('editorMsg 抛出时返回 isError', async () => {
-    const editorMsg = vi.fn().mockRejectedValue(new Error('IPC 超时'));
-    const server = buildCocosToolServer(makeCtx({ editorMsg }));
+  it('bridgePost 抛出时返回 isError', async () => {
+    const bridgePost = vi.fn().mockRejectedValue(new Error('IPC 超时'));
+    const server = buildCocosToolServer(makeCtx({ bridgePost }));
 
-    const result = await server.callTool('editor_action', { action: 'pause_in_editor' });
+    const result = await server.callTool('editor_action', { action: 'undo' });
     expect(result.isError).toBe(true);
     const data = parse(result) as any;
     expect(data.error).toContain('IPC 超时');

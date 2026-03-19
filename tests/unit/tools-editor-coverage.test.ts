@@ -232,27 +232,6 @@ describe('editor_action — editorMsg actions', () => {
     expect(editorMsg).toHaveBeenCalledWith('package', 'reload', 'my-plugin');
   });
 
-  it('pause_in_editor calls editorMsg scene pause', async () => {
-    const editorMsg = vi.fn().mockResolvedValue(null);
-    const server = buildCocosToolServer(makeCtx({ editorMsg }));
-    await server.callTool('editor_action', { action: 'pause_in_editor' });
-    expect(editorMsg).toHaveBeenCalledWith('scene', 'pause');
-  });
-
-  it('stop_in_editor calls editorMsg scene stop', async () => {
-    const editorMsg = vi.fn().mockResolvedValue(null);
-    const server = buildCocosToolServer(makeCtx({ editorMsg }));
-    await server.callTool('editor_action', { action: 'stop_in_editor' });
-    expect(editorMsg).toHaveBeenCalledWith('scene', 'stop');
-  });
-
-  it('step_in_editor calls editorMsg scene step', async () => {
-    const editorMsg = vi.fn().mockResolvedValue(null);
-    const server = buildCocosToolServer(makeCtx({ editorMsg }));
-    await server.callTool('editor_action', { action: 'step_in_editor' });
-    expect(editorMsg).toHaveBeenCalledWith('scene', 'step');
-  });
-
   it.skip('inspect_asset calls editorMsg selection select asset', async () => {
     const editorMsg = vi.fn().mockResolvedValue({});
     const server = buildCocosToolServer(makeCtx({ editorMsg }));

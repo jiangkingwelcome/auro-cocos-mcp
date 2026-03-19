@@ -315,7 +315,6 @@ export const REQUIRED_PARAMS: Record<string, string[]> = {
   'scene_operation.create_prefab': ['uuid'],
   'scene_operation.clipboard_copy': ['uuid'],
   'scene_operation.instantiate_prefab': ['prefabUrl'],
-  'scene_operation.enter_prefab_edit': ['uuid'],
   'scene_operation.apply_prefab': ['uuid'],
   'scene_operation.restore_prefab': ['uuid'],
   'scene_operation.validate_prefab': ['prefabUrl'],
@@ -350,6 +349,24 @@ export const REQUIRED_PARAMS: Record<string, string[]> = {
   'scene_operation.attach_script': ['uuid', 'script'],
   'scene_operation.set_component_properties': ['uuid', 'component', 'properties'],
   'scene_operation.detach_script': ['uuid', 'script'],
+  'scene_operation.copy_node': ['uuid'],
+  'scene_operation.paste_node': [],
+  'scene_operation.cut_node': ['uuid'],
+  'scene_operation.move_array_element': ['uuid', 'path', 'target'],
+  'scene_operation.remove_array_element': ['uuid', 'path'],
+  'scene_operation.execute_component_method': ['uuid', 'component', 'methodName'],
+
+  // ── scene_query (native IPC) ─────────────────────────────────────
+  'scene_query.query_node': ['uuid'],
+  'scene_query.query_component': ['uuid'],
+  'scene_query.query_nodes_by_asset_uuid': ['assetUuid'],
+  'scene_query.query_component_has_script': ['className'],
+
+  // ── editor_action (gizmo / view / scene management) ──────────────
+  'editor_action.change_gizmo_tool': ['tool'],
+  'editor_action.change_gizmo_pivot': ['pivot'],
+  'editor_action.change_gizmo_coordinate': ['coordinate'],
+  'editor_action.set_icon_gizmo_size': ['size'],
 
   // ── asset_operation ──────────────────────────────────────────────
   'asset_operation.info': ['url'],

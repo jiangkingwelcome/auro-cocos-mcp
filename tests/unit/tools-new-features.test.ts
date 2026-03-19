@@ -145,18 +145,18 @@ describe('新增功能 — 预制体实例化到场景', () => {
         expect(result.isError).toBe(true);
     });
 
-    it('instantiate_prefab 查询 uuid 并调用 create-node-by-prefab', async () => {
+    it('instantiate_prefab 查询 uuid 并通过 scene-script 实例化', async () => {
         const editorMsg = vi.fn()
-            .mockResolvedValueOnce('prefab-uuid-123') // query-uuid
-            .mockResolvedValueOnce({ uuid: 'new-node-uuid' }); // create-node-by-prefab
-        const server = buildCocosToolServer(makeCtx({ editorMsg }));
+            .mockResolvedValueOnce('prefab-uuid-123'); // query-uuid
+        const sceneMethod = vi.fn().mockResolvedValue({ uuid: 'new-node-uuid' });
+        const server = buildCocosToolServer(makeCtx({ editorMsg, sceneMethod }));
 
         const result = await server.callTool('scene_operation', {
             action: 'instantiate_prefab', prefabUrl: 'db://assets/prefabs/Player.prefab',
         });
         expect(result.isError).toBeFalsy();
         expect(editorMsg).toHaveBeenCalledWith('asset-db', 'query-uuid', 'db://assets/prefabs/Player.prefab');
-        expect(editorMsg).toHaveBeenCalledWith('scene', 'create-node-by-prefab', 'prefab-uuid-123', undefined);
+        expect(sceneMethod).toHaveBeenCalledWith('instantiatePrefab', ['prefab-uuid-123', '']);
     });
 
     it('instantiate_prefab 预制体不存在时返回错误', async () => {
@@ -171,36 +171,7 @@ describe('新增功能 — 预制体实例化到场景', () => {
 });
 
 // ═════════════════════════════════════════════════════════════════════════════
-// 7. 预制体编辑模式 (enter_prefab_edit / exit_prefab_edit)
-// ═════════════════════════════════════════════════════════════════════════════
-describe('新增功能 — 预制体编辑模式', () => {
-    it('enter_prefab_edit 缺少 uuid 时返回错误', async () => {
-        const server = buildCocosToolServer(makeCtx());
-        const result = await server.callTool('scene_operation', { action: 'enter_prefab_edit' });
-        expect(result.isError).toBe(true);
-    });
-
-    it('enter_prefab_edit 调用 editorMsg 进入预制体编辑', async () => {
-        const editorMsg = vi.fn().mockResolvedValue({});
-        const server = buildCocosToolServer(makeCtx({ editorMsg }));
-
-        const result = await server.callTool('scene_operation', { action: 'enter_prefab_edit', uuid: 'prefab-node-1' });
-        expect(result.isError).toBeFalsy();
-        expect(editorMsg).toHaveBeenCalledWith('scene', 'enter-prefab-edit-mode', 'prefab-node-1');
-    });
-
-    it('exit_prefab_edit 调用 editorMsg 退出预制体编辑', async () => {
-        const editorMsg = vi.fn().mockResolvedValue({});
-        const server = buildCocosToolServer(makeCtx({ editorMsg }));
-
-        const result = await server.callTool('scene_operation', { action: 'exit_prefab_edit' });
-        expect(result.isError).toBeFalsy();
-        expect(editorMsg).toHaveBeenCalledWith('scene', 'exit-prefab-edit-mode');
-    });
-});
-
-// ═════════════════════════════════════════════════════════════════════════════
-// 8. 预制体应用/还原 (apply_prefab / restore_prefab)
+// 7. 预制体应用/还原 (apply_prefab / restore_prefab)
 // ═════════════════════════════════════════════════════════════════════════════
 describe('新增功能 — 预制体应用/还原', () => {
     it('apply_prefab 缺少 uuid 时返回错误', async () => {
@@ -508,8 +479,6 @@ describe('新增功能 — 工具注册完整性 (社区版)', () => {
         const soActions = soSchema?.properties?.action?.enum || [];
         expect(soActions).toContain('reset_property');
         expect(soActions).toContain('instantiate_prefab');
-        expect(soActions).toContain('enter_prefab_edit');
-        expect(soActions).toContain('exit_prefab_edit');
         expect(soActions).toContain('apply_prefab');
         expect(soActions).toContain('restore_prefab');
         expect(soActions).toContain('validate_prefab');

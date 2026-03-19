@@ -21,6 +21,10 @@ const QUERY_ACTIONS: &[&str] = &[
     "get_light_info", "get_scene_environment",
     "screen_to_world", "world_to_screen",
     "check_script_ready", "get_script_properties",
+    // Native IPC queries
+    "query_node", "query_component", "query_node_tree",
+    "query_nodes_by_asset_uuid", "query_is_ready",
+    "query_classes", "query_component_has_script",
     // New query actions in 1.7.3
     "find_similar_nodes", "find_nodes_by_tag", "find_nodes_by_script",
     "get_node_hierarchy", "get_node_path", "get_node_depth",
@@ -61,8 +65,11 @@ const OPERATION_ACTIONS: &[&str] = &[
     "bind_event", "unbind_event", "list_events",
     "attach_script", "detach_script",
     "set_component_properties",
-    // New operations in 1.7.3
+    // Clipboard / Array / Component method (native IPC)
     "copy_node", "paste_node", "cut_node",
+    "move_array_element", "remove_array_element",
+    "execute_component_method",
+    // New operations in 1.7.3 (additional)
     "group_nodes_advanced", "ungroup_nodes",
     "find_similar_nodes", "find_nodes_by_tag",
     "serialize_node", "deserialize_node",
@@ -91,6 +98,8 @@ const OPERATION_UUID_REQUIRED: &[&str] = &[
     "swap_technique", "sprite_grayscale",
     "set_light_property",
     "bind_event", "unbind_event", "list_events",
+    "move_array_element", "remove_array_element",
+    "execute_component_method",
     // New in 1.7.3
     "copy_node", "cut_node", "paste_node",
     "group_nodes_advanced", "ungroup_nodes",
@@ -230,9 +239,36 @@ pub fn definitions() -> Vec<ToolDefinition> {
     ]
 }
 
+const NATIVE_IPC_QUERIES: &[(&str, &str)] = &[
+    ("query_node", "query-node"),
+    ("query_component", "query-component"),
+    ("query_node_tree", "query-node-tree"),
+    ("query_nodes_by_asset_uuid", "query-nodes-by-asset-uuid"),
+    ("query_is_ready", "query-is-ready"),
+    ("query_classes", "query-classes"),
+    ("query_component_has_script", "query-component-has-script"),
+];
+
 pub fn process_query(args: &serde_json::Value) -> ExecutionPlan {
-    if let Err(plan) = validate::require_action(args, QUERY_ACTIONS) {
-        return plan;
+    let action = match validate::require_action(args, QUERY_ACTIONS) {
+        Ok(a) => a,
+        Err(plan) => return plan,
+    };
+
+    for &(act, ipc_msg) in NATIVE_IPC_QUERIES {
+        if action == act {
+            let ipc_args: Vec<serde_json::Value> = match act {
+                "query_node" | "query_component" => vec![args["uuid"].clone()],
+                "query_nodes_by_asset_uuid" => vec![args["assetUuid"].clone()],
+                "query_component_has_script" => vec![args["className"].clone()],
+                _ => vec![],
+            };
+            return ExecutionPlan::single(CallInstruction::EditorMsg {
+                module: "scene".into(),
+                message: ipc_msg.into(),
+                args: ipc_args,
+            });
+        }
     }
 
     ExecutionPlan::single(CallInstruction::SceneMethod {
@@ -251,8 +287,45 @@ pub fn process_operation(args: &serde_json::Value) -> ExecutionPlan {
         return plan;
     }
 
-    ExecutionPlan::single(CallInstruction::SceneMethod {
-        method: "dispatchOperation".into(),
-        args: vec![args.clone()],
-    })
+    match action.as_str() {
+        "copy_node" => ExecutionPlan::single(CallInstruction::EditorMsg {
+            module: "scene".into(),
+            message: "copy-node".into(),
+            args: vec![json!([args["uuid"]])],
+        }),
+        "paste_node" => ExecutionPlan::single(CallInstruction::EditorMsg {
+            module: "scene".into(),
+            message: "paste-node".into(),
+            args: if args.get("parentUuid").is_some() { vec![args["parentUuid"].clone()] } else { vec![] },
+        }),
+        "cut_node" => ExecutionPlan::single(CallInstruction::EditorMsg {
+            module: "scene".into(),
+            message: "cut-node".into(),
+            args: vec![json!([args["uuid"]])],
+        }),
+        "move_array_element" => ExecutionPlan::single(CallInstruction::EditorMsg {
+            module: "scene".into(),
+            message: "move-array-element".into(),
+            args: vec![json!({"uuid": args["uuid"], "path": args["path"], "target": args["target"]})],
+        }),
+        "remove_array_element" => ExecutionPlan::single(CallInstruction::EditorMsg {
+            module: "scene".into(),
+            message: "remove-array-element".into(),
+            args: vec![json!({"uuid": args["uuid"], "path": args["path"]})],
+        }),
+        "execute_component_method" => ExecutionPlan::single(CallInstruction::EditorMsg {
+            module: "scene".into(),
+            message: "execute-component-method".into(),
+            args: vec![json!({
+                "uuid": args["uuid"],
+                "component": args["component"],
+                "method": args["methodName"],
+                "args": args.get("args").cloned().unwrap_or(json!([]))
+            })],
+        }),
+        _ => ExecutionPlan::single(CallInstruction::SceneMethod {
+            method: "dispatchOperation".into(),
+            args: vec![args.clone()],
+        }),
+    }
 }

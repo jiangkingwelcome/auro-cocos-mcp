@@ -68,6 +68,13 @@ Actions & required parameters:
 - world_to_screen: uuid(optional camera), worldX/worldY/worldZ(REQUIRED). Convert world position to screen coordinates via camera.
 - check_script_ready: script(REQUIRED, class name). Check if a script class is compiled and registered, returns {ready, isComponent}.
 - get_script_properties: script(REQUIRED, class name). Get all @property declarations of a script class (name, type, default, visible).
+- query_node: uuid(REQUIRED). Query node dump data via native Editor IPC (returns full serialized node info).
+- query_component: uuid(REQUIRED). Query component dump data via native Editor IPC.
+- query_node_tree: no params. Query the full node tree via native Editor IPC (returns raw editor tree structure).
+- query_nodes_by_asset_uuid: assetUuid(REQUIRED). Find all nodes that reference a specific asset UUID.
+- query_is_ready: no params. Check if the current scene is fully loaded and ready.
+- query_classes: no params. List all classes registered in the engine.
+- query_component_has_script: className(REQUIRED). Check if engine component list contains a script with the given class name.
 
 Returns: All actions return JSON. tree→{uuid,name,active,childCount,children[]}. list→{count,nodes[{uuid,name,depth,path}]}. stats→{sceneName,nodeCount,activeCount}. node_detail→{uuid,name,active,path,position,scale,components[]}. find_nodes_by_name→{nodes[]}. get_component_property→{value}. On error: {error:"message"}.
 Common errors: "没有打开的场景"=no scene open; "未找到节点: uuid"=invalid UUID (use tree/list to get valid UUIDs first).` + AI_RULES,
@@ -87,7 +94,11 @@ Common errors: "没有打开的场景"=no scene open; "未找到节点: uuid"=in
         'get_node_bounds', 'find_nodes_by_layer', 'get_animation_state', 'get_collider_info',
         'get_material_info', 'get_light_info', 'get_scene_environment',
         'screen_to_world', 'world_to_screen',
-        'check_script_ready', 'get_script_properties'
+        'check_script_ready', 'get_script_properties',
+        // Native IPC queries
+        'query_node', 'query_component', 'query_node_tree',
+        'query_nodes_by_asset_uuid', 'query_is_ready',
+        'query_classes', 'query_component_has_script',
       ]).describe('Query action to perform. See tool description for required parameters per action.'),
       uuid: z.string().optional().describe(
         'Target node UUID. REQUIRED for: node_detail, get_components, get_parent, get_children, get_sibling, ' +
@@ -146,6 +157,9 @@ Common errors: "没有打开的场景"=no scene open; "未找到节点: uuid"=in
       worldX: z.number().optional().describe('World X coordinate. REQUIRED for action=world_to_screen.'),
       worldY: z.number().optional().describe('World Y coordinate. REQUIRED for action=world_to_screen.'),
       worldZ: z.number().optional().describe('World Z coordinate. REQUIRED for action=world_to_screen.'),
+      // Native IPC queries
+      assetUuid: z.string().optional().describe('Asset UUID. REQUIRED for: query_nodes_by_asset_uuid.'),
+      className: z.string().optional().describe('Script class name. REQUIRED for: query_component_has_script.'),
     }),
     async (params) => {
       try {
@@ -172,6 +186,28 @@ Common errors: "没有打开的场景"=no scene open; "未找到节点: uuid"=in
         if (p.action === 'list_all_scenes') {
           const scenes = await editorMsg('asset-db', 'query-assets', { pattern: 'db://assets/**/*.scene' });
           return text(scenes);
+        }
+        // ── Native IPC queries (bypass scene-script, call Editor IPC directly) ──
+        if (p.action === 'query_node') {
+          return text({ uuid: p.uuid, dump: await editorMsg('scene', 'query-node', p.uuid) });
+        }
+        if (p.action === 'query_component') {
+          return text({ uuid: p.uuid, dump: await editorMsg('scene', 'query-component', p.uuid) });
+        }
+        if (p.action === 'query_node_tree') {
+          return text(await editorMsg('scene', 'query-node-tree'));
+        }
+        if (p.action === 'query_nodes_by_asset_uuid') {
+          return text({ assetUuid: p.assetUuid, nodes: await editorMsg('scene', 'query-nodes-by-asset-uuid', p.assetUuid) });
+        }
+        if (p.action === 'query_is_ready') {
+          return text({ ready: await editorMsg('scene', 'query-is-ready') });
+        }
+        if (p.action === 'query_classes') {
+          return text(await editorMsg('scene', 'query-classes'));
+        }
+        if (p.action === 'query_component_has_script') {
+          return text({ className: p.className, hasScript: await editorMsg('scene', 'query-component-has-script', p.className) });
         }
         // For new query actions, try dispatchQuery first, fallback to MCP-layer
         if (NEW_QUERY_ACTIONS.has(String(p.action))) {
@@ -218,8 +254,6 @@ Actions & required parameters:
 - call_component_method: uuid(REQUIRED), component(REQUIRED), methodName(REQUIRED), args(optional).
 - create_prefab: uuid(REQUIRED), savePath(recommended, e.g. "db://assets/prefabs/X.prefab").
 - instantiate_prefab: prefabUrl(REQUIRED, db:// path to .prefab file), parentUuid(optional).
-- enter_prefab_edit: uuid(REQUIRED). Enter prefab editing mode for a prefab instance.
-- exit_prefab_edit: no params. Exit prefab editing mode.
 - apply_prefab: uuid(REQUIRED). Apply changes to prefab asset.
 - restore_prefab: uuid(REQUIRED). Restore prefab instance to original.
 - validate_prefab: prefabUrl(REQUIRED). Check prefab file integrity.
@@ -227,6 +261,12 @@ Actions & required parameters:
 - reset_transform: uuid(REQUIRED). Reset position/rotation/scale to defaults. resetPosition/resetRotation/resetScale(optional, default true).
 - set_anchor_point: uuid(REQUIRED), anchorX/anchorY(optional, default 0.5). Set UITransform anchor point directly.
 - set_content_size: uuid(REQUIRED), width(REQUIRED), height(REQUIRED). Set UITransform content size directly.
+- copy_node: uuid(REQUIRED). Copy node to clipboard (prepares for paste_node).
+- paste_node: parentUuid(optional). Paste previously copied node under parent (omit=scene root).
+- cut_node: uuid(REQUIRED). Cut node to clipboard (removes from scene, prepares for paste_node).
+- move_array_element: uuid(REQUIRED), path(REQUIRED), target(REQUIRED, number). Move array element within a component property array.
+- remove_array_element: uuid(REQUIRED), path(REQUIRED). Remove an array element from a component property array.
+- execute_component_method: uuid(REQUIRED), component(REQUIRED), methodName(REQUIRED), args(optional). Execute a component method via native Editor IPC.
 
 ASSET REFERENCES: For set_property on spriteFrame/font/material, value MUST be {__uuid__:"asset-uuid-here"}. Get the UUID via asset_operation action=url_to_uuid. NEVER pass raw file paths or plain strings for asset properties.
 NODE REFERENCES: For set_property on properties that expect a Node (e.g. ScrollView.content, ScrollView.view), value MUST be {"__refType__":"cc.Node","uuid":"target-node-uuid"}. The bridge resolves this via Editor IPC or runtime lookup.
@@ -247,15 +287,21 @@ Common errors: "未找到节点"=bad UUID; "未找到父节点"=parent not found
         'add_component', 'remove_component', 'set_property', 'reset_property', 'call_component_method',
         // Basic UI (3)
         'ensure_2d_canvas', 'set_anchor_point', 'set_content_size',
-        // Prefab (7)
-        'create_prefab', 'instantiate_prefab', 'enter_prefab_edit', 'exit_prefab_edit',
+        // Prefab (5)
+        'create_prefab', 'instantiate_prefab',
         'apply_prefab', 'restore_prefab', 'validate_prefab',
+        // Clipboard (3)
+        'copy_node', 'paste_node', 'cut_node',
+        // Array operations (2)
+        'move_array_element', 'remove_array_element',
+        // Component method via native IPC (1)
+        'execute_component_method',
       ]).describe('Operation to perform. See tool description for required parameters per action.'),
       uuid: z.string().optional().describe(
         'Target node UUID. REQUIRED for most actions: destroy_node, reparent, set_position, set_rotation, ' +
         'set_scale, set_name, set_active, add_component, remove_component, set_property, reset_property, ' +
         'set_world_position/rotation/scale, duplicate_node, move_node_up/down, set_sibling_index, ' +
-        'call_component_method, create_prefab, enter_prefab_edit, apply_prefab, restore_prefab, ' +
+        'call_component_method, create_prefab, apply_prefab, restore_prefab, ' +
         'set_anchor_point, set_content_size, reset_transform.'
       ),
       parentUuid: z.string().optional().describe(
@@ -314,10 +360,17 @@ Common errors: "未找到节点"=bad UUID; "未找到父节点"=parent not found
         'Node layer bitmask value. REQUIRED for: set_layer. Common values: 1<<0=DEFAULT(1), 1<<25=UI_2D(33554432), 1<<30=IGNORE_RAYCAST.'
       ),
       methodName: z.string().optional().describe(
-        'Component method name to call. REQUIRED for: call_component_method. e.g. "play", "stop", "resetInEditor".'
+        'Component method name to call. REQUIRED for: call_component_method, execute_component_method.'
       ),
       args: z.array(z.unknown()).optional().describe(
-        'Arguments array for call_component_method. Each element is passed as a positional argument.'
+        'Arguments array for call_component_method / execute_component_method.'
+      ),
+      path: z.string().optional().describe(
+        'Property path for array operations. REQUIRED for: move_array_element, remove_array_element. ' +
+        'Format: "componentUuid.propertyName.index" (e.g. "compUuid.__comps__.0.items.2").'
+      ),
+      target: z.number().int().optional().describe(
+        'Target index for move_array_element. REQUIRED for: move_array_element.'
       ),
       savePath: z.string().optional().describe(
         'db:// path to save the prefab asset. Recommended for: create_prefab. Default: "db://assets/prefabs/{name}.prefab". ' +
@@ -436,33 +489,10 @@ Common errors: "未找到节点"=bad UUID; "未找到父节点"=parent not found
           try {
             const prefabUuid = await editorMsg('asset-db', 'query-uuid', prefabUrl);
             if (!prefabUuid) return text({ error: `预制体不存在: ${prefabUrl}` }, true);
-            // Try IPC first (works in some CC versions), fallback to scene script
-            try {
-              const result = await editorMsg('scene', 'create-node-by-prefab', String(prefabUuid), p.parentUuid || undefined);
-              return text({ success: true, action: 'instantiate_prefab', prefabUrl, result: result ?? 'instantiated' });
-            } catch {
-              // Fallback: use scene script to instantiate prefab via assetManager
-              const result = await sceneMethod('instantiatePrefab', [String(prefabUuid), p.parentUuid || '']);
-              return text({ success: true, action: 'instantiate_prefab', prefabUrl, result: result ?? 'instantiated', method: 'scene-script' });
-            }
+            const result = await sceneMethod('instantiatePrefab', [String(prefabUuid), p.parentUuid || '']);
+            return text({ success: true, action: 'instantiate_prefab', prefabUrl, result: result ?? 'instantiated', method: 'scene-script' });
           } catch (err: unknown) {
             return text({ error: `实例化预制体失败: ${errorMessage(err)}` }, true);
-          }
-        }
-        if (p.action === 'enter_prefab_edit') {
-          try {
-            const result = await editorMsg('scene', 'enter-prefab-edit-mode', p.uuid);
-            return text({ success: true, action: 'enter_prefab_edit', uuid: p.uuid, result: result ?? 'entered' });
-          } catch (err: unknown) {
-            return text({ error: `进入预制体编辑模式失败: ${errorMessage(err)}` }, true);
-          }
-        }
-        if (p.action === 'exit_prefab_edit') {
-          try {
-            const result = await editorMsg('scene', 'exit-prefab-edit-mode');
-            return text({ success: true, action: 'exit_prefab_edit', result: result ?? 'exited' });
-          } catch (err: unknown) {
-            return text({ error: `退出预制体编辑模式失败: ${errorMessage(err)}` }, true);
           }
         }
         if (p.action === 'apply_prefab') {
@@ -495,6 +525,61 @@ Common errors: "未找到节点"=bad UUID; "未找到父节点"=parent not found
             return text({ valid: true, prefabUrl, assetInfo: info, dependencies });
           } catch (err: unknown) {
             return text({ valid: false, prefabUrl, error: errorMessage(err) });
+          }
+        }
+
+        // ── Clipboard operations (native IPC) ──
+        if (p.action === 'copy_node') {
+          try {
+            const result = await editorMsg('scene', 'copy-node', [p.uuid]);
+            return text({ success: true, action: 'copy_node', uuid: p.uuid, result: result ?? 'copied' });
+          } catch (err: unknown) {
+            return text({ error: `复制节点失败: ${errorMessage(err)}` }, true);
+          }
+        }
+        if (p.action === 'paste_node') {
+          try {
+            const result = await editorMsg('scene', 'paste-node', p.parentUuid || undefined);
+            return text({ success: true, action: 'paste_node', parentUuid: p.parentUuid, result: result ?? 'pasted' });
+          } catch (err: unknown) {
+            return text({ error: `粘贴节点失败: ${errorMessage(err)}` }, true);
+          }
+        }
+        if (p.action === 'cut_node') {
+          try {
+            const result = await editorMsg('scene', 'cut-node', [p.uuid]);
+            return text({ success: true, action: 'cut_node', uuid: p.uuid, result: result ?? 'cut' });
+          } catch (err: unknown) {
+            return text({ error: `剪切节点失败: ${errorMessage(err)}` }, true);
+          }
+        }
+        // ── Array operations (native IPC) ──
+        if (p.action === 'move_array_element') {
+          try {
+            const result = await editorMsg('scene', 'move-array-element', { uuid: p.uuid, path: p.path, target: p.target });
+            return text({ success: true, action: 'move_array_element', result: result ?? 'moved' });
+          } catch (err: unknown) {
+            return text({ error: `移动数组元素失败: ${errorMessage(err)}` }, true);
+          }
+        }
+        if (p.action === 'remove_array_element') {
+          try {
+            const result = await editorMsg('scene', 'remove-array-element', { uuid: p.uuid, path: p.path });
+            return text({ success: true, action: 'remove_array_element', result: result ?? 'removed' });
+          } catch (err: unknown) {
+            return text({ error: `删除数组元素失败: ${errorMessage(err)}` }, true);
+          }
+        }
+        // ── Execute component method via native IPC ──
+        if (p.action === 'execute_component_method') {
+          try {
+            const result = await editorMsg('scene', 'execute-component-method', {
+              uuid: p.uuid, component: p.component, method: p.methodName,
+              args: Array.isArray(p.args) ? p.args : [],
+            });
+            return text({ success: true, action: 'execute_component_method', result: result ?? 'executed' });
+          } catch (err: unknown) {
+            return text({ error: `执行组件方法失败: ${errorMessage(err)}` }, true);
           }
         }
 

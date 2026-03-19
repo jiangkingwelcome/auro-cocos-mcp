@@ -8,23 +8,7 @@ export function registerEditorControlRoutes(get: RouteRegistrar, post: RouteRegi
     return 'global';
   };
 
-  post('/api/editor/save-scene', async (_params, body) => {
-    const payload = (body && typeof body === 'object' ? body : {}) as { force?: boolean };
-    try {
-      const sceneInfo = await ipc('scene', 'query-scene') as { url?: string; name?: string } | null;
-      const sceneUrl = sceneInfo?.url;
-      const isUntitled = !sceneUrl || sceneUrl === '' || sceneUrl === 'db://';
-      if (isUntitled && !payload.force) {
-        return {
-          success: false,
-          skipped: true,
-          reason: '当前场景尚未保存过（无文件路径），save-scene 会弹出原生对话框。请先在编辑器中手动 Ctrl+S 保存一次，或传 force:true 强制弹出对话框。',
-          sceneName: sceneInfo?.name || 'Untitled',
-        };
-      }
-    } catch {
-      // query-scene IPC not available on this Cocos version — proceed with save
-    }
+  post('/api/editor/save-scene', async () => {
     await ipc('scene', 'save-scene');
     return { success: true };
   });
@@ -48,14 +32,10 @@ export function registerEditorControlRoutes(get: RouteRegistrar, post: RouteRegi
 
   post('/api/scene/new-scene', async () => {
     try {
-      const sceneInfo = await ipc('scene', 'query-scene') as { url?: string } | null;
-      const sceneUrl = sceneInfo?.url;
-      if (sceneUrl && sceneUrl !== '' && sceneUrl !== 'db://') {
-        await ipc('scene', 'save-scene');
-      }
-    } catch (_e) { /* best effort save — skip if query-scene or save fails */ }
+      await ipc('scene', 'save-scene');
+    } catch (_e) { /* best effort save */ }
 
-    // 方案1: 通过 asset-db 创建 .scene 文件 + open-asset 打开，避免直接调用 scene:new-scene 可能的兼容性问题
+    // 通过 asset-db 创建 .scene 文件 + open-asset 打开
     const baseUrl = 'db://assets/scenes/New Scene.scene';
     let sceneUrl: string;
     try {
@@ -118,7 +98,14 @@ export function registerEditorControlRoutes(get: RouteRegistrar, post: RouteRegi
     const payload = (body && typeof body === 'object' ? body : {}) as { uuid?: string };
     const uuid = payload.uuid || '';
     if (!uuid) return { error: '缺少 uuid 参数' };
+    // Select the node in hierarchy (for Inspector display)
     Editor.Selection.select('node', [uuid]);
+    // Actually focus the scene camera on the node via IPC
+    try {
+      await ipc('scene', 'focus-camera', uuid);
+    } catch (e) {
+      logIgnored(ErrorCategory.EDITOR_IPC, 'focus-camera IPC 失败，节点已选中但摄像机未聚焦', e);
+    }
     return { success: true, uuid };
   });
 
