@@ -64,7 +64,7 @@ Actions & required parameters:
 - get_material_info: uuid(REQUIRED). Get material info on a node's renderer (MeshRenderer/Sprite/etc): effectName, technique, passes, uniforms (mainColor, albedo, roughness, metallic, etc).
 - get_light_info: uuid(optional). Get all light components in scene (DirectionalLight/SpotLight/SphereLight) with color, illuminance/luminance, range, shadow settings, position/rotation. If uuid specified, only that node.
 - get_scene_environment: no params. Get structured scene environment settings: ambient (skyColor, skyIllum), shadows (enabled, type, size), fog (enabled, type, density), skybox (enabled, useIBL, useHDR), octree.
-- screen_to_world: uuid(optional camera), screenX/screenY/screenZ(REQUIRED). Convert screen coordinates to world position via camera.
+- screen_to_world: uuid(optional camera), screenX/screenY(REQUIRED), screenZ(optional, default 0). Convert screen coordinates to world position via camera.
 - world_to_screen: uuid(optional camera), worldX/worldY/worldZ(REQUIRED). Convert world position to screen coordinates via camera.
 - check_script_ready: script(REQUIRED, class name). Check if a script class is compiled and registered, returns {ready, isComponent}.
 - get_script_properties: script(REQUIRED, class name). Get all @property declarations of a script class (name, type, default, visible).
@@ -105,7 +105,7 @@ Common errors: "没有打开的场景"=no scene open; "未找到节点: uuid"=in
         'get_world_position, get_world_rotation, get_world_scale, get_active_in_hierarchy, ' +
         'get_component_property, get_node_components_properties, get_node_bounds, get_animation_state, ' +
         'get_collider_info, get_material_info, get_light_info, screen_to_world, world_to_screen. ' +
-        'Optional for: get_camera_info, get_canvas_info, detect_2d_3d, get_light_info.'
+        'Optional for: get_camera_info, get_canvas_info, get_light_info.'
       ),
       uuidA: z.string().optional().describe(
         'First node UUID for measure_distance. REQUIRED when action=measure_distance.'
@@ -157,6 +157,8 @@ Common errors: "没有打开的场景"=no scene open; "未找到节点: uuid"=in
       worldX: z.number().optional().describe('World X coordinate. REQUIRED for action=world_to_screen.'),
       worldY: z.number().optional().describe('World Y coordinate. REQUIRED for action=world_to_screen.'),
       worldZ: z.number().optional().describe('World Z coordinate. REQUIRED for action=world_to_screen.'),
+      // Script queries
+      script: z.string().optional().describe('Script class name. REQUIRED for: check_script_ready, get_script_properties.'),
       // Native IPC queries
       assetUuid: z.string().optional().describe('Asset UUID. REQUIRED for: query_nodes_by_asset_uuid.'),
       className: z.string().optional().describe('Script class name. REQUIRED for: query_component_has_script.'),
@@ -224,7 +226,7 @@ Common errors: "没有打开的场景"=no scene open; "未找到节点: uuid"=in
     },
   );
 
-  // 3. scene_operation (30 actions — Community Edition)
+  // 3. scene_operation (37 actions — Community Edition)
   server.tool(
     'scene_operation',
     `Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.
@@ -267,6 +269,8 @@ Actions & required parameters:
 - move_array_element: uuid(REQUIRED), path(REQUIRED), target(REQUIRED, number). Move array element within a component property array.
 - remove_array_element: uuid(REQUIRED), path(REQUIRED). Remove an array element from a component property array.
 - execute_component_method: uuid(REQUIRED), component(REQUIRED), methodName(REQUIRED), args(optional). Execute a component method via native Editor IPC.
+- clear_children: uuid(REQUIRED), confirmDangerous=true(REQUIRED). Remove all child nodes.
+- reset_node_properties: uuid(REQUIRED), component(optional). Reset all component properties to defaults. If component specified, only reset that component.
 
 ASSET REFERENCES: For set_property on spriteFrame/font/material, value MUST be {__uuid__:"asset-uuid-here"}. Get the UUID via asset_operation action=url_to_uuid. NEVER pass raw file paths or plain strings for asset properties.
 NODE REFERENCES: For set_property on properties that expect a Node (e.g. ScrollView.content, ScrollView.view), value MUST be {"__refType__":"cc.Node","uuid":"target-node-uuid"}. The bridge resolves this via Editor IPC or runtime lookup.
@@ -296,6 +300,8 @@ Common errors: "未找到节点"=bad UUID; "未找到父节点"=parent not found
         'move_array_element', 'remove_array_element',
         // Component method via native IPC (1)
         'execute_component_method',
+        // IPC-only operations (2)
+        'clear_children', 'reset_node_properties',
       ]).describe('Operation to perform. See tool description for required parameters per action.'),
       uuid: z.string().optional().describe(
         'Target node UUID. REQUIRED for most actions: destroy_node, reparent, set_position, set_rotation, ' +

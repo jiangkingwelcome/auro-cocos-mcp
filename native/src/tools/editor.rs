@@ -59,7 +59,7 @@ pub fn definitions() -> Vec<ToolDefinition> {
             "Actions (60): save_scene, open_scene, new_scene, undo, redo, ",
             "project_info, ",
             "preview, preview_refresh, build, build_query, ",
-            "play/pause/stop/step_in_editor, ",
+            "play_in_editor, ",
             "focus_node, log, warn, error, clear_console, show_notification, ",
             "build_with_config, build_status, preview_status, send_message, ",
             "open/close/query_panels, get_packages, reload_plugin, ",

@@ -6,13 +6,13 @@ import { toInputSchema, errorMessage, AI_RULES, validateRequiredParams } from '.
 export function registerEditorTools(server: LocalToolServer, ctx: BridgeToolContext): void {
   const { bridgeGet, bridgePost, editorMsg, text } = ctx;
 
-  // editor_action (24 actions — Community Edition)
+  // editor_action (39 actions — Community Edition)
   server.tool(
     'editor_action',
     `Control the Cocos Creator editor environment (non-scene operations).
 
 Actions & required parameters:
-- save_scene: no params. Save current scene silently.
+- save_scene: force(optional, boolean). Save current scene. Pass force=true to show Save As dialog for untitled scenes.
 - open_scene: uuid(optional) or url(optional). Open a scene by UUID or db:// URL.
 - new_scene: no params. Create a new empty scene.
 - undo: no params. Undo last operation.
@@ -25,7 +25,7 @@ Actions & required parameters:
 - log/warn/error: text(REQUIRED). Write message to console.
 - clear_console: no params. Clear console output.
 - play_in_editor: no params. Enter play/preview mode.
-- show_notification: text(REQUIRED), title(optional). Show editor notification dialog.
+- show_notification: text(REQUIRED), title(optional). Write notification to console (non-blocking, no modal dialog).
 - build_query: no params. Get build configuration and available platforms.
 - change_gizmo_tool: tool(REQUIRED, "position"|"rotation"|"scale"|"rect"). Switch Gizmo tool.
 - query_gizmo_tool_name: no params. Get current Gizmo tool name.

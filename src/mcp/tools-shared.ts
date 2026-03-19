@@ -366,6 +366,9 @@ export const REQUIRED_PARAMS: Record<string, string[]> = {
   'editor_action.change_gizmo_tool': ['tool'],
   'editor_action.change_gizmo_pivot': ['pivot'],
   'editor_action.change_gizmo_coordinate': ['coordinate'],
+  'editor_action.change_is2D': ['is2D'],
+  'editor_action.set_grid_visible': ['visible'],
+  'editor_action.set_icon_gizmo_3d': ['is3D'],
   'editor_action.set_icon_gizmo_size': ['size'],
 
   // ── asset_operation ──────────────────────────────────────────────
