@@ -200,7 +200,7 @@ describe('新增功能 — 预制体编辑模式', () => {
 });
 
 // ═════════════════════════════════════════════════════════════════════════════
-// 8. 预制体应用/还原 (apply_prefab / revert_prefab)
+// 8. 预制体应用/还原 (apply_prefab / restore_prefab)
 // ═════════════════════════════════════════════════════════════════════════════
 describe('新增功能 — 预制体应用/还原', () => {
     it('apply_prefab 缺少 uuid 时返回错误', async () => {
@@ -218,19 +218,19 @@ describe('新增功能 — 预制体应用/还原', () => {
         expect(editorMsg).toHaveBeenCalledWith('scene', 'apply-prefab', 'prefab-inst-1');
     });
 
-    it('revert_prefab 缺少 uuid 时返回错误', async () => {
+    it('restore_prefab 缺少 uuid 时返回错误', async () => {
         const server = buildCocosToolServer(makeCtx());
-        const result = await server.callTool('scene_operation', { action: 'revert_prefab' });
+        const result = await server.callTool('scene_operation', { action: 'restore_prefab' });
         expect(result.isError).toBe(true);
     });
 
-    it('revert_prefab 调用 editorMsg 还原预制体', async () => {
+    it('restore_prefab 调用 editorMsg 恢复预制体', async () => {
         const editorMsg = vi.fn().mockResolvedValue({});
         const server = buildCocosToolServer(makeCtx({ editorMsg }));
 
-        const result = await server.callTool('scene_operation', { action: 'revert_prefab', uuid: 'prefab-inst-1' });
+        const result = await server.callTool('scene_operation', { action: 'restore_prefab', uuid: 'prefab-inst-1' });
         expect(result.isError).toBeFalsy();
-        expect(editorMsg).toHaveBeenCalledWith('scene', 'revert-prefab', 'prefab-inst-1');
+        expect(editorMsg).toHaveBeenCalledWith('scene', 'restore-prefab', 'prefab-inst-1');
     });
 });
 
@@ -247,7 +247,7 @@ describe('新增功能 — 预制体验证', () => {
     it('validate_prefab 检查预制体存在性和依赖', async () => {
         const editorMsg = vi.fn()
             .mockResolvedValueOnce({ uuid: 'prefab-uuid', type: 'cc.Prefab' }) // query-asset-info
-            .mockResolvedValueOnce(['dep-1', 'dep-2']); // query-dependencies
+            .mockResolvedValueOnce(['dep-1', 'dep-2']); // query-asset-dependencies
         const server = buildCocosToolServer(makeCtx({ editorMsg }));
 
         const result = await server.callTool('scene_operation', {
@@ -391,7 +391,7 @@ describe.skip('新增功能 — 资源验证 — Pro exclusive', () => {
             .mockResolvedValueOnce({ uuid: 'u1', type: 'cc.Script' }); // query-asset-info
         const editorMsg = vi.fn()
             .mockResolvedValueOnce({ ver: '1.0' })                     // query-asset-meta
-            .mockResolvedValueOnce([])                                  // query-dependencies (empty)
+            .mockResolvedValueOnce([])                                  // query-asset-dependencies (empty)
             .mockResolvedValueOnce([]);                                 // query-dependents (empty)
         const server = buildCocosToolServer(makeCtx({ bridgeGet, editorMsg }));
         const result = await server.callTool('asset_operation', { action: 'validate_asset', url: 'db://assets/scripts/main.ts' });
@@ -405,7 +405,7 @@ describe.skip('新增功能 — 资源验证 — Pro exclusive', () => {
             .mockResolvedValueOnce(null);                // query-asset-info for dep → null = missing
         const editorMsg = vi.fn()
             .mockResolvedValueOnce({ ver: '1.0' })        // query-asset-meta (meta ok)
-            .mockResolvedValueOnce(['db://assets/missing-dep.png'])  // query-dependencies
+            .mockResolvedValueOnce(['db://assets/missing-dep.png'])  // query-asset-dependencies
             .mockResolvedValueOnce([]);                   // query-dependents
         const server = buildCocosToolServer(makeCtx({ bridgeGet, editorMsg }));
         const result = await server.callTool('asset_operation', { action: 'validate_asset', url: 'db://assets/prefabs/test.prefab' });
@@ -511,7 +511,7 @@ describe('新增功能 — 工具注册完整性 (社区版)', () => {
         expect(soActions).toContain('enter_prefab_edit');
         expect(soActions).toContain('exit_prefab_edit');
         expect(soActions).toContain('apply_prefab');
-        expect(soActions).toContain('revert_prefab');
+        expect(soActions).toContain('restore_prefab');
         expect(soActions).toContain('validate_prefab');
     });
 

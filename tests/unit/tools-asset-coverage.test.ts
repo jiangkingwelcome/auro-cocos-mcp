@@ -169,12 +169,12 @@ describe('asset_operation — editorMsg (IPC) actions', () => {
     expect(editorMsg).toHaveBeenCalledWith('asset-db', 'reimport-asset', 'db://assets/hero.png');
   });
 
-  it.skip('get_dependencies calls editorMsg asset-db query-dependencies', async () => {
+  it.skip('get_dependencies calls editorMsg asset-db query-asset-dependencies', async () => {
     const editorMsg = vi.fn().mockResolvedValue(['db://assets/dep.png']);
     const server = buildCocosToolServer(makeCtx({ editorMsg }));
     const result = await server.callTool('asset_operation', { action: 'get_dependencies', url: 'db://assets/hero.prefab' });
     expect(result.isError).toBeFalsy();
-    expect(editorMsg).toHaveBeenCalledWith('asset-db', 'query-dependencies', 'db://assets/hero.prefab');
+    expect(editorMsg).toHaveBeenCalledWith('asset-db', 'query-asset-dependencies', 'db://assets/hero.prefab');
   });
 
   it.skip('get_dependents calls editorMsg asset-db query-dependents', async () => {

@@ -30,7 +30,7 @@ const SCENE_MESSAGES = [
   'enter-prefab-edit-mode',
   'exit-prefab-edit-mode',
   'apply-prefab',
-  'revert-prefab',
+  'restore-prefab',
   
   // 预览控制
   'pause',
@@ -55,7 +55,7 @@ const ASSET_DB_MESSAGES = [
   'query-asset-meta',
   'save-asset-meta',
   'reimport-asset',
-  'query-dependencies',
+  'query-asset-dependencies',
 ];
 
 // 需要测试的 builder 模块 IPC 消息列表

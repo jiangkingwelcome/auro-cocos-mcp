@@ -6,7 +6,6 @@ const ACTIONS: &[&str] = &[
     // Community actions
     "save_scene", "open_scene", "new_scene",
     "undo", "redo",
-    "get_selection", "select", "clear_selection",
     "project_info",
     "preview", "preview_refresh",
     "build", "build_query",
@@ -46,8 +45,8 @@ pub fn definitions() -> Vec<ToolDefinition> {
             "1. save_scene before switching scenes.\n",
             "2. Use undo/redo for quick corrections.\n",
             "3. Use focus_node after creating nodes to center the view.\n\n",
-            "Actions (63): save_scene, open_scene, new_scene, undo, redo, ",
-            "get_selection, select, clear_selection, project_info, ",
+            "Actions (60): save_scene, open_scene, new_scene, undo, redo, ",
+            "project_info, ",
             "preview, preview_refresh, build, build_query, ",
             "play/pause/stop/step_in_editor, ",
             "focus_node, log, warn, error, clear_console, show_notification, ",
@@ -76,7 +75,7 @@ pub fn definitions() -> Vec<ToolDefinition> {
                     "enum": ACTIONS,
                     "description": "Editor action to perform."
                 },
-                "uuid": { "type": "string", "description": "Node UUID for focus_node, select, inspect_asset." },
+                "uuid": { "type": "string", "description": "Node UUID for focus_node, inspect_asset." },
                 "scenePath": { "type": "string", "description": "Scene db:// path for open_scene." },
                 "message": { "type": "string", "description": "Log message or notification text." },
                 "level": { "type": "string", "description": "Log level: log, warn, error." },
@@ -88,7 +87,6 @@ pub fn definitions() -> Vec<ToolDefinition> {
                 "keyword": { "type": "string", "description": "Search keyword for search_logs." },
                 "pluginName": { "type": "string", "description": "Plugin name for reload_plugin." },
                 "position": { "type": "object", "description": "Camera position for move_scene_camera." },
-                "uuids": { "type": "array", "description": "Array of UUIDs for select." },
                 // New parameters in 1.7.3
                 "projectPath": { "type": "string", "description": "Project path for open_recent_project." },
                 "settings": { "type": "object", "description": "Settings object for set_project_settings, set_editor_preferences." },
@@ -129,12 +127,6 @@ pub fn process(args: &serde_json::Value) -> ExecutionPlan {
                 module: "scene".into(),
                 message: "open-scene".into(),
                 args: vec![args.clone()],
-            })
-        }
-        "get_selection" | "clear_selection" => {
-            ExecutionPlan::single(CallInstruction::BridgeGet {
-                path: format!("/api/editor/{}", action.replace('_', "-")),
-                params: None,
             })
         }
         "project_info" => {

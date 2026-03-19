@@ -443,15 +443,15 @@ describe('scene_operation — prefab & clipboard actions (editorMsg)', () => {
     expect(editorMsg).toHaveBeenCalledWith('scene', 'apply-prefab', 'u1');
   });
 
-  it('revert_prefab calls editorMsg', async () => {
+  it('restore_prefab calls editorMsg', async () => {
     const editorMsg = vi.fn().mockResolvedValue({});
     const server = buildCocosToolServer(makeCtx({ editorMsg }));
-    const result = await server.callTool('scene_operation', { action: 'revert_prefab', uuid: 'u1' });
+    const result = await server.callTool('scene_operation', { action: 'restore_prefab', uuid: 'u1' });
     expect(result.isError).toBeFalsy();
-    expect(editorMsg).toHaveBeenCalledWith('scene', 'revert-prefab', 'u1');
+    expect(editorMsg).toHaveBeenCalledWith('scene', 'restore-prefab', 'u1');
   });
 
-  it('validate_prefab calls editorMsg query-asset-info and query-dependencies', async () => {
+  it('validate_prefab calls editorMsg query-asset-info and query-asset-dependencies', async () => {
     const editorMsg = vi.fn()
       .mockResolvedValueOnce({ url: 'db://assets/prefabs/P.prefab' })
       .mockResolvedValueOnce([]);

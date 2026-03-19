@@ -68,14 +68,6 @@ describe('editor_action — bridgePost actions', () => {
     expect(bridgePost).toHaveBeenCalledWith('/api/editor/redo');
   });
 
-  it('select 调用 POST /api/editor/select 并传入 uuids', async () => {
-    const bridgePost = vi.fn().mockResolvedValue({ success: true });
-    const server = buildCocosToolServer(makeCtx({ bridgePost }));
-
-    await server.callTool('editor_action', { action: 'select', uuids: ['uuid-1', 'uuid-2'] });
-    expect(bridgePost).toHaveBeenCalledWith('/api/editor/select', { uuids: ['uuid-1', 'uuid-2'] });
-  });
-
   it('build 调用 POST /api/builder/build 并传入 platform', async () => {
     const bridgePost = vi.fn().mockResolvedValue({ success: true });
     const server = buildCocosToolServer(makeCtx({ bridgePost }));
@@ -97,15 +89,6 @@ describe('editor_action — bridgePost actions', () => {
 // 2. bridgeGet 类 actions
 // ─────────────────────────────────────────────────────────────────────────────
 describe('editor_action — bridgeGet actions', () => {
-  it('get_selection 调用 GET /api/editor/selection', async () => {
-    const bridgeGet = vi.fn().mockResolvedValue({ selected: ['uuid-1'] });
-    const server = buildCocosToolServer(makeCtx({ bridgeGet }));
-
-    const result = await server.callTool('editor_action', { action: 'get_selection' });
-    expect(result.isError).toBeFalsy();
-    expect(bridgeGet).toHaveBeenCalledWith('/api/editor/selection');
-  });
-
   it('project_info 调用 GET /api/editor/project-info', async () => {
     const bridgeGet = vi.fn().mockResolvedValue({ name: 'MyGame', version: '1.0' });
     const server = buildCocosToolServer(makeCtx({ bridgeGet }));
@@ -130,14 +113,6 @@ describe('editor_action — editorMsg actions', () => {
       args: ['arg1'],
     });
     expect(editorMsg).toHaveBeenCalledWith('scene', 'reload', 'arg1');
-  });
-
-  it('clear_selection 调用 editorMsg("selection", "clear", "node")', async () => {
-    const editorMsg = vi.fn().mockResolvedValue({});
-    const server = buildCocosToolServer(makeCtx({ editorMsg }));
-
-    await server.callTool('editor_action', { action: 'clear_selection' });
-    expect(editorMsg).toHaveBeenCalledWith('selection', 'clear', 'node');
   });
 
   it('log 调用 bridgePost("/api/console/log")', async () => {
@@ -256,7 +231,7 @@ describe('editor_action — 异常处理', () => {
     const editorMsg = vi.fn().mockRejectedValue(new Error('IPC 超时'));
     const server = buildCocosToolServer(makeCtx({ editorMsg }));
 
-    const result = await server.callTool('editor_action', { action: 'clear_selection' });
+    const result = await server.callTool('editor_action', { action: 'pause_in_editor' });
     expect(result.isError).toBe(true);
     const data = parse(result) as any;
     expect(data.error).toContain('IPC 超时');

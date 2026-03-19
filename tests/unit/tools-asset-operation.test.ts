@@ -162,12 +162,12 @@ describe('asset_operation — editorMsg actions', () => {
     });
   });
 
-  it.skip('get_dependencies 调用 editorMsg("asset-db", "query-dependencies")', async () => {
+  it.skip('get_dependencies 调用 editorMsg("asset-db", "query-asset-dependencies")', async () => {
     const editorMsg = vi.fn().mockResolvedValue([]);
     const server = buildCocosToolServer(makeCtx({ editorMsg }));
 
     await server.callTool('asset_operation', { action: 'get_dependencies', url: 'db://assets/foo.ts' });
-    expect(editorMsg).toHaveBeenCalledWith('asset-db', 'query-dependencies', 'db://assets/foo.ts');
+    expect(editorMsg).toHaveBeenCalledWith('asset-db', 'query-asset-dependencies', 'db://assets/foo.ts');
   });
 
   it.skip('get_dependents 调用 editorMsg("asset-db", "query-dependents")', async () => {

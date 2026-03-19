@@ -221,7 +221,7 @@ Actions & required parameters:
 - enter_prefab_edit: uuid(REQUIRED). Enter prefab editing mode for a prefab instance.
 - exit_prefab_edit: no params. Exit prefab editing mode.
 - apply_prefab: uuid(REQUIRED). Apply changes to prefab asset.
-- revert_prefab: uuid(REQUIRED). Revert prefab instance to original.
+- restore_prefab: uuid(REQUIRED). Restore prefab instance to original.
 - validate_prefab: prefabUrl(REQUIRED). Check prefab file integrity.
 - ensure_2d_canvas: confirmCreateCanvas(REQUIRED, true). Idempotent: returns existing Canvas if present. IF NOT PRESENT, YOU MUST EXPLICITLY ASK THE USER BEFORE CALLING THIS! Tell the user "There is no Canvas for 2D UI. Can I create one for you?". Only call this after they agree, and pass confirmCreateCanvas=true.
 - reset_transform: uuid(REQUIRED). Reset position/rotation/scale to defaults. resetPosition/resetRotation/resetScale(optional, default true).
@@ -249,13 +249,13 @@ Common errors: "未找到节点"=bad UUID; "未找到父节点"=parent not found
         'ensure_2d_canvas', 'set_anchor_point', 'set_content_size',
         // Prefab (7)
         'create_prefab', 'instantiate_prefab', 'enter_prefab_edit', 'exit_prefab_edit',
-        'apply_prefab', 'revert_prefab', 'validate_prefab',
+        'apply_prefab', 'restore_prefab', 'validate_prefab',
       ]).describe('Operation to perform. See tool description for required parameters per action.'),
       uuid: z.string().optional().describe(
         'Target node UUID. REQUIRED for most actions: destroy_node, reparent, set_position, set_rotation, ' +
         'set_scale, set_name, set_active, add_component, remove_component, set_property, reset_property, ' +
         'set_world_position/rotation/scale, duplicate_node, move_node_up/down, set_sibling_index, ' +
-        'call_component_method, create_prefab, enter_prefab_edit, apply_prefab, revert_prefab, ' +
+        'call_component_method, create_prefab, enter_prefab_edit, apply_prefab, restore_prefab, ' +
         'set_anchor_point, set_content_size, reset_transform.'
       ),
       parentUuid: z.string().optional().describe(
@@ -473,12 +473,12 @@ Common errors: "未找到节点"=bad UUID; "未找到父节点"=parent not found
             return text({ error: `应用预制体更改失败: ${errorMessage(err)}` }, true);
           }
         }
-        if (p.action === 'revert_prefab') {
+        if (p.action === 'restore_prefab') {
           try {
-            const result = await editorMsg('scene', 'revert-prefab', p.uuid);
-            return text({ success: true, action: 'revert_prefab', uuid: p.uuid, result: result ?? 'reverted' });
+            const result = await editorMsg('scene', 'restore-prefab', p.uuid);
+            return text({ success: true, action: 'restore_prefab', uuid: p.uuid, result: result ?? 'restored' });
           } catch (err: unknown) {
-            return text({ error: `还原预制体失败: ${errorMessage(err)}` }, true);
+            return text({ error: `恢复预制体失败: ${errorMessage(err)}` }, true);
           }
         }
         if (p.action === 'validate_prefab') {
@@ -488,9 +488,9 @@ Common errors: "未找到节点"=bad UUID; "未找到父节点"=parent not found
             if (!info) return text({ valid: false, prefabUrl, error: '预制体文件不存在' });
             let dependencies: unknown = null;
             try {
-              dependencies = await editorMsg('asset-db', 'query-dependencies', prefabUrl);
+              dependencies = await editorMsg('asset-db', 'query-asset-dependencies', prefabUrl);
             } catch {
-              dependencies = '(query-dependencies IPC 不可用，跳过依赖检查)';
+              dependencies = '(query-asset-dependencies IPC 不可用，跳过依赖检查)';
             }
             return text({ valid: true, prefabUrl, assetInfo: info, dependencies });
           } catch (err: unknown) {

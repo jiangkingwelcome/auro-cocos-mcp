@@ -17,9 +17,6 @@ Actions & required parameters:
 - new_scene: no params. Create a new empty scene.
 - undo: no params. Undo last operation.
 - redo: no params. Redo last undone operation.
-- get_selection: no params. Get currently selected node UUIDs.
-- select: uuids(REQUIRED, string array). Select specific nodes by UUID.
-- clear_selection: no params. Deselect all nodes.
 - project_info: no params. Get project name, path, engine version.
 - build: platform(optional, e.g. "web-mobile", "android", "ios"). Start project build.
 - preview: no params. Open preview in browser.
@@ -36,16 +33,14 @@ Actions & required parameters:
 - show_notification: text(REQUIRED), title(optional). Show editor notification dialog.
 - build_query: no params. Get current build configuration and available platforms.
 
-Returns: save_scene→{success}. project_info→{name,path,version}. get_selection→{selected:[uuid]}. On error: {error:"message"}.
+Returns: save_scene→{success}. project_info→{name,path,version}. On error: {error:"message"}.
 Prerequisites: build requires scene to be saved first (call save_scene). play_in_editor/pause_in_editor/stop_in_editor control the editor preview mode.
 Common errors: build may fail silently — use build_query to check configuration first.` + AI_RULES,
     toInputSchema({
       action: z.enum([
-        // Community: basic editor actions (23 actions)
+        // Community: basic editor actions (20 actions)
         // Scene lifecycle
         'save_scene', 'open_scene', 'new_scene', 'undo', 'redo',
-        // Selection
-        'get_selection', 'select', 'clear_selection',
         // Project
         'project_info',
         // Preview
@@ -63,9 +58,6 @@ Common errors: build may fail silently — use build_query to check configuratio
       ),
       url: z.string().optional().describe(
         'Asset db:// URL. Optional for: open_scene (open scene by db:// URL).'
-      ),
-      uuids: z.array(z.string()).optional().describe(
-        'Array of node UUID strings. REQUIRED for: select. Example: ["uuid1", "uuid2"].'
       ),
       platform: z.enum(['web-mobile', 'web-desktop', 'android', 'ios', 'mac', 'windows', 'wechatgame']).optional().describe(
         'Target build platform. Used by: build. Example: "web-mobile".'
@@ -92,13 +84,10 @@ Common errors: build may fail silently — use build_query to check configuratio
           case 'new_scene': return text(await bridgePost('/api/scene/new-scene'));
           case 'undo': return text(await bridgePost('/api/editor/undo'));
           case 'redo': return text(await bridgePost('/api/editor/redo'));
-          case 'get_selection': return text(await bridgeGet('/api/editor/selection'));
-          case 'select': return text(await bridgePost('/api/editor/select', { uuids: p.uuids || [] }));
           case 'project_info': return text(await bridgeGet('/api/editor/project-info'));
           case 'build': return text(await bridgePost('/api/builder/build', { platform: p.platform }));
           case 'preview': return text(await bridgePost('/api/preview/open'));
           case 'preview_refresh': return text(await bridgePost('/api/preview/refresh'));
-          case 'clear_selection': return text(await editorMsg('selection', 'clear', 'node'));
           case 'log': return text(await bridgePost('/api/console/log', { text: p.text }));
           case 'warn': return text(await bridgePost('/api/console/warn', { text: p.text }));
           case 'error': return text(await bridgePost('/api/console/error', { text: p.text }));

@@ -129,7 +129,7 @@
 128,scene_operation,enter_prefab_edit,进入编辑,"{""action"": ""enter_prefab_edit"", ""uuid"": ""<prefab>""}",进入预制体编辑模式,,,,,
 129,scene_operation,exit_prefab_edit,退出编辑,"{""action"": ""exit_prefab_edit""}",返回场景编辑模式,,,,,
 130,scene_operation,apply_prefab,应用更改,"{""action"": ""apply_prefab"", ""uuid"": ""<uuid>""}",同步到预制体资源,,,,,
-131,scene_operation,revert_prefab,还原,"{""action"": ""revert_prefab"", ""uuid"": ""<uuid>""}",恢复为原始状态,,,,,
+131,scene_operation,restore_prefab,恢复,"{""action"": ""restore_prefab"", ""uuid"": ""<uuid>""}",恢复为原始状态,,,,,
 132,scene_operation,validate_prefab,验证,"{""action"": ""validate_prefab"", ""prefabUrl"": ""db://assets/prefabs/Hero.prefab""}",检查完整性和依赖,,,,,
 133,scene_operation,create_ui_widget,创建 Button,"{""action"": ""create_ui_widget"", ""widgetType"": ""button"", ""text"": ""点击""}",创建完整 Button 层级,,,,,
 134,scene_operation,create_ui_widget,创建 Label,"{""action"": ""create_ui_widget"", ""widgetType"": ""label"", ""text"": ""Hello""}",创建 Label 节点,,,,,

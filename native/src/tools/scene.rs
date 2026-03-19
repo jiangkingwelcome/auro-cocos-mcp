@@ -44,7 +44,7 @@ const OPERATION_ACTIONS: &[&str] = &[
     // Prefab ops
     "create_prefab", "instantiate_prefab",
     "enter_prefab_edit", "exit_prefab_edit",
-    "apply_prefab", "revert_prefab", "validate_prefab",
+    "apply_prefab", "restore_prefab", "validate_prefab",
     // Pro-only extended ops
     "lock_node", "unlock_node", "hide_node", "unhide_node",
     "set_layer", "clear_children", "reset_node_properties",
@@ -82,7 +82,7 @@ const OPERATION_UUID_REQUIRED: &[&str] = &[
     "set_anchor_point", "set_content_size",
     "instantiate_prefab",
     "enter_prefab_edit", "exit_prefab_edit",
-    "apply_prefab", "revert_prefab", "validate_prefab",
+    "apply_prefab", "restore_prefab", "validate_prefab",
     "lock_node", "unlock_node", "hide_node", "unhide_node",
     "set_layer", "clear_children", "reset_node_properties",
     "attach_script", "detach_script", "set_component_properties",
@@ -172,7 +172,7 @@ pub fn definitions() -> Vec<ToolDefinition> {
                 "set_name, set_active, duplicate_node, move_node_up/down, set_sibling_index, reset_transform, ",
                 "add_component, remove_component, set_property, reset_property, call_component_method, ",
                 "ensure_2d_canvas, set_anchor_point, set_content_size, ",
-                "create_prefab, instantiate_prefab, enter/exit_prefab_edit, apply/revert/validate_prefab, ",
+                "create_prefab, instantiate_prefab, enter/exit_prefab_edit, apply/restore/validate_prefab, ",
                 "lock/unlock_node, hide/unhide_node, set_layer, clear_children, reset_node_properties, ",
                 "batch, batch_set_property, group_nodes, align_nodes, clipboard_copy/paste, ",
                 "create_ui_widget, setup_particle, audio_setup, setup_physics_world, ",

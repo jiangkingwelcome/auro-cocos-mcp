@@ -1651,10 +1651,10 @@
   {
     "id": 131,
     "tool": "scene_operation",
-    "action": "revert_prefab",
-    "title": "还原",
+    "action": "restore_prefab",
+    "title": "恢复",
     "input": {
-      "action": "revert_prefab",
+      "action": "restore_prefab",
       "uuid": "<uuid>"
     },
     "expected": "恢复为原始状态",

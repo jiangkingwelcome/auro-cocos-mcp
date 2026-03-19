@@ -59,13 +59,6 @@ describe('editor_action — bridgePost actions', () => {
     expect(bridgePost).toHaveBeenCalledWith('/api/editor/redo');
   });
 
-  it('select calls POST /api/editor/select', async () => {
-    const bridgePost = vi.fn().mockResolvedValue({ success: true });
-    const server = buildCocosToolServer(makeCtx({ bridgePost }));
-    await server.callTool('editor_action', { action: 'select', uuids: ['u1', 'u2'] });
-    expect(bridgePost).toHaveBeenCalledWith('/api/editor/select', { uuids: ['u1', 'u2'] });
-  });
-
   it('build calls POST /api/builder/build', async () => {
     const bridgePost = vi.fn().mockResolvedValue({ success: true });
     const server = buildCocosToolServer(makeCtx({ bridgePost }));
@@ -141,14 +134,6 @@ describe('editor_action — bridgePost actions', () => {
 // editor_action — bridgeGet actions
 // ═══════════════════════════════════════════════════════════════════════════════
 describe('editor_action — bridgeGet actions', () => {
-  it('get_selection calls GET /api/editor/selection', async () => {
-    const bridgeGet = vi.fn().mockResolvedValue({ selected: ['u1'] });
-    const server = buildCocosToolServer(makeCtx({ bridgeGet }));
-    const result = await server.callTool('editor_action', { action: 'get_selection' });
-    expect(result.isError).toBeFalsy();
-    expect(bridgeGet).toHaveBeenCalledWith('/api/editor/selection');
-  });
-
   it('project_info calls GET /api/editor/project-info', async () => {
     const bridgeGet = vi.fn().mockResolvedValue({ name: 'MyProject' });
     const server = buildCocosToolServer(makeCtx({ bridgeGet }));
@@ -215,13 +200,6 @@ describe('editor_action — editorMsg actions', () => {
     expect(result.isError).toBe(true);
     const data = parse(result);
     expect(data.error).toContain('不在允许列表中');
-  });
-
-  it('clear_selection calls editorMsg selection clear', async () => {
-    const editorMsg = vi.fn().mockResolvedValue({});
-    const server = buildCocosToolServer(makeCtx({ editorMsg }));
-    await server.callTool('editor_action', { action: 'clear_selection' });
-    expect(editorMsg).toHaveBeenCalledWith('selection', 'clear', 'node');
   });
 
   it.skip('open_panel calls editorMsg panel open', async () => {
