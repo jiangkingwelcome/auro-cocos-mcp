@@ -109,6 +109,7 @@ module.exports = {
     'license.activated': 'Activated',
     'license.expired': 'Expired',
     'license.not_activated': 'Not Activated',
+    'license.edition_community_pro_inactive': 'Community (Pro not activated)',
     'license.expiry_prefix': 'Valid until',
 
     // Footer

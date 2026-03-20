@@ -109,6 +109,7 @@ module.exports = {
     'license.activated': '已激活',
     'license.expired': '已过期',
     'license.not_activated': '未激活',
+    'license.edition_community_pro_inactive': '社区版（Pro 未激活）',
     'license.expiry_prefix': '有效期至',
 
     // Footer

@@ -181,6 +181,7 @@ export class LocalToolServer {
   getTotalActionCount(): number {
     let total = 0;
     for (const tool of this.tools.values()) {
+      if (this.disabledTools.has(tool.name)) continue;
       total += tool.actionCount;
     }
     return total;

@@ -1059,9 +1059,16 @@ module.exports = Editor.Panel.define({
     try { self._toolEnabled = JSON.parse(localStorage.getItem('mcp-tool-enabled') || '{}'); } catch { }
     let _lastToolDataKey = '';
 
-    function renderToolToggles(toolNames, toolActions, toolStates) {
+    function renderToolToggles(toolNames, toolActions, toolStates, licenseStatus) {
       const container = self.$.toolToggleList;
       if (!container) return;
+
+      const proLicensed = !!(
+        licenseStatus &&
+        licenseStatus.licenseValid &&
+        licenseStatus.edition &&
+        licenseStatus.edition !== 'community'
+      );
 
       const registeredSet = new Set(toolNames || []);
       const registeredActionSets = {};
@@ -1080,7 +1087,7 @@ module.exports = Editor.Panel.define({
       });
 
       // Skip rebuild if data unchanged
-      const dataKey = JSON.stringify({ mergedNames, toolActions, toolStates, currentLang });
+      const dataKey = JSON.stringify({ mergedNames, toolActions, toolStates, currentLang, proLicensed });
       if (dataKey === _lastToolDataKey && container.children.length > 0) return;
       _lastToolDataKey = dataKey;
 
@@ -1108,11 +1115,16 @@ module.exports = Editor.Panel.define({
 
         const currentActions = (toolActions && toolActions[name]) || [];
         const proActions = PRO_FULL_CATALOG[name] || [];
-        const displayActions = proActions.length > 0 ? proActions : currentActions;
+        // 已激活 Pro：以服务端从 JSON Schema 解析的 action 为准（与顶栏 totalActionCount 一致）；
+        // 未激活时仍用静态目录做「社区版 vs Pro 能力」对比展示。
+        const displayActions = proLicensed
+          ? (currentActions.length > 0 ? currentActions : (proActions.length > 0 ? proActions : currentActions))
+          : (proActions.length > 0 ? proActions : currentActions);
 
         // Determine how many extra Pro actions exist for this tool
         const currentActionSet = registeredActionSets[name] || new Set();
-        const hasProExtras = isRegistered && proActions.length > currentActions.length;
+        const hasProExtras = !proLicensed && isRegistered && proActions.length > currentActions.length;
+        const usingServerActions = proLicensed && isRegistered && currentActions.length > 0;
 
         const wrapper = document.createElement('div');
         wrapper.className = 'tool-wrapper';
@@ -1210,8 +1222,8 @@ module.exports = Editor.Panel.define({
           actionGrid.className = 'action-grid';
           displayActions.forEach(a => {
             const chip = document.createElement('span');
-            const isAvailable = isRegistered && currentActionSet.has(a);
-            const isProOnlyAction = isRegistered && !currentActionSet.has(a);
+            const isAvailable = isRegistered && (usingServerActions ? currentActionSet.has(a) : (proLicensed || currentActionSet.has(a)));
+            const isProOnlyAction = isRegistered && !proLicensed && !currentActionSet.has(a);
             chip.className = 'action-chip'
               + (isProExclusive ? ' action-chip-locked' : '')
               + (isProOnlyAction ? ' action-chip-pro' : '');
@@ -1538,7 +1550,12 @@ module.exports = Editor.Panel.define({
             self._toolEnabled = { ...self._toolEnabled, ...info.toolEnabledStates };
           }
           if ((info.allToolNames || info.toolNames) && self._renderToolToggles) {
-            self._renderToolToggles(info.allToolNames || info.toolNames, info.toolActions || {}, info.toolEnabledStates || {});
+            self._renderToolToggles(
+              info.allToolNames || info.toolNames,
+              info.toolActions || {},
+              info.toolEnabledStates || {},
+              info.licenseStatus,
+            );
           }
 
           if (info.settings) {
@@ -1804,7 +1821,8 @@ module.exports = Editor.Panel.define({
         if (licenseHint) licenseHint.style.display = 'block';
         if (badgeInner) badgeInner.textContent = edition === 'enterprise' ? t('badge.enterprise', 'Enterprise') : t('badge.pro', 'Pro');
       } else if (proInstalled && !licenseValid) {
-        self.$.licenseEdition.textContent = t('license.pro_edition', 'Pro Edition');
+        // 实际 MCP 仍走社区版工具；仅表示本机带有 Pro .node。角标与工具数需一致，避免误显示为 Pro。
+        self.$.licenseEdition.textContent = t('license.edition_community_pro_inactive', 'Community (Pro not activated)');
         const isExpired = error && error.includes('expired');
         if (isExpired) {
           self.$.licenseState.textContent = t('license.expired', 'Expired');
@@ -1822,7 +1840,7 @@ module.exports = Editor.Panel.define({
         }
         if (licenseInputRow) licenseInputRow.style.display = 'flex';
         if (licenseHint) licenseHint.style.display = 'block';
-        if (badgeInner) badgeInner.textContent = t('badge.pro', 'Pro');
+        if (badgeInner) badgeInner.textContent = t('badge.community', 'Community');
       } else {
         self.$.licenseEdition.textContent = t('license.community_edition', 'Community Edition');
         self.$.licenseState.textContent = t('license.free', 'Free');
