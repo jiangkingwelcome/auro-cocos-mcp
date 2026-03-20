@@ -147,6 +147,49 @@ function worldLookAtToLocalEulerDeg(
 export function buildOperationHandlers(deps: SceneOperationDeps): Map<string, OperationHandler> {
 
     const { getCC, requireNode, setSiblingIndexViaEditor, ipcCreateNode, ipcCreateComponent, ipcResetProperty } = deps;
+
+    /** 将纯数据属性写入组件（不先改运行时字段），支持 number/boolean/cc.Color/cc.Vec3 */
+    async function applyPropsViaEditor(nodeUuid, node, comp, props) {
+        let okAll = true;
+        for (const [key, val] of Object.entries(props)) {
+            if (val === null || val === undefined)
+                continue;
+            try {
+                if (typeof val === 'number' || typeof val === 'boolean') {
+                    const ok = await deps.notifyEditorComponentProperty(nodeUuid, node, comp, key, {
+                        type: typeof val === 'boolean' ? 'boolean' : 'number', value: val,
+                    });
+                    okAll = okAll && ok;
+                }
+                else if (typeof val === 'object' && !Array.isArray(val) && 'r' in val) {
+                    const o = val;
+                    const ok = await deps.notifyEditorComponentProperty(nodeUuid, node, comp, key, {
+                        type: 'cc.Color',
+                        value: {
+                            r: Math.max(0, Math.min(255, Number(o.r ?? 0))),
+                            g: Math.max(0, Math.min(255, Number(o.g ?? 0))),
+                            b: Math.max(0, Math.min(255, Number(o.b ?? 0))),
+                            a: Math.max(0, Math.min(255, Number(o.a ?? 255))),
+                        },
+                    });
+                    okAll = okAll && ok;
+                }
+                else if (typeof val === 'object' && !Array.isArray(val) && 'x' in val && 'y' in val) {
+                    const o = val;
+                    const ok = await deps.notifyEditorComponentProperty(nodeUuid, node, comp, key, {
+                        type: 'cc.Vec3',
+                        value: { x: Number(o.x ?? 0), y: Number(o.y ?? 0), z: Number(o.z ?? 0) },
+                    });
+                    okAll = okAll && ok;
+                }
+            }
+            catch (e) {
+                logIgnored(ErrorCategory.PROPERTY_ASSIGN, `IPC 写入属性 "${key}" 失败`, e);
+            }
+        }
+        return okAll;
+    }
+
     const handlers = new Map([
         ['create_node', (self, _s, p) => {
                 return (async () => {
@@ -728,126 +771,173 @@ export function buildOperationHandlers(deps: SceneOperationDeps): Map<string, Op
         // ─── create_ui_widget: one-step common UI component creation ─────────
         ['create_ui_widget', (self, scene, p) => {
                 const cc = getCC();
-                const { Node, Vec3, js } = cc;
+                const { js } = cc;
                 const widgetType = String(p.widgetType ?? 'button').toLowerCase();
                 const parentRef = String(p.parentUuid ?? '');
                 const nodeName = String(p.name ?? widgetType.charAt(0).toUpperCase() + widgetType.slice(1));
                 const resolved = deps.resolveParent(scene, parentRef);
                 if ('error' in resolved)
                     return resolved;
-                const root = new Node(nodeName);
-                resolved.node.addChild(root);
-                const rootUuid = root.uuid || root._id;
-                const addComp = (node, name) => {
-                    const cls = js.getClassByName(name) || js.getClassByName('cc.' + name);
-                    return cls ? node.addComponent(cls) : null;
+                const allowed = ['button', 'toggle', 'slider', 'progressbar', 'editbox', 'label', 'sprite'];
+                if (!allowed.includes(widgetType))
+                    return { error: `未知的 widgetType: ${widgetType}，支持: ${allowed.join(', ')}` };
+                const getComp = (node, shortName) => {
+                    const cls = js.getClassByName(shortName) || js.getClassByName('cc.' + shortName);
+                    return cls ? node.getComponent(cls) : null;
                 };
-                const createdNodes = [];
-                createdNodes.push({ uuid: rootUuid, name: nodeName, role: 'root' });
-                addComp(root, 'UITransform');
-                switch (widgetType) {
-                    case 'button': {
-                        addComp(root, 'Sprite');
-                        addComp(root, 'Button');
-                        const label = new Node('Label');
-                        root.addChild(label);
-                        addComp(label, 'UITransform');
-                        const labelComp = addComp(label, 'Label');
-                        if (labelComp)
-                            labelComp.string = String(p.text ?? 'Button');
-                        createdNodes.push({ uuid: label.uuid || label._id, name: 'Label', role: 'label' });
-                        break;
-                    }
-                    case 'toggle': {
-                        addComp(root, 'Sprite');
-                        addComp(root, 'Toggle');
-                        const checkmark = new Node('Checkmark');
-                        root.addChild(checkmark);
-                        addComp(checkmark, 'UITransform');
-                        addComp(checkmark, 'Sprite');
-                        createdNodes.push({ uuid: checkmark.uuid || checkmark._id, name: 'Checkmark', role: 'checkmark' });
-                        break;
-                    }
-                    case 'slider': {
-                        addComp(root, 'Sprite');
-                        addComp(root, 'Slider');
-                        const handle = new Node('Handle');
-                        root.addChild(handle);
-                        addComp(handle, 'UITransform');
-                        addComp(handle, 'Sprite');
-                        createdNodes.push({ uuid: handle.uuid || handle._id, name: 'Handle', role: 'handle' });
-                        break;
-                    }
-                    case 'progressbar': {
-                        addComp(root, 'Sprite');
-                        addComp(root, 'ProgressBar');
-                        const bar = new Node('Bar');
-                        root.addChild(bar);
-                        addComp(bar, 'UITransform');
-                        addComp(bar, 'Sprite');
-                        createdNodes.push({ uuid: bar.uuid || bar._id, name: 'Bar', role: 'bar' });
-                        break;
-                    }
-                    case 'editbox': {
-                        addComp(root, 'Sprite');
-                        addComp(root, 'EditBox');
-                        const placeholder = new Node('Placeholder');
-                        root.addChild(placeholder);
-                        addComp(placeholder, 'UITransform');
-                        const phLabel = addComp(placeholder, 'Label');
-                        if (phLabel)
-                            phLabel.string = String(p.placeholder ?? 'Enter text...');
-                        createdNodes.push({ uuid: placeholder.uuid || placeholder._id, name: 'Placeholder', role: 'placeholder' });
-                        break;
-                    }
-                    case 'label': {
-                        const labelComp = addComp(root, 'Label');
-                        if (labelComp)
-                            labelComp.string = String(p.text ?? 'Label');
-                        break;
-                    }
-                    case 'sprite': {
-                        addComp(root, 'Sprite');
-                        break;
-                    }
-                    default:
-                        return { error: `未知的 widgetType: ${widgetType}，支持: button, toggle, slider, progressbar, editbox, label, sprite` };
-                }
-                if (p.x !== undefined || p.y !== undefined) {
-                    root.setPosition(new Vec3(Number(p.x ?? 0), Number(p.y ?? 0), 0));
-                }
-                const result = { success: true, uuid: rootUuid, widgetType, nodes: createdNodes };
                 return (async () => {
-                    for (const cn of createdNodes) {
-                        await deps.notifyEditorProperty(cn.uuid, 'active', { type: 'boolean', value: true });
+                    try {
+                        const addCompIpc = async (uuid, compShortName) => {
+                            const res = await Promise.resolve(self.addComponent(uuid, compShortName));
+                            if (res && typeof res === 'object' && 'error' in res)
+                                throw new Error(String(res.error));
+                            return res;
+                        };
+                        const newChildUuid = async (parentUuid, childName) => {
+                            const res = await Promise.resolve(self.createChildNode(parentUuid, childName));
+                            if (!res || typeof res !== 'object' || !res.success || !res.uuid)
+                                throw new Error(res && res.error ? String(res.error) : 'createChildNode 失败');
+                            return String(res.uuid);
+                        };
+                        const rootRes = await Promise.resolve(self.createChildNode(parentRef, nodeName));
+                        if (!rootRes || typeof rootRes !== 'object' || !rootRes.success || !rootRes.uuid)
+                            return { error: rootRes && rootRes.error ? String(rootRes.error) : 'createChildNode 失败' };
+                        const rootUuid = String(rootRes.uuid);
+                        const createdNodes = [{ uuid: rootUuid, name: nodeName, role: 'root' }];
+                        await addCompIpc(rootUuid, 'UITransform');
+                        switch (widgetType) {
+                            case 'button': {
+                                await addCompIpc(rootUuid, 'Sprite');
+                                await addCompIpc(rootUuid, 'Button');
+                                const labelUuid = await newChildUuid(rootUuid, 'Label');
+                                createdNodes.push({ uuid: labelUuid, name: 'Label', role: 'label' });
+                                await addCompIpc(labelUuid, 'UITransform');
+                                await addCompIpc(labelUuid, 'Label');
+                                const rL = requireNode(scene, labelUuid);
+                                if (!('error' in rL)) {
+                                    const labelComp = getComp(rL.node, 'Label');
+                                    if (labelComp) {
+                                        await deps.notifyEditorComponentProperty(labelUuid, rL.node, labelComp, 'string', {
+                                            type: 'string', value: String(p.text ?? 'Button'),
+                                        });
+                                    }
+                                }
+                                break;
+                            }
+                            case 'toggle': {
+                                await addCompIpc(rootUuid, 'Sprite');
+                                await addCompIpc(rootUuid, 'Toggle');
+                                const cUuid = await newChildUuid(rootUuid, 'Checkmark');
+                                createdNodes.push({ uuid: cUuid, name: 'Checkmark', role: 'checkmark' });
+                                await addCompIpc(cUuid, 'UITransform');
+                                await addCompIpc(cUuid, 'Sprite');
+                                break;
+                            }
+                            case 'slider': {
+                                await addCompIpc(rootUuid, 'Sprite');
+                                await addCompIpc(rootUuid, 'Slider');
+                                const hUuid = await newChildUuid(rootUuid, 'Handle');
+                                createdNodes.push({ uuid: hUuid, name: 'Handle', role: 'handle' });
+                                await addCompIpc(hUuid, 'UITransform');
+                                await addCompIpc(hUuid, 'Sprite');
+                                break;
+                            }
+                            case 'progressbar': {
+                                await addCompIpc(rootUuid, 'Sprite');
+                                await addCompIpc(rootUuid, 'ProgressBar');
+                                const bUuid = await newChildUuid(rootUuid, 'Bar');
+                                createdNodes.push({ uuid: bUuid, name: 'Bar', role: 'bar' });
+                                await addCompIpc(bUuid, 'UITransform');
+                                await addCompIpc(bUuid, 'Sprite');
+                                break;
+                            }
+                            case 'editbox': {
+                                await addCompIpc(rootUuid, 'Sprite');
+                                await addCompIpc(rootUuid, 'EditBox');
+                                const phUuid = await newChildUuid(rootUuid, 'Placeholder');
+                                createdNodes.push({ uuid: phUuid, name: 'Placeholder', role: 'placeholder' });
+                                await addCompIpc(phUuid, 'UITransform');
+                                await addCompIpc(phUuid, 'Label');
+                                const rP = requireNode(scene, phUuid);
+                                if (!('error' in rP)) {
+                                    const phLabel = getComp(rP.node, 'Label');
+                                    if (phLabel) {
+                                        await deps.notifyEditorComponentProperty(phUuid, rP.node, phLabel, 'string', {
+                                            type: 'string', value: String(p.placeholder ?? 'Enter text...'),
+                                        });
+                                    }
+                                }
+                                break;
+                            }
+                            case 'label': {
+                                await addCompIpc(rootUuid, 'Label');
+                                const rR = requireNode(scene, rootUuid);
+                                if (!('error' in rR)) {
+                                    const lc = getComp(rR.node, 'Label');
+                                    if (lc) {
+                                        await deps.notifyEditorComponentProperty(rootUuid, rR.node, lc, 'string', {
+                                            type: 'string', value: String(p.text ?? 'Label'),
+                                        });
+                                    }
+                                }
+                                break;
+                            }
+                            case 'sprite': {
+                                await addCompIpc(rootUuid, 'Sprite');
+                                break;
+                            }
+                            default:
+                                return { error: `未知的 widgetType: ${widgetType}` };
+                        }
+                        const result = { success: true, uuid: rootUuid, widgetType, nodes: createdNodes, _viaEditorIPC: true };
+                        if (p.x !== undefined || p.y !== undefined) {
+                            const ok = await deps.notifyEditorProperty(rootUuid, 'position', {
+                                type: 'cc.Vec3',
+                                value: { x: Number(p.x ?? 0), y: Number(p.y ?? 0), z: 0 },
+                            });
+                            if (!ok) {
+                                result.success = false;
+                                result.error = 'set-property(position) 失败';
+                            }
+                        }
+                        let okAll = result.success !== false;
+                        for (const cn of createdNodes) {
+                            const ok = await deps.notifyEditorProperty(cn.uuid, 'active', { type: 'boolean', value: true });
+                            okAll = okAll && ok;
+                        }
+                        if (okAll && result.success !== false) {
+                            result._inspectorRefreshed = true;
+                        }
+                        else if (result.success !== false) {
+                            result.success = false;
+                            result.error = result.error || '部分节点 active IPC 失败';
+                        }
+                        return result;
                     }
-                    result._inspectorRefreshed = true;
-                    return result;
+                    catch (e) {
+                        return { error: e instanceof Error ? e.message : String(e) };
+                    }
                 })();
             }],
         // ─── setup_particle: create and configure particle system ────────────
         ['setup_particle', (_self, scene, p) => {
                 const cc = getCC();
-                const { Node, js } = cc;
+                const { js } = cc;
                 const parentRef = String(p.parentUuid ?? '');
                 const resolved = deps.resolveParent(scene, parentRef);
                 if ('error' in resolved)
                     return resolved;
                 const nodeName = String(p.name ?? 'Particles');
-                const node = new Node(nodeName);
-                resolved.node.addChild(node);
-                const uuid = node.uuid || node._id;
-                // Try ParticleSystem2D first (2D), then ParticleSystem (3D)
+                const parentUuid = String(resolved.node.uuid ?? resolved.node._id ?? '');
+                if (!parentUuid)
+                    return { error: '父节点无 UUID' };
                 const PS2D = js.getClassByName('ParticleSystem2D') || js.getClassByName('cc.ParticleSystem2D');
                 const PS3D = js.getClassByName('ParticleSystem') || js.getClassByName('cc.ParticleSystem');
                 const is2D = String(p.mode ?? 'auto') === '2d' || (!PS3D && PS2D);
                 const PSClass = is2D ? PS2D : PS3D;
                 if (!PSClass)
                     return { error: 'ParticleSystem 组件不可用' };
-                const comp = node.addComponent(PSClass);
-                if (!comp)
-                    return { error: '无法添加粒子系统组件' };
-                // Apply preset or custom properties
+                const compShort = is2D ? 'ParticleSystem2D' : 'ParticleSystem';
                 const preset = String(p.preset ?? '').toLowerCase();
                 const PRESETS = {
                     fire: { life: 1.5, emissionRate: 80, speed: 60, startColor: { r: 255, g: 120, b: 20, a: 255 } },
@@ -858,20 +948,36 @@ export function buildOperationHandlers(deps: SceneOperationDeps): Map<string, Op
                     explosion: { life: 0.8, emissionRate: 500, speed: 200, duration: 0.1 },
                 };
                 const props = preset && PRESETS[preset] ? { ...PRESETS[preset], ...(p.properties ?? {}) } : (p.properties ?? {});
-                for (const [key, val] of Object.entries(props)) {
+                return (async () => {
                     try {
-                        comp[key] = val;
+                        const nodeUuid = await ipcCreateNode(parentUuid, nodeName);
+                        await ipcCreateComponent(nodeUuid, compShort);
+                        const r = requireNode(scene, nodeUuid);
+                        if ('error' in r)
+                            return { error: r.error, uuid: nodeUuid, partial: true };
+                        const comp = r.node.getComponent(PSClass);
+                        if (!comp)
+                            return { error: '无法取得粒子系统组件', uuid: nodeUuid, partial: true };
+                        const propsOk = await applyPropsViaEditor(nodeUuid, r.node, comp, props);
+                        const okA = await deps.notifyEditorProperty(nodeUuid, 'active', { type: 'boolean', value: true });
+                        const result = {
+                            success: propsOk && okA,
+                            uuid: nodeUuid,
+                            name: nodeName,
+                            particleType: is2D ? '2D' : '3D',
+                            preset: preset || 'custom',
+                            appliedProperties: Object.keys(props),
+                            _viaEditorIPC: true,
+                        };
+                        if (!propsOk || !okA)
+                            result.error = '部分属性或 active 写入失败';
+                        else
+                            result._inspectorRefreshed = true;
+                        return result;
                     }
                     catch (e) {
-                        logIgnored(ErrorCategory.PROPERTY_ASSIGN, `粒子系统属性 "${key}" 赋值失败`, e);
+                        return { error: e instanceof Error ? e.message : String(e) };
                     }
-                }
-                const result = { success: true, uuid: uuid || '', name: nodeName, particleType: is2D ? '2D' : '3D', preset: preset || 'custom', appliedProperties: Object.keys(props) };
-                return (async () => {
-                    if (uuid)
-                        await deps.notifyEditorProperty(uuid, 'active', { type: 'boolean', value: node.active });
-                    result._inspectorRefreshed = true;
-                    return result;
                 })();
             }],
         // ─── align_nodes: align or distribute multiple nodes ─────────────────
@@ -1106,70 +1212,102 @@ export function buildOperationHandlers(deps: SceneOperationDeps): Map<string, Op
         // ─── create_skeleton_node: Spine/DragonBones node setup ──────────────
         ['create_skeleton_node', (_self, scene, p) => {
                 const cc = getCC();
-                const { Node, js } = cc;
+                const { js } = cc;
                 const parentRef = String(p.parentUuid ?? '');
                 const resolved = deps.resolveParent(scene, parentRef);
                 if ('error' in resolved)
                     return resolved;
                 const skeletonType = String(p.skeletonType ?? 'spine').toLowerCase();
                 const nodeName = String(p.name ?? `${skeletonType}_node`);
-                const node = new Node(nodeName);
-                resolved.node.addChild(node);
-                const uuid = node.uuid || node._id;
                 const compName = skeletonType === 'spine' ? 'sp.Skeleton' : skeletonType === 'dragonbones' ? 'dragonBones.ArmatureDisplay' : '';
                 if (!compName)
                     return { error: `未知骨骼类型: ${skeletonType}，支持: spine, dragonbones` };
                 const cls = js.getClassByName(compName);
                 if (!cls)
                     return { error: `${compName} 组件不可用，请确认项目中已启用对应模块` };
-                const comp = node.addComponent(cls);
-                if (!comp)
-                    return { error: `无法添加 ${compName} 组件` };
-                const props = p.properties;
-                if (props) {
-                    for (const [key, val] of Object.entries(props)) {
-                        try {
-                            comp[key] = val;
-                        }
-                        catch (e) {
-                            logIgnored(ErrorCategory.PROPERTY_ASSIGN, `骨骼组件属性 "${key}" 赋值失败`, e);
-                        }
-                    }
-                }
-                const result = { success: true, uuid: uuid || '', name: nodeName, skeletonType, component: compName };
+                const parentUuid = String(resolved.node.uuid ?? resolved.node._id ?? '');
+                if (!parentUuid)
+                    return { error: '父节点无 UUID' };
+                const props = p.properties && typeof p.properties === 'object' ? p.properties : {};
                 return (async () => {
-                    if (uuid)
-                        await deps.notifyEditorProperty(uuid, 'active', { type: 'boolean', value: node.active });
-                    result._inspectorRefreshed = true;
-                    return result;
+                    try {
+                        const nodeUuid = await ipcCreateNode(parentUuid, nodeName);
+                        await ipcCreateComponent(nodeUuid, compName);
+                        const r = requireNode(scene, nodeUuid);
+                        if ('error' in r)
+                            return { error: r.error, uuid: nodeUuid, partial: true };
+                        const comp = r.node.getComponent(cls);
+                        if (!comp)
+                            return { error: `无法取得 ${compName} 组件`, uuid: nodeUuid, partial: true };
+                        const propsOk = await applyPropsViaEditor(nodeUuid, r.node, comp, props);
+                        const okA = await deps.notifyEditorProperty(nodeUuid, 'active', { type: 'boolean', value: true });
+                        const result = {
+                            success: propsOk && okA,
+                            uuid: nodeUuid,
+                            name: nodeName,
+                            skeletonType,
+                            component: compName,
+                            _viaEditorIPC: true,
+                        };
+                        if (!propsOk || !okA)
+                            result.error = '部分属性或 active 写入失败';
+                        else
+                            result._inspectorRefreshed = true;
+                        return result;
+                    }
+                    catch (e) {
+                        return { error: e instanceof Error ? e.message : String(e) };
+                    }
                 })();
             }],
         // ─── generate_tilemap: create TiledMap node ──────────────────────────
-        ['generate_tilemap', (_self, scene, p) => {
+        ['generate_tilemap', (self, scene, p) => {
                 const cc = getCC();
-                const { Node, js } = cc;
+                const { js } = cc;
                 const parentRef = String(p.parentUuid ?? '');
                 const resolved = deps.resolveParent(scene, parentRef);
                 if ('error' in resolved)
                     return resolved;
                 const nodeName = String(p.name ?? 'TiledMap');
-                const node = new Node(nodeName);
-                resolved.node.addChild(node);
-                const uuid = node.uuid || node._id;
                 const TiledMap = js.getClassByName('TiledMap') || js.getClassByName('cc.TiledMap');
                 if (!TiledMap)
                     return { error: 'TiledMap 组件不可用' };
-                const comp = node.addComponent(TiledMap);
-                if (!comp)
-                    return { error: '无法添加 TiledMap 组件' };
-                if (p.tmxAsset)
-                    comp.tmxAsset = p.tmxAsset;
-                const result = { success: true, uuid: uuid || '', name: nodeName, component: 'TiledMap', hasTmxAsset: !!p.tmxAsset };
+                const parentUuid = String(resolved.node.uuid ?? resolved.node._id ?? '');
+                if (!parentUuid)
+                    return { error: '父节点无 UUID' };
                 return (async () => {
-                    if (uuid)
-                        await deps.notifyEditorProperty(uuid, 'active', { type: 'boolean', value: node.active });
-                    result._inspectorRefreshed = true;
-                    return result;
+                    try {
+                        const nodeUuid = await ipcCreateNode(parentUuid, nodeName);
+                        await ipcCreateComponent(nodeUuid, 'TiledMap');
+                        const r = requireNode(scene, nodeUuid);
+                        if ('error' in r)
+                            return { error: r.error, uuid: nodeUuid, partial: true };
+                        const comp = r.node.getComponent(TiledMap);
+                        if (!comp)
+                            return { error: '无法取得 TiledMap 组件', uuid: nodeUuid, partial: true };
+                        let tmxOk = true;
+                        if (p.tmxAsset !== undefined && p.tmxAsset !== null) {
+                            const sp = await Promise.resolve(self.setComponentProperty(nodeUuid, 'TiledMap', 'tmxAsset', p.tmxAsset));
+                            tmxOk = !!(sp && typeof sp === 'object' && !('error' in sp && sp.error));
+                        }
+                        const okA = await deps.notifyEditorProperty(nodeUuid, 'active', { type: 'boolean', value: true });
+                        const result = {
+                            success: tmxOk && okA,
+                            uuid: nodeUuid,
+                            name: nodeName,
+                            component: 'TiledMap',
+                            hasTmxAsset: !!p.tmxAsset,
+                            _viaEditorIPC: true,
+                        };
+                        if (!tmxOk || !okA)
+                            result.error = 'tmxAsset 或 active 写入失败';
+                        else
+                            result._inspectorRefreshed = true;
+                        return result;
+                    }
+                    catch (e) {
+                        return { error: e instanceof Error ? e.message : String(e) };
+                    }
                 })();
             }],
         // ─── bind_event: attach UI event handler to component ────────────────

@@ -33,7 +33,8 @@
       "Bash(powershell -Command \"\\(Get-Content package.json -Encoding UTF8\\) -replace ''\"\"version\"\": \"\"1.0.14\"\"'',''\"\"version\"\": \"\"1.0.15\"\"'' | Set-Content package.json -Encoding UTF8\")",
       "Bash(powershell -Command \":*)",
       "Bash(powershell -Command \"\\(Get-FileHash ''E:\\\\gitproject\\\\cocos\\\\auro-cocos-mcp\\\\aura-for-cocos-ce-v1.0.15.zip'' -Algorithm SHA256\\).Hash.ToLower\\(\\)\")",
-      "Bash(bash \"C:\\\\Users\\\\jiang\\\\.claude\\\\skills\\\\git-pushing\\\\scripts\\\\smart_commit.sh\" \"chore: update version.json v1.0.15 with CE zip SHA256\")"
+      "Bash(bash \"C:\\\\Users\\\\jiang\\\\.claude\\\\skills\\\\git-pushing\\\\scripts\\\\smart_commit.sh\" \"chore: update version.json v1.0.15 with CE zip SHA256\")",
+      "Bash(bash \"C:\\\\Users\\\\jiang\\\\.claude\\\\skills\\\\git-pushing\\\\scripts\\\\smart_commit.sh\" \"chore: remove zip artifact from repo, add to .gitignore\")"
     ]
   }
 }

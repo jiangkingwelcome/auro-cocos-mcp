@@ -180,17 +180,25 @@ async function ipcCreateNode(parentUuid: string, name: string): Promise<string> 
   throw new Error(`create-node IPC 返回了无法识别的格式: ${JSON.stringify(result)}`);
 }
 
+/** 编辑器 create-component / remove-component 的组件名字符串（cc.Label / sp.Skeleton 等） */
+function editorComponentIpcName(componentName: string): string {
+  if (componentName.startsWith('cc.')) return componentName;
+  // 扩展模块：sp.*、dragonBones.* — 不可再加 cc. 前缀
+  if (componentName.includes('.')) return componentName;
+  return `cc.${componentName}`;
+}
+
 async function ipcCreateComponent(nodeUuid: string, componentName: string): Promise<void> {
   await Editor.Message.request('scene', 'create-component', {
     uuid: nodeUuid,
-    component: componentName.startsWith('cc.') ? componentName : `cc.${componentName}`,
+    component: editorComponentIpcName(componentName),
   });
 }
 
 async function ipcRemoveComponent(nodeUuid: string, componentName: string): Promise<void> {
   await Editor.Message.request('scene', 'remove-component', {
     uuid: nodeUuid,
-    component: componentName.startsWith('cc.') ? componentName : `cc.${componentName}`,
+    component: editorComponentIpcName(componentName),
   });
 }
 

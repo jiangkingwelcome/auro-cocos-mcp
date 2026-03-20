@@ -25,3 +25,4 @@ licenses.csv
 native/target/
 native/*.node
 # native/src/, Cargo.toml, Cargo.lock, build.rs, index.js — committed
+aura-for-cocos-*.zip
