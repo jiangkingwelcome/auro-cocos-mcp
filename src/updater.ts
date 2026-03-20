@@ -66,29 +66,63 @@ export type UpdatePhase =
 
 // ─── Network helpers ─────────────────────────────────────────────────────────
 
+/** 可重试的瞬断错误码集合（网络抖动/连接被重置/连接拒绝） */
+const RETRYABLE_CODES = new Set(['ECONNRESET', 'ECONNREFUSED', 'ETIMEDOUT', 'ENOTFOUND', 'EAI_AGAIN']);
+
+/**
+ * 自动重试包装器：对瞬断错误最多重试 maxRetries 次，每次间隔 delayMs 毫秒。
+ * 非瞬断错误（如 HTTP 404）直接抛出，不浪费等待时间。
+ */
+async function withRetry<T>(
+  fn: () => Promise<T>,
+  maxRetries = 3,
+  delayMs = 2_000,
+): Promise<T> {
+  let lastErr: unknown;
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    try {
+      return await fn();
+    } catch (err: unknown) {
+      lastErr = err;
+      const code = (err as NodeJS.ErrnoException).code ?? '';
+      const msg  = err instanceof Error ? err.message : String(err);
+      // 非瞬断错误（HTTP 4xx 等）立即退出
+      if (!RETRYABLE_CODES.has(code) && !msg.includes('超时')) throw err;
+      if (attempt < maxRetries) {
+        await new Promise(r => setTimeout(r, delayMs * (attempt + 1)));
+      }
+    }
+  }
+  throw lastErr;
+}
+
 function fetchText(url: string, timeoutMs = FETCH_TIMEOUT_MS): Promise<string> {
   return new Promise((resolve, reject) => {
     const transport = url.startsWith('https') ? https : http;
+    let settled = false;
+    const done = (fn: () => void) => { if (!settled) { settled = true; fn(); } };
+
     const req = transport.get(url, { timeout: timeoutMs }, (res) => {
       if (res.statusCode === 301 || res.statusCode === 302) {
         res.resume();
         const loc = res.headers.location;
         if (loc) { fetchText(loc, timeoutMs).then(resolve).catch(reject); return; }
-        reject(new Error('重定向目标丢失'));
+        done(() => reject(new Error('重定向目标丢失')));
         return;
       }
       if (res.statusCode !== 200) {
         res.resume();
-        reject(new Error(`HTTP ${res.statusCode}`));
+        done(() => reject(new Error(`HTTP ${res.statusCode}`)));
         return;
       }
       let data = '';
       res.on('data', (chunk: Buffer) => { data += chunk.toString('utf-8'); });
-      res.on('end', () => resolve(data));
-      res.on('error', reject);
+      res.on('end', () => done(() => resolve(data)));
+      res.on('error', (e) => done(() => reject(e)));
     });
-    req.on('timeout', () => { req.destroy(); reject(new Error('请求超时')); });
-    req.on('error', reject);
+    // destroy() 后 Node.js 会再触发 error(ECONNRESET)，用 settled 标记防止二次 reject
+    req.on('timeout', () => { req.destroy(); done(() => reject(new Error('请求超时'))); });
+    req.on('error',   (e) => done(() => reject(e)));
   });
 }
 
@@ -430,7 +464,7 @@ class AuraUpdater {
 
     this.set({ phase: 'checking' });
     try {
-      const raw = await fetchText(VERSION_JSON_URL);
+      const raw = await withRetry(() => fetchText(VERSION_JSON_URL));
       const mf  = JSON.parse(raw) as VersionManifest;
       const ch  = mf.stable;
       const cur = this.currentVersion();

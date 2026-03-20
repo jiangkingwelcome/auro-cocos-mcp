@@ -183,6 +183,10 @@ export function registerEditorControlRoutes(get: RouteRegistrar, post: RouteRegi
       const mapping = EDITOR_FILE_KEYS[payload.key];
       try {
         writeEditorFileKey(mapping, payload.value);
+        if (mapping.restartRequired) {
+          // Cocos 控制台不支持 ANSI 颜色，console.warn 自带橙黄图标，纯文字即可
+          console.warn(`[Aura] ⚠️ 编辑器设置已更新 (${payload.key} = ${JSON.stringify(payload.value)})，请重启 Cocos Creator 编辑器使其生效。`);
+        }
         return {
           success: true,
           key: payload.key,
@@ -190,7 +194,7 @@ export function registerEditorControlRoutes(get: RouteRegistrar, post: RouteRegi
           value: payload.value,
           source: 'file',
           restartRequired: mapping.restartRequired,
-          // ⚠️ warning 字段供 MCP 工具层读取并显示黄色重启提示
+          // warning 字段供 MCP 工具层读取并追加重启提示
           warning: mapping.restartRequired
             ? '⚠️ 设置已写入磁盘，但需要重启 Cocos Creator 编辑器才能生效。'
             : undefined,
