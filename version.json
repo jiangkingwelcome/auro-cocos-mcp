@@ -1,15 +1,15 @@
 {
   "schemaVersion": 1,
   "stable": {
-    "version": "1.0.15",
+    "version": "1.0.14",
     "releaseDate": "2026-03-20",
     "ce": {
-      "url": "https://github.com/jiangkingwelcome/auro-cocos-mcp/releases/download/v1.0.15/aura-for-cocos-ce-v1.0.15.zip",
-      "sha256": "83080dc683b2681b807656879008b125a9431ad0af7461a0d1fcba9f8d8ce138"
+      "url": "https://github.com/jiangkingwelcome/auro-cocos-mcp/releases/download/v1.0.14/aura-for-cocos-ce-v1.0.14.zip",
+      "sha256": "f86c901da86e8c58ae318733d39edd708f5b027c41db3c5b77a9506538a78850"
     },
     "pro": {
-      "url": "https://github.com/jiangkingwelcome/auro-cocos-mcp/releases/download/v1.0.15/aura-for-cocos-pro-v1.0.15.zip",
-      "sha256": ""
+      "url": "https://github.com/jiangkingwelcome/auro-cocos-mcp/releases/download/v1.0.14/aura-for-cocos-pro-v1.0.14.zip",
+      "sha256": "10ff48c06a38a20e4bd433b817086838fd47288d79886dfdbe5cb7dc3dc40dad"
     },
     "breaking": false
   },
