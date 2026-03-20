@@ -4,6 +4,20 @@ declare namespace Editor {
     function unregister(pkgPath: string): Promise<void>;
   }
 
+  namespace Dialog {
+    interface ShowOptions {
+      type?:      'none' | 'info' | 'error' | 'question' | 'warning';
+      title?:     string;
+      message:    string;
+      detail?:    string;
+      buttons?:   string[];
+      defaultId?: number;
+      cancelId?:  number;
+    }
+    /** Cocos Creator 3.x 原生对话框，返回用户点击的按钮索引 */
+    function show(options: ShowOptions): Promise<{ response: number }>;
+  }
+
   namespace App {
     const version: string;
     const path: string;

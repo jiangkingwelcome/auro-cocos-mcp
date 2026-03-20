@@ -314,6 +314,85 @@ function cleanUpdateArtifacts(dir: string): void {
   } catch (_) {}
 }
 
+// ─── 主动通知：控制台 banner + Editor.Dialog ──────────────────────────────────
+//
+// 问题：checkForUpdates() 在 load() 后台静默执行，用户不打开面板根本不知道有更新。
+// 方案：
+//   1. console.warn 彩色 banner —— 始终输出，降级保底（控制台始终可见）
+//   2. Editor.Dialog 一次性弹窗 —— 每个新版本只弹一次，记录到 .mcp-update-state.json
+//      - 「立即打开」→ Editor.Panel.open() 打开面板，用户在面板内点更新
+//      - 「稍后提醒」→ 关闭，下次启动重新提示（本版本不会再弹）
+
+/** 读取已通知版本记录（防重复弹窗） */
+function readNotifiedVersion(root: string): string {
+  try {
+    const f = path.join(root, '.mcp-update-state.json');
+    if (fs.existsSync(f)) {
+      const raw = JSON.parse(fs.readFileSync(f, 'utf-8'));
+      return typeof raw.notifiedVersion === 'string' ? raw.notifiedVersion : '';
+    }
+  } catch (_) {}
+  return '';
+}
+
+/** 记录已弹窗的版本号，防止重复打扰 */
+function writeNotifiedVersion(root: string, version: string): void {
+  try {
+    fs.writeFileSync(
+      path.join(root, '.mcp-update-state.json'),
+      JSON.stringify({ notifiedVersion: version }, null, 2),
+      'utf-8',
+    );
+  } catch (_) {}
+}
+
+/**
+ * 主动通知用户有新版本：
+ *  1. 始终打印控制台 banner（颜色醒目，Cocos 控制台直接可见）
+ *  2. 首次发现该版本时弹 Editor.Dialog（每个版本只弹一次）
+ *     - 「立即打开」→ 自动打开 Aura 面板
+ *     - 「稍后提醒」→ 关闭，下次启动继续提示
+ */
+async function notifyAvailable(info: UpdateInfo, root: string): Promise<void> {
+  // ① 控制台 banner（始终输出，零依赖降级保底）
+  const bar  = '═'.repeat(52);
+  console.warn(
+    `\x1b[33m\n╔${bar}╗\n` +
+    `║  🚀 Aura for Cocos 有新版本！                      ║\n` +
+    `║  当前: v${info.currentVersion.padEnd(10)} →  最新: v${info.latestVersion.padEnd(10)}  ║\n` +
+    (info.changelog ? `║  ${info.changelog.slice(0, 48).padEnd(48)}  ║\n` : '') +
+    `║  打开 Aura 插件面板 → 点击「检查更新」安装          ║\n` +
+    `╚${bar}╝\x1b[0m`,
+  );
+
+  // ② Editor.Dialog 一次性弹窗（每个新版本只弹一次）
+  if (readNotifiedVersion(root) === info.latestVersion) return; // 已弹过，跳过
+  writeNotifiedVersion(root, info.latestVersion);               // 先记录，防止并发重复
+
+  try {
+    const result = await Editor.Dialog.show({
+      type:      'info',
+      title:     `🚀 Aura for Cocos v${info.latestVersion} 可用`,
+      message:   `发现新版本 v${info.latestVersion}（当前 v${info.currentVersion}）`,
+      detail:    info.changelog || '包含 bug 修复和功能改进。',
+      buttons:   ['立即打开面板', '稍后提醒'],
+      defaultId: 0,
+      cancelId:  1,
+    });
+    if (result.response === 0) {
+      // 用户点「立即打开面板」→ 打开 Aura 面板，用户在面板内触发更新
+      try { Editor.Panel.open('aura-for-cocos.default'); } catch (_) {
+        try { Editor.Panel.open('aura-for-cocos'); } catch (__) {}
+      }
+    }
+    // 「稍后提醒」：已写入 notifiedVersion，本次会话不再弹；
+    //              下次启动 readNotifiedVersion 读到相同版本，依然不弹。
+    //              如需下次继续提示，需清除 .mcp-update-state.json。
+  } catch (_) {
+    // Editor.Dialog 不可用（极端环境），控制台 banner 已足够
+  }
+}
+
 // 更新时跳过的用户数据文件
 const SKIP_ON_UPDATE = new Set([
   '.mcp-token', '.mcp-settings.json', '.mcp-license',
@@ -387,6 +466,10 @@ class AuraUpdater {
       };
 
       this.set({ phase: 'available', info });
+
+      // 主动通知（不等待，后台执行）
+      void notifyAvailable(info, this.pluginRoot());
+
       return info;
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : String(err);
