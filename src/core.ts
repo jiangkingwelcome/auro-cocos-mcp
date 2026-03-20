@@ -2,14 +2,14 @@ import fs from 'fs';
 import http from 'http';
 import path from 'path';
 import { URL } from 'url';
-import { applySettingsUpdate, type BridgeSettings, DEFAULT_SETTINGS, loadSettings, saveSettings } from './bridge-settings';
+import { applySettingsUpdate, type BridgeSettings, DEFAULT_SETTINGS, loadSettingsAsync, saveSettingsAsync } from './bridge-settings';
 import { buildCocosToolServer } from './mcp/tools';
 import { StandaloneMcpHost } from './mcp/standalone-host';
 import { ErrorCategory, logIgnored, logWarn } from './error-utils';
-import { ensureToken, extractMcpToken } from './token-manager';
+import { ensureTokenAsync, extractMcpToken } from './token-manager';
 import { updateRegistry, removeRegistry } from './registry';
 import { getProLicenseStatus, saveLicenseKey, type ProLicenseStatus } from './mcp/tools-pro-bridge';
-import { getConfigStatus, configureIDE as configureIdeService } from './ide-config-service';
+import { getConfigStatusAsync, configureIDE as configureIdeService } from './ide-config-service';
 import { registerAssetDbRoutes } from './routes/asset-db-routes';
 import { registerConsoleRoutes } from './routes/console-routes';
 import { registerEditorControlRoutes } from './routes/editor-control-routes';
@@ -22,14 +22,14 @@ import { updater } from './updater';
 import type { UpdatePhase } from './updater';
 
 const EXTENSION_NAME = 'aura-for-cocos';
-const PKG_VERSION = (() => { try { return JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'package.json'), 'utf-8')).version || '0.0.0'; } catch (e) { logIgnored(ErrorCategory.CONFIG, '读取 package.json 版本号失败', e); return '0.0.0'; } })();
+const FALLBACK_PKG_VERSION = '0.0.0';
 const DEFAULT_PORT = Number(process.env.COCOS_MCP_PORT) || 7779;
 const REQUEST_TIMEOUT_MS = Number(process.env.COCOS_MCP_TIMEOUT_MS || 20_000);
 const TOKEN_FILE = path.join(__dirname, '..', '.mcp-token');
 const SETTINGS_FILE = path.join(__dirname, '..', '.mcp-settings.json');
 
 let currentSettings: BridgeSettings = { ...DEFAULT_SETTINGS };
-currentSettings = loadSettings(SETTINGS_FILE);
+let packageVersion = FALLBACK_PKG_VERSION;
 
 // updateRegistry / removeRegistry 已抽取到 ./registry.ts
 
@@ -45,6 +45,9 @@ let mcpHost: StandaloneMcpHost | null = null;
 let mcpToken = '';
 let bridgeBase = '';
 
+let initialized = false;
+let initPromise: Promise<void> | null = null;
+
 const rateCounter = new Map<string, number>();
 let rateWindowStart = 0;
 
@@ -52,6 +55,17 @@ import { installConsoleCapture } from './console-capture';
 
 // Ensure console capture is installed (may already be from main.ts)
 installConsoleCapture();
+
+async function readPackageVersion(): Promise<string> {
+  try {
+    const pkgRaw = await fs.promises.readFile(path.join(__dirname, '..', 'package.json'), 'utf-8');
+    const parsed = JSON.parse(pkgRaw) as { version?: string };
+    return parsed.version || FALLBACK_PKG_VERSION;
+  } catch (e) {
+    logIgnored(ErrorCategory.CONFIG, '读取 package.json 版本号失败', e);
+    return FALLBACK_PKG_VERSION;
+  }
+}
 
 function get(pathName: string, handler: RouteHandler) {
   routes.push({ method: 'GET', path: pathName, handler });
@@ -211,7 +225,8 @@ function requiresAuth(method: string, pathname: string): boolean {
   return false;
 }
 
-function initializeMcpHost() {
+function initializeMcpHost(serverVersion = packageVersion) {
+  if (mcpHost) return;
   const tools = buildCocosToolServer({
     bridgeGet: async (apiPath, params) => invokeRoute('GET', apiPath, params ?? {}, null),
     bridgePost: async (apiPath, body) => invokeRoute('POST', apiPath, {}, body ?? null),
@@ -237,8 +252,64 @@ function initializeMcpHost() {
 
   mcpHost = new StandaloneMcpHost({
     serverName: 'cocos-creator-bridge',
-    serverVersion: PKG_VERSION,
+    serverVersion,
     toolServer: tools,
+  });
+}
+
+async function ensureInitialized(): Promise<void> {
+  if (initialized) return;
+  if (initPromise) return initPromise;
+
+  initPromise = (async () => {
+    const [loadedSettings, loadedToken, loadedPkgVersion] = await Promise.all([
+      loadSettingsAsync(SETTINGS_FILE),
+      ensureTokenAsync(TOKEN_FILE),
+      readPackageVersion(),
+    ]);
+    currentSettings = loadedSettings;
+    mcpToken = loadedToken;
+    packageVersion = loadedPkgVersion;
+    initializeMcpHost(packageVersion);
+    initialized = true;
+  })().catch((err) => {
+    initPromise = null;
+    throw err;
+  });
+
+  return initPromise;
+}
+
+function persistSettingsInBackground() {
+  void saveSettingsAsync(SETTINGS_FILE, currentSettings);
+}
+
+const HEAVY_STATUS_TTL_MS = 10_000;
+const heavyStatusCache = {
+  toolActions: {} as Record<string, unknown>,
+  configStatus: {} as Record<string, boolean>,
+  updatedAt: 0,
+  loading: false,
+};
+let heavyStatusRefreshPromise: Promise<void> | null = null;
+
+function refreshHeavyStatusInBackground(force = false): void {
+  const stale = Date.now() - heavyStatusCache.updatedAt > HEAVY_STATUS_TTL_MS;
+  if (!force && !stale && heavyStatusCache.updatedAt > 0) return;
+  if (heavyStatusRefreshPromise) return;
+
+  heavyStatusCache.loading = true;
+  heavyStatusRefreshPromise = (async () => {
+    const nextToolActions = mcpHost ? mcpHost.getToolActions() : {};
+    const nextConfigStatus = await getConfigStatusAsync();
+    heavyStatusCache.toolActions = nextToolActions;
+    heavyStatusCache.configStatus = nextConfigStatus;
+    heavyStatusCache.updatedAt = Date.now();
+  })().catch((err) => {
+    logIgnored(ErrorCategory.CONFIG, '刷新配置状态缓存失败', err);
+  }).finally(() => {
+    heavyStatusCache.loading = false;
+    heavyStatusRefreshPromise = null;
   });
 }
 
@@ -258,12 +329,12 @@ registerServiceRoutes(get, post, {
   getDefaultSettings: () => DEFAULT_SETTINGS,
   updateSettings: (payload) => {
     currentSettings = applySettingsUpdate(currentSettings, payload);
-    saveSettings(SETTINGS_FILE, currentSettings);
+    persistSettingsInBackground();
     return { success: true as const, settings: currentSettings };
   },
   resetSettings: () => {
     currentSettings = { ...DEFAULT_SETTINGS };
-    saveSettings(SETTINGS_FILE, currentSettings);
+    persistSettingsInBackground();
     return { success: true as const, settings: currentSettings };
   },
   detectSceneFeatures: async () => {
@@ -401,12 +472,7 @@ export async function startServer() {
   }
 
   try {
-    if (!mcpToken) {
-      mcpToken = ensureToken(TOKEN_FILE);
-    }
-    if (!mcpHost) {
-      initializeMcpHost();
-    }
+    await ensureInitialized();
 
     const port = DEFAULT_PORT;
     const srv = createServer();
@@ -476,6 +542,8 @@ export async function restartServer() {
 
 export function getServiceInfo() {
   try {
+    refreshHeavyStatusInBackground();
+
     const projectPath = Editor.Project?.path || process.cwd();
     const projectName = Editor.Project?.name || path.basename(projectPath);
 
@@ -484,7 +552,6 @@ export function getServiceInfo() {
     let totalActionCount = 0;
     let toolNames: string[] = [];
     let allToolNames: string[] = [];
-    let toolActions: Record<string, unknown> = {};
     let toolEnabledStates: Record<string, boolean> = {};
     let toolListVersion = 0;
 
@@ -495,7 +562,6 @@ export function getServiceInfo() {
         totalActionCount = mcpHost.getTotalActionCount();
         toolNames = mcpHost.getToolNames();
         allToolNames = mcpHost.getAllToolNames();
-        toolActions = mcpHost.getToolActions();
         toolEnabledStates = mcpHost.getToolEnabledStates();
         toolListVersion = mcpHost.getToolListVersion();
       } catch (e) {
@@ -503,15 +569,9 @@ export function getServiceInfo() {
       }
     }
 
-    let configStatus: Record<string, boolean> = {};
-    try {
-      configStatus = getConfigStatus();
-    } catch (e) {
-      console.warn('[Aura] getServiceInfo: getConfigStatus 异常', e);
-    }
-
     return {
       running: !!server,
+      initialized,
       port: activePort,
       token: mcpToken,
       bridgeBase,
@@ -525,10 +585,13 @@ export function getServiceInfo() {
       connectionCount,
       toolNames,
       allToolNames,
-      toolActions,
+      toolActions: heavyStatusCache.toolActions,
       toolEnabledStates,
       toolListVersion,
-      configStatus,
+      configStatus: heavyStatusCache.configStatus,
+      heavyStatusLoading: heavyStatusCache.loading,
+      heavyStatusReady: heavyStatusCache.updatedAt > 0,
+      heavyStatusUpdatedAt: heavyStatusCache.updatedAt,
       settings: currentSettings,
       licenseStatus: getProLicenseStatus(),
       updatePhase: serializeUpdatePhase(updater.phase),
@@ -537,6 +600,7 @@ export function getServiceInfo() {
     console.error('[Aura] getServiceInfo 发生严重异常:', e);
     return {
       running: !!server,
+      initialized,
       port: activePort,
       token: mcpToken,
       bridgeBase,
@@ -554,6 +618,9 @@ export function getServiceInfo() {
       toolEnabledStates: {},
       toolListVersion: 0,
       configStatus: {},
+      heavyStatusLoading: heavyStatusCache.loading,
+      heavyStatusReady: heavyStatusCache.updatedAt > 0,
+      heavyStatusUpdatedAt: heavyStatusCache.updatedAt,
       settings: currentSettings,
       licenseStatus: getProLicenseStatus(),
       updatePhase: serializeUpdatePhase(updater.phase),
@@ -580,13 +647,13 @@ export function getSettings() {
 export function updateSettings(...args: unknown[]) {
   const payload = args[0] && typeof args[0] === 'object' ? args[0] as Partial<BridgeSettings> : {};
   currentSettings = applySettingsUpdate(currentSettings, payload);
-  saveSettings(SETTINGS_FILE, currentSettings);
+  persistSettingsInBackground();
   return { success: true, settings: currentSettings };
 }
 
 export function resetSettings() {
   currentSettings = { ...DEFAULT_SETTINGS };
-  saveSettings(SETTINGS_FILE, currentSettings);
+  persistSettingsInBackground();
   return { success: true, settings: currentSettings };
 }
 
@@ -668,14 +735,19 @@ export const methods = {
 
 export function load() {
   console.log('[Aura] 插件已加载');
-  mcpToken = ensureToken(TOKEN_FILE);
   try {
     registerBroadcastListeners();
   } catch (err) {
     console.warn('[MCP] 广播系统事件注册失败 (部分事件可能不可用)', err);
   }
-  initializeMcpHost();
-  void startServer();
+  void ensureInitialized()
+    .then(async () => {
+      await startServer();
+      refreshHeavyStatusInBackground(true);
+    })
+    .catch((err) => {
+      console.error('[Aura] 初始化失败:', err);
+    });
   // 启动自动更新后台检查（异步，不阻塞加载）
   updater.scheduleChecks();
 }
@@ -685,6 +757,13 @@ export function unload() {
   unregisterBroadcastListeners();
   stopServer();
   mcpHost = null;
+  initialized = false;
+  initPromise = null;
+  heavyStatusCache.toolActions = {};
+  heavyStatusCache.configStatus = {};
+  heavyStatusCache.updatedAt = 0;
+  heavyStatusCache.loading = false;
+  heavyStatusRefreshPromise = null;
   updater.stopChecks();
 }
 

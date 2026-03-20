@@ -1249,6 +1249,9 @@ module.exports = Editor.Panel.define({
     }
     self._renderToolToggles = renderToolToggles;
     self._applyI18n = applyI18n;
+    self._refreshInFlight = false;
+    self._refreshPending = false;
+    self._refreshSeq = 0;
 
     // Tab Logic
     const tabs = self.$.app.querySelectorAll('.mcp-tab');
@@ -1499,8 +1502,15 @@ module.exports = Editor.Panel.define({
 
     async refreshStatus() {
       const self = this;
+      if (self._refreshInFlight) {
+        self._refreshPending = true;
+        return;
+      }
+      self._refreshInFlight = true;
+      const requestSeq = ++self._refreshSeq;
       try {
         const info = await Editor.Message.request(EXTENSION_NAME, 'get-service-info');
+        if (requestSeq !== self._refreshSeq) return;
         if (info && info.running) {
           self.$.statusDot.className = 'status-dot online';
           self.$.statusText.className = 'status-text online';
@@ -1567,8 +1577,15 @@ module.exports = Editor.Panel.define({
           self.renderUpdateBanner(info.updatePhase);
         }
       } catch (e) {
+        if (requestSeq !== self._refreshSeq) return;
         console.warn('[Aura] refreshStatus 异常:', e);
         self.setOffline();
+      } finally {
+        self._refreshInFlight = false;
+        if (self._refreshPending) {
+          self._refreshPending = false;
+          setTimeout(() => self.refreshStatus(), 0);
+        }
       }
     },
 
@@ -1742,7 +1759,6 @@ module.exports = Editor.Panel.define({
     },
 
     async handleDownloadUpdate(btn) {
-      const self = this;
       if (btn) { btn.setAttribute('disabled', ''); btn.textContent = '下载中...'; }
       try {
         await Editor.Message.request(EXTENSION_NAME, 'download-update');
@@ -1753,7 +1769,6 @@ module.exports = Editor.Panel.define({
     },
 
     async handleInstallUpdate(btn) {
-      const self = this;
       if (btn) { btn.setAttribute('disabled', ''); btn.textContent = '安装中...'; }
       try {
         await Editor.Message.request(EXTENSION_NAME, 'install-update');

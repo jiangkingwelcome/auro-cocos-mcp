@@ -27,6 +27,31 @@ export function ensureToken(tokenFile: string): string {
 }
 
 /**
+ * Async variant of ensureToken to avoid blocking startup on filesystem I/O.
+ */
+export async function ensureTokenAsync(tokenFile: string): Promise<string> {
+  const env = process.env.COCOS_MCP_TOKEN?.trim();
+  if (env) return env;
+  try {
+    await fs.promises.access(tokenFile, fs.constants.F_OK);
+    const existing = (await fs.promises.readFile(tokenFile, 'utf-8')).trim();
+    if (existing) return existing;
+  } catch (e) {
+    const err = e as NodeJS.ErrnoException;
+    if (err?.code !== 'ENOENT') {
+      logIgnored(ErrorCategory.CONFIG, '读取 token 文件失败，将重新生成', e);
+    }
+  }
+  const generated = crypto.randomBytes(24).toString('hex');
+  try {
+    await fs.promises.writeFile(tokenFile, `${generated}\n`, 'utf-8');
+  } catch (e) {
+    logWarn(ErrorCategory.CONFIG, 'token 文件写入失败，仅保留在内存中', e);
+  }
+  return generated;
+}
+
+/**
  * 从 HTTP 请求头中提取 MCP Token。
  * 支持 X-MCP-Token 头和 Bearer 认证。
  */

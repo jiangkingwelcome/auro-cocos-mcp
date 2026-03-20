@@ -1,9 +1,3 @@
-import type { CocosNode, CocosCC, OperationHandler } from '../scene-types';
-import { isNodeRef, isComponentRef, resolveRefToRuntime } from '../scene-types';
-import { ErrorCategory, logIgnored } from '../error-utils';
-import { bilingualMessage } from '../mcp/tools-shared';
-import type { SceneOperationDeps } from '../scene-operation-handlers-impl';
-
 export const TRANSFORM_ACTIONS = [
   'create_node',
   'destroy_node',
@@ -25,10 +19,3 @@ export const TRANSFORM_ACTIONS = [
   'group_nodes',
   'batch',
 ] as const;
-
-export function buildTransformActions(deps: SceneOperationDeps, allHandlers?: Map<string, OperationHandler>): Map<string, OperationHandler> {
-  const { getCC, requireNode } = deps;
-  const handlers = allHandlers || new Map();
-  return new Map<string, OperationHandler>([
-  ]);
-}

@@ -26,6 +26,7 @@ const CHECK_DELAY_MS      = 15_000;              // 启动后 15 秒首检
 const CHECK_INTERVAL_MS   = 4 * 60 * 60 * 1000; // 每 4 小时轮检
 const FETCH_TIMEOUT_MS    = 12_000;
 const DOWNLOAD_TIMEOUT_MS = 120_000;
+const MAX_REDIRECTS       = 5;                   // [Fix-J] 最大重定向次数，防循环
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 interface PackageAsset { url: string; sha256: string; }
@@ -70,34 +71,46 @@ export type UpdatePhase =
 const RETRYABLE_CODES = new Set(['ECONNRESET', 'ECONNREFUSED', 'ETIMEDOUT', 'ENOTFOUND', 'EAI_AGAIN']);
 
 /**
- * 自动重试包装器：对瞬断错误最多重试 maxRetries 次，每次间隔 delayMs 毫秒。
- * 非瞬断错误（如 HTTP 404）直接抛出，不浪费等待时间。
+ * [Fix-K] 自动重试包装器，支持外部中止信号。
+ * 对瞬断错误最多重试 maxRetries 次，每次间隔 delayMs × (attempt+1) 毫秒。
+ * isStopped 返回 true 时立即放弃，不再等待或重试。
  */
 async function withRetry<T>(
   fn: () => Promise<T>,
   maxRetries = 3,
   delayMs = 2_000,
+  isStopped?: () => boolean,
 ): Promise<T> {
   let lastErr: unknown;
   for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    if (isStopped?.()) throw new Error('操作已取消');
     try {
       return await fn();
     } catch (err: unknown) {
       lastErr = err;
+      const msg = err instanceof Error ? err.message : String(err);
+      if (msg === '操作已取消') throw err;
       const code = (err as NodeJS.ErrnoException).code ?? '';
-      const msg  = err instanceof Error ? err.message : String(err);
       // 非瞬断错误（HTTP 4xx 等）立即退出
       if (!RETRYABLE_CODES.has(code) && !msg.includes('超时')) throw err;
       if (attempt < maxRetries) {
-        await new Promise(r => setTimeout(r, delayMs * (attempt + 1)));
+        await new Promise<void>(r => setTimeout(r, delayMs * (attempt + 1)));
       }
     }
   }
   throw lastErr;
 }
 
-function fetchText(url: string, timeoutMs = FETCH_TIMEOUT_MS): Promise<string> {
+/**
+ * [Fix-J] fetchText 增加重定向计数，防止循环重定向导致调用栈溢出。
+ * [已有] settled 标记防止 req.destroy() 后触发的二次 reject。
+ */
+function fetchText(url: string, timeoutMs = FETCH_TIMEOUT_MS, redirectCount = 0): Promise<string> {
   return new Promise((resolve, reject) => {
+    if (redirectCount > MAX_REDIRECTS) {
+      reject(new Error(`重定向过多（超过 ${MAX_REDIRECTS} 次）`));
+      return;
+    }
     const transport = url.startsWith('https') ? https : http;
     let settled = false;
     const done = (fn: () => void) => { if (!settled) { settled = true; fn(); } };
@@ -106,7 +119,7 @@ function fetchText(url: string, timeoutMs = FETCH_TIMEOUT_MS): Promise<string> {
       if (res.statusCode === 301 || res.statusCode === 302) {
         res.resume();
         const loc = res.headers.location;
-        if (loc) { fetchText(loc, timeoutMs).then(resolve).catch(reject); return; }
+        if (loc) { fetchText(loc, timeoutMs, redirectCount + 1).then(resolve).catch(reject); return; }
         done(() => reject(new Error('重定向目标丢失')));
         return;
       }
@@ -117,34 +130,44 @@ function fetchText(url: string, timeoutMs = FETCH_TIMEOUT_MS): Promise<string> {
       }
       let data = '';
       res.on('data', (chunk: Buffer) => { data += chunk.toString('utf-8'); });
-      res.on('end', () => done(() => resolve(data)));
+      res.on('end',  () => done(() => resolve(data)));
       res.on('error', (e) => done(() => reject(e)));
     });
-    // destroy() 后 Node.js 会再触发 error(ECONNRESET)，用 settled 标记防止二次 reject
     req.on('timeout', () => { req.destroy(); done(() => reject(new Error('请求超时'))); });
     req.on('error',   (e) => done(() => reject(e)));
   });
 }
 
+/**
+ * [Fix-I] 添加 settled 标记，防止 WriteStream/res 异常后触发二次 reject。
+ * [Fix-J] 添加重定向计数，防止循环重定向。
+ */
 function downloadFile(
   url: string,
   dest: string,
   onProgress?: (pct: number) => void,
 ): Promise<void> {
   return new Promise((resolve, reject) => {
-    const doFetch = (targetUrl: string) => {
+    let settled = false;
+    const done = (fn: () => void) => { if (!settled) { settled = true; fn(); } };
+
+    const doFetch = (targetUrl: string, redirectCount = 0) => {
+      if (redirectCount > MAX_REDIRECTS) {
+        done(() => reject(new Error(`重定向过多（超过 ${MAX_REDIRECTS} 次）`)));
+        return;
+      }
       const transport = targetUrl.startsWith('https') ? https : http;
       const req = transport.get(targetUrl, { timeout: DOWNLOAD_TIMEOUT_MS }, (res) => {
         if (res.statusCode === 301 || res.statusCode === 302) {
           res.resume();
           const loc = res.headers.location;
-          if (loc) { doFetch(loc); return; }
-          reject(new Error('重定向目标丢失'));
+          if (loc) { doFetch(loc, redirectCount + 1); return; }
+          done(() => reject(new Error('重定向目标丢失')));
           return;
         }
         if (res.statusCode !== 200) {
           res.resume();
-          reject(new Error(`下载失败 HTTP ${res.statusCode}`));
+          done(() => reject(new Error(`下载失败 HTTP ${res.statusCode}`)));
           return;
         }
         const total = parseInt(res.headers['content-length'] || '0', 10);
@@ -157,12 +180,13 @@ function downloadFile(
           }
         });
         res.pipe(file);
-        file.on('finish', () => { file.close(); resolve(); });
-        file.on('error', (e) => { file.close(); tryUnlink(dest); reject(e); });
-        res.on('error',  (e) => { file.close(); tryUnlink(dest); reject(e); });
+        file.on('finish', () => { file.close(); done(() => resolve()); });
+        // [Fix-I] 用 destroy() 替代 close()，确保缓冲区不再 flush
+        file.on('error', (e) => { file.destroy(); tryUnlink(dest); done(() => reject(e)); });
+        res.on('error',  (e) => { file.destroy(); tryUnlink(dest); done(() => reject(e)); });
       });
-      req.on('timeout', () => { req.destroy(); reject(new Error('下载超时')); });
-      req.on('error', reject);
+      req.on('timeout', () => { req.destroy(); done(() => reject(new Error('下载超时'))); });
+      req.on('error',   (e) => done(() => reject(e)));
     };
     doFetch(url);
   });
@@ -178,23 +202,43 @@ function sha256File(filePath: string): Promise<string> {
   });
 }
 
+/**
+ * [Fix-C] 解压实现：Windows 用环境变量传递路径，完全规避 PowerShell 注入风险。
+ * [Fix-E] macOS/Linux：unzip 不存在时降级到 ditto（macOS 内置）。
+ */
 function extractZip(zipPath: string, destDir: string): Promise<void> {
   return new Promise((resolve, reject) => {
     fs.mkdirSync(destDir, { recursive: true });
     const isWin = process.platform === 'win32';
-    
+
     if (isWin) {
-      const escaped = zipPath.replace(/'/g, "''");
-      const escapedDest = destDir.replace(/'/g, "''");
-      const cmd = `Expand-Archive -LiteralPath '${escaped}' -DestinationPath '${escapedDest}' -Force`;
-      execFile('powershell', ['-NoProfile', '-NonInteractive', '-Command', cmd], { timeout: 90_000 }, (err, _out, stderr) => {
-        if (err) reject(new Error(`解压失败: ${(stderr || err.message).slice(0, 300)}`));
-        else resolve();
-      });
+      // 路径通过环境变量注入，命令字符串本身不含任何用户数据，杜绝 PowerShell 注入
+      const cmd = [
+        'Add-Type -Assembly System.IO.Compression.FileSystem;',
+        '[System.IO.Compression.ZipFile]::ExtractToDirectory($env:AURA_ZIP, $env:AURA_DEST, $true)',
+      ].join(' ');
+      execFile(
+        'powershell',
+        ['-NoProfile', '-NonInteractive', '-Command', cmd],
+        { timeout: 90_000, env: { ...process.env, AURA_ZIP: zipPath, AURA_DEST: destDir } },
+        (err, _out, stderr) => {
+          if (err) reject(new Error(`解压失败: ${(stderr || err.message).slice(0, 300)}`));
+          else resolve();
+        },
+      );
     } else {
+      // 先尝试 unzip；若不存在则降级到 macOS 内置 ditto
       execFile('unzip', ['-o', zipPath, '-d', destDir], { timeout: 90_000 }, (err, _out, stderr) => {
-        if (err) reject(new Error(`解压失败: ${(stderr || err.message).slice(0, 300)}`));
-        else resolve();
+        if (!err) { resolve(); return; }
+        if ((err as NodeJS.ErrnoException).code === 'ENOENT') {
+          // unzip 不可用，使用 macOS 内置的 ditto（所有 macOS 版本均有）
+          execFile('ditto', ['-xk', zipPath, destDir], { timeout: 90_000 }, (err2, _o, se2) => {
+            if (err2) reject(new Error(`解压失败 (ditto): ${(se2 || err2.message).slice(0, 300)}`));
+            else resolve();
+          });
+        } else {
+          reject(new Error(`解压失败 (unzip): ${(stderr || err.message).slice(0, 300)}`));
+        }
       });
     }
   });
@@ -221,7 +265,7 @@ function cleanTempFiles(): void {
     }
   } catch (_) {}
 
-  // 清理超过 1 小时的遗留 zip 文件（1 小时内的保留，允许用户在 ready 状态下重启 Cocos 后重新安装）
+  // 清理超过 1 小时的遗留 zip 文件
   const updateDir = path.join(tmpDir, 'aura-cocos-update');
   try {
     if (fs.existsSync(updateDir)) {
@@ -254,7 +298,7 @@ function compareVer(a: string, b: string): number {
 interface TxEntry {
   original: string;
   backup:   string;
-  /** true = 用 rename 换出的 .node 文件（不需要 copy back，直接 rename 回去） */
+  /** true = 用 rename 换出的 .node 文件（回滚时 rename 回去即可） */
   nativeRename: boolean;
   /** true = 原来不存在的新文件，回滚时安全删除 */
   isNew?: boolean;
@@ -266,31 +310,46 @@ interface TxEntry {
  *  - 但 rename 始终被允许（DLL 锁定的是 inode 而非路径）
  *  - 策略：rename(dest → dest.upd-old) 腾出路径，再 copy(src → dest)
  *  - .upd-old 文件在下次成功更新时被 cleanUpdateArtifacts() 清理
+ *
+ * [Fix-B] copyFileSync 失败时立即就地撤销 rename，不依赖 txRollback，
+ *         同时不向 txLog push 记录，避免 txRollback 重复处理同一个文件。
  */
 function safeReplaceFile(src: string, dest: string, txLog: TxEntry[]): void {
   const isNative = process.platform === 'win32' && dest.endsWith('.node');
 
   if (fs.existsSync(dest)) {
     if (isNative) {
-      // Windows .node：rename 换出，不做 copy backup（rename 本身就是原子的）
       const oldPath = dest + '.upd-old';
       tryUnlink(oldPath);
       fs.renameSync(dest, oldPath); // 始终成功，即使文件已被加载
-      txLog.push({ original: dest, backup: oldPath, nativeRename: true });
+      try {
+        fs.copyFileSync(src, dest);
+        // copy 成功后才记录事务，确保 txLog 里的每一条都是"已成功修改"的文件
+        txLog.push({ original: dest, backup: oldPath, nativeRename: true });
+      } catch (e) {
+        // copy 失败：立即就地还原，不等 txRollback
+        try { fs.renameSync(oldPath, dest); } catch (_) {}
+        throw e;
+      }
     } else {
-      // 普通文件：先 copy 备份，再覆盖
       const bakPath = dest + '.upd-bak';
       tryUnlink(bakPath);
-      fs.copyFileSync(dest, bakPath);
-      txLog.push({ original: dest, backup: bakPath, nativeRename: false });
+      fs.copyFileSync(dest, bakPath); // 备份原文件
+      try {
+        fs.copyFileSync(src, dest);
+        txLog.push({ original: dest, backup: bakPath, nativeRename: false });
+      } catch (e) {
+        // copy 失败：立即就地还原
+        try { fs.copyFileSync(bakPath, dest); } catch (_) {}
+        tryUnlink(bakPath);
+        throw e;
+      }
     }
   } else {
-    // 这是一个全新的文件，备份留空，记录用于撤销时删除
+    // 全新文件：copy 成功后才记录，copy 失败时路径干净，无需还原
+    fs.copyFileSync(src, dest);
     txLog.push({ original: dest, backup: '', nativeRename: false, isNew: true });
   }
-  
-  // 此时路径已腾出，直接 copy
-  fs.copyFileSync(src, dest);
 }
 
 /** 递归合并目录（不删除目标目录，逐文件替换，对 .node 使用 rename 技巧） */
@@ -310,7 +369,6 @@ function txRollback(txLog: TxEntry[]): void {
   for (const entry of [...txLog].reverse()) {
     try {
       if (entry.isNew) {
-        // 新增的文件，回滚时直接把它抹杀掉
         tryUnlink(entry.original);
       } else if (entry.nativeRename) {
         // .node 文件：删除新写入的（可能损坏），把 .upd-old 重命名回去
@@ -322,7 +380,7 @@ function txRollback(txLog: TxEntry[]): void {
         tryUnlink(entry.backup);
       }
     } catch (_) {
-      // best-effort，单个文件回滚失败不中断其余文件的还原
+      // best-effort：单个文件回滚失败不中断其余文件的还原
     }
   }
 }
@@ -330,17 +388,21 @@ function txRollback(txLog: TxEntry[]): void {
 /** 提交：删除所有备份文件（更新成功后调用） */
 function txCommit(txLog: TxEntry[]): void {
   for (const entry of txLog) {
-    tryUnlink(entry.backup);
+    if (entry.backup) tryUnlink(entry.backup);
   }
 }
 
-/** 清理上一次更新遗留的 .upd-old 和 .upd-bak 文件 */
-function cleanUpdateArtifacts(dir: string): void {
+/**
+ * [Fix-F] 清理上一次更新遗留的 .upd-old 和 .upd-bak 文件。
+ * 增加递归深度限制，防止符号链接导致无限遍历。
+ */
+function cleanUpdateArtifacts(dir: string, depth = 0): void {
+  if (depth > 8) return;
   try {
     for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
       const p = path.join(dir, e.name);
-      if (e.isDirectory()) {
-        cleanUpdateArtifacts(p);
+      if (e.isDirectory() && !e.isSymbolicLink()) {
+        cleanUpdateArtifacts(p, depth + 1);
       } else if (e.name.endsWith('.upd-old') || e.name.endsWith('.upd-bak')) {
         tryUnlink(p);
       }
@@ -349,13 +411,6 @@ function cleanUpdateArtifacts(dir: string): void {
 }
 
 // ─── 主动通知：控制台 banner + Editor.Dialog ──────────────────────────────────
-//
-// 问题：checkForUpdates() 在 load() 后台静默执行，用户不打开面板根本不知道有更新。
-// 方案：
-//   1. console.warn 彩色 banner —— 始终输出，降级保底（控制台始终可见）
-//   2. Editor.Dialog 一次性弹窗 —— 每个新版本只弹一次，记录到 .mcp-update-state.json
-//      - 「立即打开」→ Editor.Panel.open() 打开面板，用户在面板内点更新
-//      - 「稍后提醒」→ 关闭，下次启动重新提示（本版本不会再弹）
 
 /** 读取已通知版本记录（防重复弹窗） */
 function readNotifiedVersion(root: string): string {
@@ -380,19 +435,9 @@ function writeNotifiedVersion(root: string, version: string): void {
   } catch (_) {}
 }
 
-/**
- * 主动通知用户有新版本：
- *  1. 始终打印控制台 banner（颜色醒目，Cocos 控制台直接可见）
- *  2. 首次发现该版本时弹 Editor.Dialog（每个版本只弹一次）
- *     - 「立即打开」→ 自动打开 Aura 面板
- *     - 「稍后提醒」→ 关闭，下次启动继续提示
- */
 async function notifyAvailable(info: UpdateInfo, root: string): Promise<void> {
-  // ① 控制台单行提示（降级保底，简短不扰）
   console.warn(`[Aura] 有新版本 v${info.latestVersion} 可用，打开插件面板查看详情`);
 
-  // ② Editor.Dialog 一次性弹窗（每个新版本只弹一次）
-  //    只告知"有更新"，不堆砌 changelog —— 详情留给面板展示
   if (readNotifiedVersion(root) === info.latestVersion) return;
   writeNotifiedVersion(root, info.latestVersion);
 
@@ -416,18 +461,19 @@ async function notifyAvailable(info: UpdateInfo, root: string): Promise<void> {
   }
 }
 
-// 更新时跳过的用户数据文件
+// [Fix-M] 更新时跳过的用户数据文件（增加 .mcp-update-state.json）
 const SKIP_ON_UPDATE = new Set([
-  '.mcp-token', '.mcp-settings.json', '.mcp-license',
+  '.mcp-token', '.mcp-settings.json', '.mcp-license', '.mcp-update-state.json',
   'node_modules', '.git', 'dist.bak', 'dist-backup',
 ]);
 
 // ─── AuraUpdater ─────────────────────────────────────────────────────────────
 class AuraUpdater {
-  private _phase: UpdatePhase = { phase: 'idle' };
+  private _phase:    UpdatePhase = { phase: 'idle' };
   private _listeners: Array<(p: UpdatePhase) => void> = [];
-  private _timer1: ReturnType<typeof setTimeout>  | null = null;
-  private _timer2: ReturnType<typeof setInterval> | null = null;
+  private _timer1:   ReturnType<typeof setTimeout>  | null = null;
+  private _timer2:   ReturnType<typeof setInterval> | null = null;
+  private _stopped = false; // [Fix-K] 用于中断 withRetry 的重试等待
 
   get phase(): UpdatePhase { return this._phase; }
 
@@ -436,9 +482,15 @@ class AuraUpdater {
     this._listeners.forEach(fn => { try { fn(p); } catch (_) {} });
   }
 
+  // [Fix-L] 添加 removed 标记，确保 unsubscribe 函数幂等
   onChange(cb: (p: UpdatePhase) => void): () => void {
     this._listeners.push(cb);
-    return () => { this._listeners = this._listeners.filter(f => f !== cb); };
+    let removed = false;
+    return () => {
+      if (removed) return;
+      removed = true;
+      this._listeners = this._listeners.filter(f => f !== cb);
+    };
   }
 
   pluginRoot(): string { return path.join(__dirname, '..'); }
@@ -450,9 +502,21 @@ class AuraUpdater {
     } catch { return '0.0.0'; }
   }
 
+  // [Fix-G] 递归扫描子目录（深度≤3），防止 Pro .node 在子目录时误判为 CE
   isPro(): boolean {
-    try { return fs.readdirSync(this.pluginRoot()).some(f => f.endsWith('.node')); }
-    catch { return false; }
+    const hasNodeFile = (dir: string, depth = 0): boolean => {
+      if (depth > 3) return false;
+      try {
+        for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
+          if (e.isFile() && e.name.endsWith('.node')) return true;
+          if (e.isDirectory() && !e.name.startsWith('.') && e.name !== 'node_modules') {
+            if (hasNodeFile(path.join(dir, e.name), depth + 1)) return true;
+          }
+        }
+      } catch { /* ignore */ }
+      return false;
+    };
+    return hasNodeFile(this.pluginRoot());
   }
 
   // ── Public API ──────────────────────────────────────────────────────────────
@@ -464,8 +528,23 @@ class AuraUpdater {
 
     this.set({ phase: 'checking' });
     try {
-      const raw = await withRetry(() => fetchText(VERSION_JSON_URL));
-      const mf  = JSON.parse(raw) as VersionManifest;
+      const raw = await withRetry(
+        () => fetchText(VERSION_JSON_URL),
+        3, 2_000,
+        () => this._stopped, // [Fix-K] stopChecks() 后重试立即放弃
+      );
+
+      // [Fix-D] 严格校验 JSON 格式，字段缺失时明确报错而非 TypeError 崩溃
+      let mf: VersionManifest;
+      try {
+        mf = JSON.parse(raw) as VersionManifest;
+      } catch {
+        throw new Error('version.json 不是有效的 JSON');
+      }
+      if (!mf || typeof mf !== 'object' || !mf.stable || typeof mf.stable.version !== 'string') {
+        throw new Error('version.json 格式无效：缺少 stable.version 字段');
+      }
+
       const ch  = mf.stable;
       const cur = this.currentVersion();
       const lat = ch.version;
@@ -489,14 +568,14 @@ class AuraUpdater {
       };
 
       this.set({ phase: 'available', info });
-
-      // 主动通知（不等待，后台执行）
       void notifyAvailable(info, this.pluginRoot());
-
       return info;
+
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : String(err);
-      console.warn('[Aura Updater] 版本检查静默失败:', msg);
+      if (msg !== '操作已取消') {
+        console.warn('[Aura Updater] 版本检查静默失败:', msg);
+      }
       this.set({ phase: 'idle' });
       return null;
     }
@@ -518,14 +597,21 @@ class AuraUpdater {
     });
 
     this.set({ phase: 'verifying', info });
-    if (info.sha256 && info.sha256.length === 64) {
-      const actual = await sha256File(zipPath);
-      if (actual.toLowerCase() !== info.sha256.toLowerCase()) {
-        tryUnlink(zipPath);
-        this.set({ phase: 'error', message: 'SHA256 校验失败，文件可能已损坏，请重试' });
-        throw new Error('SHA256 mismatch');
-      }
+
+    // [Fix-A] SHA256 强制校验：空值/非法格式一律拒绝安装，不允许跳过
+    const sha256Hex = (info.sha256 || '').toLowerCase().trim();
+    if (!sha256Hex || sha256Hex.length !== 64 || !/^[0-9a-f]{64}$/.test(sha256Hex)) {
+      tryUnlink(zipPath);
+      this.set({ phase: 'error', message: 'version.json 中缺少有效的 SHA256 校验值，拒绝安装' });
+      throw new Error('缺少有效的 SHA256');
     }
+    const actual = await sha256File(zipPath);
+    if (actual !== sha256Hex) {
+      tryUnlink(zipPath);
+      this.set({ phase: 'error', message: 'SHA256 校验失败，文件可能已损坏或被篡改，请重试' });
+      throw new Error('SHA256 mismatch');
+    }
+
     this.set({ phase: 'ready', info, zipPath });
   }
 
@@ -538,7 +624,7 @@ class AuraUpdater {
    *     - 改用 safeMergeDir → safeReplaceFile，对 .node 先 rename 再 copy
    *
    *  ② 回滚不彻底（插件碎裂）
-   *     - 引入 txLog（事务日志）：每个文件替换前先做 .upd-bak 备份
+   *     - 引入 txLog（事务日志）：copy 成功后才 push 记录，确保每条记录都可回滚
    *     - 任何一步失败 → txRollback() 精确还原全部已改文件
    *     - 成功后 txCommit() 清理备份，再清理 .upd-old 残留
    */
@@ -565,8 +651,8 @@ class AuraUpdater {
       }
 
       // ③ 逐项替换，全程记录事务日志
-      //    - 普通文件：先 copy 备份(.upd-bak)，再覆盖
-      //    - .node 文件：rename 换出(.upd-old)，再 copy 新文件（绕过 EBUSY）
+      //    - 普通文件：先 copy 备份(.upd-bak)，copy 成功后 push txLog
+      //    - .node 文件：rename 换出(.upd-old)，copy 成功后 push txLog（绕过 EBUSY）
       for (const e of fs.readdirSync(extRoot, { withFileTypes: true })) {
         if (SKIP_ON_UPDATE.has(e.name)) continue;
         const src  = path.join(extRoot, e.name);
@@ -587,18 +673,12 @@ class AuraUpdater {
 
       this.set({ phase: 'done', version: info.latestVersion });
 
-      // ⑥ 通知 Cocos Editor 重载插件：发 IPC 消息让主进程重载该扩展
+      // ⑥ 通知 Cocos Editor 重载插件：卸载旧内存镜像 → 重新加载新代码
       //    延迟 800ms 确保当前调用栈（面板轮询、IPC 回包）全部结束后再执行
       setTimeout(() => {
         try {
-          // 仅支持 Cocos Creator 3.x 及以上版本的扩展重载 API
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
-          if (typeof Editor !== 'undefined' && Editor.Message) {
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            Editor.Message.send('extension', 'reload', 'aura-for-cocos');
-          }
+          Editor.Package.unregister(root);
+          Editor.Package.register(root);
         } catch (e) {
           console.warn('[Aura Updater] 自动重载失败，请在编辑器中手动重启插件:', e);
         }
@@ -607,10 +687,7 @@ class AuraUpdater {
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : String(err);
       console.warn('[Aura Updater] 安装失败，执行事务回滚:', msg);
-
-      // 精确回滚：仅还原已经被修改的文件，未触碰的文件完全不受影响
       txRollback(txLog);
-
       this.set({ phase: 'error', message: `安装失败: ${msg}` });
       throw err;
     } finally {
@@ -619,11 +696,18 @@ class AuraUpdater {
     }
   }
 
-  /** 重置为 idle，允许重新检查 */
-  reset() { this.set({ phase: 'idle' }); }
+  /**
+   * [Fix-H] 重置为 idle：下载中/安装中不允许重置，防止后台任务与状态机脱节。
+   */
+  reset() {
+    const { phase } = this._phase;
+    if (phase === 'downloading' || phase === 'installing') return;
+    this.set({ phase: 'idle' });
+  }
 
   /** 启动定期检查（同时清理上次残留的临时文件） */
   scheduleChecks(): void {
+    this._stopped = false; // [Fix-K] 重置停止标志，允许新一轮重试
     cleanTempFiles();
     this._timer1 = setTimeout(() => { void this.checkForUpdates(); }, CHECK_DELAY_MS);
     this._timer2 = setInterval(() => { void this.checkForUpdates(); }, CHECK_INTERVAL_MS);
@@ -631,6 +715,7 @@ class AuraUpdater {
 
   /** 停止定期检查（清理本次会话产生的临时文件） */
   stopChecks(): void {
+    this._stopped = true; // [Fix-K] 让正在等待重试的 withRetry 立即放弃
     if (this._timer1) { clearTimeout(this._timer1);  this._timer1 = null; }
     if (this._timer2) { clearInterval(this._timer2); this._timer2 = null; }
     cleanTempFiles();

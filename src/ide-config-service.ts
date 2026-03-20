@@ -49,6 +49,21 @@ export function hasOurEntry(filePath: string): boolean {
   }
 }
 
+export async function hasOurEntryAsync(filePath: string): Promise<boolean> {
+  if (!filePath) return false;
+  try {
+    await fs.promises.access(filePath, fs.constants.F_OK);
+    const raw = await fs.promises.readFile(filePath, 'utf-8');
+    return raw.includes('aura-cocos') || raw.includes('aura-for-cocos') || raw.includes('cocos-bridge-ai-mcp') || raw.includes('cocos-mcp-bridge');
+  } catch (e) {
+    const err = e as NodeJS.ErrnoException;
+    if (err?.code !== 'ENOENT') {
+      logIgnored(ErrorCategory.CONFIG, `检查文件 "${filePath}" 是否包含插件入口失败`, e);
+    }
+    return false;
+  }
+}
+
 let _claudeCodeCached: boolean | null = null;
 let _claudeCodeCacheTs = 0;
 const CLAUDE_CODE_CACHE_TTL = 60_000;
@@ -73,6 +88,7 @@ function hasClaudeCodeEntry(): boolean {
 
 let _configStatusCache: Record<string, boolean> | null = null;
 let _configStatusCacheTs = 0;
+let _configStatusAsyncPromise: Promise<Record<string, boolean>> | null = null;
 const CONFIG_STATUS_CACHE_TTL = 30_000;
 
 export function getConfigStatus(): Record<string, boolean> {
@@ -95,9 +111,39 @@ export function getConfigStatus(): Record<string, boolean> {
   return configStatus;
 }
 
+export async function getConfigStatusAsync(): Promise<Record<string, boolean>> {
+  const now = Date.now();
+  if (_configStatusCache && now - _configStatusCacheTs < CONFIG_STATUS_CACHE_TTL) {
+    return _configStatusCache;
+  }
+  if (_configStatusAsyncPromise) {
+    return _configStatusAsyncPromise;
+  }
+
+  _configStatusAsyncPromise = (async () => {
+    const entries = await Promise.all(
+      IDE_NAMES.map(async (ide) => {
+        if (ide === 'claude-code') return [ide, hasClaudeCodeEntry()] as const;
+        return [ide, await hasOurEntryAsync(getIdeConfigPath(ide))] as const;
+      }),
+    );
+    const configStatus = Object.fromEntries(entries) as Record<string, boolean>;
+    _configStatusCache = configStatus;
+    _configStatusCacheTs = Date.now();
+    return configStatus;
+  })();
+
+  try {
+    return await _configStatusAsyncPromise;
+  } finally {
+    _configStatusAsyncPromise = null;
+  }
+}
+
 export function invalidateConfigStatusCache(): void {
   _configStatusCache = null;
   _configStatusCacheTs = 0;
+  _configStatusAsyncPromise = null;
 }
 
 function getShimPath(): string {

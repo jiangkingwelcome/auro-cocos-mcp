@@ -40,7 +40,8 @@
       "Bash(bash \"C:\\\\Users\\\\jiang\\\\.claude\\\\skills\\\\git-pushing\\\\scripts\\\\smart_commit.sh\" \"fix\\(updater\\): 修复控制台banner右边框错位，改用无右边框格式\")",
       "Bash(bash \"C:\\\\Users\\\\jiang\\\\.claude\\\\skills\\\\git-pushing\\\\scripts\\\\smart_commit.sh\" \"fix\\(updater\\): 简化通知层，详情留给面板展示\")",
       "Bash(bash \"C:\\\\Users\\\\jiang\\\\.claude\\\\skills\\\\git-pushing\\\\scripts\\\\smart_commit.sh\" \"fix\\(updater\\): 移除控制台通知的 ANSI 颜色转义码\")",
-      "Bash(bash \"C:\\\\Users\\\\jiang\\\\.claude\\\\skills\\\\git-pushing\\\\scripts\\\\smart_commit.sh\" \"fix\\(updater\\): 修复 ECONNRESET 二次触发 + 加入自动重试机制\")"
+      "Bash(bash \"C:\\\\Users\\\\jiang\\\\.claude\\\\skills\\\\git-pushing\\\\scripts\\\\smart_commit.sh\" \"fix\\(updater\\): 修复 ECONNRESET 二次触发 + 加入自动重试机制\")",
+      "Bash(bash \"C:\\\\Users\\\\jiang\\\\.claude\\\\skills\\\\git-pushing\\\\scripts\\\\smart_commit.sh\" \"fix\\(updater\\): 修复全部13处安全/稳定性问题\")"
     ]
   }
 }
