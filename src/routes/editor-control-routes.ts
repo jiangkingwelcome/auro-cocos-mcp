@@ -120,41 +120,50 @@ export function registerEditorControlRoutes(get: RouteRegistrar, post: RouteRegi
   get('/api/preferences/get', async (params) => {
     const key = params.key || '';
     const scope = resolvePreferenceScope(params.scope);
-    if (typeof Editor.Profile?.getConfig !== 'function') {
-      return { error: '当前 Cocos 版本不支持 Editor.Profile API (需要 >= 3.6)' };
-    }
-    if (!key) {
-      try {
-        const cfg = await Editor.Profile.getConfig(scope, '*') || {};
-        return { success: true, scope, config: cfg };
-      } catch (e) {
-        logIgnored(ErrorCategory.EDITOR_IPC, '读取全量偏好配置失败', e);
-        return { success: true, scope, config: {}, info: '无法读取全量配置，请指定具体 key' };
-      }
-    }
     try {
-      const val = await Editor.Profile.getConfig(scope, key);
-      return { success: true, key, scope, value: val };
-    } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : String(err);
-      return { error: `读取偏好失败: ${msg}` };
+      // 优先走 Cocos 3.8.x 内置 preferences 模块的 query-config IPC
+      // 进行 scope + key 提交：query-config(“global”, “general.language”)
+      const result = await ipc('preferences', 'query-config', scope, key || '*');
+      return { success: true, key: key || '*', scope, value: result ?? null };
+    } catch (e) {
+      logIgnored(ErrorCategory.EDITOR_IPC, `preferences query-config IPC 失败，尝试 Profile API`, e);
+      // 降级：尝试旧版 Editor.Profile.getConfig
+      if (typeof Editor.Profile?.getConfig === 'function') {
+        try {
+          const val = await Editor.Profile.getConfig(scope, key);
+          return { success: true, key, scope, value: val };
+        } catch (err2: unknown) {
+          const msg = err2 instanceof Error ? err2.message : String(err2);
+          return { error: `读取偏好失败: ${msg}` };
+        }
+      }
+      return { error: '当前 Cocos 版本不支持偏好读取 API' };
     }
   });
 
   post('/api/preferences/set', async (_params, body) => {
     const payload = (body && typeof body === 'object' ? body : {}) as { key?: string; value?: unknown; scope?: string };
     if (!payload.key) return { error: '缺少 key 参数' };
-    if (typeof Editor.Profile?.setConfig !== 'function') {
-      return { error: '当前 Cocos 版本不支持 Editor.Profile API (需要 >= 3.6)' };
-    }
     const scope = resolvePreferenceScope(payload.scope);
     if (scope === 'default') return { error: 'default 作用域只读，不能写入' };
     try {
-      await Editor.Profile.setConfig(scope, payload.key, payload.value);
+      // 优先走 Cocos 3.8.x 内置 preferences 模块的 set-config IPC
+      // 这是真正写入编辑器全局偏好设置的正确方式（和在界面上手动改是一样的效果）
+      await ipc('preferences', 'set-config', scope, payload.key, payload.value);
       return { success: true, key: payload.key, scope, value: payload.value };
-    } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : String(err);
-      return { error: `写入偏好失败: ${msg}` };
+    } catch (e) {
+      logIgnored(ErrorCategory.EDITOR_IPC, `preferences set-config IPC 失败，尝试 Profile API`, e);
+      // 降级：尝试旧版 Editor.Profile.setConfig
+      if (typeof Editor.Profile?.setConfig === 'function') {
+        try {
+          await Editor.Profile.setConfig(scope, payload.key, payload.value);
+          return { success: true, key: payload.key, scope, value: payload.value, note: '通过 Profile API 写入，可能不影响编辑器全局设置' };
+        } catch (err2: unknown) {
+          const msg = err2 instanceof Error ? err2.message : String(err2);
+          return { error: `写入偏好失败: ${msg}` };
+        }
+      }
+      return { error: '当前 Cocos 版本不支持偏好写入 API' };
     }
   });
 

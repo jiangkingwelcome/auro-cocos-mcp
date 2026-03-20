@@ -355,15 +355,18 @@ function writeNotifiedVersion(root: string, version: string): void {
  */
 async function notifyAvailable(info: UpdateInfo, root: string): Promise<void> {
   // ① 控制台 banner（始终输出，零依赖降级保底）
-  const bar  = '═'.repeat(52);
-  console.warn(
-    `\x1b[33m\n╔${bar}╗\n` +
-    `║  🚀 Aura for Cocos 有新版本！                      ║\n` +
-    `║  当前: v${info.currentVersion.padEnd(10)} →  最新: v${info.latestVersion.padEnd(10)}  ║\n` +
-    (info.changelog ? `║  ${info.changelog.slice(0, 48).padEnd(48)}  ║\n` : '') +
-    `║  打开 Aura 插件面板 → 点击「检查更新」安装          ║\n` +
-    `╚${bar}╝\x1b[0m`,
-  );
+  // 注意：汉字/emoji 各占 2 列，padEnd 按字符数补位会错位，
+  //       因此只保留上下分隔线，不使用右边框。
+  const sep = '─'.repeat(52);
+  const lines = [
+    `\x1b[33m${sep}`,
+    `  🚀 Aura for Cocos 有新版本可用！`,
+    `  当前: v${info.currentVersion}  →  最新: v${info.latestVersion}`,
+    ...(info.changelog ? [`  ${info.changelog.slice(0, 60)}`] : []),
+    `  打开 Aura 插件面板 → 点击「检查更新」安装`,
+    `${sep}\x1b[0m`,
+  ];
+  console.warn(lines.join('\n'));
 
   // ② Editor.Dialog 一次性弹窗（每个新版本只弹一次）
   if (readNotifiedVersion(root) === info.latestVersion) return; // 已弹过，跳过

@@ -14,6 +14,7 @@ const SCENE_SCRIPT_WHITELIST = new Set([
 
 const IPC_ALLOWED_MODULES = new Set([
   'scene', 'asset-db', 'selection', 'preview', 'builder', 'panel', 'package',
+  'preferences', 'project',  // Cocos 3.8.x 内置模块，支持 query-config / set-config
 ]);
 
 export function registerIpcBridgeRoutes(post: RouteRegistrar, extensionName: string): void {

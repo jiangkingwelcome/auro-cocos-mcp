@@ -36,7 +36,8 @@
       "Bash(bash \"C:\\\\Users\\\\jiang\\\\.claude\\\\skills\\\\git-pushing\\\\scripts\\\\smart_commit.sh\" \"chore: update version.json v1.0.15 with CE zip SHA256\")",
       "Bash(bash \"C:\\\\Users\\\\jiang\\\\.claude\\\\skills\\\\git-pushing\\\\scripts\\\\smart_commit.sh\" \"chore: remove zip artifact from repo, add to .gitignore\")",
       "WebFetch(domain:raw.githubusercontent.com)",
-      "Bash(bash \"C:\\\\Users\\\\jiang\\\\.claude\\\\skills\\\\git-pushing\\\\scripts\\\\smart_commit.sh\" \"feat\\(updater\\): 主动通知热更新 - Editor.Dialog弹窗 + 控制台banner\")"
+      "Bash(bash \"C:\\\\Users\\\\jiang\\\\.claude\\\\skills\\\\git-pushing\\\\scripts\\\\smart_commit.sh\" \"feat\\(updater\\): 主动通知热更新 - Editor.Dialog弹窗 + 控制台banner\")",
+      "Bash(bash \"C:\\\\Users\\\\jiang\\\\.claude\\\\skills\\\\git-pushing\\\\scripts\\\\smart_commit.sh\" \"fix\\(updater\\): 修复控制台banner右边框错位，改用无右边框格式\")"
     ]
   }
 }
