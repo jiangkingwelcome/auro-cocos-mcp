@@ -34,7 +34,8 @@
       "Bash(powershell -Command \":*)",
       "Bash(powershell -Command \"\\(Get-FileHash ''E:\\\\gitproject\\\\cocos\\\\auro-cocos-mcp\\\\aura-for-cocos-ce-v1.0.15.zip'' -Algorithm SHA256\\).Hash.ToLower\\(\\)\")",
       "Bash(bash \"C:\\\\Users\\\\jiang\\\\.claude\\\\skills\\\\git-pushing\\\\scripts\\\\smart_commit.sh\" \"chore: update version.json v1.0.15 with CE zip SHA256\")",
-      "Bash(bash \"C:\\\\Users\\\\jiang\\\\.claude\\\\skills\\\\git-pushing\\\\scripts\\\\smart_commit.sh\" \"chore: remove zip artifact from repo, add to .gitignore\")"
+      "Bash(bash \"C:\\\\Users\\\\jiang\\\\.claude\\\\skills\\\\git-pushing\\\\scripts\\\\smart_commit.sh\" \"chore: remove zip artifact from repo, add to .gitignore\")",
+      "WebFetch(domain:raw.githubusercontent.com)"
     ]
   }
 }

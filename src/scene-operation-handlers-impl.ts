@@ -1,6 +1,6 @@
 // @ts-nocheck — 自 dist 迁移的完整 handler 映射；后续若拆分子模块再逐步补类型
 import type { CocosCC, CocosNode, OperationHandler } from './scene-types';
-import { isNodeRef, isComponentRef, resolveRefToRuntime } from './scene-types';
+import { isAssetRef, isNodeRef, isComponentRef } from './scene-types';
 import { ErrorCategory, logIgnored } from './error-utils';
 
 export interface SceneOperationDeps {
@@ -614,7 +614,15 @@ export function buildOperationHandlers(deps: SceneOperationDeps): Map<string, Op
                 catch (err) {
                     return { error: `创建 ${resolvedType} 网格失败: ${err instanceof Error ? err.message : String(err)}` };
                 }
-                const result = { success: true, uuid: nodeUuid, name, type: resolvedType };
+                const result = {
+                    success: true,
+                    uuid: nodeUuid,
+                    name,
+                    type: resolvedType,
+                    _structureViaEditorIPC: true,
+                    _meshMaterialViaRuntime: true,
+                    _note: 'Mesh/shadow/材质实例在运行时生成，仅 sharedMaterials 等通过 IPC 同步',
+                };
                 return (async () => {
                     await Promise.resolve(createRes);
                     await Promise.resolve(addRes);
@@ -1207,7 +1215,7 @@ export function buildOperationHandlers(deps: SceneOperationDeps): Map<string, Op
                 }
                 if (!applied.physics2D && !applied.physics3D)
                     return { error: '物理系统不可用（2D 和 3D 均未找到）', warnings };
-                return { success: true, ...applied, ...(warnings.length ? { warnings } : {}) };
+                return { success: true, ...applied, _runtimeOnly: true, _note: '直接修改 PhysicsSystem.instance，非场景序列化数据', ...(warnings.length ? { warnings } : {}) };
             }],
         // ─── create_skeleton_node: Spine/DragonBones node setup ──────────────
         ['create_skeleton_node', (_self, scene, p) => {
@@ -1685,51 +1693,54 @@ export function buildOperationHandlers(deps: SceneOperationDeps): Map<string, Op
                 const node = r.node;
                 const targetComp = p.component ? String(p.component) : '';
                 const components = node._components || [];
-                let resetCount = 0;
-                const resetResults = [];
-                for (const comp of components) {
-                    const compName = comp.constructor?.name ?? comp.__classname__ ?? 'Unknown';
-                    if (targetComp && compName !== targetComp && `cc.${compName}` !== targetComp)
-                        continue;
-                    const CompClass = comp.constructor;
-                    if (!CompClass)
-                        continue;
-                    try {
-                        const defaultInstance = new CompClass();
-                        const keys = Object.keys(defaultInstance);
-                        let propsReset = 0;
-                        for (const key of keys) {
-                            if (key.startsWith('__') || key === 'node' || key === 'uuid' || key === '_id' || key === 'enabled')
-                                continue;
-                            try {
-                                comp[key] = defaultInstance[key];
-                                propsReset++;
+                return (async () => {
+                    let resetCount = 0;
+                    const resetResults = [];
+                    for (const comp of components) {
+                        const compName = comp.constructor?.name ?? comp.__classname__ ?? 'Unknown';
+                        if (targetComp && compName !== targetComp && `cc.${compName}` !== targetComp)
+                            continue;
+                        const CompClass = comp.constructor;
+                        if (!CompClass)
+                            continue;
+                        try {
+                            const defaultInstance = new CompClass();
+                            const keys = Object.keys(defaultInstance);
+                            let propsReset = 0;
+                            let propsResetFailed = 0;
+                            for (const key of keys) {
+                                if (key.startsWith('__') || key === 'node' || key === 'uuid' || key === '_id' || key === 'enabled')
+                                    continue;
+                                const path = `${compName}.${key}`;
+                                const ok = await ipcResetProperty(uuid, path);
+                                if (ok)
+                                    propsReset++;
+                                else
+                                    propsResetFailed++;
                             }
-                            catch (e) {
-                                logIgnored(ErrorCategory.PROPERTY_ASSIGN, `属性 "${key}" 可能为只读，重置跳过`, e);
-                            }
+                            resetResults.push({ component: compName, propertiesReset: propsReset, propertiesResetFailed: propsResetFailed });
+                            resetCount++;
                         }
-                        resetResults.push({ component: compName, propertiesReset: propsReset });
-                        resetCount++;
+                        catch (e) {
+                            logIgnored(ErrorCategory.REFLECTION, `组件 "${compName}" 无法创建默认实例`, e);
+                            resetResults.push({ component: compName, error: '无法创建默认实例' });
+                        }
                     }
-                    catch (e) {
-                        logIgnored(ErrorCategory.REFLECTION, `组件 "${compName}" 无法创建默认实例`, e);
-                        resetResults.push({ component: compName, error: '无法创建默认实例' });
+                    const result = {
+                        success: true,
+                        uuid,
+                        name: node.name,
+                        componentsReset: resetCount,
+                        details: resetResults,
+                        _viaEditorIPC: true,
+                    };
+                    if (resetCount > 0) {
+                        if (await deps.notifyEditorProperty(uuid, 'active', { type: 'boolean', value: node.active })) {
+                            result._inspectorRefreshed = true;
+                        }
                     }
-                }
-                const result = {
-                    success: true, uuid, name: node.name,
-                    componentsReset: resetCount,
-                    details: resetResults,
-                };
-                if (resetCount > 0) {
-                    return (async () => {
-                        await deps.notifyEditorProperty(uuid, 'active', { type: 'boolean', value: node.active });
-                        result._inspectorRefreshed = true;
-                        return result;
-                    })();
-                }
-                return result;
+                    return result;
+                })();
             }],
         ['set_camera_property', (_self, scene, p) => {
                 const cc = getCC();
@@ -2285,7 +2296,7 @@ export function buildOperationHandlers(deps: SceneOperationDeps): Map<string, Op
                                 target[k] = v;
                         }
                     }
-                    return { success: true, preset, applied: presetData };
+                    return { success: true, preset, applied: presetData, _runtimeOnly: true, _note: '仅修改运行时 scene.globals，不经过 scene set-property，可能不会随场景保存' };
                 }
                 if (!subsystem)
                     return { error: '缺少 subsystem 参数（ambient/shadows/fog/skybox）或 preset 参数' };
@@ -2369,7 +2380,7 @@ export function buildOperationHandlers(deps: SceneOperationDeps): Map<string, Op
                 }
                 if (Object.keys(changed).length === 0)
                     return { error: `未指定任何要修改的 ${subsystem} 属性` };
-                return { success: true, subsystem, changed };
+                return { success: true, subsystem, changed, _runtimeOnly: true, _note: '仅修改运行时 scene.globals' };
             }],
         // ─── P1: set_material_define — set shader compile macros ─────────────
         ['set_material_define', (_self, scene, p) => {
@@ -2660,8 +2671,7 @@ export function buildOperationHandlers(deps: SceneOperationDeps): Map<string, Op
                 };
                 if (enable) {
                     if ('grayscale' in sprite) {
-                        sprite.grayscale = true;
-                        return notifySprite({ success: true, uuid, name: r.node.name, grayscale: true, method: 'grayscale_property' }, 'grayscale', true);
+                        return notifySprite({ success: true, uuid, name: r.node.name, grayscale: true, method: 'grayscale_property', _viaEditorIPC: true }, 'grayscale', true);
                     }
                     const Mat = cc.Material;
                     const grayMat = Mat?.getBuiltinMaterial?.('builtin-2d-gray-sprite');
@@ -2669,17 +2679,16 @@ export function buildOperationHandlers(deps: SceneOperationDeps): Map<string, Op
                         const clone = typeof grayMat.clone === 'function'
                             ? grayMat.clone() : grayMat;
                         sprite.customMaterial = clone;
-                        return notifySprite({ success: true, uuid, name: r.node.name, grayscale: true, method: 'gray_sprite_material' }, 'customMaterial', clone);
+                        return notifySprite({ success: true, uuid, name: r.node.name, grayscale: true, method: 'gray_sprite_material', _assignsRuntimeFirst: true }, 'customMaterial', clone);
                     }
                     return { error: '无法启用灰度：Sprite 没有 grayscale 属性，且 builtin-2d-gray-sprite 材质不可用' };
                 }
                 else {
                     if ('grayscale' in sprite) {
-                        sprite.grayscale = false;
-                        return notifySprite({ success: true, uuid, name: r.node.name, grayscale: false, method: 'grayscale_property' }, 'grayscale', false);
+                        return notifySprite({ success: true, uuid, name: r.node.name, grayscale: false, method: 'grayscale_property', _viaEditorIPC: true }, 'grayscale', false);
                     }
                     sprite.customMaterial = null;
-                    return notifySprite({ success: true, uuid, name: r.node.name, grayscale: false, method: 'remove_custom_material' }, 'customMaterial', null);
+                    return notifySprite({ success: true, uuid, name: r.node.name, grayscale: false, method: 'remove_custom_material', _assignsRuntimeFirst: true }, 'customMaterial', null);
                 }
             }],
         // ─── P2: camera_screenshot — capture camera view via RenderTexture ───
@@ -2752,7 +2761,7 @@ export function buildOperationHandlers(deps: SceneOperationDeps): Map<string, Op
                 }
             }],
         // ── Script binding operations ───────────────────────────────────────────
-        ['set_component_properties', (_self, scene, p) => {
+        ['set_component_properties', (self, scene, p) => {
                 const cc = getCC();
                 const { js } = cc;
                 const uuid = String(p.uuid ?? '');
@@ -2774,51 +2783,72 @@ export function buildOperationHandlers(deps: SceneOperationDeps): Map<string, Op
                 if (!props || typeof props !== 'object' || Object.keys(props).length === 0) {
                     return { error: '缺少 properties 参数（要设置的属性键值对）' };
                 }
-                const changed = {};
-                const errors = [];
-                for (const [key, val] of Object.entries(props)) {
-                    if (key.startsWith('__') || key === 'constructor' || key === 'prototype') {
-                        errors.push(`属性 "${key}" 不允许被设置`);
-                        continue;
-                    }
-                    try {
-                        if (isNodeRef(val) || isComponentRef(val)) {
-                            const resolved = resolveRefToRuntime(val, scene, deps.findNodeByUuid, js);
-                            if (!resolved) {
-                                errors.push(`设置 ${key} 失败: 无法解析引用 (节点或组件未找到)`);
+                return (async () => {
+                    const changed = {};
+                    const errors = [];
+                    const assignedRuntimeOnly = [];
+                    for (const [key, val] of Object.entries(props)) {
+                        if (key.startsWith('__') || key === 'constructor' || key === 'prototype') {
+                            errors.push(`属性 "${key}" 不允许被设置`);
+                            continue;
+                        }
+                        try {
+                            if (isAssetRef(val) || isNodeRef(val) || isComponentRef(val)) {
+                                const res = await Promise.resolve(self.setComponentProperty(uuid, compName, key, val));
+                                if (res && typeof res === 'object' && 'error' in res)
+                                    errors.push(`设置 ${key} 失败: ${String((res).error)}`);
+                                else
+                                    changed[key] = val;
                                 continue;
                             }
-                            comp[key] = resolved;
-                            changed[key] = val;
-                        }
-                        else {
-                            comp[key] = val;
-                            changed[key] = val;
-                        }
-                    }
-                    catch (err) {
-                        errors.push(`设置 ${key} 失败: ${err instanceof Error ? err.message : String(err)}`);
-                    }
-                }
-                const result = {
-                    success: Object.keys(changed).length > 0,
-                    uuid, name: r.node.name, component: compName,
-                    changed,
-                    ...(errors.length ? { errors } : {}),
-                };
-                if (Object.keys(changed).length > 0) {
-                    return (async () => {
-                        for (const [key, val] of Object.entries(changed)) {
                             if (typeof val === 'boolean' || typeof val === 'number' || typeof val === 'string') {
                                 const dumpType = typeof val === 'boolean' ? 'boolean' : typeof val === 'number' ? 'number' : 'string';
-                                await deps.notifyEditorComponentProperty(uuid, r.node, comp, key, { type: dumpType, value: val });
+                                const ok = await deps.notifyEditorComponentProperty(uuid, r.node, comp, key, { type: dumpType, value: val });
+                                if (ok)
+                                    changed[key] = val;
+                                else
+                                    errors.push(`IPC 设置 ${key} 失败`);
+                                continue;
                             }
+                            if (val && typeof val === 'object' && !Array.isArray(val) && 'r' in val) {
+                                const o = val;
+                                const ok = await deps.notifyEditorComponentProperty(uuid, r.node, comp, key, {
+                                    type: 'cc.Color',
+                                    value: {
+                                        r: Math.max(0, Math.min(255, Number(o.r ?? 0))),
+                                        g: Math.max(0, Math.min(255, Number(o.g ?? 0))),
+                                        b: Math.max(0, Math.min(255, Number(o.b ?? 0))),
+                                        a: Math.max(0, Math.min(255, Number(o.a ?? 255))),
+                                    },
+                                });
+                                if (ok)
+                                    changed[key] = val;
+                                else
+                                    errors.push(`IPC 设置 ${key} (Color) 失败`);
+                                continue;
+                            }
+                            comp[key] = val;
+                            changed[key] = val;
+                            assignedRuntimeOnly.push(key);
                         }
+                        catch (err) {
+                            errors.push(`设置 ${key} 失败: ${err instanceof Error ? err.message : String(err)}`);
+                        }
+                    }
+                    const result = {
+                        success: Object.keys(changed).length > 0 && errors.length === 0,
+                        uuid,
+                        name: r.node.name,
+                        component: compName,
+                        changed,
+                        ...(errors.length ? { errors } : {}),
+                        ...(assignedRuntimeOnly.length ? { assignedRuntimeOnly, _note: 'assignedRuntimeOnly 中的键仅写了运行时对象，未保证 Inspector/保存一致' } : {}),
+                    };
+                    if (Object.keys(changed).length > 0 && errors.length === 0) {
                         result._inspectorRefreshed = true;
-                        return result;
-                    })();
-                }
-                return result;
+                    }
+                    return result;
+                })();
             }],
         ['attach_script', (self, scene, p) => {
                 const cc = getCC();
@@ -2850,59 +2880,81 @@ export function buildOperationHandlers(deps: SceneOperationDeps): Map<string, Op
                 const addResult = self.addComponent(uuid, scriptName);
                 if (addResult && typeof addResult === 'object' && 'error' in addResult)
                     return addResult;
-                const comp = r.node.getComponent?.(cls);
-                if (!comp)
-                    return { error: `添加脚本组件 ${scriptName} 失败` };
-                const props = p.properties;
-                const changed = {};
-                const propErrors = [];
-                if (props && typeof props === 'object') {
-                    for (const [key, val] of Object.entries(props)) {
-                        if (key.startsWith('__') || key === 'constructor' || key === 'prototype') {
-                            propErrors.push(`属性 "${key}" 不允许被设置`);
-                            continue;
-                        }
-                        try {
-                            if (isNodeRef(val) || isComponentRef(val)) {
-                                const resolved = resolveRefToRuntime(val, scene, deps.findNodeByUuid, js);
-                                if (!resolved) {
-                                    propErrors.push(`设置 ${key} 失败: 无法解析引用 (节点或组件未找到)`);
+                return (async () => {
+                    const baseResult = await Promise.resolve(addResult);
+                    const r2 = requireNode(scene, uuid);
+                    if ('error' in r2)
+                        return { error: r2.error, _addComponentResult: baseResult };
+                    const comp = r2.node.getComponent?.(cls);
+                    if (!comp)
+                        return { error: `添加脚本组件 ${scriptName} 失败`, _addComponentResult: baseResult };
+                    const props = p.properties;
+                    const changed = {};
+                    const propErrors = [];
+                    const assignedRuntimeOnly = [];
+                    if (props && typeof props === 'object') {
+                        for (const [key, val] of Object.entries(props)) {
+                            if (key.startsWith('__') || key === 'constructor' || key === 'prototype') {
+                                propErrors.push(`属性 "${key}" 不允许被设置`);
+                                continue;
+                            }
+                            try {
+                                if (isAssetRef(val) || isNodeRef(val) || isComponentRef(val)) {
+                                    const res = await Promise.resolve(self.setComponentProperty(uuid, scriptName, key, val));
+                                    if (res && typeof res === 'object' && 'error' in res)
+                                        propErrors.push(`设置 ${key} 失败: ${String(res.error)}`);
+                                    else
+                                        changed[key] = val;
                                     continue;
                                 }
-                                comp[key] = resolved;
-                                changed[key] = val;
-                            }
-                            else {
+                                if (typeof val === 'boolean' || typeof val === 'number' || typeof val === 'string') {
+                                    const dumpType = typeof val === 'boolean' ? 'boolean' : typeof val === 'number' ? 'number' : 'string';
+                                    const ok = await deps.notifyEditorComponentProperty(uuid, r2.node, comp, key, { type: dumpType, value: val });
+                                    if (ok)
+                                        changed[key] = val;
+                                    else
+                                        propErrors.push(`IPC 设置 ${key} 失败`);
+                                    continue;
+                                }
+                                if (val && typeof val === 'object' && !Array.isArray(val) && 'r' in val) {
+                                    const o = val;
+                                    const ok = await deps.notifyEditorComponentProperty(uuid, r2.node, comp, key, {
+                                        type: 'cc.Color',
+                                        value: {
+                                            r: Math.max(0, Math.min(255, Number(o.r ?? 0))),
+                                            g: Math.max(0, Math.min(255, Number(o.g ?? 0))),
+                                            b: Math.max(0, Math.min(255, Number(o.b ?? 0))),
+                                            a: Math.max(0, Math.min(255, Number(o.a ?? 255))),
+                                        },
+                                    });
+                                    if (ok)
+                                        changed[key] = val;
+                                    else
+                                        propErrors.push(`IPC 设置 ${key} (Color) 失败`);
+                                    continue;
+                                }
                                 comp[key] = val;
                                 changed[key] = val;
+                                assignedRuntimeOnly.push(key);
                             }
-                        }
-                        catch (err) {
-                            propErrors.push(`设置 ${key} 失败: ${err instanceof Error ? err.message : String(err)}`);
+                            catch (err) {
+                                propErrors.push(`设置 ${key} 失败: ${err instanceof Error ? err.message : String(err)}`);
+                            }
                         }
                     }
-                }
-                const result = {
-                    success: true, uuid, name: r.node.name, script: scriptName,
-                    propertiesSet: Object.keys(changed).length > 0 ? changed : undefined,
-                    ...(propErrors.length ? { propertyErrors: propErrors } : {}),
-                };
-                if (Object.keys(changed).length > 0) {
-                    return (async () => {
-                        const baseResult = await Promise.resolve(addResult);
-                        Object.assign(result, { _addComponentResult: baseResult });
-                        for (const [key, val] of Object.entries(changed)) {
-                            if (typeof val === 'boolean' || typeof val === 'number' || typeof val === 'string') {
-                                const dumpType = typeof val === 'boolean' ? 'boolean' : typeof val === 'number' ? 'number' : 'string';
-                                await deps.notifyEditorComponentProperty(uuid, r.node, comp, key, { type: dumpType, value: val });
-                            }
-                        }
+                    const result = {
+                        success: propErrors.length === 0,
+                        uuid,
+                        name: r2.node.name,
+                        script: scriptName,
+                        _addComponentResult: baseResult,
+                        ...(Object.keys(changed).length > 0 ? { propertiesSet: changed } : {}),
+                        ...(propErrors.length ? { propertyErrors: propErrors } : {}),
+                        ...(assignedRuntimeOnly.length ? { assignedRuntimeOnly, _note: 'assignedRuntimeOnly 仅运行时赋值' } : {}),
+                    };
+                    if (Object.keys(changed).length > 0 && propErrors.length === 0) {
                         result._inspectorRefreshed = true;
-                        return result;
-                    })();
-                }
-                return (async () => {
-                    await Promise.resolve(addResult);
+                    }
                     return result;
                 })();
             }],
