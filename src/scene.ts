@@ -94,9 +94,8 @@ const COMPONENT_PROPERTY_BLOCKLIST = new Set([
 ]);
 
 // ─── Editor IPC notification helpers ────────────────────────────────────────
-// Fire-and-forget: notify the editor of a property change so it records an
-// undo entry, refreshes Inspector, and marks the scene dirty for serialization.
-// Failures are silently logged — the runtime modification already took effect.
+// 优先仅通过 set-property / remove-node 等 IPC 写入可序列化场景数据；失败则返回错误，
+// 避免「只改运行时内存、保存丢失」的双写语义。
 
 async function notifyEditorProperty(
   uuid: string, path: string, dump: { type: string; value: unknown },
@@ -202,6 +201,16 @@ async function ipcSetParent(nodeUuid: string, parentUuid: string): Promise<void>
   });
 }
 
+async function ipcResetProperty(nodeUuid: string, path: string): Promise<boolean> {
+  try {
+    await Editor.Message.request('scene', 'reset-property', { uuid: nodeUuid, path });
+    return true;
+  } catch (e) {
+    logIgnored(ErrorCategory.EDITOR_IPC, `reset-property 失败 (${path})`, e);
+    return false;
+  }
+}
+
 async function ipcDuplicateNode(nodeUuid: string): Promise<string> {
   const result = await Editor.Message.request('scene', 'duplicate-node', {
     uuids: [nodeUuid],
@@ -216,6 +225,35 @@ async function ipcDuplicateNode(nodeUuid: string): Promise<string> {
   }
   if (typeof result === 'string') return result;
   throw new Error(`duplicate-node IPC 返回了无法识别的格式: ${JSON.stringify(result)}`);
+}
+
+/** 通过 move-array-element 调整节点在父节点 children 中的顺序（可 Undo / 可保存） */
+async function ipcMoveArrayElementForChild(parentUuid: string, fromIndex: number, toIndex: number): Promise<boolean> {
+  const pathCandidates = [`_children.${fromIndex}`, `children.${fromIndex}`];
+  for (const path of pathCandidates) {
+    try {
+      await Editor.Message.request('scene', 'move-array-element', {
+        uuid: parentUuid,
+        path,
+        target: toIndex,
+      });
+      return true;
+    } catch (e) {
+      logIgnored(ErrorCategory.EDITOR_IPC, `move-array-element 失败 (${path})`, e);
+    }
+  }
+  return false;
+}
+
+async function setSiblingIndexViaEditor(nodeUuid: string, targetIndex: number): Promise<boolean> {
+  const scene = getScene();
+  if (!scene) return false;
+  const node = findNodeByUuid(scene, nodeUuid);
+  if (!node?.parent) return false;
+  const parentUuid = String(node.parent.uuid ?? node.parent._id ?? '');
+  const currentIndex = node.getSiblingIndex();
+  if (currentIndex === targetIndex) return true;
+  return ipcMoveArrayElementForChild(parentUuid, currentIndex, targetIndex);
 }
 
 const SPRITE_NAMES = new Set(['Sprite', 'cc.Sprite']);
@@ -306,7 +344,14 @@ function requireNode(scene: CocosNode, uuid: string): { node: CocosNode } | { er
   return { node };
 }
 
-const deps = { getCC, getNodePath, findNodeByUuid, findNodeByName, resolveParent, requireNode, notifyEditorProperty, notifyEditorRemoveNode, notifyEditorComponentProperty, ipcDuplicateNode };
+const deps = {
+  getCC, getNodePath, findNodeByUuid, findNodeByName, resolveParent, requireNode,
+  notifyEditorProperty, notifyEditorRemoveNode, notifyEditorComponentProperty, ipcDuplicateNode,
+  setSiblingIndexViaEditor,
+  ipcCreateNode,
+  ipcCreateComponent,
+  ipcResetProperty,
+};
 const queryHandlers = buildQueryHandlers(deps);
 const operationHandlers = buildOperationHandlers(deps);
 
@@ -421,18 +466,28 @@ export const methods = {
   },
 
   setNodePosition(uuid: string, x: number, y: number, z: number) {
-    const { Vec3 } = getCC();
     const scene = getScene();
     if (!scene) return { error: '没有打开的场景' };
     const node = findNodeByUuid(scene, uuid);
     if (!node) return { error: `未找到节点: ${uuid}` };
-    node.setPosition(new Vec3(x, y, z));
-    const result: Record<string, unknown> = { success: true, uuid, name: node.name, position: { x, y, z } };
     return (async () => {
-      if (await notifyEditorProperty(uuid, 'position', { type: 'cc.Vec3', value: { x, y, z } })) {
-        result._inspectorRefreshed = true;
+      const ok = await notifyEditorProperty(uuid, 'position', { type: 'cc.Vec3', value: { x, y, z } });
+      if (!ok) {
+        return {
+          success: false,
+          uuid,
+          name: node.name,
+          error: 'set-property(position) 失败，本地坐标未能写入可保存数据',
+        };
       }
-      return result;
+      return {
+        success: true,
+        uuid,
+        name: node.name,
+        position: { x, y, z },
+        _viaEditorIPC: true,
+        _inspectorRefreshed: true,
+      };
     })();
   },
 
@@ -441,29 +496,50 @@ export const methods = {
     if (!scene) return { error: '没有打开的场景' };
     const node = findNodeByUuid(scene, uuid);
     if (!node) return { error: `未找到节点: ${uuid}` };
-    node.setRotationFromEuler(x, y, z);
-    const result: Record<string, unknown> = { success: true, uuid, name: node.name, rotation: { x, y, z } };
     return (async () => {
-      if (await notifyEditorProperty(uuid, 'rotation', { type: 'cc.Vec3', value: { x, y, z } })) {
-        result._inspectorRefreshed = true;
+      const ok = await notifyEditorProperty(uuid, 'rotation', { type: 'cc.Vec3', value: { x, y, z } });
+      if (!ok) {
+        return {
+          success: false,
+          uuid,
+          name: node.name,
+          error: 'set-property(rotation) 失败，旋转未能写入可保存数据',
+        };
       }
-      return result;
+      return {
+        success: true,
+        uuid,
+        name: node.name,
+        rotation: { x, y, z },
+        _viaEditorIPC: true,
+        _inspectorRefreshed: true,
+      };
     })();
   },
 
   setNodeScale(uuid: string, x: number, y: number, z: number) {
-    const { Vec3 } = getCC();
     const scene = getScene();
     if (!scene) return { error: '没有打开的场景' };
     const node = findNodeByUuid(scene, uuid);
     if (!node) return { error: `未找到节点: ${uuid}` };
-    node.setScale(new Vec3(x, y, z));
-    const result: Record<string, unknown> = { success: true, uuid, name: node.name, scale: { x, y, z } };
     return (async () => {
-      if (await notifyEditorProperty(uuid, 'scale', { type: 'cc.Vec3', value: { x, y, z } })) {
-        result._inspectorRefreshed = true;
+      const ok = await notifyEditorProperty(uuid, 'scale', { type: 'cc.Vec3', value: { x, y, z } });
+      if (!ok) {
+        return {
+          success: false,
+          uuid,
+          name: node.name,
+          error: 'set-property(scale) 失败，缩放未能写入可保存数据',
+        };
       }
-      return result;
+      return {
+        success: true,
+        uuid,
+        name: node.name,
+        scale: { x, y, z },
+        _viaEditorIPC: true,
+        _inspectorRefreshed: true,
+      };
     })();
   },
 
@@ -473,13 +549,24 @@ export const methods = {
     const node = findNodeByUuid(scene, uuid);
     if (!node) return { error: `未找到节点: ${uuid}` };
     const oldName = node.name;
-    node.name = name;
-    const result: Record<string, unknown> = { success: true, uuid, oldName, newName: name };
     return (async () => {
-      if (await notifyEditorProperty(uuid, 'name', { type: 'string', value: name })) {
-        result._inspectorRefreshed = true;
+      const ok = await notifyEditorProperty(uuid, 'name', { type: 'string', value: name });
+      if (!ok) {
+        return {
+          success: false,
+          uuid,
+          oldName,
+          error: 'set-property(name) 失败，节点名未能写入可保存数据',
+        };
       }
-      return result;
+      return {
+        success: true,
+        uuid,
+        oldName,
+        newName: name,
+        _viaEditorIPC: true,
+        _inspectorRefreshed: true,
+      };
     })();
   },
 
@@ -488,13 +575,22 @@ export const methods = {
     if (!scene) return { error: '没有打开的场景' };
     const node = findNodeByUuid(scene, uuid);
     if (!node) return { error: `未找到节点: ${uuid}` };
-    node.active = active;
-    const result: Record<string, unknown> = { success: true, uuid, active };
     return (async () => {
-      if (await notifyEditorProperty(uuid, 'active', { type: 'boolean', value: active })) {
-        result._inspectorRefreshed = true;
+      const ok = await notifyEditorProperty(uuid, 'active', { type: 'boolean', value: active });
+      if (!ok) {
+        return {
+          success: false,
+          uuid,
+          error: 'set-property(active) 失败，显隐状态未能写入可保存数据',
+        };
       }
-      return result;
+      return {
+        success: true,
+        uuid,
+        active,
+        _viaEditorIPC: true,
+        _inspectorRefreshed: true,
+      };
     })();
   },
 
@@ -522,9 +618,14 @@ export const methods = {
     return (async () => {
       const removed = await notifyEditorRemoveNode(uuid);
       if (!removed) {
-        node.destroy();
+        return {
+          success: false,
+          uuid,
+          name,
+          error: 'remove-node IPC 失败，已跳过销毁（避免仅内存删除导致无法保存/不同步）',
+        };
       }
-      return { success: true, uuid, name, _editorIPC: removed };
+      return { success: true, uuid, name, _editorIPC: true, _viaEditorIPC: true };
     })();
   },
 

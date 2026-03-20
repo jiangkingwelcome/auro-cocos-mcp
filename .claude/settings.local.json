@@ -25,7 +25,15 @@
       "mcp__filesystem__get_file_info",
       "mcp__github__get_file_contents",
       "mcp__github__create_or_update_file",
-      "Bash(python -c \"import sys,json,base64; d=json.load\\(sys.stdin\\); print\\(base64.b64decode\\(d[''''content'''']\\).decode\\(\\)\\)\")"
+      "Bash(python -c \"import sys,json,base64; d=json.load\\(sys.stdin\\); print\\(base64.b64decode\\(d[''''content'''']\\).decode\\(\\)\\)\")",
+      "Bash(gh release:*)",
+      "Bash(python -c \"import sys,json; p=json.load\\(sys.stdin\\); print\\(p.get\\(''''scripts'''',{}\\).get\\(''''build:release'''',''''NO''''\\)\\)\")",
+      "Bash(python3 -c \"import sys,json; p=json.load\\(sys.stdin\\); print\\(p.get\\(''''version''''\\), p.get\\(''''name''''\\)\\)\")",
+      "Bash(python3 -c \":*)",
+      "Bash(powershell -Command \"\\(Get-Content package.json -Encoding UTF8\\) -replace ''\"\"version\"\": \"\"1.0.14\"\"'',''\"\"version\"\": \"\"1.0.15\"\"'' | Set-Content package.json -Encoding UTF8\")",
+      "Bash(powershell -Command \":*)",
+      "Bash(powershell -Command \"\\(Get-FileHash ''E:\\\\gitproject\\\\cocos\\\\auro-cocos-mcp\\\\aura-for-cocos-ce-v1.0.15.zip'' -Algorithm SHA256\\).Hash.ToLower\\(\\)\")",
+      "Bash(bash \"C:\\\\Users\\\\jiang\\\\.claude\\\\skills\\\\git-pushing\\\\scripts\\\\smart_commit.sh\" \"chore: update version.json v1.0.15 with CE zip SHA256\")"
     ]
   }
 }
