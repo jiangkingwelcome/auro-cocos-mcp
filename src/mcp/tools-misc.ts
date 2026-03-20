@@ -76,7 +76,16 @@ Returns: get→{value}. set→{success,key,value,scope}. list→{preferences:[{k
             return text({ success: true, key, scope, value: p.value });
           } catch (e) {
             logIgnored(ErrorCategory.EDITOR_IPC, `通过 IPC 写入偏好 "${key}" 失败，回退到 HTTP 接口`, e);
-            return text(await bridgePost('/api/preferences/set', { key, value: p.value, scope }));
+            const result = await bridgePost('/api/preferences/set', { key, value: p.value, scope }) as Record<string, unknown>;
+            // 如果后端返回了 warning 字段，把它拼接到返回文本结尾，让 AI 直接读到并转述给用户
+            if (result && typeof result.warning === 'string') {
+              const resultText = JSON.stringify(result, null, 2);
+              const warningText = `\n\n🟡 重要提示：${result.warning}`;
+              return {
+                content: [{ type: 'text' as const, text: resultText + warningText }],
+              };
+            }
+            return text(result);
           }
         }
 

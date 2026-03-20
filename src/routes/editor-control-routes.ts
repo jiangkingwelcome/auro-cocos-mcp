@@ -1,3 +1,6 @@
+import fs from 'fs';
+import os from 'os';
+import path from 'path';
 import { ErrorCategory, logIgnored } from '../error-utils';
 import type { RouteRegistrar } from './route-types';
 import { ipc, safeEditorMsg } from './route-types';
@@ -117,17 +120,45 @@ export function registerEditorControlRoutes(get: RouteRegistrar, post: RouteRegi
     info: 'Cocos 3.8.x 面板列表（静态）',
   }));
 
+  // ── 已知的编辑器全局设置文件映射表 ──────────────────────────────────────────
+  // 关键发现：Cocos Creator 3.8.x 将语言等全局设置写在独立磁盘文件里，不走 IPC/Profile API
+  const COCOS_EDITOR_BASE   = path.join(os.homedir(), '.CocosCreator', 'editor');
+  const COCOS_PROFILES_BASE = path.join(os.homedir(), '.CocosCreator', 'profiles');
+
+  const EDITOR_FILE_KEYS: Record<string, { file: string; field: string; restartRequired: boolean }> = {
+    'general.language': { file: path.join(COCOS_EDITOR_BASE,   'i18n.json'),     field: 'language', restartRequired: true  },
+    'language':         { file: path.join(COCOS_EDITOR_BASE,   'i18n.json'),     field: 'language', restartRequired: true  },
+    'general.theme':    { file: path.join(COCOS_PROFILES_BASE, 'settings.json'), field: 'theme',    restartRequired: false },
+  };
+
+  function readEditorFileKey(m: { file: string; field: string }): unknown {
+    try { return fs.existsSync(m.file) ? (JSON.parse(fs.readFileSync(m.file, 'utf-8'))[m.field] ?? null) : null; }
+    catch { return null; }
+  }
+
+  function writeEditorFileKey(m: { file: string; field: string }, value: unknown): void {
+    let raw: Record<string, unknown> = {};
+    try { if (fs.existsSync(m.file)) raw = JSON.parse(fs.readFileSync(m.file, 'utf-8')); } catch { /* start fresh */ }
+    raw[m.field] = value;
+    fs.mkdirSync(path.dirname(m.file), { recursive: true });
+    fs.writeFileSync(m.file, JSON.stringify(raw, null, 2), 'utf-8');
+  }
+
   get('/api/preferences/get', async (params) => {
     const key = params.key || '';
     const scope = resolvePreferenceScope(params.scope);
+
+    // 已知 key：直接读磁盘文件，最可靠
+    if (key && EDITOR_FILE_KEYS[key]) {
+      const mapping = EDITOR_FILE_KEYS[key];
+      return { success: true, key, scope, value: readEditorFileKey(mapping), source: 'file' };
+    }
+
     try {
-      // 优先走 Cocos 3.8.x 内置 preferences 模块的 query-config IPC
-      // 进行 scope + key 提交：query-config(“global”, “general.language”)
       const result = await ipc('preferences', 'query-config', scope, key || '*');
       return { success: true, key: key || '*', scope, value: result ?? null };
     } catch (e) {
       logIgnored(ErrorCategory.EDITOR_IPC, `preferences query-config IPC 失败，尝试 Profile API`, e);
-      // 降级：尝试旧版 Editor.Profile.getConfig
       if (typeof Editor.Profile?.getConfig === 'function') {
         try {
           const val = await Editor.Profile.getConfig(scope, key);
@@ -146,18 +177,39 @@ export function registerEditorControlRoutes(get: RouteRegistrar, post: RouteRegi
     if (!payload.key) return { error: '缺少 key 参数' };
     const scope = resolvePreferenceScope(payload.scope);
     if (scope === 'default') return { error: 'default 作用域只读，不能写入' };
+
+    // 已知 key：直接写磁盘文件，真正生效
+    if (EDITOR_FILE_KEYS[payload.key]) {
+      const mapping = EDITOR_FILE_KEYS[payload.key];
+      try {
+        writeEditorFileKey(mapping, payload.value);
+        return {
+          success: true,
+          key: payload.key,
+          scope,
+          value: payload.value,
+          source: 'file',
+          restartRequired: mapping.restartRequired,
+          // ⚠️ warning 字段供 MCP 工具层读取并显示黄色重启提示
+          warning: mapping.restartRequired
+            ? '⚠️ 设置已写入磁盘，但需要重启 Cocos Creator 编辑器才能生效。'
+            : undefined,
+        };
+      } catch (err: unknown) {
+        const msg = err instanceof Error ? err.message : String(err);
+        return { error: `写入文件失败: ${msg}` };
+      }
+    }
+
     try {
-      // 优先走 Cocos 3.8.x 内置 preferences 模块的 set-config IPC
-      // 这是真正写入编辑器全局偏好设置的正确方式（和在界面上手动改是一样的效果）
       await ipc('preferences', 'set-config', scope, payload.key, payload.value);
       return { success: true, key: payload.key, scope, value: payload.value };
     } catch (e) {
       logIgnored(ErrorCategory.EDITOR_IPC, `preferences set-config IPC 失败，尝试 Profile API`, e);
-      // 降级：尝试旧版 Editor.Profile.setConfig
       if (typeof Editor.Profile?.setConfig === 'function') {
         try {
           await Editor.Profile.setConfig(scope, payload.key, payload.value);
-          return { success: true, key: payload.key, scope, value: payload.value, note: '通过 Profile API 写入，可能不影响编辑器全局设置' };
+          return { success: true, key: payload.key, scope, value: payload.value, note: '通过 Profile API 写入' };
         } catch (err2: unknown) {
           const msg = err2 instanceof Error ? err2.message : String(err2);
           return { error: `写入偏好失败: ${msg}` };

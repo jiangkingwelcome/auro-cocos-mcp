@@ -355,9 +355,7 @@ function writeNotifiedVersion(root: string, version: string): void {
  */
 async function notifyAvailable(info: UpdateInfo, root: string): Promise<void> {
   // ① 控制台单行提示（降级保底，简短不扰）
-  console.warn(
-    `\x1b[33m[Aura] 有新版本 v${info.latestVersion} 可用，打开插件面板查看详情\x1b[0m`,
-  );
+  console.warn(`[Aura] 有新版本 v${info.latestVersion} 可用，打开插件面板查看详情`);
 
   // ② Editor.Dialog 一次性弹窗（每个新版本只弹一次）
   //    只告知"有更新"，不堆砌 changelog —— 详情留给面板展示
