@@ -413,8 +413,21 @@ describe('scene_operation — prefab & clipboard actions (editorMsg)', () => {
     expect(editorMsg).toHaveBeenCalledWith('scene', 'create-prefab', 'u1', 'db://assets/prefabs/Test.prefab');
   });
 
-  it.skip('clipboard_copy — Pro exclusive', () => {});
-  it.skip('clipboard_paste — Pro exclusive', () => {});
+  it('clipboard_copy 透传 dispatchOperation', async () => {
+    const sceneMethod = vi.fn().mockResolvedValue({ success: true });
+    const server = buildCocosToolServer(makeCtx({ sceneMethod }));
+    const result = await server.callTool('scene_operation', { action: 'clipboard_copy', uuid: 'u1' });
+    expect(result.isError).toBeFalsy();
+    expect(sceneMethod).toHaveBeenCalledWith('dispatchOperation', [expect.objectContaining({ action: 'clipboard_copy', uuid: 'u1' })]);
+  });
+
+  it('clipboard_paste 透传 dispatchOperation', async () => {
+    const sceneMethod = vi.fn().mockResolvedValue({ success: true });
+    const server = buildCocosToolServer(makeCtx({ sceneMethod }));
+    const result = await server.callTool('scene_operation', { action: 'clipboard_paste', parentUuid: 'u1' });
+    expect(result.isError).toBeFalsy();
+    expect(sceneMethod).toHaveBeenCalledWith('dispatchOperation', [expect.objectContaining({ action: 'clipboard_paste', parentUuid: 'u1' })]);
+  });
 
   it('instantiate_prefab calls editorMsg', async () => {
     const editorMsg = vi.fn().mockResolvedValue('prefab-uuid');
@@ -488,7 +501,7 @@ describe('scene_operation — NEW_SCENE_OPS (dispatchOperation with fallback)', 
     { action: 'attach_script', params: { uuid: 'u1', script: 'PlayerCtrl' } },
     { action: 'set_component_properties', params: { uuid: 'u1', component: 'Label', properties: { string: 'Hi' } } },
     { action: 'detach_script', params: { uuid: 'u1', script: 'PlayerCtrl' } },
-    { action: 'ensure_2d_canvas', params: {} },
+    { action: 'ensure_2d_canvas', params: { confirmCreateCanvas: true } },
   ];
 
   for (const { action, params } of newSceneOps) {
@@ -541,7 +554,7 @@ describe('scene_operation — ensure_2d_canvas', () => {
       .mockResolvedValue({ success: true });
     const server = buildCocosToolServer(makeCtx({ sceneMethod }));
 
-    const result = await server.callTool('scene_operation', { action: 'ensure_2d_canvas' });
+    const result = await server.callTool('scene_operation', { action: 'ensure_2d_canvas', confirmCreateCanvas: true });
     expect(result.isError).toBeFalsy();
     const data = parse(result);
     expect(data.canvasUuid).toBe('existing-canvas');
@@ -564,7 +577,7 @@ describe('scene_operation — ensure_2d_canvas', () => {
     });
     const server = buildCocosToolServer(makeCtx({ sceneMethod }));
 
-    const result = await server.callTool('scene_operation', { action: 'ensure_2d_canvas' });
+    const result = await server.callTool('scene_operation', { action: 'ensure_2d_canvas', confirmCreateCanvas: true });
     expect(result.isError).toBeFalsy();
     const data = parse(result);
     expect(data.canvasUuid).toBe('new-canvas-uuid');
@@ -589,7 +602,7 @@ describe('scene_operation — ensure_2d_canvas', () => {
     });
     const server = buildCocosToolServer(makeCtx({ sceneMethod }));
 
-    const result = await server.callTool('scene_operation', { action: 'ensure_2d_canvas', designHeight: 1280 });
+    const result = await server.callTool('scene_operation', { action: 'ensure_2d_canvas', confirmCreateCanvas: true, designHeight: 1280 });
     const data = parse(result);
     expect(data.camera.orthoHeight).toBe(640);
   });
@@ -602,7 +615,7 @@ describe('scene_operation — ensure_2d_canvas', () => {
       .mockResolvedValue({ success: true });
     const server = buildCocosToolServer(makeCtx({ sceneMethod }));
 
-    const result = await server.callTool('scene_operation', { action: 'ensure_2d_canvas' });
+    const result = await server.callTool('scene_operation', { action: 'ensure_2d_canvas', confirmCreateCanvas: true });
     const data = parse(result);
     expect(data.created).toBe(true);
   });

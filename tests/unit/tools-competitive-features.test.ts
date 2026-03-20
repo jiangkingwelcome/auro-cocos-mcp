@@ -57,41 +57,13 @@ describe('竞品功能验证 — UUID/URL 互转', () => {
 //    测试条件：调用 get_animation_clips / get_materials 应使用正确的 glob 模式
 // ═════════════════════════════════════════════════════════════════════════════
 
-describe.skip('竞品功能验证 — 动画剪辑/材质列表', () => {
-  it('get_animation_clips: 默认查询 db://assets/**/*.anim', async () => {
-    const mockClips = [{ url: 'db://assets/anims/walk.anim', type: 'cc.AnimationClip' }];
-    const bridgeGet = vi.fn().mockResolvedValue(mockClips);
-    const server = buildCocosToolServer(makeCtx({ bridgeGet }));
-
-    const result = await server.callTool('asset_operation', { action: 'get_animation_clips' });
-    expect(result.isError).toBeFalsy();
-    expect(bridgeGet).toHaveBeenCalledWith('/api/asset-db/query-assets', { pattern: 'db://assets/**/*.anim' });
-  });
-
-  it('get_animation_clips: 自定义 pattern 覆盖默认值', async () => {
-    const bridgeGet = vi.fn().mockResolvedValue([]);
-    const server = buildCocosToolServer(makeCtx({ bridgeGet }));
-
-    await server.callTool('asset_operation', { action: 'get_animation_clips', pattern: 'db://assets/characters/**/*.anim' });
-    expect(bridgeGet).toHaveBeenCalledWith('/api/asset-db/query-assets', { pattern: 'db://assets/characters/**/*.anim' });
-  });
-
-  it('get_materials: 默认查询 db://assets/**/*.mtl', async () => {
-    const mockMats = [{ url: 'db://assets/materials/default.mtl', type: 'cc.Material' }];
-    const bridgeGet = vi.fn().mockResolvedValue(mockMats);
-    const server = buildCocosToolServer(makeCtx({ bridgeGet }));
-
-    const result = await server.callTool('asset_operation', { action: 'get_materials' });
-    expect(result.isError).toBeFalsy();
-    expect(bridgeGet).toHaveBeenCalledWith('/api/asset-db/query-assets', { pattern: 'db://assets/**/*.mtl' });
-  });
-
-  it('get_materials: 自定义 pattern', async () => {
-    const bridgeGet = vi.fn().mockResolvedValue([]);
-    const server = buildCocosToolServer(makeCtx({ bridgeGet }));
-
-    await server.callTool('asset_operation', { action: 'get_materials', pattern: 'db://assets/ui/**/*.mtl' });
-    expect(bridgeGet).toHaveBeenCalledWith('/api/asset-db/query-assets', { pattern: 'db://assets/ui/**/*.mtl' });
+describe('竞品功能验证 — 动画剪辑/材质列表（社区版边界）', () => {
+  it('get_animation_clips / get_materials 在社区版返回 isError', async () => {
+    const server = buildCocosToolServer(makeCtx());
+    const a = await server.callTool('asset_operation', { action: 'get_animation_clips' });
+    const b = await server.callTool('asset_operation', { action: 'get_materials' });
+    expect(a.isError).toBe(true);
+    expect(b.isError).toBe(true);
   });
 });
 
@@ -100,14 +72,11 @@ describe.skip('竞品功能验证 — 动画剪辑/材质列表', () => {
 //    测试条件：调用 show_in_explorer 应路由到 editorMsg("asset-db", "open-asset")
 // ═════════════════════════════════════════════════════════════════════════════
 
-describe.skip('竞品功能验证 — 在资源管理器中显示', () => {
-  it('show_in_explorer: 传入 url 应调用 /api/asset-db/open-asset', async () => {
-    const bridgePost = vi.fn().mockResolvedValue({ success: true });
-    const server = buildCocosToolServer(makeCtx({ bridgePost }));
-
+describe('竞品功能验证 — 在资源管理器中显示（社区版边界）', () => {
+  it('show_in_explorer 在社区版返回 isError', async () => {
+    const server = buildCocosToolServer(makeCtx());
     const result = await server.callTool('asset_operation', { action: 'show_in_explorer', url: 'db://assets/prefabs/Player.prefab' });
-    expect(result.isError).toBeFalsy();
-    expect(bridgePost).toHaveBeenCalledWith('/api/asset-db/open-asset', { url: 'db://assets/prefabs/Player.prefab' });
+    expect(result.isError).toBe(true);
   });
 });
 
@@ -116,23 +85,11 @@ describe.skip('竞品功能验证 — 在资源管理器中显示', () => {
 //    测试条件：pack_atlas 应调用 reimport-asset（我们标记为"仅 reimport 封装"）
 // ═════════════════════════════════════════════════════════════════════════════
 
-describe.skip('竞品功能验证 — 图集打包 (部分支持)', () => {
-  it('pack_atlas: 传入 url 应调用 editorMsg("asset-db", "reimport-asset", url)', async () => {
-    const editorMsg = vi.fn().mockResolvedValue({ success: true });
-    const server = buildCocosToolServer(makeCtx({ editorMsg }));
-
-    const result = await server.callTool('asset_operation', { action: 'pack_atlas', url: 'db://assets/atlas/ui-sprites' });
-    expect(result.isError).toBeFalsy();
-    expect(editorMsg).toHaveBeenCalledWith('asset-db', 'reimport-asset', 'db://assets/atlas/ui-sprites');
-  });
-
-  it('pack_atlas: 缺少 url 参数时返回错误', async () => {
+describe('竞品功能验证 — 图集打包（社区版边界）', () => {
+  it('pack_atlas 在社区版返回 isError', async () => {
     const server = buildCocosToolServer(makeCtx());
-
-    const result = await server.callTool('asset_operation', { action: 'pack_atlas' });
+    const result = await server.callTool('asset_operation', { action: 'pack_atlas', url: 'db://assets/atlas/ui-sprites' });
     expect(result.isError).toBe(true);
-    const data = parse(result) as any;
-    expect(data.error).toContain('url');
   });
 });
 
@@ -141,20 +98,11 @@ describe.skip('竞品功能验证 — 图集打包 (部分支持)', () => {
 //    测试条件：clean_unused 应返回提示信息，不实际执行删除
 // ═════════════════════════════════════════════════════════════════════════════
 
-describe.skip('竞品功能验证 — 清理未使用资源 (仅提示)', () => {
-  it('clean_unused: 应返回只读扫描结果，不执行任何破坏性 POST 操作', async () => {
-    const bridgeGet = vi.fn().mockResolvedValue([]);
-    const bridgePost = vi.fn();
-    const editorMsg = vi.fn();
-    const server = buildCocosToolServer(makeCtx({ bridgeGet, bridgePost, editorMsg }));
-
+describe('竞品功能验证 — 清理未使用资源（社区版边界）', () => {
+  it('clean_unused 在社区版返回 isError', async () => {
+    const server = buildCocosToolServer(makeCtx());
     const result = await server.callTool('asset_operation', { action: 'clean_unused' });
-    expect(result.isError).toBeFalsy();
-    const data = parse(result) as any;
-    expect(data.status).toBe('completed');
-    expect(data.warning).toContain('人工审核');
-    expect(bridgePost).not.toHaveBeenCalled();
-    expect(editorMsg).not.toHaveBeenCalled();
+    expect(result.isError).toBe(true);
   });
 });
 
@@ -164,7 +112,7 @@ describe.skip('竞品功能验证 — 清理未使用资源 (仅提示)', () => 
 // ═════════════════════════════════════════════════════════════════════════════
 
 // engine_action — Pro exclusive (社区版已移除 engine_action，测试在 Pro 版中运行)
-describe.skip('竞品功能验证 — 性能统计 (部分支持) — Pro exclusive', () => {
+describe('竞品功能验证 — 性能统计 (社区版可用 + Pro边界)', () => {
   it('scene_query stats: 应调用 sceneMethod("dispatchQuery", [{action:"stats"}])', async () => {
     const mockStats = { sceneName: 'Main', nodeCount: 42, activeCount: 38, inactiveCount: 4 };
     const sceneMethod = vi.fn().mockResolvedValue(mockStats);
@@ -178,16 +126,10 @@ describe.skip('竞品功能验证 — 性能统计 (部分支持) — Pro exclus
     expect(data.activeCount).toBe(38);
   });
 
-  it('engine_action dump_texture_cache: 应调用 sceneMethod("dispatchEngineAction")', async () => {
-    const mockCache = { success: true, action: 'dump_texture_cache', totalCount: 15, topAssets: [] };
-    const sceneMethod = vi.fn().mockResolvedValue(mockCache);
-    const server = buildCocosToolServer(makeCtx({ sceneMethod }));
-
+  it('engine_action dump_texture_cache: 社区版返回 isError', async () => {
+    const server = buildCocosToolServer(makeCtx());
     const result = await server.callTool('engine_action', { action: 'dump_texture_cache' });
-    expect(result.isError).toBeFalsy();
-    expect(sceneMethod).toHaveBeenCalledWith('dispatchEngineAction', [{ action: 'dump_texture_cache' }]);
-    const data = parse(result) as any;
-    expect(data.totalCount).toBe(15);
+    expect(result.isError).toBe(true);
   });
 });
 
@@ -321,20 +263,18 @@ describe('竞品功能验证 — 组件名自动纠正 (我们的优势)', () =>
 // ═════════════════════════════════════════════════════════════════════════════
 
 // engine_action — Pro exclusive (社区版已移除 engine_action，测试在 Pro 版中运行)
-describe.skip('竞品功能验证 — 引擎全局操作 — Pro exclusive', () => {
+describe('竞品功能验证 — 引擎全局操作（社区版边界）', () => {
   const engineActions = ['set_frame_rate', 'pause_engine', 'resume_engine', 'get_system_info', 'dump_texture_cache'];
 
   for (const action of engineActions) {
-    it(`engine_action.${action} 应可调用且不报错`, async () => {
-      const sceneMethod = vi.fn().mockResolvedValue({ success: true, action });
-      const server = buildCocosToolServer(makeCtx({ sceneMethod }));
+    it(`engine_action.${action} 在社区版返回 isError`, async () => {
+      const server = buildCocosToolServer(makeCtx());
 
       const params: any = { action };
       if (action === 'set_frame_rate') params.fps = 30;
 
       const result = await server.callTool('engine_action', params);
-      expect(result.isError).toBeFalsy();
-      expect(sceneMethod).toHaveBeenCalledWith('dispatchEngineAction', [params]);
+      expect(result.isError).toBe(true);
     });
   }
 });

@@ -712,7 +712,10 @@ Common errors: "未找到节点"=bad UUID; "未找到父节点"=parent not found
             return text(tryResult);
           }
           // Fallback: implement at MCP layer using basic scene methods
-          return text(await fallbackSceneOperation(String(p.action), p, { sceneMethod, editorMsg, bridgePost, text }));
+          const fallbackResult = withGuardrailHints(
+            await fallbackSceneOperation(String(p.action), p, { sceneMethod, editorMsg, bridgePost, text })
+          ) as Record<string, unknown>;
+          return text(fallbackResult, Boolean(fallbackResult?.error));
         }
 
         const result = withGuardrailHints(await sceneMethod('dispatchOperation', [p])) as Record<string, unknown>;

@@ -68,6 +68,14 @@ describe('error-utils', () => {
       expect(spy).toHaveBeenCalled();
       spy.mockRestore();
     });
+
+    it('is suppressed when log level is SILENT', () => {
+      setLogLevel(LogLevel.SILENT);
+      const spy = vi.spyOn(console, 'error').mockImplementation(() => {});
+      logError(ErrorCategory.UNKNOWN, 'hidden');
+      expect(spy).not.toHaveBeenCalled();
+      spy.mockRestore();
+    });
   });
 
   describe('safeExec', () => {
@@ -80,6 +88,13 @@ describe('error-utils', () => {
       const result = safeExec(ErrorCategory.CONFIG, 'test', () => { throw new Error('boom'); }, -1);
       expect(result).toBe(-1);
     });
+
+    it('logs ignored error when exception happens', () => {
+      const spy = vi.spyOn(console, 'debug').mockImplementation(() => {});
+      safeExec(ErrorCategory.CONFIG, 'exec failed', () => { throw new Error('broken'); }, 'fallback');
+      expect(spy).toHaveBeenCalledWith(expect.stringContaining('exec failed'));
+      spy.mockRestore();
+    });
   });
 
   describe('safeExecAsync', () => {
@@ -91,6 +106,15 @@ describe('error-utils', () => {
     it('returns fallback on async exception', async () => {
       const result = await safeExecAsync(ErrorCategory.CONFIG, 'test', async () => { throw new Error('boom'); }, 'fallback');
       expect(result).toBe('fallback');
+    });
+
+    it('logs ignored error when async exception happens', async () => {
+      const spy = vi.spyOn(console, 'debug').mockImplementation(() => {});
+      await safeExecAsync(ErrorCategory.CONFIG, 'async failed', async () => {
+        throw new Error('broken');
+      }, 'fallback');
+      expect(spy).toHaveBeenCalledWith(expect.stringContaining('async failed'));
+      spy.mockRestore();
     });
   });
 
@@ -125,6 +149,12 @@ describe('error-utils', () => {
       const result = safeStringify(obj, 'circular');
       expect(result).toBe('circular');
     });
+
+    it('falls back to String(value) when fallback is not provided', () => {
+      const obj: Record<string, unknown> = {};
+      obj.self = obj;
+      expect(safeStringify(obj)).toBe('[object Object]');
+    });
   });
 
   describe('safeJsonClone', () => {
@@ -140,6 +170,11 @@ describe('error-utils', () => {
       obj.self = obj;
       const result = safeJsonClone(obj);
       expect(typeof result).toBe('string');
+    });
+
+    it('returns string form for symbol values', () => {
+      const result = safeJsonClone(Symbol('x'));
+      expect(result).toBe('Symbol(x)');
     });
   });
 });

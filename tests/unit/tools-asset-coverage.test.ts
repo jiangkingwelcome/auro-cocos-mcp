@@ -47,18 +47,12 @@ describe('asset_operation — bridgeGet actions', () => {
     expect(bridgeGet).toHaveBeenCalledWith('/api/asset-db/query-asset-info', { url: 'db://assets/hero.png' });
   });
 
-  it.skip('get_animation_clips calls bridgeGet with anim pattern', async () => {
-    const bridgeGet = vi.fn().mockResolvedValue([]);
-    const server = buildCocosToolServer(makeCtx({ bridgeGet }));
-    await server.callTool('asset_operation', { action: 'get_animation_clips' });
-    expect(bridgeGet).toHaveBeenCalledWith('/api/asset-db/query-assets', { pattern: 'db://assets/**/*.anim' });
-  });
-
-  it.skip('get_materials calls bridgeGet with mtl pattern', async () => {
-    const bridgeGet = vi.fn().mockResolvedValue([]);
-    const server = buildCocosToolServer(makeCtx({ bridgeGet }));
-    await server.callTool('asset_operation', { action: 'get_materials' });
-    expect(bridgeGet).toHaveBeenCalledWith('/api/asset-db/query-assets', { pattern: 'db://assets/**/*.mtl' });
+  it('community edition rejects Pro query actions', async () => {
+    const server = buildCocosToolServer(makeCtx());
+    const a = await server.callTool('asset_operation', { action: 'get_animation_clips' });
+    const b = await server.callTool('asset_operation', { action: 'get_materials' });
+    expect(a.isError).toBe(true);
+    expect(b.isError).toBe(true);
   });
 });
 
@@ -127,12 +121,10 @@ describe('asset_operation — bridgePost actions', () => {
     expect(bridgePost).toHaveBeenCalledWith('/api/asset-db/create-asset', { url: 'db://assets/prefabs', content: null });
   });
 
-  it.skip('show_in_explorer calls bridgePost /api/asset-db/open-asset', async () => {
-    const bridgePost = vi.fn().mockResolvedValue({ success: true });
-    const server = buildCocosToolServer(makeCtx({ bridgePost }));
+  it('community edition rejects show_in_explorer', async () => {
+    const server = buildCocosToolServer(makeCtx());
     const result = await server.callTool('asset_operation', { action: 'show_in_explorer', url: 'db://assets/hero.png' });
-    expect(result.isError).toBeFalsy();
-    expect(bridgePost).toHaveBeenCalledWith('/api/asset-db/open-asset', { url: 'db://assets/hero.png' });
+    expect(result.isError).toBe(true);
   });
 
   it('rename calls bridgePost /api/asset-db/move-asset', async () => {
@@ -161,28 +153,13 @@ describe('asset_operation — editorMsg (IPC) actions', () => {
     expect(editorMsg).toHaveBeenCalledWith('asset-db', 'query-uuid', 'db://assets/hero.png');
   });
 
-  it.skip('reimport calls editorMsg asset-db reimport-asset', async () => {
-    const editorMsg = vi.fn().mockResolvedValue(null);
-    const server = buildCocosToolServer(makeCtx({ editorMsg }));
-    const result = await server.callTool('asset_operation', { action: 'reimport', url: 'db://assets/hero.png' });
-    expect(result.isError).toBeFalsy();
-    expect(editorMsg).toHaveBeenCalledWith('asset-db', 'reimport-asset', 'db://assets/hero.png');
-  });
-
-  it.skip('get_dependencies calls editorMsg asset-db query-asset-dependencies', async () => {
-    const editorMsg = vi.fn().mockResolvedValue(['db://assets/dep.png']);
-    const server = buildCocosToolServer(makeCtx({ editorMsg }));
-    const result = await server.callTool('asset_operation', { action: 'get_dependencies', url: 'db://assets/hero.prefab' });
-    expect(result.isError).toBeFalsy();
-    expect(editorMsg).toHaveBeenCalledWith('asset-db', 'query-asset-dependencies', 'db://assets/hero.prefab');
-  });
-
-  it.skip('get_dependents calls editorMsg asset-db query-dependents', async () => {
-    const editorMsg = vi.fn().mockResolvedValue(['db://assets/scene.scene']);
-    const server = buildCocosToolServer(makeCtx({ editorMsg }));
-    const result = await server.callTool('asset_operation', { action: 'get_dependents', url: 'db://assets/hero.png' });
-    expect(result.isError).toBeFalsy();
-    expect(editorMsg).toHaveBeenCalledWith('asset-db', 'query-dependents', 'db://assets/hero.png');
+  it('community edition rejects Pro IPC actions', async () => {
+    const server = buildCocosToolServer(makeCtx());
+    const actions = ['reimport', 'get_dependencies', 'get_dependents', 'pack_atlas'] as const;
+    for (const action of actions) {
+      const result = await server.callTool('asset_operation', { action, url: 'db://assets/hero.png' });
+      expect(result.isError).toBe(true);
+    }
   });
 
   it('get_meta calls editorMsg asset-db query-asset-meta', async () => {
@@ -202,14 +179,6 @@ describe('asset_operation — editorMsg (IPC) actions', () => {
     expect(result.isError).toBeFalsy();
     expect(editorMsg).toHaveBeenCalledWith('asset-db', 'query-asset-meta', 'db://assets/hero.png');
     expect(editorMsg).toHaveBeenCalledWith('asset-db', 'save-asset-meta', 'db://assets/hero.png', expect.any(String));
-  });
-
-  it.skip('pack_atlas calls editorMsg reimport-asset', async () => {
-    const editorMsg = vi.fn().mockResolvedValue(null);
-    const server = buildCocosToolServer(makeCtx({ editorMsg }));
-    const result = await server.callTool('asset_operation', { action: 'pack_atlas', url: 'db://assets/atlas' });
-    expect(result.isError).toBeFalsy();
-    expect(editorMsg).toHaveBeenCalledWith('asset-db', 'reimport-asset', 'db://assets/atlas');
   });
 
   it('copy calls editorMsg copy-asset', async () => {
@@ -235,75 +204,24 @@ describe('asset_operation — composite actions', () => {
     expect(data.count).toBe(1);
   });
 
-  it.skip('clean_unused scans assets for unused', async () => {
-    const bridgeGet = vi.fn().mockResolvedValue([
-      { url: 'db://assets/a.png', type: 'cc.ImageAsset', uuid: 'u1' },
-    ]);
-    const editorMsg = vi.fn().mockResolvedValue([]);
-    const server = buildCocosToolServer(makeCtx({ bridgeGet, editorMsg }));
-    const result = await server.callTool('asset_operation', { action: 'clean_unused' });
-    expect(result.isError).toBeFalsy();
-    const data = parse(result);
-    expect(data.status).toBe('completed');
-  });
-
-  it.skip('validate_asset checks asset integrity', async () => {
-    const bridgeGet = vi.fn().mockResolvedValue({ uuid: 'abc', type: 'cc.ImageAsset' });
-    const editorMsg = vi.fn()
-      .mockResolvedValueOnce({ ver: '1.0' })
-      .mockResolvedValueOnce([])
-      .mockResolvedValueOnce([]);
-    const server = buildCocosToolServer(makeCtx({ bridgeGet, editorMsg }));
-    const result = await server.callTool('asset_operation', { action: 'validate_asset', url: 'db://assets/hero.png' });
-    expect(result.isError).toBeFalsy();
-    const data = parse(result);
-    expect(data.valid).toBe(true);
-  });
-
-  it.skip('validate_asset returns invalid when asset not found', async () => {
-    const bridgeGet = vi.fn().mockResolvedValue(null);
-    const server = buildCocosToolServer(makeCtx({ bridgeGet }));
-    const result = await server.callTool('asset_operation', { action: 'validate_asset', url: 'db://assets/missing.png' });
-    expect(result.isError).toBeFalsy();
-    const data = parse(result);
-    expect(data.valid).toBe(false);
-  });
-
-  it.skip('export_asset_manifest returns paginated manifest', async () => {
-    const assets = Array.from({ length: 5 }, (_, i) => ({ url: `db://assets/f${i}.png`, type: 'cc.ImageAsset', uuid: `u${i}` }));
-    const bridgeGet = vi.fn().mockResolvedValue(assets);
-    const server = buildCocosToolServer(makeCtx({ bridgeGet }));
-    const result = await server.callTool('asset_operation', { action: 'export_asset_manifest' });
-    expect(result.isError).toBeFalsy();
-    const data = parse(result);
-    expect(data.totalCount).toBe(5);
-    expect(data.returnedCount).toBe(5);
-  });
-
-  it.skip('create_material calls bridgePost create-asset', async () => {
-    const bridgePost = vi.fn().mockResolvedValue({ success: true });
-    const bridgeGet = vi.fn().mockResolvedValue(null);
-    const editorMsg = vi.fn().mockResolvedValue(null);
-    const server = buildCocosToolServer(makeCtx({ bridgePost, bridgeGet, editorMsg }));
-    const result = await server.callTool('asset_operation', { action: 'create_material', url: 'db://assets/materials/Test.mtl' });
-    expect(result.isError).toBeFalsy();
-    expect(bridgePost).toHaveBeenCalledWith('/api/asset-db/create-asset', expect.objectContaining({ url: 'db://assets/materials/Test.mtl' }));
-  });
-
-  it.skip('generate_script creates script via bridgePost', async () => {
-    const bridgePost = vi.fn().mockResolvedValue({ success: true });
-    const editorMsg = vi.fn().mockResolvedValue(null);
-    const server = buildCocosToolServer(makeCtx({ bridgePost, editorMsg }));
-    const result = await server.callTool('asset_operation', {
-      action: 'generate_script',
-      url: 'db://assets/scripts/Player.ts',
-      className: 'Player',
-      lifecycle: ['onLoad', 'start'],
-    });
-    expect(result.isError).toBeFalsy();
-    expect(bridgePost).toHaveBeenCalledWith('/api/asset-db/create-asset', expect.objectContaining({ url: 'db://assets/scripts/Player.ts' }));
-    const data = parse(result);
-    expect(data.className).toBe('Player');
+  it('community edition rejects Pro composite actions', async () => {
+    const server = buildCocosToolServer(makeCtx());
+    const cases: Array<{ action: string; params?: Record<string, unknown> }> = [
+      { action: 'clean_unused' },
+      { action: 'validate_asset', params: { url: 'db://assets/hero.png' } },
+      { action: 'export_asset_manifest' },
+      { action: 'create_material', params: { url: 'db://assets/materials/Test.mtl' } },
+      { action: 'generate_script', params: { url: 'db://assets/scripts/Player.ts', className: 'Player' } },
+      { action: 'get_asset_size', params: { url: 'db://assets/hero.png' } },
+      {
+        action: 'slice_sprite',
+        params: { url: 'db://assets/sprites/btn.png', borderTop: 10, borderBottom: 10, borderLeft: 10, borderRight: 10 },
+      },
+    ];
+    for (const c of cases) {
+      const result = await server.callTool('asset_operation', { action: c.action, ...(c.params ?? {}) });
+      expect(result.isError).toBe(true);
+    }
   });
 
   it('batch_import requires files array', async () => {
@@ -312,36 +230,11 @@ describe('asset_operation — composite actions', () => {
     expect(result.isError).toBe(true);
   });
 
-  it.skip('get_asset_size calls bridgeGet for asset info', async () => {
-    const bridgeGet = vi.fn().mockResolvedValue({ uuid: 'abc', file: '/path/to/file.png' });
-    const server = buildCocosToolServer(makeCtx({ bridgeGet }));
-    const result = await server.callTool('asset_operation', { action: 'get_asset_size', url: 'db://assets/hero.png' });
-    expect(result.isError).toBeFalsy();
-    expect(bridgeGet).toHaveBeenCalledWith('/api/asset-db/query-asset-info', { url: 'db://assets/hero.png' });
-  });
-
   it('get_asset_size returns error when asset not found', async () => {
     const bridgeGet = vi.fn().mockResolvedValue(null);
     const server = buildCocosToolServer(makeCtx({ bridgeGet }));
     const result = await server.callTool('asset_operation', { action: 'get_asset_size', url: 'db://assets/missing.png' });
     expect(result.isError).toBe(true);
-  });
-
-  it.skip('slice_sprite reads meta and saves borders', async () => {
-    const editorMsg = vi.fn()
-      .mockResolvedValueOnce({ ver: '1.0', userData: {} })
-      .mockResolvedValueOnce(null)
-      .mockResolvedValueOnce(null);
-    const server = buildCocosToolServer(makeCtx({ editorMsg }));
-    const result = await server.callTool('asset_operation', {
-      action: 'slice_sprite',
-      url: 'db://assets/sprites/btn.png',
-      borderTop: 10, borderBottom: 10, borderLeft: 10, borderRight: 10,
-    });
-    expect(result.isError).toBeFalsy();
-    expect(editorMsg).toHaveBeenCalledWith('asset-db', 'query-asset-meta', 'db://assets/sprites/btn.png');
-    const data = parse(result);
-    expect(data.success).toBe(true);
   });
 
   it('slice_sprite rejects all-zero borders', async () => {

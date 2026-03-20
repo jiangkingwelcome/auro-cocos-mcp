@@ -1,0 +1,253 @@
+{
+  "generatedAt": "2026-03-20T08:17:37.617Z",
+  "community": {
+    "toolCount": 17,
+    "totalActions": 188,
+    "rows": [
+      {
+        "tool": "bridge_status",
+        "actions": 1
+      },
+      {
+        "tool": "scene_query",
+        "actions": 50
+      },
+      {
+        "tool": "scene_operation",
+        "actions": 39
+      },
+      {
+        "tool": "asset_operation",
+        "actions": 17
+      },
+      {
+        "tool": "editor_action",
+        "actions": 38
+      },
+      {
+        "tool": "preferences",
+        "actions": 7
+      },
+      {
+        "tool": "broadcast",
+        "actions": 5
+      },
+      {
+        "tool": "tool_management",
+        "actions": 4
+      },
+      {
+        "tool": "create_prefab_atomic",
+        "actions": 1
+      },
+      {
+        "tool": "import_and_apply_texture",
+        "actions": 1
+      },
+      {
+        "tool": "setup_ui_layout",
+        "actions": 1
+      },
+      {
+        "tool": "create_tween_animation_atomic",
+        "actions": 1
+      },
+      {
+        "tool": "auto_fit_physics_collider",
+        "actions": 1
+      },
+      {
+        "tool": "execute_script",
+        "actions": 1
+      },
+      {
+        "tool": "register_custom_macro",
+        "actions": 1
+      },
+      {
+        "tool": "animation_tool",
+        "actions": 10
+      },
+      {
+        "tool": "physics_tool",
+        "actions": 10
+      }
+    ]
+  },
+  "proNative": {
+    "toolCount": 28,
+    "totalActions": 408,
+    "phaseSummary": {
+      "phase1": {
+        "toolCount": 12,
+        "totalActions": 58
+      },
+      "phase2": {
+        "toolCount": 7,
+        "totalActions": 279
+      },
+      "phase3": {
+        "toolCount": 3,
+        "totalActions": 24
+      },
+      "phase4": {
+        "toolCount": 5,
+        "totalActions": 37
+      },
+      "phase5": {
+        "toolCount": 1,
+        "totalActions": 10
+      }
+    },
+    "rows": [
+      {
+        "file": "animation.rs",
+        "tool": "animation_tool",
+        "actions": 18
+      },
+      {
+        "file": "anim_workflow.rs",
+        "tool": "animation_workflow",
+        "actions": 8
+      },
+      {
+        "file": "asset.rs",
+        "tool": "asset_operation",
+        "actions": 39
+      },
+      {
+        "file": "atomic.rs",
+        "tool": "auto_fit_physics_collider",
+        "actions": 1
+      },
+      {
+        "file": "batch.rs",
+        "tool": "batch_engine",
+        "actions": 10
+      },
+      {
+        "file": "misc.rs",
+        "tool": "broadcast",
+        "actions": 5
+      },
+      {
+        "file": "atomic.rs",
+        "tool": "create_prefab_atomic",
+        "actions": 1
+      },
+      {
+        "file": "atomic.rs",
+        "tool": "create_tween_animation_atomic",
+        "actions": 1
+      },
+      {
+        "file": "editor.rs",
+        "tool": "editor_action",
+        "actions": 80
+      },
+      {
+        "file": "engine.rs",
+        "tool": "engine_action",
+        "actions": 8
+      },
+      {
+        "file": "script.rs",
+        "tool": "execute_script",
+        "actions": 1
+      },
+      {
+        "file": "atomic.rs",
+        "tool": "import_and_apply_texture",
+        "actions": 1
+      },
+      {
+        "file": "knowledge.rs",
+        "tool": "knowledge_base",
+        "actions": 10
+      },
+      {
+        "file": "oplog.rs",
+        "tool": "operation_log",
+        "actions": 8
+      },
+      {
+        "file": "physics.rs",
+        "tool": "physics_tool",
+        "actions": 12
+      },
+      {
+        "file": "atomic.rs",
+        "tool": "prefab_operation",
+        "actions": 6
+      },
+      {
+        "file": "misc.rs",
+        "tool": "preferences",
+        "actions": 7
+      },
+      {
+        "file": "linter.rs",
+        "tool": "project_linter",
+        "actions": 8
+      },
+      {
+        "file": "reference.rs",
+        "tool": "reference_image",
+        "actions": 7
+      },
+      {
+        "file": "script.rs",
+        "tool": "register_custom_macro",
+        "actions": 1
+      },
+      {
+        "file": "audit.rs",
+        "tool": "scene_audit",
+        "actions": 9
+      },
+      {
+        "file": "generator.rs",
+        "tool": "scene_generator",
+        "actions": 5
+      },
+      {
+        "file": "scene.rs",
+        "tool": "scene_operation",
+        "actions": 86
+      },
+      {
+        "file": "scene.rs",
+        "tool": "scene_query",
+        "actions": 58
+      },
+      {
+        "file": "scaffold.rs",
+        "tool": "script_scaffold",
+        "actions": 6
+      },
+      {
+        "file": "atomic.rs",
+        "tool": "setup_ui_layout",
+        "actions": 1
+      },
+      {
+        "file": "misc.rs",
+        "tool": "tool_management",
+        "actions": 4
+      },
+      {
+        "file": "ui_gen.rs",
+        "tool": "ui_generator",
+        "actions": 7
+      }
+    ]
+  },
+  "tests": {
+    "testFileCount": 25,
+    "passed": 601,
+    "failed": 0,
+    "skipped": 0,
+    "todo": 0,
+    "total": 601
+  }
+}

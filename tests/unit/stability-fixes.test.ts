@@ -55,8 +55,8 @@ describe('stability fixes — preferences scope fallback', () => {
   });
 });
 
-describe.skip('stability fixes — batch import guardrails', () => {
-  it('batch_import 拒绝重复 targetUrl，避免同事务自锁和覆盖', async () => {
+describe('stability fixes — batch import guardrails', () => {
+  it('batch_import 在社区版返回 isError（未开放）', async () => {
     const server = buildCocosToolServer(makeCtx());
 
     const result = await server.callTool('asset_operation', {
@@ -68,8 +68,6 @@ describe.skip('stability fixes — batch import guardrails', () => {
     });
 
     expect(result.isError).toBe(true);
-    const data = parse(result) as { error: string };
-    expect(data.error).toContain('目标路径不能重复');
   });
 });
 

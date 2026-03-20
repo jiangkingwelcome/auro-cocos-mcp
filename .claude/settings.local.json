@@ -17,7 +17,15 @@
       "WebFetch(domain:www.cocos.com)",
       "WebFetch(domain:generalistprogrammer.com)",
       "mcp__sequential-thinking__sequentialthinking",
-      "mcp__filesystem__search_files"
+      "mcp__filesystem__search_files",
+      "mcp__filesystem__list_directory",
+      "mcp__filesystem__read_multiple_files",
+      "mcp__filesystem__read_text_file",
+      "mcp__filesystem__directory_tree",
+      "mcp__filesystem__get_file_info",
+      "mcp__github__get_file_contents",
+      "mcp__github__create_or_update_file",
+      "Bash(python -c \"import sys,json,base64; d=json.load\\(sys.stdin\\); print\\(base64.b64decode\\(d[''''content'''']\\).decode\\(\\)\\)\")"
     ]
   }
 }

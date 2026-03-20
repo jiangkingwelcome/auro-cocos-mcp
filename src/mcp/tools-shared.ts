@@ -5,6 +5,13 @@ import { ErrorCategory, logIgnored } from '../error-utils';
 export { errorMessage };
 export type { ToolCallResult };
 
+export interface ToolErrorResult {
+  error: string;
+}
+
+export type ToolSuccessResult<T extends Record<string, unknown> = Record<string, never>> = T & { success: true };
+export type ToolResult<T extends Record<string, unknown> = Record<string, never>> = ToolSuccessResult<T> | ToolErrorResult;
+
 /**
  * AI_RULES version — bump when rule semantics change so clients can
  * detect stale cached descriptions.
@@ -112,9 +119,10 @@ export function withGuardrailHints(result: unknown): unknown {
   const maybeError = (result as Record<string, unknown>).error;
   if (typeof maybeError !== 'string') return result;
   if (maybeError.includes('未找到组件类')) {
+    const candidates = COMPONENT_SUGGESTIONS.join(', ');
     return {
       ...(result as Record<string, unknown>),
-      suggestion: `可尝试组件名: ${COMPONENT_SUGGESTIONS.join(', ')}`,
+      suggestion: `Try component names: ${candidates} (可尝试组件名: ${candidates})`,
     };
   }
   return result;
@@ -135,6 +143,15 @@ export interface NormalizeResult {
   fixedSegments?: string[];
 }
 
+export interface NormalizeParamsResult {
+  warnings: string[];
+  pathError?: string;
+}
+
+export function bilingualMessage(en: string, zh: string): string {
+  return `${en} (${zh})`;
+}
+
 export function normalizeDbUrl(url: string): NormalizeResult {
   // Pass-through: no case normalization map is currently populated.
   // The function signature is kept for future use.
@@ -148,16 +165,31 @@ export function normalizeDbUrl(url: string): NormalizeResult {
  */
 export function sanitizeDbUrl(url: string): string | null {
   if (typeof url !== 'string' || !url) return null; // empty is ok, let downstream handle required validation
-  if (!url.startsWith('db://')) return `非法资源路径: 必须以 db:// 开头，收到 "${url}"`;
-  if (url.includes('\0')) return `非法资源路径: 包含空字节`;
+  if (!url.startsWith('db://')) {
+    return bilingualMessage(
+      `Invalid db URL: must start with "db://", got "${url}"`,
+      `非法资源路径: 必须以 db:// 开头，收到 "${url}"`,
+    );
+  }
+  if (url.includes('\0')) {
+    return bilingualMessage('Invalid db URL: contains null byte', '非法资源路径: 包含空字节');
+  }
   // Normalize backslashes then check for traversal
   const normalized = url.replace(/\\/g, '/');
   const segments = normalized.split('/');
-  if (segments.some(s => s === '..')) return `非法资源路径: 包含路径遍历 ".." — ${url}`;
+  if (segments.some(s => s === '..')) {
+    return bilingualMessage(
+      `Invalid db URL: path traversal ".." is not allowed — ${url}`,
+      `非法资源路径: 包含路径遍历 ".." — ${url}`,
+    );
+  }
   // Ensure stays within db://assets/ or db://internal/
   const afterProtocol = normalized.slice('db://'.length);
   if (!afterProtocol.startsWith('assets') && !afterProtocol.startsWith('internal')) {
-    return `非法资源路径: 必须在 db://assets/ 或 db://internal/ 下，收到 "${url}"`;
+    return bilingualMessage(
+      `Invalid db URL: must be under db://assets/ or db://internal/, got "${url}"`,
+      `非法资源路径: 必须在 db://assets/ 或 db://internal/ 下，收到 "${url}"`,
+    );
   }
   return null;
 }
@@ -169,14 +201,21 @@ export function sanitizeDbUrl(url: string): string | null {
  */
 export function sanitizeOsPath(filePath: string): string | null {
   if (typeof filePath !== 'string' || !filePath) return null;
-  if (filePath.includes('\0')) return `非法文件路径: 包含空字节`;
+  if (filePath.includes('\0')) {
+    return bilingualMessage('Invalid file path: contains null byte', '非法文件路径: 包含空字节');
+  }
   const normalized = filePath.replace(/\\/g, '/');
   const segments = normalized.split('/');
-  if (segments.some(s => s === '..')) return `非法文件路径: 包含路径遍历 ".." — ${filePath}`;
+  if (segments.some(s => s === '..')) {
+    return bilingualMessage(
+      `Invalid file path: path traversal ".." is not allowed — ${filePath}`,
+      `非法文件路径: 包含路径遍历 ".." — ${filePath}`,
+    );
+  }
   return null;
 }
 
-export function normalizeParams(p: Record<string, unknown>): { warnings: string[]; pathError?: string } {
+export function normalizeParams(p: Record<string, unknown>): NormalizeParamsResult {
   const warnings: string[] = [];
   // Validate db:// URLs against path traversal
   const dbUrlFields = ['url', 'sourceUrl', 'targetUrl', 'savePath', 'pattern'];
@@ -485,5 +524,9 @@ export function validateRequiredParams(
   });
 
   if (missing.length === 0) return null;
-  return `action "${action}" 缺少必需参数: ${missing.join(', ')}`;
+  const miss = missing.join(', ');
+  return bilingualMessage(
+    `Missing required params for action "${action}": ${miss}`,
+    `action "${action}" 缺少必需参数: ${miss}`,
+  );
 }

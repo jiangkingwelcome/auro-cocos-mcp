@@ -143,12 +143,10 @@ describe('asset_operation — editorMsg actions', () => {
     expect(editorMsg).toHaveBeenCalledWith('asset-db', 'query-uuid', 'db://assets/foo.ts');
   });
 
-  it.skip('reimport 调用 editorMsg("asset-db", "reimport-asset")', async () => {
-    const editorMsg = vi.fn().mockResolvedValue({ success: true });
-    const server = buildCocosToolServer(makeCtx({ editorMsg }));
-
-    await server.callTool('asset_operation', { action: 'reimport', url: 'db://assets/foo.ts' });
-    expect(editorMsg).toHaveBeenCalledWith('asset-db', 'reimport-asset', 'db://assets/foo.ts');
+  it('reimport 在社区版返回 isError', async () => {
+    const server = buildCocosToolServer(makeCtx());
+    const result = await server.callTool('asset_operation', { action: 'reimport', url: 'db://assets/foo.ts' });
+    expect(result.isError).toBe(true);
   });
 
   it('create_folder 调用 /api/asset-db/create-asset', async () => {
@@ -162,20 +160,12 @@ describe('asset_operation — editorMsg actions', () => {
     });
   });
 
-  it.skip('get_dependencies 调用 editorMsg("asset-db", "query-asset-dependencies")', async () => {
-    const editorMsg = vi.fn().mockResolvedValue([]);
-    const server = buildCocosToolServer(makeCtx({ editorMsg }));
-
-    await server.callTool('asset_operation', { action: 'get_dependencies', url: 'db://assets/foo.ts' });
-    expect(editorMsg).toHaveBeenCalledWith('asset-db', 'query-asset-dependencies', 'db://assets/foo.ts');
-  });
-
-  it.skip('get_dependents 调用 editorMsg("asset-db", "query-dependents")', async () => {
-    const editorMsg = vi.fn().mockResolvedValue([]);
-    const server = buildCocosToolServer(makeCtx({ editorMsg }));
-
-    await server.callTool('asset_operation', { action: 'get_dependents', url: 'db://assets/foo.ts' });
-    expect(editorMsg).toHaveBeenCalledWith('asset-db', 'query-dependents', 'db://assets/foo.ts');
+  it('get_dependencies / get_dependents 在社区版返回 isError', async () => {
+    const server = buildCocosToolServer(makeCtx());
+    const dep = await server.callTool('asset_operation', { action: 'get_dependencies', url: 'db://assets/foo.ts' });
+    const rev = await server.callTool('asset_operation', { action: 'get_dependents', url: 'db://assets/foo.ts' });
+    expect(dep.isError).toBe(true);
+    expect(rev.isError).toBe(true);
   });
 });
 
@@ -247,18 +237,10 @@ describe('asset_operation — 复合逻辑 actions', () => {
     });
   });
 
-  it.skip('clean_unused 返回只读扫描结果（非 isError）', async () => {
-    const bridgeGet = vi.fn().mockResolvedValue([]);
-    const editorMsg = vi.fn();
-    const server = buildCocosToolServer(makeCtx({ bridgeGet, editorMsg }));
-
+  it('clean_unused 在社区版返回 isError', async () => {
+    const server = buildCocosToolServer(makeCtx());
     const result = await server.callTool('asset_operation', { action: 'clean_unused' });
-    expect(result.isError).toBeFalsy();
-    const data = parse(result) as any;
-    expect(data.status).toBe('completed');
-    expect(data.potentiallyUnusedCount).toBe(0);
-    expect(data.warning).toContain('人工审核');
-    expect(editorMsg).not.toHaveBeenCalled();
+    expect(result.isError).toBe(true);
   });
 
   it('search_by_type 过滤 type 字段', async () => {
@@ -274,20 +256,12 @@ describe('asset_operation — 复合逻辑 actions', () => {
     expect(data.assets[0].type).toContain('Prefab');
   });
 
-  it.skip('get_animation_clips 使用 .anim 模式', async () => {
-    const bridgeGet = vi.fn().mockResolvedValue([]);
-    const server = buildCocosToolServer(makeCtx({ bridgeGet }));
-
-    await server.callTool('asset_operation', { action: 'get_animation_clips' });
-    expect(bridgeGet).toHaveBeenCalledWith('/api/asset-db/query-assets', { pattern: 'db://assets/**/*.anim' });
-  });
-
-  it.skip('get_materials 使用 .mtl 模式', async () => {
-    const bridgeGet = vi.fn().mockResolvedValue([]);
-    const server = buildCocosToolServer(makeCtx({ bridgeGet }));
-
-    await server.callTool('asset_operation', { action: 'get_materials' });
-    expect(bridgeGet).toHaveBeenCalledWith('/api/asset-db/query-assets', { pattern: 'db://assets/**/*.mtl' });
+  it('get_animation_clips / get_materials 在社区版返回 isError', async () => {
+    const server = buildCocosToolServer(makeCtx());
+    const clips = await server.callTool('asset_operation', { action: 'get_animation_clips' });
+    const mats = await server.callTool('asset_operation', { action: 'get_materials' });
+    expect(clips.isError).toBe(true);
+    expect(mats.isError).toBe(true);
   });
 });
 

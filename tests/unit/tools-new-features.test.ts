@@ -104,31 +104,13 @@ describe('新增功能 — 属性重置', () => {
 // ═════════════════════════════════════════════════════════════════════════════
 // 5. 剪贴板操作 (clipboard_copy / clipboard_paste)
 // ═════════════════════════════════════════════════════════════════════════════
-describe.skip('新增功能 — 剪贴板操作 — Pro exclusive', () => {
-    it('clipboard_copy 缺少 uuid 时返回错误', async () => {
+describe('新增功能 — 剪贴板操作（社区版边界）', () => {
+    it('clipboard_copy / clipboard_paste 透传到 scene_operation（由引擎侧决定可用性）', async () => {
         const server = buildCocosToolServer(makeCtx());
-        const result = await server.callTool('scene_operation', { action: 'clipboard_copy' });
-        expect(result.isError).toBe(true);
-    });
-
-    it('clipboard_copy 调用 bridgePost 选择并 editorMsg 复制节点', async () => {
-        const editorMsg = vi.fn().mockResolvedValue({});
-        const bridgePost = vi.fn().mockResolvedValue({});
-        const server = buildCocosToolServer(makeCtx({ editorMsg, bridgePost }));
-
-        const result = await server.callTool('scene_operation', { action: 'clipboard_copy', uuid: 'node-1' });
-        expect(result.isError).toBeFalsy();
-        expect(bridgePost).toHaveBeenCalledWith('/api/editor/select', { uuids: ['node-1'], forceRefresh: true });
-        expect(editorMsg).toHaveBeenCalledWith('scene', 'copy-node', ['node-1']);
-    });
-
-    it('clipboard_paste 调用 editorMsg 粘贴节点', async () => {
-        const editorMsg = vi.fn().mockResolvedValue({});
-        const server = buildCocosToolServer(makeCtx({ editorMsg }));
-
-        const result = await server.callTool('scene_operation', { action: 'clipboard_paste', parentUuid: 'parent-1' });
-        expect(result.isError).toBeFalsy();
-        expect(editorMsg).toHaveBeenCalledWith('scene', 'paste-node', 'parent-1');
+        const copyResult = await server.callTool('scene_operation', { action: 'clipboard_copy', uuid: 'node-1' });
+        const pasteResult = await server.callTool('scene_operation', { action: 'clipboard_paste', parentUuid: 'parent-1' });
+        expect(copyResult.isError).toBeFalsy();
+        expect(pasteResult.isError).toBeFalsy();
     });
 });
 
@@ -243,31 +225,13 @@ describe('新增功能 — 预制体验证', () => {
 // 10. Gizmo/坐标系控制 (set_transform_tool / set_coordinate)
 // ═════════════════════════════════════════════════════════════════════════════
 // set_transform_tool / set_coordinate — Pro exclusive (社区版已裁剪)
-describe.skip('新增功能 — Gizmo/坐标系控制 — Pro exclusive', () => {
-    it('set_transform_tool 调用 editorMsg 设置 gizmo 模式', async () => {
-        const editorMsg = vi.fn().mockResolvedValue(null);
-        const server = buildCocosToolServer(makeCtx({ editorMsg }));
-
-        const result = await server.callTool('editor_action', { action: 'set_transform_tool', toolType: 'rotation' });
-        expect(result.isError).toBeFalsy();
-        expect(editorMsg).toHaveBeenCalledWith('scene', 'set-transform-tool', 'rotation');
-    });
-
-    it('set_transform_tool 默认为 position 模式', async () => {
-        const editorMsg = vi.fn().mockResolvedValue(null);
-        const server = buildCocosToolServer(makeCtx({ editorMsg }));
-
-        await server.callTool('editor_action', { action: 'set_transform_tool' });
-        expect(editorMsg).toHaveBeenCalledWith('scene', 'set-transform-tool', 'position');
-    });
-
-    it('set_coordinate 调用 editorMsg 设置坐标系', async () => {
-        const editorMsg = vi.fn().mockResolvedValue(null);
-        const server = buildCocosToolServer(makeCtx({ editorMsg }));
-
-        const result = await server.callTool('editor_action', { action: 'set_coordinate', coordinate: 'world' });
-        expect(result.isError).toBeFalsy();
-        expect(editorMsg).toHaveBeenCalledWith('scene', 'set-coordinate', 'world');
+describe('新增功能 — Gizmo/坐标系控制（社区版边界）', () => {
+    it('set_transform_tool / set_coordinate 在社区版返回 isError', async () => {
+        const server = buildCocosToolServer(makeCtx());
+        const a = await server.callTool('editor_action', { action: 'set_transform_tool', toolType: 'rotation' });
+        const b = await server.callTool('editor_action', { action: 'set_coordinate', coordinate: 'world' });
+        expect(a.isError).toBe(true);
+        expect(b.isError).toBe(true);
     });
 });
 
@@ -275,23 +239,13 @@ describe.skip('新增功能 — Gizmo/坐标系控制 — Pro exclusive', () => 
 // 11. 场景视图工具 (toggle_grid / toggle_snap)
 // ═════════════════════════════════════════════════════════════════════════════
 // toggle_grid / toggle_snap — Pro exclusive (社区版已裁剪)
-describe.skip('新增功能 — 场景视图工具 — Pro exclusive', () => {
-    it('toggle_grid 调用 editorMsg 控制网格可见性', async () => {
-        const editorMsg = vi.fn().mockResolvedValue(null);
-        const server = buildCocosToolServer(makeCtx({ editorMsg }));
-
-        const result = await server.callTool('editor_action', { action: 'toggle_grid', visible: false });
-        expect(result.isError).toBeFalsy();
-        expect(editorMsg).toHaveBeenCalledWith('scene', 'set-grid-visible', false);
-    });
-
-    it('toggle_snap 调用 editorMsg 控制吸附模式', async () => {
-        const editorMsg = vi.fn().mockResolvedValue(null);
-        const server = buildCocosToolServer(makeCtx({ editorMsg }));
-
-        const result = await server.callTool('editor_action', { action: 'toggle_snap', enabled: true });
-        expect(result.isError).toBeFalsy();
-        expect(editorMsg).toHaveBeenCalledWith('scene', 'set-snap', true);
+describe('新增功能 — 场景视图工具（社区版边界）', () => {
+    it('toggle_grid / toggle_snap 在社区版返回 isError', async () => {
+        const server = buildCocosToolServer(makeCtx());
+        const a = await server.callTool('editor_action', { action: 'toggle_grid', visible: false });
+        const b = await server.callTool('editor_action', { action: 'toggle_snap', enabled: true });
+        expect(a.isError).toBe(true);
+        expect(b.isError).toBe(true);
     });
 });
 
@@ -299,37 +253,13 @@ describe.skip('新增功能 — 场景视图工具 — Pro exclusive', () => {
 // 12. 日志分析/模式匹配 (get_console_logs / search_logs)
 // ═════════════════════════════════════════════════════════════════════════════
 // get_console_logs / search_logs — Pro exclusive (社区版已裁剪)
-describe.skip('新增功能 — 日志分析/模式匹配 — Pro exclusive', () => {
-    it('get_console_logs 调用 bridgeGet 获取日志', async () => {
-        const mockLogs = [{ text: 'log1' }, { text: 'log2' }];
-        const bridgeGet = vi.fn().mockResolvedValue(mockLogs);
-        const server = buildCocosToolServer(makeCtx({ bridgeGet }));
-
-        const result = await server.callTool('editor_action', { action: 'get_console_logs', logType: 'warn', logCount: 20 });
-        expect(result.isError).toBeFalsy();
-        expect(bridgeGet).toHaveBeenCalledWith('/api/console/logs', { type: 'warn', count: '20' });
-    });
-
-    it('search_logs 缺少 keyword 时返回错误', async () => {
+describe('新增功能 — 日志分析/模式匹配（社区版边界）', () => {
+    it('get_console_logs / search_logs 在社区版返回 isError', async () => {
         const server = buildCocosToolServer(makeCtx());
-        const result = await server.callTool('editor_action', { action: 'search_logs' });
-        expect(result.isError).toBe(true);
-    });
-
-    it('search_logs 获取日志并按关键词过滤', async () => {
-        const mockLogs = [
-            { text: 'Error: failed to load asset' },
-            { text: 'Info: scene loaded' },
-            { text: 'Error: missing component' },
-        ];
-        const bridgeGet = vi.fn().mockResolvedValue(mockLogs);
-        const server = buildCocosToolServer(makeCtx({ bridgeGet }));
-
-        const result = await server.callTool('editor_action', { action: 'search_logs', keyword: 'error' });
-        expect(result.isError).toBeFalsy();
-        const data = parse(result) as any;
-        expect(data.matchCount).toBe(2);
-        expect(data.keyword).toBe('error');
+        const a = await server.callTool('editor_action', { action: 'get_console_logs', logType: 'warn', logCount: 20 });
+        const b = await server.callTool('editor_action', { action: 'search_logs', keyword: 'error' });
+        expect(a.isError).toBe(true);
+        expect(b.isError).toBe(true);
     });
 });
 
@@ -337,49 +267,11 @@ describe.skip('新增功能 — 日志分析/模式匹配 — Pro exclusive', ()
 // 13. 资源验证 (validate_asset)
 // ═════════════════════════════════════════════════════════════════════════════
 // validate_asset — Pro exclusive (社区版已裁剪)
-describe.skip('新增功能 — 资源验证 — Pro exclusive', () => {
-    it('validate_asset 缺少 url 时返回错误', async () => {
+describe('新增功能 — 资源验证（社区版边界）', () => {
+    it('validate_asset 在社区版返回 isError', async () => {
         const server = buildCocosToolServer(makeCtx());
-        const result = await server.callTool('asset_operation', { action: 'validate_asset' });
+        const result = await server.callTool('asset_operation', { action: 'validate_asset', url: 'db://assets/main.ts' });
         expect(result.isError).toBe(true);
-    });
-
-    it('validate_asset 资源不存在时返回 valid=false', async () => {
-        const bridgeGet = vi.fn().mockResolvedValue(null);
-        const editorMsg = vi.fn();
-        const server = buildCocosToolServer(makeCtx({ bridgeGet, editorMsg }));
-        const result = await server.callTool('asset_operation', { action: 'validate_asset', url: 'db://assets/notexist.ts' });
-        const data = parse(result) as any;
-        expect(data.valid).toBe(false);
-        expect(data.issues.some((i: any) => (i.message || i).includes('资源文件未找到'))).toBe(true);
-    });
-
-    it('validate_asset 资源存在且依赖完整时返回 valid=true', async () => {
-        const bridgeGet = vi.fn()
-            .mockResolvedValueOnce({ uuid: 'u1', type: 'cc.Script' }); // query-asset-info
-        const editorMsg = vi.fn()
-            .mockResolvedValueOnce({ ver: '1.0' })                     // query-asset-meta
-            .mockResolvedValueOnce([])                                  // query-asset-dependencies (empty)
-            .mockResolvedValueOnce([]);                                 // query-dependents (empty)
-        const server = buildCocosToolServer(makeCtx({ bridgeGet, editorMsg }));
-        const result = await server.callTool('asset_operation', { action: 'validate_asset', url: 'db://assets/scripts/main.ts' });
-        const data = parse(result) as any;
-        expect(data.valid).toBe(true);
-    });
-
-    it('validate_asset 检测到断裂依赖', async () => {
-        const bridgeGet = vi.fn()
-            .mockResolvedValueOnce({ uuid: 'u1' })       // query-asset-info (asset exists)
-            .mockResolvedValueOnce(null);                // query-asset-info for dep → null = missing
-        const editorMsg = vi.fn()
-            .mockResolvedValueOnce({ ver: '1.0' })        // query-asset-meta (meta ok)
-            .mockResolvedValueOnce(['db://assets/missing-dep.png'])  // query-asset-dependencies
-            .mockResolvedValueOnce([]);                   // query-dependents
-        const server = buildCocosToolServer(makeCtx({ bridgeGet, editorMsg }));
-        const result = await server.callTool('asset_operation', { action: 'validate_asset', url: 'db://assets/prefabs/test.prefab' });
-        const data = parse(result) as any;
-        expect(data.valid).toBe(false);
-        expect(data.issues.some((i: any) => (i.message || i).includes('依赖缺失'))).toBe(true);
     });
 });
 
@@ -387,47 +279,11 @@ describe.skip('新增功能 — 资源验证 — Pro exclusive', () => {
 // 14. 资源清单导出 (export_asset_manifest)
 // ═════════════════════════════════════════════════════════════════════════════
 // export_asset_manifest — Pro exclusive (社区版已裁剪)
-describe.skip('新增功能 — 资源清单导出 — Pro exclusive', () => {
-    it('export_asset_manifest 返回按类型分组的资源清单', async () => {
-        const mockAssets = [
-            { url: 'db://assets/textures/bg.png', uuid: 'u1', type: 'cc.ImageAsset' },
-            { url: 'db://assets/textures/icon.png', uuid: 'u2', type: 'cc.ImageAsset' },
-            { url: 'db://assets/scripts/main.ts', uuid: 'u3', type: 'cc.Script' },
-            { url: 'db://assets/scenes/main.scene', uuid: 'u4', type: 'cc.SceneAsset' },
-        ];
-        const bridgeGet = vi.fn().mockResolvedValue(mockAssets);
-        const server = buildCocosToolServer(makeCtx({ bridgeGet }));
-
+describe('新增功能 — 资源清单导出（社区版边界）', () => {
+    it('export_asset_manifest 在社区版返回 isError', async () => {
+        const server = buildCocosToolServer(makeCtx());
         const result = await server.callTool('asset_operation', { action: 'export_asset_manifest' });
-        expect(result.isError).toBeFalsy();
-        const data = parse(result) as any;
-        expect(data.totalCount).toBe(4);
-        expect(data.typeSummary['cc.ImageAsset']).toBe(2);
-        expect(data.typeSummary['cc.Script']).toBe(1);
-        expect(data.typeSummary['cc.SceneAsset']).toBe(1);
-        expect(data.returnedCount).toBe(4);
-        expect(data.hasMore).toBe(false);
-    });
-
-    it('export_asset_manifest 支持自定义 pattern 筛选', async () => {
-        const bridgeGet = vi.fn().mockResolvedValue([]);
-        const server = buildCocosToolServer(makeCtx({ bridgeGet }));
-
-        await server.callTool('asset_operation', { action: 'export_asset_manifest', pattern: 'db://assets/textures/**/*' });
-        expect(bridgeGet).toHaveBeenCalledWith('/api/asset-db/query-assets', { pattern: 'db://assets/textures/**/*' });
-    });
-
-    it('export_asset_manifest 默认按 200 条分页并标记 hasMore', async () => {
-        const bigList = Array.from({ length: 250 }, (_, i) => ({ url: `db://assets/item${i}.ts`, uuid: `u${i}`, type: 'cc.Script' }));
-        const bridgeGet = vi.fn().mockResolvedValue(bigList);
-        const server = buildCocosToolServer(makeCtx({ bridgeGet }));
-
-        const result = await server.callTool('asset_operation', { action: 'export_asset_manifest' });
-        const data = parse(result) as any;
-        expect(data.totalCount).toBe(250);
-        expect(data.returnedCount).toBe(200);
-        expect(data.assets).toHaveLength(200);
-        expect(data.hasMore).toBe(true);
+        expect(result.isError).toBe(true);
     });
 });
 
@@ -482,27 +338,27 @@ describe('新增功能 — 工具注册完整性 (社区版)', () => {
     });
 
     // Pro 独占 action 注册检查 (社区版已裁剪)
-    it.skip('Pro 独占 action: asset_operation (validate_asset, export_asset_manifest)', () => {
+    it('Pro 独占 action: asset_operation 在社区版 schema 中不存在', () => {
         const server = buildCocosToolServer(makeCtx());
         const tools = server.listTools();
         const getSchema = (name: string) => tools.find(t => t.name === name)?.inputSchema as any;
         const aoSchema = getSchema('asset_operation');
         const aoActions = aoSchema?.properties?.action?.enum || [];
-        expect(aoActions).toContain('validate_asset');
-        expect(aoActions).toContain('export_asset_manifest');
+        expect(aoActions).not.toContain('validate_asset');
+        expect(aoActions).not.toContain('export_asset_manifest');
     });
 
-    it.skip('Pro 独占 action: editor_action (set_transform_tool, set_coordinate, toggle_grid, toggle_snap, get_console_logs, search_logs)', () => {
+    it('Pro 独占 action: editor_action 在社区版 schema 中不存在', () => {
         const server = buildCocosToolServer(makeCtx());
         const tools = server.listTools();
         const getSchema = (name: string) => tools.find(t => t.name === name)?.inputSchema as any;
         const eaSchema = getSchema('editor_action');
         const eaActions = eaSchema?.properties?.action?.enum || [];
-        expect(eaActions).toContain('set_transform_tool');
-        expect(eaActions).toContain('set_coordinate');
-        expect(eaActions).toContain('toggle_grid');
-        expect(eaActions).toContain('toggle_snap');
-        expect(eaActions).toContain('get_console_logs');
-        expect(eaActions).toContain('search_logs');
+        expect(eaActions).not.toContain('set_transform_tool');
+        expect(eaActions).not.toContain('set_coordinate');
+        expect(eaActions).not.toContain('toggle_grid');
+        expect(eaActions).not.toContain('toggle_snap');
+        expect(eaActions).not.toContain('get_console_logs');
+        expect(eaActions).not.toContain('search_logs');
     });
 });

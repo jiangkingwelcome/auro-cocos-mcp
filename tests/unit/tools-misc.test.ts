@@ -100,55 +100,18 @@ describe('broadcast tool', () => {
   });
 });
 
-// reference_image — Pro exclusive (社区版已移除，测试在 Pro 版中运行)
-describe.skip('reference_image tool — Pro exclusive', () => {
-  it('set action calls bridgePost', async () => {
-    const ctx = makeCtx();
-    const server = buildCocosToolServer(ctx);
-    await server.callTool('reference_image', { action: 'set', opacity: 0.5 });
-    expect(ctx.bridgePost).toHaveBeenCalledWith('/api/reference-image/set', expect.objectContaining({ active: true }));
+// reference_image — Pro exclusive (社区版边界)
+describe('reference_image tool — community guardrail', () => {
+  it('reference_image tool is not registered in community edition', () => {
+    const server = buildCocosToolServer(makeCtx());
+    const names = server.listTools().map((t) => t.name);
+    expect(names).not.toContain('reference_image');
   });
 
-  it('clear action calls bridgePost', async () => {
-    const ctx = makeCtx();
-    const server = buildCocosToolServer(ctx);
-    await server.callTool('reference_image', { action: 'clear' });
-    expect(ctx.bridgePost).toHaveBeenCalledWith('/api/reference-image/clear');
-  });
-
-  it('list action calls sceneMethod', async () => {
-    const ctx = makeCtx();
-    const server = buildCocosToolServer(ctx);
-    await server.callTool('reference_image', { action: 'list' });
-    expect(ctx.sceneMethod).toHaveBeenCalled();
-  });
-
-  it('add action requires imagePath', async () => {
-    const ctx = makeCtx();
-    const server = buildCocosToolServer(ctx);
-    const result = await server.callTool('reference_image', { action: 'add' });
-    expect(parse(result).error).toBeDefined();
-  });
-
-  it('add action with imagePath succeeds', async () => {
-    const ctx = makeCtx();
-    const server = buildCocosToolServer(ctx);
-    await server.callTool('reference_image', { action: 'add', imagePath: 'db://assets/ref.png' });
-    expect(ctx.sceneMethod).toHaveBeenCalled();
-  });
-
-  it('set_opacity action calls sceneMethod', async () => {
-    const ctx = makeCtx();
-    const server = buildCocosToolServer(ctx);
-    await server.callTool('reference_image', { action: 'set_opacity', refUuid: 'ref-1', opacity: 0.8 });
-    expect(ctx.sceneMethod).toHaveBeenCalled();
-  });
-
-  it('set_transform action calls sceneMethod', async () => {
-    const ctx = makeCtx();
-    const server = buildCocosToolServer(ctx);
-    await server.callTool('reference_image', { action: 'set_transform', refUuid: 'ref-1', x: 100, y: 200 });
-    expect(ctx.sceneMethod).toHaveBeenCalled();
+  it('calling reference_image returns isError in community edition', async () => {
+    const server = buildCocosToolServer(makeCtx());
+    const result = await server.callTool('reference_image', { action: 'list' });
+    expect(result.isError).toBe(true);
   });
 });
 

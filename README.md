@@ -14,21 +14,21 @@
 
 Standalone Cocos Creator editor plugin that provides a full-featured MCP (Model Context Protocol) service directly from the plugin process — enabling AI coding assistants to query, modify, and control your Cocos project in real time.
 
-**22 tools · 270+ actions · Funnel architecture · User-configurable security · AI-Native design**
+**Community: 17 tools / 188 actions · Pro Native: up to 28 tools / 408 actions (phased)**
 
 ### Editions
 
 | Edition | Price | Content |
 |---------|-------|---------|
-| **Community** | Free | ~158 actions, JS implementation, open source (BSL 1.1) |
-| **Pro** | ¥99/year ($15/year) | 270+ actions + AI smart tools, Rust binary |
+| **Community** | Free | 188 actions, JS implementation, open source (BSL 1.1) |
+| **Pro** | ¥99/year ($15/year) | 270+ production actions (Phase 1-3), Rust binary |
 | **Enterprise** | ¥999/year ($150/year) | Pro + private deployment + SLA + customization |
 
 ### Architecture
 
 ```
 ┌──────────────────────────────────────────────────────┐
-│  Cocos Creator Editor (>= 3.4.2)                     │
+│  Cocos Creator Editor (>= 3.6.0)                     │
 │  ┌────────────────────────────────────────────────┐  │
 │  │  aura-for-cocos plugin                       │  │
 │  │  ┌──────────┐  ┌──────────┐  ┌─────────────┐  │  │
@@ -36,7 +36,8 @@ Standalone Cocos Creator editor plugin that provides a full-featured MCP (Model 
 │  │  │ :7779    │  │ /mcp     │  │ (runtime)   │  │  │
 │  │  └────┬─────┘  └────┬─────┘  └──────┬──────┘  │  │
 │  │       └──────────────┼───────────────┘         │  │
-│  │              22 tools, 270+ actions             │  │
+│  │       Community: 17 tools / 188 actions         │  │
+│  │       Pro Native (phased): up to 28 / 408       │  │
 │  └────────────────────────────────────────────────┘  │
 │                         ▲                            │
 │  ┌──────────────────────┼─────────────────────────┐  │
@@ -57,7 +58,7 @@ Standalone Cocos Creator editor plugin that provides a full-featured MCP (Model 
 #### Core
 - In-process MCP host at `http://127.0.0.1:<port>/mcp`
 - Stdio compatibility shim for clients that only support stdio transport
-- **Funnel architecture**: 22 tools with 270+ actions vs flat 50+ tool approach — significantly lower token overhead
+- **Funnel architecture**: Community ships 17 tools / 188 actions; Pro Native modules register up to 28 / 408 (phased)
 - **User-configurable security**: rate limit, loopback restriction, body size limit, auto-rollback
 
 #### AI-Native Design
@@ -69,27 +70,24 @@ Standalone Cocos Creator editor plugin that provides a full-featured MCP (Model 
 
 #### Tool Overview
 
-| Category | Actions | Description |
+| Category (Community Runtime) | Actions | Description |
 |----------|---------|-------------|
-| Scene Queries | 43 | Tree, search, introspection, validation, spatial queries |
-| Scene Operations | 68 | CRUD, transform, components, prefabs, batch, UI, camera, materials |
-| Asset Management | 32 | CRUD, discovery, meta control, generation, utilities |
-| Editor Control | 45 | Scene lifecycle, selection, console, panels, build, preview, tools |
+| Scene Queries | 50 | Tree, search, introspection, validation, spatial queries |
+| Scene Operations | 39 | CRUD, transform, components, prefabs, UI, camera/material extensions |
+| Asset Management | 17 | CRUD, discovery, meta control, URL/UUID conversion |
+| Editor Control | 38 | Scene lifecycle, selection, console, build, preview, gizmo/view basics |
 | Macro Atomic Tools | 5 | High-cohesion multi-step operations with auto-rollback |
-| Engine Actions | 8 | Frame rate, pause/resume, system info, render stats |
+| Script Utilities | 2 | `execute_script`, `register_custom_macro` |
 | Animation | 10 | Create clips, playback control, crossfade |
-| Physics | 12 | Colliders, rigidbodies, joints, world config, raycast |
-| Reference Image | 7 | Overlay management for visual reference |
-| Preferences | 7 | Editor preferences (global/project) |
-| Broadcast | 5 | Editor events, custom messages, raw IPC |
-| Tool Management | 4 | List/enable/disable tools |
+| Physics | 10 | Colliders, rigidbodies, joints, world config |
+| Preferences / Broadcast / Tool Mgmt / Status | 17 | preferences(7), broadcast(5), tool_management(4), bridge_status(1) |
 
-#### Pro Edition Exclusive
-- Full scene/asset/editor action set (110+ additional actions)
-- Engine actions and reference image tools
-- AI Scene Generator — natural language → complete scene
-- Batch Operation Engine — node matching + bulk transforms
-- Scene Audit Tool — auto-detect issues + fix suggestions
+#### Pro Edition (Native) Status
+- Commercial commitment: 270+ production actions (Phase 1-3)
+- Native code registration snapshot: up to 28 tools / 408 actions (includes Phase 4-5 modules)
+- AI tools (`scene_generator`, `batch_engine`, `scene_audit`) are implemented in native modules and released in phases
+
+See [docs/PRODUCT_TRUST_ASSET.md](docs/PRODUCT_TRUST_ASSET.md) and [docs/trust-metrics.json](docs/trust-metrics.json) for the single source of truth.
 
 ### Panel
 
@@ -157,21 +155,21 @@ Pro Edition: Commercial License (Cocos Store / Gumroad)
 
 独立的 Cocos Creator 编辑器插件，直接在插件进程中提供完整的 MCP（Model Context Protocol）服务——让 AI 编程助手实时查询、修改和控制你的 Cocos 项目。
 
-**22 个工具 · 270+ 个 action · 漏斗架构 · 用户可配置安全策略 · AI 原生设计**
+**社区版：17 个工具 / 188 个 action · Pro Native：最高 28 / 408（分阶段）**
 
 ### 版本
 
 | 版本 | 价格 | 内容 |
 |------|------|------|
-| **社区版** | 免费 | ~158 个 action，JS 实现，开源 (BSL 1.1) |
-| **Pro 版** | ¥99/年 ($15/年) | 270+ 个 action + AI 智能工具，Rust 二进制 |
+| **社区版** | 免费 | 188 个 action，JS 实现，开源 (BSL 1.1) |
+| **Pro 版** | ¥99/年 ($15/年) | 270+ 生产可用 action（Phase 1-3），Rust 二进制 |
 | **企业版** | ¥999/年 ($150/年) | Pro + 私有部署 + SLA + 定制 |
 
 ### 架构
 
 ```
 ┌──────────────────────────────────────────────────────┐
-│  Cocos Creator 编辑器 (>= 3.4.2)                     │
+│  Cocos Creator 编辑器 (>= 3.6.0)                     │
 │  ┌────────────────────────────────────────────────┐  │
 │  │  aura-for-cocos 插件                         │  │
 │  │  ┌──────────┐  ┌──────────┐  ┌─────────────┐  │  │
@@ -179,7 +177,8 @@ Pro Edition: Commercial License (Cocos Store / Gumroad)
 │  │  │ :7779    │  │ /mcp     │  │ (运行时)    │  │  │
 │  │  └────┬─────┘  └────┬─────┘  └──────┬──────┘  │  │
 │  │       └──────────────┼───────────────┘         │  │
-│  │              22 个工具, 270+ 个 action          │  │
+│  │          社区版：17 个工具 / 188 个 action       │  │
+│  │          Pro Native（分阶段）：最高 28 / 408     │  │
 │  └────────────────────────────────────────────────┘  │
 │                         ▲                            │
 │  ┌──────────────────────┼─────────────────────────┐  │
@@ -200,7 +199,7 @@ Pro Edition: Commercial License (Cocos Store / Gumroad)
 #### 核心
 - 插件进程内 MCP 宿主：`http://127.0.0.1:<port>/mcp`
 - Stdio 兼容垫片，支持仅 stdio 传输的客户端
-- **漏斗架构**：22 个工具承载 270+ 个 action，相比扁平 50+ 工具方案大幅降低 Token 开销
+- **漏斗架构**：社区版 17 个工具 / 188 个 action；Pro Native 模块最高注册到 28 / 408（分阶段）
 - **用户可配置安全策略**：速率限制、回环限制、请求体大小、自动回滚
 
 #### AI 原生设计
@@ -212,27 +211,24 @@ Pro Edition: Commercial License (Cocos Store / Gumroad)
 
 #### 工具概览
 
-| 分类 | Action 数 | 说明 |
+| 分类（社区版运行时） | Action 数 | 说明 |
 |------|-----------|------|
-| 场景查询 | 43 | 节点树、搜索、组件内省、验证、空间查询 |
-| 场景操作 | 68 | 增删改、变换、组件、预制体、批量、UI、相机、材质 |
-| 资产管理 | 32 | 增删改、发现、Meta 控制、生成、工具函数 |
-| 编辑器控制 | 45 | 场景生命周期、选择、控制台、面板、构建、预览 |
+| 场景查询 | 50 | 节点树、搜索、组件内省、验证、空间查询 |
+| 场景操作 | 39 | 增删改、变换、组件、预制体、UI、相机/材质扩展 |
+| 资产管理 | 17 | 增删改、发现、Meta 控制、URL/UUID 互转 |
+| 编辑器控制 | 38 | 场景生命周期、选择、控制台、构建、预览、gizmo/view 基础 |
 | 原子宏工具 | 5 | 高内聚多步操作，失败自动回滚 |
-| 引擎操作 | 8 | 帧率、暂停/恢复、系统信息、渲染统计 |
+| 脚本工具 | 2 | `execute_script`、`register_custom_macro` |
 | 动画 | 10 | 创建剪辑、播放控制、交叉淡入淡出 |
-| 物理 | 12 | 碰撞体、刚体、关节、世界配置、射线检测 |
-| 参考图 | 7 | 叠加层管理 |
-| 偏好设置 | 7 | 编辑器偏好（全局/项目） |
-| 广播 | 5 | 编辑器事件、自定义消息、原始 IPC |
-| 工具管理 | 4 | 列出/启用/禁用工具 |
+| 物理 | 10 | 碰撞体、刚体、关节、世界配置 |
+| 偏好/广播/工具管理/状态 | 17 | preferences(7)、broadcast(5)、tool_management(4)、bridge_status(1) |
 
-#### Pro 版独占
-- 完整的场景/资产/编辑器 action 集（额外 110+ 个 action）
-- 引擎操作和参考图工具
-- AI 场景生成器（规划中）— 自然语言 → 完整场景
-- 批量操作引擎（规划中）— 节点匹配 + 批量变换
-- 场景审计工具（规划中）— 自动检测问题 + 修复建议
+#### Pro 版（Native）状态
+- 商业承诺：270+ 生产可用 action（Phase 1-3）
+- Native 代码注册快照：最高 28 个工具 / 408 个 action（含 Phase 4-5 模块）
+- AI 工具 `scene_generator` / `batch_engine` / `scene_audit` 已在 Native 模块实现，按版本分阶段发布
+
+统一口径请以 [docs/PRODUCT_TRUST_ASSET.md](docs/PRODUCT_TRUST_ASSET.md) 与 [docs/trust-metrics.json](docs/trust-metrics.json) 为准。
 
 ### 面板
 

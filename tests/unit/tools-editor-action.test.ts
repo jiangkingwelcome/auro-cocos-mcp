@@ -102,17 +102,15 @@ describe('editor_action — bridgeGet actions', () => {
 // 3. editorMsg 类 actions
 // ─────────────────────────────────────────────────────────────────────────────
 describe('editor_action — editorMsg actions', () => {
-  it.skip('send_message 透传 module / message / args', async () => {
-    const editorMsg = vi.fn().mockResolvedValue({ ok: true });
-    const server = buildCocosToolServer(makeCtx({ editorMsg }));
-
-    await server.callTool('editor_action', {
+  it('send_message 在社区版返回 isError', async () => {
+    const server = buildCocosToolServer(makeCtx());
+    const result = await server.callTool('editor_action', {
       action: 'send_message',
       module: 'scene',
       message: 'reload',
       args: ['arg1'],
     });
-    expect(editorMsg).toHaveBeenCalledWith('scene', 'reload', 'arg1');
+    expect(result.isError).toBe(true);
   });
 
   it('log 调用 bridgePost("/api/console/log")', async () => {
@@ -147,20 +145,12 @@ describe('editor_action — editorMsg actions', () => {
     expect(bridgePost).toHaveBeenCalledWith('/api/console/clear', {});
   });
 
-  it.skip('open_panel 调用 editorMsg("panel", "open", panelName)', async () => {
-    const editorMsg = vi.fn().mockResolvedValue({});
-    const server = buildCocosToolServer(makeCtx({ editorMsg }));
-
-    await server.callTool('editor_action', { action: 'open_panel', panel: 'animator' });
-    expect(editorMsg).toHaveBeenCalledWith('panel', 'open', 'animator');
-  });
-
-  it.skip('close_panel 调用 editorMsg("panel", "close", panelName)', async () => {
-    const editorMsg = vi.fn().mockResolvedValue({});
-    const server = buildCocosToolServer(makeCtx({ editorMsg }));
-
-    await server.callTool('editor_action', { action: 'close_panel', panel: 'animator' });
-    expect(editorMsg).toHaveBeenCalledWith('panel', 'close', 'animator');
+  it('open_panel / close_panel 在社区版返回 isError', async () => {
+    const server = buildCocosToolServer(makeCtx());
+    const openResult = await server.callTool('editor_action', { action: 'open_panel', panel: 'animator' });
+    const closeResult = await server.callTool('editor_action', { action: 'close_panel', panel: 'animator' });
+    expect(openResult.isError).toBe(true);
+    expect(closeResult.isError).toBe(true);
   });
 
   it('focus_node 缺少 uuid 时返回 isError', async () => {
@@ -187,28 +177,14 @@ describe('editor_action — editorMsg actions', () => {
     expect(result.isError).toBe(true);
   });
 
-  it.skip('reload_plugin 正确调用 editorMsg("package", "reload")', async () => {
-    const editorMsg = vi.fn().mockResolvedValue({ success: true });
-    const server = buildCocosToolServer(makeCtx({ editorMsg }));
-
-    await server.callTool('editor_action', { action: 'reload_plugin', module: 'aura-for-cocos' });
-    expect(editorMsg).toHaveBeenCalledWith('package', 'reload', 'aura-for-cocos');
-  });
-
-  it.skip('open_preferences 调用 editorMsg("panel", "open", "preferences")', async () => {
-    const editorMsg = vi.fn().mockResolvedValue({});
-    const server = buildCocosToolServer(makeCtx({ editorMsg }));
-
-    await server.callTool('editor_action', { action: 'open_preferences' });
-    expect(editorMsg).toHaveBeenCalledWith('panel', 'open', 'preferences');
-  });
-
-  it.skip('open_project_settings 调用 editorMsg("panel", "open", "project-settings")', async () => {
-    const editorMsg = vi.fn().mockResolvedValue({});
-    const server = buildCocosToolServer(makeCtx({ editorMsg }));
-
-    await server.callTool('editor_action', { action: 'open_project_settings' });
-    expect(editorMsg).toHaveBeenCalledWith('panel', 'open', 'project-settings');
+  it('reload_plugin / open_preferences / open_project_settings 在社区版返回 isError', async () => {
+    const server = buildCocosToolServer(makeCtx());
+    const reload = await server.callTool('editor_action', { action: 'reload_plugin', module: 'aura-for-cocos' });
+    const pref = await server.callTool('editor_action', { action: 'open_preferences' });
+    const project = await server.callTool('editor_action', { action: 'open_project_settings' });
+    expect(reload.isError).toBe(true);
+    expect(pref.isError).toBe(true);
+    expect(project.isError).toBe(true);
   });
 });
 

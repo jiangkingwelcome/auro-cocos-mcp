@@ -1,0 +1,2749 @@
+
+[1m[46m RUN [49m[22m [36mv4.0.18 [39m[90mE:/gitproject/cocos/auro-cocos-mcp[39m
+      [2mCoverage enabled with [22m[33mv8[39m
+
+ [32m✓[39m tests/unit/registry.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 74[2mms[22m[39m
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_query — standard dispatchQuery actions[2m > [22m[2mtree calls sceneMethod('dispatchQuery')
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_query.tree {action:"tree"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_query — standard dispatchQuery actions[2m > [22m[2mtree calls sceneMethod('dispatchQuery')
+[22m[39m[MCP] #1 ✓ scene_query.tree 1ms
+
+[90mstdout[2m | tests/unit/tools-editor-action.test.ts[2m > [22m[2meditor_action — bridgePost actions[2m > [22m[2msave_scene 调用 POST /api/editor/save-scene
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → editor_action.save_scene {action:"save_scene"}
+
+[90mstdout[2m | tests/unit/tools-editor-action.test.ts[2m > [22m[2meditor_action — bridgePost actions[2m > [22m[2msave_scene 调用 POST /api/editor/save-scene
+[22m[39m[MCP] #1 ✓ editor_action.save_scene 1ms
+
+[90mstdout[2m | tests/unit/tools-editor-coverage.test.ts[2m > [22m[2meditor_action — bridgePost actions[2m > [22m[2msave_scene calls POST /api/editor/save-scene
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → editor_action.save_scene {action:"save_scene"}
+
+[90mstdout[2m | tests/unit/tools-editor-coverage.test.ts[2m > [22m[2meditor_action — bridgePost actions[2m > [22m[2msave_scene calls POST /api/editor/save-scene
+[22m[39m[MCP] #1 ✓ editor_action.save_scene 2ms
+
+[90mstdout[2m | tests/unit/tools-asset-operation.test.ts[2m > [22m[2masset_operation — bridgeGet actions[2m > [22m[2mlist 调用 /api/asset-db/query-assets
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → asset_operation.list {action:"list"}
+
+[90mstdout[2m | tests/unit/tools-asset-operation.test.ts[2m > [22m[2masset_operation — bridgeGet actions[2m > [22m[2mlist 调用 /api/asset-db/query-assets
+[22m[39m[MCP] #1 ✓ asset_operation.list 3ms
+
+[90mstdout[2m | tests/unit/tools-new-features.test.ts[2m > [22m[2m新增功能 — 场景列表查询[2m > [22m[2mlist_all_scenes 调用 editorMsg 查询所有 .scene 文件
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_query.list_all_scenes {action:"list_all_scenes"}
+
+[90mstdout[2m | tests/unit/tools-asset-coverage.test.ts[2m > [22m[2masset_operation — bridgeGet actions[2m > [22m[2mlist calls bridgeGet /api/asset-db/query-assets
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → asset_operation.list {action:"list"}
+
+[90mstdout[2m | tests/unit/tools-asset-coverage.test.ts[2m > [22m[2masset_operation — bridgeGet actions[2m > [22m[2mlist calls bridgeGet /api/asset-db/query-assets
+[22m[39m[MCP] #1 ✓ asset_operation.list 4ms
+
+[90mstdout[2m | tests/unit/tools-misc.test.ts[2m > [22m[2mpreferences tool[2m > [22m[2mlist action calls bridgeGet
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → preferences.list {action:"list"}
+
+[90mstdout[2m | tests/unit/tools-misc.test.ts[2m > [22m[2mpreferences tool[2m > [22m[2mlist action calls bridgeGet
+[22m[39m[MCP] #1 ✓ preferences.list 2ms
+
+[90mstdout[2m | tests/unit/tools-editor-action.test.ts[2m > [22m[2meditor_action — bridgePost actions[2m > [22m[2mopen_scene 传入 url
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → editor_action.open_scene {action:"open_scene", url:"db://assets/scenes/main.scene"}
+
+[90mstdout[2m | tests/unit/tools-editor-action.test.ts[2m > [22m[2meditor_action — bridgePost actions[2m > [22m[2mopen_scene 传入 url
+[22m[39m[MCP] #1 ✓ editor_action.open_scene 0ms
+
+[90mstdout[2m | tests/unit/tools-animation.test.ts[2m > [22m[2manimation_tool[2m > [22m[2mcreate_clip calls sceneMethod and returns result
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → animation_tool.create_clip {action:"create_clip", uuid:"test-uuid"}
+
+[90mstdout[2m | tests/unit/tools-animation.test.ts[2m > [22m[2manimation_tool[2m > [22m[2mcreate_clip calls sceneMethod and returns result
+[22m[39m[MCP] #1 ✓ animation_tool.create_clip 4ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_query — standard dispatchQuery actions[2m > [22m[2mlist calls sceneMethod('dispatchQuery')
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_query.list {action:"list"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_query — standard dispatchQuery actions[2m > [22m[2mlist calls sceneMethod('dispatchQuery')
+[22m[39m[MCP] #1 ✓ scene_query.list 0ms
+
+[90mstdout[2m | tests/unit/tools-new-features.test.ts[2m > [22m[2m新增功能 — 场景列表查询[2m > [22m[2mlist_all_scenes 调用 editorMsg 查询所有 .scene 文件
+[22m[39m[MCP] #1 ✓ scene_query.list_all_scenes 54ms
+
+[90mstdout[2m | tests/unit/tools-script.test.ts[2m > [22m[2mexecute_script[2m > [22m[2mcalls sceneMethod with method and args
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → execute_script {}
+
+[90mstdout[2m | tests/unit/tools-script.test.ts[2m > [22m[2mexecute_script[2m > [22m[2mcalls sceneMethod with method and args
+[22m[39m[MCP] #1 ✓ execute_script 2ms
+
+[90mstdout[2m | tests/unit/tools-competitive-features.test.ts[2m > [22m[2m竞品功能验证 — UUID/URL 互转[2m > [22m[2muuid_to_url: 传入 uuid 应调用 editorMsg("asset-db", "query-url", uuid)
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → asset_operation.uuid_to_url {action:"uuid_to_url", uuid:"abc-123-def"}
+
+[90mstdout[2m | tests/unit/tools-competitive-features.test.ts[2m > [22m[2m竞品功能验证 — UUID/URL 互转[2m > [22m[2muuid_to_url: 传入 uuid 应调用 editorMsg("asset-db", "query-url", uuid)
+[22m[39m[MCP] #1 ✓ asset_operation.uuid_to_url 4ms
+
+[90mstdout[2m | tests/unit/tools-physics.test.ts[2m > [22m[2mphysics_tool[2m > [22m[2mget_collider_info dispatches query
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → physics_tool.get_collider_info {action:"get_collider_info", uuid:"node-1"}
+
+[90mstdout[2m | tests/unit/tools-atomic.test.ts[2m > [22m[2mcreate_prefab_atomic — 正常流程[2m > [22m[2m完整流程：创建节点 → 创建预制体 → 刷新 → 清理
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → create_prefab_atomic {}
+
+[90mstdout[2m | tests/unit/tools-physics.test.ts[2m > [22m[2mphysics_tool[2m > [22m[2mget_collider_info dispatches query
+[22m[39m[MCP] #1 ✓ physics_tool.get_collider_info 4ms
+
+[90mstdout[2m | tests/unit/tools-atomic.test.ts[2m > [22m[2mcreate_prefab_atomic — 正常流程[2m > [22m[2m完整流程：创建节点 → 创建预制体 → 刷新 → 清理
+[22m[39m[MCP] #1 ✓ create_prefab_atomic 6ms
+
+[90mstdout[2m | tests/unit/tools-editor-action.test.ts[2m > [22m[2meditor_action — bridgePost actions[2m > [22m[2mnew_scene 调用 POST /api/scene/new-scene
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → editor_action.new_scene {action:"new_scene"}
+
+[90mstdout[2m | tests/unit/tools-editor-action.test.ts[2m > [22m[2meditor_action — bridgePost actions[2m > [22m[2mnew_scene 调用 POST /api/scene/new-scene
+[22m[39m[MCP] #1 ✓ editor_action.new_scene 0ms
+
+[90mstdout[2m | tests/unit/tools-misc.test.ts[2m > [22m[2mpreferences tool[2m > [22m[2mget action with key calls editorMsg (IPC primary)
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → preferences.get {action:"get"}
+
+[90mstdout[2m | tests/unit/tools-misc.test.ts[2m > [22m[2mpreferences tool[2m > [22m[2mget action with key calls editorMsg (IPC primary)
+[22m[39m[MCP] #1 ✓ preferences.get 1ms
+
+[90mstdout[2m | tests/unit/tools-asset-coverage.test.ts[2m > [22m[2masset_operation — bridgeGet actions[2m > [22m[2mlist with custom pattern
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → asset_operation.list {action:"list"}
+
+[90mstdout[2m | tests/unit/tools-asset-coverage.test.ts[2m > [22m[2masset_operation — bridgeGet actions[2m > [22m[2mlist with custom pattern
+[22m[39m[MCP] #1 ✓ asset_operation.list 2ms
+
+[90mstdout[2m | tests/unit/stability-fixes.test.ts[2m > [22m[2mstability fixes — editor_action semantics[2m > [22m[2mplay_in_editor 调用预览启动接口，而不是进入 prefab 编辑模式
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → editor_action.play_in_editor {action:"play_in_editor"}
+
+[90mstdout[2m | tests/unit/stability-fixes.test.ts[2m > [22m[2mstability fixes — editor_action semantics[2m > [22m[2mplay_in_editor 调用预览启动接口，而不是进入 prefab 编辑模式
+[22m[39m[MCP] #1 ✓ editor_action.play_in_editor 2ms
+
+[90mstdout[2m | tests/unit/tools-editor-coverage.test.ts[2m > [22m[2meditor_action — bridgePost actions[2m > [22m[2mopen_scene calls POST /api/editor/open-scene
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → editor_action.open_scene {action:"open_scene", url:"db://assets/scenes/main.scene"}
+
+[90mstdout[2m | tests/unit/tools-editor-coverage.test.ts[2m > [22m[2meditor_action — bridgePost actions[2m > [22m[2mopen_scene calls POST /api/editor/open-scene
+[22m[39m[MCP] #1 ✓ editor_action.open_scene 1ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_query — standard dispatchQuery actions[2m > [22m[2mstats calls sceneMethod('dispatchQuery')
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_query.stats {action:"stats"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_query — standard dispatchQuery actions[2m > [22m[2mstats calls sceneMethod('dispatchQuery')
+[22m[39m[MCP] #1 ✓ scene_query.stats 1ms
+
+[90mstdout[2m | tests/unit/tools-asset-operation.test.ts[2m > [22m[2masset_operation — bridgeGet actions[2m > [22m[2mlist 可以指定自定义 pattern
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → asset_operation.list {action:"list"}
+
+[90mstdout[2m | tests/unit/tools-asset-operation.test.ts[2m > [22m[2masset_operation — bridgeGet actions[2m > [22m[2mlist 可以指定自定义 pattern
+[22m[39m[MCP] #1 ✓ asset_operation.list 1ms
+
+[90mstdout[2m | tests/unit/tools-atomic.test.ts[2m > [22m[2mcreate_prefab_atomic — 正常流程[2m > [22m[2m路径透传：大写 Prefabs 原样保留（CASE_NORMALIZE_MAP 已清空）
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → create_prefab_atomic {}
+
+[90mstdout[2m | tests/unit/tools-atomic.test.ts[2m > [22m[2mcreate_prefab_atomic — 正常流程[2m > [22m[2m路径透传：大写 Prefabs 原样保留（CASE_NORMALIZE_MAP 已清空）
+[22m[39m[MCP] #1 ✓ create_prefab_atomic 1ms
+
+[90mstdout[2m | tests/unit/tools-animation.test.ts[2m > [22m[2manimation_tool[2m > [22m[2mplay calls sceneMethod and returns result
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → animation_tool.play {action:"play", uuid:"test-uuid"}
+
+[90mstdout[2m | tests/unit/tools-animation.test.ts[2m > [22m[2manimation_tool[2m > [22m[2mplay calls sceneMethod and returns result
+[22m[39m[MCP] #1 ✓ animation_tool.play 1ms
+
+[90mstdout[2m | tests/unit/tools-script.test.ts[2m > [22m[2mexecute_script[2m > [22m[2mhandles missing args gracefully
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → execute_script {}
+
+[90mstdout[2m | tests/unit/tools-script.test.ts[2m > [22m[2mexecute_script[2m > [22m[2mhandles missing args gracefully
+[22m[39m[MCP] #1 ✓ execute_script 1ms
+
+[90mstdout[2m | tests/unit/tools-competitive-features.test.ts[2m > [22m[2m竞品功能验证 — UUID/URL 互转[2m > [22m[2murl_to_uuid: 传入 url 应调用 editorMsg("asset-db", "query-uuid", url)
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → asset_operation.url_to_uuid {action:"url_to_uuid", url:"db://assets/textures/icon.png"}
+
+[90mstdout[2m | tests/unit/tools-competitive-features.test.ts[2m > [22m[2m竞品功能验证 — UUID/URL 互转[2m > [22m[2murl_to_uuid: 传入 url 应调用 editorMsg("asset-db", "query-uuid", url)
+[22m[39m[MCP] #1 ✓ asset_operation.url_to_uuid 1ms
+
+[90mstdout[2m | tests/unit/tools-new-features.test.ts[2m > [22m[2m新增功能 — 场景验证/完整性[2m > [22m[2mvalidate_scene 路由到 sceneMethod("dispatchQuery")
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_query.validate_scene {action:"validate_scene"}
+
+[90mstdout[2m | tests/unit/tools-new-features.test.ts[2m > [22m[2m新增功能 — 场景验证/完整性[2m > [22m[2mvalidate_scene 路由到 sceneMethod("dispatchQuery")
+[22m[39m[MCP] #1 ✓ scene_query.validate_scene 0ms
+
+[90mstdout[2m | tests/unit/tools-physics.test.ts[2m > [22m[2mphysics_tool[2m > [22m[2madd_collider maps type to component name
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → physics_tool.add_collider {action:"add_collider", uuid:"n1"}
+
+[90mstdout[2m | tests/unit/tools-physics.test.ts[2m > [22m[2mphysics_tool[2m > [22m[2madd_collider maps type to component name
+[22m[39m[MCP] #1 ✓ physics_tool.add_collider 1ms
+
+ [32m✓[39m tests/unit/token-manager.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 113[2mms[22m[39m
+[90mstdout[2m | tests/unit/tools-asset-operation.test.ts[2m > [22m[2masset_operation — bridgeGet actions[2m > [22m[2minfo 调用 /api/asset-db/query-asset-info
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → asset_operation.info {action:"info", url:"db://assets/foo.ts"}
+
+[90mstdout[2m | tests/unit/tools-competitive-features.test.ts[2m > [22m[2m竞品功能验证 — 原子宏操作 (我们的优势)[2m > [22m[2m三个 macro 工具均已注册
+[22m[39m[MCP] Community Edition — JS tools registered
+
+[90mstdout[2m | tests/unit/tools-misc.test.ts[2m > [22m[2mpreferences tool[2m > [22m[2mset action calls editorMsg (IPC primary)
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → preferences.set {action:"set", value:"dark"}
+
+[90mstdout[2m | tests/unit/tools-editor-action.test.ts[2m > [22m[2meditor_action — bridgePost actions[2m > [22m[2mundo 调用 POST /api/editor/undo
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → editor_action.undo {action:"undo"}
+
+[90mstdout[2m | tests/unit/tools-asset-coverage.test.ts[2m > [22m[2masset_operation — bridgeGet actions[2m > [22m[2minfo calls bridgeGet /api/asset-db/query-asset-info
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → asset_operation.info {action:"info", url:"db://assets/hero.png"}
+
+[90mstdout[2m | tests/unit/tools-atomic.test.ts[2m > [22m[2mcreate_prefab_atomic — 正常流程[2m > [22m[2mcleanupSourceNode=false 不清理临时节点
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → create_prefab_atomic {}
+
+[90mstdout[2m | tests/unit/stability-fixes.test.ts[2m > [22m[2mstability fixes — preferences scope fallback[2m > [22m[2mget_global 在 IPC 失败时保留 global scope
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → preferences.get_global {action:"get_global"}
+
+[90mstdout[2m | tests/unit/tools-builder.test.ts[2m > [22m[2mbuildCocosToolServer — 工具注册完整性[2m > [22m[2m包含所有预期的工具名
+[22m[39m[MCP] Community Edition — JS tools registered
+
+[90mstdout[2m | tests/unit/tools-animation.test.ts[2m > [22m[2manimation_tool[2m > [22m[2mpause calls sceneMethod and returns result
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → animation_tool.pause {action:"pause", uuid:"test-uuid"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_query — standard dispatchQuery actions[2m > [22m[2mnode_detail calls dispatchQuery with uuid
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_query.node_detail {action:"node_detail", uuid:"test-uuid"}
+
+[90mstdout[2m | tests/unit/tools-physics.test.ts[2m > [22m[2mphysics_tool[2m > [22m[2madd_collider returns error for unknown type
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → physics_tool.add_collider {action:"add_collider", uuid:"n1"}
+
+[90mstdout[2m | tests/unit/tools-script.test.ts[2m > [22m[2mexecute_script[2m > [22m[2mreturns error on exception
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → execute_script {}
+
+[90mstdout[2m | tests/unit/tools-editor-coverage.test.ts[2m > [22m[2meditor_action — bridgePost actions[2m > [22m[2mnew_scene calls POST /api/scene/new-scene
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → editor_action.new_scene {action:"new_scene"}
+
+[90mstdout[2m | tests/unit/tools-new-features.test.ts[2m > [22m[2m新增功能 — 2D/3D 类型检测[2m > [22m[2mdetect_2d_3d 路由到 sceneMethod("dispatchQuery")
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_query.detect_2d_3d {action:"detect_2d_3d"}
+
+[90mstdout[2m | tests/unit/tools-asset-operation.test.ts[2m > [22m[2masset_operation — bridgeGet actions[2m > [22m[2minfo 调用 /api/asset-db/query-asset-info
+[22m[39m[MCP] #1 ✓ asset_operation.info 1ms
+
+[90mstdout[2m | tests/unit/tools-misc.test.ts[2m > [22m[2mpreferences tool[2m > [22m[2mset action calls editorMsg (IPC primary)
+[22m[39m[MCP] #1 ✓ preferences.set 1ms
+
+[90mstdout[2m | tests/unit/tools-editor-action.test.ts[2m > [22m[2meditor_action — bridgePost actions[2m > [22m[2mundo 调用 POST /api/editor/undo
+[22m[39m[MCP] #1 ✓ editor_action.undo 0ms
+
+[90mstdout[2m | tests/unit/tools-asset-coverage.test.ts[2m > [22m[2masset_operation — bridgeGet actions[2m > [22m[2minfo calls bridgeGet /api/asset-db/query-asset-info
+[22m[39m[MCP] #1 ✓ asset_operation.info 0ms
+
+[90mstdout[2m | tests/unit/tools-atomic.test.ts[2m > [22m[2mcreate_prefab_atomic — 正常流程[2m > [22m[2mcleanupSourceNode=false 不清理临时节点
+[22m[39m[MCP] #1 ✓ create_prefab_atomic 0ms
+
+[90mstdout[2m | tests/unit/stability-fixes.test.ts[2m > [22m[2mstability fixes — preferences scope fallback[2m > [22m[2mget_global 在 IPC 失败时保留 global scope
+[22m[39m[Aura] [EDITOR_IPC] 已忽略: 通过 IPC 读取偏好 "general.theme" 失败，回退到 HTTP 接口: IPC unavailable
+
+[90mstdout[2m | tests/unit/tools-animation.test.ts[2m > [22m[2manimation_tool[2m > [22m[2mpause calls sceneMethod and returns result
+[22m[39m[MCP] #1 ✓ animation_tool.pause 2ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_query — standard dispatchQuery actions[2m > [22m[2mnode_detail calls dispatchQuery with uuid
+[22m[39m[MCP] #1 ✓ scene_query.node_detail 18ms
+
+stderr | tests/unit/tools-physics.test.ts > physics_tool > add_collider returns error for unknown type
+[MCP] #1 ✗ physics_tool.add_collider 0ms — 未知 colliderType: unknown_type
+[90mstdout[2m | tests/unit/tools-editor-coverage.test.ts[2m > [22m[2meditor_action — bridgePost actions[2m > [22m[2mnew_scene calls POST /api/scene/new-scene
+[22m[39m[MCP] #1 ✓ editor_action.new_scene 0ms
+
+
+stderr | tests/unit/tools-script.test.ts > execute_script > returns error on exception
+[MCP] #1 ✗ execute_script 53ms — script error
+
+[90mstdout[2m | tests/unit/tools-new-features.test.ts[2m > [22m[2m新增功能 — 2D/3D 类型检测[2m > [22m[2mdetect_2d_3d 路由到 sceneMethod("dispatchQuery")
+[22m[39m[MCP] #1 ✓ scene_query.detect_2d_3d 0ms
+
+[90mstdout[2m | tests/unit/tools-asset-operation.test.ts[2m > [22m[2masset_operation — bridgePost actions[2m > [22m[2mcreate 调用 /api/asset-db/create-asset
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → asset_operation.create {action:"create", url:"db://assets/foo.ts"}
+
+[90mstdout[2m | tests/unit/tools-competitive-features.test.ts[2m > [22m[2m竞品功能验证 — 选区感知上下文 (我们的优势)[2m > [22m[2mget_current_selection: 无选中时返回空结果（不报错）
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_query.get_current_selection {action:"get_current_selection"}
+
+[90mstdout[2m | tests/unit/stability-fixes.test.ts[2m > [22m[2mstability fixes — preferences scope fallback[2m > [22m[2mget_global 在 IPC 失败时保留 global scope
+[22m[39m[MCP] #1 ✓ preferences.get_global 2ms
+
+[90mstdout[2m | tests/unit/tools-builder.test.ts[2m > [22m[2mbuildCocosToolServer — 工具注册完整性[2m > [22m[2m工具总数 >= 9
+[22m[39m[MCP] Community Edition — JS tools registered
+
+[90mstdout[2m | tests/unit/tools-physics.test.ts[2m > [22m[2mphysics_tool[2m > [22m[2madd_collider supports box2d
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → physics_tool.add_collider {action:"add_collider", uuid:"n"}
+
+[90mstdout[2m | tests/unit/tools-asset-operation.test.ts[2m > [22m[2masset_operation — bridgePost actions[2m > [22m[2mcreate 调用 /api/asset-db/create-asset
+[22m[39m[MCP] #1 ✓ asset_operation.create 2ms
+
+[90mstdout[2m | tests/unit/tools-competitive-features.test.ts[2m > [22m[2m竞品功能验证 — 选区感知上下文 (我们的优势)[2m > [22m[2mget_current_selection: 无选中时返回空结果（不报错）
+[22m[39m[MCP] #1 ✓ scene_query.get_current_selection 38ms
+
+[90mstdout[2m | tests/unit/tools-misc.test.ts[2m > [22m[2mpreferences tool[2m > [22m[2mget_global falls back to bridgeGet on IPC failure
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → preferences.get_global {action:"get_global"}
+
+[90mstdout[2m | tests/unit/tools-editor-action.test.ts[2m > [22m[2meditor_action — bridgePost actions[2m > [22m[2mredo 调用 POST /api/editor/redo
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → editor_action.redo {action:"redo"}
+
+[90mstdout[2m | tests/unit/tools-asset-coverage.test.ts[2m > [22m[2masset_operation — bridgePost actions[2m > [22m[2mcreate calls bridgePost /api/asset-db/create-asset
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → asset_operation.create {action:"create", url:"db://assets/test.ts"}
+
+[90mstdout[2m | tests/unit/tools-atomic.test.ts[2m > [22m[2mcreate_prefab_atomic — 正常流程[2m > [22m[2m带组件：添加 Sprite 组件
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → create_prefab_atomic {}
+
+[90mstdout[2m | tests/unit/tools-animation.test.ts[2m > [22m[2manimation_tool[2m > [22m[2mresume calls sceneMethod and returns result
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → animation_tool.resume {action:"resume", uuid:"test-uuid"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_query — standard dispatchQuery actions[2m > [22m[2mget_components calls dispatchQuery with uuid
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_query.get_components {action:"get_components", uuid:"test-uuid"}
+
+[90mstdout[2m | tests/unit/tools-physics.test.ts[2m > [22m[2mphysics_tool[2m > [22m[2madd_collider supports box2d
+[22m[39m[MCP] #1 ✓ physics_tool.add_collider 3ms
+
+[90mstdout[2m | tests/unit/tools-script.test.ts[2m > [22m[2mregister_custom_macro[2m > [22m[2mregisters a macro with allowed method
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → register_custom_macro {name:"test_macro"}
+
+[90mstdout[2m | tests/unit/tools-editor-coverage.test.ts[2m > [22m[2meditor_action — bridgePost actions[2m > [22m[2mundo calls POST /api/editor/undo
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → editor_action.undo {action:"undo"}
+
+[90mstdout[2m | tests/unit/tools-new-features.test.ts[2m > [22m[2m新增功能 — 2D/3D 类型检测[2m > [22m[2mdetect_2d_3d 支持传入 uuid 限定检测范围
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_query.detect_2d_3d {action:"detect_2d_3d", uuid:"node-123"}
+
+[90mstdout[2m | tests/unit/tools-misc.test.ts[2m > [22m[2mpreferences tool[2m > [22m[2mget_global falls back to bridgeGet on IPC failure
+[22m[39m[Aura] [EDITOR_IPC] 已忽略: 通过 IPC 读取偏好 "test.key" 失败，回退到 HTTP 接口: IPC unavailable
+
+[90mstdout[2m | tests/unit/tools-editor-action.test.ts[2m > [22m[2meditor_action — bridgePost actions[2m > [22m[2mredo 调用 POST /api/editor/redo
+[22m[39m[MCP] #1 ✓ editor_action.redo 0ms
+
+[90mstdout[2m | tests/unit/tools-asset-coverage.test.ts[2m > [22m[2masset_operation — bridgePost actions[2m > [22m[2mcreate calls bridgePost /api/asset-db/create-asset
+[22m[39m[MCP] #1 ✓ asset_operation.create 1ms
+
+[90mstdout[2m | tests/unit/tools-atomic.test.ts[2m > [22m[2mcreate_prefab_atomic — 正常流程[2m > [22m[2m带组件：添加 Sprite 组件
+[22m[39m[MCP] #1 ✓ create_prefab_atomic 1ms
+
+[90mstdout[2m | tests/unit/stability-fixes.test.ts[2m > [22m[2mstability fixes — preferences scope fallback[2m > [22m[2mset_project 在 IPC 失败时保留 project scope
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → preferences.set_project {action:"set_project", value:7456}
+
+[90mstdout[2m | tests/unit/tools-animation.test.ts[2m > [22m[2manimation_tool[2m > [22m[2mresume calls sceneMethod and returns result
+[22m[39m[MCP] #1 ✓ animation_tool.resume 1ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_query — standard dispatchQuery actions[2m > [22m[2mget_components calls dispatchQuery with uuid
+[22m[39m[MCP] #1 ✓ scene_query.get_components 0ms
+
+[90mstdout[2m | tests/unit/tools-script.test.ts[2m > [22m[2mregister_custom_macro[2m > [22m[2mregisters a macro with allowed method
+[22m[39m[MCP] #1 ✓ register_custom_macro 1ms
+
+[90mstdout[2m | tests/unit/tools-editor-coverage.test.ts[2m > [22m[2meditor_action — bridgePost actions[2m > [22m[2mundo calls POST /api/editor/undo
+[22m[39m[MCP] #1 ✓ editor_action.undo 0ms
+
+[90mstdout[2m | tests/unit/tools-new-features.test.ts[2m > [22m[2m新增功能 — 2D/3D 类型检测[2m > [22m[2mdetect_2d_3d 支持传入 uuid 限定检测范围
+[22m[39m[MCP] #1 ✓ scene_query.detect_2d_3d 1ms
+
+[90mstdout[2m | tests/unit/tools-asset-operation.test.ts[2m > [22m[2masset_operation — bridgePost actions[2m > [22m[2msave 调用 /api/asset-db/save-asset
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → asset_operation.save {action:"save", url:"db://assets/foo.ts"}
+
+[90mstdout[2m | tests/unit/tools-competitive-features.test.ts[2m > [22m[2m竞品功能验证 — 选区感知上下文 (我们的优势)[2m > [22m[2mget_current_selection: 有选中时调用 node_detail 充实信息
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_query.get_current_selection {action:"get_current_selection"}
+
+[90mstdout[2m | tests/unit/tools-misc.test.ts[2m > [22m[2mpreferences tool[2m > [22m[2mget_global falls back to bridgeGet on IPC failure
+[22m[39m[MCP] #1 ✓ preferences.get_global 2ms
+
+[90mstdout[2m | tests/unit/tools-atomic.test.ts[2m > [22m[2mcreate_prefab_atomic — 正常流程[2m > [22m[2m带子节点：创建 Viewport 子节点
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → create_prefab_atomic {}
+
+[90mstdout[2m | tests/unit/stability-fixes.test.ts[2m > [22m[2mstability fixes — preferences scope fallback[2m > [22m[2mset_project 在 IPC 失败时保留 project scope
+[22m[39m[Aura] [EDITOR_IPC] 已忽略: 通过 IPC 写入偏好 "preview.port" 失败，回退到 HTTP 接口: IPC unavailable
+
+[90mstdout[2m | tests/unit/tools-physics.test.ts[2m > [22m[2mphysics_tool[2m > [22m[2madd_collider supports circle2d
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → physics_tool.add_collider {action:"add_collider", uuid:"n"}
+
+[90mstdout[2m | tests/unit/tools-script.test.ts[2m > [22m[2mregister_custom_macro[2m > [22m[2mrejects disallowed method
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → register_custom_macro {name:"bad_macro"}
+
+[90mstdout[2m | tests/unit/tools-new-features.test.ts[2m > [22m[2m新增功能 — 属性重置[2m > [22m[2mreset_property 路由到 editorMsg reset-property
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.reset_property {action:"reset_property", uuid:"n1", component:"Label", property:"fontSize"}
+
+[90mstdout[2m | tests/unit/tools-asset-operation.test.ts[2m > [22m[2masset_operation — bridgePost actions[2m > [22m[2msave 调用 /api/asset-db/save-asset
+[22m[39m[MCP] #1 ✓ asset_operation.save 1ms
+
+[90mstdout[2m | tests/unit/tools-competitive-features.test.ts[2m > [22m[2m竞品功能验证 — 选区感知上下文 (我们的优势)[2m > [22m[2mget_current_selection: 有选中时调用 node_detail 充实信息
+[22m[39m[MCP] #1 ✓ scene_query.get_current_selection 1ms
+
+[90mstdout[2m | tests/unit/tools-misc.test.ts[2m > [22m[2mpreferences tool[2m > [22m[2mset_project falls back to bridgePost on IPC failure
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → preferences.set_project {action:"set_project", value:true}
+
+[90mstdout[2m | tests/unit/tools-editor-action.test.ts[2m > [22m[2meditor_action — bridgePost actions[2m > [22m[2mbuild 调用 POST /api/builder/build 并传入 platform
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → editor_action.build {action:"build"}
+
+[90mstdout[2m | tests/unit/tools-asset-coverage.test.ts[2m > [22m[2masset_operation — bridgePost actions[2m > [22m[2msave calls bridgePost /api/asset-db/save-asset
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → asset_operation.save {action:"save", url:"db://assets/test.ts"}
+
+[90mstdout[2m | tests/unit/tools-atomic.test.ts[2m > [22m[2mcreate_prefab_atomic — 正常流程[2m > [22m[2m带子节点：创建 Viewport 子节点
+[22m[39m[MCP] #1 ✓ create_prefab_atomic 0ms
+
+[90mstdout[2m | tests/unit/stability-fixes.test.ts[2m > [22m[2mstability fixes — preferences scope fallback[2m > [22m[2mset_project 在 IPC 失败时保留 project scope
+[22m[39m[MCP] #1 ✓ preferences.set_project 1ms
+
+[90mstdout[2m | tests/unit/tools-animation.test.ts[2m > [22m[2manimation_tool[2m > [22m[2mstop calls sceneMethod and returns result
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → animation_tool.stop {action:"stop", uuid:"test-uuid"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_query — standard dispatchQuery actions[2m > [22m[2mget_parent calls dispatchQuery with uuid
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_query.get_parent {action:"get_parent", uuid:"test-uuid"}
+
+[90mstdout[2m | tests/unit/tools-physics.test.ts[2m > [22m[2mphysics_tool[2m > [22m[2madd_collider supports circle2d
+[22m[39m[MCP] #1 ✓ physics_tool.add_collider 1ms
+
+stderr | tests/unit/tools-script.test.ts > register_custom_macro > rejects disallowed method
+[MCP] #1 ✗ register_custom_macro 1ms — 方法 "dangerousMethod" 不在允许列表中。
+
+[90mstdout[2m | tests/unit/tools-editor-coverage.test.ts[2m > [22m[2meditor_action — bridgePost actions[2m > [22m[2mredo calls POST /api/editor/redo
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → editor_action.redo {action:"redo"}
+
+[90mstdout[2m | tests/unit/tools-new-features.test.ts[2m > [22m[2m新增功能 — 属性重置[2m > [22m[2mreset_property 路由到 editorMsg reset-property
+[22m[39m[MCP] #1 ✓ scene_operation.reset_property 3ms
+
+[90mstdout[2m | tests/unit/tools-competitive-features.test.ts[2m > [22m[2m竞品功能验证 — 选区感知上下文 (我们的优势)[2m > [22m[2mget_active_scene_focus: 无选中时回退到场景统计
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_query.get_active_scene_focus {action:"get_active_scene_focus"}
+
+[90mstdout[2m | tests/unit/tools-misc.test.ts[2m > [22m[2mpreferences tool[2m > [22m[2mset_project falls back to bridgePost on IPC failure
+[22m[39m[Aura] [EDITOR_IPC] 已忽略: 通过 IPC 写入偏好 "test.key" 失败，回退到 HTTP 接口: IPC unavailable
+
+[90mstdout[2m | tests/unit/tools-editor-action.test.ts[2m > [22m[2meditor_action — bridgePost actions[2m > [22m[2mbuild 调用 POST /api/builder/build 并传入 platform
+[22m[39m[MCP] #1 ✓ editor_action.build 0ms
+
+[90mstdout[2m | tests/unit/tools-asset-coverage.test.ts[2m > [22m[2masset_operation — bridgePost actions[2m > [22m[2msave calls bridgePost /api/asset-db/save-asset
+[22m[39m[MCP] #1 ✓ asset_operation.save 1ms
+
+[90mstdout[2m | tests/unit/tools-animation.test.ts[2m > [22m[2manimation_tool[2m > [22m[2mstop calls sceneMethod and returns result
+[22m[39m[MCP] #1 ✓ animation_tool.stop 1ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_query — standard dispatchQuery actions[2m > [22m[2mget_parent calls dispatchQuery with uuid
+[22m[39m[MCP] #1 ✓ scene_query.get_parent 0ms
+
+[90mstdout[2m | tests/unit/tools-editor-coverage.test.ts[2m > [22m[2meditor_action — bridgePost actions[2m > [22m[2mredo calls POST /api/editor/redo
+[22m[39m[MCP] #1 ✓ editor_action.redo 0ms
+
+[90mstdout[2m | tests/unit/tools-asset-operation.test.ts[2m > [22m[2masset_operation — bridgePost actions[2m > [22m[2mdelete 调用 /api/asset-db/delete-asset
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → asset_operation.delete {action:"delete", url:"db://assets/old.ts"}
+
+[90mstdout[2m | tests/unit/tools-competitive-features.test.ts[2m > [22m[2m竞品功能验证 — 选区感知上下文 (我们的优势)[2m > [22m[2mget_active_scene_focus: 无选中时回退到场景统计
+[22m[39m[MCP] #1 ✓ scene_query.get_active_scene_focus 1ms
+
+[90mstdout[2m | tests/unit/tools-misc.test.ts[2m > [22m[2mpreferences tool[2m > [22m[2mset_project falls back to bridgePost on IPC failure
+[22m[39m[MCP] #1 ✓ preferences.set_project 0ms
+
+[90mstdout[2m | tests/unit/tools-atomic.test.ts[2m > [22m[2mcreate_prefab_atomic — 正常流程[2m > [22m[2m带 position 设置
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → create_prefab_atomic {}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_query — standard dispatchQuery actions[2m > [22m[2mget_children calls dispatchQuery with uuid
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_query.get_children {action:"get_children", uuid:"test-uuid"}
+
+[90mstdout[2m | tests/unit/tools-physics.test.ts[2m > [22m[2mphysics_tool[2m > [22m[2madd_collider supports polygon2d
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → physics_tool.add_collider {action:"add_collider", uuid:"n"}
+
+[90mstdout[2m | tests/unit/tools-script.test.ts[2m > [22m[2mregister_custom_macro[2m > [22m[2mregistered macro can be called
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → register_custom_macro {name:"callable_macro"}
+
+[90mstdout[2m | tests/unit/tools-asset-operation.test.ts[2m > [22m[2masset_operation — bridgePost actions[2m > [22m[2mdelete 调用 /api/asset-db/delete-asset
+[22m[39m[MCP] #1 ✓ asset_operation.delete 0ms
+
+[90mstdout[2m | tests/unit/tools-editor-action.test.ts[2m > [22m[2meditor_action — bridgePost actions[2m > [22m[2mpreview 调用 POST /api/preview/open
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → editor_action.preview {action:"preview"}
+
+[90mstdout[2m | tests/unit/tools-asset-coverage.test.ts[2m > [22m[2masset_operation — bridgePost actions[2m > [22m[2mdelete calls bridgePost /api/asset-db/delete-asset
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → asset_operation.delete {action:"delete", url:"db://assets/old.png"}
+
+[90mstdout[2m | tests/unit/tools-atomic.test.ts[2m > [22m[2mcreate_prefab_atomic — 正常流程[2m > [22m[2m带 position 设置
+[22m[39m[MCP] #1 ✓ create_prefab_atomic 0ms
+
+[90mstdout[2m | tests/unit/tools-animation.test.ts[2m > [22m[2manimation_tool[2m > [22m[2mget_state calls sceneMethod and returns result
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → animation_tool.get_state {action:"get_state", uuid:"test-uuid"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_query — standard dispatchQuery actions[2m > [22m[2mget_children calls dispatchQuery with uuid
+[22m[39m[MCP] #1 ✓ scene_query.get_children 1ms
+
+[90mstdout[2m | tests/unit/tools-physics.test.ts[2m > [22m[2mphysics_tool[2m > [22m[2madd_collider supports polygon2d
+[22m[39m[MCP] #1 ✓ physics_tool.add_collider 0ms
+
+[90mstdout[2m | tests/unit/tools-script.test.ts[2m > [22m[2mregister_custom_macro[2m > [22m[2mregistered macro can be called
+[22m[39m[MCP] #1 ✓ register_custom_macro 10ms
+
+[90mstdout[2m | tests/unit/tools-misc.test.ts[2m > [22m[2mbroadcast tool[2m > [22m[2mpoll action calls bridgeGet
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → broadcast.poll {action:"poll"}
+
+[90mstdout[2m | tests/unit/tools-editor-action.test.ts[2m > [22m[2meditor_action — bridgePost actions[2m > [22m[2mpreview 调用 POST /api/preview/open
+[22m[39m[MCP] #1 ✓ editor_action.preview 1ms
+
+[90mstdout[2m | tests/unit/tools-asset-coverage.test.ts[2m > [22m[2masset_operation — bridgePost actions[2m > [22m[2mdelete calls bridgePost /api/asset-db/delete-asset
+[22m[39m[MCP] #1 ✓ asset_operation.delete 1ms
+
+ [32m✓[39m tests/unit/stability-fixes.test.ts [2m([22m[2m5 tests[22m[2m | [22m[33m1 skipped[39m[2m)[22m[33m 417[2mms[22m[39m
+[90mstdout[2m | tests/unit/tools-animation.test.ts[2m > [22m[2manimation_tool[2m > [22m[2mget_state calls sceneMethod and returns result
+[22m[39m[MCP] #1 ✓ animation_tool.get_state 0ms
+
+[90mstdout[2m | tests/unit/tools-script.test.ts[2m > [22m[2mregister_custom_macro[2m > [22m[2mregistered macro can be called
+[22m[39m[MCP] #2 → macro_callable_macro {}
+
+[90mstdout[2m | tests/unit/tools-asset-operation.test.ts[2m > [22m[2masset_operation — bridgePost actions[2m > [22m[2mmove 调用 /api/asset-db/move-asset
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → asset_operation.move {action:"move"}
+
+[90mstdout[2m | tests/unit/tools-misc.test.ts[2m > [22m[2mbroadcast tool[2m > [22m[2mpoll action calls bridgeGet
+[22m[39m[MCP] #1 ✓ broadcast.poll 1ms
+
+[90mstdout[2m | tests/unit/tools-asset-coverage.test.ts[2m > [22m[2masset_operation — bridgePost actions[2m > [22m[2mmove calls bridgePost /api/asset-db/move-asset
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → asset_operation.move {action:"move"}
+
+[90mstdout[2m | tests/unit/tools-animation.test.ts[2m > [22m[2manimation_tool[2m > [22m[2mlist_clips calls sceneMethod and returns result
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → animation_tool.list_clips {action:"list_clips", uuid:"test-uuid"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_query — standard dispatchQuery actions[2m > [22m[2mget_sibling calls dispatchQuery with uuid
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_query.get_sibling {action:"get_sibling", uuid:"test-uuid"}
+
+[90mstdout[2m | tests/unit/tools-script.test.ts[2m > [22m[2mregister_custom_macro[2m > [22m[2mregistered macro can be called
+[22m[39m[MCP] #2 ✓ macro_callable_macro 1ms
+
+[90mstdout[2m | tests/unit/tools-asset-operation.test.ts[2m > [22m[2masset_operation — bridgePost actions[2m > [22m[2mmove 调用 /api/asset-db/move-asset
+[22m[39m[MCP] #1 ✓ asset_operation.move 1ms
+
+[90mstdout[2m | tests/unit/tools-asset-coverage.test.ts[2m > [22m[2masset_operation — bridgePost actions[2m > [22m[2mmove calls bridgePost /api/asset-db/move-asset
+[22m[39m[MCP] #1 ✓ asset_operation.move 0ms
+
+[90mstdout[2m | tests/unit/tools-animation.test.ts[2m > [22m[2manimation_tool[2m > [22m[2mlist_clips calls sceneMethod and returns result
+[22m[39m[MCP] #1 ✓ animation_tool.list_clips 2ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_query — standard dispatchQuery actions[2m > [22m[2mget_sibling calls dispatchQuery with uuid
+[22m[39m[MCP] #1 ✓ scene_query.get_sibling 0ms
+
+[90mstdout[2m | tests/unit/tools-asset-operation.test.ts[2m > [22m[2masset_operation — bridgePost actions[2m > [22m[2mimport 调用 /api/asset-db/import-asset
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → asset_operation.import {action:"import", sourcePath:"C:/images/icon.png"}
+
+[90mstdout[2m | tests/unit/tools-asset-operation.test.ts[2m > [22m[2masset_operation — bridgePost actions[2m > [22m[2mimport 调用 /api/asset-db/import-asset
+[22m[39m[MCP] #1 ✓ asset_operation.import 1ms
+
+[90mstdout[2m | tests/unit/tools-animation.test.ts[2m > [22m[2manimation_tool[2m > [22m[2mset_current_time calls sceneMethod and returns result
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → animation_tool.set_current_time {action:"set_current_time", uuid:"test-uuid"}
+
+[90mstdout[2m | tests/unit/tools-animation.test.ts[2m > [22m[2manimation_tool[2m > [22m[2mset_current_time calls sceneMethod and returns result
+[22m[39m[MCP] #1 ✓ animation_tool.set_current_time 0ms
+
+[90mstdout[2m | tests/unit/tools-asset-coverage.test.ts[2m > [22m[2masset_operation — bridgePost actions[2m > [22m[2mimport calls bridgePost /api/asset-db/import-asset
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → asset_operation.import {action:"import", sourcePath:"C:/img.png"}
+
+[90mstdout[2m | tests/unit/tools-asset-coverage.test.ts[2m > [22m[2masset_operation — bridgePost actions[2m > [22m[2mimport calls bridgePost /api/asset-db/import-asset
+[22m[39m[MCP] #1 ✓ asset_operation.import 1ms
+
+[90mstdout[2m | tests/unit/tools-script.test.ts[2m > [22m[2mregister_custom_macro[2m > [22m[2mregistered macro handles errors
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → register_custom_macro {name:"err_macro"}
+
+[90mstdout[2m | tests/unit/tools-script.test.ts[2m > [22m[2mregister_custom_macro[2m > [22m[2mregistered macro handles errors
+[22m[39m[MCP] #1 ✓ register_custom_macro 1ms
+
+[90mstdout[2m | tests/unit/tools-script.test.ts[2m > [22m[2mregister_custom_macro[2m > [22m[2mregistered macro handles errors
+[22m[39m[MCP] #2 → macro_err_macro {}
+
+stderr | tests/unit/tools-script.test.ts > register_custom_macro > registered macro handles errors
+[MCP] #2 ✗ macro_err_macro 0ms — macro fail
+
+[90mstdout[2m | tests/unit/tools-new-features.test.ts[2m > [22m[2m新增功能 — 预制体实例化到场景[2m > [22m[2minstantiate_prefab 缺少 prefabUrl 时返回错误
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.instantiate_prefab {action:"instantiate_prefab"}
+
+stderr | tests/unit/tools-new-features.test.ts > 新增功能 — 预制体实例化到场景 > instantiate_prefab 缺少 prefabUrl 时返回错误
+[MCP] #1 ✗ scene_operation.instantiate_prefab 0ms — action "instantiate_prefab" 缺少必需参数: prefabUrl
+
+[90mstdout[2m | tests/unit/tools-physics.test.ts[2m > [22m[2mphysics_tool[2m > [22m[2madd_collider supports capsule2d
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → physics_tool.add_collider {action:"add_collider", uuid:"n"}
+
+[90mstdout[2m | tests/unit/tools-physics.test.ts[2m > [22m[2mphysics_tool[2m > [22m[2madd_collider supports capsule2d
+[22m[39m[MCP] #1 ✓ physics_tool.add_collider 1ms
+
+[90mstdout[2m | tests/unit/tools-builder.test.ts[2m > [22m[2mbuildCocosToolServer — 工具注册完整性[2m > [22m[2m每个工具都有 description 和 inputSchema
+[22m[39m[MCP] Community Edition — JS tools registered
+
+[90mstdout[2m | tests/unit/tools-editor-action.test.ts[2m > [22m[2meditor_action — bridgeGet actions[2m > [22m[2mproject_info 调用 GET /api/editor/project-info
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → editor_action.project_info {action:"project_info"}
+
+[90mstdout[2m | tests/unit/tools-asset-operation.test.ts[2m > [22m[2masset_operation — bridgePost actions[2m > [22m[2mrefresh 调用 /api/asset-db/refresh
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → asset_operation.refresh {action:"refresh", url:"db://assets/prefabs"}
+
+[90mstdout[2m | tests/unit/tools-asset-coverage.test.ts[2m > [22m[2masset_operation — bridgePost actions[2m > [22m[2mopen calls bridgePost /api/asset-db/open-asset
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → asset_operation.open {action:"open", url:"db://assets/hero.png"}
+
+[90mstdout[2m | tests/unit/tools-competitive-features.test.ts[2m > [22m[2m竞品功能验证 — 危险操作拦截 (我们的优势)[2m > [22m[2mdestroy_node 无确认 → 被拦截
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.destroy_node {action:"destroy_node", uuid:"node-1"}
+
+[90mstdout[2m | tests/unit/tools-builder.test.ts[2m > [22m[2mbuildCocosToolServer — 工具注册完整性[2m > [22m[2mgetTotalActionCount() 远大于工具数（因为每个工具含多个 action）
+[22m[39m[MCP] Community Edition — JS tools registered
+
+[90mstdout[2m | tests/unit/tools-atomic.test.ts[2m > [22m[2mcreate_prefab_atomic — 失败与回滚[2m > [22m[2mcreateChildNode 失败时立即返回 isError（无回滚节点）
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → create_prefab_atomic {}
+
+[90mstdout[2m | tests/unit/tools-misc.test.ts[2m > [22m[2mbroadcast tool[2m > [22m[2mhistory action calls bridgeGet
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → broadcast.history {action:"history"}
+
+[90mstdout[2m | tests/unit/tools-editor-coverage.test.ts[2m > [22m[2meditor_action — bridgePost actions[2m > [22m[2mbuild calls POST /api/builder/build
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → editor_action.build {action:"build"}
+
+[90mstdout[2m | tests/unit/tools-animation.test.ts[2m > [22m[2manimation_tool[2m > [22m[2mset_speed calls sceneMethod and returns result
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → animation_tool.set_speed {action:"set_speed", uuid:"test-uuid"}
+
+[90mstdout[2m | tests/unit/tools-physics.test.ts[2m > [22m[2mphysics_tool[2m > [22m[2madd_collider supports box3d
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → physics_tool.add_collider {action:"add_collider", uuid:"n"}
+
+[90mstdout[2m | tests/unit/tools-new-features.test.ts[2m > [22m[2m新增功能 — 预制体实例化到场景[2m > [22m[2minstantiate_prefab 查询 uuid 并通过 scene-script 实例化
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.instantiate_prefab {action:"instantiate_prefab", prefabUrl:"db://assets/prefabs/Player.prefab"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_query — standard dispatchQuery actions[2m > [22m[2mget_world_position calls dispatchQuery with uuid
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_query.get_world_position {action:"get_world_position", uuid:"test-uuid"}
+
+ [32m✓[39m tests/unit/tools-script.test.ts [2m([22m[2m7 tests[22m[2m)[22m[33m 936[2mms[22m[39m
+[90mstdout[2m | tests/unit/tools-editor-action.test.ts[2m > [22m[2meditor_action — bridgeGet actions[2m > [22m[2mproject_info 调用 GET /api/editor/project-info
+[22m[39m[MCP] #1 ✓ editor_action.project_info 1ms
+
+[90mstdout[2m | tests/unit/tools-asset-operation.test.ts[2m > [22m[2masset_operation — bridgePost actions[2m > [22m[2mrefresh 调用 /api/asset-db/refresh
+[22m[39m[MCP] #1 ✓ asset_operation.refresh 0ms
+
+[90mstdout[2m | tests/unit/tools-asset-coverage.test.ts[2m > [22m[2masset_operation — bridgePost actions[2m > [22m[2mopen calls bridgePost /api/asset-db/open-asset
+[22m[39m[MCP] #1 ✓ asset_operation.open 0ms
+stderr | tests/unit/tools-competitive-features.test.ts > 竞品功能验证 — 危险操作拦截 (我们的优势) > destroy_node 无确认 → 被拦截
+[MCP] #1 ✗ scene_operation.destroy_node 14ms — 危险操作 destroy_node 已拦截。请显式传入 confirmDangerous=true 后重试。
+
+stderr | tests/unit/tools-atomic.test.ts > create_prefab_atomic — 失败与回滚 > createChildNode 失败时立即返回 isError（无回滚节点）
+[MCP] #1 ✗ create_prefab_atomic 1ms — 场景未加载
+
+
+[90mstdout[2m | tests/unit/tools-misc.test.ts[2m > [22m[2mbroadcast tool[2m > [22m[2mhistory action calls bridgeGet
+[22m[39m[MCP] #1 ✓ broadcast.history 1ms
+
+[90mstdout[2m | tests/unit/tools-editor-coverage.test.ts[2m > [22m[2meditor_action — bridgePost actions[2m > [22m[2mbuild calls POST /api/builder/build
+[22m[39m[MCP] #1 ✓ editor_action.build 2ms
+
+[90mstdout[2m | tests/unit/tools-animation.test.ts[2m > [22m[2manimation_tool[2m > [22m[2mset_speed calls sceneMethod and returns result
+[22m[39m[MCP] #1 ✓ animation_tool.set_speed 0ms
+
+[90mstdout[2m | tests/unit/tools-physics.test.ts[2m > [22m[2mphysics_tool[2m > [22m[2madd_collider supports box3d
+[22m[39m[MCP] #1 ✓ physics_tool.add_collider 1ms
+
+[90mstdout[2m | tests/unit/tools-new-features.test.ts[2m > [22m[2m新增功能 — 预制体实例化到场景[2m > [22m[2minstantiate_prefab 查询 uuid 并通过 scene-script 实例化
+[22m[39m[MCP] #1 ✓ scene_operation.instantiate_prefab 1ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_query — standard dispatchQuery actions[2m > [22m[2mget_world_position calls dispatchQuery with uuid
+[22m[39m[MCP] #1 ✓ scene_query.get_world_position 3ms
+
+[90mstdout[2m | tests/unit/tools-editor-action.test.ts[2m > [22m[2meditor_action — editorMsg actions[2m > [22m[2mlog 调用 bridgePost("/api/console/log")
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → editor_action.log {action:"log"}
+
+[90mstdout[2m | tests/unit/tools-builder.test.ts[2m > [22m[2mbuildCocosToolServer — bridge_status[2m > [22m[2m调用 bridgeGet("/api/status") 并返回连接状态
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → bridge_status {}
+
+[90mstdout[2m | tests/unit/tools-editor-action.test.ts[2m > [22m[2meditor_action — editorMsg actions[2m > [22m[2mlog 调用 bridgePost("/api/console/log")
+[22m[39m[MCP] #1 ✓ editor_action.log 1ms
+
+[90mstdout[2m | tests/unit/tools-asset-operation.test.ts[2m > [22m[2masset_operation — editorMsg actions[2m > [22m[2muuid_to_url 调用 editorMsg("asset-db", "query-url")
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → asset_operation.uuid_to_url {action:"uuid_to_url", uuid:"some-uuid"}
+
+[90mstdout[2m | tests/unit/tools-asset-coverage.test.ts[2m > [22m[2masset_operation — bridgePost actions[2m > [22m[2mrefresh calls bridgePost /api/asset-db/refresh
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → asset_operation.refresh {action:"refresh"}
+
+[90mstdout[2m | tests/unit/tools-competitive-features.test.ts[2m > [22m[2m竞品功能验证 — 危险操作拦截 (我们的优势)[2m > [22m[2mclear_children 无确认 → 被拦截
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.clear_children {action:"clear_children", uuid:"node-1"}
+
+[90mstdout[2m | tests/unit/tools-builder.test.ts[2m > [22m[2mbuildCocosToolServer — bridge_status[2m > [22m[2m调用 bridgeGet("/api/status") 并返回连接状态
+[22m[39m[MCP] #1 ✓ bridge_status 2ms
+
+[90mstdout[2m | tests/unit/tools-atomic.test.ts[2m > [22m[2mcreate_prefab_atomic — 失败与回滚[2m > [22m[2meditorMsg create-prefab 失败时自动回滚删除临时节点
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → create_prefab_atomic {}
+
+[90mstdout[2m | tests/unit/tools-misc.test.ts[2m > [22m[2mbroadcast tool[2m > [22m[2mclear action calls bridgePost
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → broadcast.clear {action:"clear"}
+
+[90mstdout[2m | tests/unit/tools-editor-coverage.test.ts[2m > [22m[2meditor_action — bridgePost actions[2m > [22m[2mpreview calls POST /api/preview/open
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → editor_action.preview {action:"preview"}
+
+[90mstdout[2m | tests/unit/tools-animation.test.ts[2m > [22m[2manimation_tool[2m > [22m[2mcrossfade calls sceneMethod and returns result
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → animation_tool.crossfade {action:"crossfade", uuid:"test-uuid"}
+
+[90mstdout[2m | tests/unit/tools-physics.test.ts[2m > [22m[2mphysics_tool[2m > [22m[2madd_collider supports sphere3d
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → physics_tool.add_collider {action:"add_collider", uuid:"n"}
+
+[90mstdout[2m | tests/unit/tools-new-features.test.ts[2m > [22m[2m新增功能 — 预制体实例化到场景[2m > [22m[2minstantiate_prefab 预制体不存在时返回错误
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.instantiate_prefab {action:"instantiate_prefab", prefabUrl:"db://assets/prefabs/NotExist.prefab"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_query — standard dispatchQuery actions[2m > [22m[2mget_world_rotation calls dispatchQuery with uuid
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_query.get_world_rotation {action:"get_world_rotation", uuid:"test-uuid"}
+
+[90mstdout[2m | tests/unit/tools-asset-operation.test.ts[2m > [22m[2masset_operation — editorMsg actions[2m > [22m[2muuid_to_url 调用 editorMsg("asset-db", "query-url")
+[22m[39m[MCP] #1 ✓ asset_operation.uuid_to_url 0ms
+
+[90mstdout[2m | tests/unit/tools-asset-coverage.test.ts[2m > [22m[2masset_operation — bridgePost actions[2m > [22m[2mrefresh calls bridgePost /api/asset-db/refresh
+[22m[39m[MCP] #1 ✓ asset_operation.refresh 1ms
+
+stderr | tests/unit/tools-competitive-features.test.ts > 竞品功能验证 — 危险操作拦截 (我们的优势) > clear_children 无确认 → 被拦截
+[MCP] #1 ✗ scene_operation.clear_children 0ms — 危险操作 clear_children 已拦截。请显式传入 confirmDangerous=true 后重试。
+
+stderr | tests/unit/tools-atomic.test.ts > create_prefab_atomic — 失败与回滚 > editorMsg create-prefab 失败时自动回滚删除临时节点
+[MCP] #1 ✗ create_prefab_atomic 1ms — 创建预制体失败
+
+[90mstdout[2m | tests/unit/tools-misc.test.ts[2m > [22m[2mbroadcast tool[2m > [22m[2mclear action calls bridgePost
+[22m[39m[MCP] #1 ✓ broadcast.clear 2ms
+
+[90mstdout[2m | tests/unit/tools-editor-coverage.test.ts[2m > [22m[2meditor_action — bridgePost actions[2m > [22m[2mpreview calls POST /api/preview/open
+[22m[39m[MCP] #1 ✓ editor_action.preview 1ms
+
+[90mstdout[2m | tests/unit/tools-animation.test.ts[2m > [22m[2manimation_tool[2m > [22m[2mcrossfade calls sceneMethod and returns result
+[22m[39m[MCP] #1 ✓ animation_tool.crossfade 1ms
+
+[90mstdout[2m | tests/unit/tools-physics.test.ts[2m > [22m[2mphysics_tool[2m > [22m[2madd_collider supports sphere3d
+[22m[39m[MCP] #1 ✓ physics_tool.add_collider 1ms
+
+stderr | tests/unit/tools-new-features.test.ts > 新增功能 — 预制体实例化到场景 > instantiate_prefab 预制体不存在时返回错误
+[MCP] #1 ✗ scene_operation.instantiate_prefab 42ms — 预制体不存在: db://assets/prefabs/NotExist.prefab
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_query — standard dispatchQuery actions[2m > [22m[2mget_world_rotation calls dispatchQuery with uuid
+[22m[39m[MCP] #1 ✓ scene_query.get_world_rotation 0ms
+
+[90mstdout[2m | tests/unit/tools-editor-action.test.ts[2m > [22m[2meditor_action — editorMsg actions[2m > [22m[2mwarn 调用 bridgePost("/api/console/warn")
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → editor_action.warn {action:"warn"}
+
+[90mstdout[2m | tests/unit/tools-builder.test.ts[2m > [22m[2mbuildCocosToolServer — bridge_status[2m > [22m[2mbridgeGet 失败时返回 connected: false 且 isError
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → bridge_status {}
+
+[90mstdout[2m | tests/unit/tools-misc.test.ts[2m > [22m[2mbroadcast tool[2m > [22m[2msend action calls bridgePost with channel
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → broadcast.send {action:"send"}
+
+[90mstdout[2m | tests/unit/tools-animation.test.ts[2m > [22m[2manimation_tool[2m > [22m[2mreturns error when uuid is missing
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → animation_tool.play {action:"play", uuid:""}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_query — standard dispatchQuery actions[2m > [22m[2mget_world_scale calls dispatchQuery with uuid
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_query.get_world_scale {action:"get_world_scale", uuid:"test-uuid"}
+
+[90mstdout[2m | tests/unit/tools-editor-action.test.ts[2m > [22m[2meditor_action — editorMsg actions[2m > [22m[2mwarn 调用 bridgePost("/api/console/warn")
+[22m[39m[MCP] #1 ✓ editor_action.warn 0ms
+
+[90mstdout[2m | tests/unit/tools-asset-operation.test.ts[2m > [22m[2masset_operation — editorMsg actions[2m > [22m[2murl_to_uuid 调用 editorMsg("asset-db", "query-uuid")
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → asset_operation.url_to_uuid {action:"url_to_uuid", url:"db://assets/foo.ts"}
+
+[90mstdout[2m | tests/unit/tools-asset-coverage.test.ts[2m > [22m[2masset_operation — bridgePost actions[2m > [22m[2mcreate_folder calls bridgePost /api/asset-db/create-asset with null content
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → asset_operation.create_folder {action:"create_folder", url:"db://assets/prefabs"}
+
+[90mstdout[2m | tests/unit/tools-competitive-features.test.ts[2m > [22m[2m竞品功能验证 — 危险操作拦截 (我们的优势)[2m > [22m[2mdestroy_node 有确认 → 放行
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.destroy_node {action:"destroy_node", uuid:"node-1"}
+
+stderr | tests/unit/tools-builder.test.ts > buildCocosToolServer — bridge_status > bridgeGet 失败时返回 connected: false 且 isError
+[MCP] #1 ✗ bridge_status 4ms — 连接超时
+
+[90mstdout[2m | tests/unit/tools-atomic.test.ts[2m > [22m[2mcreate_prefab_atomic — 失败与回滚[2m > [22m[2m回滚本身失败时，rollback 记录失败信息
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → create_prefab_atomic {}
+
+[90mstdout[2m | tests/unit/tools-misc.test.ts[2m > [22m[2mbroadcast tool[2m > [22m[2msend action calls bridgePost with channel
+[22m[39m[MCP] #1 ✓ broadcast.send 1ms
+
+[90mstdout[2m | tests/unit/tools-editor-coverage.test.ts[2m > [22m[2meditor_action — bridgePost actions[2m > [22m[2mpreview_refresh calls POST /api/preview/refresh
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → editor_action.preview_refresh {action:"preview_refresh"}
+
+stderr | tests/unit/tools-animation.test.ts > animation_tool > returns error when uuid is missing
+[MCP] #1 ✗ animation_tool.play 0ms — 缺少 uuid 参数
+
+[90mstdout[2m | tests/unit/tools-physics.test.ts[2m > [22m[2mphysics_tool[2m > [22m[2madd_collider supports capsule3d
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → physics_tool.add_collider {action:"add_collider", uuid:"n"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_query — standard dispatchQuery actions[2m > [22m[2mget_world_scale calls dispatchQuery with uuid
+[22m[39m[MCP] #1 ✓ scene_query.get_world_scale 1ms
+
+[90mstdout[2m | tests/unit/tools-editor-action.test.ts[2m > [22m[2meditor_action — editorMsg actions[2m > [22m[2merror 调用 bridgePost("/api/console/error")
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → editor_action.error {action:"error"}
+
+[90mstdout[2m | tests/unit/tools-asset-operation.test.ts[2m > [22m[2masset_operation — editorMsg actions[2m > [22m[2murl_to_uuid 调用 editorMsg("asset-db", "query-uuid")
+[22m[39m[MCP] #1 ✓ asset_operation.url_to_uuid 1ms
+
+[90mstdout[2m | tests/unit/tools-asset-coverage.test.ts[2m > [22m[2masset_operation — bridgePost actions[2m > [22m[2mcreate_folder calls bridgePost /api/asset-db/create-asset with null content
+[22m[39m[MCP] #1 ✓ asset_operation.create_folder 0ms
+
+[90mstdout[2m | tests/unit/tools-competitive-features.test.ts[2m > [22m[2m竞品功能验证 — 危险操作拦截 (我们的优势)[2m > [22m[2mdestroy_node 有确认 → 放行
+[22m[39m[MCP] #1 ✓ scene_operation.destroy_node 1ms
+
+[90mstdout[2m | tests/unit/tools-atomic.test.ts[2m > [22m[2mcreate_prefab_atomic — 失败与回滚[2m > [22m[2m回滚本身失败时，rollback 记录失败信息
+[22m[39m[Aura] [ASSET_OPERATION] 已忽略: 确保资源目录存在时冲突（已安全跳过）: 预制体创建失败
+
+[90mstdout[2m | tests/unit/tools-editor-coverage.test.ts[2m > [22m[2meditor_action — bridgePost actions[2m > [22m[2mpreview_refresh calls POST /api/preview/refresh
+[22m[39m[MCP] #1 ✓ editor_action.preview_refresh 3ms
+
+[90mstdout[2m | tests/unit/tools-physics.test.ts[2m > [22m[2mphysics_tool[2m > [22m[2madd_collider supports capsule3d
+[22m[39m[MCP] #1 ✓ physics_tool.add_collider 1ms
+
+[90mstdout[2m | tests/unit/tools-editor-action.test.ts[2m > [22m[2meditor_action — editorMsg actions[2m > [22m[2merror 调用 bridgePost("/api/console/error")
+[22m[39m[MCP] #1 ✓ editor_action.error 1ms
+
+[90mstdout[2m | tests/unit/tools-asset-operation.test.ts[2m > [22m[2masset_operation — editorMsg actions[2m > [22m[2mcreate_folder 调用 /api/asset-db/create-asset
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → asset_operation.create_folder {action:"create_folder", url:"db://assets/newfolder"}
+
+[90mstdout[2m | tests/unit/tools-asset-coverage.test.ts[2m > [22m[2masset_operation — bridgePost actions[2m > [22m[2mrename calls bridgePost /api/asset-db/move-asset
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → asset_operation.rename {action:"rename", url:"db://assets/old.png"}
+
+[90mstdout[2m | tests/unit/tools-builder.test.ts[2m > [22m[2mbuildCocosToolServer — scene_operation 危险操作守卫[2m > [22m[2mdestroy_node 没有 confirmDangerous → 被拦截，返回 isError
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.destroy_node {action:"destroy_node", uuid:"some-node-uuid"}
+
+[90mstdout[2m | tests/unit/tools-atomic.test.ts[2m > [22m[2mcreate_prefab_atomic — 失败与回滚[2m > [22m[2m回滚本身失败时，rollback 记录失败信息
+[22m[39m[Aura] [EDITOR_IPC] 已忽略: 回滚时通过 IPC 删除临时节点失败，尝试场景脚本方式: 预制体创建失败
+
+[90mstdout[2m | tests/unit/tools-misc.test.ts[2m > [22m[2mbroadcast tool[2m > [22m[2msend_ipc dispatches editor message
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → broadcast.send_ipc {action:"send_ipc"}
+
+[90mstdout[2m | tests/unit/tools-animation.test.ts[2m > [22m[2manimation_tool[2m > [22m[2mreturns error for unknown action
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → animation_tool.nonexistent {action:"nonexistent", uuid:"u"}
+
+[90mstdout[2m | tests/unit/tools-asset-operation.test.ts[2m > [22m[2masset_operation — editorMsg actions[2m > [22m[2mcreate_folder 调用 /api/asset-db/create-asset
+[22m[39m[MCP] #1 ✓ asset_operation.create_folder 1ms
+
+[90mstdout[2m | tests/unit/tools-asset-coverage.test.ts[2m > [22m[2masset_operation — bridgePost actions[2m > [22m[2mrename calls bridgePost /api/asset-db/move-asset
+[22m[39m[MCP] #1 ✓ asset_operation.rename 1ms
+
+[90mstdout[2m | tests/unit/tools-competitive-features.test.ts[2m > [22m[2m竞品功能验证 — 组件名自动纠正 (我们的优势)[2m > [22m[2msprite → Sprite 自动纠正
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.add_component {action:"add_component", uuid:"n1", component:"sprite"}
+
+stderr | tests/unit/tools-builder.test.ts > buildCocosToolServer — scene_operation 危险操作守卫 > destroy_node 没有 confirmDangerous → 被拦截，返回 isError
+[MCP] #1 ✗ scene_operation.destroy_node 2ms — 危险操作 destroy_node 已拦截。请显式传入 confirmDangerous=true 后重试。
+
+stderr | tests/unit/tools-atomic.test.ts > create_prefab_atomic — 失败与回滚 > 回滚本身失败时，rollback 记录失败信息
+[MCP] #1 ✗ create_prefab_atomic 2ms — 预制体创建失败
+
+[90mstdout[2m | tests/unit/tools-misc.test.ts[2m > [22m[2mbroadcast tool[2m > [22m[2msend_ipc dispatches editor message
+[22m[39m[MCP] #1 ✓ broadcast.send_ipc 0ms
+
+stderr | tests/unit/tools-animation.test.ts > animation_tool > returns error for unknown action
+[MCP] #1 ✗ animation_tool.nonexistent 1ms — 未知的动画 action: nonexistent
+
+[90mstdout[2m | tests/unit/tools-competitive-features.test.ts[2m > [22m[2m竞品功能验证 — 组件名自动纠正 (我们的优势)[2m > [22m[2msprite → Sprite 自动纠正
+[22m[39m[MCP] #1 ✓ scene_operation.add_component 7ms
+
+[90mstdout[2m | tests/unit/tools-atomic.test.ts[2m > [22m[2mcreate_prefab_atomic — 失败与回滚[2m > [22m[2mcompletedStages 记录失败前已完成的阶段
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → create_prefab_atomic {}
+
+[90mstdout[2m | tests/unit/tools-asset-operation.test.ts[2m > [22m[2masset_operation — 复合逻辑 actions[2m > [22m[2mcopy 缺少参数时返回 isError
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → asset_operation.copy {action:"copy"}
+
+[90mstdout[2m | tests/unit/tools-asset-coverage.test.ts[2m > [22m[2masset_operation — editorMsg (IPC) actions[2m > [22m[2muuid_to_url calls editorMsg asset-db query-url
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → asset_operation.uuid_to_url {action:"uuid_to_url", uuid:"abc-123"}
+
+[90mstdout[2m | tests/unit/tools-competitive-features.test.ts[2m > [22m[2m竞品功能验证 — 组件名自动纠正 (我们的优势)[2m > [22m[2mscrollview → ScrollView 自动纠正
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.add_component {action:"add_component", uuid:"n1", component:"scrollview"}
+
+[90mstdout[2m | tests/unit/tools-atomic.test.ts[2m > [22m[2mcreate_prefab_atomic — 失败与回滚[2m > [22m[2mcompletedStages 记录失败前已完成的阶段
+[22m[39m[Aura] [ASSET_OPERATION] 已忽略: 确保资源目录存在时冲突（已安全跳过）: 失败
+
+[90mstdout[2m | tests/unit/tools-animation.test.ts[2m > [22m[2manimation_tool[2m > [22m[2mhandles sceneMethod exception
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → animation_tool.play {action:"play", uuid:"u"}
+
+stderr | tests/unit/tools-asset-operation.test.ts > asset_operation — 复合逻辑 actions > copy 缺少参数时返回 isError
+[MCP] #1 ✗ asset_operation.copy 0ms — action "copy" 缺少必需参数: sourceUrl, targetUrl
+
+[90mstdout[2m | tests/unit/tools-asset-coverage.test.ts[2m > [22m[2masset_operation — editorMsg (IPC) actions[2m > [22m[2muuid_to_url calls editorMsg asset-db query-url
+[22m[39m[MCP] #1 ✓ asset_operation.uuid_to_url 1ms
+
+[90mstdout[2m | tests/unit/tools-competitive-features.test.ts[2m > [22m[2m竞品功能验证 — 组件名自动纠正 (我们的优势)[2m > [22m[2mscrollview → ScrollView 自动纠正
+[22m[39m[MCP] #1 ✓ scene_operation.add_component 2ms
+
+[90mstdout[2m | tests/unit/tools-atomic.test.ts[2m > [22m[2mcreate_prefab_atomic — 失败与回滚[2m > [22m[2mcompletedStages 记录失败前已完成的阶段
+[22m[39m[Aura] [EDITOR_IPC] 已忽略: 回滚时通过 IPC 删除临时节点失败，尝试场景脚本方式: 失败
+
+stderr | tests/unit/tools-animation.test.ts > animation_tool > handles sceneMethod exception
+[MCP] #1 ✗ animation_tool.play 1ms — scene crash
+
+[90mstdout[2m | tests/unit/tools-asset-operation.test.ts[2m > [22m[2masset_operation — 复合逻辑 actions[2m > [22m[2mcopy 正常调用 bridgeGet 校验源资源并通过 editorMsg copy-asset
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → asset_operation.copy {action:"copy"}
+
+stderr | tests/unit/tools-atomic.test.ts > create_prefab_atomic — 失败与回滚 > completedStages 记录失败前已完成的阶段
+[MCP] #1 ✗ create_prefab_atomic 1ms — 失败
+
+[90mstdout[2m | tests/unit/tools-asset-operation.test.ts[2m > [22m[2masset_operation — 复合逻辑 actions[2m > [22m[2mcopy 正常调用 bridgeGet 校验源资源并通过 editorMsg copy-asset
+[22m[39m[MCP] #1 ✓ asset_operation.copy 1ms
+
+[90mstdout[2m | tests/unit/tools-atomic.test.ts[2m > [22m[2mimport_and_apply_texture — 正常流程[2m > [22m[2m缺少 sourcePath 时返回 isError
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → import_and_apply_texture {}
+
+stderr | tests/unit/tools-atomic.test.ts > import_and_apply_texture — 正常流程 > 缺少 sourcePath 时返回 isError
+[MCP] #1 ✗ import_and_apply_texture 1ms — 缺少 sourcePath 参数
+
+[90mstdout[2m | tests/unit/tools-physics.test.ts[2m > [22m[2mphysics_tool[2m > [22m[2madd_rigidbody defaults to 2D
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → physics_tool.add_rigidbody {action:"add_rigidbody", uuid:"n1"}
+
+[90mstdout[2m | tests/unit/tools-misc.test.ts[2m > [22m[2mtool_management[2m > [22m[2mlist_all returns all tools
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → tool_management.list_all {action:"list_all"}
+
+[90mstdout[2m | tests/unit/tools-physics.test.ts[2m > [22m[2mphysics_tool[2m > [22m[2madd_rigidbody defaults to 2D
+[22m[39m[MCP] #1 ✓ physics_tool.add_rigidbody 0ms
+
+[90mstdout[2m | tests/unit/tools-misc.test.ts[2m > [22m[2mtool_management[2m > [22m[2mlist_all returns all tools
+[22m[39m[MCP] #1 ✓ tool_management.list_all 1ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_query — standard dispatchQuery actions[2m > [22m[2mget_active_in_hierarchy calls dispatchQuery with uuid
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_query.get_active_in_hierarchy {action:"get_active_in_hierarchy", uuid:"test-uuid"}
+
+[90mstdout[2m | tests/unit/tools-editor-action.test.ts[2m > [22m[2meditor_action — editorMsg actions[2m > [22m[2mclear_console 调用 bridgePost("/api/console/clear")
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → editor_action.clear_console {action:"clear_console"}
+
+[90mstdout[2m | tests/unit/tools-physics.test.ts[2m > [22m[2mphysics_tool[2m > [22m[2madd_rigidbody with is2d=false uses 3D
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → physics_tool.add_rigidbody {action:"add_rigidbody", uuid:"n1"}
+
+[90mstdout[2m | tests/unit/tools-new-features.test.ts[2m > [22m[2m新增功能 — 预制体应用/还原[2m > [22m[2mapply_prefab 缺少 uuid 时返回错误
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.apply_prefab {action:"apply_prefab"}
+
+[90mstdout[2m | tests/unit/tools-atomic.test.ts[2m > [22m[2mimport_and_apply_texture — 正常流程[2m > [22m[2m指定 nodeUuid：跳过 resolve_selection，直接导入
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → import_and_apply_texture {sourcePath:"C:/images/icon.png"}
+
+[90mstdout[2m | tests/unit/tools-asset-coverage.test.ts[2m > [22m[2masset_operation — editorMsg (IPC) actions[2m > [22m[2murl_to_uuid calls editorMsg asset-db query-uuid
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → asset_operation.url_to_uuid {action:"url_to_uuid", url:"db://assets/hero.png"}
+
+[90mstdout[2m | tests/unit/tools-editor-coverage.test.ts[2m > [22m[2meditor_action — bridgePost actions[2m > [22m[2mlog calls POST /api/console/log
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → editor_action.log {action:"log"}
+
+[90mstdout[2m | tests/unit/tools-asset-operation.test.ts[2m > [22m[2masset_operation — 复合逻辑 actions[2m > [22m[2mcopy 源不存在时返回 isError
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → asset_operation.copy {action:"copy"}
+
+[90mstdout[2m | tests/unit/tools-builder.test.ts[2m > [22m[2mbuildCocosToolServer — scene_operation 危险操作守卫[2m > [22m[2mdestroy_node confirmDangerous=true → 调用 editorMsg remove-node
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.destroy_node {action:"destroy_node", uuid:"some-node-uuid"}
+
+[90mstdout[2m | tests/unit/tools-misc.test.ts[2m > [22m[2mtool_management[2m > [22m[2mdisable and enable a tool
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → tool_management.disable {action:"disable"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_query — standard dispatchQuery actions[2m > [22m[2mget_active_in_hierarchy calls dispatchQuery with uuid
+[22m[39m[MCP] #1 ✓ scene_query.get_active_in_hierarchy 0ms
+
+[90mstdout[2m | tests/unit/tools-editor-action.test.ts[2m > [22m[2meditor_action — editorMsg actions[2m > [22m[2mclear_console 调用 bridgePost("/api/console/clear")
+[22m[39m[MCP] #1 ✓ editor_action.clear_console 0ms
+
+ [32m✓[39m tests/unit/tools-competitive-features.test.ts [2m([22m[2m26 tests[22m[2m | [22m[33m15 skipped[39m[2m)[22m[33m 1497[2mms[22m[39m
+     [33m[2m✓[22m[39m destroy_node 无确认 → 被拦截 [33m 391[2mms[22m[39m
+ [32m✓[39m tests/unit/tools-animation.test.ts [2m([22m[2m13 tests[22m[2m)[22m[33m 1463[2mms[22m[39m
+[90mstdout[2m | tests/unit/tools-physics.test.ts[2m > [22m[2mphysics_tool[2m > [22m[2madd_rigidbody with is2d=false uses 3D
+[22m[39m[MCP] #1 ✓ physics_tool.add_rigidbody 1ms
+
+stderr | tests/unit/tools-new-features.test.ts > 新增功能 — 预制体应用/还原 > apply_prefab 缺少 uuid 时返回错误
+[MCP] #1 ✗ scene_operation.apply_prefab 1ms — action "apply_prefab" 缺少必需参数: uuid
+
+[90mstdout[2m | tests/unit/tools-atomic.test.ts[2m > [22m[2mimport_and_apply_texture — 正常流程[2m > [22m[2m指定 nodeUuid：跳过 resolve_selection，直接导入
+[22m[39m[MCP] #1 ✓ import_and_apply_texture 1ms
+
+[90mstdout[2m | tests/unit/tools-asset-coverage.test.ts[2m > [22m[2masset_operation — editorMsg (IPC) actions[2m > [22m[2murl_to_uuid calls editorMsg asset-db query-uuid
+[22m[39m[MCP] #1 ✓ asset_operation.url_to_uuid 1ms
+
+[90mstdout[2m | tests/unit/tools-editor-coverage.test.ts[2m > [22m[2meditor_action — bridgePost actions[2m > [22m[2mlog calls POST /api/console/log
+[22m[39m[MCP] #1 ✓ editor_action.log 1ms
+
+stderr | tests/unit/tools-asset-operation.test.ts > asset_operation — 复合逻辑 actions > copy 源不存在时返回 isError
+[MCP] #1 ✗ asset_operation.copy 1ms — 源资源不存在: db://assets/notexist.prefab
+
+[90mstdout[2m | tests/unit/tools-builder.test.ts[2m > [22m[2mbuildCocosToolServer — scene_operation 危险操作守卫[2m > [22m[2mdestroy_node confirmDangerous=true → 调用 editorMsg remove-node
+[22m[39m[MCP] #1 ✓ scene_operation.destroy_node 0ms
+
+[90mstdout[2m | tests/unit/tools-misc.test.ts[2m > [22m[2mtool_management[2m > [22m[2mdisable and enable a tool
+[22m[39m[MCP] #1 ✓ tool_management.disable 1ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_query — standard dispatchQuery actions[2m > [22m[2mget_node_components_properties calls dispatchQuery with uuid
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_query.get_node_components_properties {action:"get_node_components_properties", uuid:"test-uuid"}
+
+[90mstdout[2m | tests/unit/tools-editor-action.test.ts[2m > [22m[2meditor_action — editorMsg actions[2m > [22m[2mfocus_node 缺少 uuid 时返回 isError
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → editor_action.focus_node {action:"focus_node"}
+
+[90mstdout[2m | tests/unit/tools-physics.test.ts[2m > [22m[2mphysics_tool[2m > [22m[2madd_rigidbody sets bodyType when provided
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → physics_tool.add_rigidbody {action:"add_rigidbody", uuid:"n1"}
+
+[90mstdout[2m | tests/unit/tools-misc.test.ts[2m > [22m[2mtool_management[2m > [22m[2mdisable and enable a tool
+[22m[39m[MCP] #2 → tool_management.list_all {action:"list_all"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_query — standard dispatchQuery actions[2m > [22m[2mget_node_components_properties calls dispatchQuery with uuid
+[22m[39m[MCP] #1 ✓ scene_query.get_node_components_properties 1ms
+
+stderr | tests/unit/tools-editor-action.test.ts > editor_action — editorMsg actions > focus_node 缺少 uuid 时返回 isError
+[MCP] #1 ✗ editor_action.focus_node 1ms — action "focus_node" 缺少必需参数: uuid
+
+[90mstdout[2m | tests/unit/tools-physics.test.ts[2m > [22m[2mphysics_tool[2m > [22m[2madd_rigidbody sets bodyType when provided
+[22m[39m[MCP] #1 ✓ physics_tool.add_rigidbody 1ms
+
+[90mstdout[2m | tests/unit/tools-new-features.test.ts[2m > [22m[2m新增功能 — 预制体应用/还原[2m > [22m[2mapply_prefab 调用 editorMsg 应用预制体更改
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.apply_prefab {action:"apply_prefab", uuid:"prefab-inst-1"}
+
+[90mstdout[2m | tests/unit/tools-atomic.test.ts[2m > [22m[2mimport_and_apply_texture — 正常流程[2m > [22m[2m未指定 nodeUuid 时从 selection 中获取
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → import_and_apply_texture {sourcePath:"C:/images/bg.png"}
+
+[90mstdout[2m | tests/unit/tools-editor-coverage.test.ts[2m > [22m[2meditor_action — bridgePost actions[2m > [22m[2mwarn calls POST /api/console/warn
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → editor_action.warn {action:"warn"}
+
+[90mstdout[2m | tests/unit/tools-asset-operation.test.ts[2m > [22m[2masset_operation — 复合逻辑 actions[2m > [22m[2mrename 缺少 newName 时返回 isError
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → asset_operation.rename {action:"rename", url:"db://assets/foo.ts"}
+
+[90mstdout[2m | tests/unit/tools-misc.test.ts[2m > [22m[2mtool_management[2m > [22m[2mdisable and enable a tool
+[22m[39m[MCP] #2 ✓ tool_management.list_all 0ms
+
+[90mstdout[2m | tests/unit/tools-new-features.test.ts[2m > [22m[2m新增功能 — 预制体应用/还原[2m > [22m[2mapply_prefab 调用 editorMsg 应用预制体更改
+[22m[39m[MCP] #1 ✓ scene_operation.apply_prefab 1ms
+
+[90mstdout[2m | tests/unit/tools-atomic.test.ts[2m > [22m[2mimport_and_apply_texture — 正常流程[2m > [22m[2m未指定 nodeUuid 时从 selection 中获取
+[22m[39m[Aura] [ASSET_OPERATION] 已忽略: 设置图片 meta type 为 sprite-frame 失败: Cannot create property 'userData' on string 'sprite-frame-uuid'
+
+[90mstdout[2m | tests/unit/tools-editor-coverage.test.ts[2m > [22m[2meditor_action — bridgePost actions[2m > [22m[2mwarn calls POST /api/console/warn
+[22m[39m[MCP] #1 ✓ editor_action.warn 0ms
+
+stderr | tests/unit/tools-asset-operation.test.ts > asset_operation — 复合逻辑 actions > rename 缺少 newName 时返回 isError
+[MCP] #1 ✗ asset_operation.rename 2ms — action "rename" 缺少必需参数: newName
+[90mstdout[2m | tests/unit/tools-misc.test.ts[2m > [22m[2mtool_management[2m > [22m[2mdisable and enable a tool
+[22m[39m[MCP] #3 → tool_management.enable {action:"enable"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_query — standard dispatchQuery actions[2m > [22m[2mfind_by_path calls dispatchQuery with path
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_query.find_by_path {action:"find_by_path"}
+
+[90mstdout[2m | tests/unit/tools-editor-action.test.ts[2m > [22m[2meditor_action — editorMsg actions[2m > [22m[2mfocus_node 正确调用 bridgePost("/api/scene/focus-node")
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → editor_action.focus_node {action:"focus_node", uuid:"node-uuid-123"}
+
+
+[90mstdout[2m | tests/unit/tools-atomic.test.ts[2m > [22m[2mimport_and_apply_texture — 正常流程[2m > [22m[2m未指定 nodeUuid 时从 selection 中获取
+[22m[39m[MCP] #1 ✓ import_and_apply_texture 2ms
+
+[90mstdout[2m | tests/unit/tools-misc.test.ts[2m > [22m[2mtool_management[2m > [22m[2mdisable and enable a tool
+[22m[39m[MCP] #3 ✓ tool_management.enable 0ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_query — standard dispatchQuery actions[2m > [22m[2mfind_by_path calls dispatchQuery with path
+[22m[39m[MCP] #1 ✓ scene_query.find_by_path 0ms
+
+[90mstdout[2m | tests/unit/tools-editor-action.test.ts[2m > [22m[2meditor_action — editorMsg actions[2m > [22m[2mfocus_node 正确调用 bridgePost("/api/scene/focus-node")
+[22m[39m[MCP] #1 ✓ editor_action.focus_node 1ms
+
+[90mstdout[2m | tests/unit/tools-asset-coverage.test.ts[2m > [22m[2masset_operation — editorMsg (IPC) actions[2m > [22m[2mget_meta calls editorMsg asset-db query-asset-meta
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → asset_operation.get_meta {action:"get_meta", url:"db://assets/hero.png"}
+
+[90mstdout[2m | tests/unit/tools-asset-coverage.test.ts[2m > [22m[2masset_operation — editorMsg (IPC) actions[2m > [22m[2mget_meta calls editorMsg asset-db query-asset-meta
+[22m[39m[MCP] #1 ✓ asset_operation.get_meta 0ms
+
+[90mstdout[2m | tests/unit/tools-misc.test.ts[2m > [22m[2mtool_management[2m > [22m[2mcannot disable tool_management itself
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → tool_management.disable {action:"disable"}
+
+[90mstdout[2m | tests/unit/tools-editor-coverage.test.ts[2m > [22m[2meditor_action — bridgePost actions[2m > [22m[2merror calls POST /api/console/error
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → editor_action.error {action:"error"}
+
+[90mstdout[2m | tests/unit/tools-physics.test.ts[2m > [22m[2mphysics_tool[2m > [22m[2mset_collider_size dispatches to physics action
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → physics_tool.set_collider_size {action:"set_collider_size", uuid:"n1"}
+
+[90mstdout[2m | tests/unit/tools-editor-action.test.ts[2m > [22m[2meditor_action — editorMsg actions[2m > [22m[2mreload_plugin 缺少 module 时返回 isError
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → editor_action.reload_plugin {action:"reload_plugin"}
+
+[90mstdout[2m | tests/unit/tools-new-features.test.ts[2m > [22m[2m新增功能 — 预制体应用/还原[2m > [22m[2mrestore_prefab 缺少 uuid 时返回错误
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.restore_prefab {action:"restore_prefab"}
+
+[90mstdout[2m | tests/unit/tools-asset-operation.test.ts[2m > [22m[2masset_operation — 复合逻辑 actions[2m > [22m[2mrename 正确拼接新路径并调用 /api/asset-db/move-asset
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → asset_operation.rename {action:"rename", url:"db://assets/scripts/old.ts"}
+
+[90mstdout[2m | tests/unit/tools-atomic.test.ts[2m > [22m[2mimport_and_apply_texture — 正常流程[2m > [22m[2m未指定 nodeUuid 且无 selection 时返回 isError
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → import_and_apply_texture {sourcePath:"C:/images/icon.png"}
+
+[90mstdout[2m | tests/unit/tools-builder.test.ts[2m > [22m[2mbuildCocosToolServer — scene_operation 危险操作守卫[2m > [22m[2mclear_children 没有 confirmDangerous → 被拦截
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.clear_children {action:"clear_children", uuid:"parent-uuid"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_query — standard dispatchQuery actions[2m > [22m[2mfind_nodes_by_name calls dispatchQuery with name
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_query.find_nodes_by_name {action:"find_nodes_by_name", name:"Player"}
+
+[90mstdout[2m | tests/unit/tools-asset-coverage.test.ts[2m > [22m[2masset_operation — editorMsg (IPC) actions[2m > [22m[2mset_meta_property reads meta then saves
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → asset_operation.set_meta_property {action:"set_meta_property", url:"db://assets/hero.png", property:"ver", value:"2.0"}
+
+stderr | tests/unit/tools-misc.test.ts > tool_management > cannot disable tool_management itself
+[MCP] #1 ✗ tool_management.disable 1ms — 不能禁用 tool_management 工具本身
+
+[90mstdout[2m | tests/unit/tools-editor-coverage.test.ts[2m > [22m[2meditor_action — bridgePost actions[2m > [22m[2merror calls POST /api/console/error
+[22m[39m[MCP] #1 ✓ editor_action.error 0ms
+
+[90mstdout[2m | tests/unit/tools-physics.test.ts[2m > [22m[2mphysics_tool[2m > [22m[2mset_collider_size dispatches to physics action
+[22m[39m[MCP] #1 ✓ physics_tool.set_collider_size 1ms
+
+stderr | tests/unit/tools-editor-action.test.ts > editor_action — editorMsg actions > reload_plugin 缺少 module 时返回 isError
+[MCP] #1 ✗ editor_action.reload_plugin 1ms — action "reload_plugin" 缺少必需参数: module
+
+stderr | tests/unit/tools-new-features.test.ts > 新增功能 — 预制体应用/还原 > restore_prefab 缺少 uuid 时返回错误
+[MCP] #1 ✗ scene_operation.restore_prefab 1ms — action "restore_prefab" 缺少必需参数: uuid
+
+[90mstdout[2m | tests/unit/tools-asset-operation.test.ts[2m > [22m[2masset_operation — 复合逻辑 actions[2m > [22m[2mrename 正确拼接新路径并调用 /api/asset-db/move-asset
+[22m[39m[MCP] #1 ✓ asset_operation.rename 0ms
+
+stderr | tests/unit/tools-atomic.test.ts > import_and_apply_texture — 正常流程 > 未指定 nodeUuid 且无 selection 时返回 isError
+[MCP] #1 ✗ import_and_apply_texture 0ms — 未提供 nodeUuid 且当前未选中节点
+
+stderr | tests/unit/tools-builder.test.ts > buildCocosToolServer — scene_operation 危险操作守卫 > clear_children 没有 confirmDangerous → 被拦截
+[MCP] #1 ✗ scene_operation.clear_children 1ms — 危险操作 clear_children 已拦截。请显式传入 confirmDangerous=true 后重试。
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_query — standard dispatchQuery actions[2m > [22m[2mfind_nodes_by_name calls dispatchQuery with name
+[22m[39m[MCP] #1 ✓ scene_query.find_nodes_by_name 0ms
+
+[90mstdout[2m | tests/unit/tools-asset-coverage.test.ts[2m > [22m[2masset_operation — editorMsg (IPC) actions[2m > [22m[2mset_meta_property reads meta then saves
+[22m[39m[MCP] #1 ✓ asset_operation.set_meta_property 3ms
+
+[90mstdout[2m | tests/unit/tools-misc.test.ts[2m > [22m[2mtool_management[2m > [22m[2mget_stats returns statistics
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → tool_management.get_stats {action:"get_stats"}
+
+[90mstdout[2m | tests/unit/tools-editor-coverage.test.ts[2m > [22m[2meditor_action — bridgePost actions[2m > [22m[2mclear_console calls POST /api/console/clear
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → editor_action.clear_console {action:"clear_console"}
+
+[90mstdout[2m | tests/unit/tools-physics.test.ts[2m > [22m[2mphysics_tool[2m > [22m[2mset_rigidbody_props dispatches to physics action
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → physics_tool.set_rigidbody_props {action:"set_rigidbody_props", uuid:"n1"}
+
+[90mstdout[2m | tests/unit/tools-editor-action.test.ts[2m > [22m[2meditor_action — 异常处理[2m > [22m[2mbridgePost 抛出时返回 isError
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → editor_action.save_scene {action:"save_scene"}
+
+[90mstdout[2m | tests/unit/tools-new-features.test.ts[2m > [22m[2m新增功能 — 预制体应用/还原[2m > [22m[2mrestore_prefab 调用 editorMsg 恢复预制体
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.restore_prefab {action:"restore_prefab", uuid:"prefab-inst-1"}
+
+[90mstdout[2m | tests/unit/tools-asset-operation.test.ts[2m > [22m[2masset_operation — 复合逻辑 actions[2m > [22m[2msearch_by_type 过滤 type 字段
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → asset_operation.search_by_type {action:"search_by_type"}
+
+[90mstdout[2m | tests/unit/tools-atomic.test.ts[2m > [22m[2mimport_and_apply_texture — 正常流程[2m > [22m[2mspriteFrame UUID 解析失败时加 warning 而非 isError
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → import_and_apply_texture {sourcePath:"C:/images/icon.png"}
+
+[90mstdout[2m | tests/unit/tools-builder.test.ts[2m > [22m[2mbuildCocosToolServer — scene_operation 危险操作守卫[2m > [22m[2mcreate_node 不需要 confirmDangerous → 正常调用
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.create_node {action:"create_node", name:"NewNode"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_query — standard dispatchQuery actions[2m > [22m[2mfind_nodes_by_component calls dispatchQuery with component
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_query.find_nodes_by_component {action:"find_nodes_by_component", component:"Sprite"}
+
+[90mstdout[2m | tests/unit/tools-asset-coverage.test.ts[2m > [22m[2masset_operation — editorMsg (IPC) actions[2m > [22m[2mcopy calls editorMsg copy-asset
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → asset_operation.copy {action:"copy"}
+
+[90mstdout[2m | tests/unit/tools-misc.test.ts[2m > [22m[2mtool_management[2m > [22m[2mget_stats returns statistics
+[22m[39m[MCP] #1 ✓ tool_management.get_stats 2ms
+
+[90mstdout[2m | tests/unit/tools-editor-coverage.test.ts[2m > [22m[2meditor_action — bridgePost actions[2m > [22m[2mclear_console calls POST /api/console/clear
+[22m[39m[MCP] #1 ✓ editor_action.clear_console 1ms
+
+[90mstdout[2m | tests/unit/tools-physics.test.ts[2m > [22m[2mphysics_tool[2m > [22m[2mset_rigidbody_props dispatches to physics action
+[22m[39m[MCP] #1 ✓ physics_tool.set_rigidbody_props 1ms
+
+stderr | tests/unit/tools-editor-action.test.ts > editor_action — 异常处理 > bridgePost 抛出时返回 isError
+[MCP] #1 ✗ editor_action.save_scene 4ms — 保存失败
+
+[90mstdout[2m | tests/unit/tools-new-features.test.ts[2m > [22m[2m新增功能 — 预制体应用/还原[2m > [22m[2mrestore_prefab 调用 editorMsg 恢复预制体
+[22m[39m[MCP] #1 ✓ scene_operation.restore_prefab 1ms
+
+[90mstdout[2m | tests/unit/tools-asset-operation.test.ts[2m > [22m[2masset_operation — 复合逻辑 actions[2m > [22m[2msearch_by_type 过滤 type 字段
+[22m[39m[MCP] #1 ✓ asset_operation.search_by_type 1ms
+
+[90mstdout[2m | tests/unit/tools-builder.test.ts[2m > [22m[2mbuildCocosToolServer — scene_operation 危险操作守卫[2m > [22m[2mcreate_node 不需要 confirmDangerous → 正常调用
+[22m[39m[MCP] #1 ✓ scene_operation.create_node 0ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_query — standard dispatchQuery actions[2m > [22m[2mfind_nodes_by_component calls dispatchQuery with component
+[22m[39m[MCP] #1 ✓ scene_query.find_nodes_by_component 0ms
+
+[90mstdout[2m | tests/unit/tools-asset-coverage.test.ts[2m > [22m[2masset_operation — editorMsg (IPC) actions[2m > [22m[2mcopy calls editorMsg copy-asset
+[22m[39m[MCP] #1 ✓ asset_operation.copy 0ms
+
+[90mstdout[2m | tests/unit/tools-editor-action.test.ts[2m > [22m[2meditor_action — 异常处理[2m > [22m[2mbridgePost 抛出时返回 isError
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → editor_action.undo {action:"undo"}
+
+[90mstdout[2m | tests/unit/tools-new-features.test.ts[2m > [22m[2m新增功能 — 预制体验证[2m > [22m[2mvalidate_prefab 缺少 prefabUrl 时返回错误
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.validate_prefab {action:"validate_prefab"}
+
+[90mstdout[2m | tests/unit/tools-asset-operation.test.ts[2m > [22m[2masset_operation — 路径透传[2m > [22m[2murl 字段大写路径段原样透传（无规范化）
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → asset_operation.info {action:"info", url:"db://assets/Prefabs/Hero.prefab"}
+
+[90mstdout[2m | tests/unit/tools-builder.test.ts[2m > [22m[2mbuildCocosToolServer — scene_operation 路径透传[2m > [22m[2mcreate_prefab 的 savePath 原样传递（大写路径段不修改）
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.create_prefab {action:"create_prefab", uuid:"some-uuid"}
+
+[90mstdout[2m | tests/unit/tools-asset-coverage.test.ts[2m > [22m[2masset_operation — composite actions[2m > [22m[2msearch_by_type filters by type
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → asset_operation.search_by_type {action:"search_by_type"}
+
+[90mstdout[2m | tests/unit/tools-editor-coverage.test.ts[2m > [22m[2meditor_action — bridgePost actions[2m > [22m[2mfocus_node calls POST /api/scene/focus-node
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → editor_action.focus_node {action:"focus_node", uuid:"node-1"}
+
+[90mstdout[2m | tests/unit/tools-physics.test.ts[2m > [22m[2mphysics_tool[2m > [22m[2mset_physics_material dispatches to physics action
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → physics_tool.set_physics_material {action:"set_physics_material", uuid:"n1"}
+
+stderr | tests/unit/tools-editor-action.test.ts > editor_action — 异常处理 > bridgePost 抛出时返回 isError
+[MCP] #1 ✗ editor_action.undo 1ms — IPC 超时
+
+stderr | tests/unit/tools-new-features.test.ts > 新增功能 — 预制体验证 > validate_prefab 缺少 prefabUrl 时返回错误
+[MCP] #1 ✗ scene_operation.validate_prefab 0ms — action "validate_prefab" 缺少必需参数: prefabUrl
+
+[90mstdout[2m | tests/unit/tools-asset-operation.test.ts[2m > [22m[2masset_operation — 路径透传[2m > [22m[2murl 字段大写路径段原样透传（无规范化）
+[22m[39m[MCP] #1 ✓ asset_operation.info 0ms
+
+[90mstdout[2m | tests/unit/tools-builder.test.ts[2m > [22m[2mbuildCocosToolServer — scene_operation 路径透传[2m > [22m[2mcreate_prefab 的 savePath 原样传递（大写路径段不修改）
+[22m[39m[MCP] #1 ✓ scene_operation.create_prefab 2ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_query — standard dispatchQuery actions[2m > [22m[2mget_component_property calls dispatchQuery with uuid, component, property
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_query.get_component_property {action:"get_component_property", uuid:"u1", component:"Label", property:"fontSize"}
+
+[90mstdout[2m | tests/unit/tools-asset-coverage.test.ts[2m > [22m[2masset_operation — composite actions[2m > [22m[2msearch_by_type filters by type
+[22m[39m[MCP] #1 ✓ asset_operation.search_by_type 0ms
+
+ [32m✓[39m tests/unit/tools-misc.test.ts [2m([22m[2m21 tests[22m[2m | [22m[33m7 skipped[39m[2m)[22m[33m 1986[2mms[22m[39m
+     [33m[2m✓[22m[39m history action calls bridgeGet [33m 327[2mms[22m[39m
+[90mstdout[2m | tests/unit/tools-editor-coverage.test.ts[2m > [22m[2meditor_action — bridgePost actions[2m > [22m[2mfocus_node calls POST /api/scene/focus-node
+[22m[39m[MCP] #1 ✓ editor_action.focus_node 3ms
+
+[90mstdout[2m | tests/unit/tools-physics.test.ts[2m > [22m[2mphysics_tool[2m > [22m[2mset_physics_material dispatches to physics action
+[22m[39m[MCP] #1 ✓ physics_tool.set_physics_material 1ms
+
+[90mstdout[2m | tests/unit/tools-builder.test.ts[2m > [22m[2mbuildCocosToolServer — withGuardrailHints（通过 scene_operation）[2m > [22m[2msceneMethod 返回"未找到组件类"错误时追加 suggestion
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.add_component {action:"add_component", uuid:"some-uuid", component:"MySprite"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_query — standard dispatchQuery actions[2m > [22m[2mget_component_property calls dispatchQuery with uuid, component, property
+[22m[39m[MCP] #1 ✓ scene_query.get_component_property 1ms
+
+[90mstdout[2m | tests/unit/tools-new-features.test.ts[2m > [22m[2m新增功能 — 预制体验证[2m > [22m[2mvalidate_prefab 检查预制体存在性和依赖
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.validate_prefab {action:"validate_prefab", prefabUrl:"db://assets/prefabs/Player.prefab"}
+
+[90mstdout[2m | tests/unit/tools-asset-operation.test.ts[2m > [22m[2masset_operation — 路径透传[2m > [22m[2mmove 的 sourceUrl / targetUrl 原样透传
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → asset_operation.move {action:"move"}
+
+[90mstdout[2m | tests/unit/tools-builder.test.ts[2m > [22m[2mbuildCocosToolServer — withGuardrailHints（通过 scene_operation）[2m > [22m[2msceneMethod 返回"未找到组件类"错误时追加 suggestion
+[22m[39m[MCP] #1 ✓ scene_operation.add_component 4ms
+
+[90mstdout[2m | tests/unit/tools-asset-coverage.test.ts[2m > [22m[2masset_operation — composite actions[2m > [22m[2mbatch_import requires files array
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → asset_operation.batch_import {action:"batch_import"}
+
+[90mstdout[2m | tests/unit/tools-editor-coverage.test.ts[2m > [22m[2meditor_action — bridgePost actions[2m > [22m[2mplay_in_editor calls POST /api/preview/open
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → editor_action.play_in_editor {action:"play_in_editor"}
+
+[90mstdout[2m | tests/unit/tools-physics.test.ts[2m > [22m[2mphysics_tool[2m > [22m[2mset_collision_group dispatches to physics action
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → physics_tool.set_collision_group {action:"set_collision_group", uuid:"n1"}
+
+[90mstdout[2m | tests/unit/tools-new-features.test.ts[2m > [22m[2m新增功能 — 预制体验证[2m > [22m[2mvalidate_prefab 检查预制体存在性和依赖
+[22m[39m[MCP] #1 ✓ scene_operation.validate_prefab 1ms
+
+[90mstdout[2m | tests/unit/tools-asset-operation.test.ts[2m > [22m[2masset_operation — 路径透传[2m > [22m[2mmove 的 sourceUrl / targetUrl 原样透传
+[22m[39m[MCP] #1 ✓ asset_operation.move 0ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_query — standard dispatchQuery actions[2m > [22m[2mget_camera_info calls dispatchQuery
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_query.get_camera_info {action:"get_camera_info"}
+
+stderr | tests/unit/tools-asset-coverage.test.ts > asset_operation — composite actions > batch_import requires files array
+[MCP] #1 ✗ asset_operation.batch_import 1ms — 未知的资源操作 action: batch_import
+
+[90mstdout[2m | tests/unit/tools-editor-coverage.test.ts[2m > [22m[2meditor_action — bridgePost actions[2m > [22m[2mplay_in_editor calls POST /api/preview/open
+[22m[39m[MCP] #1 ✓ editor_action.play_in_editor 0ms
+
+[90mstdout[2m | tests/unit/tools-physics.test.ts[2m > [22m[2mphysics_tool[2m > [22m[2mset_collision_group dispatches to physics action
+[22m[39m[MCP] #1 ✓ physics_tool.set_collision_group 0ms
+
+ [32m✓[39m tests/unit/tools-editor-action.test.ts [2m([22m[2m23 tests[22m[2m | [22m[33m6 skipped[39m[2m)[22m[33m 2130[2mms[22m[39m
+     [33m[2m✓[22m[39m log 调用 bridgePost("/api/console/log") [33m 410[2mms[22m[39m
+[90mstdout[2m | tests/unit/tools-new-features.test.ts[2m > [22m[2m新增功能 — 预制体验证[2m > [22m[2mvalidate_prefab 预制体不存在时返回 valid=false
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.validate_prefab {action:"validate_prefab", prefabUrl:"db://assets/prefabs/NotExist.prefab"}
+
+[90mstdout[2m | tests/unit/tools-builder.test.ts[2m > [22m[2mbuildCocosToolServer — withGuardrailHints（通过 scene_operation）[2m > [22m[2m普通错误不追加 suggestion
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.set_property {action:"set_property", uuid:"some-uuid", component:"Sprite", property:"color", value:{"r":255,"g":0,"b":0,"a":255}}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_query — standard dispatchQuery actions[2m > [22m[2mget_camera_info calls dispatchQuery
+[22m[39m[MCP] #1 ✓ scene_query.get_camera_info 1ms
+
+[90mstdout[2m | tests/unit/tools-editor-coverage.test.ts[2m > [22m[2meditor_action — bridgeGet actions[2m > [22m[2mproject_info calls GET /api/editor/project-info
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → editor_action.project_info {action:"project_info"}
+
+[90mstdout[2m | tests/unit/tools-new-features.test.ts[2m > [22m[2m新增功能 — 预制体验证[2m > [22m[2mvalidate_prefab 预制体不存在时返回 valid=false
+[22m[39m[MCP] #1 ✓ scene_operation.validate_prefab 0ms
+
+[90mstdout[2m | tests/unit/tools-asset-operation.test.ts[2m > [22m[2masset_operation — 异常处理[2m > [22m[2mbridgeGet 抛出异常时返回 isError
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → asset_operation.list {action:"list"}
+
+[90mstdout[2m | tests/unit/tools-builder.test.ts[2m > [22m[2mbuildCocosToolServer — withGuardrailHints（通过 scene_operation）[2m > [22m[2m普通错误不追加 suggestion
+[22m[39m[MCP] #1 ✓ scene_operation.set_property 1ms
+
+[90mstdout[2m | tests/unit/tools-asset-coverage.test.ts[2m > [22m[2masset_operation — composite actions[2m > [22m[2mget_asset_size returns error when asset not found
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → asset_operation.get_asset_size {action:"get_asset_size", url:"db://assets/missing.png"}
+
+[90mstdout[2m | tests/unit/tools-editor-coverage.test.ts[2m > [22m[2meditor_action — bridgeGet actions[2m > [22m[2mproject_info calls GET /api/editor/project-info
+[22m[39m[MCP] #1 ✓ editor_action.project_info 1ms
+
+[90mstdout[2m | tests/unit/tools-physics.test.ts[2m > [22m[2mphysics_tool[2m > [22m[2madd_joint dispatches to physics action
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → physics_tool.add_joint {action:"add_joint", uuid:"n1"}
+
+stderr | tests/unit/tools-asset-operation.test.ts > asset_operation — 异常处理 > bridgeGet 抛出异常时返回 isError
+[MCP] #1 ✗ asset_operation.list 1ms — 网络错误
+[90mstdout[2m | tests/unit/tools-builder.test.ts[2m > [22m[2mbuildCocosToolServer — scene_query[2m > [22m[2maction=tree 调用 sceneMethod("dispatchQuery")
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_query.tree {action:"tree"}
+
+
+stderr | tests/unit/tools-asset-coverage.test.ts > asset_operation — composite actions > get_asset_size returns error when asset not found
+[MCP] #1 ✗ asset_operation.get_asset_size 1ms — 未知的资源操作 action: get_asset_size
+
+[90mstdout[2m | tests/unit/tools-physics.test.ts[2m > [22m[2mphysics_tool[2m > [22m[2madd_joint dispatches to physics action
+[22m[39m[MCP] #1 ✓ physics_tool.add_joint 0ms
+
+[90mstdout[2m | tests/unit/tools-new-features.test.ts[2m > [22m[2m新增功能 — 可用组件类型发现[2m > [22m[2mlist_available_components 路由到 sceneMethod("dispatchQuery")
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_query.list_available_components {action:"list_available_components"}
+
+[90mstdout[2m | tests/unit/tools-builder.test.ts[2m > [22m[2mbuildCocosToolServer — scene_query[2m > [22m[2maction=tree 调用 sceneMethod("dispatchQuery")
+[22m[39m[MCP] #1 ✓ scene_query.tree 7ms
+
+[90mstdout[2m | tests/unit/tools-asset-coverage.test.ts[2m > [22m[2masset_operation — composite actions[2m > [22m[2mslice_sprite rejects all-zero borders
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → asset_operation.slice_sprite {action:"slice_sprite", url:"db://assets/sprites/btn.png"}
+
+[90mstdout[2m | tests/unit/tools-editor-coverage.test.ts[2m > [22m[2meditor_action — bridgeGet actions[2m > [22m[2msearch_logs requires keyword
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → editor_action.search_logs {action:"search_logs"}
+
+[90mstdout[2m | tests/unit/tools-new-features.test.ts[2m > [22m[2m新增功能 — 可用组件类型发现[2m > [22m[2mlist_available_components 路由到 sceneMethod("dispatchQuery")
+[22m[39m[MCP] #1 ✓ scene_query.list_available_components 0ms
+
+stderr | tests/unit/tools-asset-coverage.test.ts > asset_operation — composite actions > slice_sprite rejects all-zero borders
+[MCP] #1 ✗ asset_operation.slice_sprite 1ms — 未知的资源操作 action: slice_sprite
+
+stderr | tests/unit/tools-editor-coverage.test.ts > editor_action — bridgeGet actions > search_logs requires keyword
+[MCP] #1 ✗ editor_action.search_logs 0ms — action "search_logs" 缺少必需参数: keyword
+
+[90mstdout[2m | tests/unit/tools-new-features.test.ts[2m > [22m[2m新增功能 — 工具注册完整性 (社区版)[2m > [22m[2m社区版保留的新增 action 都在各工具的 enum 中
+[22m[39m[MCP] Community Edition — JS tools registered
+
+[90mstdout[2m | tests/unit/tools-asset-coverage.test.ts[2m > [22m[2masset_operation — composite actions[2m > [22m[2mexception in asset_operation returns error
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → asset_operation.list {action:"list"}
+
+stderr | tests/unit/tools-asset-coverage.test.ts > asset_operation — composite actions > exception in asset_operation returns error
+[MCP] #1 ✗ asset_operation.list 1ms — network error
+
+[90mstdout[2m | tests/unit/tools-editor-coverage.test.ts[2m > [22m[2meditor_action — bridgeGet actions[2m > [22m[2mbuild_query calls bridgeGet project-info
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → editor_action.build_query {action:"build_query"}
+
+[90mstdout[2m | tests/unit/tools-builder.test.ts[2m > [22m[2mbuildCocosToolServer — scene_query[2m > [22m[2maction=list 调用 sceneMethod("dispatchQuery")
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_query.list {action:"list"}
+
+[90mstdout[2m | tests/unit/tools-physics.test.ts[2m > [22m[2mphysics_tool[2m > [22m[2mget_physics_world dispatches without uuid
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → physics_tool.get_physics_world {action:"get_physics_world"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_query — standard dispatchQuery actions[2m > [22m[2mget_canvas_info calls dispatchQuery
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_query.get_canvas_info {action:"get_canvas_info"}
+
+[90mstdout[2m | tests/unit/tools-editor-coverage.test.ts[2m > [22m[2meditor_action — bridgeGet actions[2m > [22m[2mbuild_query calls bridgeGet project-info
+[22m[39m[MCP] #1 ✓ editor_action.build_query 1ms
+
+ [32m✓[39m tests/unit/tools-new-features.test.ts [2m([22m[2m37 tests[22m[2m | [22m[33m20 skipped[39m[2m)[22m[33m 2458[2mms[22m[39m
+     [33m[2m✓[22m[39m instantiate_prefab 查询 uuid 并通过 scene-script 实例化 [33m 323[2mms[22m[39m
+[90mstdout[2m | tests/unit/tools-builder.test.ts[2m > [22m[2mbuildCocosToolServer — scene_query[2m > [22m[2maction=list 调用 sceneMethod("dispatchQuery")
+[22m[39m[MCP] #1 ✓ scene_query.list 2ms
+
+ [32m✓[39m tests/unit/tools-asset-operation.test.ts [2m([22m[2m27 tests[22m[2m | [22m[33m6 skipped[39m[2m)[22m[33m 2414[2mms[22m[39m
+     [33m[2m✓[22m[39m copy 源不存在时返回 isError [33m 316[2mms[22m[39m
+[90mstdout[2m | tests/unit/tools-physics.test.ts[2m > [22m[2mphysics_tool[2m > [22m[2mget_physics_world dispatches without uuid
+[22m[39m[MCP] #1 ✓ physics_tool.get_physics_world 0ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_query — standard dispatchQuery actions[2m > [22m[2mget_canvas_info calls dispatchQuery
+[22m[39m[MCP] #1 ✓ scene_query.get_canvas_info 1ms
+
+ [32m✓[39m tests/unit/tools-asset-coverage.test.ts [2m([22m[2m37 tests[22m[2m | [22m[33m15 skipped[39m[2m)[22m[33m 2580[2mms[22m[39m
+[90mstdout[2m | tests/unit/tools-editor-coverage.test.ts[2m > [22m[2meditor_action — editorMsg actions[2m > [22m[2mshow_notification calls bridgePost and editorMsg dialog
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → editor_action.show_notification {action:"show_notification"}
+
+[90mstdout[2m | tests/unit/tools-builder.test.ts[2m > [22m[2mbuildCocosToolServer — scene_query[2m > [22m[2maction=get_current_selection 通过 editorMsg 获取
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_query.get_current_selection {action:"get_current_selection"}
+
+[90mstdout[2m | tests/unit/tools-physics.test.ts[2m > [22m[2mphysics_tool[2m > [22m[2mset_physics_world dispatches operation
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → physics_tool.set_physics_world {action:"set_physics_world"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_query — standard dispatchQuery actions[2m > [22m[2mget_scene_globals calls dispatchQuery
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_query.get_scene_globals {action:"get_scene_globals"}
+
+[90mstdout[2m | tests/unit/tools-editor-coverage.test.ts[2m > [22m[2meditor_action — editorMsg actions[2m > [22m[2mshow_notification calls bridgePost and editorMsg dialog
+[22m[39m[MCP] #1 ✓ editor_action.show_notification 1ms
+
+[90mstdout[2m | tests/unit/tools-builder.test.ts[2m > [22m[2mbuildCocosToolServer — scene_query[2m > [22m[2maction=get_current_selection 通过 editorMsg 获取
+[22m[39m[MCP] #1 ✓ scene_query.get_current_selection 1ms
+
+[90mstdout[2m | tests/unit/tools-physics.test.ts[2m > [22m[2mphysics_tool[2m > [22m[2mset_physics_world dispatches operation
+[22m[39m[MCP] #1 ✓ physics_tool.set_physics_world 1ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_query — standard dispatchQuery actions[2m > [22m[2mget_scene_globals calls dispatchQuery
+[22m[39m[MCP] #1 ✓ scene_query.get_scene_globals 0ms
+
+[90mstdout[2m | tests/unit/tools-editor-coverage.test.ts[2m > [22m[2meditor_action — editorMsg actions[2m > [22m[2mexception in editor_action returns error
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → editor_action.save_scene {action:"save_scene"}
+
+[90mstdout[2m | tests/unit/tools-builder.test.ts[2m > [22m[2mbuildCocosToolServer — execute_script[2m > [22m[2m调用 sceneMethod 执行任意方法
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → execute_script {}
+
+[90mstdout[2m | tests/unit/tools-physics.test.ts[2m > [22m[2mphysics_tool[2m > [22m[2munknown action returns error
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → physics_tool.nonexistent {action:"nonexistent", uuid:"n"}
+
+stderr | tests/unit/tools-editor-coverage.test.ts > editor_action — editorMsg actions > exception in editor_action returns error
+[MCP] #1 ✗ editor_action.save_scene 1ms — editor offline
+[90mstdout[2m | tests/unit/tools-builder.test.ts[2m > [22m[2mbuildCocosToolServer — execute_script[2m > [22m[2m调用 sceneMethod 执行任意方法
+[22m[39m[MCP] #1 ✓ execute_script 1ms
+
+
+stderr | tests/unit/tools-physics.test.ts > physics_tool > unknown action returns error
+[MCP] #1 ✗ physics_tool.nonexistent 0ms — 未知的物理 action: nonexistent
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_query — standard dispatchQuery actions[2m > [22m[2mget_current_selection calls bridgeGet then sceneMethod
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_query.get_current_selection {action:"get_current_selection"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_query — standard dispatchQuery actions[2m > [22m[2mget_current_selection calls bridgeGet then sceneMethod
+[22m[39m[MCP] #1 ✓ scene_query.get_current_selection 0ms
+
+[90mstdout[2m | tests/unit/tools-physics.test.ts[2m > [22m[2mphysics_tool[2m > [22m[2mhandles exception gracefully
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → physics_tool.get_collider_info {action:"get_collider_info", uuid:"n"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_query — standard dispatchQuery actions[2m > [22m[2mget_current_selection returns empty when nothing selected
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_query.get_current_selection {action:"get_current_selection"}
+
+stderr | tests/unit/tools-physics.test.ts > physics_tool > handles exception gracefully
+[MCP] #1 ✗ physics_tool.get_collider_info 2ms — physics crash
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_query — standard dispatchQuery actions[2m > [22m[2mget_current_selection returns empty when nothing selected
+[22m[39m[MCP] #1 ✓ scene_query.get_current_selection 1ms
+
+ [32m✓[39m tests/unit/tools-editor-coverage.test.ts [2m([22m[2m51 tests[22m[2m | [22m[33m32 skipped[39m[2m)[22m[33m 2756[2mms[22m[39m
+     [33m[2m✓[22m[39m build calls POST /api/builder/build [33m 428[2mms[22m[39m
+     [33m[2m✓[22m[39m preview calls POST /api/preview/open [33m 355[2mms[22m[39m
+ [32m✓[39m tests/unit/tools-builder.test.ts [2m([22m[2m17 tests[22m[2m)[22m[33m 2721[2mms[22m[39m
+     [33m[2m✓[22m[39m 包含所有预期的工具名 [33m 359[2mms[22m[39m
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_query — standard dispatchQuery actions[2m > [22m[2mget_active_scene_focus with selection returns selection detail
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_query.get_active_scene_focus {action:"get_active_scene_focus"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_query — standard dispatchQuery actions[2m > [22m[2mget_active_scene_focus with selection returns selection detail
+[22m[39m[MCP] #1 ✓ scene_query.get_active_scene_focus 1ms
+
+ [32m✓[39m tests/unit/tools-physics.test.ts [2m([22m[2m22 tests[22m[2m)[22m[33m 2957[2mms[22m[39m
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_query — standard dispatchQuery actions[2m > [22m[2mget_active_scene_focus without selection falls back to stats
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_query.get_active_scene_focus {action:"get_active_scene_focus"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_query — standard dispatchQuery actions[2m > [22m[2mget_active_scene_focus without selection falls back to stats
+[22m[39m[MCP] #1 ✓ scene_query.get_active_scene_focus 0ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_query — standard dispatchQuery actions[2m > [22m[2mlist_all_scenes calls editorMsg
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_query.list_all_scenes {action:"list_all_scenes"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_query — standard dispatchQuery actions[2m > [22m[2mlist_all_scenes calls editorMsg
+[22m[39m[MCP] #1 ✓ scene_query.list_all_scenes 0ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_query — standard dispatchQuery actions[2m > [22m[2mvalidate_scene calls dispatchQuery
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_query.validate_scene {action:"validate_scene"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_query — standard dispatchQuery actions[2m > [22m[2mvalidate_scene calls dispatchQuery
+[22m[39m[MCP] #1 ✓ scene_query.validate_scene 0ms
+
+[90mstdout[2m | tests/unit/error-utils.test.ts[2m > [22m[2merror-utils[2m > [22m[2msafeExec[2m > [22m[2mreturns fallback on exception
+[22m[39m[Aura] [CONFIG] 已忽略: test: boom
+
+[90mstdout[2m | tests/unit/error-utils.test.ts[2m > [22m[2merror-utils[2m > [22m[2msafeExecAsync[2m > [22m[2mreturns fallback on async exception
+[22m[39m[Aura] [CONFIG] 已忽略: test: boom
+
+[90mstdout[2m | tests/unit/error-utils.test.ts[2m > [22m[2merror-utils[2m > [22m[2msafeSetProperties[2m > [22m[2mskips properties that throw on assignment
+[22m[39m[Aura] [PROPERTY_ASSIGN] 已忽略: test: 属性 "readonly" 赋值失败: readonly
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_query — standard dispatchQuery actions[2m > [22m[2mdetect_2d_3d calls dispatchQuery
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_query.detect_2d_3d {action:"detect_2d_3d"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_query — standard dispatchQuery actions[2m > [22m[2mdetect_2d_3d calls dispatchQuery
+[22m[39m[MCP] #1 ✓ scene_query.detect_2d_3d 1ms
+
+ [32m✓[39m tests/unit/error-utils.test.ts [2m([22m[2m17 tests[22m[2m)[22m[32m 56[2mms[22m[39m
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_query — standard dispatchQuery actions[2m > [22m[2mlist_available_components calls dispatchQuery
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_query.list_available_components {action:"list_available_components"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_query — standard dispatchQuery actions[2m > [22m[2mlist_available_components calls dispatchQuery
+[22m[39m[MCP] #1 ✓ scene_query.list_available_components 1ms
+
+[90mstdout[2m | tests/unit/local-tool-server.test.ts[2m > [22m[2mLocalToolServer — callTool[2m > [22m[2m正常调用返回处理器结果
+[22m[39m[MCP] #1 → echo {}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_query — NEW_QUERY_ACTIONS (dispatchQuery with fallback)[2m > [22m[2mmeasure_distance calls dispatchQuery
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_query.measure_distance {action:"measure_distance"}
+
+[90mstdout[2m | tests/unit/local-tool-server.test.ts[2m > [22m[2mLocalToolServer — callTool[2m > [22m[2m正常调用返回处理器结果
+[22m[39m[MCP] #1 ✓ echo 2ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_query — NEW_QUERY_ACTIONS (dispatchQuery with fallback)[2m > [22m[2mmeasure_distance calls dispatchQuery
+[22m[39m[MCP] #1 ✓ scene_query.measure_distance 0ms
+
+[90mstdout[2m | tests/unit/local-tool-server.test.ts[2m > [22m[2mLocalToolServer — callTool[2m > [22m[2m处理器抛出异常时返回 isError
+[22m[39m[MCP] #1 → failer {}
+
+stderr | tests/unit/local-tool-server.test.ts > LocalToolServer — callTool > 处理器抛出异常时返回 isError
+[MCP] #1 ✗✗ failer 0ms — EXCEPTION: 故意失败
+
+[90mstdout[2m | tests/unit/local-tool-server.test.ts[2m > [22m[2mLocalToolServer — Zod 参数校验[2m > [22m[2m参数符合 schema 时正常通过
+[22m[39m[MCP] #1 → typed {name:"foo"}
+
+[90mstdout[2m | tests/unit/local-tool-server.test.ts[2m > [22m[2mLocalToolServer — Zod 参数校验[2m > [22m[2m参数符合 schema 时正常通过
+[22m[39m[MCP] #1 ✓ typed 1ms
+
+[90mstdout[2m | tests/unit/local-tool-server.test.ts[2m > [22m[2mLocalToolServer — Zod 参数校验[2m > [22m[2m参数类型错误时返回 isError（Zod 校验失败）
+[22m[39m[MCP] #1 → typed {}
+
+stderr | tests/unit/local-tool-server.test.ts > LocalToolServer — Zod 参数校验 > 参数类型错误时返回 isError（Zod 校验失败）
+[MCP] #1 ✗✗ typed 1ms — EXCEPTION: Invalid input: expected number, received string
+
+[90mstdout[2m | tests/unit/local-tool-server.test.ts[2m > [22m[2mLocalToolServer — Zod 参数校验[2m > [22m[2m缺少必填参数时返回 isError
+[22m[39m[MCP] #1 → required {}
+
+stderr | tests/unit/local-tool-server.test.ts > LocalToolServer — Zod 参数校验 > 缺少必填参数时返回 isError
+[MCP] #1 ✗✗ required 1ms — EXCEPTION: Invalid input: expected string, received undefined
+
+[90mstdout[2m | tests/unit/local-tool-server.test.ts[2m > [22m[2mLocalToolServer — Zod 参数校验[2m > [22m[2m可选参数缺失时正常通过
+[22m[39m[MCP] #1 → optional_tool {}
+
+[90mstdout[2m | tests/unit/local-tool-server.test.ts[2m > [22m[2mLocalToolServer — Zod 参数校验[2m > [22m[2m可选参数缺失时正常通过
+[22m[39m[MCP] #1 ✓ optional_tool 1ms
+
+[90mstdout[2m | tests/unit/standalone-host.test.ts[2m > [22m[2mStandaloneMcpHost — tools/call[2m > [22m[2m正常调用工具返回结果
+[22m[39m[MCP] #1 → echo {}
+
+[90mstdout[2m | tests/unit/standalone-host.test.ts[2m > [22m[2mStandaloneMcpHost — tools/call[2m > [22m[2m正常调用工具返回结果
+[22m[39m[MCP] #1 ✓ echo 2ms
+
+[90mstdout[2m | tests/unit/standalone-host.test.ts[2m > [22m[2mStandaloneMcpHost — tools/call[2m > [22m[2mtools/call 作为通知（无 id）时返回 204
+[22m[39m[MCP] #1 → echo {}
+
+[90mstdout[2m | tests/unit/standalone-host.test.ts[2m > [22m[2mStandaloneMcpHost — tools/call[2m > [22m[2mtools/call 作为通知（无 id）时返回 204
+[22m[39m[MCP] #1 ✓ echo 0ms
+
+stderr | tests/unit/operation-manager.test.ts > operation-manager > undoLastOperation > handles rollback failure
+[Aura] [UNKNOWN] 撤销操作 "fail undo" 失败: undo fail
+
+stderr | tests/unit/operation-manager.test.ts > operation-manager > executeTransaction > rolls back on failure
+[Aura] [UNKNOWN] 事务 "test-tx" 步骤 "step2" 失败: fail
+
+stderr | tests/unit/operation-manager.test.ts > operation-manager > executeTransaction > skips rollback when autoRollback is false
+[Aura] [UNKNOWN] 事务 "未命名事务" 步骤 "step2" 失败: fail
+
+stderr | tests/unit/operation-manager.test.ts > operation-manager > executeTransaction > continues on error when continueOnError is true
+[Aura] [UNKNOWN] 事务 "未命名事务" 步骤 "step2" 失败: fail
+
+stderr | tests/unit/operation-manager.test.ts > operation-manager > executeTransaction > handles rollback failure gracefully
+[Aura] [UNKNOWN] 事务 "未命名事务" 步骤 "step2" 失败: fail
+
+ [32m✓[39m tests/unit/standalone-host.test.ts [2m([22m[2m27 tests[22m[2m)[22m[32m 17[2mms[22m[39m
+stderr | tests/unit/operation-manager.test.ts > operation-manager > executeTransaction > handles rollback failure gracefully
+[Aura] [UNKNOWN] 事务 "未命名事务" 回滚步骤 "step1" 失败: rb fail
+
+ [32m✓[39m tests/unit/operation-manager.test.ts [2m([22m[2m24 tests[22m[2m)[22m[32m 34[2mms[22m[39m
+ [32m✓[39m tests/unit/local-tool-server.test.ts [2m([22m[2m25 tests[22m[2m)[22m[32m 35[2mms[22m[39m
+[90mstdout[2m | tests/unit/mcp-e2e.test.ts[2m > [22m[2mMCP 协议端到端流程[2m > [22m[2m完整生命周期: initialize → tools/list → tools/call → disconnect
+[22m[39m[MCP] #1 → echo.ping {action:"ping"}
+
+[90mstdout[2m | tests/unit/bridge-settings.test.ts[2m > [22m[2mbridge-settings[2m > [22m[2mloadSettings[2m > [22m[2mreturns defaults on corrupt JSON
+[22m[39m[Aura] [CONFIG] 已忽略: 加载设置文件失败，使用默认值: Expected property name or '}' in JSON at position 1 (line 1 column 2)
+
+[90mstdout[2m | tests/unit/mcp-e2e.test.ts[2m > [22m[2mMCP 协议端到端流程[2m > [22m[2m完整生命周期: initialize → tools/list → tools/call → disconnect
+[22m[39m[MCP] #1 ✓ echo.ping 2ms
+
+[90mstdout[2m | tests/unit/mcp-e2e.test.ts[2m > [22m[2mMCP 协议端到端流程[2m > [22m[2m完整生命周期: initialize → tools/list → tools/call → disconnect
+[22m[39m[MCP] #2 → greet {name:"Cocos"}
+
+[90mstdout[2m | tests/unit/mcp-e2e.test.ts[2m > [22m[2mMCP 协议端到端流程[2m > [22m[2m完整生命周期: initialize → tools/list → tools/call → disconnect
+[22m[39m[MCP] #2 ✓ greet 1ms
+
+ [32m✓[39m tests/unit/mcp-e2e.test.ts [2m([22m[2m17 tests[22m[2m)[22m[32m 31[2mms[22m[39m
+stderr | tests/unit/bridge-settings.test.ts > bridge-settings > saveSettings > does not throw on write failure
+[Aura] [CONFIG] 保存设置文件失败: ENOENT: no such file or directory, open 'E:\nonexistent\path\settings.json'
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_query — NEW_QUERY_ACTIONS (dispatchQuery with fallback)[2m > [22m[2mscene_snapshot calls dispatchQuery
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_query.scene_snapshot {action:"scene_snapshot"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_query — NEW_QUERY_ACTIONS (dispatchQuery with fallback)[2m > [22m[2mscene_snapshot calls dispatchQuery
+[22m[39m[MCP] #1 ✓ scene_query.scene_snapshot 1ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_query — NEW_QUERY_ACTIONS (dispatchQuery with fallback)[2m > [22m[2mscene_diff calls dispatchQuery
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_query.scene_diff {action:"scene_diff"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_query — NEW_QUERY_ACTIONS (dispatchQuery with fallback)[2m > [22m[2mscene_diff calls dispatchQuery
+[22m[39m[MCP] #1 ✓ scene_query.scene_diff 1ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_query — NEW_QUERY_ACTIONS (dispatchQuery with fallback)[2m > [22m[2mperformance_audit calls dispatchQuery
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_query.performance_audit {action:"performance_audit"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_query — NEW_QUERY_ACTIONS (dispatchQuery with fallback)[2m > [22m[2mperformance_audit calls dispatchQuery
+[22m[39m[MCP] #1 ✓ scene_query.performance_audit 0ms
+
+ [32m✓[39m tests/unit/bridge-settings.test.ts [2m([22m[2m14 tests[22m[2m)[22m[33m 373[2mms[22m[39m
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_query — NEW_QUERY_ACTIONS (dispatchQuery with fallback)[2m > [22m[2mexport_scene_json calls dispatchQuery
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_query.export_scene_json {action:"export_scene_json"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_query — NEW_QUERY_ACTIONS (dispatchQuery with fallback)[2m > [22m[2mexport_scene_json calls dispatchQuery
+[22m[39m[MCP] #1 ✓ scene_query.export_scene_json 0ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_query — NEW_QUERY_ACTIONS (dispatchQuery with fallback)[2m > [22m[2mdeep_validate_scene calls dispatchQuery
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_query.deep_validate_scene {action:"deep_validate_scene"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_query — NEW_QUERY_ACTIONS (dispatchQuery with fallback)[2m > [22m[2mdeep_validate_scene calls dispatchQuery
+[22m[39m[MCP] #1 ✓ scene_query.deep_validate_scene 1ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_query — NEW_QUERY_ACTIONS (dispatchQuery with fallback)[2m > [22m[2mget_node_bounds calls dispatchQuery
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_query.get_node_bounds {action:"get_node_bounds", uuid:"u1"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_query — NEW_QUERY_ACTIONS (dispatchQuery with fallback)[2m > [22m[2mget_node_bounds calls dispatchQuery
+[22m[39m[MCP] #1 ✓ scene_query.get_node_bounds 0ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_query — NEW_QUERY_ACTIONS (dispatchQuery with fallback)[2m > [22m[2mfind_nodes_by_layer calls dispatchQuery
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_query.find_nodes_by_layer {action:"find_nodes_by_layer"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_query — NEW_QUERY_ACTIONS (dispatchQuery with fallback)[2m > [22m[2mfind_nodes_by_layer calls dispatchQuery
+[22m[39m[MCP] #1 ✓ scene_query.find_nodes_by_layer 4ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_query — NEW_QUERY_ACTIONS (dispatchQuery with fallback)[2m > [22m[2mget_animation_state calls dispatchQuery
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_query.get_animation_state {action:"get_animation_state", uuid:"u1"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_query — NEW_QUERY_ACTIONS (dispatchQuery with fallback)[2m > [22m[2mget_animation_state calls dispatchQuery
+[22m[39m[MCP] #1 ✓ scene_query.get_animation_state 0ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_query — NEW_QUERY_ACTIONS (dispatchQuery with fallback)[2m > [22m[2mget_collider_info calls dispatchQuery
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_query.get_collider_info {action:"get_collider_info", uuid:"u1"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_query — NEW_QUERY_ACTIONS (dispatchQuery with fallback)[2m > [22m[2mget_collider_info calls dispatchQuery
+[22m[39m[MCP] #1 ✓ scene_query.get_collider_info 1ms
+
+ [32m✓[39m tests/unit/stdio-shim.test.ts [2m([22m[2m29 tests[22m[2m)[22m[32m 12[2mms[22m[39m
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_query — NEW_QUERY_ACTIONS (dispatchQuery with fallback)[2m > [22m[2mget_material_info calls dispatchQuery
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_query.get_material_info {action:"get_material_info", uuid:"u1"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_query — NEW_QUERY_ACTIONS (dispatchQuery with fallback)[2m > [22m[2mget_material_info calls dispatchQuery
+[22m[39m[MCP] #1 ✓ scene_query.get_material_info 1ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_query — NEW_QUERY_ACTIONS (dispatchQuery with fallback)[2m > [22m[2mget_light_info calls dispatchQuery
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_query.get_light_info {action:"get_light_info"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_query — NEW_QUERY_ACTIONS (dispatchQuery with fallback)[2m > [22m[2mget_light_info calls dispatchQuery
+[22m[39m[MCP] #1 ✓ scene_query.get_light_info 0ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_query — NEW_QUERY_ACTIONS (dispatchQuery with fallback)[2m > [22m[2mget_scene_environment calls dispatchQuery
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_query.get_scene_environment {action:"get_scene_environment"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_query — NEW_QUERY_ACTIONS (dispatchQuery with fallback)[2m > [22m[2mget_scene_environment calls dispatchQuery
+[22m[39m[MCP] #1 ✓ scene_query.get_scene_environment 0ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_query — NEW_QUERY_ACTIONS (dispatchQuery with fallback)[2m > [22m[2mscreen_to_world calls dispatchQuery
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_query.screen_to_world {action:"screen_to_world"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_query — NEW_QUERY_ACTIONS (dispatchQuery with fallback)[2m > [22m[2mscreen_to_world calls dispatchQuery
+[22m[39m[MCP] #1 ✓ scene_query.screen_to_world 1ms
+
+ [32m✓[39m tests/unit/tools-normalizer.test.ts [2m([22m[2m26 tests[22m[2m)[22m[32m 15[2mms[22m[39m
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_query — NEW_QUERY_ACTIONS (dispatchQuery with fallback)[2m > [22m[2mworld_to_screen calls dispatchQuery
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_query.world_to_screen {action:"world_to_screen"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_query — NEW_QUERY_ACTIONS (dispatchQuery with fallback)[2m > [22m[2mworld_to_screen calls dispatchQuery
+[22m[39m[MCP] #1 ✓ scene_query.world_to_screen 1ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_query — NEW_QUERY_ACTIONS (dispatchQuery with fallback)[2m > [22m[2mcheck_script_ready calls dispatchQuery
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_query.check_script_ready {action:"check_script_ready"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_query — NEW_QUERY_ACTIONS (dispatchQuery with fallback)[2m > [22m[2mcheck_script_ready calls dispatchQuery
+[22m[39m[MCP] #1 ✓ scene_query.check_script_ready 0ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_query — NEW_QUERY_ACTIONS (dispatchQuery with fallback)[2m > [22m[2mget_script_properties calls dispatchQuery
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_query.get_script_properties {action:"get_script_properties"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_query — NEW_QUERY_ACTIONS (dispatchQuery with fallback)[2m > [22m[2mget_script_properties calls dispatchQuery
+[22m[39m[MCP] #1 ✓ scene_query.get_script_properties 0ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_query — NEW_QUERY_ACTIONS (dispatchQuery with fallback)[2m > [22m[2mexception in scene_query returns error
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_query.tree {action:"tree"}
+
+stderr | tests/unit/tools-scene-coverage.test.ts > scene_query — NEW_QUERY_ACTIONS (dispatchQuery with fallback) > exception in scene_query returns error
+[MCP] #1 ✗ scene_query.tree 0ms — connection lost
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — standard dispatchOperation actions[2m > [22m[2mcreate_node calls dispatchOperation
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.create_node {action:"create_node", name:"TestNode"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — standard dispatchOperation actions[2m > [22m[2mcreate_node calls dispatchOperation
+[22m[39m[MCP] #1 ✓ scene_operation.create_node 2ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — standard dispatchOperation actions[2m > [22m[2mdestroy_node blocked without confirmDangerous
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.destroy_node {action:"destroy_node", uuid:"u1"}
+
+stderr | tests/unit/tools-scene-coverage.test.ts > scene_operation — standard dispatchOperation actions > destroy_node blocked without confirmDangerous
+[MCP] #1 ✗ scene_operation.destroy_node 0ms — 危险操作 destroy_node 已拦截。请显式传入 confirmDangerous=true 后重试。
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — standard dispatchOperation actions[2m > [22m[2mdestroy_node calls editorMsg remove-node with confirmDangerous=true
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.destroy_node {action:"destroy_node", uuid:"u1"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — standard dispatchOperation actions[2m > [22m[2mdestroy_node calls editorMsg remove-node with confirmDangerous=true
+[22m[39m[MCP] #1 ✓ scene_operation.destroy_node 1ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — standard dispatchOperation actions[2m > [22m[2mreparent calls dispatchOperation
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.reparent {action:"reparent", uuid:"child"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — standard dispatchOperation actions[2m > [22m[2mreparent calls dispatchOperation
+[22m[39m[MCP] #1 ✓ scene_operation.reparent 1ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — standard dispatchOperation actions[2m > [22m[2mset_position calls dispatchOperation
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.set_position {action:"set_position", uuid:"u1"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — standard dispatchOperation actions[2m > [22m[2mset_position calls dispatchOperation
+[22m[39m[MCP] #1 ✓ scene_operation.set_position 0ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — standard dispatchOperation actions[2m > [22m[2mset_rotation calls dispatchOperation
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.set_rotation {action:"set_rotation", uuid:"u1"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — standard dispatchOperation actions[2m > [22m[2mset_rotation calls dispatchOperation
+[22m[39m[MCP] #1 ✓ scene_operation.set_rotation 0ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — standard dispatchOperation actions[2m > [22m[2mset_scale calls dispatchOperation
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.set_scale {action:"set_scale", uuid:"u1"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — standard dispatchOperation actions[2m > [22m[2mset_scale calls dispatchOperation
+[22m[39m[MCP] #1 ✓ scene_operation.set_scale 1ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — standard dispatchOperation actions[2m > [22m[2mset_world_position calls dispatchOperation
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.set_world_position {action:"set_world_position", uuid:"u1"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — standard dispatchOperation actions[2m > [22m[2mset_world_position calls dispatchOperation
+[22m[39m[MCP] #1 ✓ scene_operation.set_world_position 1ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — standard dispatchOperation actions[2m > [22m[2mset_world_rotation calls dispatchOperation
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.set_world_rotation {action:"set_world_rotation", uuid:"u1"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — standard dispatchOperation actions[2m > [22m[2mset_world_rotation calls dispatchOperation
+[22m[39m[MCP] #1 ✓ scene_operation.set_world_rotation 1ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — standard dispatchOperation actions[2m > [22m[2mset_world_scale calls dispatchOperation
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.set_world_scale {action:"set_world_scale", uuid:"u1"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — standard dispatchOperation actions[2m > [22m[2mset_world_scale calls dispatchOperation
+[22m[39m[MCP] #1 ✓ scene_operation.set_world_scale 1ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — standard dispatchOperation actions[2m > [22m[2mset_name calls dispatchOperation
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.set_name {action:"set_name", uuid:"u1", name:"NewName"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — standard dispatchOperation actions[2m > [22m[2mset_name calls dispatchOperation
+[22m[39m[MCP] #1 ✓ scene_operation.set_name 0ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — standard dispatchOperation actions[2m > [22m[2mset_active calls dispatchOperation
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.set_active {action:"set_active", uuid:"u1"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — standard dispatchOperation actions[2m > [22m[2mset_active calls dispatchOperation
+[22m[39m[MCP] #1 ✓ scene_operation.set_active 0ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — standard dispatchOperation actions[2m > [22m[2madd_component calls dispatchOperation
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.add_component {action:"add_component", uuid:"u1", component:"Sprite"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — standard dispatchOperation actions[2m > [22m[2madd_component calls dispatchOperation
+[22m[39m[MCP] #1 ✓ scene_operation.add_component 1ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — standard dispatchOperation actions[2m > [22m[2mremove_component calls dispatchOperation
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.remove_component {action:"remove_component", uuid:"u1", component:"Sprite"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — standard dispatchOperation actions[2m > [22m[2mremove_component calls dispatchOperation
+[22m[39m[MCP] #1 ✓ scene_operation.remove_component 0ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — standard dispatchOperation actions[2m > [22m[2mset_property calls dispatchOperation
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.set_property {action:"set_property", uuid:"u1", component:"Label", property:"string", value:"Hello"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — standard dispatchOperation actions[2m > [22m[2mset_property calls dispatchOperation
+[22m[39m[MCP] #1 ✓ scene_operation.set_property 1ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — standard dispatchOperation actions[2m > [22m[2mreset_property calls editorMsg reset-property
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.reset_property {action:"reset_property", uuid:"u1", component:"Label", property:"string"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — standard dispatchOperation actions[2m > [22m[2mreset_property calls editorMsg reset-property
+[22m[39m[MCP] #1 ✓ scene_operation.reset_property 1ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — standard dispatchOperation actions[2m > [22m[2mduplicate_node calls dispatchOperation
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.duplicate_node {action:"duplicate_node", uuid:"u1"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — standard dispatchOperation actions[2m > [22m[2mduplicate_node calls dispatchOperation
+[22m[39m[MCP] #1 ✓ scene_operation.duplicate_node 1ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — standard dispatchOperation actions[2m > [22m[2mmove_node_up calls dispatchOperation
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.move_node_up {action:"move_node_up", uuid:"u1"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — standard dispatchOperation actions[2m > [22m[2mmove_node_up calls dispatchOperation
+[22m[39m[MCP] #1 ✓ scene_operation.move_node_up 0ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — standard dispatchOperation actions[2m > [22m[2mmove_node_down calls dispatchOperation
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.move_node_down {action:"move_node_down", uuid:"u1"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — standard dispatchOperation actions[2m > [22m[2mmove_node_down calls dispatchOperation
+[22m[39m[MCP] #1 ✓ scene_operation.move_node_down 1ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — standard dispatchOperation actions[2m > [22m[2mset_sibling_index calls dispatchOperation
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.set_sibling_index {action:"set_sibling_index", uuid:"u1"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — standard dispatchOperation actions[2m > [22m[2mset_sibling_index calls dispatchOperation
+[22m[39m[MCP] #1 ✓ scene_operation.set_sibling_index 0ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — standard dispatchOperation actions[2m > [22m[2mlock_node calls dispatchOperation
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.lock_node {action:"lock_node", uuid:"u1"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — standard dispatchOperation actions[2m > [22m[2mlock_node calls dispatchOperation
+[22m[39m[MCP] #1 ✓ scene_operation.lock_node 0ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — standard dispatchOperation actions[2m > [22m[2munlock_node calls dispatchOperation
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.unlock_node {action:"unlock_node", uuid:"u1"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — standard dispatchOperation actions[2m > [22m[2munlock_node calls dispatchOperation
+[22m[39m[MCP] #1 ✓ scene_operation.unlock_node 0ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — standard dispatchOperation actions[2m > [22m[2mhide_node calls dispatchOperation
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.hide_node {action:"hide_node", uuid:"u1"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — standard dispatchOperation actions[2m > [22m[2mhide_node calls dispatchOperation
+[22m[39m[MCP] #1 ✓ scene_operation.hide_node 0ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — standard dispatchOperation actions[2m > [22m[2munhide_node calls dispatchOperation
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.unhide_node {action:"unhide_node", uuid:"u1"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — standard dispatchOperation actions[2m > [22m[2munhide_node calls dispatchOperation
+[22m[39m[MCP] #1 ✓ scene_operation.unhide_node 0ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — standard dispatchOperation actions[2m > [22m[2mset_layer calls dispatchOperation
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.set_layer {action:"set_layer", uuid:"u1"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — standard dispatchOperation actions[2m > [22m[2mset_layer calls dispatchOperation
+[22m[39m[MCP] #1 ✓ scene_operation.set_layer 0ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — standard dispatchOperation actions[2m > [22m[2mcall_component_method calls editorMsg execute-component-method
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.call_component_method {action:"call_component_method", uuid:"u1", component:"Animation"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — standard dispatchOperation actions[2m > [22m[2mcall_component_method calls editorMsg execute-component-method
+[22m[39m[MCP] #1 ✓ scene_operation.call_component_method 0ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — standard dispatchOperation actions[2m > [22m[2mclear_children blocked without confirmDangerous
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.clear_children {action:"clear_children", uuid:"u1"}
+
+stderr | tests/unit/tools-scene-coverage.test.ts > scene_operation — standard dispatchOperation actions > clear_children blocked without confirmDangerous
+[MCP] #1 ✗ scene_operation.clear_children 0ms — 危险操作 clear_children 已拦截。请显式传入 confirmDangerous=true 后重试。
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — standard dispatchOperation actions[2m > [22m[2mclear_children queries children then calls editorMsg remove-node for each
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.clear_children {action:"clear_children", uuid:"u1"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — standard dispatchOperation actions[2m > [22m[2mclear_children queries children then calls editorMsg remove-node for each
+[22m[39m[MCP] #1 ✓ scene_operation.clear_children 0ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — prefab & clipboard actions (editorMsg)[2m > [22m[2mcreate_prefab calls editorMsg scene create-prefab
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.create_prefab {action:"create_prefab", uuid:"u1"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — prefab & clipboard actions (editorMsg)[2m > [22m[2mcreate_prefab calls editorMsg scene create-prefab
+[22m[39m[MCP] #1 ✓ scene_operation.create_prefab 2ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — prefab & clipboard actions (editorMsg)[2m > [22m[2minstantiate_prefab calls editorMsg
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.instantiate_prefab {action:"instantiate_prefab", prefabUrl:"db://assets/prefabs/P.prefab"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — prefab & clipboard actions (editorMsg)[2m > [22m[2minstantiate_prefab calls editorMsg
+[22m[39m[MCP] #1 ✓ scene_operation.instantiate_prefab 0ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — prefab & clipboard actions (editorMsg)[2m > [22m[2mapply_prefab calls editorMsg
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.apply_prefab {action:"apply_prefab", uuid:"u1"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — prefab & clipboard actions (editorMsg)[2m > [22m[2mapply_prefab calls editorMsg
+[22m[39m[MCP] #1 ✓ scene_operation.apply_prefab 0ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — prefab & clipboard actions (editorMsg)[2m > [22m[2mrestore_prefab calls editorMsg
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.restore_prefab {action:"restore_prefab", uuid:"u1"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — prefab & clipboard actions (editorMsg)[2m > [22m[2mrestore_prefab calls editorMsg
+[22m[39m[MCP] #1 ✓ scene_operation.restore_prefab 1ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — prefab & clipboard actions (editorMsg)[2m > [22m[2mvalidate_prefab calls editorMsg query-asset-info and query-asset-dependencies
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.validate_prefab {action:"validate_prefab", prefabUrl:"db://assets/prefabs/P.prefab"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — prefab & clipboard actions (editorMsg)[2m > [22m[2mvalidate_prefab calls editorMsg query-asset-info and query-asset-dependencies
+[22m[39m[MCP] #1 ✓ scene_operation.validate_prefab 1ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — NEW_SCENE_OPS (dispatchOperation with fallback)[2m > [22m[2mbatch calls dispatchOperation
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.batch {action:"batch"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — NEW_SCENE_OPS (dispatchOperation with fallback)[2m > [22m[2mbatch calls dispatchOperation
+[22m[39m[MCP] #1 ✓ scene_operation.batch 0ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — NEW_SCENE_OPS (dispatchOperation with fallback)[2m > [22m[2mcreate_ui_widget calls dispatchOperation
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.create_ui_widget {action:"create_ui_widget"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — NEW_SCENE_OPS (dispatchOperation with fallback)[2m > [22m[2mcreate_ui_widget calls dispatchOperation
+[22m[39m[MCP] #1 ✓ scene_operation.create_ui_widget 1ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — NEW_SCENE_OPS (dispatchOperation with fallback)[2m > [22m[2msetup_particle calls dispatchOperation
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.setup_particle {action:"setup_particle"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — NEW_SCENE_OPS (dispatchOperation with fallback)[2m > [22m[2msetup_particle calls dispatchOperation
+[22m[39m[MCP] #1 ✓ scene_operation.setup_particle 0ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — NEW_SCENE_OPS (dispatchOperation with fallback)[2m > [22m[2malign_nodes calls dispatchOperation
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.align_nodes {action:"align_nodes"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — NEW_SCENE_OPS (dispatchOperation with fallback)[2m > [22m[2malign_nodes calls dispatchOperation
+[22m[39m[MCP] #1 ✓ scene_operation.align_nodes 0ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — NEW_SCENE_OPS (dispatchOperation with fallback)[2m > [22m[2maudio_setup calls dispatchOperation
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.audio_setup {action:"audio_setup", uuid:"u1"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — NEW_SCENE_OPS (dispatchOperation with fallback)[2m > [22m[2maudio_setup calls dispatchOperation
+[22m[39m[MCP] #1 ✓ scene_operation.audio_setup 0ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — NEW_SCENE_OPS (dispatchOperation with fallback)[2m > [22m[2msetup_physics_world calls dispatchOperation
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.setup_physics_world {action:"setup_physics_world"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — NEW_SCENE_OPS (dispatchOperation with fallback)[2m > [22m[2msetup_physics_world calls dispatchOperation
+[22m[39m[MCP] #1 ✓ scene_operation.setup_physics_world 0ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — NEW_SCENE_OPS (dispatchOperation with fallback)[2m > [22m[2mcreate_skeleton_node calls dispatchOperation
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.create_skeleton_node {action:"create_skeleton_node"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — NEW_SCENE_OPS (dispatchOperation with fallback)[2m > [22m[2mcreate_skeleton_node calls dispatchOperation
+[22m[39m[MCP] #1 ✓ scene_operation.create_skeleton_node 0ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — NEW_SCENE_OPS (dispatchOperation with fallback)[2m > [22m[2mgenerate_tilemap calls dispatchOperation
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.generate_tilemap {action:"generate_tilemap"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — NEW_SCENE_OPS (dispatchOperation with fallback)[2m > [22m[2mgenerate_tilemap calls dispatchOperation
+[22m[39m[MCP] #1 ✓ scene_operation.generate_tilemap 0ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — NEW_SCENE_OPS (dispatchOperation with fallback)[2m > [22m[2mcreate_primitive calls dispatchOperation
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.create_primitive {action:"create_primitive"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — NEW_SCENE_OPS (dispatchOperation with fallback)[2m > [22m[2mcreate_primitive calls dispatchOperation
+[22m[39m[MCP] #1 ✓ scene_operation.create_primitive 0ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — NEW_SCENE_OPS (dispatchOperation with fallback)[2m > [22m[2mset_camera_look_at calls dispatchOperation
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.set_camera_look_at {action:"set_camera_look_at", uuid:"u1"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — NEW_SCENE_OPS (dispatchOperation with fallback)[2m > [22m[2mset_camera_look_at calls dispatchOperation
+[22m[39m[MCP] #1 ✓ scene_operation.set_camera_look_at 0ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — NEW_SCENE_OPS (dispatchOperation with fallback)[2m > [22m[2mset_camera_property calls dispatchOperation
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.set_camera_property {action:"set_camera_property", uuid:"u1"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — NEW_SCENE_OPS (dispatchOperation with fallback)[2m > [22m[2mset_camera_property calls dispatchOperation
+[22m[39m[MCP] #1 ✓ scene_operation.set_camera_property 1ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — NEW_SCENE_OPS (dispatchOperation with fallback)[2m > [22m[2mcreate_camera calls dispatchOperation
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.create_camera {action:"create_camera"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — NEW_SCENE_OPS (dispatchOperation with fallback)[2m > [22m[2mcreate_camera calls dispatchOperation
+[22m[39m[MCP] #1 ✓ scene_operation.create_camera 0ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — NEW_SCENE_OPS (dispatchOperation with fallback)[2m > [22m[2mset_material_property calls dispatchOperation
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.set_material_property {action:"set_material_property", uuid:"u1"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — NEW_SCENE_OPS (dispatchOperation with fallback)[2m > [22m[2mset_material_property calls dispatchOperation
+[22m[39m[MCP] #1 ✓ scene_operation.set_material_property 0ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — NEW_SCENE_OPS (dispatchOperation with fallback)[2m > [22m[2massign_builtin_material calls dispatchOperation
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.assign_builtin_material {action:"assign_builtin_material", uuid:"u1"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — NEW_SCENE_OPS (dispatchOperation with fallback)[2m > [22m[2massign_builtin_material calls dispatchOperation
+[22m[39m[MCP] #1 ✓ scene_operation.assign_builtin_material 0ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — NEW_SCENE_OPS (dispatchOperation with fallback)[2m > [22m[2mbind_event calls dispatchOperation
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.bind_event {action:"bind_event", uuid:"u1", component:"MyScript"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — NEW_SCENE_OPS (dispatchOperation with fallback)[2m > [22m[2mbind_event calls dispatchOperation
+[22m[39m[MCP] #1 ✓ scene_operation.bind_event 0ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — NEW_SCENE_OPS (dispatchOperation with fallback)[2m > [22m[2munbind_event calls dispatchOperation
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.unbind_event {action:"unbind_event", uuid:"u1"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — NEW_SCENE_OPS (dispatchOperation with fallback)[2m > [22m[2munbind_event calls dispatchOperation
+[22m[39m[MCP] #1 ✓ scene_operation.unbind_event 0ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — NEW_SCENE_OPS (dispatchOperation with fallback)[2m > [22m[2mlist_events calls dispatchOperation
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.list_events {action:"list_events", uuid:"u1"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — NEW_SCENE_OPS (dispatchOperation with fallback)[2m > [22m[2mlist_events calls dispatchOperation
+[22m[39m[MCP] #1 ✓ scene_operation.list_events 0ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — NEW_SCENE_OPS (dispatchOperation with fallback)[2m > [22m[2mset_anchor_point calls dispatchOperation
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.set_anchor_point {action:"set_anchor_point", uuid:"u1"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — NEW_SCENE_OPS (dispatchOperation with fallback)[2m > [22m[2mset_anchor_point calls dispatchOperation
+[22m[39m[MCP] #1 ✓ scene_operation.set_anchor_point 0ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — NEW_SCENE_OPS (dispatchOperation with fallback)[2m > [22m[2mset_content_size calls dispatchOperation
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.set_content_size {action:"set_content_size", uuid:"u1"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — NEW_SCENE_OPS (dispatchOperation with fallback)[2m > [22m[2mset_content_size calls dispatchOperation
+[22m[39m[MCP] #1 ✓ scene_operation.set_content_size 0ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — NEW_SCENE_OPS (dispatchOperation with fallback)[2m > [22m[2mbatch_set_property calls dispatchOperation
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.batch_set_property {action:"batch_set_property", component:"Label", property:"string", value:"Hi"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — NEW_SCENE_OPS (dispatchOperation with fallback)[2m > [22m[2mbatch_set_property calls dispatchOperation
+[22m[39m[MCP] #1 ✓ scene_operation.batch_set_property 0ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — NEW_SCENE_OPS (dispatchOperation with fallback)[2m > [22m[2mgroup_nodes calls dispatchOperation
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.group_nodes {action:"group_nodes"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — NEW_SCENE_OPS (dispatchOperation with fallback)[2m > [22m[2mgroup_nodes calls dispatchOperation
+[22m[39m[MCP] #1 ✓ scene_operation.group_nodes 0ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — NEW_SCENE_OPS (dispatchOperation with fallback)[2m > [22m[2mcreate_light calls dispatchOperation
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.create_light {action:"create_light"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — NEW_SCENE_OPS (dispatchOperation with fallback)[2m > [22m[2mcreate_light calls dispatchOperation
+[22m[39m[MCP] #1 ✓ scene_operation.create_light 0ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — NEW_SCENE_OPS (dispatchOperation with fallback)[2m > [22m[2mset_light_property calls dispatchOperation
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.set_light_property {action:"set_light_property", uuid:"u1"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — NEW_SCENE_OPS (dispatchOperation with fallback)[2m > [22m[2mset_light_property calls dispatchOperation
+[22m[39m[MCP] #1 ✓ scene_operation.set_light_property 0ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — NEW_SCENE_OPS (dispatchOperation with fallback)[2m > [22m[2mset_scene_environment calls dispatchOperation
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.set_scene_environment {action:"set_scene_environment"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — NEW_SCENE_OPS (dispatchOperation with fallback)[2m > [22m[2mset_scene_environment calls dispatchOperation
+[22m[39m[MCP] #1 ✓ scene_operation.set_scene_environment 0ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — NEW_SCENE_OPS (dispatchOperation with fallback)[2m > [22m[2mset_material_define calls dispatchOperation
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.set_material_define {action:"set_material_define", uuid:"u1"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — NEW_SCENE_OPS (dispatchOperation with fallback)[2m > [22m[2mset_material_define calls dispatchOperation
+[22m[39m[MCP] #1 ✓ scene_operation.set_material_define 0ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — NEW_SCENE_OPS (dispatchOperation with fallback)[2m > [22m[2massign_project_material calls dispatchOperation
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.assign_project_material {action:"assign_project_material", uuid:"u1"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — NEW_SCENE_OPS (dispatchOperation with fallback)[2m > [22m[2massign_project_material calls dispatchOperation
+[22m[39m[MCP] #1 ✓ scene_operation.assign_project_material 0ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — NEW_SCENE_OPS (dispatchOperation with fallback)[2m > [22m[2mclone_material calls dispatchOperation
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.clone_material {action:"clone_material", uuid:"u1"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — NEW_SCENE_OPS (dispatchOperation with fallback)[2m > [22m[2mclone_material calls dispatchOperation
+[22m[39m[MCP] #1 ✓ scene_operation.clone_material 0ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — NEW_SCENE_OPS (dispatchOperation with fallback)[2m > [22m[2mswap_technique calls dispatchOperation
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.swap_technique {action:"swap_technique", uuid:"u1"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — NEW_SCENE_OPS (dispatchOperation with fallback)[2m > [22m[2mswap_technique calls dispatchOperation
+[22m[39m[MCP] #1 ✓ scene_operation.swap_technique 1ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — NEW_SCENE_OPS (dispatchOperation with fallback)[2m > [22m[2msprite_grayscale calls dispatchOperation
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.sprite_grayscale {action:"sprite_grayscale", uuid:"u1"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — NEW_SCENE_OPS (dispatchOperation with fallback)[2m > [22m[2msprite_grayscale calls dispatchOperation
+[22m[39m[MCP] #1 ✓ scene_operation.sprite_grayscale 0ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — NEW_SCENE_OPS (dispatchOperation with fallback)[2m > [22m[2mcamera_screenshot calls dispatchOperation
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.camera_screenshot {action:"camera_screenshot"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — NEW_SCENE_OPS (dispatchOperation with fallback)[2m > [22m[2mcamera_screenshot calls dispatchOperation
+[22m[39m[MCP] #1 ✓ scene_operation.camera_screenshot 0ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — NEW_SCENE_OPS (dispatchOperation with fallback)[2m > [22m[2mattach_script calls dispatchOperation
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.attach_script {action:"attach_script", uuid:"u1"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — NEW_SCENE_OPS (dispatchOperation with fallback)[2m > [22m[2mattach_script calls dispatchOperation
+[22m[39m[MCP] #1 ✓ scene_operation.attach_script 0ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — NEW_SCENE_OPS (dispatchOperation with fallback)[2m > [22m[2mset_component_properties calls dispatchOperation
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.set_component_properties {action:"set_component_properties", uuid:"u1", component:"Label"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — NEW_SCENE_OPS (dispatchOperation with fallback)[2m > [22m[2mset_component_properties calls dispatchOperation
+[22m[39m[MCP] #1 ✓ scene_operation.set_component_properties 1ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — NEW_SCENE_OPS (dispatchOperation with fallback)[2m > [22m[2mdetach_script calls dispatchOperation
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.detach_script {action:"detach_script", uuid:"u1"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — NEW_SCENE_OPS (dispatchOperation with fallback)[2m > [22m[2mdetach_script calls dispatchOperation
+[22m[39m[MCP] #1 ✓ scene_operation.detach_script 0ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — NEW_SCENE_OPS (dispatchOperation with fallback)[2m > [22m[2mensure_2d_canvas calls dispatchOperation
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.ensure_2d_canvas {action:"ensure_2d_canvas"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — NEW_SCENE_OPS (dispatchOperation with fallback)[2m > [22m[2mensure_2d_canvas calls dispatchOperation
+[22m[39m[MCP] #1 ✓ scene_operation.ensure_2d_canvas 0ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — NEW_SCENE_OPS (dispatchOperation with fallback)[2m > [22m[2mreset_transform calls editorMsg reset-node
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.reset_transform {action:"reset_transform", uuid:"u1"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — NEW_SCENE_OPS (dispatchOperation with fallback)[2m > [22m[2mreset_transform calls editorMsg reset-node
+[22m[39m[MCP] #1 ✓ scene_operation.reset_transform 1ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — NEW_SCENE_OPS (dispatchOperation with fallback)[2m > [22m[2mreset_node_properties queries components then calls editorMsg reset-component
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.reset_node_properties {action:"reset_node_properties", uuid:"u1"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — NEW_SCENE_OPS (dispatchOperation with fallback)[2m > [22m[2mreset_node_properties queries components then calls editorMsg reset-component
+[22m[39m[MCP] #1 ✓ scene_operation.reset_node_properties 0ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — NEW_SCENE_OPS (dispatchOperation with fallback)[2m > [22m[2mexception in scene_operation returns error
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.create_node {action:"create_node", name:"Fail"}
+
+stderr | tests/unit/tools-scene-coverage.test.ts > scene_operation — NEW_SCENE_OPS (dispatchOperation with fallback) > exception in scene_operation returns error
+[MCP] #1 ✗ scene_operation.create_node 0ms — scene crashed
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — ensure_2d_canvas[2m > [22m[2m场景已有 Canvas 时返回已有 UUID，不创建新的
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.ensure_2d_canvas {action:"ensure_2d_canvas"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — ensure_2d_canvas[2m > [22m[2m场景已有 Canvas 时返回已有 UUID，不创建新的
+[22m[39m[MCP] #1 ✓ scene_operation.ensure_2d_canvas 0ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — ensure_2d_canvas[2m > [22m[2m场景无 Canvas 时创建新的 Canvas + Camera
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.ensure_2d_canvas {action:"ensure_2d_canvas"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — ensure_2d_canvas[2m > [22m[2m场景无 Canvas 时创建新的 Canvas + Camera
+[22m[39m[MCP] #1 ✓ scene_operation.ensure_2d_canvas 0ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — ensure_2d_canvas[2m > [22m[2m自定义 designHeight 影响 orthoHeight
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.ensure_2d_canvas {action:"ensure_2d_canvas"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — ensure_2d_canvas[2m > [22m[2m自定义 designHeight 影响 orthoHeight
+[22m[39m[MCP] #1 ✓ scene_operation.ensure_2d_canvas 0ms
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — ensure_2d_canvas[2m > [22m[2m忽略 Editor Scene Background 中的 Canvas
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.ensure_2d_canvas {action:"ensure_2d_canvas"}
+
+[90mstdout[2m | tests/unit/tools-scene-coverage.test.ts[2m > [22m[2mscene_operation — ensure_2d_canvas[2m > [22m[2m忽略 Editor Scene Background 中的 Canvas
+[22m[39m[MCP] #1 ✓ scene_operation.ensure_2d_canvas 1ms
+
+ [31m❯[39m tests/unit/tools-scene-coverage.test.ts [2m([22m[2m122 tests[22m[2m | [22m[31m4 failed[39m[2m | [22m[33m2 skipped[39m[2m)[22m[33m 6228[2mms[22m[39m
+     [32m✓[39m tree calls sceneMethod('dispatchQuery')[32m 111[2mms[22m[39m
+     [32m✓[39m list calls sceneMethod('dispatchQuery')[32m 77[2mms[22m[39m
+     [32m✓[39m stats calls sceneMethod('dispatchQuery')[32m 102[2mms[22m[39m
+     [32m✓[39m node_detail calls dispatchQuery with uuid[32m 209[2mms[22m[39m
+     [32m✓[39m get_components calls dispatchQuery with uuid[32m 168[2mms[22m[39m
+     [32m✓[39m get_parent calls dispatchQuery with uuid[32m 53[2mms[22m[39m
+     [32m✓[39m get_children calls dispatchQuery with uuid[32m 101[2mms[22m[39m
+     [32m✓[39m get_sibling calls dispatchQuery with uuid[32m 69[2mms[22m[39m
+     [33m[2m✓[22m[39m get_world_position calls dispatchQuery with uuid [33m 485[2mms[22m[39m
+     [32m✓[39m get_world_rotation calls dispatchQuery with uuid[32m 88[2mms[22m[39m
+     [32m✓[39m get_world_scale calls dispatchQuery with uuid[32m 85[2mms[22m[39m
+     [32m✓[39m get_active_in_hierarchy calls dispatchQuery with uuid[32m 62[2mms[22m[39m
+     [32m✓[39m get_node_components_properties calls dispatchQuery with uuid[32m 155[2mms[22m[39m
+     [32m✓[39m find_by_path calls dispatchQuery with path[32m 43[2mms[22m[39m
+     [32m✓[39m find_nodes_by_name calls dispatchQuery with name[32m 247[2mms[22m[39m
+     [32m✓[39m find_nodes_by_component calls dispatchQuery with component[32m 149[2mms[22m[39m
+     [32m✓[39m get_component_property calls dispatchQuery with uuid, component, property[32m 171[2mms[22m[39m
+     [32m✓[39m get_camera_info calls dispatchQuery[32m 65[2mms[22m[39m
+     [32m✓[39m get_canvas_info calls dispatchQuery[32m 259[2mms[22m[39m
+     [32m✓[39m get_scene_globals calls dispatchQuery[32m 109[2mms[22m[39m
+     [32m✓[39m get_current_selection calls bridgeGet then sceneMethod[32m 68[2mms[22m[39m
+     [32m✓[39m get_current_selection returns empty when nothing selected[32m 98[2mms[22m[39m
+     [32m✓[39m get_active_scene_focus with selection returns selection detail[32m 51[2mms[22m[39m
+     [32m✓[39m get_active_scene_focus without selection falls back to stats[32m 77[2mms[22m[39m
+     [32m✓[39m list_all_scenes calls editorMsg[32m 59[2mms[22m[39m
+     [32m✓[39m validate_scene calls dispatchQuery[32m 120[2mms[22m[39m
+     [32m✓[39m detect_2d_3d calls dispatchQuery[32m 44[2mms[22m[39m
+     [32m✓[39m list_available_components calls dispatchQuery[32m 99[2mms[22m[39m
+     [32m✓[39m measure_distance calls dispatchQuery[32m 85[2mms[22m[39m
+     [32m✓[39m scene_snapshot calls dispatchQuery[32m 159[2mms[22m[39m
+     [32m✓[39m scene_diff calls dispatchQuery[32m 108[2mms[22m[39m
+     [32m✓[39m performance_audit calls dispatchQuery[32m 45[2mms[22m[39m
+     [32m✓[39m export_scene_json calls dispatchQuery[32m 92[2mms[22m[39m
+     [32m✓[39m deep_validate_scene calls dispatchQuery[32m 43[2mms[22m[39m
+     [32m✓[39m get_node_bounds calls dispatchQuery[32m 36[2mms[22m[39m
+     [32m✓[39m find_nodes_by_layer calls dispatchQuery[32m 35[2mms[22m[39m
+     [32m✓[39m get_animation_state calls dispatchQuery[32m 44[2mms[22m[39m
+     [32m✓[39m get_collider_info calls dispatchQuery[32m 32[2mms[22m[39m
+     [32m✓[39m get_material_info calls dispatchQuery[32m 28[2mms[22m[39m
+     [32m✓[39m get_light_info calls dispatchQuery[32m 53[2mms[22m[39m
+     [32m✓[39m get_scene_environment calls dispatchQuery[32m 40[2mms[22m[39m
+     [32m✓[39m screen_to_world calls dispatchQuery[32m 37[2mms[22m[39m
+     [32m✓[39m world_to_screen calls dispatchQuery[32m 45[2mms[22m[39m
+     [32m✓[39m check_script_ready calls dispatchQuery[32m 67[2mms[22m[39m
+     [32m✓[39m get_script_properties calls dispatchQuery[32m 34[2mms[22m[39m
+     [32m✓[39m exception in scene_query returns error[32m 81[2mms[22m[39m
+     [32m✓[39m create_node calls dispatchOperation[32m 30[2mms[22m[39m
+     [32m✓[39m destroy_node blocked without confirmDangerous[32m 26[2mms[22m[39m
+     [32m✓[39m destroy_node calls editorMsg remove-node with confirmDangerous=true[32m 44[2mms[22m[39m
+     [32m✓[39m reparent calls dispatchOperation[32m 26[2mms[22m[39m
+     [32m✓[39m set_position calls dispatchOperation[32m 25[2mms[22m[39m
+     [32m✓[39m set_rotation calls dispatchOperation[32m 34[2mms[22m[39m
+     [32m✓[39m set_scale calls dispatchOperation[32m 65[2mms[22m[39m
+     [32m✓[39m set_world_position calls dispatchOperation[32m 40[2mms[22m[39m
+     [32m✓[39m set_world_rotation calls dispatchOperation[32m 39[2mms[22m[39m
+     [32m✓[39m set_world_scale calls dispatchOperation[32m 39[2mms[22m[39m
+     [32m✓[39m set_name calls dispatchOperation[32m 26[2mms[22m[39m
+     [32m✓[39m set_active calls dispatchOperation[32m 49[2mms[22m[39m
+     [32m✓[39m add_component calls dispatchOperation[32m 29[2mms[22m[39m
+     [32m✓[39m remove_component calls dispatchOperation[32m 32[2mms[22m[39m
+     [32m✓[39m set_property calls dispatchOperation[32m 24[2mms[22m[39m
+     [32m✓[39m reset_property calls editorMsg reset-property[32m 23[2mms[22m[39m
+     [32m✓[39m duplicate_node calls dispatchOperation[32m 24[2mms[22m[39m
+     [32m✓[39m move_node_up calls dispatchOperation[32m 37[2mms[22m[39m
+     [32m✓[39m move_node_down calls dispatchOperation[32m 20[2mms[22m[39m
+     [32m✓[39m set_sibling_index calls dispatchOperation[32m 16[2mms[22m[39m
+     [32m✓[39m lock_node calls dispatchOperation[32m 35[2mms[22m[39m
+     [32m✓[39m unlock_node calls dispatchOperation[32m 17[2mms[22m[39m
+     [32m✓[39m hide_node calls dispatchOperation[32m 17[2mms[22m[39m
+     [32m✓[39m unhide_node calls dispatchOperation[32m 25[2mms[22m[39m
+     [32m✓[39m set_layer calls dispatchOperation[32m 37[2mms[22m[39m
+     [32m✓[39m call_component_method calls editorMsg execute-component-method[32m 18[2mms[22m[39m
+     [32m✓[39m clear_children blocked without confirmDangerous[32m 18[2mms[22m[39m
+     [32m✓[39m clear_children queries children then calls editorMsg remove-node for each[32m 18[2mms[22m[39m
+     [32m✓[39m create_prefab calls editorMsg scene create-prefab[32m 39[2mms[22m[39m
+     [2m[90m↓[39m[22m clipboard_copy — Pro exclusive
+     [2m[90m↓[39m[22m clipboard_paste — Pro exclusive
+     [32m✓[39m instantiate_prefab calls editorMsg[32m 17[2mms[22m[39m
+     [32m✓[39m apply_prefab calls editorMsg[32m 19[2mms[22m[39m
+     [32m✓[39m restore_prefab calls editorMsg[32m 16[2mms[22m[39m
+     [32m✓[39m validate_prefab calls editorMsg query-asset-info and query-asset-dependencies[32m 29[2mms[22m[39m
+     [32m✓[39m batch calls dispatchOperation[32m 25[2mms[22m[39m
+     [32m✓[39m create_ui_widget calls dispatchOperation[32m 27[2mms[22m[39m
+     [32m✓[39m setup_particle calls dispatchOperation[32m 34[2mms[22m[39m
+     [32m✓[39m align_nodes calls dispatchOperation[32m 27[2mms[22m[39m
+     [32m✓[39m audio_setup calls dispatchOperation[32m 17[2mms[22m[39m
+     [32m✓[39m setup_physics_world calls dispatchOperation[32m 13[2mms[22m[39m
+     [32m✓[39m create_skeleton_node calls dispatchOperation[32m 16[2mms[22m[39m
+     [32m✓[39m generate_tilemap calls dispatchOperation[32m 17[2mms[22m[39m
+     [32m✓[39m create_primitive calls dispatchOperation[32m 13[2mms[22m[39m
+     [32m✓[39m set_camera_look_at calls dispatchOperation[32m 30[2mms[22m[39m
+     [32m✓[39m set_camera_property calls dispatchOperation[32m 17[2mms[22m[39m
+     [32m✓[39m create_camera calls dispatchOperation[32m 30[2mms[22m[39m
+     [32m✓[39m set_material_property calls dispatchOperation[32m 15[2mms[22m[39m
+     [32m✓[39m assign_builtin_material calls dispatchOperation[32m 18[2mms[22m[39m
+     [32m✓[39m bind_event calls dispatchOperation[32m 15[2mms[22m[39m
+     [32m✓[39m unbind_event calls dispatchOperation[32m 15[2mms[22m[39m
+     [32m✓[39m list_events calls dispatchOperation[32m 27[2mms[22m[39m
+     [32m✓[39m set_anchor_point calls dispatchOperation[32m 16[2mms[22m[39m
+     [32m✓[39m set_content_size calls dispatchOperation[32m 16[2mms[22m[39m
+     [32m✓[39m batch_set_property calls dispatchOperation[32m 28[2mms[22m[39m
+     [32m✓[39m group_nodes calls dispatchOperation[32m 15[2mms[22m[39m
+     [32m✓[39m create_light calls dispatchOperation[32m 14[2mms[22m[39m
+     [32m✓[39m set_light_property calls dispatchOperation[32m 16[2mms[22m[39m
+     [32m✓[39m set_scene_environment calls dispatchOperation[32m 27[2mms[22m[39m
+     [32m✓[39m set_material_define calls dispatchOperation[32m 13[2mms[22m[39m
+     [32m✓[39m assign_project_material calls dispatchOperation[32m 12[2mms[22m[39m
+     [32m✓[39m clone_material calls dispatchOperation[32m 9[2mms[22m[39m
+     [32m✓[39m swap_technique calls dispatchOperation[32m 30[2mms[22m[39m
+     [32m✓[39m sprite_grayscale calls dispatchOperation[32m 19[2mms[22m[39m
+     [32m✓[39m camera_screenshot calls dispatchOperation[32m 16[2mms[22m[39m
+     [32m✓[39m attach_script calls dispatchOperation[32m 12[2mms[22m[39m
+     [32m✓[39m set_component_properties calls dispatchOperation[32m 14[2mms[22m[39m
+     [32m✓[39m detach_script calls dispatchOperation[32m 14[2mms[22m[39m
+     [32m✓[39m ensure_2d_canvas calls dispatchOperation[32m 24[2mms[22m[39m
+     [32m✓[39m reset_transform calls editorMsg reset-node[32m 10[2mms[22m[39m
+     [32m✓[39m reset_node_properties queries components then calls editorMsg reset-component[32m 14[2mms[22m[39m
+     [32m✓[39m exception in scene_operation returns error[32m 26[2mms[22m[39m
+[31m     [31m×[31m 场景已有 Canvas 时返回已有 UUID，不创建新的[39m[32m 18[2mms[22m[39m
+[31m     [31m×[31m 场景无 Canvas 时创建新的 Canvas + Camera[39m[32m 16[2mms[22m[39m
+[31m     [31m×[31m 自定义 designHeight 影响 orthoHeight[39m[32m 10[2mms[22m[39m
+[31m     [31m×[31m 忽略 Editor Scene Background 中的 Canvas[39m[32m 23[2mms[22m[39m
+[90mstdout[2m | tests/unit/tools-atomic.test.ts[2m > [22m[2mimport_and_apply_texture — 正常流程[2m > [22m[2mspriteFrame UUID 解析失败时加 warning 而非 isError
+[22m[39m[MCP] #1 ✓ import_and_apply_texture 7580ms
+
+[90mstdout[2m | tests/unit/tools-atomic.test.ts[2m > [22m[2mimport_and_apply_texture — 正常流程[2m > [22m[2mapply_sprite_frame 阶段传递 __uuid__ 资源引用给 sceneMethod
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → import_and_apply_texture {sourcePath:"C:/images/icon.png"}
+
+[90mstdout[2m | tests/unit/tools-atomic.test.ts[2m > [22m[2mimport_and_apply_texture — 正常流程[2m > [22m[2mapply_sprite_frame 阶段传递 __uuid__ 资源引用给 sceneMethod
+[22m[39m[MCP] #1 ✓ import_and_apply_texture 0ms
+
+[90mstdout[2m | tests/unit/tools-atomic.test.ts[2m > [22m[2mimport_and_apply_texture — 正常流程[2m > [22m[2mspriteFrame UUID 解析重试：首次失败后重试成功
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → import_and_apply_texture {sourcePath:"C:/images/icon.png"}
+
+[90mstdout[2m | tests/unit/tools-atomic.test.ts[2m > [22m[2mimport_and_apply_texture — 正常流程[2m > [22m[2mspriteFrame UUID 解析重试：首次失败后重试成功
+[22m[39m[MCP] #1 ✓ import_and_apply_texture 1523ms
+
+[90mstdout[2m | tests/unit/tools-atomic.test.ts[2m > [22m[2mimport_and_apply_texture — 正常流程[2m > [22m[2mset_property 传递资源引用 { __uuid__ } 给 dispatchOperation
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → scene_operation.set_property {action:"set_property", uuid:"sprite-node", component:"Sprite", property:"spriteFrame", value:{"__uuid__":"some-sprite-frame-uuid"}}
+
+[90mstdout[2m | tests/unit/tools-atomic.test.ts[2m > [22m[2mimport_and_apply_texture — 正常流程[2m > [22m[2mset_property 传递资源引用 { __uuid__ } 给 dispatchOperation
+[22m[39m[MCP] #1 ✓ scene_operation.set_property 2ms
+
+[90mstdout[2m | tests/unit/tools-atomic.test.ts[2m > [22m[2mimport_and_apply_texture — 正常流程[2m > [22m[2mtargetUrl 路径透传：大写 Textures 原样保留
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → import_and_apply_texture {sourcePath:"C:/images/icon.png"}
+
+[90mstdout[2m | tests/unit/tools-atomic.test.ts[2m > [22m[2mimport_and_apply_texture — 正常流程[2m > [22m[2mtargetUrl 路径透传：大写 Textures 原样保留
+[22m[39m[Aura] [ASSET_OPERATION] 已忽略: 设置图片 meta type 为 sprite-frame 失败: Cannot create property 'userData' on string 'sprite-uuid'
+
+[90mstdout[2m | tests/unit/tools-atomic.test.ts[2m > [22m[2mimport_and_apply_texture — 正常流程[2m > [22m[2mtargetUrl 路径透传：大写 Textures 原样保留
+[22m[39m[MCP] #1 ✓ import_and_apply_texture 1ms
+
+[90mstdout[2m | tests/unit/tools-atomic.test.ts[2m > [22m[2msetup_ui_layout — 正常流程[2m > [22m[2m创建完整 ScrollView 层级，返回所有 uuid
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → setup_ui_layout {}
+
+[90mstdout[2m | tests/unit/tools-atomic.test.ts[2m > [22m[2msetup_ui_layout — 正常流程[2m > [22m[2m创建完整 ScrollView 层级，返回所有 uuid
+[22m[39m[MCP] #1 ✓ setup_ui_layout 1ms
+
+[90mstdout[2m | tests/unit/tools-atomic.test.ts[2m > [22m[2msetup_ui_layout — 正常流程[2m > [22m[2m包含所有阶段：create_root / root_components / viewport / content / items
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → setup_ui_layout {}
+
+[90mstdout[2m | tests/unit/tools-atomic.test.ts[2m > [22m[2msetup_ui_layout — 正常流程[2m > [22m[2m包含所有阶段：create_root / root_components / viewport / content / items
+[22m[39m[MCP] #1 ✓ setup_ui_layout 0ms
+
+[90mstdout[2m | tests/unit/tools-atomic.test.ts[2m > [22m[2msetup_ui_layout — 正常流程[2m > [22m[2mitemCount 超出 100 时限制为 100
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → setup_ui_layout {}
+
+[90mstdout[2m | tests/unit/tools-atomic.test.ts[2m > [22m[2msetup_ui_layout — 正常流程[2m > [22m[2mitemCount 超出 100 时限制为 100
+[22m[39m[MCP] #1 ✓ setup_ui_layout 0ms
+
+[90mstdout[2m | tests/unit/tools-atomic.test.ts[2m > [22m[2msetup_ui_layout — 正常流程[2m > [22m[2mwithMask=false 跳过 Mask 组件
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → setup_ui_layout {}
+
+[90mstdout[2m | tests/unit/tools-atomic.test.ts[2m > [22m[2msetup_ui_layout — 正常流程[2m > [22m[2mwithMask=false 跳过 Mask 组件
+[22m[39m[MCP] #1 ✓ setup_ui_layout 0ms
+
+[90mstdout[2m | tests/unit/tools-atomic.test.ts[2m > [22m[2msetup_ui_layout — 正常流程[2m > [22m[2mwithLayout=false 跳过 Layout 组件
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → setup_ui_layout {}
+
+[90mstdout[2m | tests/unit/tools-atomic.test.ts[2m > [22m[2msetup_ui_layout — 正常流程[2m > [22m[2mwithLayout=false 跳过 Layout 组件
+[22m[39m[MCP] #1 ✓ setup_ui_layout 0ms
+
+[90mstdout[2m | tests/unit/tools-atomic.test.ts[2m > [22m[2msetup_ui_layout — 正常流程[2m > [22m[2m根节点创建失败时返回 isError
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → setup_ui_layout {}
+
+stderr | tests/unit/tools-atomic.test.ts > setup_ui_layout — 正常流程 > 根节点创建失败时返回 isError
+[MCP] #1 ✗ setup_ui_layout 1ms — 场景未加载
+
+[90mstdout[2m | tests/unit/tools-atomic.test.ts[2m > [22m[2msetup_ui_layout — 正常流程[2m > [22m[2m未指定 parentUuid 时从 selection 中获取
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → setup_ui_layout {}
+
+[90mstdout[2m | tests/unit/tools-atomic.test.ts[2m > [22m[2msetup_ui_layout — 正常流程[2m > [22m[2m未指定 parentUuid 时从 selection 中获取
+[22m[39m[MCP] #1 ✓ setup_ui_layout 0ms
+
+[90mstdout[2m | tests/unit/tools-atomic.test.ts[2m > [22m[2mcreate_tween_animation_atomic — 正常流程[2m > [22m[2m完整流程：验证节点 → 创建动画 → highlight
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → create_tween_animation_atomic {}
+
+[90mstdout[2m | tests/unit/tools-atomic.test.ts[2m > [22m[2mcreate_tween_animation_atomic — 正常流程[2m > [22m[2m完整流程：验证节点 → 创建动画 → highlight
+[22m[39m[MCP] #1 ✓ create_tween_animation_atomic 1ms
+
+[90mstdout[2m | tests/unit/tools-atomic.test.ts[2m > [22m[2mcreate_tween_animation_atomic — 正常流程[2m > [22m[2m缺少 tracks 参数时返回 isError
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → create_tween_animation_atomic {}
+
+stderr | tests/unit/tools-atomic.test.ts > create_tween_animation_atomic — 正常流程 > 缺少 tracks 参数时返回 isError
+[MCP] #1 ✗ create_tween_animation_atomic 1ms — 缺少 tracks 参数（至少需要一条动画轨道）
+
+[90mstdout[2m | tests/unit/tools-atomic.test.ts[2m > [22m[2mcreate_tween_animation_atomic — 正常流程[2m > [22m[2m未指定 nodeUuid 时从 selection 中获取
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → create_tween_animation_atomic {}
+
+[90mstdout[2m | tests/unit/tools-atomic.test.ts[2m > [22m[2mcreate_tween_animation_atomic — 正常流程[2m > [22m[2m未指定 nodeUuid 时从 selection 中获取
+[22m[39m[MCP] #1 ✓ create_tween_animation_atomic 1ms
+
+[90mstdout[2m | tests/unit/tools-atomic.test.ts[2m > [22m[2mcreate_tween_animation_atomic — 正常流程[2m > [22m[2m未指定 nodeUuid 且无 selection 时返回 isError
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → create_tween_animation_atomic {}
+
+stderr | tests/unit/tools-atomic.test.ts > create_tween_animation_atomic — 正常流程 > 未指定 nodeUuid 且无 selection 时返回 isError
+[MCP] #1 ✗ create_tween_animation_atomic 0ms — 未提供 nodeUuid 且当前未选中节点
+
+[90mstdout[2m | tests/unit/tools-atomic.test.ts[2m > [22m[2mcreate_tween_animation_atomic — 正常流程[2m > [22m[2m带 savePath 时尝试保存 .anim 资产
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → create_tween_animation_atomic {}
+
+[90mstdout[2m | tests/unit/tools-atomic.test.ts[2m > [22m[2mcreate_tween_animation_atomic — 正常流程[2m > [22m[2m带 savePath 时尝试保存 .anim 资产
+[22m[39m[MCP] #1 ✓ create_tween_animation_atomic 1ms
+
+[90mstdout[2m | tests/unit/tools-atomic.test.ts[2m > [22m[2mcreate_tween_animation_atomic — 正常流程[2m > [22m[2mcreateAnimationClip 失败时返回 isError
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → create_tween_animation_atomic {}
+
+stderr | tests/unit/tools-atomic.test.ts > create_tween_animation_atomic — 正常流程 > createAnimationClip 失败时返回 isError
+[MCP] #1 ✗ create_tween_animation_atomic 0ms — AnimationClip 类不可用
+
+[90mstdout[2m | tests/unit/tools-atomic.test.ts[2m > [22m[2mauto_fit_physics_collider — 正常流程[2m > [22m[2m完整流程：验证节点 → 检测组件 → 自动适配 → highlight
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → auto_fit_physics_collider {}
+
+[90mstdout[2m | tests/unit/tools-atomic.test.ts[2m > [22m[2mauto_fit_physics_collider — 正常流程[2m > [22m[2m完整流程：验证节点 → 检测组件 → 自动适配 → highlight
+[22m[39m[MCP] #1 ✓ auto_fit_physics_collider 1ms
+
+[90mstdout[2m | tests/unit/tools-atomic.test.ts[2m > [22m[2mauto_fit_physics_collider — 正常流程[2m > [22m[2mpolygon 类型结果包含 points
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → auto_fit_physics_collider {}
+
+[90mstdout[2m | tests/unit/tools-atomic.test.ts[2m > [22m[2mauto_fit_physics_collider — 正常流程[2m > [22m[2mpolygon 类型结果包含 points
+[22m[39m[MCP] #1 ✓ auto_fit_physics_collider 1ms
+
+[90mstdout[2m | tests/unit/tools-atomic.test.ts[2m > [22m[2mauto_fit_physics_collider — 正常流程[2m > [22m[2m未指定 nodeUuid 时从 selection 中获取
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → auto_fit_physics_collider {}
+
+[90mstdout[2m | tests/unit/tools-atomic.test.ts[2m > [22m[2mauto_fit_physics_collider — 正常流程[2m > [22m[2m未指定 nodeUuid 时从 selection 中获取
+[22m[39m[MCP] #1 ✓ auto_fit_physics_collider 0ms
+
+[90mstdout[2m | tests/unit/tools-atomic.test.ts[2m > [22m[2mauto_fit_physics_collider — 正常流程[2m > [22m[2m未指定 nodeUuid 且无 selection 时返回 isError
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → auto_fit_physics_collider {}
+
+stderr | tests/unit/tools-atomic.test.ts > auto_fit_physics_collider — 正常流程 > 未指定 nodeUuid 且无 selection 时返回 isError
+[MCP] #1 ✗ auto_fit_physics_collider 1ms — 未提供 nodeUuid 且当前未选中节点
+
+[90mstdout[2m | tests/unit/tools-atomic.test.ts[2m > [22m[2mauto_fit_physics_collider — 正常流程[2m > [22m[2mautoFitCollider 失败时返回 isError
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → auto_fit_physics_collider {}
+
+stderr | tests/unit/tools-atomic.test.ts > auto_fit_physics_collider — 正常流程 > autoFitCollider 失败时返回 isError
+[MCP] #1 ✗ auto_fit_physics_collider 0ms — PolygonCollider2D 类不可用
+
+[90mstdout[2m | tests/unit/tools-atomic.test.ts[2m > [22m[2mauto_fit_physics_collider — 正常流程[2m > [22m[2m设置额外物理属性 (sensor, friction, restitution)
+[22m[39m[MCP] Community Edition — JS tools registered
+[MCP] #1 → auto_fit_physics_collider {}
+
+[90mstdout[2m | tests/unit/tools-atomic.test.ts[2m > [22m[2mauto_fit_physics_collider — 正常流程[2m > [22m[2m设置额外物理属性 (sensor, friction, restitution)
+[22m[39m[MCP] #1 ✓ auto_fit_physics_collider 1ms
+
+ [32m✓[39m tests/unit/tools-atomic.test.ts [2m([22m[2m38 tests[22m[2m)[22m[33m 11684[2mms[22m[39m
+     [33m[2m✓[22m[39m createChildNode 失败时立即返回 isError（无回滚节点） [33m 399[2mms[22m[39m
+     [33m[2m✓[22m[39m spriteFrame UUID 解析失败时加 warning 而非 isError [33m 7680[2mms[22m[39m
+     [33m[2m✓[22m[39m spriteFrame UUID 解析重试：首次失败后重试成功 [33m 1549[2mms[22m[39m
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/unit/tools-scene-coverage.test.ts > scene_operation — ensure_2d_canvas > 场景已有 Canvas 时返回已有 UUID，不创建新的
+AssertionError: expected undefined to be 'existing-canvas' // Object.is equality
+
+- Expected: 
+"existing-canvas"
+
++ Received: 
+undefined
+
+ ❯ tests/unit/tools-scene-coverage.test.ts:547:29
+    545|     expect(result.isError).toBeFalsy();
+    546|     const data = parse(result);
+    547|     expect(data.canvasUuid).toBe('existing-canvas');
+       |                             ^
+    548|     expect(data.created).toBe(false);
+    549|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+ FAIL  tests/unit/tools-scene-coverage.test.ts > scene_operation — ensure_2d_canvas > 场景无 Canvas 时创建新的 Canvas + Camera
+AssertionError: expected undefined to be 'new-canvas-uuid' // Object.is equality
+
+- Expected: 
+"new-canvas-uuid"
+
++ Received: 
+undefined
+
+ ❯ tests/unit/tools-scene-coverage.test.ts:570:29
+    568|     expect(result.isError).toBeFalsy();
+    569|     const data = parse(result);
+    570|     expect(data.canvasUuid).toBe('new-canvas-uuid');
+       |                             ^
+    571|     expect(data.created).toBe(true);
+    572|     expect(data.layer).toBe(33554432);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+
+ FAIL  tests/unit/tools-scene-coverage.test.ts > scene_operation — ensure_2d_canvas > 自定义 designHeight 影响 orthoHeight
+TypeError: Cannot read properties of undefined (reading 'orthoHeight')
+ ❯ tests/unit/tools-scene-coverage.test.ts:594:24
+    592|     const result = await server.callTool('scene_operation', { action: …
+    593|     const data = parse(result);
+    594|     expect(data.camera.orthoHeight).toBe(640);
+       |                        ^
+    595|   });
+    596| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯
+
+ FAIL  tests/unit/tools-scene-coverage.test.ts > scene_operation — ensure_2d_canvas > 忽略 Editor Scene Background 中的 Canvas
+AssertionError: expected undefined to be true // Object.is equality
+
+- Expected: 
+true
+
++ Received: 
+undefined
+
+ ❯ tests/unit/tools-scene-coverage.test.ts:607:26
+    605|     const result = await server.callTool('scene_operation', { action: …
+    606|     const data = parse(result);
+    607|     expect(data.created).toBe(true);
+       |                          ^
+    608|   });
+    609| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m23 passed[39m[22m[90m (24)[39m
+[2m      Tests [22m [1m[31m4 failed[39m[22m[2m | [22m[1m[32m533 passed[39m[22m[2m | [22m[33m104 skipped[39m[90m (641)[39m
+[2m   Start at [22m 09:52:47
+[2m   Duration [22m 14.47s[2m (transform 10.55s, setup 0ms, import 16.18s, tests 42.98s, environment 5ms)[22m
+

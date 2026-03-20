@@ -1,4 +1,9 @@
 declare namespace Editor {
+  namespace Package {
+    function register(pkgPath: string): Promise<void>;
+    function unregister(pkgPath: string): Promise<void>;
+  }
+
   namespace App {
     const version: string;
     const path: string;

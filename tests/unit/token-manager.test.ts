@@ -64,6 +64,33 @@ describe('ensureToken', () => {
     const token2 = ensureToken(tokenFile);
     expect(token1).toBe(token2);
   });
+
+  it('读取 token 文件异常时会回退到生成新 token', () => {
+    const existsSpy = vi.spyOn(fs, 'existsSync').mockReturnValue(true);
+    const readSpy = vi.spyOn(fs, 'readFileSync').mockImplementation(() => {
+      throw new Error('read denied');
+    });
+    const writeSpy = vi.spyOn(fs, 'writeFileSync').mockImplementation(() => {});
+
+    const token = ensureToken(tokenFile);
+    expect(token.length).toBe(48);
+    expect(writeSpy).toHaveBeenCalled();
+
+    existsSpy.mockRestore();
+    readSpy.mockRestore();
+    writeSpy.mockRestore();
+  });
+
+  it('写入 token 文件失败时仍返回内存中的 token', () => {
+    const writeSpy = vi.spyOn(fs, 'writeFileSync').mockImplementation(() => {
+      throw new Error('disk full');
+    });
+
+    const token = ensureToken(tokenFile);
+    expect(token.length).toBe(48);
+
+    writeSpy.mockRestore();
+  });
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -79,8 +106,18 @@ describe('extractMcpToken', () => {
     expect(extractMcpToken(req)).toBe('my-token-abc');
   });
 
+  it('提取时会 trim X-MCP-Token 头', () => {
+    const req = fakeReq({ 'x-mcp-token': '  my-token-abc  ' });
+    expect(extractMcpToken(req)).toBe('my-token-abc');
+  });
+
   it('从 Authorization Bearer 头提取 Token', () => {
     const req = fakeReq({ authorization: 'Bearer bearer-token-123' });
+    expect(extractMcpToken(req)).toBe('bearer-token-123');
+  });
+
+  it('提取时会 trim Bearer token', () => {
+    const req = fakeReq({ authorization: 'Bearer   bearer-token-123   ' });
     expect(extractMcpToken(req)).toBe('bearer-token-123');
   });
 
