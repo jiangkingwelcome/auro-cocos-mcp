@@ -354,45 +354,33 @@ function writeNotifiedVersion(root: string, version: string): void {
  *     - 「稍后提醒」→ 关闭，下次启动继续提示
  */
 async function notifyAvailable(info: UpdateInfo, root: string): Promise<void> {
-  // ① 控制台 banner（始终输出，零依赖降级保底）
-  // 注意：汉字/emoji 各占 2 列，padEnd 按字符数补位会错位，
-  //       因此只保留上下分隔线，不使用右边框。
-  const sep = '─'.repeat(52);
-  const lines = [
-    `\x1b[33m${sep}`,
-    `  🚀 Aura for Cocos 有新版本可用！`,
-    `  当前: v${info.currentVersion}  →  最新: v${info.latestVersion}`,
-    ...(info.changelog ? [`  ${info.changelog.slice(0, 60)}`] : []),
-    `  打开 Aura 插件面板 → 点击「检查更新」安装`,
-    `${sep}\x1b[0m`,
-  ];
-  console.warn(lines.join('\n'));
+  // ① 控制台单行提示（降级保底，简短不扰）
+  console.warn(
+    `\x1b[33m[Aura] 有新版本 v${info.latestVersion} 可用，打开插件面板查看详情\x1b[0m`,
+  );
 
   // ② Editor.Dialog 一次性弹窗（每个新版本只弹一次）
-  if (readNotifiedVersion(root) === info.latestVersion) return; // 已弹过，跳过
-  writeNotifiedVersion(root, info.latestVersion);               // 先记录，防止并发重复
+  //    只告知"有更新"，不堆砌 changelog —— 详情留给面板展示
+  if (readNotifiedVersion(root) === info.latestVersion) return;
+  writeNotifiedVersion(root, info.latestVersion);
 
   try {
     const result = await Editor.Dialog.show({
       type:      'info',
-      title:     `🚀 Aura for Cocos v${info.latestVersion} 可用`,
-      message:   `发现新版本 v${info.latestVersion}（当前 v${info.currentVersion}）`,
-      detail:    info.changelog || '包含 bug 修复和功能改进。',
-      buttons:   ['立即打开面板', '稍后提醒'],
+      title:     'Aura for Cocos 有新版本',
+      message:   `v${info.latestVersion} 已发布`,
+      detail:    '点击「查看详情」打开插件面板，了解更新内容并一键安装。',
+      buttons:   ['查看详情', '稍后'],
       defaultId: 0,
       cancelId:  1,
     });
     if (result.response === 0) {
-      // 用户点「立即打开面板」→ 打开 Aura 面板，用户在面板内触发更新
       try { Editor.Panel.open('aura-for-cocos.default'); } catch (_) {
         try { Editor.Panel.open('aura-for-cocos'); } catch (__) {}
       }
     }
-    // 「稍后提醒」：已写入 notifiedVersion，本次会话不再弹；
-    //              下次启动 readNotifiedVersion 读到相同版本，依然不弹。
-    //              如需下次继续提示，需清除 .mcp-update-state.json。
   } catch (_) {
-    // Editor.Dialog 不可用（极端环境），控制台 banner 已足够
+    // Editor.Dialog 不可用时控制台提示已足够
   }
 }
 
