@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "stable": {
+    "version": "1.0.14",
+    "releaseDate": "2026-03-17",
+    "ce": {
+      "url": "https://github.com/GameFlowEditor/aura-for-cocos/releases/download/v1.0.14/aura-for-cocos-ce-v1.0.14.zip",
+      "sha256": ""
+    },
+    "pro": {
+      "url": "https://github.com/GameFlowEditor/aura-for-cocos/releases/download/v1.0.14/aura-for-cocos-pro-v1.0.14.zip",
+      "sha256": ""
+    },
+    "breaking": false
+  },
+  "changelog": {
+    "1.0.14": "面板加载优化，修复面板闪烁问题，构建混淆修复，新增 Canvas 守护功能"
+  }
+}

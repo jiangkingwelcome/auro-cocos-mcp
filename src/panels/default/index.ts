@@ -20,6 +20,7 @@ module.exports = Editor.Panel.define({
         <span class="brand-txt">Aura</span>
         <div class="holo-badge" id="holoBadge"><div class="holo-badge-inner" data-i18n="badge.community">Community</div></div>
         <div class="header-actions">
+          <button id="updateBtn" class="ghost-btn update-notify-btn" style="display:none;" data-i18n="update.notify">有更新</button>
           <button id="langBtn" class="ghost-btn">中/EN</button>
           <button id="refreshBtn" class="ghost-btn" data-i18n="footer.sync">Sync</button>
         </div>
@@ -45,6 +46,8 @@ module.exports = Editor.Panel.define({
               <span id="statusText" class="status-lbl status-text offline">Offline</span>
               <span id="endpointValue" class="status-port"></span>
             </div>
+
+            <div id="updateBanner" class="update-banner" style="display:none;"></div>
 
             <div class="stats-list" id="bentoGrid">
               <div class="stat-row">
@@ -757,6 +760,61 @@ module.exports = Editor.Panel.define({
       100% { background-position: -200% 0; }
     }
 
+    /* ===== UPDATE BANNER ===== */
+    .update-banner {
+      border-radius: 4px; padding: 12px 14px;
+      background: rgba(124,58,237,0.08); border: 1px solid rgba(124,58,237,0.3);
+      display: flex; flex-direction: column; gap: 10px;
+    }
+    .update-header { display: flex; align-items: center; justify-content: space-between; }
+    .update-title { font-size: 13px; font-weight: 600; color: #a78bfa; }
+    .update-ver-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .update-ver-label { font-size: 11px; color: #858585; }
+    .update-ver-value {
+      font-family: 'SF Mono', Consolas, 'Courier New', monospace;
+      font-size: 11px; color: #c4b5fd; font-weight: 600;
+    }
+    .update-arrow { font-size: 12px; color: #858585; }
+    .update-changelog {
+      font-size: 11px; color: #999; line-height: 1.5;
+      background: rgba(0,0,0,0.2); border-radius: 3px;
+      padding: 7px 10px; border-left: 2px solid rgba(124,58,237,0.4);
+      max-height: 60px; overflow: hidden; text-overflow: ellipsis;
+    }
+    .update-breaking {
+      font-size: 11px; color: #f59e0b;
+      background: rgba(245,158,11,0.08); border: 1px solid rgba(245,158,11,0.25);
+      border-radius: 3px; padding: 6px 10px;
+    }
+    .update-actions { display: flex; gap: 8px; align-items: center; }
+    .update-progress-wrap {
+      display: flex; flex-direction: column; gap: 5px;
+    }
+    .update-progress-bar {
+      height: 4px; border-radius: 2px; background: #3c3c3c; overflow: hidden;
+    }
+    .update-progress-fill {
+      height: 100%; background: #7c3aed; border-radius: 2px;
+      transition: width 0.3s ease;
+    }
+    .update-progress-text { font-size: 11px; color: #858585; }
+    .update-done-msg {
+      font-size: 12px; color: #5eead4; font-weight: 500;
+    }
+    .update-error-msg { font-size: 12px; color: #f14c4c; }
+    .update-notify-btn {
+      color: #a78bfa !important;
+      border: 1px solid rgba(124,58,237,0.35) !important;
+      background: rgba(124,58,237,0.08) !important;
+      border-radius: 3px;
+    }
+    .update-notify-btn:hover { background: rgba(124,58,237,0.16) !important; }
+    @keyframes updatePulse {
+      0%,100% { opacity: 1; }
+      50% { opacity: 0.6; }
+    }
+    .update-notify-btn { animation: updatePulse 2.5s ease-in-out infinite; }
+
   \n  `,
 
   $: {
@@ -784,6 +842,8 @@ module.exports = Editor.Panel.define({
     licenseEdition: '#licenseEdition', licenseState: '#licenseState',
     licenseDetail: '#licenseDetail', licenseExpiry: '#licenseExpiry', licenseOwner: '#licenseOwner',
     licenseError: '#licenseError', licenseKeyInput: '#licenseKeyInput', activateLicenseBtn: '#activateLicenseBtn',
+    updateBanner: '#updateBanner',
+    updateBtn: '#updateBtn',
   },
 
   ready() {
@@ -1387,6 +1447,17 @@ module.exports = Editor.Panel.define({
     makeCopyable(self.$.portValue);
     makeCopyable(self.$.endpointValue);
 
+    // ---- Update notification button ----
+    self.$.updateBtn.addEventListener('click', () => {
+      // 滚动到 Status Tab 并显示更新横幅
+      const statusTab = self.$.app.querySelector('[data-target="tabStatus"]');
+      if (statusTab) statusTab.click();
+      if (self.$.updateBanner) {
+        self.$.updateBanner.style.display = 'flex';
+        self.$.updateBanner.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    });
+
     self.$.refreshBtn.addEventListener('click', () => {
       self.$.refreshBtn.classList.remove('spinning');
       void self.$.refreshBtn.offsetWidth;
@@ -1491,6 +1562,10 @@ module.exports = Editor.Panel.define({
         if (info && info.licenseStatus) {
           self.updateLicenseUI(info.licenseStatus);
         }
+        // Update banner
+        if (info && info.updatePhase) {
+          self.renderUpdateBanner(info.updatePhase);
+        }
       } catch (e) {
         console.warn('[Aura] refreshStatus 异常:', e);
         self.setOffline();
@@ -1556,6 +1631,135 @@ module.exports = Editor.Panel.define({
       self.$.settingsIcon.textContent = success ? '✓' : '✗';
       self.$.settingsMessage.textContent = message || '';
       setTimeout(() => { el.style.display = 'none'; }, 3000);
+    },
+
+    renderUpdateBanner(up) {
+      const self = this;
+      const banner = self.$.updateBanner;
+      const updateBtn = self.$.updateBtn;
+      if (!banner || !up) return;
+      const dict = (self._I18N && self._I18N[self._currentLang]) || {};
+      const t = (key, fallback) => dict[key] || fallback;
+
+      if (up.phase === 'idle' || up.phase === 'checking' || up.phase === 'up-to-date') {
+        banner.style.display = 'none';
+        if (updateBtn) updateBtn.style.display = 'none';
+        return;
+      }
+
+      banner.style.display = 'flex';
+      if (updateBtn) updateBtn.style.display = 'inline-flex';
+
+      if (up.phase === 'available') {
+        const info = up.info || {};
+        let html = `<div class="update-header"><span class="update-title">${t('update.available','🎉 新版本可用')}</span></div>`;
+        html += `<div class="update-ver-row">
+          <span class="update-ver-label">${t('update.current','当前')}:</span>
+          <span class="update-ver-value">${info.currentVersion || '-'}</span>
+          <span class="update-arrow">→</span>
+          <span class="update-ver-label">${t('update.latest','最新')}:</span>
+          <span class="update-ver-value">${info.latestVersion || '-'}</span>
+        </div>`;
+        if (info.changelog) {
+          html += `<div class="update-changelog">${info.changelog}</div>`;
+        }
+        if (info.breaking) {
+          html += `<div class="update-breaking">${t('update.breaking','⚠ 重要更新，建议备份后升级')}</div>`;
+        }
+        html += `<div class="update-actions">
+          <button class="btn btn-primary" id="doDownloadBtn" style="padding:6px 14px;font-size:12px;">${t('update.download','立即下载')}</button>
+        </div>`;
+        banner.innerHTML = html;
+        const dlBtn = banner.querySelector('#doDownloadBtn');
+        if (dlBtn) {
+          dlBtn.addEventListener('click', () => { self.handleDownloadUpdate(dlBtn); });
+        }
+        return;
+      }
+
+      if (up.phase === 'downloading' || up.phase === 'verifying') {
+        const pct = up.phase === 'verifying' ? 100 : (up.progress || 0);
+        const label = up.phase === 'verifying' ? t('update.verifying','校验中...') : `${t('update.downloading','下载中')} ${pct}%`;
+        banner.innerHTML = `
+          <div class="update-header"><span class="update-title">${label}</span></div>
+          <div class="update-progress-wrap">
+            <div class="update-progress-bar">
+              <div class="update-progress-fill" style="width:${pct}%"></div>
+            </div>
+            <span class="update-progress-text">${pct}%</span>
+          </div>`;
+        return;
+      }
+
+      if (up.phase === 'ready') {
+        const info = up.info || {};
+        banner.innerHTML = `
+          <div class="update-header"><span class="update-title">${t('update.available','🎉 新版本可用')} v${info.latestVersion || ''}</span></div>
+          <div class="update-progress-wrap">
+            <div class="update-progress-bar"><div class="update-progress-fill" style="width:100%"></div></div>
+            <span class="update-progress-text">✓ 下载完成，SHA256 校验通过</span>
+          </div>
+          <div class="update-actions">
+            <button class="btn btn-primary" id="doInstallBtn" style="padding:6px 14px;font-size:12px;">${t('update.install','安装并重启')}</button>
+          </div>`;
+        const instBtn = banner.querySelector('#doInstallBtn');
+        if (instBtn) {
+          instBtn.addEventListener('click', () => { self.handleInstallUpdate(instBtn); });
+        }
+        return;
+      }
+
+      if (up.phase === 'installing') {
+        banner.innerHTML = `<div class="update-header"><span class="update-title">${t('update.installing','安装中...')}</span></div>
+          <div class="update-progress-wrap">
+            <div class="update-progress-bar"><div class="update-progress-fill" style="width:100%;animation:updatePulse 1s infinite"></div></div>
+          </div>`;
+        return;
+      }
+
+      if (up.phase === 'done') {
+        banner.innerHTML = `<div class="update-done-msg">${t('update.done','✅ 更新完成，请重启 Cocos Creator 生效')}</div>`;
+        if (updateBtn) updateBtn.style.display = 'none';
+        return;
+      }
+
+      if (up.phase === 'error') {
+        banner.innerHTML = `
+          <div class="update-error-msg">✗ ${t('update.error','更新失败')}: ${up.message || ''}</div>
+          <div class="update-actions">
+            <button class="btn" id="doRetryBtn" style="padding:5px 12px;font-size:11px;">${t('update.retry','重试')}</button>
+          </div>`;
+        const retryBtn = banner.querySelector('#doRetryBtn');
+        if (retryBtn) {
+          retryBtn.addEventListener('click', async () => {
+            await Editor.Message.request(EXTENSION_NAME, 'reset-update-state');
+            await Editor.Message.request(EXTENSION_NAME, 'check-for-updates');
+            setTimeout(() => self.refreshStatus(), 500);
+          });
+        }
+        return;
+      }
+    },
+
+    async handleDownloadUpdate(btn) {
+      const self = this;
+      if (btn) { btn.setAttribute('disabled', ''); btn.textContent = '下载中...'; }
+      try {
+        await Editor.Message.request(EXTENSION_NAME, 'download-update');
+        // 面板会通过 3s 轮询自动更新进度
+      } catch (err) {
+        console.error('[Aura] 下载更新失败:', err);
+      }
+    },
+
+    async handleInstallUpdate(btn) {
+      const self = this;
+      if (btn) { btn.setAttribute('disabled', ''); btn.textContent = '安装中...'; }
+      try {
+        await Editor.Message.request(EXTENSION_NAME, 'install-update');
+      } catch (err) {
+        console.error('[Aura] 安装更新失败:', err);
+      }
     },
 
     updateLicenseUI(status) {

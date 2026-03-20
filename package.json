@@ -114,6 +114,34 @@
           "activateLicense"
         ]
       },
+      "check-for-updates": {
+        "public": true,
+        "description": "Check GitHub for plugin updates",
+        "methods": [
+          "checkForUpdates"
+        ]
+      },
+      "download-update": {
+        "public": true,
+        "description": "Download the available update package",
+        "methods": [
+          "downloadUpdate"
+        ]
+      },
+      "install-update": {
+        "public": true,
+        "description": "Apply the downloaded update and backup current version",
+        "methods": [
+          "installUpdate"
+        ]
+      },
+      "reset-update-state": {
+        "public": true,
+        "description": "Reset the updater state to idle",
+        "methods": [
+          "resetUpdateState"
+        ]
+      },
       "scene:ready": {
         "methods": [
           "onSceneReady"
@@ -154,7 +182,8 @@
     "package:pro:win": "scripts\\package-pro-win.bat",
     "package:pro:mac": "bash ./scripts/package-pro-mac.sh",
     "verify": "node ./scripts/verify-local.mjs",
-    "install:global": "node ./scripts/install-global.js"
+    "install:global": "node ./scripts/install-global.js",
+    "update-manifest": "node scripts/update-version-manifest.mjs"
   },
   "dependencies": {
     "zod": "^4.3.6"

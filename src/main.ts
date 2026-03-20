@@ -55,4 +55,16 @@ export const methods = {
   onSceneReady() {
     core.methods.onSceneReady();
   },
+  checkForUpdates() {
+    return core.checkForUpdates();
+  },
+  downloadUpdate() {
+    return core.downloadUpdate();
+  },
+  installUpdate() {
+    return core.installUpdate();
+  },
+  resetUpdateState() {
+    return core.resetUpdateState();
+  },
 };

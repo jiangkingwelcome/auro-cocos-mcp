@@ -113,4 +113,21 @@ module.exports = {
 
     // Footer
     'footer.sync': '🔄 Sync',
+
+    // Update
+    'update.available': '🎉 Update Available',
+    'update.current': 'Current',
+    'update.latest': 'Latest',
+    'update.changelog': "What's New",
+    'update.download': 'Download',
+    'update.downloading': 'Downloading',
+    'update.verifying': 'Verifying...',
+    'update.install': 'Install & Restart',
+    'update.installing': 'Installing...',
+    'update.done': '✅ Update complete. Restart Cocos Creator to apply.',
+    'update.error': 'Update Failed',
+    'update.retry': 'Retry',
+    'update.notify': 'Update',
+    'update.breaking': '⚠ Breaking change — backup your project before upgrading',
+    'update.up_to_date': 'Already up to date',
 };

@@ -18,6 +18,8 @@ import { registerIpcBridgeRoutes } from './routes/ipc-bridge-routes';
 import { registerOperationRoutes } from './routes/operation-routes';
 import { registerServiceRoutes } from './routes/service-routes';
 import type { RouteHandler } from './routes/route-types';
+import { updater } from './updater';
+import type { UpdatePhase } from './updater';
 
 const EXTENSION_NAME = 'aura-for-cocos';
 const PKG_VERSION = (() => { try { return JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'package.json'), 'utf-8')).version || '0.0.0'; } catch (e) { logIgnored(ErrorCategory.CONFIG, '读取 package.json 版本号失败', e); return '0.0.0'; } })();
@@ -529,6 +531,7 @@ export function getServiceInfo() {
       configStatus,
       settings: currentSettings,
       licenseStatus: getProLicenseStatus(),
+      updatePhase: serializeUpdatePhase(updater.phase),
     };
   } catch (e) {
     console.error('[Aura] getServiceInfo 发生严重异常:', e);
@@ -553,6 +556,7 @@ export function getServiceInfo() {
       configStatus: {},
       settings: currentSettings,
       licenseStatus: getProLicenseStatus(),
+      updatePhase: serializeUpdatePhase(updater.phase),
     };
   }
 }
@@ -672,6 +676,8 @@ export function load() {
   }
   initializeMcpHost();
   void startServer();
+  // 启动自动更新后台检查（异步，不阻塞加载）
+  updater.scheduleChecks();
 }
 
 export function unload() {
@@ -679,4 +685,55 @@ export function unload() {
   unregisterBroadcastListeners();
   stopServer();
   mcpHost = null;
+  updater.stopChecks();
+}
+
+// ─── Update API ──────────────────────────────────────────────────────────────
+
+function serializeUpdatePhase(p: UpdatePhase): Record<string, unknown> {
+  switch (p.phase) {
+    case 'downloading': return { phase: p.phase, progress: p.progress, info: p.info };
+    case 'available':   return { phase: p.phase, info: p.info };
+    case 'verifying':   return { phase: p.phase, info: p.info };
+    case 'ready':       return { phase: p.phase, info: p.info };
+    case 'done':        return { phase: p.phase, version: p.version };
+    case 'error':       return { phase: p.phase, message: p.message };
+    default:            return { phase: p.phase };
+  }
+}
+
+export async function checkForUpdates() {
+  const info = await updater.checkForUpdates();
+  return { updatePhase: serializeUpdatePhase(updater.phase), info };
+}
+
+export async function downloadUpdate() {
+  if (updater.phase.phase !== 'available') {
+    return { success: false, error: '当前没有可用更新', updatePhase: serializeUpdatePhase(updater.phase) };
+  }
+  try {
+    void updater.download(); // 异步，面板通过轮询获取进度
+    return { success: true, updatePhase: serializeUpdatePhase(updater.phase) };
+  } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : String(err);
+    return { success: false, error: msg, updatePhase: serializeUpdatePhase(updater.phase) };
+  }
+}
+
+export async function installUpdate() {
+  if (updater.phase.phase !== 'ready') {
+    return { success: false, error: '更新包尚未下载完成', updatePhase: serializeUpdatePhase(updater.phase) };
+  }
+  try {
+    void updater.apply(); // 异步
+    return { success: true, updatePhase: serializeUpdatePhase(updater.phase) };
+  } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : String(err);
+    return { success: false, error: msg, updatePhase: serializeUpdatePhase(updater.phase) };
+  }
+}
+
+export function resetUpdateState() {
+  updater.reset();
+  return { success: true, updatePhase: serializeUpdatePhase(updater.phase) };
 }

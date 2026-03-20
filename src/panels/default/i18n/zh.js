@@ -113,4 +113,21 @@ module.exports = {
 
     // Footer
     'footer.sync': '🔄 同步状态',
+
+    // Update
+    'update.available': '🎉 新版本可用',
+    'update.current': '当前版本',
+    'update.latest': '最新版本',
+    'update.changelog': '更新内容',
+    'update.download': '立即下载',
+    'update.downloading': '下载中',
+    'update.verifying': '校验中...',
+    'update.install': '安装并重启',
+    'update.installing': '安装中...',
+    'update.done': '✅ 更新完成，请重启 Cocos Creator 生效',
+    'update.error': '更新失败',
+    'update.retry': '重试',
+    'update.notify': '有更新',
+    'update.breaking': '⚠ 重要更新，建议备份项目后升级',
+    'update.up_to_date': '已是最新版本',
 };
