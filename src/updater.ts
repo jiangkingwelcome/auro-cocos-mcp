@@ -14,7 +14,7 @@ import http from 'http';
 import path from 'path';
 import os from 'os';
 import crypto from 'crypto';
-import { exec } from 'child_process';
+import { execFile } from 'child_process';
 
 // ─── Config ──────────────────────────────────────────────────────────────────
 const GITHUB_OWNER = 'jiangkingwelcome';
@@ -148,15 +148,21 @@ function extractZip(zipPath: string, destDir: string): Promise<void> {
   return new Promise((resolve, reject) => {
     fs.mkdirSync(destDir, { recursive: true });
     const isWin = process.platform === 'win32';
-    const escaped     = zipPath.replace(/'/g, "''");
-    const escapedDest = destDir.replace(/'/g, "''");
-    const cmd = isWin
-      ? `powershell -NoProfile -NonInteractive -Command "Expand-Archive -LiteralPath '${escaped}' -DestinationPath '${escapedDest}' -Force"`
-      : `unzip -o "${zipPath}" -d "${destDir}"`;
-    exec(cmd, { timeout: 90_000 }, (err, _out, stderr) => {
-      if (err) reject(new Error(`解压失败: ${(stderr || err.message).slice(0, 300)}`));
-      else resolve();
-    });
+    
+    if (isWin) {
+      const escaped = zipPath.replace(/'/g, "''");
+      const escapedDest = destDir.replace(/'/g, "''");
+      const cmd = `Expand-Archive -LiteralPath '${escaped}' -DestinationPath '${escapedDest}' -Force`;
+      execFile('powershell', ['-NoProfile', '-NonInteractive', '-Command', cmd], { timeout: 90_000 }, (err, _out, stderr) => {
+        if (err) reject(new Error(`解压失败: ${(stderr || err.message).slice(0, 300)}`));
+        else resolve();
+      });
+    } else {
+      execFile('unzip', ['-o', zipPath, '-d', destDir], { timeout: 90_000 }, (err, _out, stderr) => {
+        if (err) reject(new Error(`解压失败: ${(stderr || err.message).slice(0, 300)}`));
+        else resolve();
+      });
+    }
   });
 }
 
@@ -216,6 +222,8 @@ interface TxEntry {
   backup:   string;
   /** true = 用 rename 换出的 .node 文件（不需要 copy back，直接 rename 回去） */
   nativeRename: boolean;
+  /** true = 原来不存在的新文件，回滚时安全删除 */
+  isNew?: boolean;
 }
 
 /**
@@ -228,20 +236,26 @@ interface TxEntry {
 function safeReplaceFile(src: string, dest: string, txLog: TxEntry[]): void {
   const isNative = process.platform === 'win32' && dest.endsWith('.node');
 
-  if (isNative && fs.existsSync(dest)) {
-    // Windows .node：rename 换出，不做 copy backup（rename 本身就是原子的）
-    const oldPath = dest + '.upd-old';
-    tryUnlink(oldPath);
-    fs.renameSync(dest, oldPath); // 始终成功，即使文件已被加载
-    txLog.push({ original: dest, backup: oldPath, nativeRename: true });
-  } else if (fs.existsSync(dest)) {
-    // 普通文件：先 copy 备份，再覆盖
-    const bakPath = dest + '.upd-bak';
-    tryUnlink(bakPath);
-    fs.copyFileSync(dest, bakPath);
-    txLog.push({ original: dest, backup: bakPath, nativeRename: false });
+  if (fs.existsSync(dest)) {
+    if (isNative) {
+      // Windows .node：rename 换出，不做 copy backup（rename 本身就是原子的）
+      const oldPath = dest + '.upd-old';
+      tryUnlink(oldPath);
+      fs.renameSync(dest, oldPath); // 始终成功，即使文件已被加载
+      txLog.push({ original: dest, backup: oldPath, nativeRename: true });
+    } else {
+      // 普通文件：先 copy 备份，再覆盖
+      const bakPath = dest + '.upd-bak';
+      tryUnlink(bakPath);
+      fs.copyFileSync(dest, bakPath);
+      txLog.push({ original: dest, backup: bakPath, nativeRename: false });
+    }
+  } else {
+    // 这是一个全新的文件，备份留空，记录用于撤销时删除
+    txLog.push({ original: dest, backup: '', nativeRename: false, isNew: true });
   }
-  // 此时 dest 已不存在（.node 被 rename，或不存在），直接 copy
+  
+  // 此时路径已腾出，直接 copy
   fs.copyFileSync(src, dest);
 }
 
@@ -261,7 +275,10 @@ function txRollback(txLog: TxEntry[]): void {
   // 逆序还原，保证目录结构正确
   for (const entry of [...txLog].reverse()) {
     try {
-      if (entry.nativeRename) {
+      if (entry.isNew) {
+        // 新增的文件，回滚时直接把它抹杀掉
+        tryUnlink(entry.original);
+      } else if (entry.nativeRename) {
         // .node 文件：删除新写入的（可能损坏），把 .upd-old 重命名回去
         tryUnlink(entry.original);
         try { fs.renameSync(entry.backup, entry.original); } catch (_) {}
@@ -464,12 +481,18 @@ class AuraUpdater {
 
       this.set({ phase: 'done', version: info.latestVersion });
 
-      // ⑥ 通知 Cocos Editor 重载插件：卸载旧内存镜像 → 重新加载新代码
+      // ⑥ 通知 Cocos Editor 重载插件：发 IPC 消息让主进程重载该扩展
       //    延迟 800ms 确保当前调用栈（面板轮询、IPC 回包）全部结束后再执行
       setTimeout(() => {
         try {
-          Editor.Package.unregister(root);
-          Editor.Package.register(root);
+          // 仅支持 Cocos Creator 3.x 及以上版本的扩展重载 API
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          if (typeof Editor !== 'undefined' && Editor.Message) {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            Editor.Message.send('extension', 'reload', 'aura-for-cocos');
+          }
         } catch (e) {
           console.warn('[Aura Updater] 自动重载失败，请在编辑器中手动重启插件:', e);
         }

@@ -6,7 +6,7 @@
   "icon": "assets/aura-brand-icon.png",
   "description": "AI-powered Cocos Creator editor plugin — query, modify, and control your project via MCP",
   "author": "GameFlowEditor",
-  "editor": ">=3.6.0",
+  "editor": ">=3.8.0",
   "main": "./dist/main.js",
   "panels": {
     "default": {
