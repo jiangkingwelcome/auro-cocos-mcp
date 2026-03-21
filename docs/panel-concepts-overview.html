@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aura Panel Concepts</title>
+  <style>
+    :root {
+      --bg: #0e1116;
+      --panel: rgba(20, 24, 31, 0.86);
+      --line: rgba(255, 255, 255, 0.1);
+      --line-strong: rgba(255, 255, 255, 0.18);
+      --text: #eff3f8;
+      --muted: #9aa6b4;
+      --teal: #4fd1c5;
+      --amber: #f6b852;
+      --blue: #72b5ff;
+      --shadow: 0 28px 80px rgba(0, 0, 0, 0.38);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      font-family: "Aptos", "Segoe UI Variable Display", "Microsoft YaHei UI", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(79, 209, 197, 0.18), transparent 28%),
+        radial-gradient(circle at top right, rgba(114, 181, 255, 0.12), transparent 24%),
+        linear-gradient(180deg, #131922 0%, #0e1116 48%, #0b0d12 100%);
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+      background-size: 36px 36px;
+      mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.8), transparent);
+      pointer-events: none;
+    }
+    main {
+      position: relative;
+      width: min(1440px, calc(100vw - 40px));
+      margin: 0 auto;
+      padding: 48px 0 72px;
+    }
+    .hero {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 24px;
+      align-items: end;
+      margin-bottom: 28px;
+    }
+    .hero-card, .summary-card, .concept-card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      backdrop-filter: blur(18px);
+      box-shadow: var(--shadow);
+    }
+    .hero-card {
+      padding: 28px;
+      border-radius: 28px;
+    }
+    .kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 7px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(79, 209, 197, 0.22);
+      color: var(--teal);
+      font-size: 12px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+    h1 {
+      margin: 18px 0 10px;
+      font-size: clamp(34px, 5vw, 56px);
+      line-height: 0.98;
+      letter-spacing: -0.05em;
+    }
+    .lead {
+      max-width: 760px;
+      color: #c8d0d8;
+      font-size: 16px;
+      line-height: 1.7;
+    }
+    .principles {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 24px;
+    }
+    .principle {
+      padding: 16px;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.03);
+    }
+    .principle strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 13px;
+      color: #ffffff;
+    }
+    .principle span {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    .summary-card {
+      border-radius: 24px;
+      padding: 24px;
+    }
+    .summary-card h2 {
+      margin: 0 0 18px;
+      font-size: 18px;
+      letter-spacing: -0.03em;
+    }
+    .summary-list {
+      display: grid;
+      gap: 12px;
+    }
+    .summary-item {
+      display: grid;
+      grid-template-columns: 104px 1fr;
+      gap: 12px;
+      align-items: start;
+      padding: 14px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.035);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .summary-label {
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .summary-item strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 15px;
+    }
+    .summary-item p {
+      margin: 0;
+      color: #c8d0d8;
+      line-height: 1.6;
+      font-size: 13px;
+    }
+    .concept-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 20px;
+    }
+    .concept-card {
+      padding: 18px;
+      border-radius: 24px;
+      animation: floatIn 720ms ease both;
+    }
+    .concept-card:nth-child(2) { animation-delay: 90ms; }
+    .concept-card:nth-child(3) { animation-delay: 180ms; }
+    .concept-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+    .concept-head h3 {
+      margin: 0 0 5px;
+      font-size: 23px;
+      letter-spacing: -0.04em;
+    }
+    .concept-head p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .tone {
+      padding: 8px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      border: 1px solid currentColor;
+    }
+    .tone-teal { color: var(--teal); }
+    .tone-amber { color: var(--amber); }
+    .tone-blue { color: var(--blue); }
+    iframe {
+      width: 100%;
+      height: 760px;
+      border: 1px solid var(--line-strong);
+      border-radius: 18px;
+      background: #11151c;
+      display: block;
+    }
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 14px 0 16px;
+    }
+    .tag {
+      padding: 8px 10px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: #d4dbe3;
+      font-size: 12px;
+    }
+    .actions {
+      display: flex;
+      gap: 10px;
+    }
+    .btn {
+      flex: 1;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 44px;
+      border-radius: 14px;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text);
+      text-decoration: none;
+      border: 1px solid var(--line-strong);
+      background: rgba(255, 255, 255, 0.04);
+      transition: transform 180ms ease, background 180ms ease, border-color 180ms ease;
+    }
+    .btn:hover {
+      transform: translateY(-1px);
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.24);
+    }
+    .btn-primary {
+      color: #0c1218;
+      background: linear-gradient(135deg, #8ce1d8, #72b5ff);
+      border-color: transparent;
+    }
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #9ae6db, #8ac2ff);
+    }
+    @keyframes floatIn {
+      from { opacity: 0; transform: translateY(18px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @media (max-width: 1200px) {
+      .hero, .concept-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 720px) {
+      main {
+        width: min(100vw - 24px, 1440px);
+        padding-top: 24px;
+      }
+      .hero-card, .summary-card, .concept-card { border-radius: 20px; }
+      .principles { grid-template-columns: 1fr; }
+      iframe { height: 620px; }
+      .actions { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="hero">
+      <article class="hero-card">
+        <div class="kicker">Aura Plugin UI Refresh</div>
+        <h1>让插件像工具台，<br />不是 AI 展示页。</h1>
+        <p class="lead">
+          这次不是单纯换配色，而是把结构重心从“AI 很强”改成“工程控制更直接”。
+          三套原型都覆盖你们现有功能：服务状态、模块开关、IDE 注入、License 和策略设置，但交互重心各不相同。
+        </p>
+        <div class="principles">
+          <div class="principle">
+            <strong>先看状态，再谈 AI</strong>
+            <span>把连接、风险、当前工程放在第一屏，弱化花哨术语。</span>
+          </div>
+          <div class="principle">
+            <strong>动作按钮前置</strong>
+            <span>启动、重启、注入配置都应该是一级操作，不必层层切页。</span>
+          </div>
+          <div class="principle">
+            <strong>减少“模型感”</strong>
+            <span>把 AI 作为辅助说明、建议和快捷入口，而不是整页主角。</span>
+          </div>
+        </div>
+      </article>
+      <aside class="summary-card">
+        <h2>怎么选</h2>
+        <div class="summary-list">
+          <div class="summary-item">
+            <div class="summary-label">稳妥落地</div>
+            <div>
+              <strong>Command Center</strong>
+              <p>最接近现有深色工具面板，迁移成本最低，适合作为主线方案。</p>
+            </div>
+          </div>
+          <div class="summary-item">
+            <div class="summary-label">产品表达</div>
+            <div>
+              <strong>Project Pulse</strong>
+              <p>更像项目驾驶舱，适合强调工程上下文、团队协作和接入生态。</p>
+            </div>
+          </div>
+          <div class="summary-item">
+            <div class="summary-label">减轻 AI 感</div>
+            <div>
+              <strong>Quiet Dock</strong>
+              <p>最像编辑器自带工具条，信息最克制，适合侧栏常驻和高频使用。</p>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <section class="concept-grid">
+      <article class="concept-card">
+        <div class="concept-head">
+          <div>
+            <h3>Command Center</h3>
+            <p>偏专业控制台，适合主面板。</p>
+          </div>
+          <span class="tone tone-teal">Operational</span>
+        </div>
+        <iframe src="./panel-concept-command-center.html" title="Command Center Preview"></iframe>
+        <div class="tags">
+          <span class="tag">专业工具感</span>
+          <span class="tag">强状态感知</span>
+          <span class="tag">操作按钮前置</span>
+        </div>
+        <div class="actions">
+          <a class="btn btn-primary" href="./panel-concept-command-center.html">打开全屏预览</a>
+          <a class="btn" href="./panel-concept-command-center.html" target="_blank" rel="noreferrer">新窗口打开</a>
+        </div>
+      </article>
+
+      <article class="concept-card">
+        <div class="concept-head">
+          <div>
+            <h3>Project Pulse</h3>
+            <p>偏项目驾驶舱，适合做品牌表达。</p>
+          </div>
+          <span class="tone tone-amber">Contextual</span>
+        </div>
+        <iframe src="./panel-concept-project-pulse.html" title="Project Pulse Preview"></iframe>
+        <div class="tags">
+          <span class="tag">工程上下文</span>
+          <span class="tag">连接生态</span>
+          <span class="tag">轻 AI 语气</span>
+        </div>
+        <div class="actions">
+          <a class="btn btn-primary" href="./panel-concept-project-pulse.html">打开全屏预览</a>
+          <a class="btn" href="./panel-concept-project-pulse.html" target="_blank" rel="noreferrer">新窗口打开</a>
+        </div>
+      </article>
+
+      <article class="concept-card">
+        <div class="concept-head">
+          <div>
+            <h3>Quiet Dock</h3>
+            <p>偏克制侧栏，适合高频常驻。</p>
+          </div>
+          <span class="tone tone-blue">Minimal</span>
+        </div>
+        <iframe src="./panel-concept-quiet-dock.html" title="Quiet Dock Preview"></iframe>
+        <div class="tags">
+          <span class="tag">最像原生插件</span>
+          <span class="tag">低打扰</span>
+          <span class="tag">最弱 AI 露出</span>
+        </div>
+        <div class="actions">
+          <a class="btn btn-primary" href="./panel-concept-quiet-dock.html">打开全屏预览</a>
+          <a class="btn" href="./panel-concept-quiet-dock.html" target="_blank" rel="noreferrer">新窗口打开</a>
+        </div>
+      </article>
+    </section>
+  </main>
+</body>
+</html>

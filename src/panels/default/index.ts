@@ -11,18 +11,24 @@ module.exports = Editor.Panel.define({
   template: /* html */ `\n
     <div class="mcp-panel" id="app">
 
-      <!-- Brand Line -->
-      <div class="brand-line"></div>
-
       <!-- Header -->
       <div class="panel-header">
-        <div class="logo-icon"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP+gvaeTAAABqklEQVRIie2UPU/CQADH/3ctFBQSE4cujm5u+gUcnfwEji5+AhcXFxc/gYuLi5OJiYmDg4ODMTExMRoTE6MxGl9iKFB67V17vBTjwE1N7v+7/+/u2gP+e6j+DZcAqAAUgCIiLYBuALqIaI8A9wC4BcBtAN4A8AaANwC8AeANAG8AeAPAGwDeAPAGgDcAvAHgDQBvAHgDwBsA3gDwBoA3ALwB4A0AbwB4A8AbAN4A8AaANwC8AeANAG8AeAPAGwDeAPAGgDcAvAHgDQBvAHgDwBsA3gDwBoA3ALwB4A0AbwB4A8AbAN4A8AaAN/4A8AaANwC8AeANAG8AeAPAGwDeAPAGgDcAvAHgDQBvAHgDwBsA3gDwBoA3ALwB4A0AbwB4A8AbAN4A8AaANwC8AeANAG8AeAPAGwDeAPAGgDcAvAHgDQBvAHgDwBsA3gDwBoA3ALwB4A0AbwB4A8AbAN4A8AaANwC8AeANAG/8AeANAG8AeAPAGwDeAPAGgDcAvAHgDQBvAHgDwBsA3gDwBoA3ALwB4A0AbwB4A8AbAN4A8AaAN/6/8Q3SaGv8FjMJHwAAAABJRU5ErkJggg==" /></div>
-        <span class="brand-txt">Aura</span>
-        <div class="holo-badge" id="holoBadge"><div class="holo-badge-inner" data-i18n="badge.community">Community</div></div>
+        <div class="logo-icon">
+          <svg width="100%" height="100%" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M22.95 10.38L21.36 13.14L28.16 24.96H30.43L22.95 12V10.38Z" fill="#A1A1AA"/>
+            <path d="M19.34 6.78003L15.35 13.67L22.14 24.93H24.52L19.34 16.33V6.78003Z" fill="#D4D4D8"/>
+            <path d="M10 24.93L15.75 14L21.5 24.93H10Z" fill="#71717A"/>
+            <text x="20.5" y="32" fill="#71717A" font-size="6.5" font-family="-apple-system, sans-serif" font-weight="700" letter-spacing="0.5" text-anchor="middle">AURA</text>
+          </svg>
+        </div>
+        <div class="brand-container">
+          <span class="brand-txt-aura">Aura</span>
+        </div>
+        <div class="holo-badge" id="holoBadge">
+          <div class="holo-badge-inner" data-i18n="badge.community">Community</div>
+        </div>
         <div class="header-actions">
-          <button id="updateBtn" class="ghost-btn update-notify-btn" style="display:none;" data-i18n="update.notify">有更新</button>
           <button id="langBtn" class="ghost-btn">中/EN</button>
-          <button id="refreshBtn" class="ghost-btn" data-i18n="footer.sync">Sync</button>
         </div>
       </div>
 
@@ -329,64 +335,72 @@ module.exports = Editor.Panel.define({
       font-size: 13px;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
       height: 100%; display: flex; flex-direction: column;
-      background: linear-gradient(180deg, #18181b 0%, #161618 100%);
+      background: linear-gradient(180deg, #27272a 0%, #18181b 100%);
       user-select: none; position: relative; overflow: hidden;
-    }
-
-    /* ===== BRAND LINE (tooling accent — sky → teal, not “AI purple”) ===== */
-    .brand-line {
-      height: 2px; width: 100%; flex-shrink: 0;
-      background: linear-gradient(90deg, #0ea5e9 0%, #14b8a6 55%, #0d9488 100%);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
     }
 
     /* ===== HEADER ===== */
     .panel-header {
-      display: flex; align-items: center; padding: 10px 16px; gap: 8px;
-      background: rgba(24, 24, 27, 0.92);
-      border-bottom: 1px solid #27272a;
+      display: flex; align-items: center; padding: 14px 18px 10px; gap: 10px;
+      background: transparent;
       flex-shrink: 0;
     }
     .logo-icon {
-      width: 22px; height: 22px; flex-shrink: 0; border-radius: 5px; overflow: hidden;
+      width: 32px; height: 32px; flex-shrink: 0; display: flex; justify-content: center; align-items: center;
     }
-    .logo-icon img { width: 100%; height: 100%; display: block; }
-    .brand-txt { font-size: 14px; font-weight: 600; color: #f4f4f5; letter-spacing: -0.02em; }
+    .brand-container {
+      display: flex; align-items: baseline; gap: 4px; padding-left: 2px;
+    }
+    .brand-txt-aura { font-size: 18px; font-weight: 600; color: #f4f4f5; font-family: -apple-system, sans-serif; letter-spacing: -0.01em; }
+    
     .holo-badge {
-      display: inline-block; font-size: 10px; font-weight: 600; letter-spacing: 0.5px;
+      display: inline-flex; font-size: 10px; font-weight: 600; letter-spacing: 0.5px;
+      margin-left: 6px; align-items: center; justify-content: center;
     }
     .holo-badge-inner {
-      display: inline-block;
-      background: #27272a; color: #7dd3fc;
-      padding: 2px 8px; border-radius: 3px;
-      font-size: 10px; border: 1px solid rgba(14,165,233,0.28);
+      background: rgba(99, 102, 241, 0.1); color: #818cf8;
+      padding: 2px 6px; border-radius: 4px;
+      font-size: 10px; border: 1px solid rgba(99, 102, 241, 0.2);
     }
     .header-actions {
       margin-left: auto; display: flex; gap: 4px;
     }
     .ghost-btn {
-      background: transparent; border: none; font-size: 11px; font-family: inherit;
-      color: #858585; cursor: pointer; padding: 4px 8px; border-radius: 3px;
-      transition: color 0.15s, background 0.15s;
+      background: transparent; border: 1px solid rgba(255,255,255,0.06); font-size: 11px; font-family: inherit;
+      color: #71717a; cursor: pointer; padding: 4px 8px; border-radius: 4px;
+      transition: all 0.15s;
     }
-    .ghost-btn:hover { color: #cccccc; background: rgba(255,255,255,0.06); }
-    .ghost-btn.spinning { animation: refreshSpin 0.6s ease-in-out; }
+    .ghost-btn:hover { color: #d4d4d8; background: rgba(255,255,255,0.08); }
 
     /* ===== TAB NAVIGATION ===== */
     .mcp-tabs-header {
-      display: flex; background: rgba(24, 24, 27, 0.85);
+      display: flex; background: transparent;
       border-bottom: 1px solid #27272a;
-      flex-shrink: 0; padding: 0 12px; gap: 0;
+      flex-shrink: 0; padding: 0 14px; gap: 4px;
+      overflow-x: auto;
     }
+    .mcp-tabs-header::-webkit-scrollbar { display: none; } /* Safari and Chrome */
+    .mcp-tabs-header { -ms-overflow-style: none; scrollbar-width: none; } /* Firefox */
     .mcp-tab {
-      padding: 8px 14px; cursor: pointer;
-      font-size: 12px; font-weight: 500; color: #71717a;
-      border-bottom: 2px solid transparent;
-      transition: color 0.15s, border-color 0.15s;
+      flex: 1; text-align: center;
+      padding: 10px 12px; cursor: pointer;
+      font-size: 13px; font-weight: 400; color: #71717a;
+      position: relative; white-space: nowrap;
+      transition: color 0.15s;
     }
-    .mcp-tab:hover { color: #d4d4d8; }
+    .mcp-tab:hover { color: #a1a1aa; }
     .mcp-tab.active {
-      color: #fafafa;
-      border-bottom-color: #0ea5e9;
+      color: #f4f4f5;
+    }
+    .mcp-tab.active::after {
+      content: '';
+      position: absolute;
+      bottom: -1px; left: 0; width: 100%; height: 2px;
+      background: #ffffff;
+      box-shadow: 0 0 10px 1px rgba(167, 139, 250, 0.4), 0 -2px 8px rgba(255, 255, 255, 0.8), 0 0 12px 2px rgba(99, 102, 241, 0.5);
+      border-radius: 2px;
+      z-index: 10;
     }
 
     /* ===== CONTENT AREA ===== */
@@ -876,9 +890,11 @@ module.exports = Editor.Panel.define({
     }
     applyI18n(currentLang);
 
-    self.$.langBtn.addEventListener('click', () => {
-      applyI18n(currentLang === 'zh' ? 'en' : 'zh');
-    });
+    if (self.$.langBtn) {
+      self.$.langBtn.addEventListener('click', () => {
+        applyI18n(currentLang === 'zh' ? 'en' : 'zh');
+      });
+    }
 
     // ---- Tool toggle state ----
     const CORE_TOOLS = ['bridge_status'];
@@ -937,123 +953,123 @@ module.exports = Editor.Panel.define({
     const PRO_FULL_CATALOG = {
       bridge_status: [],
       scene_query: [
-        'tree','list','stats','node_detail','find_by_path','get_components',
-        'get_parent','get_children','get_sibling','get_world_position',
-        'get_world_rotation','get_world_scale','get_active_in_hierarchy',
-        'find_nodes_by_name','find_nodes_by_component','get_component_property',
-        'get_node_components_properties','get_camera_info','get_canvas_info','get_scene_globals',
-        'get_current_selection','get_active_scene_focus',
-        'list_all_scenes','validate_scene','detect_2d_3d',
+        'tree', 'list', 'stats', 'node_detail', 'find_by_path', 'get_components',
+        'get_parent', 'get_children', 'get_sibling', 'get_world_position',
+        'get_world_rotation', 'get_world_scale', 'get_active_in_hierarchy',
+        'find_nodes_by_name', 'find_nodes_by_component', 'get_component_property',
+        'get_node_components_properties', 'get_camera_info', 'get_canvas_info', 'get_scene_globals',
+        'get_current_selection', 'get_active_scene_focus',
+        'list_all_scenes', 'validate_scene', 'detect_2d_3d',
         'list_available_components',
-        'measure_distance','scene_snapshot','scene_diff',
-        'performance_audit','export_scene_json',
+        'measure_distance', 'scene_snapshot', 'scene_diff',
+        'performance_audit', 'export_scene_json',
         'deep_validate_scene',
-        'get_node_bounds','find_nodes_by_layer','get_animation_state','get_collider_info',
-        'get_material_info','get_light_info','get_scene_environment',
-        'screen_to_world','world_to_screen',
-        'check_script_ready','get_script_properties',
+        'get_node_bounds', 'find_nodes_by_layer', 'get_animation_state', 'get_collider_info',
+        'get_material_info', 'get_light_info', 'get_scene_environment',
+        'screen_to_world', 'world_to_screen',
+        'check_script_ready', 'get_script_properties',
       ],
       scene_operation: [
-        'create_node','destroy_node','reparent',
-        'set_position','set_rotation','set_scale',
-        'set_world_position','set_world_rotation','set_world_scale',
-        'set_name','set_active','duplicate_node',
-        'move_node_up','move_node_down','set_sibling_index','reset_transform',
-        'add_component','remove_component','set_property','reset_property','call_component_method',
-        'ensure_2d_canvas','set_anchor_point','set_content_size',
-        'create_prefab','instantiate_prefab',
-        'enter_prefab_edit','exit_prefab_edit',
-        'apply_prefab','restore_prefab','validate_prefab',
-        'copy_node','paste_node','cut_node',
-        'move_array_element','remove_array_element','execute_component_method',
+        'create_node', 'destroy_node', 'reparent',
+        'set_position', 'set_rotation', 'set_scale',
+        'set_world_position', 'set_world_rotation', 'set_world_scale',
+        'set_name', 'set_active', 'duplicate_node',
+        'move_node_up', 'move_node_down', 'set_sibling_index', 'reset_transform',
+        'add_component', 'remove_component', 'set_property', 'reset_property', 'call_component_method',
+        'ensure_2d_canvas', 'set_anchor_point', 'set_content_size',
+        'create_prefab', 'instantiate_prefab',
+        'enter_prefab_edit', 'exit_prefab_edit',
+        'apply_prefab', 'restore_prefab', 'validate_prefab',
+        'copy_node', 'paste_node', 'cut_node',
+        'move_array_element', 'remove_array_element', 'execute_component_method',
         // Pro-only actions below
-        'lock_node','unlock_node','hide_node','unhide_node','set_layer',
-        'clear_children','reset_node_properties',
-        'batch','batch_set_property','group_nodes','align_nodes',
-        'clipboard_copy','clipboard_paste',
-        'create_ui_widget','setup_particle','audio_setup','setup_physics_world',
-        'create_skeleton_node','generate_tilemap','create_primitive',
-        'set_camera_look_at','set_camera_property','camera_screenshot',
-        'set_material_property','set_material_define','assign_builtin_material',
-        'assign_project_material','clone_material','swap_technique','sprite_grayscale',
-        'create_light','set_light_property','set_scene_environment',
-        'bind_event','unbind_event','list_events',
-        'attach_script','set_component_properties','detach_script',
+        'lock_node', 'unlock_node', 'hide_node', 'unhide_node', 'set_layer',
+        'clear_children', 'reset_node_properties',
+        'batch', 'batch_set_property', 'group_nodes', 'align_nodes',
+        'clipboard_copy', 'clipboard_paste',
+        'create_ui_widget', 'setup_particle', 'audio_setup', 'setup_physics_world',
+        'create_skeleton_node', 'generate_tilemap', 'create_primitive',
+        'set_camera_look_at', 'set_camera_property', 'camera_screenshot',
+        'set_material_property', 'set_material_define', 'assign_builtin_material',
+        'assign_project_material', 'clone_material', 'swap_technique', 'sprite_grayscale',
+        'create_light', 'set_light_property', 'set_scene_environment',
+        'bind_event', 'unbind_event', 'list_events',
+        'attach_script', 'set_component_properties', 'detach_script',
       ],
       asset_operation: [
-        'list','info','create','save','delete','move','copy','rename',
-        'import','open','refresh','create_folder',
-        'get_meta','set_meta_property',
-        'uuid_to_url','url_to_uuid','search_by_type',
+        'list', 'info', 'create', 'save', 'delete', 'move', 'copy', 'rename',
+        'import', 'open', 'refresh', 'create_folder',
+        'get_meta', 'set_meta_property',
+        'uuid_to_url', 'url_to_uuid', 'search_by_type',
         // Pro-only actions below
-        'reimport','get_dependencies','get_dependents','show_in_explorer',
-        'clean_unused','pack_atlas','get_animation_clips','get_materials',
-        'validate_asset','export_asset_manifest',
-        'create_material','generate_script','batch_import','get_asset_size','slice_sprite',
+        'reimport', 'get_dependencies', 'get_dependents', 'show_in_explorer',
+        'clean_unused', 'pack_atlas', 'get_animation_clips', 'get_materials',
+        'validate_asset', 'export_asset_manifest',
+        'create_material', 'generate_script', 'batch_import', 'get_asset_size', 'slice_sprite',
       ],
       editor_action: [
-        'save_scene','open_scene','new_scene','undo','redo',
-        'get_selection','select','clear_selection',
+        'save_scene', 'open_scene', 'new_scene', 'undo', 'redo',
+        'get_selection', 'select', 'clear_selection',
         'project_info',
-        'preview','preview_refresh',
-        'build','build_query',
+        'preview', 'preview_refresh',
+        'build', 'build_query',
         'play_in_editor',
-        'focus_node','log','warn','error','clear_console','show_notification',
-        'change_gizmo_tool','query_gizmo_tool_name',
-        'change_gizmo_pivot','query_gizmo_pivot',
-        'change_gizmo_coordinate','query_gizmo_coordinate',
-        'change_is2D','query_is2D',
-        'set_grid_visible','query_is_grid_visible',
-        'set_icon_gizmo_3d','query_is_icon_gizmo_3d',
-        'set_icon_gizmo_size','query_icon_gizmo_size',
-        'align_node_with_view','align_view_with_node',
-        'soft_reload','query_dirty',
-        'snapshot','snapshot_abort','cancel_recording',
+        'focus_node', 'log', 'warn', 'error', 'clear_console', 'show_notification',
+        'change_gizmo_tool', 'query_gizmo_tool_name',
+        'change_gizmo_pivot', 'query_gizmo_pivot',
+        'change_gizmo_coordinate', 'query_gizmo_coordinate',
+        'change_is2D', 'query_is2D',
+        'set_grid_visible', 'query_is_grid_visible',
+        'set_icon_gizmo_3d', 'query_is_icon_gizmo_3d',
+        'set_icon_gizmo_size', 'query_icon_gizmo_size',
+        'align_node_with_view', 'align_view_with_node',
+        'soft_reload', 'query_dirty',
+        'snapshot', 'snapshot_abort', 'cancel_recording',
         // Pro-only actions below
-        'build_with_config','build_status','preview_status',
-        'send_message','open_panel','close_panel','query_panels','get_packages',
-        'reload_plugin','inspect_asset','open_preferences','open_project_settings',
-        'move_scene_camera','take_scene_screenshot',
-        'set_transform_tool','set_coordinate','toggle_grid','toggle_snap',
-        'get_console_logs','search_logs','set_view_mode','zoom_to_fit',
+        'build_with_config', 'build_status', 'preview_status',
+        'send_message', 'open_panel', 'close_panel', 'query_panels', 'get_packages',
+        'reload_plugin', 'inspect_asset', 'open_preferences', 'open_project_settings',
+        'move_scene_camera', 'take_scene_screenshot',
+        'set_transform_tool', 'set_coordinate', 'toggle_grid', 'toggle_snap',
+        'get_console_logs', 'search_logs', 'set_view_mode', 'zoom_to_fit',
       ],
-      preferences: ['get','set','list','get_global','set_global','get_project','set_project'],
-      broadcast: ['poll','history','clear','send','send_ipc'],
-      tool_management: ['list_all','enable','disable','get_stats'],
+      preferences: ['get', 'set', 'list', 'get_global', 'set_global', 'get_project', 'set_project'],
+      broadcast: ['poll', 'history', 'clear', 'send', 'send_ipc'],
+      tool_management: ['list_all', 'enable', 'disable', 'get_stats'],
       execute_script: [],
       register_custom_macro: [],
-      animation_tool: ['create_clip','play','pause','resume','stop','get_state','list_clips','set_current_time','set_speed','crossfade'],
-      physics_tool: ['get_collider_info','add_collider','set_collider_size','add_rigidbody','set_rigidbody_props','set_physics_material','set_collision_group','get_physics_world','set_physics_world','add_joint'],
+      animation_tool: ['create_clip', 'play', 'pause', 'resume', 'stop', 'get_state', 'list_clips', 'set_current_time', 'set_speed', 'crossfade'],
+      physics_tool: ['get_collider_info', 'add_collider', 'set_collider_size', 'add_rigidbody', 'set_rigidbody_props', 'set_physics_material', 'set_collision_group', 'get_physics_world', 'set_physics_world', 'add_joint'],
       create_prefab_atomic: [],
       import_and_apply_texture: [],
       setup_ui_layout: [],
       create_tween_animation_atomic: [],
       auto_fit_physics_collider: [],
       // Pro-exclusive tools
-      engine_action: ['get_engine_info','set_engine_config','reload_scripts','clear_cache','gc','get_runtime_stats','set_design_resolution','get_supported_platforms'],
-      reference_image: ['add','remove','list','set_transform','set_opacity','toggle_visibility','clear_all'],
-      scene_generator: ['create_scene','create_ui_page','create_game_level','create_menu','describe_intent'],
-      batch_engine: ['find_and_modify','find_and_delete','find_and_add_component','find_and_remove_component','find_and_set_property','find_and_reparent','transform_all','rename_pattern','set_layer_recursive','toggle_active_recursive'],
-      scene_audit: ['full_audit','check_performance','check_hierarchy','check_components','check_assets','check_physics','check_ui','auto_fix','export_report'],
+      engine_action: ['get_engine_info', 'set_engine_config', 'reload_scripts', 'clear_cache', 'gc', 'get_runtime_stats', 'set_design_resolution', 'get_supported_platforms'],
+      reference_image: ['add', 'remove', 'list', 'set_transform', 'set_opacity', 'toggle_visibility', 'clear_all'],
+      scene_generator: ['create_scene', 'create_ui_page', 'create_game_level', 'create_menu', 'describe_intent'],
+      batch_engine: ['find_and_modify', 'find_and_delete', 'find_and_add_component', 'find_and_remove_component', 'find_and_set_property', 'find_and_reparent', 'transform_all', 'rename_pattern', 'set_layer_recursive', 'toggle_active_recursive'],
+      scene_audit: ['full_audit', 'check_performance', 'check_hierarchy', 'check_components', 'check_assets', 'check_physics', 'check_ui', 'auto_fix', 'export_report'],
     };
 
     // Pro 独占工具（社区版永远不会注册的）
     const PRO_EXCLUSIVE_TOOLS = new Set([
-      'engine_action','reference_image',
-      'scene_generator','batch_engine','scene_audit',
+      'engine_action', 'reference_image',
+      'scene_generator', 'batch_engine', 'scene_audit',
     ]);
 
     // Pro 版工具展示顺序
     const PRO_TOOL_ORDER = [
       'bridge_status',
-      'scene_query','scene_operation','asset_operation','editor_action',
-      'preferences','broadcast','tool_management',
-      'execute_script','register_custom_macro',
-      'animation_tool','physics_tool',
-      'create_prefab_atomic','import_and_apply_texture','setup_ui_layout',
-      'create_tween_animation_atomic','auto_fit_physics_collider',
-      'engine_action','reference_image',
-      'scene_generator','batch_engine','scene_audit',
+      'scene_query', 'scene_operation', 'asset_operation', 'editor_action',
+      'preferences', 'broadcast', 'tool_management',
+      'execute_script', 'register_custom_macro',
+      'animation_tool', 'physics_tool',
+      'create_prefab_atomic', 'import_and_apply_texture', 'setup_ui_layout',
+      'create_tween_animation_atomic', 'auto_fit_physics_collider',
+      'engine_action', 'reference_image',
+      'scene_generator', 'batch_engine', 'scene_audit',
     ];
     self._toolEnabled = {};
     try { self._toolEnabled = JSON.parse(localStorage.getItem('mcp-tool-enabled') || '{}'); } catch { }
@@ -1463,23 +1479,27 @@ module.exports = Editor.Panel.define({
     makeCopyable(self.$.endpointValue);
 
     // ---- Update notification button ----
-    self.$.updateBtn.addEventListener('click', () => {
-      // 滚动到 Status Tab 并显示更新横幅
-      const statusTab = self.$.app.querySelector('[data-target="tabStatus"]');
-      if (statusTab) statusTab.click();
-      if (self.$.updateBanner) {
-        self.$.updateBanner.style.display = 'flex';
-        self.$.updateBanner.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-      }
-    });
+    if (self.$.updateBtn) {
+      self.$.updateBtn.addEventListener('click', () => {
+        // 滚动到 Status Tab 并显示更新横幅
+        const statusTab = self.$.app.querySelector('[data-target="tabStatus"]');
+        if (statusTab) statusTab.click();
+        if (self.$.updateBanner) {
+          self.$.updateBanner.style.display = 'flex';
+          self.$.updateBanner.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+      });
+    }
 
-    self.$.refreshBtn.addEventListener('click', () => {
-      self.$.refreshBtn.classList.remove('spinning');
-      void self.$.refreshBtn.offsetWidth;
-      self.$.refreshBtn.classList.add('spinning');
-      self.refreshStatus();
-      setTimeout(() => self.$.refreshBtn.classList.remove('spinning'), 700);
-    });
+    if (self.$.refreshBtn) {
+      self.$.refreshBtn.addEventListener('click', () => {
+        self.$.refreshBtn.classList.remove('spinning');
+        void self.$.refreshBtn.offsetWidth;
+        self.$.refreshBtn.classList.add('spinning');
+        self.refreshStatus();
+        setTimeout(() => self.$.refreshBtn.classList.remove('spinning'), 700);
+      });
+    }
 
     // Defer first fetch so the browser can paint the skeleton frame first
     requestAnimationFrame(() => {
@@ -1686,22 +1706,22 @@ module.exports = Editor.Panel.define({
 
       if (up.phase === 'available') {
         const info = up.info || {};
-        let html = `<div class="update-header"><span class="update-title">${t('update.available','🎉 新版本可用')}</span></div>`;
+        let html = `<div class="update-header"><span class="update-title">${t('update.available', '🎉 新版本可用')}</span></div>`;
         html += `<div class="update-ver-row">
-          <span class="update-ver-label">${t('update.current','当前')}:</span>
+          <span class="update-ver-label">${t('update.current', '当前')}:</span>
           <span class="update-ver-value">${info.currentVersion || '-'}</span>
           <span class="update-arrow">→</span>
-          <span class="update-ver-label">${t('update.latest','最新')}:</span>
+          <span class="update-ver-label">${t('update.latest', '最新')}:</span>
           <span class="update-ver-value">${info.latestVersion || '-'}</span>
         </div>`;
         if (info.changelog) {
           html += `<div class="update-changelog">${info.changelog}</div>`;
         }
         if (info.breaking) {
-          html += `<div class="update-breaking">${t('update.breaking','⚠ 重要更新，建议备份后升级')}</div>`;
+          html += `<div class="update-breaking">${t('update.breaking', '⚠ 重要更新，建议备份后升级')}</div>`;
         }
         html += `<div class="update-actions">
-          <button class="btn btn-primary" id="doDownloadBtn" style="padding:6px 14px;font-size:12px;">${t('update.download','立即下载')}</button>
+          <button class="btn btn-primary" id="doDownloadBtn" style="padding:6px 14px;font-size:12px;">${t('update.download', '立即下载')}</button>
         </div>`;
         banner.innerHTML = html;
         const dlBtn = banner.querySelector('#doDownloadBtn');
@@ -1713,7 +1733,7 @@ module.exports = Editor.Panel.define({
 
       if (up.phase === 'downloading' || up.phase === 'verifying') {
         const pct = up.phase === 'verifying' ? 100 : (up.progress || 0);
-        const label = up.phase === 'verifying' ? t('update.verifying','校验中...') : `${t('update.downloading','下载中')} ${pct}%`;
+        const label = up.phase === 'verifying' ? t('update.verifying', '校验中...') : `${t('update.downloading', '下载中')} ${pct}%`;
         banner.innerHTML = `
           <div class="update-header"><span class="update-title">${label}</span></div>
           <div class="update-progress-wrap">
@@ -1728,13 +1748,13 @@ module.exports = Editor.Panel.define({
       if (up.phase === 'ready') {
         const info = up.info || {};
         banner.innerHTML = `
-          <div class="update-header"><span class="update-title">${t('update.available','🎉 新版本可用')} v${info.latestVersion || ''}</span></div>
+          <div class="update-header"><span class="update-title">${t('update.available', '🎉 新版本可用')} v${info.latestVersion || ''}</span></div>
           <div class="update-progress-wrap">
             <div class="update-progress-bar"><div class="update-progress-fill" style="width:100%"></div></div>
             <span class="update-progress-text">✓ 下载完成，SHA256 校验通过</span>
           </div>
           <div class="update-actions">
-            <button class="btn btn-primary" id="doInstallBtn" style="padding:6px 14px;font-size:12px;">${t('update.install','安装并重启')}</button>
+            <button class="btn btn-primary" id="doInstallBtn" style="padding:6px 14px;font-size:12px;">${t('update.install', '安装并重启')}</button>
           </div>`;
         const instBtn = banner.querySelector('#doInstallBtn');
         if (instBtn) {
@@ -1744,7 +1764,7 @@ module.exports = Editor.Panel.define({
       }
 
       if (up.phase === 'installing') {
-        banner.innerHTML = `<div class="update-header"><span class="update-title">${t('update.installing','安装中...')}</span></div>
+        banner.innerHTML = `<div class="update-header"><span class="update-title">${t('update.installing', '安装中...')}</span></div>
           <div class="update-progress-wrap">
             <div class="update-progress-bar"><div class="update-progress-fill" style="width:100%;animation:updatePulse 1s infinite"></div></div>
           </div>`;
@@ -1752,16 +1772,16 @@ module.exports = Editor.Panel.define({
       }
 
       if (up.phase === 'done') {
-        banner.innerHTML = `<div class="update-done-msg">${t('update.done','✅ 更新完成，请重启 Cocos Creator 生效')}</div>`;
+        banner.innerHTML = `<div class="update-done-msg">${t('update.done', '✅ 更新完成，请重启 Cocos Creator 生效')}</div>`;
         if (updateBtn) updateBtn.style.display = 'none';
         return;
       }
 
       if (up.phase === 'error') {
         banner.innerHTML = `
-          <div class="update-error-msg">✗ ${t('update.error','更新失败')}: ${up.message || ''}</div>
+          <div class="update-error-msg">✗ ${t('update.error', '更新失败')}: ${up.message || ''}</div>
           <div class="update-actions">
-            <button class="btn" id="doRetryBtn" style="padding:5px 12px;font-size:11px;">${t('update.retry','重试')}</button>
+            <button class="btn" id="doRetryBtn" style="padding:5px 12px;font-size:11px;">${t('update.retry', '重试')}</button>
           </div>`;
         const retryBtn = banner.querySelector('#doRetryBtn');
         if (retryBtn) {

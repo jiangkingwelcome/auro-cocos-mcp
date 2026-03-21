@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Project Pulse</title>
+  <style>
+    :root {
+      --paper: #f6efe3;
+      --ink: #211d17;
+      --muted: #685f54;
+      --amber: #d88b3f;
+      --olive: #768256;
+      --blue: #587ca7;
+      --brick: #a25745;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 28px;
+      color: var(--ink);
+      font-family: "Aptos Display", "Trebuchet MS", "Microsoft YaHei UI", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(216, 139, 63, 0.16), transparent 24%),
+        radial-gradient(circle at bottom right, rgba(118, 130, 86, 0.18), transparent 28%),
+        linear-gradient(180deg, #231d17 0%, #161310 100%);
+    }
+    .shell {
+      width: min(1160px, 100%);
+      display: grid;
+      grid-template-columns: 480px 1fr;
+      gap: 26px;
+      align-items: start;
+    }
+    .panel {
+      min-height: 860px;
+      border-radius: 30px;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at top right, rgba(216, 139, 63, 0.18), transparent 24%),
+        linear-gradient(180deg, #fbf6ee 0%, #f0e6d6 100%);
+      box-shadow: 0 30px 90px rgba(0, 0, 0, 0.38);
+    }
+    .header {
+      padding: 18px 18px 14px;
+      border-bottom: 1px solid rgba(33, 29, 23, 0.1);
+      background: rgba(255, 255, 255, 0.55);
+      backdrop-filter: blur(12px);
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .brand {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border-radius: 14px;
+      background: linear-gradient(135deg, rgba(216, 139, 63, 0.18), rgba(88, 124, 167, 0.16));
+      color: var(--ink);
+      font-weight: 800;
+      letter-spacing: 0.05em;
+    }
+    .title strong {
+      display: block;
+      font-size: 18px;
+      letter-spacing: -0.05em;
+    }
+    .title span {
+      color: var(--muted);
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .signal {
+      margin-left: auto;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(118, 130, 86, 0.14);
+      color: var(--olive);
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .tabs {
+      display: flex;
+      gap: 8px;
+      margin-top: 14px;
+    }
+    .tab {
+      border: 0;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: transparent;
+      color: var(--muted);
+      font: inherit;
+      cursor: pointer;
+      transition: background 180ms ease, color 180ms ease, transform 180ms ease;
+    }
+    .tab.active {
+      background: var(--ink);
+      color: var(--paper);
+    }
+    .tab:not(.active):hover {
+      transform: translateY(-1px);
+      background: rgba(33, 29, 23, 0.06);
+      color: var(--ink);
+    }
+    .body { padding: 16px; }
+    .screen { display: none; animation: fade 320ms ease both; }
+    .screen.active { display: block; }
+    .hero {
+      padding: 18px;
+      border-radius: 26px;
+      background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.68), rgba(255, 255, 255, 0.42)),
+        linear-gradient(135deg, rgba(216, 139, 63, 0.18), rgba(118, 130, 86, 0.12));
+      border: 1px solid rgba(255, 255, 255, 0.62);
+      margin-bottom: 14px;
+    }
+    .hero-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: start;
+      margin-bottom: 14px;
+    }
+    .eyebrow {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--muted);
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+    .hero strong {
+      display: block;
+      font-size: 25px;
+      line-height: 1.02;
+      letter-spacing: -0.05em;
+    }
+    .hero p, .card p, .timeline p, .note p, .bridge p {
+      margin: 8px 0 0;
+      color: #5d564d;
+      font-size: 13px;
+      line-height: 1.7;
+    }
+    .stamp {
+      width: 92px;
+      height: 92px;
+      padding: 10px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      border: 1px dashed rgba(33, 29, 23, 0.22);
+      color: var(--brick);
+      font-size: 12px;
+      text-align: center;
+      line-height: 1.4;
+      transform: rotate(-7deg);
+      background: rgba(255, 255, 255, 0.35);
+    }
+    .metrics, .stack, .bridge-list {
+      display: grid;
+      gap: 12px;
+    }
+    .metrics { grid-template-columns: repeat(3, 1fr); }
+    .metric, .card, .bridge, .timeline {
+      border-radius: 22px;
+      background: rgba(255, 255, 255, 0.54);
+      border: 1px solid rgba(255, 255, 255, 0.74);
+      padding: 14px;
+    }
+    .metric strong {
+      font-size: 26px;
+      letter-spacing: -0.05em;
+    }
+    .metric span, .metric small { display: block; }
+    .metric span {
+      color: var(--muted);
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .metric small {
+      margin-top: 8px;
+      color: #6a6359;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .pill {
+      padding: 8px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      background: rgba(33, 29, 23, 0.06);
+      color: var(--ink);
+    }
+    .path {
+      display: inline-flex;
+      margin-top: 12px;
+      padding: 8px 10px;
+      border-radius: 14px;
+      background: rgba(33, 29, 23, 0.06);
+      color: #433d35;
+      font-family: "Cascadia Code", "Consolas", monospace;
+      font-size: 12px;
+    }
+    .timeline {
+      position: relative;
+      padding-left: 18px;
+    }
+    .timeline::before {
+      content: "";
+      position: absolute;
+      left: 8px;
+      top: 18px;
+      bottom: 18px;
+      width: 1px;
+      background: rgba(33, 29, 23, 0.16);
+    }
+    .timeline-item {
+      position: relative;
+      padding: 0 0 16px 16px;
+    }
+    .timeline-item:last-child { padding-bottom: 0; }
+    .timeline-item::before {
+      content: "";
+      position: absolute;
+      left: -14px;
+      top: 6px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--amber);
+      box-shadow: 0 0 0 4px rgba(216, 139, 63, 0.14);
+    }
+    .timeline-item strong, .card strong, .bridge strong, .note strong {
+      font-size: 16px;
+      letter-spacing: -0.03em;
+    }
+    .bridge {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px 12px;
+      align-items: center;
+    }
+    .bridge-tag {
+      padding: 7px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      background: rgba(33, 29, 23, 0.06);
+      color: var(--ink);
+    }
+    .bridge-tag.ready { color: var(--olive); }
+    .bridge-tag.warn { color: var(--amber); }
+    .bridge-tag.idle { color: var(--blue); }
+    .actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 14px;
+    }
+    .btn {
+      min-height: 48px;
+      border: 0;
+      border-radius: 16px;
+      font: inherit;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      color: var(--ink);
+      background: rgba(33, 29, 23, 0.08);
+      transition: transform 180ms ease, background 180ms ease;
+    }
+    .btn:hover {
+      transform: translateY(-1px);
+      background: rgba(33, 29, 23, 0.12);
+    }
+    .btn-primary {
+      color: var(--paper);
+      background: linear-gradient(135deg, #a25745, #d88b3f);
+    }
+    .btn-secondary {
+      color: var(--paper);
+      background: linear-gradient(135deg, #768256, #587ca7);
+    }
+    .note {
+      padding: 20px;
+      border-radius: 28px;
+      color: var(--paper);
+      background:
+        radial-gradient(circle at top right, rgba(216, 139, 63, 0.16), transparent 28%),
+        rgba(24, 21, 17, 0.82);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 24px 70px rgba(0, 0, 0, 0.3);
+    }
+    .note .eyebrow { color: #d9bf99; }
+    .note h1 {
+      margin: 0 0 10px;
+      font-size: 46px;
+      line-height: 0.92;
+      letter-spacing: -0.06em;
+    }
+    .note p, .note li, .note span { color: #d3cbbf; }
+    .note ul {
+      margin: 18px 0 0;
+      padding-left: 18px;
+      line-height: 1.8;
+    }
+    .note-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 18px;
+    }
+    .note-card {
+      padding: 14px;
+      border-radius: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.03);
+    }
+    .note-card strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 14px;
+    }
+    @keyframes fade {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @media (max-width: 1000px) {
+      .shell { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 540px) {
+      body { padding: 12px; }
+      .metrics, .actions, .note-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <section class="panel">
+      <header class="header">
+        <div class="header-top">
+          <div class="brand">AU</div>
+          <div class="title">
+            <strong>Aura Project Pulse</strong>
+            <span>Project-first bridge panel</span>
+          </div>
+          <div class="signal">Bridge Healthy</div>
+        </div>
+        <div class="tabs">
+          <button class="tab active" data-tab="snapshot">项目</button>
+          <button class="tab" data-tab="bridge">接入</button>
+          <button class="tab" data-tab="workflow">工作流</button>
+        </div>
+      </header>
+      <div class="body">
+        <div class="screen active" data-screen="snapshot">
+          <div class="hero">
+            <div class="hero-head">
+              <div>
+                <span class="eyebrow">Current Session</span>
+                <strong>从“当前工程”开始，<br />不是从“模型能力”开始。</strong>
+                <p>这套方案把插件理解成项目伴随面板。AI 只作为上下文建议和接入通道，不抢首页焦点。</p>
+              </div>
+              <div class="stamp">Cocos<br />3.8.8</div>
+            </div>
+            <div class="metrics">
+              <div class="metric">
+                <span>Tools</span>
+                <strong>24</strong>
+                <small>默认工具 12 + Pro 工具 12</small>
+              </div>
+              <div class="metric">
+                <span>Endpoint</span>
+                <strong>7451</strong>
+                <small>本机端口稳定，无端点漂移</small>
+              </div>
+              <div class="metric">
+                <span>IDE</span>
+                <strong>03</strong>
+                <small>已有 3 个客户端完成互联</small>
+              </div>
+            </div>
+          </div>
+          <div class="stack">
+            <div class="card">
+              <span class="eyebrow">Project</span>
+              <strong>SuperEditorDemo</strong>
+              <p>当前项目一切信息集中在一张卡片里，包括版本、路径、运行状态和风险提示，不再散落到多个模块。</p>
+              <div class="pill-row">
+                <span class="pill">Windows</span>
+                <span class="pill">Scene Graph Active</span>
+                <span class="pill">Localhost Only</span>
+              </div>
+              <div class="path">E:\workspace\SuperEditorDemo</div>
+            </div>
+            <div class="timeline">
+              <span class="eyebrow">Recent Activity</span>
+              <div class="timeline-item">
+                <strong>09:14 同步场景树完成</strong>
+                <p>当前选中节点状态已可供 IDE 查询，适合继续发出“修改当前节点”类指令。</p>
+              </div>
+              <div class="timeline-item">
+                <strong>09:08 Codex 端点已刷新</strong>
+                <p>如果你们要强化“连通性可信”，这种时序反馈比大段教程更有效。</p>
+              </div>
+              <div class="timeline-item">
+                <strong>09:03 检测到一个 Pro 能力未激活</strong>
+                <p>这里可以转成自然提醒，而不是单独开一个厚重 License 区块。</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="screen" data-screen="bridge">
+          <div class="hero">
+            <span class="eyebrow">Bridge Map</span>
+            <strong>把“接了谁”做成网络图感知。</strong>
+            <p>每个 IDE 的状态更像一张项目协作卡片，而不是一排重复按钮。这样更像工具生态，而不是 AI 营销列表。</p>
+          </div>
+          <div class="bridge-list">
+            <div class="bridge">
+              <div>
+                <strong>OpenAI Codex</strong>
+                <p>配置已存在，端点最新，建议直接展示“可用”。</p>
+              </div>
+              <span class="bridge-tag ready">Ready</span>
+            </div>
+            <div class="bridge">
+              <div>
+                <strong>Cursor</strong>
+                <p>检测到旧端点，主动作应该是“更新”，不是重新注入。</p>
+              </div>
+              <span class="bridge-tag warn">Update</span>
+            </div>
+            <div class="bridge">
+              <div>
+                <strong>Claude Code</strong>
+                <p>未发现配置文件，保持可连接但不吓人。</p>
+              </div>
+              <span class="bridge-tag idle">Discover</span>
+            </div>
+            <div class="bridge">
+              <div>
+                <strong>CodeBuddy</strong>
+                <p>企业团队如果更重视国产工具，这种展示方式也便于扩展。</p>
+              </div>
+              <span class="bridge-tag">Install</span>
+            </div>
+          </div>
+          <div class="actions">
+            <button class="btn btn-primary">一键更新所有端点</button>
+            <button class="btn btn-secondary">新增一个 IDE 接入</button>
+          </div>
+        </div>
+
+        <div class="screen" data-screen="workflow">
+          <div class="hero">
+            <span class="eyebrow">Workflow</span>
+            <strong>AI 退居辅助，工作流走到台前。</strong>
+            <p>如果你们想降低“AI 插件”的心理负担，可以把首页常驻内容改成任务建议、执行顺序和风险说明。</p>
+          </div>
+          <div class="stack">
+            <div class="card">
+              <span class="eyebrow">Suggested Order</span>
+              <strong>1. 检查桥接  2. 同步选区  3. 发出局部改动</strong>
+              <p>把建议表达成工作流提示，而不是“试试这些 prompt”。这会更像开发工具。</p>
+            </div>
+            <div class="card">
+              <span class="eyebrow">Guardrails</span>
+              <strong>复杂改动默认启用自动回滚</strong>
+              <p>风险项不需要铺满一页，只要在关键位置明确“当前策略”即可。</p>
+            </div>
+            <div class="card">
+              <span class="eyebrow">Prompt Helper</span>
+              <strong>“把当前选中的节点改成登录按钮”</strong>
+              <p>示例 prompt 还可以保留，但最好只是轻量辅助块，不要成为视觉核心。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <aside class="note">
+      <span class="eyebrow">Concept 02</span>
+      <h1>Project Pulse</h1>
+      <p>这套更偏产品感和品牌感，适合你们如果想把 Aura 从“一个 MCP 面板”往“项目操作中枢”去表达。</p>
+      <ul>
+        <li>视觉更温和，降低赛博和模型感，更像成熟的创作工具。</li>
+        <li>页面从项目、时间线、接入生态来组织，比纯功能分组更有叙事。</li>
+        <li>适合做官网截图、商店页和宣传物料，辨识度明显高于普通深色面板。</li>
+      </ul>
+      <div class="note-grid">
+        <div class="note-card">
+          <strong>优点</strong>
+          <span>品牌气质最好，最不容易被看成“又一个 AI 插件”。</span>
+        </div>
+        <div class="note-card">
+          <strong>风险</strong>
+          <span>如果实装时内容过多，暖色设计会更容易显拥挤。</span>
+        </div>
+        <div class="note-card">
+          <strong>建议</strong>
+          <span>适合抽取其信息结构，再保留部分 Command Center 的硬朗按钮体系。</span>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <script>
+    const tabs = document.querySelectorAll(".tab");
+    const screens = document.querySelectorAll(".screen");
+    tabs.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        const target = tab.dataset.tab;
+        tabs.forEach((item) => item.classList.toggle("active", item === tab));
+        screens.forEach((screen) => {
+          screen.classList.toggle("active", screen.dataset.screen === target);
+        });
+      });
+    });
+  </script>
+</body>
+</html>

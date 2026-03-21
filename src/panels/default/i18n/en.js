@@ -69,7 +69,7 @@ module.exports = {
     'settings.warn_loopback': '⚠ Disabling loopback restriction allows external access. Ensure network security.',
 
     // Guide Tab
-    'tab.guide': '📖 Guide',
+    'tab.guide': 'Guide',
     'guide.title': 'Quick Start',
     'guide.desc': '3 steps from install to AI-driven development.',
     'guide.step1_title': 'Confirm Service Online',

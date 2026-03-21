@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Command Center</title>
+  <style>
+    :root {
+      --bg: #0c1016;
+      --panel: #11161d;
+      --line: rgba(163, 187, 215, 0.14);
+      --line-strong: rgba(163, 187, 215, 0.24);
+      --text: #eef3f8;
+      --muted: #8d9aaa;
+      --teal: #5fd6ca;
+      --cyan: #67b4ff;
+      --lime: #a7dc6b;
+      --amber: #ffbb5c;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 28px;
+      color: var(--text);
+      font-family: "Bahnschrift SemiCondensed", "Aptos", "Microsoft YaHei UI", sans-serif;
+      background:
+        radial-gradient(circle at 12% 0%, rgba(95, 214, 202, 0.18), transparent 22%),
+        radial-gradient(circle at 88% 10%, rgba(103, 180, 255, 0.16), transparent 26%),
+        linear-gradient(180deg, #141b24 0%, #0c1016 100%);
+    }
+    .shell {
+      width: min(1120px, 100%);
+      display: grid;
+      grid-template-columns: 460px 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+    .panel {
+      position: relative;
+      min-height: 860px;
+      overflow: hidden;
+      border-radius: 28px;
+      border: 1px solid var(--line);
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.035), transparent 24%),
+        linear-gradient(180deg, #131922 0%, #11161d 100%);
+      box-shadow: 0 28px 90px rgba(0, 0, 0, 0.46);
+    }
+    .panel::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+      background-size: 28px 28px;
+      opacity: 0.35;
+      mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.9), transparent 92%);
+      pointer-events: none;
+    }
+    .brand-line {
+      height: 3px;
+      background: linear-gradient(90deg, #5fd6ca, #67b4ff 62%, #b1e475);
+    }
+    .panel-body {
+      position: relative;
+      z-index: 1;
+      padding: 16px;
+    }
+    .topbar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .logo {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border-radius: 14px;
+      background: linear-gradient(135deg, rgba(95, 214, 202, 0.2), rgba(103, 180, 255, 0.2));
+      border: 1px solid rgba(103, 180, 255, 0.3);
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+    }
+    .title strong {
+      display: block;
+      font-size: 17px;
+      letter-spacing: -0.04em;
+    }
+    .title span {
+      color: var(--muted);
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .chip-row {
+      margin-left: auto;
+      display: flex;
+      gap: 8px;
+    }
+    .chip {
+      padding: 8px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.04);
+      color: #c8d5e1;
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    .tabs {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+    .tab {
+      border: 0;
+      padding: 11px 10px;
+      border-radius: 14px;
+      color: var(--muted);
+      background: rgba(255, 255, 255, 0.04);
+      font: inherit;
+      cursor: pointer;
+      transition: transform 180ms ease, background 180ms ease, color 180ms ease;
+    }
+    .tab.active {
+      color: #081117;
+      background: linear-gradient(135deg, #91ebe0, #8cbfff);
+      box-shadow: 0 10px 24px rgba(103, 180, 255, 0.18);
+    }
+    .tab:not(.active):hover {
+      color: var(--text);
+      transform: translateY(-1px);
+      background: rgba(255, 255, 255, 0.08);
+    }
+    .screen { display: none; animation: rise 320ms ease both; }
+    .screen.active { display: block; }
+    .hero {
+      padding: 16px;
+      border-radius: 24px;
+      border: 1px solid rgba(95, 214, 202, 0.18);
+      background:
+        radial-gradient(circle at right top, rgba(103, 180, 255, 0.12), transparent 36%),
+        linear-gradient(160deg, rgba(95, 214, 202, 0.11), rgba(255, 255, 255, 0.04));
+      margin-bottom: 14px;
+    }
+    .hero-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+    .hero-head strong {
+      display: block;
+      font-size: 22px;
+      letter-spacing: -0.05em;
+    }
+    .hero-head span, .subcopy {
+      color: #bdd0e0;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    .status-orb {
+      display: grid;
+      place-items: center;
+      width: 78px;
+      height: 78px;
+      border-radius: 24px;
+      background: radial-gradient(circle, rgba(95, 214, 202, 0.35), rgba(95, 214, 202, 0.08) 56%, transparent 57%);
+      border: 1px solid rgba(95, 214, 202, 0.24);
+      color: var(--teal);
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      box-shadow: 0 0 0 12px rgba(95, 214, 202, 0.03);
+    }
+    .hero-grid, .cards, .bridge-list, .module-list, .license-list {
+      display: grid;
+      gap: 12px;
+    }
+    .hero-grid { grid-template-columns: repeat(3, 1fr); }
+    .metric, .card, .bridge-item, .module-item, .license-item {
+      border-radius: 20px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.04);
+    }
+    .metric { padding: 14px; }
+    .label {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--muted);
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+    .metric strong {
+      font-size: 26px;
+      letter-spacing: -0.05em;
+    }
+    .metric p, .card p, .bridge-item p, .note p, .module-item p, .license-item p {
+      margin: 8px 0 0;
+      color: #b8c7d4;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    .cards { margin-top: 12px; }
+    .card { padding: 15px; }
+    .card strong, .bridge-item strong, .module-item strong, .license-item strong {
+      font-size: 16px;
+      letter-spacing: -0.03em;
+    }
+    .project-path {
+      display: inline-flex;
+      margin-top: 12px;
+      padding: 8px 10px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.05);
+      color: #ced8e2;
+      font-family: "Cascadia Code", "Consolas", monospace;
+      font-size: 12px;
+    }
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .btn {
+      min-height: 48px;
+      border: 0;
+      border-radius: 16px;
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.06);
+      font: inherit;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 180ms ease, background 180ms ease;
+    }
+    .btn:hover {
+      transform: translateY(-1px);
+      background: rgba(255, 255, 255, 0.1);
+    }
+    .btn-primary {
+      color: #081117;
+      background: linear-gradient(135deg, #91ebe0, #8cbfff);
+    }
+    .btn-warm {
+      color: #1a1305;
+      background: linear-gradient(135deg, #ffd37b, #ffbb5c);
+    }
+    .bridge-item, .module-item, .license-item {
+      padding: 14px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px 14px;
+      align-items: center;
+    }
+    .bridge-meta, .module-meta, .license-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 999px;
+      background: var(--teal);
+      box-shadow: 0 0 18px rgba(95, 214, 202, 0.55);
+    }
+    .status {
+      padding: 7px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      border: 1px solid var(--line-strong);
+    }
+    .ok { color: var(--teal); }
+    .warn { color: var(--amber); }
+    .pro { color: #b8d97a; }
+    .bar {
+      position: relative;
+      height: 8px;
+      border-radius: 999px;
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.06);
+      margin-top: 10px;
+    }
+    .bar > span {
+      position: absolute;
+      inset: 0 auto 0 0;
+      border-radius: inherit;
+      background: linear-gradient(90deg, #5fd6ca, #8cbfff);
+    }
+    .toggle {
+      width: 52px;
+      height: 30px;
+      padding: 4px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--line-strong);
+    }
+    .toggle::after {
+      content: "";
+      display: block;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #ffffff;
+      transform: translateX(22px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.28);
+    }
+    .toggle.off::after {
+      transform: translateX(0);
+      background: #d2d9e2;
+    }
+    .note {
+      padding: 18px;
+      border-radius: 28px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(14, 18, 24, 0.72);
+      box-shadow: 0 24px 70px rgba(0, 0, 0, 0.24);
+    }
+    .note h1 {
+      margin: 0 0 10px;
+      font-size: 44px;
+      line-height: 0.94;
+      letter-spacing: -0.06em;
+    }
+    .note .eyebrow {
+      color: var(--teal);
+      font-size: 12px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+    .note ul {
+      margin: 18px 0 0;
+      padding-left: 18px;
+      color: #d7e0e8;
+      line-height: 1.8;
+    }
+    .callout-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 18px;
+    }
+    .callout {
+      padding: 14px;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.03);
+    }
+    .callout strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 14px;
+    }
+    .callout span {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @media (max-width: 980px) {
+      .shell { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 520px) {
+      body { padding: 12px; }
+      .panel { min-height: auto; }
+      .hero-grid, .buttons, .callout-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <section class="panel">
+      <div class="brand-line"></div>
+      <div class="panel-body">
+        <div class="topbar">
+          <div class="logo">AU</div>
+          <div class="title">
+            <strong>Aura Command Center</strong>
+            <span>Bridge Console for Cocos</span>
+          </div>
+          <div class="chip-row">
+            <div class="chip">Community</div>
+            <div class="chip">CN / EN</div>
+          </div>
+        </div>
+        <div class="tabs">
+          <button class="tab active" data-tab="overview">总览</button>
+          <button class="tab" data-tab="control">控制</button>
+          <button class="tab" data-tab="connect">接入</button>
+          <button class="tab" data-tab="policy">策略</button>
+        </div>
+
+        <div class="screen active" data-screen="overview">
+          <div class="hero">
+            <div class="hero-head">
+              <div>
+                <span class="label">Current Status</span>
+                <strong>Bridge 已连通</strong>
+                <span class="subcopy">当前工程和 IDE 接入状况一眼可见，强调“能不能用”而不是“AI 多厉害”。</span>
+              </div>
+              <div class="status-orb">Online</div>
+            </div>
+            <div class="hero-grid">
+              <div class="metric">
+                <span class="label">Tools</span>
+                <strong>24</strong>
+                <p>12 个默认工具 + 12 个 Pro 扩展</p>
+              </div>
+              <div class="metric">
+                <span class="label">Actions</span>
+                <strong>286</strong>
+                <p>近 80% 为场景与节点操作</p>
+              </div>
+              <div class="metric">
+                <span class="label">Clients</span>
+                <strong>03</strong>
+                <p>Cursor、Codex、Claude Code 已接入</p>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <span class="label">Project</span>
+            <strong>SuperEditorDemo</strong>
+            <p>Cocos Creator 3.8.8 · Windows · 本地回环访问已开启</p>
+            <div class="project-path">E:\workspace\SuperEditorDemo</div>
+          </div>
+          <div class="buttons">
+            <button class="btn btn-primary">启动 / 重启服务</button>
+            <button class="btn">同步当前状态</button>
+            <button class="btn btn-warm">一键注入 IDE</button>
+          </div>
+          <div class="cards">
+            <div class="card">
+              <span class="label">Attention</span>
+              <strong>AI 作为辅助区，不占主位</strong>
+              <p>这里仅保留一句建议文案，例如“当前建议先注入 Codex 配置，再开始场景类操作”。不会把提示词、示例和营销语堆满首页。</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="screen" data-screen="control">
+          <div class="hero">
+            <div class="hero-head">
+              <div>
+                <span class="label">Service Ops</span>
+                <strong>把高频动作放前面</strong>
+                <span class="subcopy">启动、停止、重启和模块开关在同一页完成，减少在多个 Tab 来回切换。</span>
+              </div>
+              <div class="status-orb">Ops</div>
+            </div>
+            <div class="buttons">
+              <button class="btn btn-primary">启动服务</button>
+              <button class="btn">停止服务</button>
+              <button class="btn btn-warm">重启服务</button>
+            </div>
+          </div>
+          <div class="module-list">
+            <div class="module-item">
+              <div>
+                <strong>Scene Graph</strong>
+                <div class="module-meta"><span class="dot"></span><span>节点读写 / 层级查询 / 选择同步</span></div>
+                <div class="bar"><span style="width: 86%;"></span></div>
+                <p>最常用模块，建议默认开启。</p>
+              </div>
+              <div class="toggle"></div>
+            </div>
+            <div class="module-item">
+              <div>
+                <strong>Assets Pipeline</strong>
+                <div class="module-meta"><span class="dot"></span><span>Prefab / SpriteFrame / 脚本引用</span></div>
+                <div class="bar"><span style="width: 68%;"></span></div>
+                <p>和工程资源相关，出现频次第二。</p>
+              </div>
+              <div class="toggle"></div>
+            </div>
+            <div class="module-item">
+              <div>
+                <strong>Build & Diagnostics</strong>
+                <div class="module-meta"><span class="dot"></span><span>构建状态 / 报错收集 / 日志摘要</span></div>
+                <div class="bar"><span style="width: 44%;"></span></div>
+                <p>适合排障，但默认不需要高亮存在感。</p>
+              </div>
+              <div class="toggle off"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="screen" data-screen="connect">
+          <div class="hero">
+            <div class="hero-head">
+              <div>
+                <span class="label">IDE Bridge</span>
+                <strong>接入结果比按钮更重要</strong>
+                <span class="subcopy">先显示检测结果，再提供一键注入，避免用户不知道当前到底有没有生效。</span>
+              </div>
+              <div class="status-orb">Link</div>
+            </div>
+          </div>
+          <div class="bridge-list">
+            <div class="bridge-item">
+              <div>
+                <strong>OpenAI Codex</strong>
+                <div class="bridge-meta"><span class="dot"></span><span>已检测到配置文件</span></div>
+                <p>建议状态清晰表达为“已接入 / 未检测 / 可更新”，而不是统一写“注入配置”。</p>
+              </div>
+              <div class="status ok">Ready</div>
+            </div>
+            <div class="bridge-item">
+              <div>
+                <strong>Cursor</strong>
+                <div class="bridge-meta"><span class="dot"></span><span>配置存在，但端点旧</span></div>
+                <p>这种情况应该直接给“更新端点”动作。</p>
+              </div>
+              <div class="status warn">Refresh</div>
+            </div>
+            <div class="bridge-item">
+              <div>
+                <strong>Claude Code</strong>
+                <div class="bridge-meta"><span class="dot"></span><span>未发现本地配置</span></div>
+                <p>明确这是“未接入”，而不是“检测中”。</p>
+              </div>
+              <div class="status">Missing</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="screen" data-screen="policy">
+          <div class="hero">
+            <div class="hero-head">
+              <div>
+                <span class="label">Policy & License</span>
+                <strong>风险项单独成页</strong>
+                <span class="subcopy">授权、回环限制、Payload 上限都属于“策略”，语义要比“设置”更清晰。</span>
+              </div>
+              <div class="status-orb">Safe</div>
+            </div>
+          </div>
+          <div class="license-list">
+            <div class="license-item">
+              <div>
+                <strong>License</strong>
+                <div class="license-meta"><span class="status pro">Pro</span><span>有效期至 2026-12-31</span></div>
+                <p>把版本状态做成显眼徽标，避免用户反复确认自己是不是 Pro。</p>
+              </div>
+              <button class="btn">管理授权</button>
+            </div>
+            <div class="license-item">
+              <div>
+                <strong>Localhost Restrict</strong>
+                <div class="license-meta"><span class="status ok">On</span><span>仅允许 127.0.0.1 访问</span></div>
+                <p>高风险项需要独立警示块，不应和普通输入框平权展示。</p>
+              </div>
+              <div class="toggle"></div>
+            </div>
+            <div class="license-item">
+              <div>
+                <strong>Payload Ceiling</strong>
+                <div class="license-meta"><span>当前 1 MB</span><span>建议保守默认值</span></div>
+                <p>数字型策略信息适合做成独立一行，便于扫描。</p>
+              </div>
+              <button class="btn">调整</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <aside class="note">
+      <div class="eyebrow">Concept 01</div>
+      <h1>Command Center</h1>
+      <p>这是最适合直接落到你们当前插件上的方案。保留深色专业感，但把页面语气从“AI 控制器”改成“工程桥接控制台”。</p>
+      <ul>
+        <li>首页先给连接状态、工程名和快操作，不放提示词教学。</li>
+        <li>把“控制”和“模块开关”合并，符合真实使用路径。</li>
+        <li>IDE 页优先展示检测结果，其次才是注入动作。</li>
+        <li>License 和安全项放进同一个“策略”语义下，减少认知分散。</li>
+      </ul>
+      <div class="callout-grid">
+        <div class="callout">
+          <strong>优点</strong>
+          <span>最容易复用现有布局和数据结构，改造成本低。</span>
+        </div>
+        <div class="callout">
+          <strong>风险</strong>
+          <span>如果视觉克制不到位，仍可能滑回“深色控制台”老路。</span>
+        </div>
+        <div class="callout">
+          <strong>建议</strong>
+          <span>可以作为主方案，再吸收 Quiet Dock 的低打扰细节。</span>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <script>
+    const tabs = document.querySelectorAll(".tab");
+    const screens = document.querySelectorAll(".screen");
+    tabs.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        const target = tab.dataset.tab;
+        tabs.forEach((item) => item.classList.toggle("active", item === tab));
+        screens.forEach((screen) => {
+          screen.classList.toggle("active", screen.dataset.screen === target);
+        });
+      });
+    });
+  </script>
+</body>
+</html>

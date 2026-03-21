@@ -69,7 +69,7 @@ module.exports = {
     'settings.warn_loopback': '⚠ 关闭回环限制将允许外部网络访问，请确保网络安全',
 
     // Guide Tab
-    'tab.guide': '📖 指南',
+    'tab.guide': '指南',
     'guide.title': '快速上手',
     'guide.desc': '3 步完成从安装到 AI 驱动开发。',
     'guide.step1_title': '确认服务在线',

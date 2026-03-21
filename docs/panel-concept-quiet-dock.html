@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quiet Dock</title>
+  <style>
+    :root {
+      --panel: rgba(247, 249, 252, 0.8);
+      --panel-strong: rgba(255, 255, 255, 0.92);
+      --line: rgba(55, 71, 89, 0.12);
+      --text: #1d2733;
+      --muted: #687586;
+      --blue: #4f86c6;
+      --green: #5a9d74;
+      --gold: #cf9f46;
+      --rose: #cb7c72;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 28px;
+      color: var(--text);
+      font-family: "Yu Gothic UI", "Aptos", "Microsoft YaHei UI", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(79, 134, 198, 0.14), transparent 24%),
+        radial-gradient(circle at bottom right, rgba(90, 157, 116, 0.14), transparent 26%),
+        linear-gradient(180deg, #e8eef4 0%, #dfe6ee 100%);
+    }
+    .shell {
+      width: min(1120px, 100%);
+      display: grid;
+      grid-template-columns: 420px 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+    .panel {
+      min-height: 860px;
+      border-radius: 30px;
+      border: 1px solid rgba(255, 255, 255, 0.72);
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.66), rgba(255, 255, 255, 0.52)),
+        linear-gradient(180deg, #f2f6fa 0%, #e8eef5 100%);
+      box-shadow: 0 28px 80px rgba(63, 83, 102, 0.22);
+      overflow: hidden;
+    }
+    .topbar {
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 1px solid rgba(55, 71, 89, 0.08);
+      background: rgba(255, 255, 255, 0.46);
+      backdrop-filter: blur(12px);
+    }
+    .icon {
+      width: 40px;
+      height: 40px;
+      display: grid;
+      place-items: center;
+      border-radius: 14px;
+      background: linear-gradient(135deg, rgba(79, 134, 198, 0.18), rgba(90, 157, 116, 0.18));
+      font-weight: 800;
+      letter-spacing: 0.05em;
+    }
+    .title strong {
+      display: block;
+      font-size: 17px;
+      letter-spacing: -0.04em;
+    }
+    .title span {
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .ghost {
+      margin-left: auto;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(55, 71, 89, 0.1);
+      background: rgba(255, 255, 255, 0.54);
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .body {
+      padding: 16px;
+      display: grid;
+      gap: 12px;
+    }
+    .section {
+      padding: 14px;
+      border-radius: 22px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+      backdrop-filter: blur(10px);
+      animation: slide 520ms ease both;
+    }
+    .section:nth-child(2) { animation-delay: 70ms; }
+    .section:nth-child(3) { animation-delay: 140ms; }
+    .section:nth-child(4) { animation-delay: 210ms; }
+    .section:nth-child(5) { animation-delay: 280ms; }
+    .eyebrow {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--muted);
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+    .section strong {
+      display: block;
+      font-size: 17px;
+      letter-spacing: -0.04em;
+    }
+    .section p, .mini p, .note p {
+      margin: 8px 0 0;
+      color: #556171;
+      font-size: 13px;
+      line-height: 1.65;
+    }
+    .hero {
+      display: grid;
+      gap: 10px;
+      background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.5)),
+        linear-gradient(135deg, rgba(79, 134, 198, 0.12), rgba(90, 157, 116, 0.12));
+    }
+    .status-row, .mini-grid {
+      display: grid;
+      gap: 10px;
+    }
+    .status-row { grid-template-columns: repeat(2, 1fr); }
+    .mini-grid { grid-template-columns: repeat(3, 1fr); }
+    .mini, .ide-card, .module-card, .shortcut-card {
+      padding: 12px;
+      border-radius: 18px;
+      background: var(--panel-strong);
+      border: 1px solid rgba(55, 71, 89, 0.08);
+    }
+    .mini span {
+      display: block;
+      color: var(--muted);
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .mini strong { font-size: 24px; }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      background: rgba(90, 157, 116, 0.1);
+      color: var(--green);
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: currentColor;
+    }
+    .ide-list, .module-list, .shortcut-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .ide-card, .module-card, .shortcut-card {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px 12px;
+      align-items: center;
+    }
+    .tag {
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(79, 134, 198, 0.1);
+      color: var(--blue);
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .tag.warn {
+      background: rgba(207, 159, 70, 0.14);
+      color: var(--gold);
+    }
+    .tag.rose {
+      background: rgba(203, 124, 114, 0.14);
+      color: var(--rose);
+    }
+    .toggle {
+      width: 48px;
+      height: 28px;
+      padding: 4px;
+      border-radius: 999px;
+      background: rgba(79, 134, 198, 0.16);
+      border: 1px solid rgba(79, 134, 198, 0.18);
+    }
+    .toggle::after {
+      content: "";
+      display: block;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #ffffff;
+      transform: translateX(20px);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+    }
+    .toggle.off {
+      background: rgba(55, 71, 89, 0.08);
+      border-color: rgba(55, 71, 89, 0.12);
+    }
+    .toggle.off::after {
+      transform: translateX(0);
+      background: #d7dde5;
+    }
+    .actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .btn {
+      min-height: 46px;
+      border: 0;
+      border-radius: 16px;
+      font: inherit;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text);
+      cursor: pointer;
+      background: rgba(255, 255, 255, 0.72);
+      transition: transform 180ms ease, background 180ms ease;
+    }
+    .btn:hover {
+      transform: translateY(-1px);
+      background: #ffffff;
+    }
+    .btn-primary {
+      color: #ffffff;
+      background: linear-gradient(135deg, #4f86c6, #5a9d74);
+    }
+    .helper {
+      display: flex;
+      align-items: start;
+      gap: 10px;
+      padding: 12px;
+      border-radius: 18px;
+      background: rgba(79, 134, 198, 0.07);
+      border: 1px solid rgba(79, 134, 198, 0.12);
+      margin-top: 12px;
+    }
+    .helper-mark {
+      width: 28px;
+      height: 28px;
+      display: grid;
+      place-items: center;
+      border-radius: 10px;
+      background: rgba(79, 134, 198, 0.12);
+      color: var(--blue);
+      font-size: 14px;
+      font-weight: 700;
+    }
+    .note {
+      padding: 20px;
+      border-radius: 28px;
+      background: rgba(28, 38, 50, 0.84);
+      color: #f1f6fb;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 20px 70px rgba(63, 83, 102, 0.2);
+    }
+    .note .eyebrow { color: #9ac0ea; }
+    .note h1 {
+      margin: 0 0 10px;
+      font-size: 46px;
+      line-height: 0.92;
+      letter-spacing: -0.06em;
+    }
+    .note p, .note li, .note span { color: #cad7e5; }
+    .note ul {
+      margin: 18px 0 0;
+      padding-left: 18px;
+      line-height: 1.8;
+    }
+    .note-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 18px;
+    }
+    .note-card {
+      padding: 14px;
+      border-radius: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.03);
+    }
+    .note-card strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 14px;
+    }
+    @keyframes slide {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @media (max-width: 980px) {
+      .shell { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 540px) {
+      body { padding: 12px; }
+      .status-row, .mini-grid, .actions, .note-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <section class="panel">
+      <div class="topbar">
+        <div class="icon">AU</div>
+        <div class="title">
+          <strong>Aura Quiet Dock</strong>
+          <span>Calm side panel for daily use</span>
+        </div>
+        <div class="ghost">Focus Mode</div>
+      </div>
+      <div class="body">
+        <div class="section hero">
+          <span class="eyebrow">Bridge</span>
+          <strong>常驻侧栏应该先给确信感。</strong>
+          <p>这套方案把一切做轻：弱化大 tab、弱化品牌叫喊、弱化 AI 术语。适合用户每天开着，不觉得压迫。</p>
+          <div class="status-row">
+            <div class="mini">
+              <span>Status</span>
+              <div class="badge"><span class="dot"></span>Online</div>
+              <p>端点 7451 · 已同步项目上下文</p>
+            </div>
+            <div class="mini">
+              <span>Project</span>
+              <strong style="font-size: 18px;">SuperEditorDemo</strong>
+              <p>Cocos 3.8.8 · Localhost Only</p>
+            </div>
+          </div>
+          <div class="mini-grid">
+            <div class="mini">
+              <span>Tools</span>
+              <strong>24</strong>
+            </div>
+            <div class="mini">
+              <span>Clients</span>
+              <strong>03</strong>
+            </div>
+            <div class="mini">
+              <span>Pro</span>
+              <strong>On</strong>
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <span class="eyebrow">Quick Actions</span>
+          <strong>动作不多，但足够快。</strong>
+          <p>高频操作只保留三个：启动、同步、接入。其余动作放到二级面板，不在常驻页制造噪音。</p>
+          <div class="actions">
+            <button class="btn btn-primary">重启 Bridge</button>
+            <button class="btn">同步状态</button>
+            <button class="btn">接入 IDE</button>
+            <button class="btn">查看策略</button>
+          </div>
+        </div>
+
+        <div class="section">
+          <span class="eyebrow">Connected IDEs</span>
+          <strong>先展示结果，再提供下一步。</strong>
+          <div class="ide-list">
+            <div class="ide-card">
+              <div>
+                <strong>OpenAI Codex</strong>
+                <p>已接入，端点最新。</p>
+              </div>
+              <span class="tag">Ready</span>
+            </div>
+            <div class="ide-card">
+              <div>
+                <strong>Cursor</strong>
+                <p>检测到旧端点，适合直接更新。</p>
+              </div>
+              <span class="tag warn">Refresh</span>
+            </div>
+            <div class="ide-card">
+              <div>
+                <strong>Claude Code</strong>
+                <p>未发现配置文件。</p>
+              </div>
+              <span class="tag rose">Install</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <span class="eyebrow">Modules</span>
+          <strong>模块开关做成安静的控制区。</strong>
+          <div class="module-list">
+            <div class="module-card">
+              <div>
+                <strong>Scene Graph</strong>
+                <p>节点读写、选择同步。</p>
+              </div>
+              <div class="toggle"></div>
+            </div>
+            <div class="module-card">
+              <div>
+                <strong>Assets Pipeline</strong>
+                <p>Prefab 与资源引用。</p>
+              </div>
+              <div class="toggle"></div>
+            </div>
+            <div class="module-card">
+              <div>
+                <strong>Build Diagnostics</strong>
+                <p>构建与错误摘要。</p>
+              </div>
+              <div class="toggle off"></div>
+            </div>
+          </div>
+          <div class="helper">
+            <div class="helper-mark">AI</div>
+            <div>
+              <strong style="font-size: 14px;">这里只保留一条助手提示</strong>
+              <p>例如“建议先同步当前选中节点，再让 IDE 执行局部改动”。AI 在这里是辅助，不是页面中心。</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <span class="eyebrow">Shortcuts</span>
+          <strong>教程收进轻量快捷入口。</strong>
+          <div class="shortcut-list">
+            <div class="shortcut-card">
+              <div>
+                <strong>分析当前场景结构</strong>
+                <p>适合第一次连通后验证桥接。</p>
+              </div>
+              <span class="tag">Copy</span>
+            </div>
+            <div class="shortcut-card">
+              <div>
+                <strong>把当前节点改成登录按钮</strong>
+                <p>只保留高频例子，不堆满示例 prompt。</p>
+              </div>
+              <span class="tag">Copy</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <aside class="note">
+      <span class="eyebrow">Concept 03</span>
+      <h1>Quiet Dock</h1>
+      <p>这是三套里最克制的一套。它更像 Cocos 侧边原生工具，而不是“AI 面板”。如果你的核心目标就是让用户感觉轻，这套最直接。</p>
+      <ul>
+        <li>没有大而重的分栏导航，信息以静态分区堆叠呈现。</li>
+        <li>把 AI 缩成一条助手提示，表达“有帮助，但不抢控制权”。</li>
+        <li>亮色和留白让插件更像生产工具，不像终端或聊天器。</li>
+      </ul>
+      <div class="note-grid">
+        <div class="note-card">
+          <strong>优点</strong>
+          <span>最轻、最像原生编辑器插件，高频使用压力最小。</span>
+        </div>
+        <div class="note-card">
+          <strong>风险</strong>
+          <span>如果你们品牌想强调“高科技感”，这套会显得更克制。</span>
+        </div>
+        <div class="note-card">
+          <strong>建议</strong>
+          <span>适合做侧栏默认态，再配合一个更强的详情页承载高级功能。</span>
+        </div>
+      </div>
+    </aside>
+  </div>
+</body>
+</html>
