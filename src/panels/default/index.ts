@@ -29,6 +29,12 @@ module.exports = Editor.Panel.define({
         </div>
         <div class="header-actions">
           <button id="langBtn" class="ghost-btn">中/EN</button>
+          <div class="user-avatar" id="userBtn" title="用户中心">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+          </div>
         </div>
       </div>
 
@@ -355,23 +361,32 @@ module.exports = Editor.Panel.define({
     .brand-txt-aura { font-size: 18px; font-weight: 600; color: #f4f4f5; font-family: -apple-system, sans-serif; letter-spacing: -0.01em; }
     
     .holo-badge {
-      display: inline-flex; font-size: 10px; font-weight: 600; letter-spacing: 0.5px;
-      margin-left: 6px; align-items: center; justify-content: center;
+      display: inline-flex;
+      margin-left: 8px; align-items: baseline;
     }
     .holo-badge-inner {
-      background: rgba(99, 102, 241, 0.1); color: #818cf8;
-      padding: 2px 6px; border-radius: 4px;
-      font-size: 10px; border: 1px solid rgba(99, 102, 241, 0.2);
+      color: #71717a; /* Sleek slate gray color */
+      font-size: 13px; font-weight: 500; font-family: -apple-system, sans-serif;
     }
     .header-actions {
-      margin-left: auto; display: flex; gap: 4px;
+      margin-left: auto; display: flex; align-items: center; gap: 8px;
     }
     .ghost-btn {
       background: transparent; border: 1px solid rgba(255,255,255,0.06); font-size: 11px; font-family: inherit;
       color: #71717a; cursor: pointer; padding: 4px 8px; border-radius: 4px;
-      transition: all 0.15s;
+      transition: all 0.15s; height: 24px; display: flex; align-items: center;
     }
     .ghost-btn:hover { color: #d4d4d8; background: rgba(255,255,255,0.08); }
+    
+    .user-avatar {
+      width: 24px; height: 24px; border-radius: 50%; background: transparent;
+      border: 1px solid rgba(255,255,255,0.06);
+      display: flex; align-items: center; justify-content: center;
+      color: #71717a; cursor: pointer; transition: all 0.15s; pointer-events: auto;
+    }
+    .user-avatar:hover {
+      color: #d4d4d8; background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.15);
+    }
 
     /* ===== TAB NAVIGATION ===== */
     .mcp-tabs-header {
@@ -593,18 +608,21 @@ module.exports = Editor.Panel.define({
 
     /* ===== TOGGLE SWITCH ===== */
     .tool-toggle {
-      appearance: none; -webkit-appearance: none; width: 36px; height: 20px; flex-shrink: 0;
-      background: #3f3f46; border: 1px solid #555;
-      border-radius: 20px; position: relative; cursor: pointer; transition: 0.2s;
+      grid-area: toggle; align-self: center; justify-self: flex-end;
+      appearance: none; -webkit-appearance: none; width: 44px; height: 26px; flex-shrink: 0;
+      background: #27272a; border: none;
+      border-radius: 20px; position: relative; cursor: pointer; transition: 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+      outline: none;
     }
     .tool-toggle::after {
-      content: ''; position: absolute; top: 2px; left: 2px; width: 14px; height: 14px;
-      background: #858585; border-radius: 50%; transition: 0.2s;
+      content: ''; position: absolute; top: 3px; left: 3px; width: 20px; height: 20px;
+      background: #71717a; border-radius: 50%; transition: 0.3s cubic-bezier(0.2, 0.8, 0.2, 1.2);
     }
     .tool-toggle:checked {
-      background: #0ea5e9; border-color: #0ea5e9;
+      background: #ffffff;
+      box-shadow: 0 0 16px 2px rgba(255, 255, 255, 0.25);
     }
-    .tool-toggle:checked::after { transform: translateX(16px); background: #fff; }
+    .tool-toggle:checked::after { transform: translateX(18px); background: #18181b; }
     .tool-toggle:disabled { opacity: 0.4; cursor: not-allowed; }
 
     /* ===== FORM INPUTS ===== */
@@ -637,50 +655,54 @@ module.exports = Editor.Panel.define({
     }
 
     /* ===== TOOL TOGGLES ===== */
-    .tool-toggle-list { display: flex; flex-direction: column; gap: 5px; }
+    .tool-toggle-list { display: flex; flex-direction: column; gap: 14px; padding-bottom: 12px; }
     .tool-wrapper { display: flex; flex-direction: column; }
     .tool-row {
-      background: #27272a; border: 1px solid #3f3f46;
-      border-radius: 4px; padding: 9px 14px;
-      display: flex; align-items: center; justify-content: space-between;
-      border-left: 2px solid transparent; transition: border-color 0.15s, background 0.15s;
+      background: #18181b; border: 1px solid #27272a;
+      border-radius: 12px; padding: 18px 20px;
+      display: grid; grid-template-columns: 1fr auto; 
+      grid-template-areas: "name name" "desc toggle";
+      row-gap: 24px; column-gap: 16px; align-items: end;
+      cursor: pointer; transition: border-color 0.2s, box-shadow 0.2s, background 0.2s, transform 0.2s;
     }
-    .tool-row:hover { border-color: #52525b; border-left-color: #52525b; background: #2a2a2e; }
-    .tool-row.expanded { border-left-color: #0ea5e9; background: #27272a; }
-    .tool-info { display: flex; flex-direction: column; gap: 3px; flex: 1; }
-    .tool-name-row { display: flex; align-items: center; gap: 8px; }
-    .tool-name { font-size: 12px; font-weight: 500; color: #cccccc; font-family: 'SF Mono', Consolas, 'Courier New', monospace; }
-    .tool-desc { font-size: 11px; color: #858585; }
+    .tool-row:hover { border-color: #3f3f46; background: #1a1a1e; box-shadow: 0 8px 24px rgba(0,0,0,0.3); transform: translateY(-1px); }
+    .tool-row.expanded { border-radius: 12px 12px 0 0; border-bottom-color: transparent; }
+    
+    .tool-info { display: contents; } /* Allows children into css grid */
+    .tool-name-row { grid-area: name; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; align-self: start; }
+    .tool-name { width: 100%; font-size: 16px; font-weight: 700; color: #ffffff; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; letter-spacing: -0.01em; margin-bottom: 2px; }
+    .tool-desc { grid-area: desc; font-size: 13px; color: #a1a1aa; line-height: 1.4; }
+    
     .action-count-badge, .core-badge {
       display: inline-flex; align-items: center;
-      padding: 1px 6px; border-radius: 3px; border: 1px solid #3f3f46;
-      font-size: 10px; color: #a1a1aa; background: #3f3f46;
+      padding: 3px 8px; border-radius: 4px; border: 1px solid #3f3f46;
+      font-size: 11px; color: #a1a1aa; background: transparent; font-family: 'SF Mono', Consolas, monospace;
     }
     .pro-badge {
       display: inline-flex; align-items: center;
-      padding: 1px 6px; border-radius: 3px;
-      font-size: 9px; font-weight: 700; letter-spacing: 0.5px;
-      background: #b45309; color: #fffbeb; border: 1px solid rgba(245,158,11,0.45);
+      padding: 3px 8px; border-radius: 4px; border: 1px solid #fde047;
+      font-size: 11px; font-weight: 700; letter-spacing: 0.3px;
+      background: #fde047; color: #18181b;
     }
     .pro-extra-badge {
       display: inline-flex; align-items: center;
-      padding: 1px 6px; border-radius: 3px; font-size: 9px; font-weight: 600;
-      background: rgba(245,158,11,0.1); color: #fcd34d; border: 1px solid rgba(245,158,11,0.32);
+      padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: 600;
+      background: transparent; color: #fde047; border: 1px solid #fde047;
     }
-    .pro-lock-icon { font-size: 14px; opacity: 0.5; flex-shrink: 0; }
-    .pro-locked { opacity: 0.55; }
-    .pro-locked:hover { opacity: 0.8; }
-    .pro-locked-text { color: #858585 !important; }
+    .pro-lock-icon { grid-area: toggle; align-self: end; justify-self: end; font-size: 20px; opacity: 0.5; margin-bottom: 2px; }
+    .pro-locked { opacity: 0.6; }
+    .pro-locked:hover { opacity: 0.9; }
+    .pro-locked-text { color: #71717a !important; }
 
     /* ===== ACTION PANEL ===== */
     .action-panel {
-      background: #18181b; border: 1px solid #3f3f46;
-      border-top: none; border-radius: 0 0 4px 4px;
-      max-height: 0; opacity: 0; padding: 0 12px;
+      background: #18181b; border: 1px solid #27272a;
+      border-top: none; border-radius: 0 0 12px 12px;
+      max-height: 0; opacity: 0; padding: 0 20px;
       transition: max-height 0.25s ease, opacity 0.2s ease, padding 0.25s ease;
       overflow: hidden;
     }
-    .action-panel.open { max-height: 300px; opacity: 1; padding: 10px 12px; }
+    .action-panel.open { max-height: 600px; opacity: 1; padding: 12px 20px 20px; }
     .action-grid { display: flex; flex-wrap: wrap; gap: 5px; }
     .action-chip {
       padding: 3px 8px; border-radius: 4px; background: #27272a;
