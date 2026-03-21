@@ -11,6 +11,7 @@ import { updateRegistry, removeRegistry } from './registry';
 import { getProLicenseStatus, saveLicenseKey, type ProLicenseStatus } from './mcp/tools-pro-bridge';
 import { getConfigStatusAsync, configureIDE as configureIdeService } from './ide-config-service';
 import { registerAssetDbRoutes } from './routes/asset-db-routes';
+import { registerAnimatorRoutes } from './routes/animator-routes';
 import { registerConsoleRoutes } from './routes/console-routes';
 import { registerEditorControlRoutes } from './routes/editor-control-routes';
 import { registerEventBusRoutes, registerBroadcastListeners, unregisterBroadcastListeners } from './routes/event-bus-routes';
@@ -359,6 +360,7 @@ registerServiceRoutes(get, post, {
 });
 registerIpcBridgeRoutes(post, EXTENSION_NAME);
 registerEditorControlRoutes(get, post);
+registerAnimatorRoutes(post);
 registerAssetDbRoutes(get, post);
 registerOperationRoutes(get, post);
 registerConsoleRoutes(get, post);

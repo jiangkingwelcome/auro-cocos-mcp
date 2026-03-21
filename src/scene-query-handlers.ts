@@ -799,7 +799,15 @@ export function buildQueryHandlers(deps: SceneQueryDeps): Map<string, QueryHandl
       if (!AnimClass) return { error: 'Animation 组件类不可用' };
       const anim = r.node.getComponent(AnimClass) as Record<string, unknown> | null;
       if (!anim) return { uuid, name: r.node.name, hasAnimation: false, message: '节点上没有 Animation 组件' };
-      const clips = (anim.clips as Array<Record<string, unknown>> | null) || [];
+      const rawClips = (anim.clips as Array<Record<string, unknown> | null> | null) || [];
+      const clips = rawClips.filter((clip): clip is Record<string, unknown> => {
+        if (!clip) return false;
+        const clipName = String(clip.name || 'unnamed');
+        const clipDuration = Number(clip.duration ?? 0);
+        const trackCount = Array.isArray(clip._tracks) ? clip._tracks.length : 0;
+        if (clipName === 'unnamed' && clipDuration === 0 && trackCount === 0) return false;
+        return true;
+      });
       const clipInfos = clips.map((clip) => {
         if (!clip) return { name: 'null', duration: 0 };
         return { name: clip.name || 'unnamed', duration: clip.duration ?? 0, speed: clip.speed ?? 1, wrapMode: clip.wrapMode ?? 0 };
@@ -812,6 +820,9 @@ export function buildQueryHandlers(deps: SceneQueryDeps): Map<string, QueryHandl
         defaultClip: defaultClip ? (defaultClip.name || 'unnamed') : null,
         playOnLoad: anim.playOnLoad ?? false,
       };
+      if (rawClips.length !== clips.length) {
+        result.filteredNullClips = rawClips.length - clips.length;
+      }
       // Try to get current playing state
       if (typeof anim.getState === 'function') {
         try {

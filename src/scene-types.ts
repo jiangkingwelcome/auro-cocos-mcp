@@ -14,8 +14,8 @@ export interface AnimationComponentLike extends CocosComponent {
   stop?(): void;
   crossFade?(name: string, duration: number): void;
   getState?(name: string): AnimationStateLike | null;
-  addClip?(clip: unknown): void;
-  createState?(clip: unknown): void;
+  addClip?(clip: unknown, name?: string): void;
+  createState?(clip: unknown, name?: string): void;
 }
 
 export interface AnimClipRef {

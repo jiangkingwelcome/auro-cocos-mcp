@@ -704,6 +704,67 @@ export const methods = {
     const comp = node.getComponent(compClass);
     if (!comp) return { error: `节点上没有此组件: ${componentName}` };
 
+    const loadAssetByUuid = async (assetUuid: string): Promise<unknown> => {
+      const am = cc.assetManager;
+      const cached = am?.assets?.get?.(assetUuid);
+      if (cached) return cached;
+      if (am && typeof am.loadAny === 'function') {
+        return await new Promise((resolve, reject) => {
+          am.loadAny!(assetUuid, (err: Error | null, asset: unknown) => {
+            if (err || !asset) {
+              reject(err || new Error(`资源为空: ${assetUuid}`));
+              return;
+            }
+            resolve(asset);
+          });
+        });
+      }
+      return null;
+    };
+
+    if (Array.isArray(value) && value.every(isAssetRef)) {
+      const assetUuids = value.map((entry) => entry.__uuid__);
+      const compIndex = (node._components ?? []).indexOf(comp);
+      if (compIndex < 0) return { error: `无法定位组件索引: ${componentName}` };
+      const propPath = `__comps__.${compIndex}.${property}`;
+
+      return (async () => {
+        try {
+          const assets = [] as unknown[];
+          for (const assetUuid of assetUuids) {
+            const loaded = await loadAssetByUuid(assetUuid);
+            if (!loaded) {
+              return { error: `设置资源数组失败: 无法加载资源 ${assetUuid}` };
+            }
+            assets.push(loaded);
+          }
+          comp[property] = assets;
+          try {
+            await Editor.Message.request('scene', 'set-property', {
+              uuid,
+              path: propPath,
+              dump: { type: 'array', value: assets },
+            });
+            return { success: true, uuid, component: componentName, property, resolvedViaEditorIPC: true, assetUuids };
+          } catch (ipcErr: unknown) {
+            const msg = ipcErr instanceof Error ? ipcErr.message : String(ipcErr);
+            logIgnored(ErrorCategory.EDITOR_IPC, `set-property 资源数组 IPC 失败 (${propPath})`, ipcErr);
+            return {
+              success: true,
+              uuid,
+              component: componentName,
+              property,
+              resolvedFromRuntime: true,
+              assetUuids,
+              _ipcError: msg,
+            };
+          }
+        } catch (assetErr: unknown) {
+          return { error: `设置资源数组失败: ${assetErr instanceof Error ? assetErr.message : String(assetErr)}` };
+        }
+      })();
+    }
+
     if (isAssetRef(value)) {
       const assetUuid = (value as { __uuid__: string }).__uuid__;
 
@@ -714,6 +775,10 @@ export const methods = {
 
       return (async () => {
         try {
+          const loaded = await loadAssetByUuid(assetUuid);
+          if (loaded) {
+            comp[property] = loaded;
+          }
           await Editor.Message.request('scene', 'set-property', {
             uuid,
             path: propPath,
@@ -721,13 +786,14 @@ export const methods = {
           });
           return { success: true, uuid, component: componentName, property, resolvedViaEditorIPC: true, assetUuid };
         } catch (ipcErr: unknown) {
-          const am = cc.assetManager;
-          if (am) {
-            const cached = am.assets?.get?.(assetUuid);
-            if (cached) {
-              comp[property] = cached;
-              return { success: true, uuid, component: componentName, property, resolvedFromCache: true };
+          try {
+            const loaded = await loadAssetByUuid(assetUuid);
+            if (loaded) {
+              comp[property] = loaded;
+              return { success: true, uuid, component: componentName, property, resolvedFromCache: true, assetUuid };
             }
+          } catch (loadErr: unknown) {
+            logIgnored(ErrorCategory.EDITOR_IPC, `set-property 资源回退加载失败 (${propPath})`, loadErr);
           }
           const msg = ipcErr instanceof Error ? ipcErr.message : String(ipcErr);
           logIgnored(ErrorCategory.EDITOR_IPC, `set-property IPC 失败 (${propPath})`, ipcErr);
@@ -1071,6 +1137,7 @@ export const methods = {
       if (uuid && !node) return { error: `未找到节点: ${uuid}` };
 
       const duration = toNum(params.duration, 1);
+      const clipName = toStr(params.clipName, '').trim();
       const wrapMode = toStr(params.wrapMode, 'Normal');
       const speed = toNum(params.speed, 1);
       const sample = toNum(params.sample, 60);
@@ -1091,22 +1158,28 @@ export const methods = {
       const sortedTimes = [...allTimes].sort((a, b) => a - b);
 
       const clip = new AnimClip();
+      if (clipName) clip.name = clipName;
       clip.duration = duration;
       clip.speed = speed;
       clip.sample = sample;
       clip.keys = [sortedTimes];
 
       // Resolve wrap mode
-      if (cc.WrapMode) {
+      const animationWrapMode = (AnimClip as { WrapMode?: Record<string, number> }).WrapMode;
+      let resolvedWrapModeValue: number | null = null;
+      if (animationWrapMode) {
         const modeMap: Record<string, number> = {
-          normal: cc.WrapMode.Normal ?? 0,
-          loop: cc.WrapMode.Loop ?? 2,
-          pingpong: cc.WrapMode.PingPong ?? 6,
-          reverse: cc.WrapMode.Reverse ?? 36,
-          loopReverse: cc.WrapMode.LoopReverse ?? 38,
+          normal: animationWrapMode.Normal ?? 1,
+          loop: animationWrapMode.Loop ?? 2,
+          pingpong: animationWrapMode.PingPong ?? 22,
+          reverse: animationWrapMode.Reverse ?? 36,
+          loopreverse: animationWrapMode.LoopReverse ?? 38,
         };
         const modeVal = modeMap[wrapMode.toLowerCase()];
-        if (modeVal !== undefined) clip.wrapMode = modeVal;
+        if (modeVal !== undefined) {
+          resolvedWrapModeValue = modeVal;
+          clip.wrapMode = modeVal;
+        }
       }
 
       const curves: unknown[] = [];
@@ -1164,7 +1237,13 @@ export const methods = {
       clip.curves = curves;
 
       // Attach to node if provided
-      let attachResult: { attached: boolean; uuid?: string; nodeName?: string; error?: string } | null = null;
+      let attachResult: {
+        attached: boolean;
+        uuid?: string;
+        nodeName?: string;
+        error?: string;
+        editorSyncSkipped?: boolean;
+      } | null = null;
       if (node) {
         const AnimComp = cc.Animation || cc.AnimationComponent;
         if (AnimComp) {
@@ -1173,19 +1252,31 @@ export const methods = {
           if (anim) {
             try {
               const ac = anim as AnimationComponentLike;
+              const existingClips = (ac.clips || []).filter((existing): existing is AnimClipRef => Boolean(existing));
+              if ((ac.clips || []).length !== existingClips.length) {
+                ac.clips = existingClips;
+              }
+              const resolvedName = clipName || clip.name || undefined;
               if (typeof ac.addClip === 'function') {
-                ac.addClip(clip);
+                ac.addClip(clip, resolvedName);
               } else if (typeof ac.createState === 'function') {
-                ac.createState(clip);
+                ac.clips = [...existingClips, clip];
+                ac.createState(clip, resolvedName);
               } else {
                 // Fallback: set clips array directly
-                const existing = ac.clips || [];
-                ac.clips = [...existing, clip];
+                ac.clips = [...existingClips, clip];
               }
-              attachResult = { attached: true, uuid, nodeName: node.name };
-              if (uuid && anim) {
-                notifyEditorComponentProperty(uuid, node, anim, 'clips', { type: 'array', value: (anim as AnimationComponentLike).clips });
+              if (!ac.defaultClip) {
+                ac.defaultClip = clip;
               }
+              // Runtime-only clips are not serializable through scene set-property.
+              // Pushing them into editor IPC causes decodePatch failures and can reset defaultClip.
+              attachResult = {
+                attached: true,
+                uuid,
+                nodeName: node.name,
+                editorSyncSkipped: true,
+              };
             } catch (attachErr: unknown) {
               attachResult = { attached: false, error: attachErr instanceof Error ? attachErr.message : toStr(attachErr) };
             }
@@ -1197,10 +1288,13 @@ export const methods = {
 
       return {
         success: true,
+        clipName: clip.name || clipName || 'unnamed',
         clipDuration: duration,
         trackCount: tracks.length,
         keyframeTimesCount: sortedTimes.length,
         wrapMode,
+        _resolvedWrapModeValue: resolvedWrapModeValue,
+        _clipWrapModeAfterAssign: clip.wrapMode,
         speed,
         ...(attachResult ? { attach: attachResult } : {}),
         _clipRef: clip, // Internal reference for caller to serialize
@@ -1437,7 +1531,7 @@ export const methods = {
         const time = toNum(params.time);
         // Try to get current state and set time
         if (typeof anim.getState === 'function') {
-          const clips: AnimClipRef[] = anim.clips || [];
+          const clips: AnimClipRef[] = (anim.clips || []).filter((clip): clip is AnimClipRef => Boolean(clip));
           for (const clip of clips) {
             if (!clip?.name) continue;
             const state = anim.getState(clip.name);
@@ -1453,7 +1547,7 @@ export const methods = {
         const speed = toNum(params.speed, 1);
         // Set speed on all clips' states
         if (typeof anim.getState === 'function') {
-          const clips: AnimClipRef[] = anim.clips || [];
+          const clips: AnimClipRef[] = (anim.clips || []).filter((clip): clip is AnimClipRef => Boolean(clip));
           let set = false;
           for (const clip of clips) {
             if (!clip?.name) continue;
