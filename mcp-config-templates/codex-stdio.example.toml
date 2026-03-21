@@ -1,0 +1,11 @@
+# OpenAI Codex MCP configuration for Aura for Cocos
+# Save to: ~/.codex/config.toml
+
+[mcp_servers.aura-cocos]
+command = "node"
+args = [
+  "/ABSOLUTE/PATH/TO/aura-for-cocos/stdio-shim/mcp-stdio-shim.cjs",
+]
+
+[mcp_servers.aura-cocos.env]
+COCOS_BRIDGE_PORT = "7779"

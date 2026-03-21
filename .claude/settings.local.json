@@ -41,7 +41,12 @@
       "Bash(bash \"C:\\\\Users\\\\jiang\\\\.claude\\\\skills\\\\git-pushing\\\\scripts\\\\smart_commit.sh\" \"fix\\(updater\\): 简化通知层，详情留给面板展示\")",
       "Bash(bash \"C:\\\\Users\\\\jiang\\\\.claude\\\\skills\\\\git-pushing\\\\scripts\\\\smart_commit.sh\" \"fix\\(updater\\): 移除控制台通知的 ANSI 颜色转义码\")",
       "Bash(bash \"C:\\\\Users\\\\jiang\\\\.claude\\\\skills\\\\git-pushing\\\\scripts\\\\smart_commit.sh\" \"fix\\(updater\\): 修复 ECONNRESET 二次触发 + 加入自动重试机制\")",
-      "Bash(bash \"C:\\\\Users\\\\jiang\\\\.claude\\\\skills\\\\git-pushing\\\\scripts\\\\smart_commit.sh\" \"fix\\(updater\\): 修复全部13处安全/稳定性问题\")"
+      "Bash(bash \"C:\\\\Users\\\\jiang\\\\.claude\\\\skills\\\\git-pushing\\\\scripts\\\\smart_commit.sh\" \"fix\\(updater\\): 修复全部13处安全/稳定性问题\")",
+      "mcp__filesystem__list_directory_with_sizes",
+      "Bash(\"E:\\\\gitproject\\\\cocos\\\\auro-cocos-mcp\\\\patches\\\\.gitkeep\")",
+      "Bash(\"E:\\\\gitproject\\\\cocos\\\\auro-cocos-mcp\\\\patches\\\\.gitkeep\":*)",
+      "Bash(echo.)",
+      "Bash(node -e \":*)"
     ]
   }
 }

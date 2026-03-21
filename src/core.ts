@@ -734,7 +734,16 @@ export const methods = {
 };
 
 export function load() {
-  console.log('[Aura] 插件已加载');
+  let loadVer = FALLBACK_PKG_VERSION;
+  try {
+    const raw = fs.readFileSync(path.join(__dirname, '..', 'package.json'), 'utf-8');
+    loadVer = (JSON.parse(raw) as { version?: string }).version || FALLBACK_PKG_VERSION;
+  } catch {
+    /* ignore */
+  }
+  console.warn(
+    `[Aura] 插件已加载 · package v${loadVer} · ${new Date().toISOString()}（热更后若见此行时间变新，说明新 JS 已生效）`,
+  );
   try {
     registerBroadcastListeners();
   } catch (err) {
@@ -775,7 +784,7 @@ function serializeUpdatePhase(p: UpdatePhase): Record<string, unknown> {
     case 'available':   return { phase: p.phase, info: p.info };
     case 'verifying':   return { phase: p.phase, info: p.info };
     case 'ready':       return { phase: p.phase, info: p.info };
-    case 'done':        return { phase: p.phase, version: p.version };
+    case 'done':        return { phase: p.phase, version: p.version, requiresRestart: p.requiresRestart };
     case 'error':       return { phase: p.phase, message: p.message };
     default:            return { phase: p.phase };
   }

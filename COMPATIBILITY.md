@@ -72,7 +72,7 @@ The bridge includes a `safeEditorMsg` wrapper that automatically tries alternati
 | **Kiro** | stdio (via shim) | ✅ Supported | JSON | Auto-configured via panel |
 | **Antigravity** | stdio (via shim) | ✅ Supported | JSON | Auto-configured via panel |
 | **Gemini CLI** | stdio (via shim) | ✅ Supported | JSON | Auto-configured via panel (`~/.gemini/settings.json`) |
-| **OpenAI Codex** | stdio (via shim) | ✅ Supported | TOML | Auto-configured via panel (`~/.codex/config.toml`) |
+| **OpenAI Codex** | stdio (via shim) | ✅ Supported | TOML | `mcp-config-templates/codex-stdio.example.toml` |
 | **Claude Code** | stdio (via shim) | ✅ Supported | CLI | Auto-configured via panel (`claude mcp add`) |
 | **CodeBuddy (腾讯)** | stdio (via shim) | ✅ Supported | JSON | Auto-configured via panel |
 | **Comate (百度)** | stdio (via shim) | ✅ Supported | JSON | Auto-configured via panel (`~/.baidu-comate/mcp.json`) |
@@ -109,6 +109,8 @@ args = ["<absolute-path>/stdio-shim/mcp-stdio-shim.cjs"]
 [mcp_servers.aura-cocos.env]
 COCOS_BRIDGE_PORT = "7779"
 ```
+
+See `mcp-config-templates/codex-stdio.example.toml` for a ready-to-copy template.
 
 ### Claude Code — CLI details
 

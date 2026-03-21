@@ -445,22 +445,43 @@ module.exports = Editor.Panel.define({
 
     /* ===== STATUS BAR ===== */
     .status-bar {
-      display: flex; align-items: center; gap: 10px; padding: 10px 14px;
-      border-radius: 6px;
-      background: #27272a; border: 1px solid #3f3f46;
+      display: flex; align-items: center; gap: 10px; padding: 12px 16px;
+      border-radius: 8px;
+      background: linear-gradient(180deg, #27272a 0%, #1c1c1e 100%);
+      border: 1px solid #3f3f46;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.05);
     }
     .status-dot {
       display: inline-block; width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+      position: relative;
     }
-    .status-dot.online { background: #5eead4; }
+    .status-dot.online { 
+      background: #5eead4; 
+      box-shadow: 0 0 8px rgba(94, 234, 212, 0.8);
+    }
+    .status-dot.online::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      border-radius: 50%;
+      border: 1px solid #5eead4;
+      animation: statusBreathe 2s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+    }
+    @keyframes statusBreathe {
+      0% { transform: scale(1); opacity: 0.8; }
+      100% { transform: scale(2.5); opacity: 0; }
+    }
     .status-dot.offline { background: #f14c4c; }
-    .status-lbl { font-size: 12.5px; font-weight: 500; }
-    .status-text.online { color: #5eead4; font-weight: 600; }
+    .status-lbl { font-size: 13px; font-weight: 600; letter-spacing: 0.3px; }
+    .status-text.online { color: #5eead4; text-shadow: 0 0 10px rgba(94,234,212,0.3); }
     .status-text.offline { color: #f14c4c; }
     .status-port {
       margin-left: auto;
       font-family: 'SF Mono', Consolas, 'Courier New', monospace;
-      font-size: 11px; color: #858585;
+      font-size: 11px; color: #a1a1aa;
+      background: rgba(0,0,0,0.25);
+      padding: 4px 8px;
+      border-radius: 4px; border: 1px solid #3f3f46;
     }
 
     /* ===== STATS LIST ===== */
@@ -670,7 +691,7 @@ module.exports = Editor.Panel.define({
     
     .tool-info { display: contents; } /* Allows children into css grid */
     .tool-name-row { grid-area: name; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; align-self: start; }
-    .tool-name { width: 100%; font-size: 16px; font-weight: 700; color: #ffffff; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; letter-spacing: -0.01em; margin-bottom: 2px; }
+    .tool-name { font-size: 16px; font-weight: 700; color: #ffffff; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; letter-spacing: -0.01em; margin-bottom: 2px; }
     .tool-desc { grid-area: desc; font-size: 13px; color: #a1a1aa; line-height: 1.4; }
     
     .action-count-badge, .core-badge {
@@ -841,8 +862,21 @@ module.exports = Editor.Panel.define({
       background: rgba(14,165,233,0.08); border: 1px solid rgba(14,165,233,0.28);
       display: flex; flex-direction: column; gap: 10px;
     }
-    .update-header { display: flex; align-items: center; justify-content: space-between; }
+    .update-header { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
     .update-title { font-size: 13px; font-weight: 600; color: #7dd3fc; }
+    .update-kind-badge {
+      font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 10px;
+      white-space: nowrap; letter-spacing: 0.3px;
+    }
+    .update-kind-badge.hotpatch {
+      background: rgba(34,197,94,0.15); border: 1px solid rgba(34,197,94,0.4); color: #4ade80;
+    }
+    .update-kind-badge.coldpatch {
+      background: rgba(245,158,11,0.12); border: 1px solid rgba(245,158,11,0.35); color: #fbbf24;
+    }
+    .update-kind-badge.full {
+      background: rgba(14,165,233,0.12); border: 1px solid rgba(14,165,233,0.35); color: #7dd3fc;
+    }
     .update-ver-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
     .update-ver-label { font-size: 11px; color: #858585; }
     .update-ver-value {
@@ -850,6 +884,14 @@ module.exports = Editor.Panel.define({
       font-size: 11px; color: #bae6fd; font-weight: 600;
     }
     .update-arrow { font-size: 12px; color: #858585; }
+    .update-meta { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+    .update-meta-item { font-size: 11px; color: #666; }
+    .update-meta-item span { color: #888; }
+    .update-files-list {
+      font-size: 10px; color: #5a5a5a; background: rgba(0,0,0,0.15);
+      border-radius: 3px; padding: 5px 8px; font-family: 'SF Mono', Consolas, monospace;
+      max-height: 48px; overflow: hidden;
+    }
     .update-changelog {
       font-size: 11px; color: #999; line-height: 1.5;
       background: rgba(0,0,0,0.2); border-radius: 3px;
@@ -876,6 +918,7 @@ module.exports = Editor.Panel.define({
     .update-done-msg {
       font-size: 12px; color: #5eead4; font-weight: 500;
     }
+    .update-done-msg.no-restart { color: #4ade80; }
     .update-error-msg { font-size: 12px; color: #f14c4c; }
     .update-notify-btn {
       color: #7dd3fc !important;
@@ -1219,13 +1262,13 @@ module.exports = Editor.Panel.define({
         nameSpan.className = 'tool-name' + (isProExclusive ? ' pro-locked-text' : '');
         nameSpan.textContent = name;
 
+        nameRow.appendChild(nameSpan);
         if (isCore) {
           const badge = document.createElement('span');
           badge.className = 'core-badge';
           badge.textContent = dict['ctrl.tools_core'] || '(core)';
-          nameSpan.appendChild(badge);
+          nameRow.appendChild(badge);
         }
-        nameRow.appendChild(nameSpan);
 
         if (isProExclusive) {
           const proBadge = document.createElement('span');
@@ -1751,6 +1794,13 @@ module.exports = Editor.Panel.define({
     renderUpdateBanner(up) {
       const self = this;
       const banner = self.$.updateBanner;
+      /** 字节数格式化：1536 → "1.5 KB" */
+      function _fmtBytes(n) {
+        if (!n || n <= 0) return '';
+        if (n < 1024)        return `${n} B`;
+        if (n < 1024 * 1024) return `${(n / 1024).toFixed(1)} KB`;
+        return `${(n / 1024 / 1024).toFixed(1)} MB`;
+      }
       const updateBtn = self.$.updateBtn;
       if (!banner || !up) return;
       const dict = (self._I18N && self._I18N[self._currentLang]) || {};
@@ -1767,7 +1817,20 @@ module.exports = Editor.Panel.define({
 
       if (up.phase === 'available') {
         const info = up.info || {};
-        let html = `<div class="update-header"><span class="update-title">${t('update.available', '🎉 新版本可用')}</span></div>`;
+        const kind = info.kind || 'full';
+        const noRestart = info.requiresRestart === false;
+
+        // 更新类型徽章
+        const kindLabel = kind === 'hotpatch'
+          ? t('update.kind.hotpatch', '热补丁 · 无需重启')
+          : kind === 'coldpatch'
+            ? t('update.kind.coldpatch', '小包更新 · 需重启')
+            : t('update.kind.full', '完整更新 · 需重启');
+
+        let html = `<div class="update-header">
+          <span class="update-title">${t('update.available', '新版本可用')}</span>
+          <span class="update-kind-badge ${kind}">${kindLabel}</span>
+        </div>`;
         html += `<div class="update-ver-row">
           <span class="update-ver-label">${t('update.current', '当前')}:</span>
           <span class="update-ver-value">${info.currentVersion || '-'}</span>
@@ -1775,14 +1838,32 @@ module.exports = Editor.Panel.define({
           <span class="update-ver-label">${t('update.latest', '最新')}:</span>
           <span class="update-ver-value">${info.latestVersion || '-'}</span>
         </div>`;
+
+        // 补丁元信息：文件数 + 大小
+        if (kind !== 'full' && (info.changedFiles || info.patchSize)) {
+          const fileCount = info.changedFiles ? info.changedFiles.length : 0;
+          const sizeStr   = info.patchSize ? _fmtBytes(info.patchSize) : '';
+          html += `<div class="update-meta">`;
+          if (fileCount) html += `<span class="update-meta-item">${fileCount} ${t('update.files.changed', '个文件变更')}</span>`;
+          if (sizeStr)   html += `<span class="update-meta-item">${t('update.size', '大小')}: <span>${sizeStr}</span></span>`;
+          html += `</div>`;
+          if (info.changedFiles && info.changedFiles.length > 0) {
+            html += `<div class="update-files-list">${info.changedFiles.slice(0, 5).join('<br>')}</div>`;
+          }
+        }
+
         if (info.changelog) {
           html += `<div class="update-changelog">${info.changelog}</div>`;
         }
         if (info.breaking) {
           html += `<div class="update-breaking">${t('update.breaking', '⚠ 重要更新，建议备份后升级')}</div>`;
         }
+
+        const btnLabel = noRestart
+          ? t('update.apply', '立即应用')
+          : t('update.download', '下载更新');
         html += `<div class="update-actions">
-          <button class="btn btn-primary" id="doDownloadBtn" style="padding:6px 14px;font-size:12px;">${t('update.download', '立即下载')}</button>
+          <button class="btn btn-primary" id="doDownloadBtn" style="padding:6px 14px;font-size:12px;">${btnLabel}</button>
         </div>`;
         banner.innerHTML = html;
         const dlBtn = banner.querySelector('#doDownloadBtn');
@@ -1808,14 +1889,18 @@ module.exports = Editor.Panel.define({
 
       if (up.phase === 'ready') {
         const info = up.info || {};
+        const noRestart = info.requiresRestart === false;
+        const installLabel = noRestart
+          ? t('update.install.hotpatch', '立即应用（无需重启）')
+          : t('update.install', '安装并重启');
         banner.innerHTML = `
-          <div class="update-header"><span class="update-title">${t('update.available', '🎉 新版本可用')} v${info.latestVersion || ''}</span></div>
+          <div class="update-header"><span class="update-title">v${info.latestVersion || ''} ${t('update.ready', '下载完成')}</span></div>
           <div class="update-progress-wrap">
             <div class="update-progress-bar"><div class="update-progress-fill" style="width:100%"></div></div>
-            <span class="update-progress-text">✓ 下载完成，SHA256 校验通过</span>
+            <span class="update-progress-text">✓ SHA256 校验通过</span>
           </div>
           <div class="update-actions">
-            <button class="btn btn-primary" id="doInstallBtn" style="padding:6px 14px;font-size:12px;">${t('update.install', '安装并重启')}</button>
+            <button class="btn btn-primary" id="doInstallBtn" style="padding:6px 14px;font-size:12px;">${installLabel}</button>
           </div>`;
         const instBtn = banner.querySelector('#doInstallBtn');
         if (instBtn) {
@@ -1833,7 +1918,11 @@ module.exports = Editor.Panel.define({
       }
 
       if (up.phase === 'done') {
-        banner.innerHTML = `<div class="update-done-msg">${t('update.done', '✅ 更新完成，请重启 Cocos Creator 生效')}</div>`;
+        const noRestart = up.requiresRestart === false;
+        const doneMsg = noRestart
+          ? t('update.done.hotpatch', '✅ 热更新完成，插件已自动重载，无需重启编辑器')
+          : t('update.done', '✅ 更新完成，请重启 Cocos Creator 生效');
+        banner.innerHTML = `<div class="update-done-msg${noRestart ? ' no-restart' : ''}">${doneMsg}</div>`;
         if (updateBtn) updateBtn.style.display = 'none';
         return;
       }
