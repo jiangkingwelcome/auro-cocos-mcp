@@ -514,26 +514,59 @@ module.exports = Editor.Panel.define({
     /* ===== BUTTONS ===== */
     .btn {
       border: 1px solid #3f3f46; border-radius: 6px;
-      padding: 8px 12px; font-size: 12px; font-weight: 500;
-      color: #cccccc; background: transparent;
+      padding: 9px 14px; font-size: 13px; font-weight: 500;
+      color: #e4e4e7; background: #27272a;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.05);
       cursor: pointer; display: flex; align-items: center; justify-content: center;
-      gap: 6px; transition: background 0.15s, border-color 0.15s, color 0.15s;
-      font-family: inherit;
+      gap: 6px; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      font-family: inherit; position: relative; overflow: hidden;
     }
-    .btn:hover { background: #3f3f46; border-color: #52525b; color: #f4f4f5; }
-    .btn:active { background: #333; }
-    .btn-primary { background: #0ea5e9; color: #fff; border-color: #0ea5e9; font-weight: 600; }
-    .btn-primary:hover { background: #0284c7; border-color: #0284c7; color: #fff; }
-    .btn-success { background: rgba(94,234,212,0.12); color: #5eead4; border-color: rgba(94,234,212,0.3); }
-    .btn-success:hover { background: rgba(94,234,212,0.2); border-color: rgba(94,234,212,0.5); }
-    .btn-danger { background: rgba(241,76,76,0.12); color: #f14c4c; border-color: rgba(241,76,76,0.3); }
-    .btn-danger:hover { background: rgba(241,76,76,0.2); border-color: rgba(241,76,76,0.5); }
+    .btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.1);
+      border-color: #52525b;
+    }
+    .btn:active {
+      transform: translateY(0);
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.3); border-color: transparent !important;
+    }
+    .btn::before {
+      content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+      transform: skewX(-20deg); transition: 0s;
+    }
+    .btn:hover::before { animation: btnShine 0.6s ease-out; }
+    @keyframes btnShine { 100% { left: 200%; } }
+
+    .btn-primary { background: linear-gradient(180deg, #0ea5e9, #0284c7); color: #fff; border-color: #0284c7; text-shadow: 0 1px 1px rgba(0,0,0,0.2); }
+    .btn-primary:hover { background: linear-gradient(180deg, #38bdf8, #0ea5e9); border-color: #0ea5e9; box-shadow: 0 4px 12px rgba(14,165,233,0.3); }
+
+    .btn-success {
+      background: linear-gradient(180deg, rgba(16,185,129,0.1), rgba(5,150,105,0.15));
+      color: #34d399; border-color: rgba(16,185,129,0.3);
+    }
+    .btn-success:hover {
+      background: linear-gradient(180deg, rgba(16,185,129,0.15), rgba(5,150,105,0.25));
+      border-color: rgba(16,185,129,0.6); color: #6ee7b7; box-shadow: 0 4px 12px rgba(16,185,129,0.15), inset 0 1px 0 rgba(255,255,255,0.05);
+    }
+
+    .btn-danger {
+      background: linear-gradient(180deg, rgba(239,68,68,0.1), rgba(220,38,38,0.15));
+      color: #f87171; border-color: rgba(239,68,68,0.3);
+    }
+    .btn-danger:hover {
+      background: linear-gradient(180deg, rgba(239,68,68,0.15), rgba(220,38,38,0.25));
+      border-color: rgba(239,68,68,0.6); color: #fca5a5; box-shadow: 0 4px 12px rgba(239,68,68,0.15), inset 0 1px 0 rgba(255,255,255,0.05);
+    }
+
     .btn-holo-btn {
-      background: rgba(14,165,233,0.1); color: #7dd3fc;
-      border: 1px solid rgba(14,165,233,0.32);
+      background: linear-gradient(180deg, #27272a, #18181b); color: #7dd3fc;
+      border-color: #3f3f46;
     }
     .btn-holo-btn:hover {
-      background: rgba(14,165,233,0.18); border-color: rgba(14,165,233,0.45); color: #bae6fd;
+      background: linear-gradient(180deg, #3f3f46, #27272a);
+      border-color: #0ea5e9; color: #bae6fd;
+      box-shadow: 0 4px 12px rgba(14,165,233,0.15), inset 0 1px 0 rgba(255,255,255,0.05);
     }
     .btn-disabled { opacity: 0.35; pointer-events: none; }
     .button-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
@@ -635,9 +668,9 @@ module.exports = Editor.Panel.define({
       background: rgba(245,158,11,0.1); color: #fcd34d; border: 1px solid rgba(245,158,11,0.32);
     }
     .pro-lock-icon { font-size: 14px; opacity: 0.5; flex-shrink: 0; }
-    .pro-locked { opacity: 0.45; }
-    .pro-locked:hover { opacity: 0.6; }
-    .pro-locked-text { color: #555 !important; }
+    .pro-locked { opacity: 0.55; }
+    .pro-locked:hover { opacity: 0.8; }
+    .pro-locked-text { color: #858585 !important; }
 
     /* ===== ACTION PANEL ===== */
     .action-panel {
@@ -648,14 +681,20 @@ module.exports = Editor.Panel.define({
       overflow: hidden;
     }
     .action-panel.open { max-height: 300px; opacity: 1; padding: 10px 12px; }
-    .action-grid { display: flex; flex-wrap: wrap; gap: 4px; }
+    .action-grid { display: flex; flex-wrap: wrap; gap: 5px; }
     .action-chip {
-      padding: 2px 7px; border-radius: 3px; background: #3f3f46;
-      border: 1px solid #3f3f46; font-size: 10px;
-      font-family: 'SF Mono', Consolas, 'Courier New', monospace; color: #999;
+      padding: 3px 8px; border-radius: 4px; background: #27272a;
+      border: 1px solid #3f3f46; font-size: 10.5px;
+      font-family: 'SF Mono', Consolas, 'Courier New', monospace; color: #a1a1aa;
     }
-    .action-chip-pro { opacity: 0.5; border-style: dashed !important; }
-    .action-chip-locked { opacity: 0.3; border-style: dashed !important; color: #555 !important; }
+    .action-chip-pro {
+      border-style: dashed !important; border-color: rgba(245,158,11,0.4) !important;
+      color: #d97706 !important; background: rgba(245,158,11,0.08); opacity: 1;
+    }
+    .action-chip-locked {
+      border-style: dashed !important; border-color: #52525b !important;
+      color: #a1a1aa !important; background: transparent; opacity: 1;
+    }
 
     /* ===== GUIDE STEPS ===== */
     .guide-steps { display: flex; flex-direction: column; gap: 8px; }
