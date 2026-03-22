@@ -283,16 +283,20 @@ Returns: create_node→{success,uuid,name,parent}. set_property→{success,uuid,
 Common errors: "未找到节点"=bad UUID; "未找到父节点"=parent not found (check name spelling or use scene_query action=tree); "未找到组件类"=wrong component name (use scene_query action=list_available_components); "危险操作已拦截"=missing confirmDangerous=true for destroy_node/clear_children.` + AI_RULES,
     toInputSchema({
       action: z.enum([
-        // Basic node (14)
+        // Basic node (16)
         'create_node', 'destroy_node', 'reparent',
         'set_position', 'set_rotation', 'set_scale',
         'set_world_position', 'set_world_rotation', 'set_world_scale',
         'set_name', 'set_active', 'duplicate_node',
         'move_node_up', 'move_node_down', 'set_sibling_index', 'reset_transform',
-        // Basic component (5)
+        // Node grouping & batch (2)
+        'group_nodes', 'batch',
+        // Basic component (9)
         'add_component', 'remove_component', 'set_property', 'reset_property', 'call_component_method',
-        // Basic UI (3)
+        'set_component_properties', 'attach_script', 'detach_script', 'batch_set_property',
+        // Basic UI (5)
         'ensure_2d_canvas', 'set_anchor_point', 'set_content_size',
+        'create_ui_widget', 'align_nodes',
         // Prefab (7)
         'create_prefab', 'instantiate_prefab',
         'enter_prefab_edit', 'exit_prefab_edit',
@@ -305,6 +309,23 @@ Common errors: "未找到节点"=bad UUID; "未找到父节点"=parent not found
         'execute_component_method',
         // IPC-only operations (2)
         'clear_children', 'reset_node_properties',
+        // 3D primitives & camera (3)
+        'create_primitive', 'create_camera', 'set_camera_look_at',
+        // Camera property (1)
+        'set_camera_property',
+        // Light (2)
+        'create_light', 'set_light_property',
+        // Scene environment (1)
+        'set_scene_environment',
+        // Material (6)
+        'set_material_property', 'assign_builtin_material', 'set_material_define',
+        'assign_project_material', 'clone_material', 'swap_technique',
+        // Sprite (1)
+        'sprite_grayscale',
+        // Events (3)
+        'bind_event', 'unbind_event', 'list_events',
+        // Special nodes (3)
+        'audio_setup', 'create_skeleton_node', 'setup_particle',
       ]).describe('Operation to perform. See tool description for required parameters per action.'),
       uuid: z.string().optional().describe(
         'Target node UUID. REQUIRED for most actions: destroy_node, reparent, set_position, set_rotation, ' +
@@ -672,14 +693,7 @@ Common errors: "未找到节点"=bad UUID; "未找到父节点"=parent not found
             return text({ error: `重置节点属性失败: ${errorMessage(err)}` }, true);
           }
         }
-        if (p.action === 'reset_transform') {
-          try {
-            const result = await editorMsg('scene', 'reset-node', { uuid: p.uuid });
-            return text({ success: true, uuid: p.uuid, result: result ?? 'reset', _editorIPC: true });
-          } catch (err: unknown) {
-            return text({ error: `重置变换失败: ${errorMessage(err)}` }, true);
-          }
-        }
+        // reset_transform: 委托给 dispatchOperation，支持 resetPosition/resetRotation/resetScale 细粒度标志
         if (p.action === 'call_component_method') {
           try {
             const result = await editorMsg('scene', 'execute-component-method', {

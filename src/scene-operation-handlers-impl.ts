@@ -2269,7 +2269,7 @@ export function buildOperationHandlers(deps: SceneOperationDeps): Map<string, Op
                 })();
             }],
         // ─── batch_set_property: set same property on multiple nodes ──────
-        ['batch_set_property', (self, scene, p) => {
+        ['batch_set_property', (self, _scene, p) => {
                 const uuids = p.uuids;
                 if (!Array.isArray(uuids) || uuids.length === 0)
                     return { error: '缺少 uuids 数组' };
@@ -2280,20 +2280,23 @@ export function buildOperationHandlers(deps: SceneOperationDeps): Map<string, Op
                     return { error: '缺少 component 或 property 参数' };
                 if (value === undefined)
                     return { error: '缺少 value 参数' };
-                const results = [];
-                let successCount = 0;
-                for (const uuid of uuids) {
-                    try {
-                        const res = self.setComponentProperty(uuid, component, property, value);
-                        results.push({ uuid, ...res });
-                        if (res.success)
-                            successCount++;
+                return (async () => {
+                    const results = [];
+                    let successCount = 0;
+                    for (const uuid of uuids) {
+                        try {
+                            const res = await Promise.resolve(self.setComponentProperty(uuid, component, property, value));
+                            const resObj = (res && typeof res === 'object') ? res as Record<string, unknown> : {};
+                            results.push({ uuid, ...resObj });
+                            if (resObj.success)
+                                successCount++;
+                        }
+                        catch (err) {
+                            results.push({ uuid, error: err instanceof Error ? err.message : String(err) });
+                        }
                     }
-                    catch (err) {
-                        results.push({ uuid, error: err instanceof Error ? err.message : String(err) });
-                    }
-                }
-                return { success: successCount > 0, totalNodes: uuids.length, successCount, failCount: uuids.length - successCount, results };
+                    return { success: successCount > 0, totalNodes: uuids.length, successCount, failCount: uuids.length - successCount, results };
+                })();
             }],
         // ─── group_nodes: create parent node and reparent selected nodes ──
         ['group_nodes', (self, scene, p) => {

@@ -58,7 +58,7 @@ const OPERATION_ACTIONS: &[&str] = &[
     "setup_physics_world", "create_skeleton_node", "generate_tilemap",
     "create_primitive",
     "create_camera", "set_camera_property", "camera_screenshot",
-    "set_material_property", "assign_material", "clone_material",
+    "set_material_property", "assign_material", "assign_builtin_material", "assign_project_material", "clone_material",
     "swap_technique", "sprite_grayscale",
     "create_light", "set_light_property",
     "set_scene_environment",
@@ -93,7 +93,7 @@ const OPERATION_UUID_REQUIRED: &[&str] = &[
     "set_layer", "clear_children", "reset_node_properties",
     "attach_script", "detach_script", "set_component_properties",
     "set_camera_property", "camera_screenshot",
-    "set_material_property", "assign_material", "clone_material",
+    "set_material_property", "assign_material", "assign_builtin_material", "assign_project_material", "clone_material",
     "swap_technique", "sprite_grayscale",
     "set_light_property",
     "bind_event", "unbind_event", "list_events",
@@ -153,10 +153,17 @@ pub fn definitions() -> Vec<ToolDefinition> {
                     "depth": { "type": "number", "description": "Max tree depth. Default: 3." },
                     "layer": { "type": "number", "description": "Layer mask for find_nodes_by_layer." },
                     "snapshotId": { "type": "string", "description": "Snapshot ID for scene_diff." },
-                    "x": { "type": "number", "description": "X coordinate for screen_to_world." },
-                    "y": { "type": "number", "description": "Y coordinate for screen_to_world." },
-                    "z": { "type": "number", "description": "Z coordinate for world_to_screen." },
-                    "scriptName": { "type": "string", "description": "Script name for check_script_ready." },
+                    "x": { "type": "number", "description": "Legacy alias. Prefer screenX/worldX depending on action." },
+                    "y": { "type": "number", "description": "Legacy alias. Prefer screenY/worldY depending on action." },
+                    "z": { "type": "number", "description": "Legacy alias. Prefer screenZ/worldZ depending on action." },
+                    "screenX": { "type": "number", "description": "Screen X coordinate for screen_to_world." },
+                    "screenY": { "type": "number", "description": "Screen Y coordinate for screen_to_world." },
+                    "screenZ": { "type": "number", "description": "Screen depth coordinate for screen_to_world." },
+                    "worldX": { "type": "number", "description": "World X coordinate for world_to_screen." },
+                    "worldY": { "type": "number", "description": "World Y coordinate for world_to_screen." },
+                    "worldZ": { "type": "number", "description": "World Z coordinate for world_to_screen." },
+                    "script": { "type": "string", "description": "Script class name for check_script_ready/get_script_properties." },
+                    "scriptName": { "type": "string", "description": "Deprecated alias of script." },
                     // New parameters in 1.7.3
                     "tag": { "type": "string", "description": "Node tag for find_nodes_by_tag." },
                     "templateName": { "type": "string", "description": "Template name for list_node_templates." },
@@ -186,7 +193,7 @@ pub fn definitions() -> Vec<ToolDefinition> {
                 "create_ui_widget, setup_particle, audio_setup, setup_physics_world, ",
                 "create_skeleton_node, generate_tilemap, create_primitive, ",
                 "create/set_camera, camera_screenshot, ",
-                "set/assign/clone_material, swap_technique, sprite_grayscale, ",
+                "set/assign_builtin/assign_project/clone_material, swap_technique, sprite_grayscale, ",
                 "create/set_light, set_scene_environment, ",
                 "bind/unbind/list_events, attach/detach_script, set_component_properties, ",
                 // New in 1.7.3
@@ -204,7 +211,8 @@ pub fn definitions() -> Vec<ToolDefinition> {
                     },
                     "uuid": { "type": "string", "description": "Target node UUID. REQUIRED for most actions." },
                     "name": { "type": "string", "description": "Node name for create_node, set_name." },
-                    "parent": { "type": "string", "description": "Parent node UUID for create_node, reparent." },
+                    "parent": { "type": "string", "description": "Deprecated alias of parentUuid." },
+                    "parentUuid": { "type": "string", "description": "Parent node UUID or node name for create_node/reparent." },
                     "component": { "type": "string", "description": "Component type name." },
                     "property": { "type": "string", "description": "Property name for set_property." },
                     "value": { "description": "Property value for set_property." },
@@ -215,10 +223,18 @@ pub fn definitions() -> Vec<ToolDefinition> {
                     "confirmDangerous": { "type": "boolean", "description": "REQUIRED=true for destructive actions." },
                     "operations": { "type": "array", "description": "Array of operations for batch." },
                     "prefabUrl": { "type": "string", "description": "Prefab db:// URL for instantiate_prefab." },
-                    "scriptName": { "type": "string", "description": "Script class name for attach/detach_script." },
+                    "script": { "type": "string", "description": "Script class name for attach/detach_script." },
+                    "scriptName": { "type": "string", "description": "Deprecated alias of script." },
                     "properties": { "type": "object", "description": "Properties map for set_component_properties." },
                     "widgetType": { "type": "string", "description": "UI widget type for create_ui_widget." },
-                    "materialPath": { "type": "string", "description": "Material path for assign_material." },
+                    "materialPath": { "type": "string", "description": "Deprecated alias of materialUrl for assign_project_material." },
+                    "materialUrl": { "type": "string", "description": "db:// or UUID of project material for assign_project_material." },
+                    "effectName": { "type": "string", "description": "Builtin material effect name for assign_builtin_material." },
+                    "uniforms": { "type": "object", "description": "Uniform/property map for set_material_property." },
+                    "technique": { "type": "integer", "description": "Technique index for swap_technique." },
+                    "techniqueIndex": { "type": "integer", "description": "Deprecated alias of technique." },
+                    "materialIndex": { "type": "integer", "description": "Renderer material slot index. Default: 0." },
+                    "methodName": { "type": "string", "description": "Component method name for call_component_method / execute_component_method." },
                     "lightType": { "type": "string", "description": "Light type for create_light." },
                     "eventName": { "type": "string", "description": "Event name for bind/unbind_event." },
                     // New parameters in 1.7.3
@@ -254,12 +270,29 @@ pub fn process_query(args: &serde_json::Value) -> ExecutionPlan {
         Err(plan) => return plan,
     };
 
+    let mut normalized = args.clone();
+    if let Some(obj) = normalized.as_object_mut() {
+        if let Some(script_name) = obj.get("scriptName").cloned() {
+            obj.entry("script").or_insert(script_name);
+        }
+        if action == "screen_to_world" {
+            if let Some(v) = obj.get("x").cloned() { obj.entry("screenX").or_insert(v); }
+            if let Some(v) = obj.get("y").cloned() { obj.entry("screenY").or_insert(v); }
+            if let Some(v) = obj.get("z").cloned() { obj.entry("screenZ").or_insert(v); }
+        }
+        if action == "world_to_screen" {
+            if let Some(v) = obj.get("x").cloned() { obj.entry("worldX").or_insert(v); }
+            if let Some(v) = obj.get("y").cloned() { obj.entry("worldY").or_insert(v); }
+            if let Some(v) = obj.get("z").cloned() { obj.entry("worldZ").or_insert(v); }
+        }
+    }
+
     for &(act, ipc_msg) in NATIVE_IPC_QUERIES {
         if action == act {
             let ipc_args: Vec<serde_json::Value> = match act {
-                "query_node" | "query_component" => vec![args["uuid"].clone()],
-                "query_nodes_by_asset_uuid" => vec![args["assetUuid"].clone()],
-                "query_component_has_script" => vec![args["className"].clone()],
+                "query_node" | "query_component" => vec![normalized["uuid"].clone()],
+                "query_nodes_by_asset_uuid" => vec![normalized["assetUuid"].clone()],
+                "query_component_has_script" => vec![normalized["className"].clone()],
                 _ => vec![],
             };
             return ExecutionPlan::single(CallInstruction::EditorMsg {
@@ -272,7 +305,7 @@ pub fn process_query(args: &serde_json::Value) -> ExecutionPlan {
 
     ExecutionPlan::single(CallInstruction::SceneMethod {
         method: "dispatchQuery".into(),
-        args: vec![args.clone()],
+        args: vec![normalized],
     })
 }
 
@@ -284,6 +317,26 @@ pub fn process_operation(args: &serde_json::Value) -> ExecutionPlan {
 
     if let Err(plan) = validate::require_string_for_actions(args, "uuid", &action, OPERATION_UUID_REQUIRED) {
         return plan;
+    }
+
+    let mut normalized = args.clone();
+    if let Some(obj) = normalized.as_object_mut() {
+        if let Some(parent) = obj.get("parent").cloned() {
+            obj.entry("parentUuid").or_insert(parent);
+        }
+        if let Some(script_name) = obj.get("scriptName").cloned() {
+            obj.entry("script").or_insert(script_name);
+        }
+        if action == "assign_material" {
+            if obj.get("materialUrl").is_some() || obj.get("materialPath").is_some() {
+                obj.insert("action".into(), json!("assign_project_material"));
+                if let Some(material_path) = obj.get("materialPath").cloned() {
+                    obj.entry("materialUrl").or_insert(material_path);
+                }
+            } else {
+                obj.insert("action".into(), json!("assign_builtin_material"));
+            }
+        }
     }
 
     match action.as_str() {
@@ -378,7 +431,7 @@ pub fn process_operation(args: &serde_json::Value) -> ExecutionPlan {
         }),
         _ => ExecutionPlan::single(CallInstruction::SceneMethod {
             method: "dispatchOperation".into(),
-            args: vec![args.clone()],
+            args: vec![normalized],
         }),
     }
 }

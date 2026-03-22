@@ -61,6 +61,7 @@ pub fn definitions() -> Vec<ToolDefinition> {
                 "url": { "type": "string", "description": "Asset db:// URL. REQUIRED for most actions." },
                 "uuid": { "type": "string", "description": "Asset UUID. For uuid_to_url." },
                 "name": { "type": "string", "description": "New name for rename, or folder name for create_folder." },
+                "sourceUrl": { "type": "string", "description": "Source asset db:// URL for move/copy." },
                 "targetUrl": { "type": "string", "description": "Destination db:// URL for move/copy." },
                 "type": { "type": "string", "description": "Asset type filter for search_by_type, or create type." },
                 "content": { "type": "string", "description": "File content for create." },
@@ -68,13 +69,14 @@ pub fn definitions() -> Vec<ToolDefinition> {
                 "value": { "description": "Value for set_meta_property." },
                 "sourcePath": { "type": "string", "description": "OS path for import." },
                 "paths": { "type": "array", "description": "Array of OS paths for batch_import." },
+                "files": { "type": "array", "description": "Deprecated alias of paths for batch_import." },
                 "urls": { "type": "array", "description": "Array of db:// URLs for batch_move, batch_reimport." },
                 "scriptName": { "type": "string", "description": "Class name for generate_script." },
                 "materialName": { "type": "string", "description": "Material name for create_material." },
                 "confirmDangerous": { "type": "boolean", "description": "REQUIRED=true for delete." },
                 // New parameters in 1.7.3
                 "folderUrl": { "type": "string", "description": "Target folder db:// URL for move_to_folder." },
-                "newName": { "type": "string", "description": "New name for duplicate_as." },
+                "newName": { "type": "string", "description": "New name for rename / duplicate_as." },
                 "force": { "type": "boolean", "description": "Force refresh. For refresh_force." },
                 "deep": { "type": "boolean", "description": "Deep reimport. For batch_reimport." }
             },
@@ -95,6 +97,57 @@ pub fn process(args: &serde_json::Value) -> ExecutionPlan {
         return plan;
     }
 
+    let mut normalized = args.clone();
+    if let Some(obj) = normalized.as_object_mut() {
+        if let Some(files) = obj.get("files").cloned() {
+            obj.entry("paths").or_insert(files);
+        }
+        if let Some(new_name) = obj.get("newName").cloned() {
+            obj.entry("name").or_insert(new_name);
+        }
+        if action == "move" || action == "copy" {
+            if let Some(source) = obj.get("sourceUrl").cloned() {
+            obj.entry("url").or_insert(source);
+            }
+        }
+    }
+
+    match action.as_str() {
+        "move" | "copy" => {
+            if normalized.get("sourceUrl").is_none() || normalized.get("targetUrl").is_none() {
+                return ExecutionPlan::error_with_suggestion(
+                    "Missing required parameters: sourceUrl and targetUrl",
+                    "Provide sourceUrl and targetUrl for move/copy",
+                );
+            }
+        }
+        "rename" => {
+            if normalized.get("newName").is_none() && normalized.get("name").is_none() {
+                return ExecutionPlan::error_with_suggestion(
+                    "Missing required parameter: newName",
+                    "Provide newName when renaming an asset",
+                );
+            }
+        }
+        "import" => {
+            if normalized.get("sourcePath").is_none() || normalized.get("targetUrl").is_none() {
+                return ExecutionPlan::error_with_suggestion(
+                    "Missing required parameters: sourcePath and targetUrl",
+                    "Provide sourcePath and targetUrl for import",
+                );
+            }
+        }
+        "batch_import" => {
+            if normalized.get("paths").is_none() {
+                return ExecutionPlan::error_with_suggestion(
+                    "Missing required parameter: files/paths",
+                    "Provide files (or paths) array for batch_import",
+                );
+            }
+        }
+        _ => {}
+    }
+
     let method = match action.as_str() {
         "list" | "search_by_type" | "uuid_to_url" | "url_to_uuid"
         | "get_meta" | "info" | "get_dependencies" | "get_dependents"
@@ -109,12 +162,12 @@ pub fn process(args: &serde_json::Value) -> ExecutionPlan {
         ExecutionPlan::single(CallInstruction::EditorMsg {
             module: "asset-db".into(),
             message: method.into(),
-            args: vec![args.clone()],
+            args: vec![normalized],
         })
     } else {
         ExecutionPlan::single(CallInstruction::BridgePost {
             path: "/api/assets/operation".into(),
-            body: Some(args.clone()),
+            body: Some(normalized),
         })
     }
 }

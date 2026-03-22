@@ -5,7 +5,7 @@ use serde_json::json;
 const ACTIONS: &[&str] = &[
     // Basic animation actions
     "create_clip", "list_clips", "play", "stop", "pause", "resume",
-    "get_state", "set_speed", "set_time", "crossfade",
+    "get_state", "set_speed", "set_time", "set_current_time", "crossfade",
     // Preset animation actions (new in 1.7.3)
     "create_preset", "list_presets", "apply_preset", "save_as_preset", "delete_preset",
     "list_preset_categories", "export_preset", "import_preset",
@@ -13,7 +13,7 @@ const ACTIONS: &[&str] = &[
 
 const UUID_REQUIRED: &[&str] = &[
     "create_clip", "list_clips", "play", "stop", "pause", "resume",
-    "get_state", "set_speed", "set_time", "crossfade", "apply_preset",
+    "get_state", "set_speed", "set_time", "set_current_time", "crossfade", "apply_preset",
 ];
 
 pub fn definitions() -> Vec<ToolDefinition> {
@@ -22,16 +22,16 @@ pub fn definitions() -> Vec<ToolDefinition> {
         description: concat!(
             "Control animation playback on Cocos Creator nodes, including preset animation system.\n\n",
             "Basic Animation Actions:\n",
-            "- create_clip: uuid(REQUIRED), tracks(REQUIRED), duration(optional), wrapMode(optional), speed(optional). ",
+            "- create_clip: uuid(REQUIRED), tracks(REQUIRED), duration(optional), wrapMode(optional), speed(optional), savePath(optional). ",
             "Create and attach an AnimationClip with keyframe tracks.\n",
             "- list_clips: uuid(REQUIRED). List animation clips on a node.\n",
-            "- play: uuid(REQUIRED), clip(optional). Play animation.\n",
+            "- play: uuid(REQUIRED), clipName(optional). Play animation.\n",
             "- stop: uuid(REQUIRED). Stop animation.\n",
             "- pause/resume: uuid(REQUIRED). Pause/resume playback.\n",
             "- get_state: uuid(REQUIRED). Get current playback state.\n",
             "- set_speed: uuid(REQUIRED), speed(REQUIRED). Set playback speed.\n",
-            "- set_time: uuid(REQUIRED), time(REQUIRED). Seek to time position.\n",
-            "- crossfade: uuid(REQUIRED), clip(REQUIRED), duration(optional). Crossfade to another clip.\n\n",
+            "- set_current_time: uuid(REQUIRED), time(REQUIRED). Seek to time position.\n",
+            "- crossfade: uuid(REQUIRED), clipName(REQUIRED), duration(optional). Crossfade to another clip.\n\n",
             "Preset Animation Actions (new in 1.7.3):\n",
             "- create_preset: name(REQUIRED), tracks(REQUIRED), category(optional), description(optional). Create a reusable animation preset.\n",
             "- list_presets: category(optional). List all available animation presets.\n",
@@ -47,11 +47,13 @@ pub fn definitions() -> Vec<ToolDefinition> {
             "properties": {
                 "action": { "type": "string", "enum": ACTIONS, "description": "Animation action to perform." },
                 "uuid": { "type": "string", "description": "Target node UUID. REQUIRED for all actions." },
-                "clip": { "type": "string", "description": "Animation clip name. REQUIRED for crossfade, optional for play." },
+                "clip": { "type": "string", "description": "Deprecated alias of clipName. Optional for play, required for crossfade if clipName omitted." },
+                "clipName": { "type": "string", "description": "Animation clip name. Optional for play, required for crossfade." },
                 "speed": { "type": "number", "description": "Playback speed multiplier. REQUIRED for set_speed, optional for create_clip (default 1)." },
-                "time": { "type": "number", "description": "Time position in seconds. REQUIRED for set_time." },
+                "time": { "type": "number", "description": "Time position in seconds. REQUIRED for set_current_time." },
                 "duration": { "type": "number", "description": "Duration in seconds. For create_clip (default 1), for crossfade transition (default 0.3)." },
                 "wrapMode": { "type": "string", "enum": ["Normal", "Loop", "PingPong", "Reverse", "LoopReverse"], "description": "Animation wrap mode. For create_clip. Default: Normal." },
+                "savePath": { "type": "string", "description": "Optional db:// path to save the generated .anim asset." },
                 "tracks": {
                     "type": "array",
                     "description": "Keyframe tracks. REQUIRED for create_clip, create_preset. Each track: {path?, component?, property, keyframes: [{time, value, easing?}]}.",
@@ -127,6 +129,16 @@ pub fn process(args: &serde_json::Value) -> ExecutionPlan {
         _ => {}
     }
 
+    let mut normalized = args.clone();
+    if let Some(obj) = normalized.as_object_mut() {
+        if let Some(clip) = obj.get("clip").cloned() {
+            obj.entry("clipName").or_insert(clip);
+        }
+        if action == "set_time" {
+            obj.insert("action".into(), json!("set_current_time"));
+        }
+    }
+
     match action.as_str() {
         "create_clip" => {
             if args.get("tracks").and_then(|v| v.as_array()).map_or(true, |a| a.is_empty()) {
@@ -137,7 +149,7 @@ pub fn process(args: &serde_json::Value) -> ExecutionPlan {
             }
             ExecutionPlan::single(CallInstruction::SceneMethod {
                 method: "createAnimationClip".into(),
-                args: vec![args.clone()],
+                args: vec![normalized],
             })
         }
         "get_state" | "list_clips" => {
@@ -160,7 +172,7 @@ pub fn process(args: &serde_json::Value) -> ExecutionPlan {
         _ => {
             ExecutionPlan::single(CallInstruction::SceneMethod {
                 method: "dispatchAnimationAction".into(),
-                args: vec![args.clone()],
+                args: vec![normalized],
             })
         }
     }

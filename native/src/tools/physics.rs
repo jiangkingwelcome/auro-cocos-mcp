@@ -4,14 +4,14 @@ use serde_json::json;
 
 const ACTIONS: &[&str] = &[
     "get_collider_info", "add_collider", "remove_collider", "set_collider_size",
-    "add_rigidbody", "set_rigidbody", "set_physics_material",
+    "add_rigidbody", "set_rigidbody", "set_rigidbody_props", "set_physics_material",
     "set_collision_group", "get_physics_world", "set_physics_world",
     "add_joint", "raycast",
 ];
 
 const UUID_REQUIRED: &[&str] = &[
     "get_collider_info", "add_collider", "remove_collider", "set_collider_size",
-    "add_rigidbody", "set_rigidbody", "set_physics_material",
+    "add_rigidbody", "set_rigidbody", "set_rigidbody_props", "set_physics_material",
     "set_collision_group", "add_joint",
 ];
 
@@ -23,16 +23,16 @@ pub fn definitions() -> Vec<ToolDefinition> {
             "Actions:\n",
             "- get_collider_info: uuid(REQUIRED). Get all collider and rigidbody details on a node.\n",
             "- add_collider: uuid(REQUIRED), colliderType(REQUIRED: box2d/circle2d/polygon2d/capsule2d/box3d/sphere3d/capsule3d). Add a collider.\n",
-            "- remove_collider: uuid(REQUIRED), colliderType(REQUIRED). Remove a collider.\n",
+            "- remove_collider: currently unsupported in the JS scene backend.\n",
             "- set_collider_size: uuid(REQUIRED), width/height or radius or size. Set collider dimensions.\n",
             "- add_rigidbody: uuid(REQUIRED), bodyType(optional: Dynamic/Static/Kinematic), is2d(optional). Add RigidBody.\n",
-            "- set_rigidbody: uuid(REQUIRED), mass/linearDamping/angularDamping/gravityScale/fixedRotation(optional). Configure rigidbody.\n",
+            "- set_rigidbody_props: uuid(REQUIRED), mass/linearDamping/angularDamping/gravityScale/fixedRotation(optional). Configure rigidbody.\n",
             "- set_physics_material: uuid(REQUIRED), friction/restitution/density(optional). Set physics material on collider.\n",
             "- set_collision_group: uuid(REQUIRED), group(REQUIRED, integer). Set collision group/layer.\n",
             "- get_physics_world: no params. Get physics world configuration (gravity, timestep).\n",
             "- set_physics_world: gravity(optional {x,y,z}), allowSleep(optional), fixedTimeStep(optional). Configure physics world.\n",
-            "- add_joint: uuid(REQUIRED), jointType(REQUIRED), connectedBody(optional). Add physics joint.\n",
-            "- raycast: origin/direction(REQUIRED). Perform physics raycast.",
+            "- add_joint: uuid(REQUIRED), jointType(REQUIRED), connectedUuid(optional). Add physics joint.\n",
+            "- raycast: currently unsupported in the JS scene backend.",
         ).into(),
         schema: json!({
             "type": "object",
@@ -50,13 +50,13 @@ pub fn definitions() -> Vec<ToolDefinition> {
                 "height": { "type": "number", "description": "Collider height. For set_collider_size." },
                 "radius": { "type": "number", "description": "Radius for circle/sphere/capsule collider. For set_collider_size." },
                 "size": { "type": "object", "properties": { "x": { "type": "number" }, "y": { "type": "number" }, "z": { "type": "number" } }, "description": "Size vector for 3D colliders." },
-                "mass": { "type": "number", "description": "Body mass. For set_rigidbody." },
-                "linearDamping": { "type": "number", "description": "Linear damping. For set_rigidbody." },
-                "angularDamping": { "type": "number", "description": "Angular damping. For set_rigidbody." },
-                "gravityScale": { "type": "number", "description": "Gravity scale (2D only). For set_rigidbody." },
-                "fixedRotation": { "type": "boolean", "description": "Lock rotation. For set_rigidbody." },
-                "allowSleep": { "type": "boolean", "description": "Allow sleep. For set_rigidbody / set_physics_world." },
-                "bullet": { "type": "boolean", "description": "Enable CCD. For set_rigidbody." },
+                "mass": { "type": "number", "description": "Body mass. For set_rigidbody_props." },
+                "linearDamping": { "type": "number", "description": "Linear damping. For set_rigidbody_props." },
+                "angularDamping": { "type": "number", "description": "Angular damping. For set_rigidbody_props." },
+                "gravityScale": { "type": "number", "description": "Gravity scale (2D only). For set_rigidbody_props." },
+                "fixedRotation": { "type": "boolean", "description": "Lock rotation. For set_rigidbody_props." },
+                "allowSleep": { "type": "boolean", "description": "Allow sleep. For set_rigidbody_props / set_physics_world." },
+                "bullet": { "type": "boolean", "description": "Enable CCD. For set_rigidbody_props." },
                 "friction": { "type": "number", "description": "Friction coefficient. For set_physics_material." },
                 "restitution": { "type": "number", "description": "Bounciness (0-1). For set_physics_material." },
                 "density": { "type": "number", "description": "Density. For set_physics_material." },
@@ -64,7 +64,8 @@ pub fn definitions() -> Vec<ToolDefinition> {
                 "gravity": { "type": "object", "properties": { "x": { "type": "number" }, "y": { "type": "number" }, "z": { "type": "number" } }, "description": "World gravity vector. For set_physics_world." },
                 "fixedTimeStep": { "type": "number", "description": "Physics fixed time step in seconds. For set_physics_world." },
                 "jointType": { "type": "string", "enum": ["distance", "spring", "hinge", "fixed", "slider"], "description": "Joint type. REQUIRED for: add_joint." },
-                "connectedBody": { "type": "string", "description": "UUID of the connected rigidbody node. For add_joint." },
+                "connectedBody": { "type": "string", "description": "Deprecated alias of connectedUuid. UUID of the connected rigidbody node." },
+                "connectedUuid": { "type": "string", "description": "UUID of the connected rigidbody node. For add_joint." },
                 "props": { "type": "object", "description": "Additional joint properties. For add_joint." },
                 "origin": { "type": "object", "description": "Raycast origin point {x,y,z}. For raycast." },
                 "direction": { "type": "object", "description": "Raycast direction {x,y,z}. For raycast." }
@@ -84,6 +85,30 @@ pub fn process(args: &serde_json::Value) -> ExecutionPlan {
 
     if let Err(plan) = validate::require_string_for_actions(args, "uuid", &action, UUID_REQUIRED) {
         return plan;
+    }
+
+    if action == "remove_collider" {
+        return ExecutionPlan::error_with_suggestion(
+            "remove_collider is not implemented by the current JS scene backend",
+            "Use remove_component with the collider component name instead",
+        );
+    }
+
+    if action == "raycast" {
+        return ExecutionPlan::error_with_suggestion(
+            "raycast is not implemented by the current JS scene backend",
+            "Use a dedicated scene query / physics query implementation before exposing this action",
+        );
+    }
+
+    let mut normalized = args.clone();
+    if let Some(obj) = normalized.as_object_mut() {
+        if action == "set_rigidbody" {
+            obj.insert("action".into(), json!("set_rigidbody_props"));
+        }
+        if let Some(connected_body) = obj.get("connectedBody").cloned() {
+            obj.entry("connectedUuid").or_insert(connected_body);
+        }
     }
 
     match action.as_str() {
@@ -170,7 +195,7 @@ pub fn process(args: &serde_json::Value) -> ExecutionPlan {
         _ => {
             ExecutionPlan::single(CallInstruction::SceneMethod {
                 method: "dispatchPhysicsAction".into(),
-                args: vec![args.clone()],
+                args: vec![normalized],
             })
         }
     }
