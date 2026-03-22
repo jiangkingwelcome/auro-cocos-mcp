@@ -147,6 +147,622 @@ function worldLookAtToLocalEulerDeg(
 export function buildOperationHandlers(deps: SceneOperationDeps): Map<string, OperationHandler> {
 
     const { getCC, requireNode, setSiblingIndexViaEditor, ipcCreateNode, ipcCreateComponent, ipcResetProperty } = deps;
+    const BUILTIN_MATERIAL_URLS = {
+        'builtin-standard': 'db://internal/default_materials/standard-material.mtl',
+        'builtin-sprite': 'db://internal/default_materials/ui-sprite-material.mtl',
+        'builtin-sprite-renderer': 'db://internal/default_materials/default-sprite-renderer-material.mtl',
+        'ui-sprite-gray': 'db://internal/default_materials/ui-sprite-gray-material.mtl',
+        'ui-sprite-gray-alpha-sep': 'db://internal/default_materials/ui-sprite-gray-alpha-sep-material.mtl',
+    };
+    const builtinMaterialCache = new Map();
+
+    function normalizeBuiltinMaterialKey(effectName) {
+        return String(effectName ?? 'builtin-standard').trim().toLowerCase();
+    }
+
+    function getNodeComponentIndex(node, comp) {
+        return (node._components ?? []).indexOf(comp);
+    }
+
+    function getComponentPropertyPath(node, comp, property) {
+        const compIndex = getNodeComponentIndex(node, comp);
+        if (compIndex < 0)
+            return null;
+        return `__comps__.${compIndex}.${property}`;
+    }
+
+    async function queryAssetInfo(url) {
+        try {
+            const info = await Editor.Message.request('asset-db', 'query-asset-info', url);
+            return info && typeof info === 'object' ? info : null;
+        }
+        catch (e) {
+            logIgnored(ErrorCategory.EDITOR_IPC, `query-asset-info 失败 (${url})`, e);
+            return null;
+        }
+    }
+
+    async function queryAssets(pattern) {
+        try {
+            const list = await Editor.Message.request('asset-db', 'query-assets', { pattern });
+            return Array.isArray(list) ? list : [];
+        }
+        catch (e) {
+            logIgnored(ErrorCategory.EDITOR_IPC, `query-assets 失败 (${pattern})`, e);
+            return [];
+        }
+    }
+
+    async function refreshAsset(url) {
+        try {
+            await Editor.Message.request('asset-db', 'refresh-asset', url);
+            return true;
+        }
+        catch (e) {
+            logIgnored(ErrorCategory.ASSET_OPERATION, `refresh-asset 失败 (${url})`, e);
+            return false;
+        }
+    }
+
+    async function loadAssetByUuid(assetUuid, opts = {}) {
+        const cc = getCC();
+        const am = cc.assetManager;
+        const forceReload = Boolean(opts && typeof opts === 'object' && opts.forceReload);
+        const cache = am?.assets;
+        const cached = cache?.get?.(assetUuid);
+        if (cached && !forceReload)
+            return cached;
+        if (forceReload && cached) {
+            try {
+                if (typeof am?.releaseAsset === 'function')
+                    am.releaseAsset(cached);
+            }
+            catch (e) {
+                logIgnored(ErrorCategory.ASSET_OPERATION, `releaseAsset 失败 (${assetUuid})`, e);
+            }
+            try {
+                if (typeof cache?.remove === 'function') {
+                    const cacheKey = String(cached?._uuid ?? cached?.uuid ?? assetUuid);
+                    cache.remove(cacheKey);
+                }
+            }
+            catch (e) {
+                logIgnored(ErrorCategory.ASSET_OPERATION, `assets.remove 失败 (${assetUuid})`, e);
+            }
+        }
+        if (!am || typeof am.loadAny !== 'function')
+            return cached || null;
+        try {
+            return await new Promise((resolve, reject) => {
+                am.loadAny(assetUuid, (err, asset) => {
+                    if (err || !asset) {
+                        reject(err || new Error(`资源为空: ${assetUuid}`));
+                        return;
+                    }
+                    resolve(asset);
+                });
+            });
+        }
+        catch (e) {
+            logIgnored(ErrorCategory.ASSET_OPERATION, `loadAny 材质资源失败 (${assetUuid})`, e);
+            return cached || null;
+        }
+    }
+
+    function findRendererOnNode(node, requestedCompName = '') {
+        const comps = node._components || [];
+        for (const comp of comps) {
+            const cn = comp.constructor?.name ?? comp.__classname__ ?? '';
+            if (requestedCompName && cn !== requestedCompName && `cc.${cn}` !== requestedCompName)
+                continue;
+            const c = comp;
+            if (Array.isArray(c.sharedMaterials) || 'customMaterial' in c || typeof c.setMaterial === 'function' || typeof c.getMaterialInstance === 'function') {
+                return { renderer: c, resolvedCompName: cn };
+            }
+        }
+        return null;
+    }
+
+    async function resolveMaterialAssetRef(materialRef) {
+        const value = String(materialRef ?? '').trim();
+        if (!value)
+            return { error: '缺少材质资源标识' };
+        if (value.startsWith('db://')) {
+            const info = await queryAssetInfo(value);
+            if (!info?.uuid)
+                return { error: `材质资源不存在: ${value}` };
+            return { uuid: String(info.uuid), url: String(info.url ?? value), source: 'asset-db' };
+        }
+        const loaded = await loadAssetByUuid(value);
+        if (!loaded)
+            return { error: `无法加载材质资源 UUID: ${value}` };
+        return { uuid: value, url: String(loaded._nativeUrl ?? loaded.nativeUrl ?? loaded.name ?? value), source: 'uuid' };
+    }
+
+    async function resolveBuiltinMaterialAsset(effectName) {
+        const normalized = normalizeBuiltinMaterialKey(effectName);
+        if (builtinMaterialCache.has(normalized))
+            return builtinMaterialCache.get(normalized);
+
+        const mappedUrl = BUILTIN_MATERIAL_URLS[normalized];
+        if (mappedUrl) {
+            const mappedInfo = await queryAssetInfo(mappedUrl);
+            if (mappedInfo?.uuid) {
+                const resolved = { uuid: String(mappedInfo.uuid), url: mappedUrl, source: 'known-map', effectName: normalized };
+                builtinMaterialCache.set(normalized, resolved);
+                return resolved;
+            }
+        }
+
+        const materials = await queryAssets('db://internal/**/*.mtl');
+        const sorted = [...materials].sort((a, b) => {
+            const urlA = String(a?.url ?? '');
+            const urlB = String(b?.url ?? '');
+            const score = (url) => {
+                let n = 0;
+                if (url.includes('/default_materials/'))
+                    n -= 10;
+                if (url.includes('missing-'))
+                    n += 100;
+                if (normalized.includes('sprite-gray') && url.includes('gray'))
+                    n -= 20;
+                if (normalized.includes('sprite') && url.includes('sprite'))
+                    n -= 10;
+                return n;
+            };
+            return score(urlA) - score(urlB);
+        });
+        for (const candidate of sorted) {
+            const url = String(candidate?.url ?? '');
+            const uuid = String(candidate?.uuid ?? '');
+            if (!url)
+                continue;
+            const finalUuid = uuid || String((await queryAssetInfo(url))?.uuid ?? '');
+            if (!finalUuid)
+                continue;
+            const loaded = await loadAssetByUuid(finalUuid);
+            const runtimeEffectName = normalizeBuiltinMaterialKey(loaded?.effectName ?? loaded?.effectAsset?.name ?? loaded?.effectAsset?._name ?? '');
+            if (runtimeEffectName === normalized) {
+                const resolved = { uuid: finalUuid, url, source: 'scan', effectName: runtimeEffectName };
+                builtinMaterialCache.set(normalized, resolved);
+                return resolved;
+            }
+        }
+        return { error: `未找到可用的内置材质资源: ${effectName}` };
+    }
+
+    function syncRendererMaterialRuntime(renderer, slotIndex, materialAsset, bindingProperty) {
+        if (!renderer || !materialAsset)
+            return false;
+        try {
+            const materialInstances = Array.isArray(renderer._materialInstances) ? renderer._materialInstances : null;
+            if (materialInstances && materialInstances[slotIndex]) {
+                try {
+                    if (typeof materialInstances[slotIndex]?.destroy === 'function')
+                        materialInstances[slotIndex].destroy();
+                }
+                catch (e) {
+                    logIgnored(ErrorCategory.PROPERTY_ASSIGN, `运行时材质实例销毁失败 (slot=${slotIndex})`, e);
+                }
+                materialInstances[slotIndex] = null;
+            }
+            if (bindingProperty === 'customMaterial' && 'customMaterial' in renderer) {
+                if (slotIndex === 0 && typeof renderer.setSharedMaterial === 'function')
+                    renderer.setSharedMaterial(materialAsset, slotIndex, true);
+                renderer.customMaterial = materialAsset;
+                if (typeof renderer.getMaterialInstance === 'function')
+                    renderer.getMaterialInstance(slotIndex);
+                return true;
+            }
+            if (typeof renderer.setSharedMaterial === 'function') {
+                renderer.setSharedMaterial(materialAsset, slotIndex, true);
+                if (typeof renderer.getMaterialInstance === 'function')
+                    renderer.getMaterialInstance(slotIndex);
+                return true;
+            }
+            if (typeof renderer.setMaterial === 'function') {
+                renderer.setMaterial(materialAsset, slotIndex);
+                if (typeof renderer.getMaterialInstance === 'function')
+                    renderer.getMaterialInstance(slotIndex);
+                return true;
+            }
+            if (Array.isArray(renderer.sharedMaterials)) {
+                const next = renderer.sharedMaterials.slice();
+                while (next.length <= slotIndex)
+                    next.push(null);
+                next[slotIndex] = materialAsset;
+                renderer.sharedMaterials = next;
+                if (typeof renderer.getMaterialInstance === 'function')
+                    renderer.getMaterialInstance(slotIndex);
+                return true;
+            }
+            if (slotIndex === 0 && 'customMaterial' in renderer) {
+                renderer.customMaterial = materialAsset;
+                if (typeof renderer.getMaterialInstance === 'function')
+                    renderer.getMaterialInstance(slotIndex);
+                return true;
+            }
+        }
+        catch (e) {
+            logIgnored(ErrorCategory.PROPERTY_ASSIGN, `运行时材质同步失败 (slot=${slotIndex})`, e);
+        }
+        return false;
+    }
+
+    async function bindMaterialAssetToRenderer(self, nodeUuid, node, renderer, resolvedCompName, slotIndex, materialUuid, opts = {}) {
+        const primary = await Promise.resolve(self.setComponentProperty(nodeUuid, resolvedCompName, `sharedMaterials.${slotIndex}`, { __uuid__: materialUuid }));
+        if (!(primary && typeof primary === 'object' && 'error' in primary)) {
+            const runtimeMaterial = await createFreshRuntimeMaterialFromJson(opts.materialJson, materialUuid)
+                || await loadAssetByUuid(materialUuid, { forceReload: true });
+            const bindingProperty = `sharedMaterials.${slotIndex}`;
+            const runtimeSynced = syncRendererMaterialRuntime(renderer, slotIndex, runtimeMaterial, bindingProperty);
+            return {
+                ...(primary && typeof primary === 'object' ? primary : {}),
+                bindingProperty,
+                ...(runtimeMaterial ? { runtimeMaterialSource: runtimeMaterial._effectAsset ? 'serialized-json' : 'asset-load' } : {}),
+                ...(runtimeSynced ? { runtimeSynced: true } : {}),
+            };
+        }
+        if (slotIndex === 0 && 'customMaterial' in renderer) {
+            const fallback = await Promise.resolve(self.setComponentProperty(nodeUuid, resolvedCompName, 'customMaterial', { __uuid__: materialUuid }));
+            if (!(fallback && typeof fallback === 'object' && 'error' in fallback)) {
+                const runtimeMaterial = await createFreshRuntimeMaterialFromJson(opts.materialJson, materialUuid)
+                    || await loadAssetByUuid(materialUuid, { forceReload: true });
+                const runtimeSynced = syncRendererMaterialRuntime(renderer, slotIndex, runtimeMaterial, 'customMaterial');
+                return {
+                    ...(fallback && typeof fallback === 'object' ? fallback : {}),
+                    bindingProperty: 'customMaterial',
+                    bindingFallbackFrom: `sharedMaterials.${slotIndex}`,
+                    ...(runtimeMaterial ? { runtimeMaterialSource: runtimeMaterial._effectAsset ? 'serialized-json' : 'asset-load' } : {}),
+                    ...(runtimeSynced ? { runtimeSynced: true } : {}),
+                };
+            }
+            return { error: `材质绑定失败: ${String(primary.error)}；customMaterial 回退也失败: ${String(fallback.error)}` };
+        }
+        return primary;
+    }
+
+    function dbUrlDirname(url) {
+        const value = String(url ?? '');
+        const idx = value.lastIndexOf('/');
+        return idx > 'db://'.length ? value.slice(0, idx) : 'db://assets';
+    }
+
+    function basenameWithoutExt(url) {
+        const last = String(url ?? '').split('/').pop() || 'material';
+        const dot = last.lastIndexOf('.');
+        return dot > 0 ? last.slice(0, dot) : last;
+    }
+
+    function sanitizeFileName(name) {
+        return String(name ?? 'material').replace(/[<>:"/\\|?*\x00-\x1F]/g, '-').replace(/\s+/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '') || 'material';
+    }
+
+    function deepCloneJson(value) {
+        return JSON.parse(JSON.stringify(value ?? null));
+    }
+
+    async function hydrateMaterialSerializedValue(value) {
+        if (Array.isArray(value)) {
+            const arr = [];
+            for (const item of value)
+                arr.push(await hydrateMaterialSerializedValue(item));
+            return arr;
+        }
+        if (!value || typeof value !== 'object')
+            return value;
+        if (typeof value.__uuid__ === 'string' && value.__uuid__) {
+            const asset = await loadAssetByUuid(String(value.__uuid__), { forceReload: true });
+            return asset || value;
+        }
+        const cc = getCC();
+        if ('r' in value || 'g' in value || 'b' in value) {
+            const Color = cc.Color;
+            if (typeof Color === 'function') {
+                return new Color(
+                    Number(value.r ?? 0),
+                    Number(value.g ?? 0),
+                    Number(value.b ?? 0),
+                    Number(value.a ?? 255),
+                );
+            }
+        }
+        if ('x' in value || 'y' in value || 'z' in value || 'w' in value) {
+            const hasW = 'w' in value;
+            const hasZ = 'z' in value;
+            const VecCtor = hasW ? cc.Vec4 : hasZ ? cc.Vec3 : cc.Vec2;
+            if (typeof VecCtor === 'function') {
+                return hasW
+                    ? new VecCtor(Number(value.x ?? 0), Number(value.y ?? 0), Number(value.z ?? 0), Number(value.w ?? 0))
+                    : hasZ
+                        ? new VecCtor(Number(value.x ?? 0), Number(value.y ?? 0), Number(value.z ?? 0))
+                        : new VecCtor(Number(value.x ?? 0), Number(value.y ?? 0));
+            }
+        }
+        const out = {};
+        for (const [k, v] of Object.entries(value))
+            out[k] = await hydrateMaterialSerializedValue(v);
+        return out;
+    }
+
+    async function createFreshRuntimeMaterialFromJson(materialJson, materialUuid = '') {
+        try {
+            const cc = getCC();
+            const MaterialCtor = cc?.Material;
+            if (typeof MaterialCtor !== 'function' || !materialJson || typeof materialJson !== 'object')
+                return null;
+            const material = new MaterialCtor();
+            const effectUuid = String(materialJson?._effectAsset?.__uuid__ ?? materialJson?._effectAsset?._uuid ?? '');
+            const effectAsset = effectUuid ? await loadAssetByUuid(effectUuid, { forceReload: true }) : null;
+            if (!effectAsset)
+                return null;
+            material._name = String(materialJson._name ?? materialUuid ?? 'RuntimeMaterial');
+            material._effectAsset = effectAsset;
+            material._techIdx = Number(materialJson._techIdx ?? 0);
+            material._defines = deepCloneJson(materialJson._defines ?? []);
+            material._states = deepCloneJson(materialJson._states ?? []);
+            material._props = await hydrateMaterialSerializedValue(materialJson._props ?? []);
+            if (materialUuid) {
+                try {
+                    material._uuid = materialUuid;
+                    material.uuid = materialUuid;
+                }
+                catch {
+                }
+            }
+            if (typeof material.onLoaded === 'function')
+                material.onLoaded();
+            else if (typeof material._update === 'function')
+                material._update();
+            return material;
+        }
+        catch (e) {
+            logIgnored(ErrorCategory.PROPERTY_ASSIGN, '根据材质 JSON 重建运行时材质失败', e);
+            return null;
+        }
+    }
+
+    async function queryAssetUrl(assetUuid) {
+        try {
+            const url = await Editor.Message.request('asset-db', 'query-url', assetUuid);
+            return typeof url === 'string' && url ? url : '';
+        }
+        catch (e) {
+            logIgnored(ErrorCategory.EDITOR_IPC, `query-url 失败 (${assetUuid})`, e);
+            return '';
+        }
+    }
+
+    async function ensureAssetDirExists(dirUrl) {
+        if (!dirUrl || dirUrl === 'db://assets' || dirUrl === 'db://internal')
+            return true;
+        const prefix = dirUrl.startsWith('db://internal') ? 'db://internal' : 'db://assets';
+        const suffix = dirUrl.slice(prefix.length).replace(/^\/+/, '');
+        if (!suffix)
+            return true;
+        const segments = suffix.split('/').filter(Boolean);
+        let current = prefix;
+        for (const seg of segments) {
+            current += `/${seg}`;
+            const existing = await queryAssetInfo(current);
+            if (existing)
+                continue;
+            try {
+                await Editor.Message.request('asset-db', 'create-asset', current, null);
+            }
+            catch (e) {
+                const retry = await queryAssetInfo(current);
+                if (!retry) {
+                    logIgnored(ErrorCategory.ASSET_OPERATION, `创建资源目录失败 (${current})`, e);
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    async function generateAvailableAssetUrl(baseUrl) {
+        try {
+            const generated = await Editor.Message.request('asset-db', 'generate-available-url', baseUrl);
+            return typeof generated === 'string' && generated ? generated : baseUrl;
+        }
+        catch (e) {
+            logIgnored(ErrorCategory.EDITOR_IPC, `generate-available-url 失败 (${baseUrl})`, e);
+            return baseUrl;
+        }
+    }
+
+    async function readMaterialAssetJson(url) {
+        const info = await queryAssetInfo(url);
+        const filePath = String(info?.file ?? '');
+        if (!info?.uuid || !filePath)
+            return { error: `无法读取材质资源: ${url}` };
+        try {
+            const fs = require('fs');
+            const text = fs.readFileSync(filePath, 'utf8');
+            return { info, json: JSON.parse(text) };
+        }
+        catch (e) {
+            return { error: `读取材质文件失败: ${e instanceof Error ? e.message : String(e)}` };
+        }
+    }
+
+    async function writeMaterialAssetJson(url, json) {
+        try {
+            await Editor.Message.request('asset-db', 'save-asset', url, JSON.stringify(json, null, 2));
+            await refreshAsset(url);
+            return true;
+        }
+        catch (e) {
+            logIgnored(ErrorCategory.ASSET_OPERATION, `保存材质资源失败 (${url})`, e);
+            return false;
+        }
+    }
+
+    async function getMaterialTechniqueCount(materialJson) {
+        const effectUuid = String(materialJson?._effectAsset?.__uuid__ ?? materialJson?._effectAsset?._uuid ?? '');
+        if (!effectUuid)
+            return 0;
+        const effectAsset = await loadAssetByUuid(effectUuid, { forceReload: true });
+        return Array.isArray(effectAsset?.techniques) ? effectAsset.techniques.length : 0;
+    }
+
+    async function getTechniqueCountFromBinding(binding) {
+        if (!binding || binding.error)
+            return 0;
+        const effectUuid = String(
+            binding.material?._effectAsset?._uuid
+            ?? binding.material?.effectAsset?._uuid
+            ?? binding.material?._effectAsset?.uuid
+            ?? binding.material?.effectAsset?.uuid
+            ?? '',
+        );
+        if (!effectUuid)
+            return 0;
+        const effectAsset = await loadAssetByUuid(effectUuid, { forceReload: true });
+        return Array.isArray(effectAsset?.techniques) ? effectAsset.techniques.length : 0;
+    }
+
+    async function resolveRendererSlotMaterialBinding(renderer, slotIndex) {
+        let material = null;
+        const sharedMats = renderer?.sharedMaterials;
+        if (Array.isArray(sharedMats))
+            material = sharedMats[slotIndex] ?? null;
+        if (!material && slotIndex === 0 && renderer?.customMaterial)
+            material = renderer.customMaterial;
+        if (!material)
+            return { error: `材质槽位 ${slotIndex} 为空` };
+
+        const uuidCandidates = [
+            material._uuid,
+            material.uuid,
+            material._id,
+        ].filter((v) => typeof v === 'string' && v);
+
+        for (const assetUuid of uuidCandidates) {
+            const url = await queryAssetUrl(assetUuid);
+            if (url) {
+                const info = await queryAssetInfo(url);
+                return {
+                    material,
+                    uuid: assetUuid,
+                    url,
+                    readonly: Boolean(info?.readonly) || url.startsWith('db://internal/'),
+                    info,
+                };
+            }
+        }
+
+        return {
+            material,
+            runtimeOnly: true,
+            effectName: normalizeBuiltinMaterialKey(material.effectName ?? material.effectAsset?.name ?? material.effectAsset?._name ?? ''),
+            technique: Number(material.technique ?? material._techIdx ?? 0),
+        };
+    }
+
+    async function cloneMaterialAssetForRenderer(self, nodeUuid, node, renderer, resolvedCompName, slotIndex, opts = {}) {
+        const binding = await resolveRendererSlotMaterialBinding(renderer, slotIndex);
+        if (binding?.error)
+            return binding;
+
+        let materialJson = null;
+        let clonedFromUrl = '';
+        let clonedFromUuid = '';
+
+        if (!binding.runtimeOnly && binding.url) {
+            const source = await readMaterialAssetJson(binding.url);
+            if (source?.error)
+                return source;
+            materialJson = deepCloneJson(source.json);
+            clonedFromUrl = binding.url;
+            clonedFromUuid = binding.uuid;
+        }
+        else {
+            const effectUuid = String(binding.material?._effectAsset?._uuid ?? binding.material?.effectAsset?._uuid ?? '');
+            if (!effectUuid)
+                return { error: '无法从运行时材质解析 effect 资源，不能克隆为可保存材质' };
+            materialJson = {
+                __type__: 'cc.Material',
+                _name: '',
+                _objFlags: 0,
+                _native: '',
+                _effectAsset: { __uuid__: effectUuid },
+                _techIdx: Number(binding.technique ?? 0),
+                _defines: deepCloneJson(binding.material?._defines ?? []),
+                _props: deepCloneJson(binding.material?._props ?? [{}]),
+            };
+        }
+
+        const requestedPath = String(opts.savePath ?? '').trim();
+        const baseName = sanitizeFileName(String(opts.baseName ?? `${node.name || 'Node'}-${resolvedCompName || 'Renderer'}-${slotIndex}`));
+        let targetUrl = requestedPath || `db://assets/materials/${baseName}.mtl`;
+        if (!requestedPath) {
+            targetUrl = await generateAvailableAssetUrl(targetUrl);
+        }
+        const dirUrl = dbUrlDirname(targetUrl);
+        const dirOk = await ensureAssetDirExists(dirUrl);
+        if (!dirOk)
+            return { error: `无法创建材质目录: ${dirUrl}` };
+
+        materialJson._name = sanitizeFileName(basenameWithoutExt(targetUrl));
+        const existing = await queryAssetInfo(targetUrl);
+        const saved = existing
+            ? await writeMaterialAssetJson(targetUrl, materialJson)
+            : await (async () => {
+                try {
+                    await Editor.Message.request('asset-db', 'create-asset', targetUrl, JSON.stringify(materialJson, null, 2));
+                    await refreshAsset(targetUrl);
+                    return true;
+                }
+                catch (e) {
+                    logIgnored(ErrorCategory.ASSET_OPERATION, `创建材质资源失败 (${targetUrl})`, e);
+                    return false;
+                }
+            })();
+        if (!saved)
+            return { error: `克隆材质资源失败: ${targetUrl}` };
+
+        const info = await queryAssetInfo(targetUrl);
+        if (!info?.uuid)
+            return { error: `无法解析克隆后的材质资源 UUID: ${targetUrl}` };
+        const rebound = await bindMaterialAssetToRenderer(self, nodeUuid, node, renderer, resolvedCompName, slotIndex, String(info.uuid), {
+            materialJson,
+        });
+        if (rebound && typeof rebound === 'object' && 'error' in rebound)
+            return rebound;
+        return {
+            success: true,
+            materialUrl: targetUrl,
+            materialUuid: String(info.uuid),
+            bindingProperty: rebound?.bindingProperty ?? `sharedMaterials.${slotIndex}`,
+            ...(clonedFromUrl ? { clonedFromUrl, clonedFromUuid } : {}),
+        };
+    }
+
+    async function resolvePersistableMaterialTarget(self, nodeUuid, node, renderer, resolvedCompName, slotIndex, opts = {}) {
+        const binding = await resolveRendererSlotMaterialBinding(renderer, slotIndex);
+        if (binding?.error)
+            return binding;
+        if (!binding.runtimeOnly && binding.url && !binding.readonly) {
+            return {
+                materialUrl: binding.url,
+                materialUuid: binding.uuid,
+                readonly: false,
+                cloned: false,
+            };
+        }
+        const clone = await cloneMaterialAssetForRenderer(self, nodeUuid, node, renderer, resolvedCompName, slotIndex, opts);
+        if (clone?.error)
+            return clone;
+        return {
+            materialUrl: clone.materialUrl,
+            materialUuid: clone.materialUuid,
+            bindingProperty: clone.bindingProperty,
+            cloned: true,
+            ...(clone.clonedFromUrl ? { clonedFromUrl: clone.clonedFromUrl, clonedFromUuid: clone.clonedFromUuid } : {}),
+        };
+    }
 
     /** 将纯数据属性写入组件（不先改运行时字段），支持 number/boolean/cc.Color/cc.Vec3 */
     async function applyPropsViaEditor(nodeUuid, node, comp, props) {
@@ -188,6 +804,109 @@ export function buildOperationHandlers(deps: SceneOperationDeps): Map<string, Op
             }
         }
         return okAll;
+    }
+
+    function classifySerializableValue(val) {
+        if (isAssetRef(val) || isNodeRef(val) || isComponentRef(val))
+            return { kind: 'ref' };
+        if (typeof val === 'boolean' || typeof val === 'number' || typeof val === 'string')
+            return { kind: 'primitive', dumpType: typeof val === 'boolean' ? 'boolean' : typeof val === 'number' ? 'number' : 'string', value: val };
+        if (val && typeof val === 'object' && !Array.isArray(val)) {
+            if ('r' in val) {
+                return {
+                    kind: 'editor-dump',
+                    dumpType: 'cc.Color',
+                    value: {
+                        r: Math.max(0, Math.min(255, Number(val.r ?? 0))),
+                        g: Math.max(0, Math.min(255, Number(val.g ?? 0))),
+                        b: Math.max(0, Math.min(255, Number(val.b ?? 0))),
+                        a: Math.max(0, Math.min(255, Number(val.a ?? 255))),
+                    },
+                };
+            }
+            if ('width' in val || 'height' in val) {
+                if ('x' in val || 'y' in val) {
+                    return {
+                        kind: 'editor-dump',
+                        dumpType: 'cc.Rect',
+                        value: {
+                            x: Number(val.x ?? 0),
+                            y: Number(val.y ?? 0),
+                            width: Number(val.width ?? 0),
+                            height: Number(val.height ?? 0),
+                        },
+                    };
+                }
+                return {
+                    kind: 'editor-dump',
+                    dumpType: 'cc.Size',
+                    value: {
+                        width: Number(val.width ?? 0),
+                        height: Number(val.height ?? 0),
+                    },
+                };
+            }
+            if ('x' in val || 'y' in val || 'z' in val || 'w' in val) {
+                if ('w' in val) {
+                    return { kind: 'unsupported', reason: 'Vec4 目前未实现稳定持久化' };
+                }
+                if ('z' in val) {
+                    return {
+                        kind: 'editor-dump',
+                        dumpType: 'cc.Vec3',
+                        value: { x: Number(val.x ?? 0), y: Number(val.y ?? 0), z: Number(val.z ?? 0) },
+                    };
+                }
+                return {
+                    kind: 'editor-dump',
+                    dumpType: 'cc.Vec2',
+                    value: { x: Number(val.x ?? 0), y: Number(val.y ?? 0) },
+                };
+            }
+        }
+        if (Array.isArray(val) && val.every(isAssetRef)) {
+            return { kind: 'ref-array' };
+        }
+        return { kind: 'unsupported', reason: Array.isArray(val) ? '数组持久化未实现' : '复杂对象持久化未实现' };
+    }
+
+    async function applySerializableComponentProperties(self, nodeUuid, node, compName, comp, props) {
+        const changed = {};
+        const errors = [];
+        const unsupportedPersistence = [];
+        for (const [key, val] of Object.entries(props)) {
+            if (key.startsWith('__') || key === 'constructor' || key === 'prototype') {
+                errors.push(`属性 "${key}" 不允许被设置`);
+                continue;
+            }
+            try {
+                const classified = classifySerializableValue(val);
+                if (classified.kind === 'ref' || classified.kind === 'ref-array') {
+                    const res = await Promise.resolve(self.setComponentProperty(nodeUuid, compName, key, val));
+                    if (res && typeof res === 'object' && 'error' in res)
+                        errors.push(`设置 ${key} 失败: ${String(res.error)}`);
+                    else
+                        changed[key] = val;
+                    continue;
+                }
+                if (classified.kind === 'primitive' || classified.kind === 'editor-dump') {
+                    const ok = await deps.notifyEditorComponentProperty(nodeUuid, node, comp, key, {
+                        type: classified.dumpType,
+                        value: classified.value,
+                    });
+                    if (ok)
+                        changed[key] = val;
+                    else
+                        errors.push(`IPC 设置 ${key} 失败`);
+                    continue;
+                }
+                unsupportedPersistence.push({ key, reason: classified.reason });
+            }
+            catch (err) {
+                errors.push(`设置 ${key} 失败: ${err instanceof Error ? err.message : String(err)}`);
+            }
+        }
+        return { changed, errors, unsupportedPersistence };
     }
 
     const handlers = new Map([
@@ -1150,72 +1869,28 @@ export function buildOperationHandlers(deps: SceneOperationDeps): Map<string, Op
         ['setup_physics_world', (_self, _scene, p) => {
                 const cc = getCC();
                 const { js } = cc;
-                const warnings = [];
-                // Try PhysicsSystem2D
                 const PS2D = js.getClassByName('PhysicsSystem2D') || js.getClassByName('cc.PhysicsSystem2D');
                 const PS3D = js.getClassByName('PhysicsSystem') || js.getClassByName('cc.PhysicsSystem');
                 const mode = String(p.mode ?? 'auto');
-                const applied = {};
-                if ((mode === '2d' || mode === 'auto') && PS2D) {
-                    try {
-                        const inst = PS2D.instance;
-                        if (inst) {
-                            if (p.gravity) {
-                                const g = p.gravity;
-                                inst.gravity = { x: g.x ?? 0, y: g.y ?? -320 };
-                                applied.gravity2D = inst.gravity;
-                            }
-                            if (p.allowSleep !== undefined) {
-                                inst.allowSleep = Boolean(p.allowSleep);
-                                applied.allowSleep2D = inst.allowSleep;
-                            }
-                            if (p.fixedTimeStep !== undefined) {
-                                inst.fixedTimeStep = Number(p.fixedTimeStep);
-                                applied.fixedTimeStep2D = inst.fixedTimeStep;
-                            }
-                            applied.physics2D = true;
-                        }
-                        else {
-                            warnings.push('PhysicsSystem2D.instance 不可用');
-                        }
-                    }
-                    catch (e) {
-                        logIgnored(ErrorCategory.ENGINE_API, 'PhysicsSystem2D 配置失败', e);
-                        warnings.push('PhysicsSystem2D 配置失败');
-                    }
-                }
-                if ((mode === '3d' || mode === 'auto') && PS3D) {
-                    try {
-                        const inst = PS3D.instance;
-                        if (inst) {
-                            if (p.gravity) {
-                                const g = p.gravity;
-                                const Vec3 = cc.Vec3;
-                                inst.gravity = new Vec3(g.x ?? 0, g.y ?? -10, g.z ?? 0);
-                                applied.gravity3D = p.gravity;
-                            }
-                            if (p.allowSleep !== undefined) {
-                                inst.allowSleep = Boolean(p.allowSleep);
-                                applied.allowSleep3D = inst.allowSleep;
-                            }
-                            if (p.fixedTimeStep !== undefined) {
-                                inst.fixedTimeStep = Number(p.fixedTimeStep);
-                                applied.fixedTimeStep3D = inst.fixedTimeStep;
-                            }
-                            applied.physics3D = true;
-                        }
-                        else {
-                            warnings.push('PhysicsSystem.instance 不可用');
-                        }
-                    }
-                    catch (e) {
-                        logIgnored(ErrorCategory.ENGINE_API, 'PhysicsSystem 配置失败', e);
-                        warnings.push('PhysicsSystem 配置失败');
-                    }
-                }
-                if (!applied.physics2D && !applied.physics3D)
-                    return { error: '物理系统不可用（2D 和 3D 均未找到）', warnings };
-                return { success: true, ...applied, _runtimeOnly: true, _note: '直接修改 PhysicsSystem.instance，非场景序列化数据', ...(warnings.length ? { warnings } : {}) };
+                const supports2D = Boolean((mode === '2d' || mode === 'auto') && PS2D?.instance);
+                const supports3D = Boolean((mode === '3d' || mode === 'auto') && PS3D?.instance);
+                if (!supports2D && !supports3D)
+                    return { error: '物理系统不可用（2D 和 3D 均未找到）' };
+                return {
+                    error: '当前版本未实现 PhysicsSystem 世界配置的稳定持久化，已阻止仅运行时修改。',
+                    unsupportedPersistence: true,
+                    requested: {
+                        mode,
+                        gravity: p.gravity ?? null,
+                        allowSleep: p.allowSleep,
+                        fixedTimeStep: p.fixedTimeStep,
+                    },
+                    availableSystems: {
+                        physics2D: supports2D,
+                        physics3D: supports3D,
+                    },
+                    note: 'PhysicsSystem.instance 属于运行时全局状态，不属于场景序列化数据。',
+                };
             }],
         // ─── create_skeleton_node: Spine/DragonBones node setup ──────────────
         ['create_skeleton_node', (_self, scene, p) => {
@@ -1896,7 +2571,6 @@ export function buildOperationHandlers(deps: SceneOperationDeps): Map<string, Op
                 })();
             }],
         ['set_material_property', (_self, scene, p) => {
-                const cc = getCC();
                 const uuid = String(p.uuid ?? '');
                 if (!uuid)
                     return { error: '缺少 uuid 参数' };
@@ -1905,93 +2579,78 @@ export function buildOperationHandlers(deps: SceneOperationDeps): Map<string, Op
                     return r;
                 const slotIndex = Number(p.materialIndex ?? 0);
                 const compName = String(p.component ?? '');
-                // Find target renderer component
-                const comps = r.node._components || [];
-                let renderer = null;
-                let resolvedCompName = '';
-                for (const comp of comps) {
-                    const cn = comp.constructor?.name ?? comp.__classname__ ?? '';
-                    if (compName && cn !== compName && `cc.${cn}` !== compName)
-                        continue;
-                    const c = comp;
-                    if (Array.isArray(c.sharedMaterials) || c.customMaterial) {
-                        renderer = c;
-                        resolvedCompName = cn;
-                        break;
-                    }
-                }
-                if (!renderer)
+                const rendererInfo = findRendererOnNode(r.node, compName);
+                if (!rendererInfo)
                     return { error: `节点 ${r.node.name} 上未找到渲染器组件${compName ? ` (${compName})` : ''}` };
-                // Get material instance (clone if shared)
-                const sharedMats = renderer.sharedMaterials;
-                let mat = null;
-                if (Array.isArray(sharedMats) && sharedMats[slotIndex]) {
-                    mat = sharedMats[slotIndex];
-                }
-                else if (renderer.customMaterial) {
-                    mat = renderer.customMaterial;
-                }
-                if (!mat)
-                    return { error: `材质槽位 ${slotIndex} 为空` };
-                // Try to get a material instance (clone for safe editing)
-                const getMaterialInstance = renderer.getMaterialInstance;
-                if (typeof getMaterialInstance === 'function') {
-                    try {
-                        mat = getMaterialInstance.call(renderer, slotIndex);
-                    }
-                    catch (e) {
-                        logIgnored(ErrorCategory.ENGINE_API, '获取材质实例失败，使用共享材质', e);
-                    }
-                }
-                // Set uniform properties
                 const uniforms = p.uniforms;
                 if (!uniforms || typeof uniforms !== 'object')
                     return { error: '缺少 uniforms 参数（如 {"mainColor": {"r":255,"g":0,"b":0,"a":255}}）' };
-                const setProperty = mat.setProperty;
-                if (typeof setProperty !== 'function')
-                    return { error: '该材质不支持 setProperty 方法' };
-                const Color = cc.Color;
-                const Vec4 = cc.Vec4;
-                const changed = {};
-                for (const [uName, uVal] of Object.entries(uniforms)) {
-                    try {
-                        if (uVal && typeof uVal === 'object') {
+                return (async () => {
+                    const target = await resolvePersistableMaterialTarget(_self, uuid, r.node, rendererInfo.renderer, rendererInfo.resolvedCompName, slotIndex, {
+                        savePath: p.savePath,
+                        baseName: `${r.node.name}-${rendererInfo.resolvedCompName || 'Material'}-${slotIndex}`,
+                    });
+                    if (target?.error)
+                        return target;
+                    const asset = await readMaterialAssetJson(target.materialUrl);
+                    if (asset?.error)
+                        return asset;
+                    const json = deepCloneJson(asset.json);
+                    const techIdx = Number(json._techIdx ?? 0);
+                    if (!Array.isArray(json._props))
+                        json._props = [];
+                    while (json._props.length <= techIdx)
+                        json._props.push({});
+                    const changed = {};
+                    for (const [uName, uVal] of Object.entries(uniforms)) {
+                        if (uVal && typeof uVal === 'object' && !Array.isArray(uVal)) {
                             const v = uVal;
-                            // Detect color-like ({r,g,b,a}) vs vec-like ({x,y,z,w})
-                            if ('r' in v && Color) {
-                                const col = new Color(Math.max(0, Math.min(255, Number(v.r ?? 0))), Math.max(0, Math.min(255, Number(v.g ?? 0))), Math.max(0, Math.min(255, Number(v.b ?? 0))), Math.max(0, Math.min(255, Number(v.a ?? 255))));
-                                setProperty.call(mat, uName, col);
-                                changed[uName] = v;
+                            if ('r' in v) {
+                                json._props[techIdx][uName] = [
+                                    Math.max(0, Math.min(255, Number(v.r ?? 0))) / 255,
+                                    Math.max(0, Math.min(255, Number(v.g ?? 0))) / 255,
+                                    Math.max(0, Math.min(255, Number(v.b ?? 0))) / 255,
+                                    Math.max(0, Math.min(255, Number(v.a ?? 255))) / 255,
+                                ];
                             }
-                            else if ('x' in v && Vec4) {
-                                const vec = new Vec4(Number(v.x ?? 0), Number(v.y ?? 0), Number(v.z ?? 0), Number(v.w ?? 0));
-                                setProperty.call(mat, uName, vec);
-                                changed[uName] = v;
+                            else if ('x' in v || 'y' in v || 'z' in v || 'w' in v) {
+                                json._props[techIdx][uName] = [
+                                    Number(v.x ?? 0),
+                                    Number(v.y ?? 0),
+                                    Number(v.z ?? 0),
+                                    Number(v.w ?? 0),
+                                ];
                             }
                             else {
-                                setProperty.call(mat, uName, uVal);
-                                changed[uName] = uVal;
+                                json._props[techIdx][uName] = deepCloneJson(uVal);
                             }
                         }
                         else {
-                            setProperty.call(mat, uName, uVal);
-                            changed[uName] = uVal;
+                            json._props[techIdx][uName] = uVal;
                         }
+                        changed[uName] = uVal;
                     }
-                    catch (err) {
-                        changed[uName] = { error: err instanceof Error ? err.message : String(err) };
-                    }
-                }
-                const result = { success: true, uuid, name: r.node.name, component: resolvedCompName, materialIndex: slotIndex, changed };
-                return (async () => {
-                    if (renderer)
-                        await deps.notifyEditorComponentProperty(uuid, r.node, renderer, 'sharedMaterials', { type: 'array', value: renderer.sharedMaterials });
-                    result._inspectorRefreshed = true;
-                    return result;
+                    const ok = await writeMaterialAssetJson(target.materialUrl, json);
+                    if (!ok)
+                        return { error: `保存材质属性失败: ${target.materialUrl}` };
+                    await bindMaterialAssetToRenderer(_self, uuid, r.node, rendererInfo.renderer, rendererInfo.resolvedCompName, slotIndex, target.materialUuid, {
+                        materialJson: json,
+                    });
+                    return {
+                        success: true,
+                        uuid,
+                        name: r.node.name,
+                        component: rendererInfo.resolvedCompName,
+                        materialIndex: slotIndex,
+                        materialUrl: target.materialUrl,
+                        materialUuid: target.materialUuid,
+                        changed,
+                        ...(target.cloned ? { clonedToPersist: true, clonedFromUrl: target.clonedFromUrl, clonedFromUuid: target.clonedFromUuid } : {}),
+                        _inspectorRefreshed: true,
+                    };
                 })();
             }],
         ['assign_builtin_material', (_self, scene, p) => {
-                const cc = getCC();
                 const uuid = String(p.uuid ?? '');
                 if (!uuid)
                     return { error: '缺少 uuid 参数' };
@@ -2001,60 +2660,29 @@ export function buildOperationHandlers(deps: SceneOperationDeps): Map<string, Op
                 const effectName = String(p.effectName ?? 'builtin-standard');
                 const slotIndex = Number(p.materialIndex ?? 0);
                 const compName = String(p.component ?? '');
-                // Find renderer
-                const comps = r.node._components || [];
-                let renderer = null;
-                let resolvedCompName = '';
-                for (const comp of comps) {
-                    const cn = comp.constructor?.name ?? comp.__classname__ ?? '';
-                    if (compName && cn !== compName && `cc.${cn}` !== compName)
-                        continue;
-                    const c = comp;
-                    if (Array.isArray(c.sharedMaterials) || c.customMaterial || typeof c.setMaterial === 'function') {
-                        renderer = c;
-                        resolvedCompName = cn;
-                        break;
-                    }
-                }
-                if (!renderer)
+                const rendererInfo = findRendererOnNode(r.node, compName);
+                if (!rendererInfo)
                     return { error: `节点 ${r.node.name} 上未找到渲染器组件${compName ? ` (${compName})` : ''}` };
-                const Mat = cc.Material;
-                if (!Mat?.getBuiltinMaterial)
-                    return { error: '当前 Cocos 版本不支持 Material.getBuiltinMaterial' };
-                const builtinMat = Mat.getBuiltinMaterial(effectName);
-                if (!builtinMat)
-                    return { error: `未找到内置材质: ${effectName}` };
-                // Clone to avoid mutating the shared builtin
-                const clone = typeof builtinMat.clone === 'function'
-                    ? builtinMat.clone()
-                    : builtinMat;
-                // Apply optional color
-                if (p.color && typeof p.color === 'object') {
-                    const cv = p.color;
-                    const Color = cc.Color;
-                    if (Color && typeof clone.setProperty === 'function') {
-                        const col = new Color(Math.max(0, Math.min(255, Number(cv.r ?? 255))), Math.max(0, Math.min(255, Number(cv.g ?? 255))), Math.max(0, Math.min(255, Number(cv.b ?? 255))), Math.max(0, Math.min(255, Number(cv.a ?? 255))));
-                        clone.setProperty('mainColor', col);
-                    }
-                }
-                const setMaterial = renderer.setMaterial;
-                if (typeof setMaterial === 'function') {
-                    setMaterial.call(renderer, clone, slotIndex);
-                }
-                else {
-                    // Fallback: directly set sharedMaterials array
-                    const mats = renderer.sharedMaterials;
-                    if (Array.isArray(mats)) {
-                        mats[slotIndex] = clone;
-                        renderer.sharedMaterials = [...mats];
-                    }
-                }
-                const result = { success: true, uuid, name: r.node.name, component: resolvedCompName, effectName, materialIndex: slotIndex };
                 return (async () => {
-                    if (renderer)
-                        await deps.notifyEditorComponentProperty(uuid, r.node, renderer, 'sharedMaterials', { type: 'array', value: renderer.sharedMaterials });
-                    result._inspectorRefreshed = true;
-                    return result;
+                    const builtinRef = await resolveBuiltinMaterialAsset(effectName);
+                    if (builtinRef?.error)
+                        return builtinRef;
+                    const binding = await bindMaterialAssetToRenderer(_self, uuid, r.node, rendererInfo.renderer, rendererInfo.resolvedCompName, slotIndex, builtinRef.uuid);
+                    if (binding && typeof binding === 'object' && 'error' in binding)
+                        return binding;
+                    return {
+                        success: true,
+                        uuid,
+                        name: r.node.name,
+                        component: rendererInfo.resolvedCompName,
+                        effectName,
+                        materialIndex: slotIndex,
+                        materialUuid: builtinRef.uuid,
+                        materialUrl: builtinRef.url,
+                        bindingProperty: binding?.bindingProperty ?? `sharedMaterials.${slotIndex}`,
+                        _materialResolveSource: builtinRef.source,
+                        _inspectorRefreshed: true,
+                    };
                 })();
             }],
         // ─── P0: create_light — create a light node ──────────────────────────
@@ -2250,12 +2878,10 @@ export function buildOperationHandlers(deps: SceneOperationDeps): Map<string, Op
             }],
         // ─── P0: set_scene_environment — modify ambient/shadows/fog/skybox ───
         ['set_scene_environment', (_self, scene, p) => {
-                const cc = getCC();
                 const globals = scene.globals;
                 if (!globals)
                     return { error: '场景没有 globals 属性' };
                 const subsystem = String(p.subsystem ?? '');
-                const changed = {};
                 // Preset mode
                 if (p.envPreset || p.preset) {
                     const preset = String(p.envPreset ?? p.preset);
@@ -2289,45 +2915,40 @@ export function buildOperationHandlers(deps: SceneOperationDeps): Map<string, Op
                     const presetData = PRESETS[preset];
                     if (!presetData)
                         return { error: `未知预设: ${preset}，可用: ${Object.keys(PRESETS).join(', ')}` };
-                    for (const [sub, vals] of Object.entries(presetData)) {
-                        const target = globals[sub];
-                        if (target) {
-                            for (const [k, v] of Object.entries(vals))
-                                target[k] = v;
-                        }
-                    }
-                    return { success: true, preset, applied: presetData, _runtimeOnly: true, _note: '仅修改运行时 scene.globals，不经过 scene set-property，可能不会随场景保存' };
+                    return {
+                        error: '当前版本未实现 scene.globals 的稳定场景持久化，已阻止仅运行时修改。',
+                        unsupportedPersistence: true,
+                        preset,
+                        requested: presetData,
+                        note: 'scene.globals 需要走场景资产级写回；当前实现若直接改运行时会与保存/重启结果不一致。',
+                    };
                 }
                 if (!subsystem)
                     return { error: '缺少 subsystem 参数（ambient/shadows/fog/skybox）或 preset 参数' };
-                const Color = cc.Color;
-                const setColor = (target, key, val) => {
-                    if (Color) {
-                        const cv = val;
-                        target[key] = new Color(Math.max(0, Math.min(255, Number(cv.r ?? 0))), Math.max(0, Math.min(255, Number(cv.g ?? 0))), Math.max(0, Math.min(255, Number(cv.b ?? 0))), Math.max(0, Math.min(255, Number(cv.a ?? 255))));
-                        changed[key] = cv;
-                    }
-                };
+                const changed = {};
+                const clampColor = (val) => ({
+                    r: Math.max(0, Math.min(255, Number(val?.r ?? 0))),
+                    g: Math.max(0, Math.min(255, Number(val?.g ?? 0))),
+                    b: Math.max(0, Math.min(255, Number(val?.b ?? 0))),
+                    a: Math.max(0, Math.min(255, Number(val?.a ?? 255))),
+                });
                 if (subsystem === 'ambient') {
                     const ambient = globals.ambient;
                     if (!ambient)
                         return { error: 'globals.ambient 不存在' };
                     if (p.skyIllum !== undefined) {
-                        ambient.skyIllum = Number(p.skyIllum);
-                        changed.skyIllum = ambient.skyIllum;
+                        changed.skyIllum = Number(p.skyIllum);
                     }
                     if (p.skyLightIntensity !== undefined) {
-                        ambient.skyLightIntensity = Number(p.skyLightIntensity);
-                        changed.skyLightIntensity = ambient.skyLightIntensity;
+                        changed.skyLightIntensity = Number(p.skyLightIntensity);
                     }
                     if (p.mipmapLevel !== undefined) {
-                        ambient.mipmapLevel = Number(p.mipmapLevel);
-                        changed.mipmapLevel = ambient.mipmapLevel;
+                        changed.mipmapLevel = Number(p.mipmapLevel);
                     }
                     if (p.skyColor && typeof p.skyColor === 'object')
-                        setColor(ambient, 'skyColor', p.skyColor);
+                        changed.skyColor = clampColor(p.skyColor);
                     if (p.groundAlbedo && typeof p.groundAlbedo === 'object')
-                        setColor(ambient, 'groundAlbedo', p.groundAlbedo);
+                        changed.groundAlbedo = clampColor(p.groundAlbedo);
                 }
                 else if (subsystem === 'shadows') {
                     const shadows = globals.shadows;
@@ -2336,17 +2957,18 @@ export function buildOperationHandlers(deps: SceneOperationDeps): Map<string, Op
                     const numProps = ['enabled', 'type', 'distance', 'planeBias', 'maxReceived', 'size', 'autoAdapt'];
                     for (const prop of numProps) {
                         if (p[prop] !== undefined) {
-                            shadows[prop] = typeof p[prop] === 'boolean' ? p[prop] : Number(p[prop]);
-                            changed[prop] = shadows[prop];
+                            changed[prop] = typeof p[prop] === 'boolean' ? p[prop] : Number(p[prop]);
                         }
                     }
                     if (p.shadowColor && typeof p.shadowColor === 'object')
-                        setColor(shadows, 'shadowColor', p.shadowColor);
+                        changed.shadowColor = clampColor(p.shadowColor);
                     if (p.normal && typeof p.normal === 'object') {
                         const nv = p.normal;
-                        const Vec3 = cc.Vec3;
-                        shadows.normal = new Vec3(Number(nv.x ?? 0), Number(nv.y ?? 1), Number(nv.z ?? 0));
-                        changed.normal = nv;
+                        changed.normal = {
+                            x: Number(nv.x ?? 0),
+                            y: Number(nv.y ?? 1),
+                            z: Number(nv.z ?? 0),
+                        };
                     }
                 }
                 else if (subsystem === 'fog') {
@@ -2356,12 +2978,11 @@ export function buildOperationHandlers(deps: SceneOperationDeps): Map<string, Op
                     const fogProps = ['enabled', 'accurate', 'type', 'fogDensity', 'fogStart', 'fogEnd', 'fogAtten', 'fogTop', 'fogRange'];
                     for (const prop of fogProps) {
                         if (p[prop] !== undefined) {
-                            fog[prop] = typeof p[prop] === 'boolean' ? p[prop] : Number(p[prop]);
-                            changed[prop] = fog[prop];
+                            changed[prop] = typeof p[prop] === 'boolean' ? p[prop] : Number(p[prop]);
                         }
                     }
                     if (p.fogColor && typeof p.fogColor === 'object')
-                        setColor(fog, 'fogColor', p.fogColor);
+                        changed.fogColor = clampColor(p.fogColor);
                 }
                 else if (subsystem === 'skybox') {
                     const skybox = globals.skybox;
@@ -2370,8 +2991,7 @@ export function buildOperationHandlers(deps: SceneOperationDeps): Map<string, Op
                     const skyProps = ['enabled', 'useIBL', 'useHDR', 'isRGBE', 'rotationAngle'];
                     for (const prop of skyProps) {
                         if (p[prop] !== undefined) {
-                            skybox[prop] = typeof p[prop] === 'boolean' ? p[prop] : Number(p[prop]);
-                            changed[prop] = skybox[prop];
+                            changed[prop] = typeof p[prop] === 'boolean' ? p[prop] : Number(p[prop]);
                         }
                     }
                 }
@@ -2380,7 +3000,13 @@ export function buildOperationHandlers(deps: SceneOperationDeps): Map<string, Op
                 }
                 if (Object.keys(changed).length === 0)
                     return { error: `未指定任何要修改的 ${subsystem} 属性` };
-                return { success: true, subsystem, changed, _runtimeOnly: true, _note: '仅修改运行时 scene.globals' };
+                return {
+                    error: '当前版本未实现 scene.globals 的稳定场景持久化，已阻止仅运行时修改。',
+                    unsupportedPersistence: true,
+                    subsystem,
+                    requested: changed,
+                    note: 'scene.globals 需要走场景资产级写回；当前实现若直接改运行时会与保存/重启结果不一致。',
+                };
             }],
         // ─── P1: set_material_define — set shader compile macros ─────────────
         ['set_material_define', (_self, scene, p) => {
@@ -2394,95 +3020,65 @@ export function buildOperationHandlers(deps: SceneOperationDeps): Map<string, Op
                 const defines = p.defines;
                 if (!defines || typeof defines !== 'object')
                     return { error: '缺少 defines 参数（如 {"USE_ALBEDO_MAP": true}）' };
-                // Find renderer
-                const comps = r.node._components || [];
-                let renderer = null;
-                for (const comp of comps) {
-                    const c = comp;
-                    if (Array.isArray(c.sharedMaterials) || c.customMaterial) {
-                        renderer = c;
-                        break;
-                    }
-                }
-                if (!renderer)
+                const compName = String(p.component ?? '');
+                const rendererInfo = findRendererOnNode(r.node, compName);
+                if (!rendererInfo)
                     return { error: `节点 ${r.node.name} 上未找到渲染器组件` };
-                // Get material instance
-                const getMaterialInstance = renderer.getMaterialInstance;
-                let mat = null;
-                if (typeof getMaterialInstance === 'function') {
-                    try {
-                        mat = getMaterialInstance.call(renderer, slotIndex);
-                    }
-                    catch (e) {
-                        logIgnored(ErrorCategory.ENGINE_API, '获取材质实例失败，回退到共享材质', e);
-                    }
-                }
-                if (!mat) {
-                    const sharedMats = renderer.sharedMaterials;
-                    if (Array.isArray(sharedMats))
-                        mat = sharedMats[slotIndex] ?? null;
-                }
-                if (!mat)
-                    return { error: `材质槽位 ${slotIndex} 为空` };
-                // Get passes and set defines
-                const passes = mat.passes;
-                if (!Array.isArray(passes) || passes.length === 0)
-                    return { error: '材质没有可用的 pass' };
-                const passIdx = Number(p.passIndex ?? 0);
-                const pass = passes[passIdx];
-                if (!pass)
-                    return { error: `pass 索引 ${passIdx} 超出范围 (共 ${passes.length} 个)` };
-                const changed = {};
-                const redefine = typeof mat.recompileShaders === 'function' ? mat.recompileShaders : null;
-                // Approach 1: use overridePipelineStates / recompileShaders on material
-                // Approach 2: set defines directly on pass
-                for (const [defName, defVal] of Object.entries(defines)) {
-                    try {
-                        if (typeof pass.setDynamic === 'function') {
-                            pass.setDynamic(defName, defVal);
-                        }
-                        // Direct property access
-                        const defs = pass.defines;
-                        if (defs)
-                            defs[defName] = defVal;
-                        changed[defName] = defVal;
-                    }
-                    catch (err) {
-                        changed[defName] = { error: err instanceof Error ? err.message : String(err) };
-                    }
-                }
-                // Try to recompile
-                let recompiled = false;
-                if (redefine) {
-                    try {
-                        redefine.call(mat, defines);
-                        recompiled = true;
-                    }
-                    catch (e) {
-                        logIgnored(ErrorCategory.ENGINE_API, '材质 redefine 编译失败', e);
-                    }
-                }
-                // Try pass.tryCompile
-                if (!recompiled && typeof pass.tryCompile === 'function') {
-                    try {
-                        pass.tryCompile.call(pass);
-                        recompiled = true;
-                    }
-                    catch (e) {
-                        logIgnored(ErrorCategory.ENGINE_API, '材质 pass.tryCompile 失败', e);
-                    }
-                }
-                const result = { success: true, uuid, name: r.node.name, materialIndex: slotIndex, passIndex: passIdx, changed, recompiled };
                 return (async () => {
-                    if (renderer)
-                        await deps.notifyEditorComponentProperty(uuid, r.node, renderer, 'sharedMaterials', { type: 'array', value: renderer.sharedMaterials });
-                    result._inspectorRefreshed = true;
-                    return result;
+                    const currentBinding = await resolveRendererSlotMaterialBinding(rendererInfo.renderer, slotIndex);
+                    if (currentBinding?.error)
+                        return currentBinding;
+                    const currentTechnique = Number(currentBinding?.material?.technique ?? currentBinding?.material?._techIdx ?? 0);
+                    const currentTechniqueCount = await getTechniqueCountFromBinding(currentBinding);
+                    if (currentTechniqueCount > 0 && (techniqueIndex < 0 || techniqueIndex >= currentTechniqueCount)) {
+                        return {
+                            error: `Technique ${techniqueIndex} 超出当前材质可用范围`,
+                            materialUrl: currentBinding?.url ?? null,
+                            materialUuid: currentBinding?.uuid ?? null,
+                            currentTechnique,
+                            techniqueCount: currentTechniqueCount,
+                            validRange: `0-${Math.max(0, currentTechniqueCount - 1)}`,
+                        };
+                    }
+                    const target = await resolvePersistableMaterialTarget(_self, uuid, r.node, rendererInfo.renderer, rendererInfo.resolvedCompName, slotIndex, {
+                        savePath: p.savePath,
+                        baseName: `${r.node.name}-${rendererInfo.resolvedCompName || 'Material'}-${slotIndex}`,
+                    });
+                    if (target?.error)
+                        return target;
+                    const asset = await readMaterialAssetJson(target.materialUrl);
+                    if (asset?.error)
+                        return asset;
+                    const json = deepCloneJson(asset.json);
+                    const techIdx = Number(json._techIdx ?? 0);
+                    if (!Array.isArray(json._defines))
+                        json._defines = [];
+                    while (json._defines.length <= techIdx)
+                        json._defines.push({});
+                    for (const [defName, defVal] of Object.entries(defines)) {
+                        json._defines[techIdx][defName] = defVal;
+                    }
+                    const ok = await writeMaterialAssetJson(target.materialUrl, json);
+                    if (!ok)
+                        return { error: `保存材质 defines 失败: ${target.materialUrl}` };
+                    await bindMaterialAssetToRenderer(_self, uuid, r.node, rendererInfo.renderer, rendererInfo.resolvedCompName, slotIndex, target.materialUuid, {
+                        materialJson: json,
+                    });
+                    return {
+                        success: true,
+                        uuid,
+                        name: r.node.name,
+                        materialIndex: slotIndex,
+                        materialUrl: target.materialUrl,
+                        materialUuid: target.materialUuid,
+                        changed: defines,
+                        ...(target.cloned ? { clonedToPersist: true, clonedFromUrl: target.clonedFromUrl, clonedFromUuid: target.clonedFromUuid } : {}),
+                        _inspectorRefreshed: true,
+                    };
                 })();
             }],
         // ─── P1: assign_project_material — assign custom .mtl by db:// url ──
         ['assign_project_material', (_self, scene, p) => {
-                const cc = getCC();
                 const uuid = String(p.uuid ?? '');
                 if (!uuid)
                     return { error: '缺少 uuid 参数' };
@@ -2493,68 +3089,29 @@ export function buildOperationHandlers(deps: SceneOperationDeps): Map<string, Op
                 if ('error' in r)
                     return r;
                 const slotIndex = Number(p.materialIndex ?? 0);
-                // Find renderer
-                const comps = r.node._components || [];
-                let renderer = null;
-                let resolvedCompName = '';
-                for (const comp of comps) {
-                    const cn = comp.constructor?.name ?? comp.__classname__ ?? '';
-                    const c = comp;
-                    if (Array.isArray(c.sharedMaterials) || c.customMaterial || typeof c.setMaterial === 'function') {
-                        renderer = c;
-                        resolvedCompName = cn;
-                        break;
-                    }
-                }
-                if (!renderer)
+                const compName = String(p.component ?? '');
+                const rendererInfo = findRendererOnNode(r.node, compName);
+                if (!rendererInfo)
                     return { error: `节点 ${r.node.name} 上未找到渲染器组件` };
-                // Try to load material from assetManager
-                const assetManager = cc.assetManager;
-                if (!assetManager)
-                    return { error: 'cc.assetManager 不可用' };
-                let foundMat = null;
-                const isUrl = materialUrl.startsWith('db://');
-                const searchKey = isUrl ? materialUrl.replace('db://assets/', '') : '';
-                let scanned = 0;
-                const MAX_SCAN = 10000;
-                assetManager.assets.forEach((asset, assetUuid) => {
-                    if (foundMat || scanned >= MAX_SCAN)
-                        return;
-                    scanned++;
-                    if (isUrl) {
-                        const assetName = String(asset.name ?? asset.nativeUrl ?? '');
-                        if (assetName.includes(searchKey))
-                            foundMat = asset;
-                    }
-                    else {
-                        if (assetUuid === materialUrl)
-                            foundMat = asset;
-                    }
-                });
-                if (!foundMat) {
-                    return {
-                        error: `未在已加载资源中找到材质: ${materialUrl}。提示: 该材质需要先被引擎加载（在场景或预制体中引用过）。`,
-                        hint: '可以先用 asset_operation info 确认材质存在，或尝试在编辑器中手动拖拽一次。',
-                    };
-                }
-                // Assign material
-                const setMaterial = renderer.setMaterial;
-                if (typeof setMaterial === 'function') {
-                    setMaterial.call(renderer, foundMat, slotIndex);
-                }
-                else {
-                    const mats = renderer.sharedMaterials;
-                    if (Array.isArray(mats)) {
-                        mats[slotIndex] = foundMat;
-                        renderer.sharedMaterials = [...mats];
-                    }
-                }
-                const result = { success: true, uuid, name: r.node.name, component: resolvedCompName, materialUrl, materialIndex: slotIndex };
                 return (async () => {
-                    if (renderer)
-                        await deps.notifyEditorComponentProperty(uuid, r.node, renderer, 'sharedMaterials', { type: 'array', value: renderer.sharedMaterials });
-                    result._inspectorRefreshed = true;
-                    return result;
+                    const materialRef = await resolveMaterialAssetRef(materialUrl);
+                    if (materialRef?.error)
+                        return materialRef;
+                    const binding = await bindMaterialAssetToRenderer(_self, uuid, r.node, rendererInfo.renderer, rendererInfo.resolvedCompName, slotIndex, materialRef.uuid);
+                    if (binding && typeof binding === 'object' && 'error' in binding)
+                        return binding;
+                    return {
+                        success: true,
+                        uuid,
+                        name: r.node.name,
+                        component: rendererInfo.resolvedCompName,
+                        materialUrl: materialRef.url,
+                        materialUuid: materialRef.uuid,
+                        materialIndex: slotIndex,
+                        bindingProperty: binding?.bindingProperty ?? `sharedMaterials.${slotIndex}`,
+                        _materialResolveSource: materialRef.source,
+                        _inspectorRefreshed: true,
+                    };
                 })();
             }],
         // ─── P2: clone_material — clone material to independent instance ─────
@@ -2566,37 +3123,33 @@ export function buildOperationHandlers(deps: SceneOperationDeps): Map<string, Op
                 if ('error' in r)
                     return r;
                 const slotIndex = Number(p.materialIndex ?? 0);
-                const comps = r.node._components || [];
-                let renderer = null;
-                for (const comp of comps) {
-                    const c = comp;
-                    if (Array.isArray(c.sharedMaterials) || c.customMaterial) {
-                        renderer = c;
-                        break;
-                    }
-                }
-                if (!renderer)
+                const compName = String(p.component ?? '');
+                const rendererInfo = findRendererOnNode(r.node, compName);
+                if (!rendererInfo)
                     return { error: `节点 ${r.node.name} 上未找到渲染器组件` };
-                // Get material instance (this clones the shared material)
-                const getMaterialInstance = renderer.getMaterialInstance;
-                if (typeof getMaterialInstance !== 'function')
-                    return { error: '渲染器不支持 getMaterialInstance 方法' };
-                try {
-                    const instance = getMaterialInstance.call(renderer, slotIndex);
-                    if (!instance)
-                        return { error: `材质槽位 ${slotIndex} 为空` };
-                    const effectName = instance.effectName ?? instance.effectAsset?.name ?? 'unknown';
-                    const result = { success: true, uuid, name: r.node.name, materialIndex: slotIndex, effectName, message: '材质已克隆为独立实例，修改不会影响其他节点' };
-                    return (async () => {
-                        if (renderer)
-                            await deps.notifyEditorComponentProperty(uuid, r.node, renderer, 'sharedMaterials', { type: 'array', value: renderer.sharedMaterials });
-                        result._inspectorRefreshed = true;
-                        return result;
-                    })();
-                }
-                catch (err) {
-                    return { error: `克隆材质失败: ${err instanceof Error ? err.message : String(err)}` };
-                }
+                return (async () => {
+                    const clone = await cloneMaterialAssetForRenderer(_self, uuid, r.node, rendererInfo.renderer, rendererInfo.resolvedCompName, slotIndex, {
+                        savePath: p.savePath,
+                        baseName: `${r.node.name}-${rendererInfo.resolvedCompName || 'Material'}-${slotIndex}`,
+                    });
+                    if (clone?.error)
+                        return clone;
+                    const asset = await readMaterialAssetJson(clone.materialUrl);
+                    const effectUuid = String(asset?.json?._effectAsset?.__uuid__ ?? '');
+                    return {
+                        success: true,
+                        uuid,
+                        name: r.node.name,
+                        materialIndex: slotIndex,
+                        materialUrl: clone.materialUrl,
+                        materialUuid: clone.materialUuid,
+                        ...(clone.clonedFromUrl ? { clonedFromUrl: clone.clonedFromUrl, clonedFromUuid: clone.clonedFromUuid } : {}),
+                        ...(effectUuid ? { effectUuid } : {}),
+                        bindingProperty: clone.bindingProperty,
+                        message: '材质已克隆为项目资源并重新绑定到节点',
+                        _inspectorRefreshed: true,
+                    };
+                })();
             }],
         // ─── P2: swap_technique — switch material technique index ────────────
         ['swap_technique', (_self, scene, p) => {
@@ -2608,48 +3161,65 @@ export function buildOperationHandlers(deps: SceneOperationDeps): Map<string, Op
                 if ('error' in r)
                     return r;
                 const slotIndex = Number(p.materialIndex ?? 0);
-                const comps = r.node._components || [];
-                let renderer = null;
-                for (const comp of comps) {
-                    const c = comp;
-                    if (Array.isArray(c.sharedMaterials) || c.customMaterial) {
-                        renderer = c;
-                        break;
-                    }
-                }
-                if (!renderer)
+                const compName = String(p.component ?? '');
+                const rendererInfo = findRendererOnNode(r.node, compName);
+                if (!rendererInfo)
                     return { error: `节点 ${r.node.name} 上未找到渲染器组件` };
-                const getMaterialInstance = renderer.getMaterialInstance;
-                let mat = null;
-                if (typeof getMaterialInstance === 'function') {
-                    try {
-                        mat = getMaterialInstance.call(renderer, slotIndex);
-                    }
-                    catch (e) {
-                        logIgnored(ErrorCategory.ENGINE_API, '获取材质实例失败，回退到共享材质', e);
-                    }
-                }
-                if (!mat) {
-                    const sharedMats = renderer.sharedMaterials;
-                    if (Array.isArray(sharedMats))
-                        mat = sharedMats[slotIndex] ?? null;
-                }
-                if (!mat)
-                    return { error: `材质槽位 ${slotIndex} 为空` };
-                const oldTechnique = mat.technique;
-                mat.technique = techniqueIndex;
-                const result = { success: true, uuid, name: r.node.name, materialIndex: slotIndex, oldTechnique, newTechnique: techniqueIndex };
                 return (async () => {
-                    if (renderer)
-                        await deps.notifyEditorComponentProperty(uuid, r.node, renderer, 'sharedMaterials', { type: 'array', value: renderer.sharedMaterials });
-                    result._inspectorRefreshed = true;
-                    return result;
+                    const target = await resolvePersistableMaterialTarget(_self, uuid, r.node, rendererInfo.renderer, rendererInfo.resolvedCompName, slotIndex, {
+                        savePath: p.savePath,
+                        baseName: `${r.node.name}-${rendererInfo.resolvedCompName || 'Material'}-${slotIndex}`,
+                    });
+                    if (target?.error)
+                        return target;
+                    const asset = await readMaterialAssetJson(target.materialUrl);
+                    if (asset?.error)
+                        return asset;
+                    const json = deepCloneJson(asset.json);
+                    const oldTechnique = Number(json._techIdx ?? 0);
+                    const techniqueCount = await getMaterialTechniqueCount(json);
+                    if (techniqueCount > 0 && (techniqueIndex < 0 || techniqueIndex >= techniqueCount)) {
+                        return {
+                            error: `Technique ${techniqueIndex} 超出当前材质可用范围`,
+                            materialUrl: target.materialUrl,
+                            materialUuid: target.materialUuid,
+                            currentTechnique: oldTechnique,
+                            techniqueCount,
+                            validRange: `0-${Math.max(0, techniqueCount - 1)}`,
+                        };
+                    }
+                    json._techIdx = techniqueIndex;
+                    if (!Array.isArray(json._props))
+                        json._props = [];
+                    while (json._props.length <= techniqueIndex)
+                        json._props.push({});
+                    if (!Array.isArray(json._defines))
+                        json._defines = [];
+                    while (json._defines.length <= techniqueIndex)
+                        json._defines.push({});
+                    const ok = await writeMaterialAssetJson(target.materialUrl, json);
+                    if (!ok)
+                        return { error: `保存材质 technique 失败: ${target.materialUrl}` };
+                    await bindMaterialAssetToRenderer(_self, uuid, r.node, rendererInfo.renderer, rendererInfo.resolvedCompName, slotIndex, target.materialUuid, {
+                        materialJson: json,
+                    });
+                    return {
+                        success: true,
+                        uuid,
+                        name: r.node.name,
+                        materialIndex: slotIndex,
+                        oldTechnique,
+                        newTechnique: techniqueIndex,
+                        materialUrl: target.materialUrl,
+                        materialUuid: target.materialUuid,
+                        ...(target.cloned ? { clonedToPersist: true, clonedFromUrl: target.clonedFromUrl, clonedFromUuid: target.clonedFromUuid } : {}),
+                        _inspectorRefreshed: true,
+                    };
                 })();
             }],
         // ─── P2: sprite_grayscale — toggle grayscale material on Sprite ──────
         ['sprite_grayscale', (_self, scene, p) => {
-                const cc = getCC();
-                const { js } = cc;
+                const { js } = getCC();
                 const uuid = String(p.uuid ?? '');
                 if (!uuid)
                     return { error: '缺少 uuid 参数' };
@@ -2663,6 +3233,8 @@ export function buildOperationHandlers(deps: SceneOperationDeps): Map<string, Op
                 const sprite = r.node.getComponent?.(SpriteClass);
                 if (!sprite)
                     return { error: `节点 ${r.node.name} 上没有 Sprite 组件` };
+                const spriteCompName = sprite.constructor?.name ?? sprite.__classname__ ?? 'Sprite';
+                const customMaterialPath = getComponentPropertyPath(r.node, sprite, 'customMaterial');
                 const notifySprite = async (res, prop, val) => {
                     const dumpType = typeof val === 'boolean' ? 'boolean' : 'object';
                     await deps.notifyEditorComponentProperty(uuid, r.node, sprite, prop, { type: dumpType, value: val });
@@ -2673,22 +3245,44 @@ export function buildOperationHandlers(deps: SceneOperationDeps): Map<string, Op
                     if ('grayscale' in sprite) {
                         return notifySprite({ success: true, uuid, name: r.node.name, grayscale: true, method: 'grayscale_property', _viaEditorIPC: true }, 'grayscale', true);
                     }
-                    const Mat = cc.Material;
-                    const grayMat = Mat?.getBuiltinMaterial?.('builtin-2d-gray-sprite');
-                    if (grayMat) {
-                        const clone = typeof grayMat.clone === 'function'
-                            ? grayMat.clone() : grayMat;
-                        sprite.customMaterial = clone;
-                        return notifySprite({ success: true, uuid, name: r.node.name, grayscale: true, method: 'gray_sprite_material', _assignsRuntimeFirst: true }, 'customMaterial', clone);
-                    }
-                    return { error: '无法启用灰度：Sprite 没有 grayscale 属性，且 builtin-2d-gray-sprite 材质不可用' };
+                    return (async () => {
+                        const grayRef = await resolveMaterialAssetRef(BUILTIN_MATERIAL_URLS['ui-sprite-gray']);
+                        if (grayRef?.error)
+                            return { error: `无法启用灰度：Sprite 没有 grayscale 属性，且灰度材质不可用 (${grayRef.error})` };
+                        const binding = await Promise.resolve(_self.setComponentProperty(uuid, spriteCompName, 'customMaterial', { __uuid__: grayRef.uuid }));
+                        if (binding && typeof binding === 'object' && 'error' in binding)
+                            return binding;
+                        return {
+                            success: true,
+                            uuid,
+                            name: r.node.name,
+                            grayscale: true,
+                            method: 'custom_material_asset',
+                            materialUuid: grayRef.uuid,
+                            materialUrl: grayRef.url,
+                            _inspectorRefreshed: true,
+                        };
+                    })();
                 }
                 else {
                     if ('grayscale' in sprite) {
                         return notifySprite({ success: true, uuid, name: r.node.name, grayscale: false, method: 'grayscale_property', _viaEditorIPC: true }, 'grayscale', false);
                     }
-                    sprite.customMaterial = null;
-                    return notifySprite({ success: true, uuid, name: r.node.name, grayscale: false, method: 'remove_custom_material', _assignsRuntimeFirst: true }, 'customMaterial', null);
+                    return (async () => {
+                        if (!customMaterialPath)
+                            return { error: '无法定位 Sprite.customMaterial 属性路径' };
+                        const ok = await ipcResetProperty(uuid, customMaterialPath);
+                        if (!ok)
+                            return { error: '重置 Sprite.customMaterial 失败' };
+                        return {
+                            success: true,
+                            uuid,
+                            name: r.node.name,
+                            grayscale: false,
+                            method: 'reset_custom_material',
+                            _inspectorRefreshed: true,
+                        };
+                    })();
                 }
             }],
         // ─── P2: camera_screenshot — capture camera view via RenderTexture ───
@@ -2784,67 +3378,17 @@ export function buildOperationHandlers(deps: SceneOperationDeps): Map<string, Op
                     return { error: '缺少 properties 参数（要设置的属性键值对）' };
                 }
                 return (async () => {
-                    const changed = {};
-                    const errors = [];
-                    const assignedRuntimeOnly = [];
-                    for (const [key, val] of Object.entries(props)) {
-                        if (key.startsWith('__') || key === 'constructor' || key === 'prototype') {
-                            errors.push(`属性 "${key}" 不允许被设置`);
-                            continue;
-                        }
-                        try {
-                            if (isAssetRef(val) || isNodeRef(val) || isComponentRef(val)) {
-                                const res = await Promise.resolve(self.setComponentProperty(uuid, compName, key, val));
-                                if (res && typeof res === 'object' && 'error' in res)
-                                    errors.push(`设置 ${key} 失败: ${String((res).error)}`);
-                                else
-                                    changed[key] = val;
-                                continue;
-                            }
-                            if (typeof val === 'boolean' || typeof val === 'number' || typeof val === 'string') {
-                                const dumpType = typeof val === 'boolean' ? 'boolean' : typeof val === 'number' ? 'number' : 'string';
-                                const ok = await deps.notifyEditorComponentProperty(uuid, r.node, comp, key, { type: dumpType, value: val });
-                                if (ok)
-                                    changed[key] = val;
-                                else
-                                    errors.push(`IPC 设置 ${key} 失败`);
-                                continue;
-                            }
-                            if (val && typeof val === 'object' && !Array.isArray(val) && 'r' in val) {
-                                const o = val;
-                                const ok = await deps.notifyEditorComponentProperty(uuid, r.node, comp, key, {
-                                    type: 'cc.Color',
-                                    value: {
-                                        r: Math.max(0, Math.min(255, Number(o.r ?? 0))),
-                                        g: Math.max(0, Math.min(255, Number(o.g ?? 0))),
-                                        b: Math.max(0, Math.min(255, Number(o.b ?? 0))),
-                                        a: Math.max(0, Math.min(255, Number(o.a ?? 255))),
-                                    },
-                                });
-                                if (ok)
-                                    changed[key] = val;
-                                else
-                                    errors.push(`IPC 设置 ${key} (Color) 失败`);
-                                continue;
-                            }
-                            comp[key] = val;
-                            changed[key] = val;
-                            assignedRuntimeOnly.push(key);
-                        }
-                        catch (err) {
-                            errors.push(`设置 ${key} 失败: ${err instanceof Error ? err.message : String(err)}`);
-                        }
-                    }
+                    const { changed, errors, unsupportedPersistence } = await applySerializableComponentProperties(self, uuid, r.node, compName, comp, props);
                     const result = {
-                        success: Object.keys(changed).length > 0 && errors.length === 0,
+                        success: Object.keys(changed).length > 0 && errors.length === 0 && unsupportedPersistence.length === 0,
                         uuid,
                         name: r.node.name,
                         component: compName,
                         changed,
                         ...(errors.length ? { errors } : {}),
-                        ...(assignedRuntimeOnly.length ? { assignedRuntimeOnly, _note: 'assignedRuntimeOnly 中的键仅写了运行时对象，未保证 Inspector/保存一致' } : {}),
+                        ...(unsupportedPersistence.length ? { unsupportedPersistence, _note: 'unsupportedPersistence 中的键未写入，避免产生仅运行时成功的假象' } : {}),
                     };
-                    if (Object.keys(changed).length > 0 && errors.length === 0) {
+                    if (Object.keys(changed).length > 0 && errors.length === 0 && unsupportedPersistence.length === 0) {
                         result._inspectorRefreshed = true;
                     }
                     return result;
@@ -2889,70 +3433,21 @@ export function buildOperationHandlers(deps: SceneOperationDeps): Map<string, Op
                     if (!comp)
                         return { error: `添加脚本组件 ${scriptName} 失败`, _addComponentResult: baseResult };
                     const props = p.properties;
-                    const changed = {};
-                    const propErrors = [];
-                    const assignedRuntimeOnly = [];
-                    if (props && typeof props === 'object') {
-                        for (const [key, val] of Object.entries(props)) {
-                            if (key.startsWith('__') || key === 'constructor' || key === 'prototype') {
-                                propErrors.push(`属性 "${key}" 不允许被设置`);
-                                continue;
-                            }
-                            try {
-                                if (isAssetRef(val) || isNodeRef(val) || isComponentRef(val)) {
-                                    const res = await Promise.resolve(self.setComponentProperty(uuid, scriptName, key, val));
-                                    if (res && typeof res === 'object' && 'error' in res)
-                                        propErrors.push(`设置 ${key} 失败: ${String(res.error)}`);
-                                    else
-                                        changed[key] = val;
-                                    continue;
-                                }
-                                if (typeof val === 'boolean' || typeof val === 'number' || typeof val === 'string') {
-                                    const dumpType = typeof val === 'boolean' ? 'boolean' : typeof val === 'number' ? 'number' : 'string';
-                                    const ok = await deps.notifyEditorComponentProperty(uuid, r2.node, comp, key, { type: dumpType, value: val });
-                                    if (ok)
-                                        changed[key] = val;
-                                    else
-                                        propErrors.push(`IPC 设置 ${key} 失败`);
-                                    continue;
-                                }
-                                if (val && typeof val === 'object' && !Array.isArray(val) && 'r' in val) {
-                                    const o = val;
-                                    const ok = await deps.notifyEditorComponentProperty(uuid, r2.node, comp, key, {
-                                        type: 'cc.Color',
-                                        value: {
-                                            r: Math.max(0, Math.min(255, Number(o.r ?? 0))),
-                                            g: Math.max(0, Math.min(255, Number(o.g ?? 0))),
-                                            b: Math.max(0, Math.min(255, Number(o.b ?? 0))),
-                                            a: Math.max(0, Math.min(255, Number(o.a ?? 255))),
-                                        },
-                                    });
-                                    if (ok)
-                                        changed[key] = val;
-                                    else
-                                        propErrors.push(`IPC 设置 ${key} (Color) 失败`);
-                                    continue;
-                                }
-                                comp[key] = val;
-                                changed[key] = val;
-                                assignedRuntimeOnly.push(key);
-                            }
-                            catch (err) {
-                                propErrors.push(`设置 ${key} 失败: ${err instanceof Error ? err.message : String(err)}`);
-                            }
-                        }
-                    }
+                    const { changed, errors: propErrors, unsupportedPersistence } =
+                        props && typeof props === 'object'
+                            ? await applySerializableComponentProperties(self, uuid, r2.node, scriptName, comp, props)
+                            : { changed: {}, errors: [], unsupportedPersistence: [] };
                     const result = {
-                        success: propErrors.length === 0,
+                        success: propErrors.length === 0 && unsupportedPersistence.length === 0,
                         uuid,
                         name: r2.node.name,
                         script: scriptName,
                         _addComponentResult: baseResult,
                         ...(Object.keys(changed).length > 0 ? { propertiesSet: changed } : {}),
                         ...(propErrors.length ? { propertyErrors: propErrors } : {}),
-                        ...(assignedRuntimeOnly.length ? { assignedRuntimeOnly, _note: 'assignedRuntimeOnly 仅运行时赋值' } : {}),
+                        ...(unsupportedPersistence.length ? { unsupportedPersistence, _note: 'unsupportedPersistence 中的键未写入，避免仅运行时成功' } : {}),
                     };
-                    if (Object.keys(changed).length > 0 && propErrors.length === 0) {
+                    if (Object.keys(changed).length > 0 && propErrors.length === 0 && unsupportedPersistence.length === 0) {
                         result._inspectorRefreshed = true;
                     }
                     return result;

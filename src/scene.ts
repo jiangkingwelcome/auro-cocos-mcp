@@ -738,26 +738,24 @@ export const methods = {
             }
             assets.push(loaded);
           }
-          comp[property] = assets;
           try {
-            await Editor.Message.request('scene', 'set-property', {
-              uuid,
-              path: propPath,
-              dump: { type: 'array', value: assets },
-            });
+            const resetOk = await ipcResetProperty(uuid, propPath);
+            if (!resetOk && assetUuids.length === 0) {
+              return { error: `设置资源数组失败: 无法清空属性 ${property}` };
+            }
+            for (let index = 0; index < assetUuids.length; index++) {
+              await Editor.Message.request('scene', 'set-property', {
+                uuid,
+                path: `${propPath}.${index}`,
+                dump: { type: 'cc.Asset', value: { uuid: assetUuids[index] } },
+              });
+            }
+            comp[property] = assets;
             return { success: true, uuid, component: componentName, property, resolvedViaEditorIPC: true, assetUuids };
           } catch (ipcErr: unknown) {
             const msg = ipcErr instanceof Error ? ipcErr.message : String(ipcErr);
             logIgnored(ErrorCategory.EDITOR_IPC, `set-property 资源数组 IPC 失败 (${propPath})`, ipcErr);
-            return {
-              success: true,
-              uuid,
-              component: componentName,
-              property,
-              resolvedFromRuntime: true,
-              assetUuids,
-              _ipcError: msg,
-            };
+            return { error: `设置资源数组失败: ${msg}。当前版本未允许仅运行时回退。`, assetUuids };
           }
         } catch (assetErr: unknown) {
           return { error: `设置资源数组失败: ${assetErr instanceof Error ? assetErr.message : String(assetErr)}` };
@@ -776,25 +774,16 @@ export const methods = {
       return (async () => {
         try {
           const loaded = await loadAssetByUuid(assetUuid);
-          if (loaded) {
-            comp[property] = loaded;
-          }
           await Editor.Message.request('scene', 'set-property', {
             uuid,
             path: propPath,
             dump: { type: 'cc.Asset', value: { uuid: assetUuid } },
           });
+          if (loaded) {
+            comp[property] = loaded;
+          }
           return { success: true, uuid, component: componentName, property, resolvedViaEditorIPC: true, assetUuid };
         } catch (ipcErr: unknown) {
-          try {
-            const loaded = await loadAssetByUuid(assetUuid);
-            if (loaded) {
-              comp[property] = loaded;
-              return { success: true, uuid, component: componentName, property, resolvedFromCache: true, assetUuid };
-            }
-          } catch (loadErr: unknown) {
-            logIgnored(ErrorCategory.EDITOR_IPC, `set-property 资源回退加载失败 (${propPath})`, loadErr);
-          }
           const msg = ipcErr instanceof Error ? ipcErr.message : String(ipcErr);
           logIgnored(ErrorCategory.EDITOR_IPC, `set-property IPC 失败 (${propPath})`, ipcErr);
           return { error: `设置资源引用失败: ${msg}。请确保资源已导入并刷新 AssetDB。`, assetUuid };
@@ -817,12 +806,6 @@ export const methods = {
           });
           return { success: true, uuid, component: componentName, property, resolvedViaEditorIPC: true, targetNodeUuid };
         } catch (ipcErr: unknown) {
-          const scene2 = getScene();
-          const targetNode = scene2 ? findNodeByUuid(scene2, targetNodeUuid) : null;
-          if (targetNode) {
-            comp[property] = targetNode;
-            return { success: true, uuid, component: componentName, property, resolvedFromRuntime: true, targetNodeUuid };
-          }
           const msg = ipcErr instanceof Error ? ipcErr.message : String(ipcErr);
           logIgnored(ErrorCategory.EDITOR_IPC, `set-property Node ref IPC 失败 (${propPath})`, ipcErr);
           return { error: `设置节点引用失败: ${msg}。请确保目标节点存在。`, targetNodeUuid };
@@ -849,20 +832,19 @@ export const methods = {
           });
           return { success: true, uuid, component: componentName, property, resolvedViaEditorIPC: true, targetNodeUuid, targetComponent: targetCompName };
         } catch (ipcErr: unknown) {
-          // Fallback: runtime assignment (Inspector won't auto-refresh)
-          const scene2 = getScene();
-          const targetNode = scene2 ? findNodeByUuid(scene2, targetNodeUuid) : null;
-          if (!targetNode) return { error: `设置组件引用失败: 未找到目标节点 ${targetNodeUuid}` };
-          const targetCompClass = js.getClassByName(targetCompName) || js.getClassByName('cc.' + targetCompName);
-          if (!targetCompClass) return { error: `设置组件引用失败: 未找到组件类 ${targetCompName}` };
-          const targetComp = targetNode.getComponent(targetCompClass);
-          if (!targetComp) return { error: `设置组件引用失败: 目标节点上没有组件 ${targetCompName}` };
-          comp[property] = targetComp;
           const msg = ipcErr instanceof Error ? ipcErr.message : String(ipcErr);
           logIgnored(ErrorCategory.EDITOR_IPC, `set-property Component ref IPC 失败 (${propPath})`, ipcErr);
-          return { success: true, uuid, component: componentName, property, resolvedFromRuntime: true, targetNodeUuid, targetComponent: targetCompName, _ipcError: msg };
+          return { error: `设置组件引用失败: ${msg}。请确保目标节点与组件存在。`, targetNodeUuid, targetComponent: targetCompName };
         }
       })();
+    }
+
+    if (Array.isArray(value)) {
+      return { error: `属性 "${property}" 的数组值暂未实现稳定持久化，请改用专用操作或资源引用数组。` };
+    }
+
+    if (value && typeof value === 'object') {
+      return { error: `属性 "${property}" 的复杂对象值暂未实现稳定持久化，请改用专用操作。` };
     }
 
     comp[property] = value;
@@ -1602,23 +1584,59 @@ export const methods = {
               const curSize = c.size as SizeLike | undefined;
               const w = toNum(params.width, curSize?.width ?? 100);
               const h = toNum(params.height, curSize?.height ?? 100);
-              c.size = Size ? new Size(w, h) : { width: w, height: h };
               const result: Record<string, unknown> = { success: true, uuid, collider: cn, size: { width: w, height: h } };
-              return (async () => { await notifyEditorComponentProperty(uuid, node, comp, 'size', { type: 'cc.Size', value: { width: w, height: h } }); result._inspectorRefreshed = true; return result; })();
+              return (async () => {
+                const ok = await notifyEditorComponentProperty(uuid, node, comp, 'size', { type: 'cc.Size', value: { width: w, height: h } });
+                if (!ok) {
+                  result.success = false;
+                  result.error = '碰撞体 size 持久化失败，已阻止仅运行时修改';
+                  return result;
+                }
+                c.size = Size ? new Size(w, h) : { width: w, height: h };
+                result._inspectorRefreshed = true;
+                return result;
+              })();
             }
           }
           if (cn.includes('CircleCollider') || cn.includes('SphereCollider')) {
             if (params.radius !== undefined) {
-              c.radius = toNum(params.radius);
-              const result: Record<string, unknown> = { success: true, uuid, collider: cn, radius: c.radius };
-              return (async () => { await notifyEditorComponentProperty(uuid, node, comp, 'radius', { type: 'number', value: c.radius }); result._inspectorRefreshed = true; return result; })();
+              const radius = toNum(params.radius);
+              const result: Record<string, unknown> = { success: true, uuid, collider: cn, radius };
+              return (async () => {
+                const ok = await notifyEditorComponentProperty(uuid, node, comp, 'radius', { type: 'number', value: radius });
+                if (!ok) {
+                  result.success = false;
+                  result.error = '碰撞体 radius 持久化失败，已阻止仅运行时修改';
+                  return result;
+                }
+                c.radius = radius;
+                result._inspectorRefreshed = true;
+                return result;
+              })();
             }
           }
           if (cn.includes('CapsuleCollider')) {
-            if (params.radius !== undefined) c.radius = toNum(params.radius);
-            if (params.height !== undefined) c.height = toNum(params.height);
-            const result: Record<string, unknown> = { success: true, uuid, collider: cn, radius: c.radius, height: c.height };
-            return (async () => { await notifyEditorProperty(uuid, 'active', { type: 'boolean', value: node.active }); result._inspectorRefreshed = true; return result; })();
+            const nextRadius = params.radius !== undefined ? toNum(params.radius) : c.radius;
+            const nextHeight = params.height !== undefined ? toNum(params.height) : c.height;
+            const result: Record<string, unknown> = { success: true, uuid, collider: cn, radius: nextRadius, height: nextHeight };
+            return (async () => {
+              let okAll = true;
+              if (params.radius !== undefined) {
+                okAll = await notifyEditorComponentProperty(uuid, node, comp, 'radius', { type: 'number', value: nextRadius }) && okAll;
+              }
+              if (params.height !== undefined) {
+                okAll = await notifyEditorComponentProperty(uuid, node, comp, 'height', { type: 'number', value: nextHeight }) && okAll;
+              }
+              if (!okAll) {
+                result.success = false;
+                result.error = 'CapsuleCollider 属性持久化失败，已阻止仅运行时修改';
+                return result;
+              }
+              if (params.radius !== undefined) c.radius = nextRadius;
+              if (params.height !== undefined) c.height = nextHeight;
+              result._inspectorRefreshed = true;
+              return result;
+            })();
           }
         }
         return { error: '节点上未找到碰撞体组件' };
@@ -1633,19 +1651,26 @@ export const methods = {
         if (!rb && RB3D) { const c = node.getComponent(RB3D); if (c) { rb = c as RigidBodyLike; rbType = 'RigidBody'; } }
         if (!rb) return { error: '节点上未找到 RigidBody 组件' };
         const applied: Partial<RigidBodyLike> = {};
-        if (params.mass !== undefined) { rb.mass = toNum(params.mass); applied.mass = rb.mass; }
-        if (params.linearDamping !== undefined) { rb.linearDamping = toNum(params.linearDamping); applied.linearDamping = rb.linearDamping; }
-        if (params.angularDamping !== undefined) { rb.angularDamping = toNum(params.angularDamping); applied.angularDamping = rb.angularDamping; }
-        if (params.gravityScale !== undefined) { rb.gravityScale = toNum(params.gravityScale); applied.gravityScale = rb.gravityScale; }
-        if (params.fixedRotation !== undefined) { rb.fixedRotation = !!params.fixedRotation; applied.fixedRotation = rb.fixedRotation; }
-        if (params.allowSleep !== undefined) { rb.allowSleep = !!params.allowSleep; applied.allowSleep = rb.allowSleep; }
-        if (params.bullet !== undefined) { rb.bullet = !!params.bullet; applied.bullet = rb.bullet; }
+        if (params.mass !== undefined) { applied.mass = toNum(params.mass); }
+        if (params.linearDamping !== undefined) { applied.linearDamping = toNum(params.linearDamping); }
+        if (params.angularDamping !== undefined) { applied.angularDamping = toNum(params.angularDamping); }
+        if (params.gravityScale !== undefined) { applied.gravityScale = toNum(params.gravityScale); }
+        if (params.fixedRotation !== undefined) { applied.fixedRotation = !!params.fixedRotation; }
+        if (params.allowSleep !== undefined) { applied.allowSleep = !!params.allowSleep; }
+        if (params.bullet !== undefined) { applied.bullet = !!params.bullet; }
         const rbResult: Record<string, unknown> = { success: true, uuid, rbType, applied };
         return (async () => {
+          let okAll = true;
           for (const [prop, val] of Object.entries(applied)) {
             const dt = typeof val === 'boolean' ? 'boolean' : 'number';
-            await notifyEditorComponentProperty(uuid, node, rb!, prop, { type: dt, value: val });
+            okAll = await notifyEditorComponentProperty(uuid, node, rb!, prop, { type: dt, value: val }) && okAll;
           }
+          if (!okAll) {
+            rbResult.success = false;
+            rbResult.error = 'RigidBody 属性持久化失败，已阻止仅运行时修改';
+            return rbResult;
+          }
+          Object.assign(rb!, applied);
           rbResult._inspectorRefreshed = true;
           return rbResult;
         })();
@@ -1657,14 +1682,21 @@ export const methods = {
           if (!cn.includes('Collider')) continue;
           const c = comp as ColliderComponentLike;
           const pmApplied: { friction?: number; restitution?: number; density?: number } = {};
-          if (params.friction !== undefined) { c.friction = toNum(params.friction); pmApplied.friction = c.friction; }
-          if (params.restitution !== undefined) { c.restitution = toNum(params.restitution); pmApplied.restitution = c.restitution; }
-          if (params.density !== undefined) { c.density = toNum(params.density); pmApplied.density = c.density; }
+          if (params.friction !== undefined) { pmApplied.friction = toNum(params.friction); }
+          if (params.restitution !== undefined) { pmApplied.restitution = toNum(params.restitution); }
+          if (params.density !== undefined) { pmApplied.density = toNum(params.density); }
           const pmResult: Record<string, unknown> = { success: true, uuid, collider: cn, applied: pmApplied };
           return (async () => {
+            let okAll = true;
             for (const [prop, val] of Object.entries(pmApplied)) {
-              await notifyEditorComponentProperty(uuid, node, comp, prop, { type: 'number', value: val });
+              okAll = await notifyEditorComponentProperty(uuid, node, comp, prop, { type: 'number', value: val }) && okAll;
             }
+            if (!okAll) {
+              pmResult.success = false;
+              pmResult.error = 'PhysicsMaterial 属性持久化失败，已阻止仅运行时修改';
+              return pmResult;
+            }
+            Object.assign(c, pmApplied);
             pmResult._inspectorRefreshed = true;
             return pmResult;
           })();
@@ -1675,15 +1707,31 @@ export const methods = {
         if (!node) return { error: `未找到节点: ${uuid}` };
         const group = toNum(params.group);
         let groupSet = false;
+        const colliders = [] as ColliderComponentLike[];
         for (const comp of (node._components || [])) {
           const cn = getComponentName(comp).replace('cc.', '');
           if (!cn.includes('Collider')) continue;
-          (comp as ColliderComponentLike).group = group;
           groupSet = true;
+          colliders.push(comp as ColliderComponentLike);
         }
         if (!groupSet) return { error: '节点上未找到碰撞体组件' };
         const grpResult: Record<string, unknown> = { success: true, uuid, group };
-        return (async () => { await notifyEditorProperty(uuid, 'active', { type: 'boolean', value: node!.active }); grpResult._inspectorRefreshed = true; return grpResult; })();
+        return (async () => {
+          let okAll = true;
+          for (const collider of colliders) {
+            okAll = await notifyEditorComponentProperty(uuid, node, collider, 'group', { type: 'number', value: group }) && okAll;
+          }
+          if (!okAll) {
+            grpResult.success = false;
+            grpResult.error = '碰撞组持久化失败，已阻止仅运行时修改';
+            return grpResult;
+          }
+          for (const collider of colliders) {
+            collider.group = group;
+          }
+          grpResult._inspectorRefreshed = true;
+          return grpResult;
+        })();
       }
       case 'get_physics_world': {
         type PhysicsWorldInfo = { gravity?: unknown; allowSleep?: boolean; fixedTimeStep?: number; enabled?: boolean };
@@ -1726,26 +1774,89 @@ export const methods = {
         if (!compName) return { error: `未知的 jointType: ${jointType}，支持: ${Object.keys(JOINT_MAP).join(', ')}` };
         const JointClass = js.getClassByName(compName) || js.getClassByName('cc.' + compName);
         if (!JointClass) return { error: `${compName} 组件不可用` };
-        const joint = node.addComponent(JointClass);
-        if (!joint) return { error: `无法添加 ${compName}` };
-        // Set connected body
-        if (params.connectedUuid) {
-          const connNode = findNodeByUuid(scene, toStr(params.connectedUuid));
-          if (connNode) {
+        return (async () => {
+          await ipcCreateComponent(uuid, compName);
+          const refreshedScene = getScene();
+          const refreshedNode = refreshedScene ? findNodeByUuid(refreshedScene, uuid) : null;
+          if (!refreshedNode) return { error: `未找到节点: ${uuid}` };
+          const joint = refreshedNode.getComponent(JointClass);
+          if (!joint) return { error: `无法取得 ${compName}` };
+          const unsupportedPersistence = [] as Array<{ key: string; reason: string }>;
+          let okAll = true;
+
+          if (params.connectedUuid) {
+            const connNodeUuid = toStr(params.connectedUuid);
+            const connNode = findNodeByUuid(refreshedScene, connNodeUuid);
+            if (!connNode) {
+              return { error: `未找到 connectedUuid 对应节点: ${connNodeUuid}` };
+            }
             const RB2D = js.getClassByName('RigidBody2D') || js.getClassByName('cc.RigidBody2D');
-            if (RB2D) {
-              const rb = connNode.getComponent(RB2D);
-              if (rb) joint.connectedBody = rb;
+            if (!RB2D || !connNode.getComponent(RB2D)) {
+              return { error: 'connectedUuid 节点上未找到 RigidBody2D 组件' };
+            }
+            const refResult = await methods.setComponentProperty(uuid, compName, 'connectedBody', {
+              __refType__: 'cc.Component',
+              uuid: connNodeUuid,
+              component: 'RigidBody2D',
+            });
+            if (!refResult || typeof refResult !== 'object' || (refResult as { success?: boolean; error?: string }).success === false || (refResult as { error?: string }).error) {
+              return {
+                error: `connectedBody 持久化失败: ${String((refResult as { error?: string } | undefined)?.error ?? '未知错误')}`,
+                component: compName,
+                jointType,
+              };
             }
           }
-        }
-        // Apply extra props
-        if (params.props && typeof params.props === 'object') {
-          for (const [k, v] of Object.entries(params.props as Record<string, unknown>)) {
-            try { joint[k] = v; } catch (e) { logIgnored(ErrorCategory.PROPERTY_ASSIGN, `关节属性 "${k}" 赋值失败`, e); }
+
+          if (params.props && typeof params.props === 'object') {
+            for (const [k, v] of Object.entries(params.props as Record<string, unknown>)) {
+              if (v === null || v === undefined) continue;
+              if (Array.isArray(v)) {
+                unsupportedPersistence.push({ key: k, reason: '数组持久化未实现' });
+                continue;
+              }
+              if (typeof v === 'object') {
+                unsupportedPersistence.push({ key: k, reason: '复杂对象持久化未实现' });
+                continue;
+              }
+              const dt = typeof v === 'boolean' ? 'boolean'
+                : typeof v === 'number' ? 'number'
+                : typeof v === 'string' ? 'string'
+                : null;
+              if (!dt) {
+                unsupportedPersistence.push({ key: k, reason: `不支持的属性类型: ${typeof v}` });
+                continue;
+              }
+              okAll = await notifyEditorComponentProperty(uuid, refreshedNode, joint, k, { type: dt, value: v }) && okAll;
+            }
           }
-        }
-        return { success: true, uuid, jointType, component: compName };
+
+          if (!okAll) {
+            return {
+              success: false,
+              uuid,
+              jointType,
+              component: compName,
+              error: '关节属性持久化失败，已阻止仅运行时修改',
+              ...(unsupportedPersistence.length ? { unsupportedPersistence } : {}),
+            };
+          }
+
+          if (params.props && typeof params.props === 'object') {
+            for (const [k, v] of Object.entries(params.props as Record<string, unknown>)) {
+              if (v === null || v === undefined) continue;
+              if (typeof v === 'object') continue;
+              try { joint[k] = v; } catch (e) { logIgnored(ErrorCategory.PROPERTY_ASSIGN, `关节属性 "${k}" 同步到运行时失败`, e); }
+            }
+          }
+
+          const result: Record<string, unknown> = { success: unsupportedPersistence.length === 0, uuid, jointType, component: compName, _editorIPC: true, _viaEditorIPC: true };
+          if (unsupportedPersistence.length) {
+            result.error = '部分关节属性暂未实现稳定持久化';
+            result.unsupportedPersistence = unsupportedPersistence;
+          }
+          return result;
+        })();
       }
       default:
         return { error: `未知的物理 action: ${action}` };
