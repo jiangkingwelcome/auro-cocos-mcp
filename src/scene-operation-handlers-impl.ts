@@ -27,6 +27,24 @@ export interface SceneOperationDeps {
   ipcResetProperty: (uuid: string, path: string) => Promise<boolean>;
 }
 
+function isSuccessfulResult(result: unknown): result is Record<string, unknown> & { success: true } {
+  return !!result && typeof result === 'object' && 'success' in result && result.success === true;
+}
+
+function getFailureReason(result: unknown, fallback: string): string {
+  if (result && typeof result === 'object') {
+    if ('error' in result && result.error) return String(result.error);
+    if ('message' in result && result.message) return String(result.message);
+  }
+  return fallback;
+}
+
+async function expectSuccessfulResult(resultOrPromise: unknown, fallback: string): Promise<Record<string, unknown> & { success: true }> {
+  const result = await Promise.resolve(resultOrPromise);
+  if (isSuccessfulResult(result)) return result;
+  throw new Error(getFailureReason(result, fallback));
+}
+
 /** 世界坐标 → 本地 position（仅用父节点变换，不修改目标节点） */
 function worldPointToLocalPosition(
   node: import('./scene-types').CocosNode,
@@ -391,7 +409,7 @@ export function buildOperationHandlers(deps: SceneOperationDeps): Map<string, Op
 
     async function bindMaterialAssetToRenderer(self, nodeUuid, node, renderer, resolvedCompName, slotIndex, materialUuid, opts = {}) {
         const primary = await Promise.resolve(self.setComponentProperty(nodeUuid, resolvedCompName, `sharedMaterials.${slotIndex}`, { __uuid__: materialUuid }));
-        if (!(primary && typeof primary === 'object' && 'error' in primary)) {
+        if (isSuccessfulResult(primary)) {
             const runtimeMaterial = await createFreshRuntimeMaterialFromJson(opts.materialJson, materialUuid)
                 || await loadAssetByUuid(materialUuid, { forceReload: true });
             const bindingProperty = `sharedMaterials.${slotIndex}`;
@@ -405,7 +423,7 @@ export function buildOperationHandlers(deps: SceneOperationDeps): Map<string, Op
         }
         if (slotIndex === 0 && 'customMaterial' in renderer) {
             const fallback = await Promise.resolve(self.setComponentProperty(nodeUuid, resolvedCompName, 'customMaterial', { __uuid__: materialUuid }));
-            if (!(fallback && typeof fallback === 'object' && 'error' in fallback)) {
+            if (isSuccessfulResult(fallback)) {
                 const runtimeMaterial = await createFreshRuntimeMaterialFromJson(opts.materialJson, materialUuid)
                     || await loadAssetByUuid(materialUuid, { forceReload: true });
                 const runtimeSynced = syncRendererMaterialRuntime(renderer, slotIndex, runtimeMaterial, 'customMaterial');
@@ -417,7 +435,9 @@ export function buildOperationHandlers(deps: SceneOperationDeps): Map<string, Op
                     ...(runtimeSynced ? { runtimeSynced: true } : {}),
                 };
             }
-            return { error: `材质绑定失败: ${String(primary.error)}；customMaterial 回退也失败: ${String(fallback.error)}` };
+            return {
+                error: `材质绑定失败: ${getFailureReason(primary, `sharedMaterials.${slotIndex} 绑定失败`)}；customMaterial 回退也失败: ${getFailureReason(fallback, 'customMaterial 绑定失败')}`,
+            };
         }
         return primary;
     }
@@ -729,7 +749,7 @@ export function buildOperationHandlers(deps: SceneOperationDeps): Map<string, Op
         const rebound = await bindMaterialAssetToRenderer(self, nodeUuid, node, renderer, resolvedCompName, slotIndex, String(info.uuid), {
             materialJson,
         });
-        if (rebound && typeof rebound === 'object' && 'error' in rebound)
+        if (!isSuccessfulResult(rebound))
             return rebound;
         return {
             success: true,
@@ -883,8 +903,8 @@ export function buildOperationHandlers(deps: SceneOperationDeps): Map<string, Op
                 const classified = classifySerializableValue(val);
                 if (classified.kind === 'ref' || classified.kind === 'ref-array') {
                     const res = await Promise.resolve(self.setComponentProperty(nodeUuid, compName, key, val));
-                    if (res && typeof res === 'object' && 'error' in res)
-                        errors.push(`设置 ${key} 失败: ${String(res.error)}`);
+                    if (!isSuccessfulResult(res))
+                        errors.push(`设置 ${key} 失败: ${getFailureReason(res, '未知错误')}`);
                     else
                         changed[key] = val;
                     continue;
@@ -1263,88 +1283,89 @@ export function buildOperationHandlers(deps: SceneOperationDeps): Map<string, Op
                 }
                 const DEFAULT_NAMES = { box: 'Cube', sphere: 'Sphere', cylinder: 'Cylinder', cone: 'Cone', plane: 'Plane', torus: 'Torus', capsule: 'Capsule', quad: 'Quad' };
                 const name = String(p.name ?? DEFAULT_NAMES[resolvedType] ?? 'Primitive');
-                const createRes = self.createChildNode(parentUuid, name);
-                if (createRes && typeof createRes === 'object' && 'error' in createRes)
-                    return createRes;
-                const nodeUuid = createRes?.uuid;
-                if (!nodeUuid)
-                    return { error: 'createChildNode 未返回 uuid' };
-                const addRes = self.addComponent(nodeUuid, 'MeshRenderer');
-                if (addRes && typeof addRes === 'object' && 'error' in addRes)
-                    return addRes;
-                try {
-                    let mesh;
-                    // Try primitives API (Cocos 3.x)
-                    const primFn = prims?.[resolvedType];
-                    if (typeof primFn === 'function' && utils?.MeshUtils?.createMesh) {
-                        const geometry = primFn();
-                        mesh = utils.MeshUtils.createMesh(geometry, undefined, { calculateBounds: true });
+                return (async () => {
+                    let createRes;
+                    let nodeUuid = '';
+                    try {
+                        createRes = await expectSuccessfulResult(self.createChildNode(parentUuid, name), 'createChildNode 失败');
+                        nodeUuid = String(createRes.uuid ?? '');
+                        if (!nodeUuid)
+                            return { error: 'createChildNode 未返回 uuid' };
+                        await expectSuccessfulResult(self.addComponent(nodeUuid, 'MeshRenderer'), '添加 MeshRenderer 失败');
                     }
-                    if (!mesh) {
-                        return { error: `当前 Cocos 版本不支持 primitives.${resolvedType}，需 Cocos Creator 3.x` };
+                    catch (err) {
+                        return { error: err instanceof Error ? err.message : String(err) };
                     }
-                    const r = requireNode(scene, nodeUuid);
-                    if ('error' in r)
-                        return r;
-                    const MeshRenderer = cc.MeshRenderer;
-                    const mr = r.node.getComponent(MeshRenderer);
-                    if (mr) {
-                        mr.mesh = mesh;
-                        // Shadow settings
-                        if (p.shadowCasting !== undefined || p.shadowCastingMode !== undefined) {
-                            const castVal = p.shadowCastingMode ?? (p.shadowCasting ? 1 : 0);
-                            if ('shadowCastingMode' in mr)
-                                mr.shadowCastingMode = Number(castVal);
+                    try {
+                        let mesh;
+                        // Try primitives API (Cocos 3.x)
+                        const primFn = prims?.[resolvedType];
+                        if (typeof primFn === 'function' && utils?.MeshUtils?.createMesh) {
+                            const geometry = primFn();
+                            mesh = utils.MeshUtils.createMesh(geometry, undefined, { calculateBounds: true });
                         }
-                        if (p.receiveShadow !== undefined) {
-                            if ('receiveShadow' in mr)
-                                mr.receiveShadow = Boolean(p.receiveShadow);
+                        if (!mesh) {
+                            return { error: `当前 Cocos 版本不支持 primitives.${resolvedType}，需 Cocos Creator 3.x` };
                         }
-                        try {
-                            const Mat = cc.Material;
-                            const Color = cc.Color;
-                            const builtinMat = Mat?.getBuiltinMaterial?.('builtin-unlit') ?? Mat?.getBuiltinMaterial?.('builtin-standard');
-                            if (builtinMat && mr.setMaterial) {
-                                const clone = typeof builtinMat.clone === 'function'
-                                    ? builtinMat.clone()
-                                    : builtinMat;
-                                let rVal = 66, gVal = 135, bVal = 245, aVal = 255;
-                                if (p.color && typeof p.color === 'object') {
-                                    const c = p.color;
-                                    rVal = Math.max(0, Math.min(255, Number(c.r ?? rVal)));
-                                    gVal = Math.max(0, Math.min(255, Number(c.g ?? gVal)));
-                                    bVal = Math.max(0, Math.min(255, Number(c.b ?? bVal)));
-                                    aVal = Math.max(0, Math.min(255, Number(c.a ?? aVal)));
-                                }
-                                if (Color) {
-                                    const col = new Color(rVal, gVal, bVal, aVal);
-                                    if (typeof clone.setProperty === 'function') {
-                                        clone.setProperty('mainColor', col);
+                        const r = requireNode(scene, nodeUuid);
+                        if ('error' in r)
+                            return r;
+                        const MeshRenderer = cc.MeshRenderer;
+                        const mr = r.node.getComponent(MeshRenderer);
+                        if (mr) {
+                            mr.mesh = mesh;
+                            // Shadow settings
+                            if (p.shadowCasting !== undefined || p.shadowCastingMode !== undefined) {
+                                const castVal = p.shadowCastingMode ?? (p.shadowCasting ? 1 : 0);
+                                if ('shadowCastingMode' in mr)
+                                    mr.shadowCastingMode = Number(castVal);
+                            }
+                            if (p.receiveShadow !== undefined) {
+                                if ('receiveShadow' in mr)
+                                    mr.receiveShadow = Boolean(p.receiveShadow);
+                            }
+                            try {
+                                const Mat = cc.Material;
+                                const Color = cc.Color;
+                                const builtinMat = Mat?.getBuiltinMaterial?.('builtin-unlit') ?? Mat?.getBuiltinMaterial?.('builtin-standard');
+                                if (builtinMat && mr.setMaterial) {
+                                    const clone = typeof builtinMat.clone === 'function'
+                                        ? builtinMat.clone()
+                                        : builtinMat;
+                                    let rVal = 66, gVal = 135, bVal = 245, aVal = 255;
+                                    if (p.color && typeof p.color === 'object') {
+                                        const c = p.color;
+                                        rVal = Math.max(0, Math.min(255, Number(c.r ?? rVal)));
+                                        gVal = Math.max(0, Math.min(255, Number(c.g ?? gVal)));
+                                        bVal = Math.max(0, Math.min(255, Number(c.b ?? bVal)));
+                                        aVal = Math.max(0, Math.min(255, Number(c.a ?? aVal)));
                                     }
+                                    if (Color) {
+                                        const col = new Color(rVal, gVal, bVal, aVal);
+                                        if (typeof clone.setProperty === 'function') {
+                                            clone.setProperty('mainColor', col);
+                                        }
+                                    }
+                                    mr.setMaterial(clone, 0);
                                 }
-                                mr.setMaterial(clone, 0);
+                            }
+                            catch (e) {
+                                logIgnored(ErrorCategory.ENGINE_API, '设置几何体材质/颜色失败（部分版本路径不同，可能显示默认色）', e);
                             }
                         }
-                        catch (e) {
-                            logIgnored(ErrorCategory.ENGINE_API, '设置几何体材质/颜色失败（部分版本路径不同，可能显示默认色）', e);
-                        }
                     }
-                }
-                catch (err) {
-                    return { error: `创建 ${resolvedType} 网格失败: ${err instanceof Error ? err.message : String(err)}` };
-                }
-                const result = {
-                    success: true,
-                    uuid: nodeUuid,
-                    name,
-                    type: resolvedType,
-                    _structureViaEditorIPC: true,
-                    _meshMaterialViaRuntime: true,
-                    _note: 'Mesh/shadow/材质实例在运行时生成，仅 sharedMaterials 等通过 IPC 同步',
-                };
-                return (async () => {
-                    await Promise.resolve(createRes);
-                    await Promise.resolve(addRes);
+                    catch (err) {
+                        return { error: `创建 ${resolvedType} 网格失败: ${err instanceof Error ? err.message : String(err)}` };
+                    }
+                    const result = {
+                        success: true,
+                        uuid: nodeUuid,
+                        name,
+                        type: resolvedType,
+                        _structureViaEditorIPC: true,
+                        _meshMaterialViaRuntime: true,
+                        _note: 'Mesh/shadow/材质实例在运行时生成，仅 sharedMaterials 等通过 IPC 同步',
+                    };
                     const rr = requireNode(scene, nodeUuid);
                     if (!('error' in rr)) {
                         const MR = cc.MeshRenderer;
@@ -1516,8 +1537,8 @@ export function buildOperationHandlers(deps: SceneOperationDeps): Map<string, Op
                     try {
                         const addCompIpc = async (uuid, compShortName) => {
                             const res = await Promise.resolve(self.addComponent(uuid, compShortName));
-                            if (res && typeof res === 'object' && 'error' in res)
-                                throw new Error(String(res.error));
+                            if (!isSuccessfulResult(res))
+                                throw new Error(getFailureReason(res, `添加组件 ${compShortName} 失败`));
                             return res;
                         };
                         const newChildUuid = async (parentUuid, childName) => {
@@ -1821,8 +1842,8 @@ export function buildOperationHandlers(deps: SceneOperationDeps): Map<string, Op
                     let comp = r.node.getComponent(AudioSource);
                     if (!comp) {
                         const addRes = await Promise.resolve(self.addComponent(uuid, 'AudioSource'));
-                        if (addRes && typeof addRes === 'object' && 'error' in addRes)
-                            return addRes;
+                        if (!isSuccessfulResult(addRes))
+                            return { error: getFailureReason(addRes, '添加 AudioSource 失败') };
                         const r2 = requireNode(scene, uuid);
                         if ('error' in r2)
                             return r2;
@@ -1969,9 +1990,12 @@ export function buildOperationHandlers(deps: SceneOperationDeps): Map<string, Op
                         if (!comp)
                             return { error: '无法取得 TiledMap 组件', uuid: nodeUuid, partial: true };
                         let tmxOk = true;
+                        let tmxError = '';
                         if (p.tmxAsset !== undefined && p.tmxAsset !== null) {
                             const sp = await Promise.resolve(self.setComponentProperty(nodeUuid, 'TiledMap', 'tmxAsset', p.tmxAsset));
-                            tmxOk = !!(sp && typeof sp === 'object' && !('error' in sp && sp.error));
+                            tmxOk = isSuccessfulResult(sp);
+                            if (!tmxOk)
+                                tmxError = getFailureReason(sp, 'tmxAsset 持久化失败');
                         }
                         const okA = await deps.notifyEditorProperty(nodeUuid, 'active', { type: 'boolean', value: true });
                         const result = {
@@ -1983,7 +2007,7 @@ export function buildOperationHandlers(deps: SceneOperationDeps): Map<string, Op
                             _viaEditorIPC: true,
                         };
                         if (!tmxOk || !okA)
-                            result.error = 'tmxAsset 或 active 写入失败';
+                            result.error = !tmxOk ? tmxError : 'active 写入失败';
                         else
                             result._inspectorRefreshed = true;
                         return result;
@@ -2338,8 +2362,8 @@ export function buildOperationHandlers(deps: SceneOperationDeps): Map<string, Op
                             continue;
                         }
                         const rep = await Promise.resolve(self.reparentNode(String(uid), groupUuid));
-                        if (rep && typeof rep === 'object' && 'error' in rep) {
-                            errors.push(`${uid}: ${(rep as { error: string }).error}`);
+                        if (!isSuccessfulResult(rep)) {
+                            errors.push(`${uid}: ${getFailureReason(rep, 'reparentNode 失败')}`);
                             continue;
                         }
                         moved.push({ uuid: String(node.uuid ?? node._id ?? uid), name: node.name });
@@ -2636,9 +2660,11 @@ export function buildOperationHandlers(deps: SceneOperationDeps): Map<string, Op
                     const ok = await writeMaterialAssetJson(target.materialUrl, json);
                     if (!ok)
                         return { error: `保存材质属性失败: ${target.materialUrl}` };
-                    await bindMaterialAssetToRenderer(_self, uuid, r.node, rendererInfo.renderer, rendererInfo.resolvedCompName, slotIndex, target.materialUuid, {
+                    const binding = await bindMaterialAssetToRenderer(_self, uuid, r.node, rendererInfo.renderer, rendererInfo.resolvedCompName, slotIndex, target.materialUuid, {
                         materialJson: json,
                     });
+                    if (!isSuccessfulResult(binding))
+                        return binding;
                     return {
                         success: true,
                         uuid,
@@ -2671,7 +2697,7 @@ export function buildOperationHandlers(deps: SceneOperationDeps): Map<string, Op
                     if (builtinRef?.error)
                         return builtinRef;
                     const binding = await bindMaterialAssetToRenderer(_self, uuid, r.node, rendererInfo.renderer, rendererInfo.resolvedCompName, slotIndex, builtinRef.uuid);
-                    if (binding && typeof binding === 'object' && 'error' in binding)
+                    if (!isSuccessfulResult(binding))
                         return binding;
                     return {
                         success: true,
@@ -3064,9 +3090,11 @@ export function buildOperationHandlers(deps: SceneOperationDeps): Map<string, Op
                     const ok = await writeMaterialAssetJson(target.materialUrl, json);
                     if (!ok)
                         return { error: `保存材质 defines 失败: ${target.materialUrl}` };
-                    await bindMaterialAssetToRenderer(_self, uuid, r.node, rendererInfo.renderer, rendererInfo.resolvedCompName, slotIndex, target.materialUuid, {
+                    const binding = await bindMaterialAssetToRenderer(_self, uuid, r.node, rendererInfo.renderer, rendererInfo.resolvedCompName, slotIndex, target.materialUuid, {
                         materialJson: json,
                     });
+                    if (!isSuccessfulResult(binding))
+                        return binding;
                     return {
                         success: true,
                         uuid,
@@ -3101,7 +3129,7 @@ export function buildOperationHandlers(deps: SceneOperationDeps): Map<string, Op
                     if (materialRef?.error)
                         return materialRef;
                     const binding = await bindMaterialAssetToRenderer(_self, uuid, r.node, rendererInfo.renderer, rendererInfo.resolvedCompName, slotIndex, materialRef.uuid);
-                    if (binding && typeof binding === 'object' && 'error' in binding)
+                    if (!isSuccessfulResult(binding))
                         return binding;
                     return {
                         success: true,
@@ -3203,9 +3231,11 @@ export function buildOperationHandlers(deps: SceneOperationDeps): Map<string, Op
                     const ok = await writeMaterialAssetJson(target.materialUrl, json);
                     if (!ok)
                         return { error: `保存材质 technique 失败: ${target.materialUrl}` };
-                    await bindMaterialAssetToRenderer(_self, uuid, r.node, rendererInfo.renderer, rendererInfo.resolvedCompName, slotIndex, target.materialUuid, {
+                    const binding = await bindMaterialAssetToRenderer(_self, uuid, r.node, rendererInfo.renderer, rendererInfo.resolvedCompName, slotIndex, target.materialUuid, {
                         materialJson: json,
                     });
+                    if (!isSuccessfulResult(binding))
+                        return binding;
                     return {
                         success: true,
                         uuid,
@@ -3253,8 +3283,8 @@ export function buildOperationHandlers(deps: SceneOperationDeps): Map<string, Op
                         if (grayRef?.error)
                             return { error: `无法启用灰度：Sprite 没有 grayscale 属性，且灰度材质不可用 (${grayRef.error})` };
                         const binding = await Promise.resolve(_self.setComponentProperty(uuid, spriteCompName, 'customMaterial', { __uuid__: grayRef.uuid }));
-                        if (binding && typeof binding === 'object' && 'error' in binding)
-                            return binding;
+                        if (!isSuccessfulResult(binding))
+                            return { error: getFailureReason(binding, 'Sprite 灰度材质绑定失败') };
                         return {
                             success: true,
                             uuid,
@@ -3425,10 +3455,10 @@ export function buildOperationHandlers(deps: SceneOperationDeps): Map<string, Op
                     };
                 }
                 const addResult = self.addComponent(uuid, scriptName);
-                if (addResult && typeof addResult === 'object' && 'error' in addResult)
-                    return addResult;
                 return (async () => {
                     const baseResult = await Promise.resolve(addResult);
+                    if (!isSuccessfulResult(baseResult))
+                        return { error: getFailureReason(baseResult, `添加脚本组件 ${scriptName} 失败`), _addComponentResult: baseResult };
                     const r2 = requireNode(scene, uuid);
                     if ('error' in r2)
                         return { error: r2.error, _addComponentResult: baseResult };

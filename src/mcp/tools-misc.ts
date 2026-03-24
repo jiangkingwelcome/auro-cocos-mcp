@@ -6,6 +6,14 @@ import { ErrorCategory, logIgnored } from '../error-utils';
 
 export function registerMiscTools(server: LocalToolServer, ctx: BridgeToolContext): void {
   const { bridgeGet, bridgePost, editorMsg, text } = ctx;
+  const toStructuredToolResult = (result: unknown, successMeta: Record<string, unknown>, fallbackResult?: unknown) => {
+    if (result && typeof result === 'object' && ('success' in result || 'error' in result)) {
+      const merged = { ...successMeta, ...(result as Record<string, unknown>) };
+      const failed = ('error' in merged && merged.error) || ('success' in merged && merged.success === false);
+      return text(merged, Boolean(failed));
+    }
+    return text({ success: true, ...successMeta, ...(result === undefined ? (fallbackResult === undefined ? {} : { result: fallbackResult }) : { result }) });
+  };
 
   server.tool(
     'preferences',
@@ -174,7 +182,7 @@ Returns: poll→{events:[{type,data,timestamp}]}. history→{events:[]}. send→
             }
             try {
               const result = await editorMsg(String(p.module), String(p.message), ...(Array.isArray(p.args) ? p.args : []));
-              return text({ success: true, module: p.module, message: p.message, result: result ?? 'sent' });
+              return toStructuredToolResult(result, { module: p.module, message: p.message }, 'sent');
             } catch (err: unknown) {
               return text({ error: `IPC 广播失败: ${errorMessage(err)}` }, true);
             }

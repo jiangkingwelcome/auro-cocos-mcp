@@ -135,17 +135,17 @@ describe('竞品功能验证 — 性能统计 (社区版可用 + Pro边界)', ()
 
 // ═════════════════════════════════════════════════════════════════════════════
 // 7. 原子宏操作（我们的核心优势）
-//    测试条件：create_prefab_atomic / import_and_apply_texture / setup_ui_layout 应已注册
+//    测试条件：社区版仅保留已开放的原子宏；Pro 独占宏不应出现在 JS 注册结果中
 // ═════════════════════════════════════════════════════════════════════════════
 
 describe('竞品功能验证 — 原子宏操作 (我们的优势)', () => {
-  it('三个 macro 工具均已注册', () => {
+  it('社区版仅注册已开放的 atomic 工具', () => {
     const server = buildCocosToolServer(makeCtx());
     const names = server.listTools().map((t) => t.name);
 
     expect(names).toContain('create_prefab_atomic');
     expect(names).toContain('import_and_apply_texture');
-    expect(names).toContain('setup_ui_layout');
+    expect(names).not.toContain('setup_ui_layout');
   });
 });
 

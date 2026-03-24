@@ -130,6 +130,7 @@ Prerequisites: Node must exist. If nodeUuid omitted, uses current selection. tra
 
         const clipResult = await sceneMethod('createAnimationClip', [{
           uuid: nodeUuid,
+          clipName: typeof p.clipName === 'string' ? p.clipName : undefined,
           duration: Number(p.duration ?? 1),
           wrapMode: String(p.wrapMode ?? 'Normal'),
           speed: Number(p.speed ?? 1),
@@ -241,7 +242,7 @@ function buildAnimJson(
   tracks: Array<Record<string, unknown>>,
 ): Record<string, unknown> {
   const wrapModeMap: Record<string, number> = {
-    normal: 0, loop: 2, pingpong: 6, reverse: 36, loopreverse: 38,
+    normal: 1, loop: 2, pingpong: 22, reverse: 36, loopreverse: 38,
   };
 
   const allTimes = new Set<number>();
@@ -279,7 +280,7 @@ function buildAnimJson(
     _duration: duration,
     sample,
     speed,
-    wrapMode: wrapModeMap[wrapMode.toLowerCase()] ?? 0,
+    wrapMode: wrapModeMap[wrapMode.toLowerCase()] ?? 1,
     keys: [sortedTimes],
     curves,
   };

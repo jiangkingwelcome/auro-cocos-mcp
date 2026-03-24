@@ -7,7 +7,7 @@
 
 ### 1.1 社区版（JS 运行时，已发布）
 
-**总览：17 tools / 188 actions**
+**总览：16 tools / 187 actions**
 
 | Tool | Actions | 状态 |
 |---|---:|---|
@@ -21,7 +21,6 @@
 | tool_management | 4 | 已发布 |
 | create_prefab_atomic | 1 | 已发布 |
 | import_and_apply_texture | 1 | 已发布 |
-| setup_ui_layout | 1 | 已发布 |
 | create_tween_animation_atomic | 1 | 已发布 |
 | auto_fit_physics_collider | 1 | 已发布 |
 | execute_script | 1 | 已发布 |
@@ -43,7 +42,7 @@
 
 ### 1.3 对外承诺口径（用于销售/官网）
 
-- 社区版：**188 actions**（JS，开源）
+- 社区版：**187 actions**（JS，开源）
 - Pro 版：**270+ 生产可用 actions（Phase 1-3）**
 - Native 注册快照：**最高 408 actions（含 Phase 4-5，分阶段发布）**
 

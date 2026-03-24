@@ -17,6 +17,14 @@ import type { LocalToolServer } from './local-tool-server';
 
 export function registerSceneTools(server: LocalToolServer, ctx: BridgeToolContext): void {
   const { bridgeGet, bridgePost, sceneMethod, editorMsg, text } = ctx;
+  const toStructuredToolResult = (result: unknown, successMeta: Record<string, unknown>, fallbackResult?: unknown) => {
+    if (result && typeof result === 'object' && ('success' in result || 'error' in result)) {
+      const merged = { ...successMeta, ...(result as Record<string, unknown>) };
+      const failed = ('error' in merged && merged.error) || ('success' in merged && merged.success === false);
+      return text(merged, Boolean(failed));
+    }
+    return text({ success: true, ...successMeta, ...(result === undefined ? (fallbackResult === undefined ? {} : { result: fallbackResult }) : { result }) });
+  };
 
   const NEW_QUERY_ACTIONS = new Set(['measure_distance', 'scene_snapshot', 'scene_diff', 'performance_audit', 'export_scene_json', 'deep_validate_scene', 'get_node_bounds', 'find_nodes_by_layer', 'get_animation_state', 'get_collider_info', 'get_material_info', 'get_light_info', 'get_scene_environment', 'screen_to_world', 'world_to_screen', 'check_script_ready', 'get_script_properties']);
 
@@ -505,13 +513,14 @@ Common errors: "未找到节点"=bad UUID; "未找到父节点"=parent not found
           const finalPath = normalized.url;
           try {
             const result = await editorMsg('scene', 'create-prefab', p.uuid, finalPath);
-            return text({
-              success: true,
-              uuid: p.uuid,
-              savePath: finalPath,
+            return toStructuredToolResult(
               result,
-              ...(guardrailWarnings.length ? { warnings: guardrailWarnings } : {}),
-            });
+              {
+                uuid: p.uuid,
+                savePath: finalPath,
+                ...(guardrailWarnings.length ? { warnings: guardrailWarnings } : {}),
+              },
+            );
           } catch (err: unknown) {
             return text(withGuardrailHints({ error: `创建预制体失败: ${errorMessage(err)}`, uuid: p.uuid, savePath: finalPath }), true);
           }
@@ -524,7 +533,7 @@ Common errors: "未找到节点"=bad UUID; "未找到父节点"=parent not found
             const prefabUuid = await editorMsg('asset-db', 'query-uuid', prefabUrl);
             if (!prefabUuid) return text({ error: `预制体不存在: ${prefabUrl}` }, true);
             const result = await sceneMethod('instantiatePrefab', [String(prefabUuid), p.parentUuid || '']);
-            return text({ success: true, action: 'instantiate_prefab', prefabUrl, result: result ?? 'instantiated', method: 'scene-script' });
+            return toStructuredToolResult(result, { action: 'instantiate_prefab', prefabUrl, method: 'scene-script' }, 'instantiated');
           } catch (err: unknown) {
             return text({ error: `实例化预制体失败: ${errorMessage(err)}` }, true);
           }
@@ -563,7 +572,7 @@ Common errors: "未找到节点"=bad UUID; "未找到父节点"=parent not found
         if (p.action === 'apply_prefab') {
           try {
             const result = await editorMsg('scene', 'apply-prefab', p.uuid);
-            return text({ success: true, action: 'apply_prefab', uuid: p.uuid, result: result ?? 'applied' });
+            return toStructuredToolResult(result, { action: 'apply_prefab', uuid: p.uuid }, 'applied');
           } catch (err: unknown) {
             return text({ error: `应用预制体更改失败: ${errorMessage(err)}` }, true);
           }
@@ -571,7 +580,7 @@ Common errors: "未找到节点"=bad UUID; "未找到父节点"=parent not found
         if (p.action === 'restore_prefab') {
           try {
             const result = await editorMsg('scene', 'restore-prefab', p.uuid);
-            return text({ success: true, action: 'restore_prefab', uuid: p.uuid, result: result ?? 'restored' });
+            return toStructuredToolResult(result, { action: 'restore_prefab', uuid: p.uuid }, 'restored');
           } catch (err: unknown) {
             return text({ error: `恢复预制体失败: ${errorMessage(err)}` }, true);
           }
@@ -597,7 +606,7 @@ Common errors: "未找到节点"=bad UUID; "未找到父节点"=parent not found
         if (p.action === 'copy_node') {
           try {
             const result = await editorMsg('scene', 'copy-node', [p.uuid]);
-            return text({ success: true, action: 'copy_node', uuid: p.uuid, result: result ?? 'copied' });
+            return toStructuredToolResult(result, { action: 'copy_node', uuid: p.uuid }, 'copied');
           } catch (err: unknown) {
             return text({ error: `复制节点失败: ${errorMessage(err)}` }, true);
           }
@@ -605,7 +614,7 @@ Common errors: "未找到节点"=bad UUID; "未找到父节点"=parent not found
         if (p.action === 'paste_node') {
           try {
             const result = await editorMsg('scene', 'paste-node', p.parentUuid || undefined);
-            return text({ success: true, action: 'paste_node', parentUuid: p.parentUuid, result: result ?? 'pasted' });
+            return toStructuredToolResult(result, { action: 'paste_node', parentUuid: p.parentUuid }, 'pasted');
           } catch (err: unknown) {
             return text({ error: `粘贴节点失败: ${errorMessage(err)}` }, true);
           }
@@ -613,7 +622,7 @@ Common errors: "未找到节点"=bad UUID; "未找到父节点"=parent not found
         if (p.action === 'cut_node') {
           try {
             const result = await editorMsg('scene', 'cut-node', [p.uuid]);
-            return text({ success: true, action: 'cut_node', uuid: p.uuid, result: result ?? 'cut' });
+            return toStructuredToolResult(result, { action: 'cut_node', uuid: p.uuid }, 'cut');
           } catch (err: unknown) {
             return text({ error: `剪切节点失败: ${errorMessage(err)}` }, true);
           }
@@ -622,7 +631,7 @@ Common errors: "未找到节点"=bad UUID; "未找到父节点"=parent not found
         if (p.action === 'move_array_element') {
           try {
             const result = await editorMsg('scene', 'move-array-element', { uuid: p.uuid, path: p.path, target: p.target });
-            return text({ success: true, action: 'move_array_element', result: result ?? 'moved' });
+            return toStructuredToolResult(result, { action: 'move_array_element' }, 'moved');
           } catch (err: unknown) {
             return text({ error: `移动数组元素失败: ${errorMessage(err)}` }, true);
           }
@@ -630,7 +639,7 @@ Common errors: "未找到节点"=bad UUID; "未找到父节点"=parent not found
         if (p.action === 'remove_array_element') {
           try {
             const result = await editorMsg('scene', 'remove-array-element', { uuid: p.uuid, path: p.path });
-            return text({ success: true, action: 'remove_array_element', result: result ?? 'removed' });
+            return toStructuredToolResult(result, { action: 'remove_array_element' }, 'removed');
           } catch (err: unknown) {
             return text({ error: `删除数组元素失败: ${errorMessage(err)}` }, true);
           }
@@ -642,7 +651,7 @@ Common errors: "未找到节点"=bad UUID; "未找到父节点"=parent not found
               uuid: p.uuid, component: p.component, method: p.methodName,
               args: Array.isArray(p.args) ? p.args : [],
             });
-            return text({ success: true, action: 'execute_component_method', result: result ?? 'executed' });
+            return toStructuredToolResult(result, { action: 'execute_component_method' }, 'executed');
           } catch (err: unknown) {
             return text({ error: `执行组件方法失败: ${errorMessage(err)}` }, true);
           }
@@ -652,7 +661,7 @@ Common errors: "未找到节点"=bad UUID; "未找到父节点"=parent not found
         if (p.action === 'destroy_node') {
           try {
             const result = await editorMsg('scene', 'remove-node', { uuid: p.uuid });
-            return text({ success: true, uuid: p.uuid, result: result ?? 'removed', _editorIPC: true });
+            return toStructuredToolResult(result, { uuid: p.uuid, _editorIPC: true }, 'removed');
           } catch (err: unknown) {
             return text({ error: `删除节点失败: ${errorMessage(err)}` }, true);
           }
@@ -673,7 +682,7 @@ Common errors: "未找到节点"=bad UUID; "未找到父节点"=parent not found
         if (p.action === 'reset_property') {
           try {
             const result = await editorMsg('scene', 'reset-property', { uuid: p.uuid, path: `${p.component}.${p.property}` });
-            return text({ success: true, uuid: p.uuid, component: p.component, property: p.property, result: result ?? 'reset', _editorIPC: true });
+            return toStructuredToolResult(result, { uuid: p.uuid, component: p.component, property: p.property, _editorIPC: true }, 'reset');
           } catch (err: unknown) {
             return text({ error: `重置属性失败: ${errorMessage(err)}` }, true);
           }
@@ -700,7 +709,7 @@ Common errors: "未找到节点"=bad UUID; "未找到父节点"=parent not found
               uuid: p.uuid, component: p.component, method: p.methodName,
               args: Array.isArray(p.args) ? p.args : [],
             });
-            return text({ success: true, uuid: p.uuid, component: p.component, method: p.methodName, result: result ?? 'executed', _editorIPC: true });
+            return toStructuredToolResult(result, { uuid: p.uuid, component: p.component, method: p.methodName, _editorIPC: true }, 'executed');
           } catch (err: unknown) {
             return text({ error: `调用组件方法失败: ${errorMessage(err)}` }, true);
           }

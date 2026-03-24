@@ -151,6 +151,33 @@ describe('scene-operation materials', () => {
     });
   });
 
+  it('assign_project_material 将 success:false 的材质绑定视为失败', async () => {
+    const renderer = { constructor: { name: 'MeshRenderer' }, sharedMaterials: [], customMaterial: null };
+    const node = makeNode(renderer);
+    const deps = makeDeps(node);
+    const handlers = buildOperationHandlers(deps);
+    const setComponentProperty = vi.fn().mockResolvedValue({ success: false, message: '材质未实际绑定' });
+
+    (globalThis as any).Editor = {
+      Message: {
+        request: vi.fn(async (module: string, message: string, payload: unknown) => {
+          if (module === 'asset-db' && message === 'query-asset-info' && payload === 'db://assets/materials/Wood.mtl') {
+            return { uuid: 'mat-uuid', url: 'db://assets/materials/Wood.mtl' };
+          }
+          throw new Error(`unexpected ${module}.${message}`);
+        }),
+      },
+    };
+
+    const result = await handlers.get('assign_project_material')!(
+      { setComponentProperty } as any,
+      {} as any,
+      { uuid: 'node-1', materialUrl: 'db://assets/materials/Wood.mtl', materialIndex: 0 },
+    );
+
+    expect((result as { error?: string }).error).toContain('材质未实际绑定');
+  });
+
   it('assign_builtin_material 解析内置材质资产后按槽位绑定', async () => {
     const renderer = { constructor: { name: 'MeshRenderer' }, sharedMaterials: [], customMaterial: null };
     const node = makeNode(renderer);
@@ -230,6 +257,39 @@ describe('scene-operation materials', () => {
     expect(disableResult).toMatchObject({
       success: true,
       method: 'reset_custom_material',
+    });
+  });
+
+  it('sprite_grayscale 将 success:false 的灰度材质绑定视为失败', async () => {
+    const sprite = {
+      constructor: { name: 'Sprite' },
+      __classname__: 'Sprite',
+    };
+    const node = makeNode(sprite);
+    node.getComponent = vi.fn(() => sprite);
+    const deps = makeDeps(node);
+    const handlers = buildOperationHandlers(deps);
+    const setComponentProperty = vi.fn().mockResolvedValue({ success: false, message: 'customMaterial 未更新' });
+
+    (globalThis as any).Editor = {
+      Message: {
+        request: vi.fn(async (module: string, message: string, payload: unknown) => {
+          if (module === 'asset-db' && message === 'query-asset-info' && payload === 'db://internal/default_materials/ui-sprite-gray-material.mtl') {
+            return { uuid: 'gray-mat-uuid', url: String(payload) };
+          }
+          throw new Error(`unexpected ${module}.${message}`);
+        }),
+      },
+    };
+
+    const result = await handlers.get('sprite_grayscale')!(
+      { setComponentProperty } as any,
+      {} as any,
+      { uuid: 'node-1', enable: true },
+    );
+
+    expect(result).toMatchObject({
+      error: 'customMaterial 未更新',
     });
   });
 

@@ -9,6 +9,22 @@ export interface SceneQueryDeps {
   requireNode: (scene: CocosNode, uuid: string) => { node: CocosNode } | { error: string };
 }
 
+function clipStrField(clip: Record<string, unknown>, ...keys: string[]): string {
+  for (const key of keys) {
+    const value = clip[key];
+    if (typeof value === 'string' && value.trim()) return value;
+  }
+  return '';
+}
+
+function clipNumField(clip: Record<string, unknown>, fallback: number, ...keys: string[]): number {
+  for (const key of keys) {
+    const value = clip[key];
+    if (typeof value === 'number' && Number.isFinite(value)) return value;
+  }
+  return fallback;
+}
+
 export function buildQueryHandlers(deps: SceneQueryDeps): Map<string, QueryHandler> {
   const { getCC, getNodePath, findNodeByUuid, requireNode } = deps;
 
@@ -802,22 +818,27 @@ export function buildQueryHandlers(deps: SceneQueryDeps): Map<string, QueryHandl
       const rawClips = (anim.clips as Array<Record<string, unknown> | null> | null) || [];
       const clips = rawClips.filter((clip): clip is Record<string, unknown> => {
         if (!clip) return false;
-        const clipName = String(clip.name || 'unnamed');
-        const clipDuration = Number(clip.duration ?? 0);
+        const clipName = clipStrField(clip, 'name', '_name') || 'unnamed';
+        const clipDuration = clipNumField(clip, 0, 'duration', '_duration');
         const trackCount = Array.isArray(clip._tracks) ? clip._tracks.length : 0;
         if (clipName === 'unnamed' && clipDuration === 0 && trackCount === 0) return false;
         return true;
       });
       const clipInfos = clips.map((clip) => {
         if (!clip) return { name: 'null', duration: 0 };
-        return { name: clip.name || 'unnamed', duration: clip.duration ?? 0, speed: clip.speed ?? 1, wrapMode: clip.wrapMode ?? 0 };
+        return {
+          name: clipStrField(clip, 'name', '_name') || 'unnamed',
+          duration: clipNumField(clip, 0, 'duration', '_duration'),
+          speed: clipNumField(clip, 1, 'speed', '_speed'),
+          wrapMode: clipNumField(clip, 0, 'wrapMode', '_wrapMode'),
+        };
       });
       const defaultClip = anim.defaultClip as Record<string, unknown> | null;
       const result: Record<string, unknown> = {
         uuid, name: r.node.name, hasAnimation: true,
         clipCount: clips.length,
         clips: clipInfos,
-        defaultClip: defaultClip ? (defaultClip.name || 'unnamed') : null,
+        defaultClip: defaultClip ? (clipStrField(defaultClip, 'name', '_name') || 'unnamed') : null,
         playOnLoad: anim.playOnLoad ?? false,
       };
       if (rawClips.length !== clips.length) {

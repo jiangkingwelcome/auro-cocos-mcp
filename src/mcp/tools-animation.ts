@@ -12,6 +12,13 @@ import {
 
 export function registerAnimationTools(server: LocalToolServer, ctx: BridgeToolContext): void {
   const { bridgePost, sceneMethod, editorMsg, text } = ctx;
+  const isFailedResult = (result: unknown): boolean => {
+    return Boolean(
+      result
+      && typeof result === 'object'
+      && (('error' in result && result.error) || ('success' in result && result.success === false))
+    );
+  };
 
   function buildAnimJson(
     name: string,
@@ -190,7 +197,7 @@ export function registerAnimationTools(server: LocalToolServer, ctx: BridgeToolC
     if (clipName) payload.clipName = clipName;
 
     const result = await sceneMethod('dispatchAnimationAction', [payload]) as Record<string, unknown>;
-    if (result && typeof result === 'object' && 'error' in result) return result;
+    if (isFailedResult(result)) return result;
 
     const stateAfter = await waitForAnimationState(uuid, (state) => playbackExpectation(action, state));
     if (!playbackExpectation(action, stateAfter)) {
@@ -235,7 +242,7 @@ export function registerAnimationTools(server: LocalToolServer, ctx: BridgeToolC
 
     const command = action === 'stop' ? 'stop' : 'play-or-pause';
     const result = await bridgePost('/api/animator/command', { command, uuid }) as Record<string, unknown>;
-    if (result && typeof result === 'object' && 'error' in result) return result;
+    if (isFailedResult(result)) return result;
 
     const stateAfter = await waitForAnimationState(
       uuid,
@@ -370,7 +377,7 @@ Returns: create_clip→{success,clipName,duration}. play/pause/resume/stop→{su
         switch (p.action) {
           case 'create_clip': {
             const result = await sceneMethod('createAnimationClip', [p]);
-            if (result && typeof result === 'object' && 'error' in result) {
+            if (isFailedResult(result)) {
               return text(result, true);
             }
             const savePath = typeof p.savePath === 'string' ? p.savePath : '';
@@ -417,19 +424,19 @@ Returns: create_clip→{success,clipName,duration}. play/pause/resume/stop→{su
           }
           case 'play': {
             const result = await dispatchAnimatorPlayback('play', uuid, typeof p.clipName === 'string' ? p.clipName : undefined);
-            return text(result, Boolean(result && typeof result === 'object' && 'error' in result));
+            return text(result, isFailedResult(result));
           }
           case 'pause': {
             const result = await dispatchAnimatorPlayback('pause', uuid);
-            return text(result, Boolean(result && typeof result === 'object' && 'error' in result));
+            return text(result, isFailedResult(result));
           }
           case 'resume': {
             const result = await dispatchAnimatorPlayback('resume', uuid);
-            return text(result, Boolean(result && typeof result === 'object' && 'error' in result));
+            return text(result, isFailedResult(result));
           }
           case 'stop': {
             const result = await dispatchAnimatorPlayback('stop', uuid);
-            return text(result, Boolean(result && typeof result === 'object' && 'error' in result));
+            return text(result, isFailedResult(result));
           }
           case 'get_state': {
             const result = await queryAnimationState(uuid);

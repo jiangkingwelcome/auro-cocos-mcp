@@ -11,6 +11,13 @@ const ALLOWED_ANIMATOR_COMMANDS = new Set([
   'jump-to-last-frame',
 ]);
 
+function normalizeAnimatorResult(result: unknown, fallback: Record<string, unknown>) {
+  if (result && typeof result === 'object' && ('success' in result || 'error' in result)) {
+    return { ...fallback, ...(result as Record<string, unknown>) };
+  }
+  return { success: true, ...fallback, ...(result === undefined ? {} : { result }) };
+}
+
 export function registerAnimatorRoutes(post: RouteRegistrar): void {
   post('/api/animator/command', async (_params, body) => {
     const payload = (body && typeof body === 'object' ? body : {}) as { command?: string; uuid?: string };
@@ -36,7 +43,7 @@ export function registerAnimatorRoutes(post: RouteRegistrar): void {
       }
 
       const result = await ipc('animator', command);
-      return { success: true, command, uuid: uuid || undefined, result: result ?? null };
+      return normalizeAnimatorResult(result, { command, uuid: uuid || undefined });
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : String(err);
       return { error: `animator 命令执行失败: ${msg}` };

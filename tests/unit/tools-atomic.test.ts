@@ -389,141 +389,6 @@ describe('import_and_apply_texture — 正常流程', () => {
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
-// setup_ui_layout
-// ─────────────────────────────────────────────────────────────────────────────
-describe('setup_ui_layout — 正常流程', () => {
-  function makeScrollViewMocks() {
-    // createChildNode 每次返回不同 uuid
-    let callCount = 0;
-    const uuids = ['root-uuid', 'viewport-uuid', 'content-uuid', 'item1-uuid', 'item2-uuid', 'item3-uuid'];
-    const sceneMethod = vi.fn().mockImplementation((method: string) => {
-      if (method === 'createChildNode') {
-        return Promise.resolve({ uuid: uuids[callCount++] || `extra-uuid-${callCount}` });
-      }
-      return Promise.resolve({ success: true });
-    });
-    const editorMsg = vi.fn().mockResolvedValue({});
-    const bridgeGet = vi.fn().mockResolvedValue({ selected: ['parent-uuid'] });
-    return { sceneMethod, editorMsg, bridgeGet };
-  }
-
-  it('创建完整 ScrollView 层级，返回所有 uuid', async () => {
-    const { sceneMethod, editorMsg, bridgeGet } = makeScrollViewMocks();
-    const server = buildCocosToolServer(makeCtx({ sceneMethod, editorMsg, bridgeGet }));
-
-    const result = await server.callTool('setup_ui_layout', {
-      parentUuid: 'canvas-uuid',
-      rootName: 'MyList',
-      itemCount: 3,
-    });
-
-    expect(result.isError).toBeFalsy();
-    const data = parse(result) as any;
-    expect(data.success).toBe(true);
-    expect(data.rootUuid).toBeDefined();
-    expect(data.viewportUuid).toBeDefined();
-    expect(data.contentUuid).toBeDefined();
-    expect(data.itemCount).toBe(3);
-  });
-
-  it('包含所有阶段：create_root / root_components / viewport / content / items', async () => {
-    const { sceneMethod, editorMsg, bridgeGet } = makeScrollViewMocks();
-    const server = buildCocosToolServer(makeCtx({ sceneMethod, editorMsg, bridgeGet }));
-
-    const result = await server.callTool('setup_ui_layout', {
-      parentUuid: 'canvas-uuid',
-      itemCount: 2,
-    });
-
-    const data = parse(result) as any;
-    expect(data.stages).toContain('create_root');
-    expect(data.stages).toContain('root_components');
-    expect(data.stages).toContain('create_viewport');
-    expect(data.stages).toContain('create_content');
-    expect(data.stages).toContain('create_items');
-  });
-
-  it('itemCount 超出 100 时限制为 100', async () => {
-    const { sceneMethod, editorMsg } = makeScrollViewMocks();
-    // 需要足够多的 uuid 返回
-    const sceneMethodUnlimited = vi.fn().mockImplementation((method: string, args: any[]) => {
-      if (method === 'createChildNode') return Promise.resolve({ uuid: `uuid-${Math.random()}` });
-      return Promise.resolve({ success: true });
-    });
-    const server = buildCocosToolServer(makeCtx({ sceneMethod: sceneMethodUnlimited, editorMsg }));
-
-    const result = await server.callTool('setup_ui_layout', {
-      parentUuid: 'p',
-      itemCount: 999,
-    });
-
-    const data = parse(result) as any;
-    expect(data.itemCount).toBeLessThanOrEqual(100);
-  });
-
-  it('withMask=false 跳过 Mask 组件', async () => {
-    const { sceneMethod, editorMsg } = makeScrollViewMocks();
-    const server = buildCocosToolServer(makeCtx({ sceneMethod, editorMsg }));
-
-    await server.callTool('setup_ui_layout', {
-      parentUuid: 'canvas',
-      withMask: false,
-      itemCount: 1,
-    });
-
-    // 确认 add_component 中没有 Mask
-    const addComponentCalls = (sceneMethod as any).mock.calls
-      .filter((c: any[]) => c[0] === 'dispatchOperation')
-      .map((c: any[]) => c[1][0]);
-    const hasMask = addComponentCalls.some((p: any) => p.component === 'Mask');
-    expect(hasMask).toBe(false);
-  });
-
-  it('withLayout=false 跳过 Layout 组件', async () => {
-    const { sceneMethod, editorMsg } = makeScrollViewMocks();
-    const server = buildCocosToolServer(makeCtx({ sceneMethod, editorMsg }));
-
-    await server.callTool('setup_ui_layout', {
-      parentUuid: 'canvas',
-      withLayout: false,
-      itemCount: 1,
-    });
-
-    const addComponentCalls = (sceneMethod as any).mock.calls
-      .filter((c: any[]) => c[0] === 'dispatchOperation')
-      .map((c: any[]) => c[1][0]);
-    const hasLayout = addComponentCalls.some((p: any) => p.component === 'Layout');
-    expect(hasLayout).toBe(false);
-  });
-
-  it('根节点创建失败时返回 isError', async () => {
-    const sceneMethod = vi.fn().mockResolvedValue({ error: '场景未加载' });
-    const server = buildCocosToolServer(makeCtx({ sceneMethod }));
-
-    const result = await server.callTool('setup_ui_layout', { parentUuid: 'canvas' });
-    expect(result.isError).toBe(true);
-    const data = parse(result) as any;
-    expect(data.success).toBe(false);
-    // error 透传自 sceneMethod 返回的 error 字符串
-    expect(data.error).toBeTruthy();
-  });
-
-  it('未指定 parentUuid 时从 selection 中获取', async () => {
-    const bridgeGet = vi.fn().mockResolvedValue({ selected: ['selected-canvas-uuid'] });
-    const sceneMethod = vi.fn().mockImplementation((method: string) => {
-      if (method === 'createChildNode') return Promise.resolve({ uuid: `uuid-${Math.random()}` });
-      return Promise.resolve({ success: true });
-    });
-    const editorMsg = vi.fn().mockResolvedValue({});
-    const server = buildCocosToolServer(makeCtx({ bridgeGet, sceneMethod, editorMsg }));
-
-    const result = await server.callTool('setup_ui_layout', { itemCount: 1 });
-
-    const data = parse(result) as any;
-    expect(data.stages).toContain('resolve_selection_parent');
-  });
-});
-
 // ─────────────────────────────────────────────────────────────────────────────
 // create_tween_animation_atomic
 // ─────────────────────────────────────────────────────────────────────────────
@@ -629,6 +494,56 @@ describe('create_tween_animation_atomic — 正常流程', () => {
     expect(data.success).toBe(true);
     expect(data.stages).toContain('save_anim_asset');
     expect(data.savedAsset).toBeTruthy();
+  });
+
+  it('透传 clipName/speed/wrapMode 到 createAnimationClip，并按引擎枚举落盘', async () => {
+    const sceneMethod = vi.fn().mockImplementation((method: string) => {
+      if (method === 'dispatchQuery') return Promise.resolve({ uuid: 'node-uuid', name: 'Hero' });
+      if (method === 'createAnimationClip') return Promise.resolve({
+        success: true,
+        clipName: 'bounce',
+        clipDuration: 1.5,
+        trackCount: 1,
+        keyframeTimesCount: 2,
+        wrapMode: 'PingPong',
+        speed: 2,
+        attach: { attached: true },
+      });
+      return Promise.resolve({ success: true });
+    });
+    const editorMsg = vi.fn().mockImplementation(async (_module: string, message: string) => {
+      if (message === 'query-asset-info') return { uuid: 'asset-uuid-1' };
+      return {};
+    });
+    const bridgePost = vi.fn().mockResolvedValue({ success: true });
+    const server = buildCocosToolServer(makeCtx({ sceneMethod, editorMsg, bridgePost }));
+
+    const result = await server.callTool('create_tween_animation_atomic', {
+      nodeUuid: 'node-uuid',
+      clipName: 'bounce',
+      duration: 1.5,
+      wrapMode: 'PingPong',
+      speed: 2,
+      savePath: 'db://assets/animations/bounce.anim',
+      tracks: [{ property: 'position', keyframes: [{ time: 0, value: 0 }, { time: 1.5, value: 100 }] }],
+    });
+
+    const data = parse(result) as any;
+    expect(data.success).toBe(true);
+    expect(sceneMethod).toHaveBeenCalledWith('createAnimationClip', [expect.objectContaining({
+      uuid: 'node-uuid',
+      clipName: 'bounce',
+      wrapMode: 'PingPong',
+      speed: 2,
+    })]);
+
+    const createAssetCall = bridgePost.mock.calls.find(([path]) => path === '/api/asset-db/create-asset');
+    expect(createAssetCall).toBeTruthy();
+    const assetPayload = createAssetCall?.[1] as { content: string };
+    const animJson = JSON.parse(assetPayload.content);
+    expect(animJson._name).toBe('bounce');
+    expect(animJson.speed).toBe(2);
+    expect(animJson.wrapMode).toBe(22);
   });
 
   it('createAnimationClip 失败时返回 isError', async () => {

@@ -252,7 +252,7 @@
 
 ## 九、结论
 
-> **技术层面：** Pro Edition 大幅扩展至 22 工具 / 270+ actions。Community Edition 同步升级到 17 工具 / ~158 actions。Funnel 架构效率依然远超竞品。动画、物理、工具管理等新工具已全部补齐。
+> **技术层面：** Pro Edition 大幅扩展至 22 工具 / 270+ actions。Community Edition 同步升级到 16 工具 / ~157 actions。Funnel 架构效率依然远超竞品。动画、物理、工具管理等新工具已全部补齐。
 >
 > **市场层面：** 差距仍在。竞品继续在所有主要 MCP 目录保持索引。上架是最紧迫的工作。
 >

@@ -40,7 +40,6 @@ describe('buildCocosToolServer — 工具注册完整性', () => {
       'execute_script',
       'create_prefab_atomic',
       'import_and_apply_texture',
-      'setup_ui_layout',
     ];
 
     for (const name of expectedTools) {
@@ -48,9 +47,15 @@ describe('buildCocosToolServer — 工具注册完整性', () => {
     }
   });
 
-  it('工具总数 >= 9', () => {
+  it('工具总数 >= 8', () => {
     const server = buildCocosToolServer(makeCtx());
-    expect(server.listTools().length).toBeGreaterThanOrEqual(9);
+    expect(server.listTools().length).toBeGreaterThanOrEqual(8);
+  });
+
+  it('社区版不注册 setup_ui_layout', () => {
+    const server = buildCocosToolServer(makeCtx());
+    const names = server.listTools().map((t) => t.name);
+    expect(names).not.toContain('setup_ui_layout');
   });
 
   it('每个工具都有 description 和 inputSchema', () => {

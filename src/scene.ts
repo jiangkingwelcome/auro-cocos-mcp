@@ -13,6 +13,7 @@ import {
 } from './scene-types';
 import { buildQueryHandlers } from './scene-query-handlers';
 import { buildOperationHandlers } from './scene-operation-handlers';
+import { inspectReparentOutcome, isComponentRemoved } from './scene-mutation-verifier';
 import { ErrorCategory, logIgnored } from './error-utils';
 
 module.paths.push(join(Editor.App.path, 'node_modules'));
@@ -613,7 +614,42 @@ export const methods = {
 
     return (async () => {
       const newUuid = await ipcCreateNode(parentUuid, nodeName);
-      return { success: true, uuid: newUuid, name: nodeName, parent: parent.name };
+      const refreshedScene = getScene();
+      if (!refreshedScene) {
+        return {
+          success: false,
+          uuid: newUuid,
+          name: nodeName,
+          parent: parent.name,
+          parentUuid,
+          error: 'create-node IPC 已返回，但场景刷新后不可用，无法确认节点是否已创建',
+        };
+      }
+      const createdNode = findNodeByUuid(refreshedScene, newUuid);
+      if (!createdNode) {
+        return {
+          success: false,
+          uuid: newUuid,
+          name: nodeName,
+          parent: parent.name,
+          parentUuid,
+          error: `create-node IPC 已返回，但场景中未找到新节点: ${newUuid}`,
+        };
+      }
+      const parentCheck = inspectReparentOutcome(createdNode, parentUuid);
+      if (!parentCheck.ok) {
+        return {
+          success: false,
+          uuid: newUuid,
+          name: createdNode.name,
+          parent: parent.name,
+          parentUuid,
+          actualParent: parentCheck.actualParentName,
+          actualParentUuid: parentCheck.actualParentUuid || null,
+          error: 'create-node IPC 已返回，但新节点父级与目标父节点不一致',
+        };
+      }
+      return { success: true, uuid: newUuid, name: createdNode.name, parent: parent.name, parentUuid };
     })();
   },
 
@@ -633,6 +669,16 @@ export const methods = {
           error: 'remove-node IPC 失败，已跳过销毁（避免仅内存删除导致无法保存/不同步）',
         };
       }
+      const refreshedScene = getScene();
+      const remainingNode = refreshedScene ? findNodeByUuid(refreshedScene, uuid) : null;
+      if (remainingNode) {
+        return {
+          success: false,
+          uuid,
+          name,
+          error: 'remove-node IPC 已返回，但节点仍存在于场景中',
+        };
+      }
       return { success: true, uuid, name, _editorIPC: true, _viaEditorIPC: true };
     })();
   },
@@ -649,7 +695,39 @@ export const methods = {
 
     return (async () => {
       await ipcSetParent(uuid, newParentUuid);
-      return { success: true, uuid, parent: newParent.name };
+      const refreshedScene = getScene();
+      if (!refreshedScene) {
+        return {
+          success: false,
+          uuid,
+          parent: newParent.name,
+          parentUuid: newParentUuid,
+          error: 'set-parent IPC 已返回，但场景刷新后不可用，无法确认节点是否已移动',
+        };
+      }
+      const refreshedNode = findNodeByUuid(refreshedScene, uuid);
+      if (!refreshedNode) {
+        return {
+          success: false,
+          uuid,
+          parent: newParent.name,
+          parentUuid: newParentUuid,
+          error: `set-parent IPC 已返回，但场景中未找到节点: ${uuid}`,
+        };
+      }
+      const parentCheck = inspectReparentOutcome(refreshedNode, newParentUuid);
+      if (!parentCheck.ok) {
+        return {
+          success: false,
+          uuid,
+          parent: newParent.name,
+          parentUuid: newParentUuid,
+          actualParent: parentCheck.actualParentName,
+          actualParentUuid: parentCheck.actualParentUuid || null,
+          error: 'set-parent IPC 已返回，但节点父级未更新',
+        };
+      }
+      return { success: true, uuid, parent: newParent.name, parentUuid: newParentUuid };
     })();
   },
 
@@ -664,6 +742,32 @@ export const methods = {
 
     return (async () => {
       await ipcCreateComponent(uuid, componentName);
+      const refreshedScene = getScene();
+      if (!refreshedScene) {
+        return {
+          success: false,
+          uuid,
+          component: componentName,
+          error: 'create-component IPC 已返回，但场景刷新后不可用，无法确认组件是否已添加',
+        };
+      }
+      const refreshedNode = findNodeByUuid(refreshedScene, uuid);
+      if (!refreshedNode) {
+        return {
+          success: false,
+          uuid,
+          component: componentName,
+          error: `create-component IPC 已返回，但场景中未找到节点: ${uuid}`,
+        };
+      }
+      if (isComponentRemoved(refreshedNode, compClass)) {
+        return {
+          success: false,
+          uuid,
+          component: componentName,
+          error: 'create-component IPC 已返回，但组件未出现在节点上',
+        };
+      }
       const result: Record<string, unknown> = { success: true, uuid, component: componentName };
       if (SPRITE_NAMES.has(componentName)) {
         result.warning = 'Sprite 组件已添加但未设置 spriteFrame。Cocos 3.8.x 存在引擎缺陷：场景重新激活时 Sprite.onEnable 会在 updateUVs 中访问空 UV 数据导致 TypeError。建议通过 set_property 设置 spriteFrame 后再使用。';
@@ -685,6 +789,32 @@ export const methods = {
 
     return (async () => {
       await ipcRemoveComponent(uuid, componentName);
+      const refreshedScene = getScene();
+      if (!refreshedScene) {
+        return {
+          success: false,
+          uuid,
+          component: componentName,
+          error: 'remove-component IPC 已返回，但场景刷新后不可用，无法确认组件是否已移除',
+        };
+      }
+      const refreshedNode = findNodeByUuid(refreshedScene, uuid);
+      if (!refreshedNode) {
+        return {
+          success: false,
+          uuid,
+          component: componentName,
+          error: `remove-component IPC 已返回，但场景中未找到节点: ${uuid}`,
+        };
+      }
+      if (!isComponentRemoved(refreshedNode, compClass)) {
+        return {
+          success: false,
+          uuid,
+          component: componentName,
+          error: 'remove-component IPC 已返回，但组件仍存在于节点上',
+        };
+      }
       return { success: true, uuid, component: componentName };
     })();
   },
@@ -847,26 +977,38 @@ export const methods = {
       return { error: `属性 "${property}" 的复杂对象值暂未实现稳定持久化，请改用专用操作。` };
     }
 
-    comp[property] = value;
-    const result: Record<string, unknown> = { success: true, uuid, component: componentName, property, value };
-
     const compIndex = (node._components ?? []).indexOf(comp);
-    if (compIndex >= 0) {
-      const propPath = `__comps__.${compIndex}.${property}`;
-      const dumpType = typeof value === 'boolean' ? 'boolean'
-        : typeof value === 'number' ? 'number'
-        : typeof value === 'string' ? 'string'
-        : null;
-      if (dumpType) {
-        return (async () => {
-          if (await notifyEditorProperty(uuid, propPath, { type: dumpType, value })) {
-            result._inspectorRefreshed = true;
-          }
-          return result;
-        })();
-      }
+    if (compIndex < 0) return { error: `无法定位组件索引: ${componentName}` };
+    const propPath = `__comps__.${compIndex}.${property}`;
+    const dumpType = typeof value === 'boolean' ? 'boolean'
+      : typeof value === 'number' ? 'number'
+      : typeof value === 'string' ? 'string'
+      : null;
+    if (!dumpType) {
+      return { error: `属性 "${property}" 的值类型 "${typeof value}" 暂未实现稳定持久化` };
     }
-    return result;
+    return (async () => {
+      const ok = await notifyEditorProperty(uuid, propPath, { type: dumpType, value });
+      if (!ok) {
+        return {
+          success: false,
+          uuid,
+          component: componentName,
+          property,
+          value,
+          error: `set-property IPC 未能持久化属性 "${property}"，已阻止仅运行时修改`,
+        };
+      }
+      comp[property] = value;
+      return {
+        success: true,
+        uuid,
+        component: componentName,
+        property,
+        value,
+        _inspectorRefreshed: true,
+      };
+    })();
   },
 
   instantiatePrefab(prefabUuid: string, parentUuid: string) {
@@ -1140,14 +1282,21 @@ export const methods = {
       const sortedTimes = [...allTimes].sort((a, b) => a - b);
 
       const clip = new AnimClip();
-      if (clipName) clip.name = clipName;
+      const clipRecord = clip as Record<string, unknown>;
+      if (clipName) {
+        clip.name = clipName;
+        if ('_name' in clipRecord) clipRecord._name = clipName;
+      }
       clip.duration = duration;
+      if ('_duration' in clipRecord) clipRecord._duration = duration;
       clip.speed = speed;
+      if ('_speed' in clipRecord) clipRecord._speed = speed;
       clip.sample = sample;
+      if ('_sample' in clipRecord) clipRecord._sample = sample;
       clip.keys = [sortedTimes];
 
       // Resolve wrap mode
-      const animationWrapMode = (AnimClip as { WrapMode?: Record<string, number> }).WrapMode;
+      const animationWrapMode = (AnimClip as { WrapMode?: Record<string, number> }).WrapMode || cc.WrapMode;
       let resolvedWrapModeValue: number | null = null;
       if (animationWrapMode) {
         const modeMap: Record<string, number> = {
@@ -1161,6 +1310,7 @@ export const methods = {
         if (modeVal !== undefined) {
           resolvedWrapModeValue = modeVal;
           clip.wrapMode = modeVal;
+          if ('_wrapMode' in clipRecord) clipRecord._wrapMode = modeVal;
         }
       }
 
@@ -1270,7 +1420,7 @@ export const methods = {
 
       return {
         success: true,
-        clipName: clip.name || clipName || 'unnamed',
+        clipName: clip.name || clipRecord._name || clipName || 'unnamed',
         clipDuration: duration,
         trackCount: tracks.length,
         keyframeTimesCount: sortedTimes.length,

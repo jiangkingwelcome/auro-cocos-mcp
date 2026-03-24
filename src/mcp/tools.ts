@@ -30,7 +30,7 @@ export type { BridgeToolContext };
  *     All new features are developed in Rust only.
  *
  *   Community Edition (no .node or no license):
- *     JS community tools are registered (~158 actions).
+ *     JS community tools are registered (~157 actions).
  *     Frozen codebase — bug fixes only, no new features.
  *     Open source on GitHub (BSL 1.1).
  */

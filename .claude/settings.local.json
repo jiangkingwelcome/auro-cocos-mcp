@@ -46,7 +46,13 @@
       "Bash(\"E:\\\\gitproject\\\\cocos\\\\auro-cocos-mcp\\\\patches\\\\.gitkeep\")",
       "Bash(\"E:\\\\gitproject\\\\cocos\\\\auro-cocos-mcp\\\\patches\\\\.gitkeep\":*)",
       "Bash(echo.)",
-      "Bash(node -e \":*)"
+      "Bash(node -e \":*)",
+      "Bash(powershell -ExecutionPolicy Bypass -File \"E:\\\\gitproject\\\\cocos\\\\auro-cocos-mcp\\\\scripts\\\\restart-cocos-and-smoke-test.ps1\" -CreatorPath \"D:\\\\cocoscreator\\\\Creator\\\\3.8.8\\\\CocosCreator.exe\" -ProjectPath \"E:\\\\gitproject\\\\cocos\\\\mcpsheqvbantest\" -SkipSmoke -BridgeTimeoutSec 60)",
+      "Bash(powershell -ExecutionPolicy Bypass -File \"E:\\\\gitproject\\\\cocos\\\\auro-cocos-mcp\\\\scripts\\\\restart-cocos-and-smoke-test.ps1\" -CreatorPath \"D:\\\\cocoscreator\\\\Creator\\\\3.8.8\\\\CocosCreator.exe\" -ProjectPath \"E:\\\\gitproject\\\\cocos\\\\mcpsheqvbantest\" -SkipSmoke -BridgeTimeoutSec 180)",
+      "Bash(powershell -ExecutionPolicy Bypass -Command \":*)",
+      "Bash(wc -l src/mcp/*.ts)",
+      "Skill(architecture)",
+      "Skill(architecture:*)"
     ]
   }
 }

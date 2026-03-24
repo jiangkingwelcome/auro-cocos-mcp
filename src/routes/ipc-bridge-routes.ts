@@ -17,6 +17,13 @@ const IPC_ALLOWED_MODULES = new Set([
   'preferences', 'project',  // Cocos 3.8.x 内置模块，支持 query-config / set-config
 ]);
 
+function normalizeStructuredResult(result: unknown, fallback: Record<string, unknown>) {
+  if (result && typeof result === 'object' && ('success' in result || 'error' in result)) {
+    return { ...fallback, ...(result as Record<string, unknown>) };
+  }
+  return { success: true, ...fallback, ...(result === undefined ? {} : { result }) };
+}
+
 export function registerIpcBridgeRoutes(post: RouteRegistrar, extensionName: string): void {
   post('/api/scene/execute-script', async (_params, body) => {
     const payload = (body && typeof body === 'object' ? body : {}) as { method?: string; args?: unknown[] };
@@ -44,7 +51,7 @@ export function registerIpcBridgeRoutes(post: RouteRegistrar, extensionName: str
     }
     try {
       const result = await ipc(payload.module, payload.message, ...(payload.args || []));
-      return result ?? { success: true };
+      return normalizeStructuredResult(result, { module: payload.module, message: payload.message });
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : String(err);
       return { error: `消息发送失败: ${msg}` };
@@ -59,7 +66,7 @@ export function registerIpcBridgeRoutes(post: RouteRegistrar, extensionName: str
         method: 'setReferenceImage',
         args: [payload.active ?? true, payload.opacity ?? 0.5],
       });
-      return result || { success: true, active: payload.active ?? true, opacity: payload.opacity ?? 0.5 };
+      return normalizeStructuredResult(result, { active: payload.active ?? true, opacity: payload.opacity ?? 0.5 });
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : String(err);
       return { error: `设置参考图失败: ${msg}` };
@@ -73,7 +80,7 @@ export function registerIpcBridgeRoutes(post: RouteRegistrar, extensionName: str
         method: 'setReferenceImage',
         args: [false, 0],
       });
-      return result || { success: true, active: false };
+      return normalizeStructuredResult(result, { active: false });
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : String(err);
       return { error: `清除参考图失败: ${msg}` };

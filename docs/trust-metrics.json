@@ -1,8 +1,8 @@
 {
   "generatedAt": "2026-03-20T08:17:37.617Z",
   "community": {
-    "toolCount": 17,
-    "totalActions": 188,
+    "toolCount": 16,
+    "totalActions": 187,
     "rows": [
       {
         "tool": "bridge_status",
@@ -42,10 +42,6 @@
       },
       {
         "tool": "import_and_apply_texture",
-        "actions": 1
-      },
-      {
-        "tool": "setup_ui_layout",
         "actions": 1
       },
       {

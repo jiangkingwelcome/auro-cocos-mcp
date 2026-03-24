@@ -917,17 +917,6 @@ async function testAtomicTools() {
     try { await callTool('asset_operation', { action: 'refresh', url: 'db://assets' }); } catch { /* ok */ }
   });
 
-  await test('setup_ui_layout', async () => {
-    const { parsed } = await callTool('setup_ui_layout', {
-      rootName: '__mcp_scroll_test__',
-      itemCount: 3,
-    });
-    assert(parsed.success || parsed.error, 'no response');
-    if (parsed.rootUuid) {
-      try { await callTool('scene_operation', { action: 'destroy_node', uuid: parsed.rootUuid, confirmDangerous: true }); } catch { /* ok */ }
-    }
-  });
-
   await test('create_tween_animation_atomic', async () => {
     // Create a temp node first
     const { parsed: node } = await callTool('scene_operation', { action: 'create_node', name: '__mcp_anim_test__' });

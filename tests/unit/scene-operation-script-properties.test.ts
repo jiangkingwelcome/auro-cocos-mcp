@@ -112,6 +112,30 @@ describe('scene-operation script properties', () => {
     expect(comp.plainArray).toBeUndefined();
   });
 
+  it('set_component_properties 将 success:false 的引用属性写入视为失败', async () => {
+    const comp: Record<string, unknown> = {};
+    const node = makeNode(comp);
+    const deps = makeDeps(node);
+    const handlers = buildOperationHandlers(deps);
+
+    const result = await handlers.get('set_component_properties')!(
+      { setComponentProperty: vi.fn().mockResolvedValue({ success: false, message: '目标节点不存在' }) } as any,
+      {} as any,
+      {
+        uuid: 'node-1',
+        component: 'TestScript',
+        properties: {
+          target: { __refType__: 'cc.Node', uuid: 'missing-node' },
+        },
+      },
+    );
+
+    expect(result).toMatchObject({
+      success: false,
+      errors: ['设置 target 失败: 目标节点不存在'],
+    });
+  });
+
   it('attach_script 设置属性时对不支持值不再 runtime-only 假成功', async () => {
     const comp: Record<string, unknown> = {};
     const node = makeNode(comp);

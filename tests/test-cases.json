@@ -4118,31 +4118,6 @@
     "note": ""
   },
   {
-    "id": 319,
-    "tool": "setup_ui_layout",
-    "action": "setup_ui_layout",
-    "title": "默认列表",
-    "input": {
-      "rootName": "PlayerList",
-      "itemCount": 5
-    },
-    "expected": "创建 PlayerList>Viewport(Mask)>Content(Layout)>Item_1~5",
-    "note": ""
-  },
-  {
-    "id": 320,
-    "tool": "setup_ui_layout",
-    "action": "setup_ui_layout",
-    "title": "无 Mask",
-    "input": {
-      "rootName": "Grid",
-      "itemCount": 10,
-      "withMask": false
-    },
-    "expected": "创建不带 Mask 的布局",
-    "note": ""
-  },
-  {
     "id": 321,
     "tool": "create_tween_animation_atomic",
     "action": "create_tween_animation_atomic",

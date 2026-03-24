@@ -40,11 +40,11 @@ All Funnel tools enforce these mandatory behavioral rules:
 | [register_custom_macro](#register_custom_macro) | Extension | — | — | Register a dynamic macro tool |
 | [create_prefab_atomic](#create_prefab_atomic) | Macro | — | — | Create a prefab in one atomic call |
 | [import_and_apply_texture](#import_and_apply_texture) | Macro | — | — | Import image and apply to Sprite |
-| [setup_ui_layout](#setup_ui_layout) | Macro | — | — | Scaffold a ScrollView UI hierarchy |
+| [setup_ui_layout](#setup_ui_layout) | Macro | — | — | Scaffold a ScrollView UI hierarchy (Pro only) |
 | [create_tween_animation_atomic](#create_tween_animation_atomic) | Macro | — | — | Create animation clip with keyframes |
 | [auto_fit_physics_collider](#auto_fit_physics_collider) | Macro | — | — | Auto-fit 2D physics collider to sprite |
 
-**Community Edition: 17 tools, ~158 actions · Pro Edition: 22 tools, 270+ actions**
+**Community Edition: 16 tools, ~157 actions · Pro Edition: 22 tools, 270+ actions**
 
 ---
 
@@ -65,7 +65,7 @@ Check connection health. **Always call this first** to verify the bridge is aliv
   "projectName": "MyGame",
   "projectPath": "D:/MyGame",
   "toolCount": 16,
-  "totalActions": 160
+  "totalActions": 157
 }
 ```
 
@@ -630,6 +630,8 @@ Import an external image and apply it to a Sprite — all in one atomic call. **
 ---
 
 ## setup_ui_layout
+
+**Pro only. Not registered in the Community JS runtime.**
 
 Create a standard ScrollView list hierarchy in one call. **Selection-aware**.
 

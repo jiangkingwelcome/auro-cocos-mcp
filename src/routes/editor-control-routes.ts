@@ -10,6 +10,12 @@ export function registerEditorControlRoutes(get: RouteRegistrar, post: RouteRegi
     if (rawScope === 'project' || rawScope === 'default') return rawScope;
     return 'global';
   };
+  const normalizeStructuredResult = (result: unknown, fallback: Record<string, unknown>) => {
+    if (result && typeof result === 'object' && ('success' in result || 'error' in result)) {
+      return { ...fallback, ...(result as Record<string, unknown>) };
+    }
+    return { success: true, ...fallback, value: result ?? null };
+  };
 
   post('/api/editor/save-scene', async () => {
     await ipc('scene', 'save-scene');
@@ -156,7 +162,7 @@ export function registerEditorControlRoutes(get: RouteRegistrar, post: RouteRegi
 
     try {
       const result = await ipc('preferences', 'query-config', scope, key || '*');
-      return { success: true, key: key || '*', scope, value: result ?? null };
+      return normalizeStructuredResult(result, { key: key || '*', scope });
     } catch (e) {
       logIgnored(ErrorCategory.EDITOR_IPC, `preferences query-config IPC 失败，尝试 Profile API`, e);
       if (typeof Editor.Profile?.getConfig === 'function') {
