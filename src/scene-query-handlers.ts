@@ -9,6 +9,90 @@ export interface SceneQueryDeps {
   requireNode: (scene: CocosNode, uuid: string) => { node: CocosNode } | { error: string };
 }
 
+function hasNumberFields(value: Record<string, unknown>, keys: string[]): boolean {
+  return keys.every((key) => typeof value[key] === 'number');
+}
+
+function snapshotObjectRef(value: Record<string, unknown>): Record<string, unknown> | null {
+  const ctorName = value.constructor?.name ?? value.__classname__;
+  const uuid = value.__uuid__ ?? value.uuid ?? value._uuid ?? value._id;
+  const name = value.name ?? value._name;
+
+  if (ctorName === 'Node' || (typeof uuid === 'string' && typeof name === 'string' && 'children' in value)) {
+    return {
+      __type__: 'Node',
+      uuid,
+      name,
+    };
+  }
+
+  if (typeof uuid === 'string') {
+    return {
+      __type__: typeof ctorName === 'string' && ctorName ? ctorName : 'Object',
+      uuid,
+      ...(typeof name === 'string' && name ? { name } : {}),
+    };
+  }
+
+  return null;
+}
+
+function serializeQueryValue(value: unknown, seen = new WeakSet<object>()): unknown {
+  if (value == null || typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean') {
+    return value;
+  }
+  if (typeof value === 'bigint') return value.toString();
+  if (Array.isArray(value)) return value.map((entry) => serializeQueryValue(entry, seen));
+  if (typeof value !== 'object') return String(value);
+
+  if (seen.has(value)) return '[Circular]';
+  seen.add(value);
+
+  const record = value as Record<string, unknown>;
+  const refSnapshot = snapshotObjectRef(record);
+  if (refSnapshot) return refSnapshot;
+
+  if (hasNumberFields(record, ['x', 'y', 'z', 'w'])) {
+    return { x: record.x, y: record.y, z: record.z, w: record.w };
+  }
+  if (hasNumberFields(record, ['x', 'y', 'z'])) {
+    return { x: record.x, y: record.y, z: record.z };
+  }
+  if (hasNumberFields(record, ['x', 'y'])) {
+    return { x: record.x, y: record.y };
+  }
+  if (hasNumberFields(record, ['width', 'height'])) {
+    return { width: record.width, height: record.height };
+  }
+  if (hasNumberFields(record, ['r', 'g', 'b', 'a'])) {
+    return { r: record.r, g: record.g, b: record.b, a: record.a };
+  }
+
+  const ctorName = record.constructor?.name;
+  if (ctorName === 'Uint8Array' || ctorName === 'Uint16Array' || ctorName === 'Float32Array') {
+    return Array.from(value as ArrayLike<unknown>);
+  }
+
+  const jsonSnapshot = (() => {
+    try {
+      return JSON.parse(JSON.stringify(value));
+    } catch {
+      return null;
+    }
+  })();
+  if (jsonSnapshot !== null) return jsonSnapshot;
+
+  const entries = Object.entries(record)
+    .filter(([key, entry]) => typeof entry !== 'function' && key !== '__proto__')
+    .slice(0, 32);
+  const output: Record<string, unknown> = {};
+  for (const [key, entry] of entries) {
+    output[key] = serializeQueryValue(entry, seen);
+  }
+  if (ctorName && ctorName !== 'Object') output.__type__ = ctorName;
+  return output;
+}
+
 function clipStrField(clip: Record<string, unknown>, ...keys: string[]): string {
   for (const key of keys) {
     const value = clip[key];
@@ -127,11 +211,12 @@ export function buildQueryHandlers(deps: SceneQueryDeps): Map<string, QueryHandl
       const compClass = js.getClassByName(compName) || js.getClassByName('cc.' + compName);
       const comp = compClass ? r.node.getComponent(compClass) : null;
       if (!comp) return { error: `节点上没有组件: ${compName}` };
-      let val = comp[propName];
-      if (val && typeof val === 'object' && typeof (val as Record<string, unknown>).clone === 'function') {
-        val = JSON.parse(JSON.stringify(val));
-      }
-      return { uuid, component: compName, property: propName, value: val };
+      return {
+        uuid,
+        component: compName,
+        property: propName,
+        value: serializeQueryValue(comp[propName]),
+      };
     }],
     ['get_node_components_properties', (_self, scene, p) => {
       const uuid = toStr(p.uuid);

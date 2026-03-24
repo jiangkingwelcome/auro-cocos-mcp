@@ -5,6 +5,13 @@ import { toInputSchema, normalizeParams, errorMessage, AI_RULES, validateRequire
 
 export function registerAssetTools(server: LocalToolServer, ctx: BridgeToolContext): void {
   const { bridgeGet, bridgePost, editorMsg, text } = ctx;
+  const isFailedResult = (result: unknown): boolean => {
+    return Boolean(
+      result
+      && typeof result === 'object'
+      && (('error' in result && result.error) || ('success' in result && result.success === false))
+    );
+  };
 
   // asset_operation (17 actions — Community Edition)
   server.tool(
@@ -123,7 +130,10 @@ Common errors: "资源不存在"=wrong db:// URL; create blocked for .spritefram
           case 'save': return text(addWarnings(await bridgePost('/api/asset-db/save-asset', { url: p.url, content: p.content || '' })));
           case 'delete': return text(addWarnings(await bridgePost('/api/asset-db/delete-asset', { url: p.url })));
           case 'move': return text(addWarnings(await bridgePost('/api/asset-db/move-asset', { sourceUrl: p.sourceUrl, targetUrl: p.targetUrl })));
-          case 'import': return text(addWarnings(await bridgePost('/api/asset-db/import-asset', { sourcePath: p.sourcePath, targetUrl: p.targetUrl })));
+          case 'import': {
+            const importResult = addWarnings(await bridgePost('/api/asset-db/import-asset', { sourcePath: p.sourcePath, targetUrl: p.targetUrl }));
+            return text(importResult, isFailedResult(importResult));
+          }
           case 'open': return text(addWarnings(await bridgePost('/api/asset-db/open-asset', { url: p.url })));
           case 'refresh': return text(addWarnings(await bridgePost('/api/asset-db/refresh', { url: p.url })));
           // ── IPC-only 读操作（无 HTTP 路由） ──

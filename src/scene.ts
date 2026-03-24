@@ -312,9 +312,10 @@ function looksLikeUuid(s: string): boolean {
 function resolveParent(scene: CocosNode, ref: string): { node: CocosNode } | { error: string } {
   if (!ref) return { node: scene };
 
+  const byUuid = findNodeByUuid(scene, ref);
+  if (byUuid) return { node: byUuid };
+
   if (looksLikeUuid(ref)) {
-    const node = findNodeByUuid(scene, ref);
-    if (node) return { node };
     return { error: `未找到父节点 (UUID): ${ref}` };
   }
 

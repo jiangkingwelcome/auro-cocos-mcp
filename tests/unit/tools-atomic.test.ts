@@ -1,4 +1,5 @@
-import { describe, it, expect, vi } from 'vitest';
+import fs from 'fs';
+import { afterEach, beforeEach, describe, it, expect, vi } from 'vitest';
 import { buildCocosToolServer, type BridgeToolContext } from '../../src/mcp/tools';
 import type { ToolCallResult } from '../../src/mcp/local-tool-server';
 
@@ -216,6 +217,46 @@ describe('create_prefab_atomic — 失败与回滚', () => {
 // import_and_apply_texture
 // ─────────────────────────────────────────────────────────────────────────────
 describe('import_and_apply_texture — 正常流程', () => {
+  beforeEach(() => {
+    vi.spyOn(fs, 'existsSync').mockReturnValue(true);
+    vi.spyOn(fs, 'statSync').mockReturnValue({ isFile: () => true } as fs.Stats);
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  function makeImportTextureSceneMethod(options: {
+    components?: string[];
+    missingNode?: boolean;
+    setPropertyResult?: Record<string, unknown>;
+    spriteFrameValue?: unknown;
+    addComponentResults?: Record<string, Record<string, unknown>>;
+  } = {}) {
+    let components = [...(options.components ?? [])];
+    return vi.fn().mockImplementation(async (method: string, args?: Array<Record<string, unknown>>) => {
+      const action = args?.[0]?.action;
+      if (method === 'dispatchQuery' && action === 'get_components') {
+        if (options.missingNode) return { error: '未找到节点: missing-node' };
+        return { uuid: String(args?.[0]?.uuid ?? 'node-uuid'), name: 'Node', components: components.map(name => ({ name })) };
+      }
+      if (method === 'dispatchQuery' && action === 'get_component_property') {
+        return { value: options.spriteFrameValue ?? { uuid: 'sprite-frame-uuid' } };
+      }
+      if (method === 'dispatchOperation' && action === 'add_component') {
+        const component = String(args?.[0]?.component ?? '');
+        const custom = options.addComponentResults?.[component];
+        if (custom) return custom;
+        if (!components.includes(component)) components.push(component);
+        return { success: true, component };
+      }
+      if (method === 'dispatchOperation' && action === 'set_property') {
+        return options.setPropertyResult ?? { success: true };
+      }
+      return { success: true };
+    });
+  }
+
   it('缺少 sourcePath 时返回 isError', async () => {
     const server = buildCocosToolServer(makeCtx());
 
@@ -228,8 +269,9 @@ describe('import_and_apply_texture — 正常流程', () => {
   it('指定 nodeUuid：跳过 resolve_selection，直接导入', async () => {
     const bridgeGet = vi.fn().mockResolvedValue({});
     const bridgePost = vi.fn().mockResolvedValue({ success: true });
-    const sceneMethod = vi.fn().mockResolvedValue({ success: true });
+    const sceneMethod = makeImportTextureSceneMethod({ components: ['Sprite', 'UITransform'] });
     const editorMsg = vi.fn()
+      .mockResolvedValueOnce({ uuid: 'imported-uuid', url: 'db://assets/textures/icon.png' }) // query-asset-info
       .mockResolvedValueOnce({ userData: { type: 'sprite-frame' } }) // query-asset-meta
       .mockResolvedValueOnce('sprite-frame-uuid') // query-uuid (spriteFrame)
       .mockResolvedValue({});
@@ -252,8 +294,12 @@ describe('import_and_apply_texture — 正常流程', () => {
   it('未指定 nodeUuid 时从 selection 中获取', async () => {
     const bridgeGet = vi.fn().mockResolvedValue({ selected: ['selected-uuid'] });
     const bridgePost = vi.fn().mockResolvedValue({ success: true });
-    const sceneMethod = vi.fn().mockResolvedValue({ success: true });
-    const editorMsg = vi.fn().mockResolvedValue('sprite-frame-uuid');
+    const sceneMethod = makeImportTextureSceneMethod({ components: ['Sprite', 'UITransform'] });
+    const editorMsg = vi.fn()
+      .mockResolvedValueOnce({ uuid: 'imported-uuid', url: 'db://assets/textures/bg.png' })
+      .mockResolvedValueOnce({ userData: { type: 'sprite-frame' } })
+      .mockResolvedValueOnce('sprite-frame-uuid')
+      .mockResolvedValue({});
     const server = buildCocosToolServer(makeCtx({ bridgeGet, bridgePost, sceneMethod, editorMsg }));
 
     const result = await server.callTool('import_and_apply_texture', {
@@ -263,6 +309,36 @@ describe('import_and_apply_texture — 正常流程', () => {
     const data = parse(result) as any;
     expect(data.nodeUuid).toBe('selected-uuid');
     expect(data.stages).toContain('resolve_selection');
+  });
+
+  it('源文件不存在时返回 isError', async () => {
+    vi.mocked(fs.existsSync).mockReturnValue(false);
+    const server = buildCocosToolServer(makeCtx());
+
+    const result = await server.callTool('import_and_apply_texture', {
+      sourcePath: 'C:/images/missing.png',
+      nodeUuid: 'node-uuid',
+    });
+
+    expect(result.isError).toBe(true);
+    const data = parse(result) as any;
+    expect(data.error).toContain('源文件不存在');
+    expect(data.stages).toContain('validate_input');
+  });
+
+  it('nodeUuid 不存在时返回 isError', async () => {
+    const sceneMethod = makeImportTextureSceneMethod({ missingNode: true });
+    const server = buildCocosToolServer(makeCtx({ sceneMethod }));
+
+    const result = await server.callTool('import_and_apply_texture', {
+      sourcePath: 'C:/images/icon.png',
+      nodeUuid: 'missing-node',
+    });
+
+    expect(result.isError).toBe(true);
+    const data = parse(result) as any;
+    expect(data.error).toContain('未找到节点');
+    expect(data.stages).toContain('validate_input');
   });
 
   it('未指定 nodeUuid 且无 selection 时返回 isError', async () => {
@@ -278,11 +354,14 @@ describe('import_and_apply_texture — 正常流程', () => {
     expect(data.error).toContain('未选中节点');
   });
 
-  it('spriteFrame UUID 解析失败时加 warning 而非 isError', async () => {
+  it('spriteFrame UUID 解析失败时返回 isError', async () => {
     const bridgeGet = vi.fn().mockResolvedValue({});
     const bridgePost = vi.fn().mockResolvedValue({ success: true });
-    const sceneMethod = vi.fn().mockResolvedValue({ success: true });
-    const editorMsg = vi.fn().mockResolvedValue(''); // 空字符串，uuid 解析失败（重试 5 次均失败）
+    const sceneMethod = makeImportTextureSceneMethod({ components: ['Sprite', 'UITransform'] });
+    const editorMsg = vi.fn()
+      .mockResolvedValueOnce({ uuid: 'imported-uuid', url: 'db://assets/textures/icon.png' })
+      .mockResolvedValueOnce({ userData: { type: 'sprite-frame' } })
+      .mockResolvedValue(''); // 空字符串，uuid 解析失败（重试 5 次均失败）
     const server = buildCocosToolServer(makeCtx({ bridgeGet, bridgePost, sceneMethod, editorMsg }));
 
     const result = await server.callTool('import_and_apply_texture', {
@@ -290,17 +369,73 @@ describe('import_and_apply_texture — 正常流程', () => {
       nodeUuid: 'node-uuid',
     });
 
+    expect(result.isError).toBe(true);
+    const data = parse(result) as any;
+    expect(data.success).toBe(false);
+    expect(data.error).toContain('未能解析 SpriteFrame UUID');
+  }, 15_000);
+
+  it('已存在 Sprite 和 UITransform 时跳过重复添加', async () => {
+    const bridgePost = vi.fn().mockResolvedValue({ success: true });
+    const sceneMethod = makeImportTextureSceneMethod({
+      components: ['Sprite', 'UITransform'],
+      spriteFrameValue: { uuid: 'resolved-sf-uuid' },
+    });
+    const editorMsg = vi.fn()
+      .mockResolvedValueOnce({ uuid: 'imported-uuid', url: 'db://assets/textures/icon.png' })
+      .mockResolvedValueOnce({ userData: { type: 'sprite-frame' } })
+      .mockResolvedValueOnce('resolved-sf-uuid')
+      .mockResolvedValue({});
+    const server = buildCocosToolServer(makeCtx({ bridgePost, sceneMethod, editorMsg }));
+
+    const result = await server.callTool('import_and_apply_texture', {
+      sourcePath: 'C:/images/icon.png',
+      nodeUuid: 'target-node',
+      targetUrl: 'db://assets/textures/icon.png',
+    });
+
+    expect(result.isError).toBeFalsy();
+    const addCalls = (sceneMethod as any).mock.calls.filter(
+      (c: any[]) => c[0] === 'dispatchOperation' && c[1]?.[0]?.action === 'add_component',
+    );
+    expect(addCalls).toHaveLength(0);
+  });
+
+  it('缺少 UITransform 时会先自动补齐', async () => {
+    const bridgePost = vi.fn().mockResolvedValue({ success: true });
+    const sceneMethod = makeImportTextureSceneMethod({
+      components: ['Sprite'],
+      spriteFrameValue: { uuid: 'resolved-sf-uuid' },
+    });
+    const editorMsg = vi.fn()
+      .mockResolvedValueOnce({ uuid: 'imported-uuid', url: 'db://assets/textures/icon.png' })
+      .mockResolvedValueOnce({ userData: { type: 'sprite-frame' } })
+      .mockResolvedValueOnce('resolved-sf-uuid')
+      .mockResolvedValue({});
+    const server = buildCocosToolServer(makeCtx({ bridgePost, sceneMethod, editorMsg }));
+
+    const result = await server.callTool('import_and_apply_texture', {
+      sourcePath: 'C:/images/icon.png',
+      nodeUuid: 'target-node',
+      targetUrl: 'db://assets/textures/icon.png',
+    });
+
     expect(result.isError).toBeFalsy();
     const data = parse(result) as any;
-    expect(data.success).toBe(true);
-    expect(data.warnings).toBeDefined();
-    expect(data.warnings.some((w: string) => w.includes('SpriteFrame'))).toBe(true);
-  }, 15_000);
+    expect(data.stages).toContain('ensure_ui_transform');
+    expect(sceneMethod).toHaveBeenCalledWith('dispatchOperation', [
+      expect.objectContaining({ action: 'add_component', uuid: 'target-node', component: 'UITransform' }),
+    ]);
+  });
 
   it('apply_sprite_frame 阶段传递 __uuid__ 资源引用给 sceneMethod', async () => {
     const bridgePost = vi.fn().mockResolvedValue({ success: true });
-    const sceneMethod = vi.fn().mockResolvedValue({ success: true });
+    const sceneMethod = makeImportTextureSceneMethod({
+      components: ['Sprite', 'UITransform'],
+      spriteFrameValue: { uuid: 'resolved-sf-uuid' },
+    });
     const editorMsg = vi.fn()
+      .mockResolvedValueOnce({ uuid: 'imported-uuid', url: 'db://assets/textures/icon.png' })
       .mockResolvedValueOnce({ userData: { type: 'sprite-frame' } }) // query-asset-meta (already sprite-frame, skip reimport)
       .mockResolvedValueOnce('resolved-sf-uuid')  // query-uuid → spriteFrame UUID
       .mockResolvedValue({});                       // selection, console log
@@ -325,8 +460,12 @@ describe('import_and_apply_texture — 正常流程', () => {
 
   it('spriteFrame UUID 解析重试：首次失败后重试成功', async () => {
     const bridgePost = vi.fn().mockResolvedValue({ success: true });
-    const sceneMethod = vi.fn().mockResolvedValue({ success: true });
+    const sceneMethod = makeImportTextureSceneMethod({
+      components: ['Sprite', 'UITransform'],
+      spriteFrameValue: { uuid: 'retry-sf-uuid' },
+    });
     const editorMsg = vi.fn()
+      .mockResolvedValueOnce({ uuid: 'imported-uuid', url: 'db://assets/textures/icon.png' })
       .mockResolvedValueOnce({ userData: { type: 'sprite-frame' } }) // query-asset-meta
       .mockResolvedValueOnce('')                   // 第 1 次 query-uuid 失败
       .mockResolvedValueOnce('')                   // 第 2 次 query-uuid 失败
@@ -372,8 +511,15 @@ describe('import_and_apply_texture — 正常流程', () => {
 
   it('targetUrl 路径透传：大写 Textures 原样保留', async () => {
     const bridgePost = vi.fn().mockResolvedValue({ success: true });
-    const sceneMethod = vi.fn().mockResolvedValue({ success: true });
-    const editorMsg = vi.fn().mockResolvedValue('sprite-uuid');
+    const sceneMethod = makeImportTextureSceneMethod({
+      components: ['Sprite', 'UITransform'],
+      spriteFrameValue: { uuid: 'sprite-uuid' },
+    });
+    const editorMsg = vi.fn()
+      .mockResolvedValueOnce({ uuid: 'imported-uuid', url: 'db://assets/Textures/icon.png' })
+      .mockResolvedValueOnce({ userData: { type: 'sprite-frame' } })
+      .mockResolvedValueOnce('sprite-uuid')
+      .mockResolvedValue({});
     const server = buildCocosToolServer(makeCtx({ bridgePost, sceneMethod, editorMsg }));
 
     const result = await server.callTool('import_and_apply_texture', {
@@ -385,6 +531,74 @@ describe('import_and_apply_texture — 正常流程', () => {
     const data = parse(result) as any;
     // CASE_NORMALIZE_MAP 已清空，路径原样保留
     expect(data.targetUrl).toBe('db://assets/Textures/icon.png');
+  });
+
+  it('set_property 返回成功但 spriteFrame 未实际挂上时返回 isError', async () => {
+    const bridgePost = vi.fn().mockResolvedValue({ success: true });
+    const sceneMethod = makeImportTextureSceneMethod({
+      components: ['Sprite', 'UITransform'],
+      spriteFrameValue: {},
+    });
+    const editorMsg = vi.fn()
+      .mockResolvedValueOnce({ uuid: 'imported-uuid', url: 'db://assets/textures/icon.png' })
+      .mockResolvedValueOnce({ userData: { type: 'sprite-frame' } })
+      .mockResolvedValueOnce('resolved-sf-uuid')
+      .mockResolvedValue({});
+    const server = buildCocosToolServer(makeCtx({ bridgePost, sceneMethod, editorMsg }));
+
+    const result = await server.callTool('import_and_apply_texture', {
+      sourcePath: 'C:/images/icon.png',
+      nodeUuid: 'target-node',
+      targetUrl: 'db://assets/textures/icon.png',
+    });
+
+    expect(result.isError).toBe(true);
+    const data = parse(result) as any;
+    expect(data.error).toContain('spriteFrame 挂载后校验失败');
+  });
+
+  it('优先使用 query-node dump 校验 spriteFrame，避免场景脚本属性序列化失败', async () => {
+    const bridgePost = vi.fn().mockResolvedValue({ success: true });
+    const sceneMethod = vi.fn().mockImplementation(async (method: string, args?: Array<Record<string, unknown>>) => {
+      const action = args?.[0]?.action;
+      if (method === 'dispatchQuery' && action === 'get_components') {
+        return { uuid: 'target-node', name: 'Node', components: [{ name: 'Sprite' }, { name: 'UITransform' }] };
+      }
+      if (method === 'dispatchQuery' && action === 'get_component_property') {
+        return { error: 'Converting circular structure to JSON' };
+      }
+      if (method === 'dispatchOperation') {
+        return { success: true };
+      }
+      return { success: true };
+    });
+    const editorMsg = vi.fn()
+      .mockResolvedValueOnce({ uuid: 'imported-uuid', url: 'db://assets/textures/icon.png' })
+      .mockResolvedValueOnce({ userData: { type: 'sprite-frame' } })
+      .mockResolvedValueOnce('resolved-sf-uuid')
+      .mockResolvedValueOnce({
+        __comps__: [{
+          type: 'cc.Sprite',
+          value: {
+            spriteFrame: {
+              value: { uuid: 'resolved-sf-uuid' },
+            },
+          },
+        }],
+      })
+      .mockResolvedValue({});
+    const server = buildCocosToolServer(makeCtx({ bridgePost, sceneMethod, editorMsg }));
+
+    const result = await server.callTool('import_and_apply_texture', {
+      sourcePath: 'C:/images/icon.png',
+      nodeUuid: 'target-node',
+      targetUrl: 'db://assets/textures/icon.png',
+    });
+
+    expect(result.isError).toBeFalsy();
+    const data = parse(result) as any;
+    expect(data.success).toBe(true);
+    expect(editorMsg).toHaveBeenCalledWith('scene', 'query-node', 'target-node');
   });
 });
 

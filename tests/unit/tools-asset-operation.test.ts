@@ -114,6 +114,21 @@ describe('asset_operation — bridgePost actions', () => {
     });
   });
 
+  it('import 遇到结构化失败时返回 isError', async () => {
+    const bridgePost = vi.fn().mockResolvedValue({ success: false, error: '源文件不存在' });
+    const server = buildCocosToolServer(makeCtx({ bridgePost }));
+
+    const result = await server.callTool('asset_operation', {
+      action: 'import',
+      sourcePath: 'C:/images/missing.png',
+      targetUrl: 'db://assets/textures/missing.png',
+    });
+
+    expect(result.isError).toBe(true);
+    const data = parse(result) as any;
+    expect(data.error).toBe('源文件不存在');
+  });
+
   it('refresh 调用 /api/asset-db/refresh', async () => {
     const bridgePost = vi.fn().mockResolvedValue({ success: true });
     const server = buildCocosToolServer(makeCtx({ bridgePost }));

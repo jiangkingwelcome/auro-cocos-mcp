@@ -176,12 +176,19 @@ native/src/
 
 ## 6. 构建命令
 
+> ⚠️ `package.json` 没有 `scripts` 段，所有构建命令直接用 node/bat 调用。
+
 | 命令 | 说明 |
 |------|------|
-| `npm run build` | TypeScript 编译 (社区版 + 共享基础设施) |
-| `npm run build:native:release` | Rust release 编译 |
-| `npm run package:pro` | 完整 Pro 版构建 (TS + Rust + 混淆 + 字节码 + 打包) |
-| `npm run package:release:win` | 社区版发行打包 (不含 .node) |
+| `node_modules/.bin/tsc --noEmit` | TypeScript 类型检查（不生成文件） |
+| `node_modules/.bin/tsc` | TypeScript 编译 → `dist/`（开发用） |
+| `node scripts/build-release.mjs` | esbuild 打包 → `dist-release/`（Release 构建） |
+| `node scripts/build-protected.mjs --obfuscate-only` | 混淆 `dist-release/` 产物（不用 bytenode） |
+| `node scripts/build-protected.mjs` | 混淆 + bytenode 字节码加固 |
+| `scripts\package-release-win.bat --no-bytenode` | 社区版完整打包 → `dist-plugin-release/`（Win） |
+| `scripts\package-pro-win.bat` | Pro 版完整打包（需要先编译 Rust） |
+| `node scripts/build-native.mjs` | 编译 Rust 原生模块 → `native/*.node` |
+| `npx vitest run` | 运行单元测试 |
 
 ## 7. 发行包结构
 
