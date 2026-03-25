@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aura 双轨测试执行台</title>
+  <link rel="stylesheet" href="./interactive-test-plan.css">
+</head>
+<body>
+  <div class="page">
+    <section class="hero">
+      <div class="hero-top">
+        <div>
+          <div class="eyebrow">AI + 人工双轨测试</div>
+          <h1>Aura 双轨测试执行台</h1>
+          <p id="heroDesc">加载中...</p>
+        </div>
+        <div class="top-note">
+          <div>数据来源：<code>tests/test-cases.json</code> + <code>tests/test-report.json</code></div>
+          <div>生成时间：<span id="generatedAt">-</span></div>
+          <div>本地保存：浏览器 <code>localStorage</code></div>
+        </div>
+      </div>
+      <div class="stats" id="heroStats"></div>
+    </section>
+
+    <div class="layout">
+      <aside class="side">
+        <section class="card">
+          <h2>测试计划</h2>
+          <div class="plan-cols" id="goals"></div>
+          <div class="plan-cols section-gap" id="stages"></div>
+          <div class="plan-cols section-gap" id="exits"></div>
+        </section>
+
+        <section class="card">
+          <h2>执行检查</h2>
+          <div class="plan-cols checklist-single" id="checklist"></div>
+        </section>
+
+        <section class="card">
+          <h2>测试信息</h2>
+          <div class="form-grid">
+            <div><label>版本 / 发布批次</label><input type="text" data-meta="releaseTarget" placeholder="例如 1.0.15-beta.2"></div>
+            <div><label>构建号 / Commit</label><input type="text" data-meta="buildVersion" placeholder="例如 8f6a2d1"></div>
+            <div><label>Cocos 版本</label><input type="text" data-meta="cocosVersion" placeholder="例如 3.8.4"></div>
+            <div><label>测试环境</label><input type="text" data-meta="testEnvironment" placeholder="例如 Win11 + Creator 3.8.4"></div>
+            <div><label>AI 执行人 / 脚本</label><input type="text" data-meta="aiOwner" placeholder="例如 mcp-full-test.mjs"></div>
+            <div><label>人工测试人</label><input type="text" data-meta="manualOwner" placeholder="填写负责人"></div>
+            <div><label>开始日期</label><input type="date" data-meta="startDate"></div>
+            <div><label>完成日期</label><input type="date" data-meta="endDate"></div>
+            <div><label>发布结论</label><select data-meta="releaseDecision"><option value="pending">待判断</option><option value="go">Go</option><option value="conditional-go">Conditional Go</option><option value="no-go">No-Go</option></select></div>
+            <div><label>当前最高风险</label><select data-meta="riskLevel"><option value="none">无</option><option value="low">低</option><option value="medium">中</option><option value="high">高</option><option value="critical">严重</option></select></div>
+            <div class="full"><label>测试总结</label><textarea data-meta="summary" placeholder="记录本轮测试总体情况、关键缺陷、是否建议发布。"></textarea></div>
+          </div>
+        </section>
+
+        <section class="card">
+          <h2>导入导出</h2>
+          <div class="actions">
+            <button class="primary" id="saveJson">保存本地 JSON</button>
+            <button id="exportCsv">导出 CSV</button>
+            <button id="importJson">导入结果</button>
+            <button class="danger" id="resetState">重置填写</button>
+          </div>
+          <input id="importFile" type="file" accept=".json" hidden>
+          <p class="tiny margin-top">页面会自动保存你在浏览器中的填写内容。导出 JSON 后，你可以在别的机器导入继续编辑。</p>
+        </section>
+
+        <section class="card">
+          <h2>版本与阶段分布</h2>
+          <div class="toolchips section-gap-less" id="editionChips"></div>
+          <div class="toolchips" id="phaseChips"></div>
+        </section>
+      </aside>
+
+      <main class="main">
+        <section class="card">
+          <h2>执行概览</h2>
+          <div class="metrics metrics-grid" id="metrics"></div>
+          <div class="progress-wrap">
+            <div class="tiny">人工完成率</div>
+            <div class="bar"><span id="manualBar"></span></div>
+            <div class="tiny" id="manualLabel"></div>
+            <div class="tiny">双轨完成率（AI 与人工都非待测）</div>
+            <div class="bar"><span id="dualBar"></span></div>
+            <div class="tiny" id="dualLabel"></div>
+          </div>
+        </section>
+
+        <section class="card">
+          <h2>筛选与定位</h2>
+          <div class="filters">
+            <div><label>搜索</label><input id="searchInput" type="text" placeholder="搜索标题 / tool / action / 问题"></div>
+            <div><label>Tool</label><select id="toolFilter"></select></div>
+            <div><label>阶段</label><select id="phaseFilter"></select></div>
+            <div><label>版本归属</label><select id="editionFilter"><option value="all">全部版本</option><option value="community">仅社区版</option><option value="pro">仅 Pro / 扩展</option></select></div>
+            <div><label>快捷过滤</label><select id="quickFilter"><option value="all">全部</option><option value="manual-pending">仅看人工待测</option><option value="ai-fail">仅看 AI 失败</option><option value="manual-fail">仅看人工失败</option><option value="open-issues">仅看有问题记录</option><option value="dual-pass">仅看双通过</option></select></div>
+          </div>
+          <div class="actions section-gap">
+            <button id="clearFilters">清空筛选</button>
+            <button id="expandAll">全部展开</button>
+            <button id="collapseAll">全部收起</button>
+            <button id="scrollIssues">跳到问题汇总</button>
+          </div>
+          <p id="filterSummary" class="tiny margin-top"></p>
+        </section>
+
+        <section class="card">
+          <h2>问题汇总</h2>
+          <div class="issues" id="issues"></div>
+        </section>
+
+        <section class="card">
+          <h2>测试用例执行区</h2>
+          <div class="case-list" id="cases"></div>
+        </section>
+      </main>
+    </div>
+
+    <div class="footer">建议使用 Chromium / Edge 打开。若测试用例源文件变更，可重新执行 <code>node scripts/generate-interactive-test-plan.mjs</code> 更新同目录下的 <code>interactive-test-plan.data.js</code>。</div>
+  </div>
+
+  <script src="./interactive-test-plan.data.js"></script>
+  <script src="./interactive-test-plan.app.js"></script>
+</body>
+</html>

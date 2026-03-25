@@ -52,7 +52,11 @@
       "Bash(powershell -ExecutionPolicy Bypass -Command \":*)",
       "Bash(wc -l src/mcp/*.ts)",
       "Skill(architecture)",
-      "Skill(architecture:*)"
+      "Skill(architecture:*)",
+      "Bash(rm -f:*)",
+      "Bash(rm -rf:*)",
+      "Bash(rmdir:*)",
+      "Bash(git:*)"
     ]
   }
 }

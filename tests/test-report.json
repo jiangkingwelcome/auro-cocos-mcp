@@ -1,71 +1,1093 @@
 {
-  "total": 325,
-  "passed": 316,
-  "failed": 9,
+  "total": 378,
+  "passed": 223,
+  "failed": 155,
   "skipped": 0,
   "errors": [
     {
-      "id": 125,
-      "tool": "scene_operation",
-      "action": "create_prefab",
-      "title": "保存预制体",
-      "error": "HTTP 500: Internal Server Error"
-    },
-    {
-      "id": 130,
-      "tool": "scene_operation",
-      "action": "apply_prefab",
-      "title": "应用更改",
-      "error": "HTTP 500: Internal Server Error"
-    },
-    {
-      "id": 185,
-      "tool": "asset_operation",
-      "action": "batch_import",
-      "title": "批量导入",
-      "error": "HTTP 500: Internal Server Error"
-    },
-    {
-      "id": 206,
-      "tool": "asset_operation",
-      "action": "create_material",
-      "title": "创建材质",
-      "error": "HTTP 500: Internal Server Error"
-    },
-    {
-      "id": 207,
-      "tool": "asset_operation",
-      "action": "generate_script",
-      "title": "生成脚本",
-      "error": "HTTP 500: Internal Server Error"
+      "id": 224,
+      "tool": "editor_action",
+      "action": "preview_status",
+      "title": "预览状态",
+      "error": "HTTP 429: Too Many Requests"
     },
     {
       "id": 225,
       "tool": "editor_action",
       "action": "send_message",
       "title": "IPC 消息",
-      "error": "HTTP 500: Internal Server Error"
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 226,
+      "tool": "editor_action",
+      "action": "focus_node",
+      "title": "聚焦节点",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 227,
+      "tool": "editor_action",
+      "action": "open_panel",
+      "title": "打开面板",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 228,
+      "tool": "editor_action",
+      "action": "close_panel",
+      "title": "关闭面板",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 229,
+      "tool": "editor_action",
+      "action": "query_panels",
+      "title": "列出面板",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 230,
+      "tool": "editor_action",
+      "action": "log",
+      "title": "输出日志",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 231,
+      "tool": "editor_action",
+      "action": "warn",
+      "title": "输出警告",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 232,
+      "tool": "editor_action",
+      "action": "error",
+      "title": "输出错误",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 233,
+      "tool": "editor_action",
+      "action": "clear_console",
+      "title": "清空控制台",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 234,
+      "tool": "editor_action",
+      "action": "get_console_logs",
+      "title": "全部日志",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 235,
+      "tool": "editor_action",
+      "action": "get_console_logs",
+      "title": "仅错误",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 236,
+      "tool": "editor_action",
+      "action": "search_logs",
+      "title": "搜索日志",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 237,
+      "tool": "editor_action",
+      "action": "get_packages",
+      "title": "已安装插件",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 238,
+      "tool": "editor_action",
+      "action": "reload_plugin",
+      "title": "重载插件",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 239,
+      "tool": "editor_action",
+      "action": "inspect_asset",
+      "title": "查看资源",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 240,
+      "tool": "editor_action",
+      "action": "open_preferences",
+      "title": "偏好设置",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 241,
+      "tool": "editor_action",
+      "action": "open_project_settings",
+      "title": "项目设置",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 242,
+      "tool": "editor_action",
+      "action": "show_notification",
+      "title": "通知",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 243,
+      "tool": "editor_action",
+      "action": "play_in_editor",
+      "title": "播放",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 244,
+      "tool": "editor_action",
+      "action": "pause_in_editor",
+      "title": "暂停",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 245,
+      "tool": "editor_action",
+      "action": "stop_in_editor",
+      "title": "停止",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 246,
+      "tool": "editor_action",
+      "action": "step_in_editor",
+      "title": "单步帧",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 247,
+      "tool": "editor_action",
+      "action": "move_scene_camera",
+      "title": "移动场景相机",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 248,
+      "tool": "editor_action",
+      "action": "take_scene_screenshot",
+      "title": "视口截图",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 249,
+      "tool": "editor_action",
+      "action": "set_transform_tool",
+      "title": "切 Gizmo",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 250,
+      "tool": "editor_action",
+      "action": "set_coordinate",
+      "title": "切坐标系",
+      "error": "HTTP 429: Too Many Requests"
     },
     {
       "id": 251,
       "tool": "editor_action",
       "action": "toggle_grid",
       "title": "显示网格",
-      "error": "HTTP 500: Internal Server Error"
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 252,
+      "tool": "editor_action",
+      "action": "toggle_snap",
+      "title": "启用吸附",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 253,
+      "tool": "editor_action",
+      "action": "set_view_mode",
+      "title": "切到 2D",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 254,
+      "tool": "editor_action",
+      "action": "set_view_mode",
+      "title": "切到 3D",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 255,
+      "tool": "editor_action",
+      "action": "zoom_to_fit",
+      "title": "缩放适应",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 256,
+      "tool": "engine_action",
+      "action": "set_frame_rate",
+      "title": "设 60 FPS",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 257,
+      "tool": "engine_action",
+      "action": "set_frame_rate",
+      "title": "设 30 FPS",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 258,
+      "tool": "engine_action",
+      "action": "pause_engine",
+      "title": "暂停引擎",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 259,
+      "tool": "engine_action",
+      "action": "resume_engine",
+      "title": "恢复引擎",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 260,
+      "tool": "engine_action",
+      "action": "get_system_info",
+      "title": "系统信息",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 261,
+      "tool": "engine_action",
+      "action": "dump_texture_cache",
+      "title": "纹理缓存",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 262,
+      "tool": "engine_action",
+      "action": "get_render_stats",
+      "title": "渲染统计",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 263,
+      "tool": "engine_action",
+      "action": "get_memory_stats",
+      "title": "内存统计",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 264,
+      "tool": "engine_action",
+      "action": "get_editor_performance",
+      "title": "性能总览",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 265,
+      "tool": "animation_tool",
+      "action": "create_clip",
+      "title": "创建动画",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 266,
+      "tool": "animation_tool",
+      "action": "play",
+      "title": "播放默认",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 267,
+      "tool": "animation_tool",
+      "action": "play",
+      "title": "播放指定",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 268,
+      "tool": "animation_tool",
+      "action": "pause",
+      "title": "暂停",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 269,
+      "tool": "animation_tool",
+      "action": "resume",
+      "title": "恢复",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 270,
+      "tool": "animation_tool",
+      "action": "stop",
+      "title": "停止",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 271,
+      "tool": "animation_tool",
+      "action": "get_state",
+      "title": "查状态",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 272,
+      "tool": "animation_tool",
+      "action": "list_clips",
+      "title": "列出片段",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 273,
+      "tool": "animation_tool",
+      "action": "set_current_time",
+      "title": "跳转时间",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 274,
+      "tool": "animation_tool",
+      "action": "set_speed",
+      "title": "倍速播放",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 275,
+      "tool": "animation_tool",
+      "action": "crossfade",
+      "title": "交叉淡入",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 276,
+      "tool": "physics_tool",
+      "action": "get_collider_info",
+      "title": "碰撞器详情",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 277,
+      "tool": "physics_tool",
+      "action": "add_collider",
+      "title": "添加 Box2D",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 278,
+      "tool": "physics_tool",
+      "action": "add_collider",
+      "title": "添加 Sphere3D",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 279,
+      "tool": "physics_tool",
+      "action": "set_collider_size",
+      "title": "设 Box 大小",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 280,
+      "tool": "physics_tool",
+      "action": "add_rigidbody",
+      "title": "动态刚体",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 281,
+      "tool": "physics_tool",
+      "action": "add_rigidbody",
+      "title": "静态刚体",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 282,
+      "tool": "physics_tool",
+      "action": "set_rigidbody_props",
+      "title": "设刚体属性",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 283,
+      "tool": "physics_tool",
+      "action": "set_physics_material",
+      "title": "设物理材质",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 284,
+      "tool": "physics_tool",
+      "action": "set_collision_group",
+      "title": "设碰撞组",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 285,
+      "tool": "physics_tool",
+      "action": "get_physics_world",
+      "title": "世界配置",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 286,
+      "tool": "physics_tool",
+      "action": "set_physics_world",
+      "title": "设重力",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 287,
+      "tool": "physics_tool",
+      "action": "add_joint",
+      "title": "弹簧关节",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 288,
+      "tool": "preferences",
+      "action": "get",
+      "title": "读偏好",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 289,
+      "tool": "preferences",
+      "action": "set",
+      "title": "写偏好",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 290,
+      "tool": "preferences",
+      "action": "list",
+      "title": "列出全部",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 291,
+      "tool": "preferences",
+      "action": "get_global",
+      "title": "读全局",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 292,
+      "tool": "preferences",
+      "action": "set_global",
+      "title": "写全局",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 293,
+      "tool": "preferences",
+      "action": "get_project",
+      "title": "读项目级",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 294,
+      "tool": "preferences",
+      "action": "set_project",
+      "title": "写项目级",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 295,
+      "tool": "broadcast",
+      "action": "poll",
+      "title": "拉取事件",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 296,
+      "tool": "broadcast",
+      "action": "history",
+      "title": "历史记录",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 297,
+      "tool": "broadcast",
+      "action": "clear",
+      "title": "清空队列",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 298,
+      "tool": "broadcast",
+      "action": "send",
+      "title": "广播消息",
+      "error": "HTTP 429: Too Many Requests"
     },
     {
       "id": 299,
       "tool": "broadcast",
       "action": "send_ipc",
       "title": "IPC 广播",
-      "error": "HTTP 500: Internal Server Error"
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 300,
+      "tool": "reference_image",
+      "action": "set",
+      "title": "显示参考图",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 301,
+      "tool": "reference_image",
+      "action": "clear",
+      "title": "清除参考图",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 302,
+      "tool": "reference_image",
+      "action": "list",
+      "title": "列出参考图",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 303,
+      "tool": "reference_image",
+      "action": "add",
+      "title": "添加参考图",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 304,
+      "tool": "reference_image",
+      "action": "remove",
+      "title": "移除参考图",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 305,
+      "tool": "reference_image",
+      "action": "set_transform",
+      "title": "调整位置",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 306,
+      "tool": "reference_image",
+      "action": "set_opacity",
+      "title": "调透明度",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 307,
+      "tool": "tool_management",
+      "action": "list_all",
+      "title": "列出工具",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 308,
+      "tool": "tool_management",
+      "action": "enable",
+      "title": "启用工具",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 309,
+      "tool": "tool_management",
+      "action": "disable",
+      "title": "禁用工具",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 310,
+      "tool": "tool_management",
+      "action": "get_stats",
+      "title": "工具统计",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 311,
+      "tool": "execute_script",
+      "action": "execute_script",
+      "title": "调用 dispatchQuery",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 312,
+      "tool": "execute_script",
+      "action": "execute_script",
+      "title": "调用 setNodePosition",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 313,
+      "tool": "register_custom_macro",
+      "action": "register_custom_macro",
+      "title": "注册快捷宏",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 314,
+      "tool": "register_custom_macro",
+      "action": "register_custom_macro",
+      "title": "非白名单方法",
+      "error": "HTTP 429: Too Many Requests"
     },
     {
       "id": 315,
       "tool": "create_prefab_atomic",
       "action": "create_prefab_atomic",
       "title": "完整预制体",
-      "error": "HTTP 500: Internal Server Error"
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 316,
+      "tool": "create_prefab_atomic",
+      "action": "create_prefab_atomic",
+      "title": "失败回滚",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 317,
+      "tool": "import_and_apply_texture",
+      "action": "import_and_apply_texture",
+      "title": "导入+应用",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 318,
+      "tool": "import_and_apply_texture",
+      "action": "import_and_apply_texture",
+      "title": "自动添加 Sprite",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 321,
+      "tool": "create_tween_animation_atomic",
+      "action": "create_tween_animation_atomic",
+      "title": "淡入动画",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 322,
+      "tool": "create_tween_animation_atomic",
+      "action": "create_tween_animation_atomic",
+      "title": "位移+旋转",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 323,
+      "tool": "auto_fit_physics_collider",
+      "action": "auto_fit_physics_collider",
+      "title": "自动适配",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 324,
+      "tool": "auto_fit_physics_collider",
+      "action": "auto_fit_physics_collider",
+      "title": "指定 Box",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 325,
+      "tool": "auto_fit_physics_collider",
+      "action": "auto_fit_physics_collider",
+      "title": "指定 Circle",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 326,
+      "tool": "script_scaffold",
+      "action": "list_templates",
+      "title": "列出脚本模板",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 327,
+      "tool": "script_scaffold",
+      "action": "generate_component",
+      "title": "生成组件脚本",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 328,
+      "tool": "script_scaffold",
+      "action": "generate_component",
+      "title": "缺少 className",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 329,
+      "tool": "script_scaffold",
+      "action": "from_template",
+      "title": "从模板生成",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 330,
+      "tool": "script_scaffold",
+      "action": "generate_and_attach",
+      "title": "生成+挂载",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 331,
+      "tool": "script_scaffold",
+      "action": "generate_and_attach",
+      "title": "缺少 uuid",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 332,
+      "tool": "script_scaffold",
+      "action": "add_properties",
+      "title": "追加属性",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 333,
+      "tool": "script_scaffold",
+      "action": "generate_event_handler",
+      "title": "生成事件处理",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 334,
+      "tool": "script_scaffold",
+      "action": "generate_event_handler",
+      "title": "缺少 events",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 335,
+      "tool": "animation_workflow",
+      "action": "create_transition",
+      "title": "淡入过渡",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 336,
+      "tool": "animation_workflow",
+      "action": "create_transition",
+      "title": "弹跳进入",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 337,
+      "tool": "animation_workflow",
+      "action": "create_transition",
+      "title": "自定义时长",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 338,
+      "tool": "animation_workflow",
+      "action": "create_loop_animation",
+      "title": "浮动循环",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 339,
+      "tool": "animation_workflow",
+      "action": "create_loop_animation",
+      "title": "旋转循环",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 340,
+      "tool": "animation_workflow",
+      "action": "apply_preset",
+      "title": "idle 预设",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 341,
+      "tool": "animation_workflow",
+      "action": "apply_preset",
+      "title": "attack 预设",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 342,
+      "tool": "animation_workflow",
+      "action": "create_ui_animation",
+      "title": "按钮点击",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 343,
+      "tool": "animation_workflow",
+      "action": "create_ui_animation",
+      "title": "面板弹出",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 344,
+      "tool": "animation_workflow",
+      "action": "create_from_description",
+      "title": "自然语言动画",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 345,
+      "tool": "animation_workflow",
+      "action": "create_from_description",
+      "title": "缺少 prompt",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 346,
+      "tool": "animation_workflow",
+      "action": "create_sequence",
+      "title": "动画序列",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 347,
+      "tool": "animation_workflow",
+      "action": "batch_animate",
+      "title": "批量入场",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 348,
+      "tool": "animation_workflow",
+      "action": "batch_animate",
+      "title": "缺少 uuids",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 349,
+      "tool": "animation_workflow",
+      "action": "preview_animation",
+      "title": "预览动画",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 350,
+      "tool": "ui_generator",
+      "action": "create_login_page",
+      "title": "一键登录页",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 351,
+      "tool": "ui_generator",
+      "action": "create_settings_page",
+      "title": "一键设置页",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 352,
+      "tool": "ui_generator",
+      "action": "create_shop_page",
+      "title": "一键商店页",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 353,
+      "tool": "ui_generator",
+      "action": "create_shop_page",
+      "title": "自定义商品数",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 354,
+      "tool": "ui_generator",
+      "action": "create_hud",
+      "title": "一键 HUD",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 355,
+      "tool": "ui_generator",
+      "action": "create_dialog",
+      "title": "自定义对话框",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 356,
+      "tool": "ui_generator",
+      "action": "create_inventory",
+      "title": "一键背包",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 357,
+      "tool": "ui_generator",
+      "action": "create_custom_ui",
+      "title": "自定义 UI",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 358,
+      "tool": "ui_generator",
+      "action": "create_custom_ui",
+      "title": "缺少 prompt",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 359,
+      "tool": "project_linter",
+      "action": "check_all",
+      "title": "全量检查",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 360,
+      "tool": "project_linter",
+      "action": "check_naming",
+      "title": "命名检查",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 361,
+      "tool": "project_linter",
+      "action": "check_hierarchy",
+      "title": "层级检查",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 362,
+      "tool": "project_linter",
+      "action": "check_components",
+      "title": "组件检查",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 363,
+      "tool": "project_linter",
+      "action": "check_assets",
+      "title": "资源检查",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 364,
+      "tool": "project_linter",
+      "action": "check_performance",
+      "title": "性能检查",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 365,
+      "tool": "project_linter",
+      "action": "auto_fix_naming",
+      "title": "自动修复命名",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 366,
+      "tool": "project_linter",
+      "action": "set_rules",
+      "title": "设置自定义规则",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 367,
+      "tool": "project_linter",
+      "action": "set_rules",
+      "title": "缺少 rules",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 368,
+      "tool": "operation_log",
+      "action": "get_history",
+      "title": "查看历史",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 369,
+      "tool": "operation_log",
+      "action": "get_history",
+      "title": "过滤历史",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 370,
+      "tool": "operation_log",
+      "action": "get_stats",
+      "title": "操作统计",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 371,
+      "tool": "operation_log",
+      "action": "export_log",
+      "title": "导出 JSON",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 372,
+      "tool": "operation_log",
+      "action": "export_script",
+      "title": "导出脚本",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 373,
+      "tool": "operation_log",
+      "action": "replay_last",
+      "title": "回放最近 5 步",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 374,
+      "tool": "operation_log",
+      "action": "replay_last",
+      "title": "默认回放 10 步",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 375,
+      "tool": "operation_log",
+      "action": "replay_from_log",
+      "title": "从日志回放",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 376,
+      "tool": "operation_log",
+      "action": "replay_from_log",
+      "title": "缺少 log",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 377,
+      "tool": "operation_log",
+      "action": "clear_history",
+      "title": "清空历史",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 378,
+      "tool": "operation_log",
+      "action": "clear_history",
+      "title": "未确认清空",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 379,
+      "tool": "operation_log",
+      "action": "bookmark",
+      "title": "添加书签",
+      "error": "HTTP 429: Too Many Requests"
+    },
+    {
+      "id": 380,
+      "tool": "operation_log",
+      "action": "bookmark",
+      "title": "缺少 label",
+      "error": "HTTP 429: Too Many Requests"
     }
   ],
   "results": [
@@ -74,21 +1096,21 @@
       "tool": "bridge_status",
       "action": "bridge_status",
       "status": "passed",
-      "duration": 2
+      "duration": 44
     },
     {
       "id": 2,
       "tool": "bridge_status",
       "action": "bridge_status",
       "status": "passed",
-      "duration": 2
+      "duration": 20
     },
     {
       "id": 3,
       "tool": "scene_query",
       "action": "tree",
       "status": "passed",
-      "duration": 3
+      "duration": 43
     },
     {
       "id": 4,
@@ -102,70 +1124,70 @@
       "tool": "scene_query",
       "action": "tree",
       "status": "passed",
-      "duration": 7
+      "duration": 6
     },
     {
       "id": 6,
       "tool": "scene_query",
       "action": "list",
       "status": "passed",
-      "duration": 5
+      "duration": 7
     },
     {
       "id": 7,
       "tool": "scene_query",
       "action": "list",
       "status": "passed",
-      "duration": 7
+      "duration": 32
     },
     {
       "id": 8,
       "tool": "scene_query",
       "action": "stats",
       "status": "passed",
-      "duration": 4
+      "duration": 5
     },
     {
       "id": 9,
       "tool": "scene_query",
       "action": "stats",
       "status": "passed",
-      "duration": 5
+      "duration": 7
     },
     {
       "id": 10,
       "tool": "scene_query",
       "action": "node_detail",
       "status": "passed",
-      "duration": 6
+      "duration": 17
     },
     {
       "id": 11,
       "tool": "scene_query",
       "action": "node_detail",
       "status": "passed",
-      "duration": 9
+      "duration": 5
     },
     {
       "id": 12,
       "tool": "scene_query",
       "action": "find_by_path",
       "status": "passed",
-      "duration": 3
+      "duration": 7
     },
     {
       "id": 13,
       "tool": "scene_query",
       "action": "find_by_path",
       "status": "passed",
-      "duration": 3
+      "duration": 12
     },
     {
       "id": 14,
       "tool": "scene_query",
       "action": "get_components",
       "status": "passed",
-      "duration": 3
+      "duration": 6
     },
     {
       "id": 15,
@@ -179,126 +1201,126 @@
       "tool": "scene_query",
       "action": "get_parent",
       "status": "passed",
-      "duration": 2
+      "duration": 13
     },
     {
       "id": 17,
       "tool": "scene_query",
       "action": "get_children",
       "status": "passed",
-      "duration": 3
+      "duration": 5
     },
     {
       "id": 18,
       "tool": "scene_query",
       "action": "get_sibling",
       "status": "passed",
-      "duration": 4
+      "duration": 6
     },
     {
       "id": 19,
       "tool": "scene_query",
       "action": "get_world_position",
       "status": "passed",
-      "duration": 3
+      "duration": 14
     },
     {
       "id": 20,
       "tool": "scene_query",
       "action": "get_world_rotation",
       "status": "passed",
-      "duration": 7
+      "duration": 15
     },
     {
       "id": 21,
       "tool": "scene_query",
       "action": "get_world_scale",
       "status": "passed",
-      "duration": 3
+      "duration": 5
     },
     {
       "id": 22,
       "tool": "scene_query",
       "action": "get_active_in_hierarchy",
       "status": "passed",
-      "duration": 3
+      "duration": 9
     },
     {
       "id": 23,
       "tool": "scene_query",
       "action": "get_active_in_hierarchy",
       "status": "passed",
-      "duration": 2
+      "duration": 5
     },
     {
       "id": 24,
       "tool": "scene_query",
       "action": "get_node_bounds",
       "status": "passed",
-      "duration": 3
+      "duration": 6
     },
     {
       "id": 25,
       "tool": "scene_query",
       "action": "get_node_bounds",
       "status": "passed",
-      "duration": 9
+      "duration": 15
     },
     {
       "id": 26,
       "tool": "scene_query",
       "action": "find_nodes_by_name",
       "status": "passed",
-      "duration": 4
+      "duration": 5
     },
     {
       "id": 27,
       "tool": "scene_query",
       "action": "find_nodes_by_name",
       "status": "passed",
-      "duration": 9
+      "duration": 5
     },
     {
       "id": 28,
       "tool": "scene_query",
       "action": "find_nodes_by_component",
       "status": "passed",
-      "duration": 5
+      "duration": 16
     },
     {
       "id": 29,
       "tool": "scene_query",
       "action": "find_nodes_by_component",
       "status": "passed",
-      "duration": 4
+      "duration": 6
     },
     {
       "id": 30,
       "tool": "scene_query",
       "action": "find_nodes_by_layer",
       "status": "passed",
-      "duration": 8
+      "duration": 6
     },
     {
       "id": 31,
       "tool": "scene_query",
       "action": "find_nodes_by_layer",
       "status": "passed",
-      "duration": 4
+      "duration": 12
     },
     {
       "id": 32,
       "tool": "scene_query",
       "action": "get_component_property",
       "status": "passed",
-      "duration": 6
+      "duration": 7
     },
     {
       "id": 33,
       "tool": "scene_query",
       "action": "get_component_property",
       "status": "passed",
-      "duration": 4
+      "duration": 12
     },
     {
       "id": 34,
@@ -312,637 +1334,644 @@
       "tool": "scene_query",
       "action": "get_camera_info",
       "status": "passed",
-      "duration": 4
+      "duration": 6
     },
     {
       "id": 36,
       "tool": "scene_query",
       "action": "get_camera_info",
       "status": "passed",
-      "duration": 3
+      "duration": 7
     },
     {
       "id": 37,
       "tool": "scene_query",
       "action": "get_canvas_info",
       "status": "passed",
-      "duration": 3
+      "duration": 5
     },
     {
       "id": 38,
       "tool": "scene_query",
       "action": "get_scene_globals",
       "status": "passed",
-      "duration": 5
+      "duration": 6
     },
     {
       "id": 39,
       "tool": "scene_query",
       "action": "get_scene_environment",
       "status": "passed",
-      "duration": 2
+      "duration": 5
     },
     {
       "id": 40,
       "tool": "scene_query",
       "action": "get_light_info",
       "status": "passed",
-      "duration": 5
+      "duration": 7
     },
     {
       "id": 41,
       "tool": "scene_query",
       "action": "get_light_info",
       "status": "passed",
-      "duration": 3
+      "duration": 6
     },
     {
       "id": 42,
       "tool": "scene_query",
       "action": "get_material_info",
       "status": "passed",
-      "duration": 3
+      "duration": 4
     },
     {
       "id": 43,
       "tool": "scene_query",
       "action": "get_animation_state",
       "status": "passed",
-      "duration": 4
+      "duration": 5
     },
     {
       "id": 44,
       "tool": "scene_query",
       "action": "get_animation_state",
       "status": "passed",
-      "duration": 3
+      "duration": 6
     },
     {
       "id": 45,
       "tool": "scene_query",
       "action": "get_collider_info",
       "status": "passed",
-      "duration": 3
+      "duration": 5
     },
     {
       "id": 46,
       "tool": "scene_query",
       "action": "screen_to_world",
       "status": "passed",
-      "duration": 3
+      "duration": 6
     },
     {
       "id": 47,
       "tool": "scene_query",
       "action": "screen_to_world",
       "status": "passed",
-      "duration": 6
+      "duration": 7
     },
     {
       "id": 48,
       "tool": "scene_query",
       "action": "world_to_screen",
       "status": "passed",
-      "duration": 11
+      "duration": 7
     },
     {
       "id": 49,
       "tool": "scene_query",
       "action": "check_script_ready",
       "status": "passed",
-      "duration": 4
+      "duration": 15
     },
     {
       "id": 50,
       "tool": "scene_query",
       "action": "check_script_ready",
       "status": "passed",
-      "duration": 7
+      "duration": 5
     },
     {
       "id": 51,
       "tool": "scene_query",
       "action": "check_script_ready",
       "status": "passed",
-      "duration": 4
+      "duration": 7
     },
     {
       "id": 52,
       "tool": "scene_query",
       "action": "get_script_properties",
       "status": "passed",
-      "duration": 4
+      "duration": 6
     },
     {
       "id": 53,
       "tool": "scene_query",
       "action": "get_script_properties",
       "status": "passed",
-      "duration": 4
+      "duration": 5
     },
     {
       "id": 54,
       "tool": "scene_query",
       "action": "get_script_properties",
       "status": "passed",
-      "duration": 3
+      "duration": 12
     },
     {
       "id": 55,
       "tool": "scene_query",
       "action": "get_current_selection",
       "status": "passed",
-      "duration": 2
+      "duration": 8
     },
     {
       "id": 56,
       "tool": "scene_query",
       "action": "get_current_selection",
       "status": "passed",
-      "duration": 3
+      "duration": 5
     },
     {
       "id": 57,
       "tool": "scene_query",
       "action": "get_active_scene_focus",
       "status": "passed",
-      "duration": 10
+      "duration": 6
     },
     {
       "id": 58,
       "tool": "scene_query",
       "action": "get_active_scene_focus",
       "status": "passed",
-      "duration": 3
+      "duration": 5
     },
     {
       "id": 59,
       "tool": "scene_query",
       "action": "list_all_scenes",
       "status": "passed",
-      "duration": 13
+      "duration": 21
     },
     {
       "id": 60,
       "tool": "scene_query",
       "action": "validate_scene",
       "status": "passed",
-      "duration": 2
+      "duration": 5
     },
     {
       "id": 61,
       "tool": "scene_query",
       "action": "deep_validate_scene",
       "status": "passed",
-      "duration": 108
+      "duration": 39
     },
     {
       "id": 62,
       "tool": "scene_query",
       "action": "detect_2d_3d",
       "status": "passed",
-      "duration": 4
+      "duration": 6
     },
     {
       "id": 63,
       "tool": "scene_query",
       "action": "detect_2d_3d",
       "status": "passed",
-      "duration": 2
+      "duration": 7
     },
     {
       "id": 64,
       "tool": "scene_query",
       "action": "detect_2d_3d",
       "status": "passed",
-      "duration": 4
+      "duration": 6
     },
     {
       "id": 65,
       "tool": "scene_query",
       "action": "performance_audit",
       "status": "passed",
-      "duration": 2
+      "duration": 5
     },
     {
       "id": 66,
       "tool": "scene_query",
       "action": "list_available_components",
       "status": "passed",
-      "duration": 3
+      "duration": 6
     },
     {
       "id": 67,
       "tool": "scene_query",
       "action": "scene_snapshot",
       "status": "passed",
-      "duration": 133
+      "duration": 101
     },
     {
       "id": 68,
       "tool": "scene_query",
       "action": "scene_snapshot",
       "status": "passed",
-      "duration": 134
+      "duration": 72
     },
     {
       "id": 69,
       "tool": "scene_query",
       "action": "scene_diff",
       "status": "passed",
-      "duration": 3
+      "duration": 6
     },
     {
       "id": 70,
       "tool": "scene_query",
       "action": "export_scene_json",
       "status": "passed",
-      "duration": 159
+      "duration": 89
     },
     {
       "id": 71,
       "tool": "scene_query",
       "action": "measure_distance",
       "status": "passed",
-      "duration": 5
+      "duration": 6
     },
     {
       "id": 72,
       "tool": "scene_operation",
       "action": "create_node",
       "status": "passed",
-      "duration": 4
+      "duration": 23
     },
     {
       "id": 73,
       "tool": "scene_operation",
       "action": "create_node",
       "status": "passed",
-      "duration": 4
+      "duration": 48
     },
     {
       "id": 74,
       "tool": "scene_operation",
       "action": "create_node",
       "status": "passed",
-      "duration": 5
+      "duration": 43
     },
     {
       "id": 75,
       "tool": "scene_operation",
       "action": "destroy_node",
       "status": "passed",
-      "duration": 9
+      "duration": 14
     },
     {
       "id": 76,
       "tool": "scene_operation",
       "action": "destroy_node",
       "status": "passed",
-      "duration": 2
+      "duration": 3
     },
     {
       "id": 77,
       "tool": "scene_operation",
       "action": "reparent",
       "status": "passed",
-      "duration": 3
+      "duration": 73
     },
     {
       "id": 78,
       "tool": "scene_operation",
       "action": "duplicate_node",
       "status": "passed",
-      "duration": 14
+      "duration": 48
     },
     {
       "id": 79,
       "tool": "scene_operation",
       "action": "duplicate_node",
       "status": "passed",
-      "duration": 3
+      "duration": 28
     },
     {
       "id": 80,
       "tool": "scene_operation",
       "action": "clear_children",
       "status": "passed",
-      "duration": 4
+      "duration": 34
     },
     {
       "id": 81,
       "tool": "scene_operation",
       "action": "group_nodes",
       "status": "passed",
-      "duration": 5
+      "duration": 26
     },
     {
       "id": 82,
       "tool": "scene_operation",
       "action": "set_position",
       "status": "passed",
-      "duration": 4
+      "duration": 66
     },
     {
       "id": 83,
       "tool": "scene_operation",
       "action": "set_rotation",
       "status": "passed",
-      "duration": 5
+      "duration": 24
     },
     {
       "id": 84,
       "tool": "scene_operation",
       "action": "set_scale",
       "status": "passed",
-      "duration": 4
+      "duration": 35
     },
     {
       "id": 85,
       "tool": "scene_operation",
       "action": "set_world_position",
       "status": "passed",
-      "duration": 8
+      "duration": 13
     },
     {
       "id": 86,
       "tool": "scene_operation",
       "action": "set_world_rotation",
       "status": "passed",
-      "duration": 6
+      "duration": 27
     },
     {
       "id": 87,
       "tool": "scene_operation",
       "action": "set_world_scale",
       "status": "passed",
-      "duration": 9
+      "duration": 11
     },
     {
       "id": 88,
       "tool": "scene_operation",
       "action": "reset_transform",
       "status": "passed",
-      "duration": 3
+      "duration": 41
     },
     {
       "id": 89,
       "tool": "scene_operation",
       "action": "reset_transform",
       "status": "passed",
-      "duration": 3
+      "duration": 26
     },
     {
       "id": 90,
       "tool": "scene_operation",
       "action": "set_name",
       "status": "passed",
-      "duration": 5
+      "duration": 11
     },
     {
       "id": 91,
       "tool": "scene_operation",
       "action": "set_active",
       "status": "passed",
-      "duration": 7
+      "duration": 17
     },
     {
       "id": 92,
       "tool": "scene_operation",
       "action": "set_active",
       "status": "passed",
-      "duration": 6
+      "duration": 34
     },
     {
       "id": 93,
       "tool": "scene_operation",
       "action": "set_layer",
       "status": "passed",
-      "duration": 4
+      "duration": 12
     },
     {
       "id": 94,
       "tool": "scene_operation",
       "action": "set_anchor_point",
       "status": "passed",
-      "duration": 6
+      "duration": 48
     },
     {
       "id": 95,
       "tool": "scene_operation",
       "action": "set_content_size",
       "status": "passed",
-      "duration": 3
+      "duration": 67
     },
     {
       "id": 96,
       "tool": "scene_operation",
       "action": "move_node_up",
       "status": "passed",
-      "duration": 3
+      "duration": 34
     },
     {
       "id": 97,
       "tool": "scene_operation",
       "action": "move_node_down",
       "status": "passed",
-      "duration": 3
+      "duration": 19
     },
     {
       "id": 98,
       "tool": "scene_operation",
       "action": "set_sibling_index",
       "status": "passed",
-      "duration": 4
+      "duration": 11
     },
     {
       "id": 99,
       "tool": "scene_operation",
       "action": "lock_node",
       "status": "passed",
-      "duration": 4
+      "duration": 8
     },
     {
       "id": 100,
       "tool": "scene_operation",
       "action": "unlock_node",
       "status": "passed",
-      "duration": 3
+      "duration": 9
     },
     {
       "id": 101,
       "tool": "scene_operation",
       "action": "hide_node",
       "status": "passed",
-      "duration": 3
+      "duration": 12
     },
     {
       "id": 102,
       "tool": "scene_operation",
       "action": "unhide_node",
       "status": "passed",
-      "duration": 5
+      "duration": 23
     },
     {
       "id": 103,
       "tool": "scene_operation",
       "action": "add_component",
       "status": "passed",
-      "duration": 8
+      "duration": 11
     },
     {
       "id": 104,
       "tool": "scene_operation",
       "action": "add_component",
       "status": "passed",
-      "duration": 3
+      "duration": 7
     },
     {
       "id": 105,
       "tool": "scene_operation",
       "action": "remove_component",
       "status": "passed",
-      "duration": 3
+      "duration": 53
     },
     {
       "id": 106,
       "tool": "scene_operation",
       "action": "set_property",
       "status": "passed",
-      "duration": 3
+      "duration": 117
     },
     {
       "id": 107,
       "tool": "scene_operation",
       "action": "set_property",
       "status": "passed",
-      "duration": 4
+      "duration": 25
     },
     {
       "id": 108,
       "tool": "scene_operation",
       "action": "reset_property",
       "status": "passed",
-      "duration": 10
+      "duration": 9
     },
     {
       "id": 109,
       "tool": "scene_operation",
       "action": "reset_node_properties",
       "status": "passed",
-      "duration": 3
+      "duration": 23
     },
     {
       "id": 110,
       "tool": "scene_operation",
       "action": "reset_node_properties",
       "status": "passed",
-      "duration": 6
+      "duration": 65
     },
     {
       "id": 111,
       "tool": "scene_operation",
       "action": "call_component_method",
       "status": "passed",
-      "duration": 4
+      "duration": 5
     },
     {
       "id": 112,
       "tool": "scene_operation",
       "action": "batch_set_property",
       "status": "passed",
-      "duration": 3
+      "duration": 17
     },
     {
       "id": 113,
       "tool": "scene_operation",
       "action": "attach_script",
       "status": "passed",
-      "duration": 3
+      "duration": 44
     },
     {
       "id": 114,
       "tool": "scene_operation",
       "action": "attach_script",
       "status": "passed",
-      "duration": 2
+      "duration": 7
     },
     {
       "id": 115,
       "tool": "scene_operation",
       "action": "attach_script",
       "status": "passed",
-      "duration": 2
+      "duration": 27
     },
     {
       "id": 116,
       "tool": "scene_operation",
       "action": "attach_script",
       "status": "passed",
-      "duration": 4
+      "duration": 44
     },
     {
       "id": 117,
       "tool": "scene_operation",
       "action": "set_component_properties",
       "status": "passed",
-      "duration": 4
+      "duration": 32
     },
     {
       "id": 118,
       "tool": "scene_operation",
       "action": "set_component_properties",
       "status": "passed",
-      "duration": 6
+      "duration": 92
     },
     {
       "id": 119,
       "tool": "scene_operation",
       "action": "detach_script",
       "status": "passed",
-      "duration": 7
+      "duration": 21
     },
     {
       "id": 120,
       "tool": "scene_operation",
       "action": "detach_script",
       "status": "passed",
-      "duration": 3
+      "duration": 13
     },
     {
       "id": 121,
       "tool": "scene_operation",
       "action": "align_nodes",
       "status": "passed",
-      "duration": 3
+      "duration": 10
     },
     {
       "id": 122,
       "tool": "scene_operation",
       "action": "align_nodes",
       "status": "passed",
-      "duration": 4
+      "duration": 24
     },
     {
       "id": 123,
       "tool": "scene_operation",
       "action": "clipboard_copy",
       "status": "passed",
-      "duration": 3
+      "duration": 21
     },
     {
       "id": 124,
       "tool": "scene_operation",
       "action": "clipboard_paste",
       "status": "passed",
-      "duration": 10
+      "duration": 19
+    },
+    {
+      "id": 125,
+      "tool": "scene_operation",
+      "action": "create_prefab",
+      "status": "passed",
+      "duration": 68
     },
     {
       "id": 126,
       "tool": "scene_operation",
       "action": "instantiate_prefab",
       "status": "passed",
-      "duration": 10
+      "duration": 81
     },
     {
       "id": 127,
@@ -956,371 +1985,378 @@
       "tool": "scene_operation",
       "action": "enter_prefab_edit",
       "status": "passed",
-      "duration": 2
+      "duration": 3
     },
     {
       "id": 129,
       "tool": "scene_operation",
       "action": "exit_prefab_edit",
       "status": "passed",
-      "duration": 1
+      "duration": 15
+    },
+    {
+      "id": 130,
+      "tool": "scene_operation",
+      "action": "apply_prefab",
+      "status": "passed",
+      "duration": 3249
     },
     {
       "id": 131,
       "tool": "scene_operation",
-      "action": "revert_prefab",
+      "action": "restore_prefab",
       "status": "passed",
-      "duration": 7
+      "duration": 12
     },
     {
       "id": 132,
       "tool": "scene_operation",
       "action": "validate_prefab",
       "status": "passed",
-      "duration": 2
+      "duration": 14
     },
     {
       "id": 133,
       "tool": "scene_operation",
       "action": "create_ui_widget",
       "status": "passed",
-      "duration": 8
+      "duration": 43
     },
     {
       "id": 134,
       "tool": "scene_operation",
       "action": "create_ui_widget",
       "status": "passed",
-      "duration": 4
+      "duration": 28
     },
     {
       "id": 135,
       "tool": "scene_operation",
       "action": "create_ui_widget",
       "status": "passed",
-      "duration": 5
+      "duration": 193
     },
     {
       "id": 136,
       "tool": "scene_operation",
       "action": "setup_particle",
       "status": "passed",
-      "duration": 3
+      "duration": 643
     },
     {
       "id": 137,
       "tool": "scene_operation",
       "action": "setup_particle",
       "status": "passed",
-      "duration": 9
+      "duration": 678
     },
     {
       "id": 138,
       "tool": "scene_operation",
       "action": "create_skeleton_node",
       "status": "passed",
-      "duration": 5
+      "duration": 298
     },
     {
       "id": 139,
       "tool": "scene_operation",
       "action": "create_skeleton_node",
       "status": "passed",
-      "duration": 5
+      "duration": 107
     },
     {
       "id": 140,
       "tool": "scene_operation",
       "action": "generate_tilemap",
       "status": "passed",
-      "duration": 10
+      "duration": 39
     },
     {
       "id": 141,
       "tool": "scene_operation",
       "action": "create_primitive",
       "status": "passed",
-      "duration": 6
+      "duration": 105
     },
     {
       "id": 142,
       "tool": "scene_operation",
       "action": "create_primitive",
       "status": "passed",
-      "duration": 8
+      "duration": 26
     },
     {
       "id": 143,
       "tool": "scene_operation",
       "action": "create_primitive",
       "status": "passed",
-      "duration": 5
+      "duration": 89
     },
     {
       "id": 144,
       "tool": "scene_operation",
       "action": "create_camera",
       "status": "passed",
-      "duration": 7
+      "duration": 41
     },
     {
       "id": 145,
       "tool": "scene_operation",
       "action": "set_camera_property",
       "status": "passed",
-      "duration": 5
+      "duration": 52
     },
     {
       "id": 146,
       "tool": "scene_operation",
       "action": "set_camera_property",
       "status": "passed",
-      "duration": 4
+      "duration": 130
     },
     {
       "id": 147,
       "tool": "scene_operation",
       "action": "set_camera_look_at",
       "status": "passed",
-      "duration": 7
+      "duration": 43
     },
     {
       "id": 148,
       "tool": "scene_operation",
       "action": "camera_screenshot",
       "status": "passed",
-      "duration": 11
+      "duration": 19
     },
     {
       "id": 149,
       "tool": "scene_operation",
       "action": "camera_screenshot",
       "status": "passed",
-      "duration": 7
+      "duration": 10
     },
     {
       "id": 150,
       "tool": "scene_operation",
       "action": "set_material_property",
       "status": "passed",
-      "duration": 3
+      "duration": 357
     },
     {
       "id": 151,
       "tool": "scene_operation",
       "action": "set_material_property",
       "status": "passed",
-      "duration": 11
+      "duration": 12
     },
     {
       "id": 152,
       "tool": "scene_operation",
       "action": "assign_builtin_material",
       "status": "passed",
-      "duration": 2
+      "duration": 8
     },
     {
       "id": 153,
       "tool": "scene_operation",
       "action": "assign_builtin_material",
       "status": "passed",
-      "duration": 2
+      "duration": 37
     },
     {
       "id": 154,
       "tool": "scene_operation",
       "action": "assign_project_material",
       "status": "passed",
-      "duration": 2
+      "duration": 8
     },
     {
       "id": 155,
       "tool": "scene_operation",
       "action": "set_material_define",
       "status": "passed",
-      "duration": 2
+      "duration": 16
     },
     {
       "id": 156,
       "tool": "scene_operation",
       "action": "clone_material",
       "status": "passed",
-      "duration": 5
+      "duration": 7
     },
     {
       "id": 157,
       "tool": "scene_operation",
       "action": "swap_technique",
       "status": "passed",
-      "duration": 3
+      "duration": 12
     },
     {
       "id": 158,
       "tool": "scene_operation",
       "action": "sprite_grayscale",
       "status": "passed",
-      "duration": 7
+      "duration": 20
     },
     {
       "id": 159,
       "tool": "scene_operation",
       "action": "sprite_grayscale",
       "status": "passed",
-      "duration": 3
+      "duration": 6
     },
     {
       "id": 160,
       "tool": "scene_operation",
       "action": "create_light",
       "status": "passed",
-      "duration": 10
+      "duration": 35
     },
     {
       "id": 161,
       "tool": "scene_operation",
       "action": "create_light",
       "status": "passed",
-      "duration": 5
+      "duration": 126
     },
     {
       "id": 162,
       "tool": "scene_operation",
       "action": "set_light_property",
       "status": "passed",
-      "duration": 4
+      "duration": 33
     },
     {
       "id": 163,
       "tool": "scene_operation",
       "action": "set_light_property",
       "status": "passed",
-      "duration": 6
+      "duration": 120
     },
     {
       "id": 164,
       "tool": "scene_operation",
       "action": "set_scene_environment",
       "status": "passed",
-      "duration": 5
+      "duration": 40
     },
     {
       "id": 165,
       "tool": "scene_operation",
       "action": "set_scene_environment",
       "status": "passed",
-      "duration": 4
+      "duration": 56
     },
     {
       "id": 166,
       "tool": "scene_operation",
       "action": "set_scene_environment",
       "status": "passed",
-      "duration": 3
+      "duration": 7
     },
     {
       "id": 167,
       "tool": "scene_operation",
       "action": "bind_event",
       "status": "passed",
-      "duration": 2
+      "duration": 9
     },
     {
       "id": 168,
       "tool": "scene_operation",
       "action": "bind_event",
       "status": "passed",
-      "duration": 3
+      "duration": 11
     },
     {
       "id": 169,
       "tool": "scene_operation",
       "action": "unbind_event",
       "status": "passed",
-      "duration": 4
+      "duration": 7
     },
     {
       "id": 170,
       "tool": "scene_operation",
       "action": "unbind_event",
       "status": "passed",
-      "duration": 2
+      "duration": 11
     },
     {
       "id": 171,
       "tool": "scene_operation",
       "action": "list_events",
       "status": "passed",
-      "duration": 3
+      "duration": 7
     },
     {
       "id": 172,
       "tool": "scene_operation",
       "action": "audio_setup",
       "status": "passed",
-      "duration": 4
+      "duration": 6
     },
     {
       "id": 173,
       "tool": "scene_operation",
       "action": "setup_physics_world",
       "status": "passed",
-      "duration": 6
+      "duration": 8
     },
     {
       "id": 174,
       "tool": "scene_operation",
       "action": "batch",
       "status": "passed",
-      "duration": 4
+      "duration": 13
     },
     {
       "id": 175,
       "tool": "asset_operation",
       "action": "list",
       "status": "passed",
-      "duration": 13
+      "duration": 10
     },
     {
       "id": 176,
       "tool": "asset_operation",
       "action": "info",
       "status": "passed",
-      "duration": 2
+      "duration": 3
     },
     {
       "id": 177,
       "tool": "asset_operation",
       "action": "create",
       "status": "passed",
-      "duration": 20010
+      "duration": 14
     },
     {
       "id": 178,
       "tool": "asset_operation",
       "action": "save",
       "status": "passed",
-      "duration": 20010
+      "duration": 10
     },
     {
       "id": 179,
       "tool": "asset_operation",
       "action": "delete",
       "status": "passed",
-      "duration": 4
+      "duration": 6
     },
     {
       "id": 180,
       "tool": "asset_operation",
       "action": "move",
       "status": "passed",
-      "duration": 20008
+      "duration": 21
     },
     {
       "id": 181,
       "tool": "asset_operation",
       "action": "copy",
       "status": "passed",
-      "duration": 26
+      "duration": 4
     },
     {
       "id": 182,
@@ -1334,161 +2370,182 @@
       "tool": "asset_operation",
       "action": "create_folder",
       "status": "passed",
-      "duration": 20015
+      "duration": 4
     },
     {
       "id": 184,
       "tool": "asset_operation",
       "action": "import",
       "status": "passed",
-      "duration": 20009
+      "duration": 24
+    },
+    {
+      "id": 185,
+      "tool": "asset_operation",
+      "action": "batch_import",
+      "status": "passed",
+      "duration": 2
     },
     {
       "id": 186,
       "tool": "asset_operation",
       "action": "open",
       "status": "passed",
-      "duration": 7
+      "duration": 4
     },
     {
       "id": 187,
       "tool": "asset_operation",
       "action": "refresh",
       "status": "passed",
-      "duration": 537
+      "duration": 533
     },
     {
       "id": 188,
       "tool": "asset_operation",
       "action": "refresh",
       "status": "passed",
-      "duration": 523
+      "duration": 513
     },
     {
       "id": 189,
       "tool": "asset_operation",
       "action": "reimport",
       "status": "passed",
-      "duration": 16
+      "duration": 3
     },
     {
       "id": 190,
       "tool": "asset_operation",
       "action": "show_in_explorer",
       "status": "passed",
-      "duration": 216
+      "duration": 2
     },
     {
       "id": 191,
       "tool": "asset_operation",
       "action": "uuid_to_url",
       "status": "passed",
-      "duration": 5
+      "duration": 4
     },
     {
       "id": 192,
       "tool": "asset_operation",
       "action": "url_to_uuid",
       "status": "passed",
-      "duration": 9
+      "duration": 3
     },
     {
       "id": 193,
       "tool": "asset_operation",
       "action": "get_dependencies",
       "status": "passed",
-      "duration": 4
+      "duration": 3
     },
     {
       "id": 194,
       "tool": "asset_operation",
       "action": "get_dependents",
       "status": "passed",
-      "duration": 2
+      "duration": 3
     },
     {
       "id": 195,
       "tool": "asset_operation",
       "action": "get_meta",
       "status": "passed",
-      "duration": 4
+      "duration": 5
     },
     {
       "id": 196,
       "tool": "asset_operation",
       "action": "set_meta_property",
       "status": "passed",
-      "duration": 12
+      "duration": 14
     },
     {
       "id": 197,
       "tool": "asset_operation",
       "action": "get_asset_size",
       "status": "passed",
-      "duration": 9
+      "duration": 2
     },
     {
       "id": 198,
       "tool": "asset_operation",
       "action": "search_by_type",
       "status": "passed",
-      "duration": 16
+      "duration": 13
     },
     {
       "id": 199,
       "tool": "asset_operation",
       "action": "get_animation_clips",
       "status": "passed",
-      "duration": 19
+      "duration": 3
     },
     {
       "id": 200,
       "tool": "asset_operation",
       "action": "get_materials",
       "status": "passed",
-      "duration": 16
+      "duration": 4
     },
     {
       "id": 201,
       "tool": "asset_operation",
       "action": "clean_unused",
       "status": "passed",
-      "duration": 28
+      "duration": 8
     },
     {
       "id": 202,
       "tool": "asset_operation",
       "action": "validate_asset",
       "status": "passed",
-      "duration": 17
+      "duration": 11
     },
     {
       "id": 203,
       "tool": "asset_operation",
       "action": "export_asset_manifest",
       "status": "passed",
-      "duration": 21
+      "duration": 2
     },
     {
       "id": 204,
       "tool": "asset_operation",
       "action": "pack_atlas",
       "status": "passed",
-      "duration": 29
+      "duration": 3
     },
     {
       "id": 205,
       "tool": "asset_operation",
       "action": "slice_sprite",
       "status": "passed",
-      "duration": 25
+      "duration": 3
+    },
+    {
+      "id": 206,
+      "tool": "asset_operation",
+      "action": "create_material",
+      "status": "passed",
+      "duration": 2
+    },
+    {
+      "id": 207,
+      "tool": "asset_operation",
+      "action": "generate_script",
+      "status": "passed",
+      "duration": 2
     },
     {
       "id": 208,
       "tool": "editor_action",
       "action": "save_scene",
       "status": "passed",
-      "duration": 20013
+      "duration": 34
     },
     {
       "id": 209,
@@ -1502,28 +2559,28 @@
       "tool": "editor_action",
       "action": "open_scene",
       "status": "passed",
-      "duration": 3
+      "duration": 5
     },
     {
       "id": 211,
       "tool": "editor_action",
       "action": "new_scene",
       "status": "passed",
-      "duration": 1
+      "duration": 96
     },
     {
       "id": 212,
       "tool": "editor_action",
       "action": "undo",
       "status": "passed",
-      "duration": 20011
+      "duration": 71
     },
     {
       "id": 213,
       "tool": "editor_action",
       "action": "redo",
       "status": "passed",
-      "duration": 20011
+      "duration": 35
     },
     {
       "id": 214,
@@ -1537,35 +2594,35 @@
       "tool": "editor_action",
       "action": "select",
       "status": "passed",
-      "duration": 3
+      "duration": 7
     },
     {
       "id": 216,
       "tool": "editor_action",
       "action": "clear_selection",
       "status": "passed",
-      "duration": 2
+      "duration": 3
     },
     {
       "id": 217,
       "tool": "editor_action",
       "action": "project_info",
       "status": "passed",
-      "duration": 7
+      "duration": 3
     },
     {
       "id": 218,
       "tool": "editor_action",
       "action": "build",
       "status": "passed",
-      "duration": 19
+      "duration": 932
     },
     {
       "id": 219,
       "tool": "editor_action",
       "action": "build_query",
       "status": "passed",
-      "duration": 4
+      "duration": 3
     },
     {
       "id": 220,
@@ -1579,709 +2636,23 @@
       "tool": "editor_action",
       "action": "build_status",
       "status": "passed",
-      "duration": 3
+      "duration": 2
     },
     {
       "id": 222,
       "tool": "editor_action",
       "action": "preview",
       "status": "passed",
-      "duration": 20012
+      "duration": 6
     },
     {
       "id": 223,
       "tool": "editor_action",
       "action": "preview_refresh",
       "status": "passed",
-      "duration": 3
-    },
-    {
-      "id": 224,
-      "tool": "editor_action",
-      "action": "preview_status",
-      "status": "passed",
-      "duration": 1
-    },
-    {
-      "id": 226,
-      "tool": "editor_action",
-      "action": "focus_node",
-      "status": "passed",
-      "duration": 1
-    },
-    {
-      "id": 227,
-      "tool": "editor_action",
-      "action": "open_panel",
-      "status": "passed",
-      "duration": 2
-    },
-    {
-      "id": 228,
-      "tool": "editor_action",
-      "action": "close_panel",
-      "status": "passed",
-      "duration": 2
-    },
-    {
-      "id": 229,
-      "tool": "editor_action",
-      "action": "query_panels",
-      "status": "passed",
-      "duration": 2
-    },
-    {
-      "id": 230,
-      "tool": "editor_action",
-      "action": "log",
-      "status": "passed",
-      "duration": 6
-    },
-    {
-      "id": 231,
-      "tool": "editor_action",
-      "action": "warn",
-      "status": "passed",
-      "duration": 7
-    },
-    {
-      "id": 232,
-      "tool": "editor_action",
-      "action": "error",
-      "status": "passed",
-      "duration": 5
-    },
-    {
-      "id": 233,
-      "tool": "editor_action",
-      "action": "clear_console",
-      "status": "passed",
-      "duration": 7
-    },
-    {
-      "id": 234,
-      "tool": "editor_action",
-      "action": "get_console_logs",
-      "status": "passed",
-      "duration": 3
-    },
-    {
-      "id": 235,
-      "tool": "editor_action",
-      "action": "get_console_logs",
-      "status": "passed",
-      "duration": 3
-    },
-    {
-      "id": 236,
-      "tool": "editor_action",
-      "action": "search_logs",
-      "status": "passed",
-      "duration": 2
-    },
-    {
-      "id": 237,
-      "tool": "editor_action",
-      "action": "get_packages",
-      "status": "passed",
-      "duration": 1
-    },
-    {
-      "id": 238,
-      "tool": "editor_action",
-      "action": "reload_plugin",
-      "status": "passed",
-      "duration": 1
-    },
-    {
-      "id": 239,
-      "tool": "editor_action",
-      "action": "inspect_asset",
-      "status": "passed",
-      "duration": 2
-    },
-    {
-      "id": 240,
-      "tool": "editor_action",
-      "action": "open_preferences",
-      "status": "passed",
-      "duration": 7
-    },
-    {
-      "id": 241,
-      "tool": "editor_action",
-      "action": "open_project_settings",
-      "status": "passed",
-      "duration": 2
-    },
-    {
-      "id": 242,
-      "tool": "editor_action",
-      "action": "show_notification",
-      "status": "passed",
-      "duration": 4
-    },
-    {
-      "id": 243,
-      "tool": "editor_action",
-      "action": "play_in_editor",
-      "status": "passed",
-      "duration": 20008
-    },
-    {
-      "id": 244,
-      "tool": "editor_action",
-      "action": "pause_in_editor",
-      "status": "passed",
-      "duration": 1
-    },
-    {
-      "id": 245,
-      "tool": "editor_action",
-      "action": "stop_in_editor",
-      "status": "passed",
-      "duration": 7
-    },
-    {
-      "id": 246,
-      "tool": "editor_action",
-      "action": "step_in_editor",
-      "status": "passed",
-      "duration": 1
-    },
-    {
-      "id": 247,
-      "tool": "editor_action",
-      "action": "move_scene_camera",
-      "status": "passed",
-      "duration": 2
-    },
-    {
-      "id": 248,
-      "tool": "editor_action",
-      "action": "take_scene_screenshot",
-      "status": "passed",
-      "duration": 2
-    },
-    {
-      "id": 249,
-      "tool": "editor_action",
-      "action": "set_transform_tool",
-      "status": "passed",
-      "duration": 1
-    },
-    {
-      "id": 250,
-      "tool": "editor_action",
-      "action": "set_coordinate",
-      "status": "passed",
-      "duration": 1
-    },
-    {
-      "id": 252,
-      "tool": "editor_action",
-      "action": "toggle_snap",
-      "status": "passed",
-      "duration": 2
-    },
-    {
-      "id": 253,
-      "tool": "editor_action",
-      "action": "set_view_mode",
-      "status": "passed",
-      "duration": 10
-    },
-    {
-      "id": 254,
-      "tool": "editor_action",
-      "action": "set_view_mode",
-      "status": "passed",
-      "duration": 3
-    },
-    {
-      "id": 255,
-      "tool": "editor_action",
-      "action": "zoom_to_fit",
-      "status": "passed",
-      "duration": 2
-    },
-    {
-      "id": 256,
-      "tool": "engine_action",
-      "action": "set_frame_rate",
-      "status": "passed",
-      "duration": 8
-    },
-    {
-      "id": 257,
-      "tool": "engine_action",
-      "action": "set_frame_rate",
-      "status": "passed",
-      "duration": 4
-    },
-    {
-      "id": 258,
-      "tool": "engine_action",
-      "action": "pause_engine",
-      "status": "passed",
-      "duration": 2
-    },
-    {
-      "id": 259,
-      "tool": "engine_action",
-      "action": "resume_engine",
-      "status": "passed",
-      "duration": 4
-    },
-    {
-      "id": 260,
-      "tool": "engine_action",
-      "action": "get_system_info",
-      "status": "passed",
-      "duration": 3
-    },
-    {
-      "id": 261,
-      "tool": "engine_action",
-      "action": "dump_texture_cache",
-      "status": "passed",
-      "duration": 3
-    },
-    {
-      "id": 262,
-      "tool": "engine_action",
-      "action": "get_render_stats",
-      "status": "passed",
-      "duration": 2
-    },
-    {
-      "id": 263,
-      "tool": "engine_action",
-      "action": "get_memory_stats",
-      "status": "passed",
-      "duration": 12
-    },
-    {
-      "id": 264,
-      "tool": "engine_action",
-      "action": "get_editor_performance",
-      "status": "passed",
-      "duration": 4
-    },
-    {
-      "id": 265,
-      "tool": "animation_tool",
-      "action": "create_clip",
-      "status": "passed",
       "duration": 9
-    },
-    {
-      "id": 266,
-      "tool": "animation_tool",
-      "action": "play",
-      "status": "passed",
-      "duration": 4
-    },
-    {
-      "id": 267,
-      "tool": "animation_tool",
-      "action": "play",
-      "status": "passed",
-      "duration": 2
-    },
-    {
-      "id": 268,
-      "tool": "animation_tool",
-      "action": "pause",
-      "status": "passed",
-      "duration": 2
-    },
-    {
-      "id": 269,
-      "tool": "animation_tool",
-      "action": "resume",
-      "status": "passed",
-      "duration": 3
-    },
-    {
-      "id": 270,
-      "tool": "animation_tool",
-      "action": "stop",
-      "status": "passed",
-      "duration": 2
-    },
-    {
-      "id": 271,
-      "tool": "animation_tool",
-      "action": "get_state",
-      "status": "passed",
-      "duration": 3
-    },
-    {
-      "id": 272,
-      "tool": "animation_tool",
-      "action": "list_clips",
-      "status": "passed",
-      "duration": 6
-    },
-    {
-      "id": 273,
-      "tool": "animation_tool",
-      "action": "set_current_time",
-      "status": "passed",
-      "duration": 3
-    },
-    {
-      "id": 274,
-      "tool": "animation_tool",
-      "action": "set_speed",
-      "status": "passed",
-      "duration": 4
-    },
-    {
-      "id": 275,
-      "tool": "animation_tool",
-      "action": "crossfade",
-      "status": "passed",
-      "duration": 4
-    },
-    {
-      "id": 276,
-      "tool": "physics_tool",
-      "action": "get_collider_info",
-      "status": "passed",
-      "duration": 8
-    },
-    {
-      "id": 277,
-      "tool": "physics_tool",
-      "action": "add_collider",
-      "status": "passed",
-      "duration": 1
-    },
-    {
-      "id": 278,
-      "tool": "physics_tool",
-      "action": "add_collider",
-      "status": "passed",
-      "duration": 2
-    },
-    {
-      "id": 279,
-      "tool": "physics_tool",
-      "action": "set_collider_size",
-      "status": "passed",
-      "duration": 7
-    },
-    {
-      "id": 280,
-      "tool": "physics_tool",
-      "action": "add_rigidbody",
-      "status": "passed",
-      "duration": 2
-    },
-    {
-      "id": 281,
-      "tool": "physics_tool",
-      "action": "add_rigidbody",
-      "status": "passed",
-      "duration": 2
-    },
-    {
-      "id": 282,
-      "tool": "physics_tool",
-      "action": "set_rigidbody_props",
-      "status": "passed",
-      "duration": 1
-    },
-    {
-      "id": 283,
-      "tool": "physics_tool",
-      "action": "set_physics_material",
-      "status": "passed",
-      "duration": 2
-    },
-    {
-      "id": 284,
-      "tool": "physics_tool",
-      "action": "set_collision_group",
-      "status": "passed",
-      "duration": 1
-    },
-    {
-      "id": 285,
-      "tool": "physics_tool",
-      "action": "get_physics_world",
-      "status": "passed",
-      "duration": 2
-    },
-    {
-      "id": 286,
-      "tool": "physics_tool",
-      "action": "set_physics_world",
-      "status": "passed",
-      "duration": 6
-    },
-    {
-      "id": 287,
-      "tool": "physics_tool",
-      "action": "add_joint",
-      "status": "passed",
-      "duration": 3
-    },
-    {
-      "id": 288,
-      "tool": "preferences",
-      "action": "get",
-      "status": "passed",
-      "duration": 2
-    },
-    {
-      "id": 289,
-      "tool": "preferences",
-      "action": "set",
-      "status": "passed",
-      "duration": 3
-    },
-    {
-      "id": 290,
-      "tool": "preferences",
-      "action": "list",
-      "status": "passed",
-      "duration": 1
-    },
-    {
-      "id": 291,
-      "tool": "preferences",
-      "action": "get_global",
-      "status": "passed",
-      "duration": 2
-    },
-    {
-      "id": 292,
-      "tool": "preferences",
-      "action": "set_global",
-      "status": "passed",
-      "duration": 3
-    },
-    {
-      "id": 293,
-      "tool": "preferences",
-      "action": "get_project",
-      "status": "passed",
-      "duration": 1
-    },
-    {
-      "id": 294,
-      "tool": "preferences",
-      "action": "set_project",
-      "status": "passed",
-      "duration": 3
-    },
-    {
-      "id": 295,
-      "tool": "broadcast",
-      "action": "poll",
-      "status": "passed",
-      "duration": 1
-    },
-    {
-      "id": 296,
-      "tool": "broadcast",
-      "action": "history",
-      "status": "passed",
-      "duration": 4
-    },
-    {
-      "id": 297,
-      "tool": "broadcast",
-      "action": "clear",
-      "status": "passed",
-      "duration": 7
-    },
-    {
-      "id": 298,
-      "tool": "broadcast",
-      "action": "send",
-      "status": "passed",
-      "duration": 2
-    },
-    {
-      "id": 300,
-      "tool": "reference_image",
-      "action": "set",
-      "status": "passed",
-      "duration": 3
-    },
-    {
-      "id": 301,
-      "tool": "reference_image",
-      "action": "clear",
-      "status": "passed",
-      "duration": 4
-    },
-    {
-      "id": 302,
-      "tool": "reference_image",
-      "action": "list",
-      "status": "passed",
-      "duration": 3
-    },
-    {
-      "id": 303,
-      "tool": "reference_image",
-      "action": "add",
-      "status": "passed",
-      "duration": 20
-    },
-    {
-      "id": 304,
-      "tool": "reference_image",
-      "action": "remove",
-      "status": "passed",
-      "duration": 4
-    },
-    {
-      "id": 305,
-      "tool": "reference_image",
-      "action": "set_transform",
-      "status": "passed",
-      "duration": 5
-    },
-    {
-      "id": 306,
-      "tool": "reference_image",
-      "action": "set_opacity",
-      "status": "passed",
-      "duration": 4
-    },
-    {
-      "id": 307,
-      "tool": "tool_management",
-      "action": "list_all",
-      "status": "passed",
-      "duration": 3
-    },
-    {
-      "id": 308,
-      "tool": "tool_management",
-      "action": "enable",
-      "status": "passed",
-      "duration": 2
-    },
-    {
-      "id": 309,
-      "tool": "tool_management",
-      "action": "disable",
-      "status": "passed",
-      "duration": 2
-    },
-    {
-      "id": 310,
-      "tool": "tool_management",
-      "action": "get_stats",
-      "status": "passed",
-      "duration": 2
-    },
-    {
-      "id": 311,
-      "tool": "execute_script",
-      "action": "execute_script",
-      "status": "passed",
-      "duration": 4
-    },
-    {
-      "id": 312,
-      "tool": "execute_script",
-      "action": "execute_script",
-      "status": "passed",
-      "duration": 3
-    },
-    {
-      "id": 313,
-      "tool": "register_custom_macro",
-      "action": "register_custom_macro",
-      "status": "passed",
-      "duration": 4
-    },
-    {
-      "id": 314,
-      "tool": "register_custom_macro",
-      "action": "register_custom_macro",
-      "status": "passed",
-      "duration": 3
-    },
-    {
-      "id": 316,
-      "tool": "create_prefab_atomic",
-      "action": "create_prefab_atomic",
-      "status": "passed",
-      "duration": 3
-    },
-    {
-      "id": 317,
-      "tool": "import_and_apply_texture",
-      "action": "import_and_apply_texture",
-      "status": "passed",
-      "duration": 20004
-    },
-    {
-      "id": 318,
-      "tool": "import_and_apply_texture",
-      "action": "import_and_apply_texture",
-      "status": "passed",
-      "duration": 20022
-    },
-    {
-      "id": 319,
-      "tool": "setup_ui_layout",
-      "action": "setup_ui_layout",
-      "status": "passed",
-      "duration": 73
-    },
-    {
-      "id": 320,
-      "tool": "setup_ui_layout",
-      "action": "setup_ui_layout",
-      "status": "passed",
-      "duration": 73
-    },
-    {
-      "id": 321,
-      "tool": "create_tween_animation_atomic",
-      "action": "create_tween_animation_atomic",
-      "status": "passed",
-      "duration": 2
-    },
-    {
-      "id": 322,
-      "tool": "create_tween_animation_atomic",
-      "action": "create_tween_animation_atomic",
-      "status": "passed",
-      "duration": 2
-    },
-    {
-      "id": 323,
-      "tool": "auto_fit_physics_collider",
-      "action": "auto_fit_physics_collider",
-      "status": "passed",
-      "duration": 5
-    },
-    {
-      "id": 324,
-      "tool": "auto_fit_physics_collider",
-      "action": "auto_fit_physics_collider",
-      "status": "passed",
-      "duration": 4
-    },
-    {
-      "id": 325,
-      "tool": "auto_fit_physics_collider",
-      "action": "auto_fit_physics_collider",
-      "status": "passed",
-      "duration": 4
     }
   ],
-  "startTime": "2026-03-10T11:50:26.477Z",
-  "endTime": "2026-03-10T11:57:48.909Z"
+  "startTime": "2026-03-25T04:20:22.261Z",
+  "endTime": "2026-03-25T04:20:58.368Z"
 }

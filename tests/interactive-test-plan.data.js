@@ -1,0 +1,8180 @@
+window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
+  "generatedAt": "2026-03-25T03:35:08.644Z",
+  "project": {
+    "name": "Aura for Cocos Creator",
+    "repoRelativeCasesPath": "tests/test-cases.json",
+    "repoRelativeReportPath": "tests/test-report.json",
+    "totalCases": 378
+  },
+  "plan": {
+    "goals": [
+      "覆盖现有 378 条 MCP/插件能力测试用例，形成可持续回归基线。",
+      "保留 AI 自动化结果，同时补充人工验证结论，避免只测接口不测真实编辑器交互。",
+      "把失败项、阻塞项、复测结果收敛到同一页面，便于发布前做 Go / No-Go 判断。"
+    ],
+    "stages": [
+      "阶段 1：环境准备与冒烟检查",
+      "阶段 2：AI 自动化回归与失败项筛查",
+      "阶段 3：人工交互验证与体验确认",
+      "阶段 4：问题复测、关闭与发布结论"
+    ],
+    "exitCriteria": [
+      "P0 / P1 用例不存在未确认失败。",
+      "人工关键路径冒烟项全部完成。",
+      "所有已记录问题具备状态、责任人或复测结论。"
+    ],
+    "checklist": [
+      {
+        "id": "prep-editor",
+        "title": "确认测试环境",
+        "description": "Cocos Creator、目标项目、插件版本、Token、端口、网络与权限已就绪。"
+      },
+      {
+        "id": "run-unit",
+        "title": "执行基础自动化",
+        "description": "完成 npm run test / 覆盖率 / 关键集成脚本，记录当前基线结果。"
+      },
+      {
+        "id": "review-ai",
+        "title": "处理 AI 失败项",
+        "description": "对自动化失败或未覆盖项进行人工确认，判断是真缺陷、环境问题还是用例过期。"
+      },
+      {
+        "id": "manual-smoke",
+        "title": "完成人工冒烟",
+        "description": "验证启动、连接、面板、核心场景改写、资源操作、构建与动画等关键链路。"
+      },
+      {
+        "id": "retest-close",
+        "title": "复测并出结论",
+        "description": "对已修复问题做回归，填写 Go / Conditional Go / No-Go 结论。"
+      }
+    ]
+  },
+  "summaries": {
+    "phases": [
+      {
+        "key": "编辑器联动",
+        "count": 53
+      },
+      {
+        "key": "动画工作流",
+        "count": 26
+      },
+      {
+        "key": "核心改写",
+        "count": 112
+      },
+      {
+        "key": "环境与连通",
+        "count": 26
+      },
+      {
+        "key": "物理工作流",
+        "count": 12
+      },
+      {
+        "key": "引擎专项",
+        "count": 9
+      },
+      {
+        "key": "只读查询",
+        "count": 69
+      },
+      {
+        "key": "质量与诊断",
+        "count": 9
+      },
+      {
+        "key": "资产与脚本",
+        "count": 46
+      },
+      {
+        "key": "UI 与参考图",
+        "count": 16
+      }
+    ],
+    "tools": [
+      {
+        "key": "animation_tool",
+        "count": 11
+      },
+      {
+        "key": "animation_workflow",
+        "count": 15
+      },
+      {
+        "key": "asset_operation",
+        "count": 33
+      },
+      {
+        "key": "auto_fit_physics_collider",
+        "count": 3
+      },
+      {
+        "key": "bridge_status",
+        "count": 2
+      },
+      {
+        "key": "broadcast",
+        "count": 5
+      },
+      {
+        "key": "create_prefab_atomic",
+        "count": 2
+      },
+      {
+        "key": "create_tween_animation_atomic",
+        "count": 2
+      },
+      {
+        "key": "editor_action",
+        "count": 48
+      },
+      {
+        "key": "engine_action",
+        "count": 9
+      },
+      {
+        "key": "execute_script",
+        "count": 2
+      },
+      {
+        "key": "import_and_apply_texture",
+        "count": 2
+      },
+      {
+        "key": "operation_log",
+        "count": 13
+      },
+      {
+        "key": "physics_tool",
+        "count": 12
+      },
+      {
+        "key": "preferences",
+        "count": 7
+      },
+      {
+        "key": "project_linter",
+        "count": 9
+      },
+      {
+        "key": "reference_image",
+        "count": 7
+      },
+      {
+        "key": "register_custom_macro",
+        "count": 2
+      },
+      {
+        "key": "scene_operation",
+        "count": 103
+      },
+      {
+        "key": "scene_query",
+        "count": 69
+      },
+      {
+        "key": "script_scaffold",
+        "count": 9
+      },
+      {
+        "key": "tool_management",
+        "count": 4
+      },
+      {
+        "key": "ui_generator",
+        "count": 9
+      }
+    ],
+    "editions": [
+      {
+        "key": "community",
+        "count": 307
+      },
+      {
+        "key": "pro",
+        "count": 71
+      }
+    ],
+    "aiBaseline": {
+      "pass": 314,
+      "fail": 9,
+      "blocked": 0,
+      "pending": 55
+    }
+  },
+  "cases": [
+    {
+      "id": 1,
+      "tool": "bridge_status",
+      "action": "bridge_status",
+      "title": "基本连通性检查",
+      "input": {},
+      "expected": "返回 {connected:true, version:\"3.8.x\", uptime, port}",
+      "note": "启动后第一步调用",
+      "phase": "环境与连通",
+      "priority": "P0",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
+      }
+    },
+    {
+      "id": 2,
+      "tool": "bridge_status",
+      "action": "bridge_status",
+      "title": "桥接断开",
+      "input": {},
+      "expected": "返回 {connected:false, error:\"ECONNREFUSED\"}",
+      "note": "编辑器未启动或插件未加载",
+      "phase": "环境与连通",
+      "priority": "P0",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
+      }
+    },
+    {
+      "id": 3,
+      "tool": "scene_query",
+      "action": "tree",
+      "title": "获取默认场景树",
+      "input": {
+        "action": "tree"
+      },
+      "expected": "返回过滤隐藏节点的层级树 {name,uuid,children[]}",
+      "note": "默认 includeInternal=false",
+      "phase": "只读查询",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
+      }
+    },
+    {
+      "id": 4,
+      "tool": "scene_query",
+      "action": "tree",
+      "title": "包含内部节点",
+      "input": {
+        "action": "tree",
+        "includeInternal": true
+      },
+      "expected": "返回含 ScrollView 内部节点、Profiler 节点的完整树",
+      "note": "",
+      "phase": "只读查询",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 11,
+        "note": "来自 tests/test-report.json，自动化执行通过（11ms）"
+      }
+    },
+    {
+      "id": 5,
+      "tool": "scene_query",
+      "action": "tree",
+      "title": "空场景",
+      "input": {
+        "action": "tree"
+      },
+      "expected": "返回仅含 Scene 根节点的树",
+      "note": "",
+      "phase": "只读查询",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 7,
+        "note": "来自 tests/test-report.json，自动化执行通过（7ms）"
+      }
+    },
+    {
+      "id": 6,
+      "tool": "scene_query",
+      "action": "list",
+      "title": "扁平节点列表",
+      "input": {
+        "action": "list"
+      },
+      "expected": "返回 [{uuid,name,depth,childCount},...] 数组",
+      "note": "",
+      "phase": "只读查询",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 5,
+        "note": "来自 tests/test-report.json，自动化执行通过（5ms）"
+      }
+    },
+    {
+      "id": 7,
+      "tool": "scene_query",
+      "action": "list",
+      "title": "含内部节点",
+      "input": {
+        "action": "list",
+        "includeInternal": true
+      },
+      "expected": "结果数量多于默认，包含引擎隐藏节点",
+      "note": "",
+      "phase": "只读查询",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 7,
+        "note": "来自 tests/test-report.json，自动化执行通过（7ms）"
+      }
+    },
+    {
+      "id": 8,
+      "tool": "scene_query",
+      "action": "stats",
+      "title": "场景统计",
+      "input": {
+        "action": "stats"
+      },
+      "expected": "返回 {nodeCount,activeCount,sceneName,filteredInternalNodes}",
+      "note": "",
+      "phase": "只读查询",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 4,
+        "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
+      }
+    },
+    {
+      "id": 9,
+      "tool": "scene_query",
+      "action": "stats",
+      "title": "含内部统计",
+      "input": {
+        "action": "stats",
+        "includeInternal": true
+      },
+      "expected": "nodeCount 包含所有运行时节点",
+      "note": "",
+      "phase": "只读查询",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 5,
+        "note": "来自 tests/test-report.json，自动化执行通过（5ms）"
+      }
+    },
+    {
+      "id": 10,
+      "tool": "scene_query",
+      "action": "node_detail",
+      "title": "查看节点详情",
+      "input": {
+        "action": "node_detail",
+        "uuid": "<node-uuid>"
+      },
+      "expected": "返回 {name,position,rotation,scale,components[],active,layer}",
+      "note": "",
+      "phase": "只读查询",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 6,
+        "note": "来自 tests/test-report.json，自动化执行通过（6ms）"
+      }
+    },
+    {
+      "id": 11,
+      "tool": "scene_query",
+      "action": "node_detail",
+      "title": "无效 UUID",
+      "input": {
+        "action": "node_detail",
+        "uuid": "invalid"
+      },
+      "expected": "返回 {error:\"未找到节点\"}",
+      "note": "",
+      "phase": "只读查询",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 9,
+        "note": "来自 tests/test-report.json，自动化执行通过（9ms）"
+      }
+    },
+    {
+      "id": 12,
+      "tool": "scene_query",
+      "action": "find_by_path",
+      "title": "按路径查找",
+      "input": {
+        "action": "find_by_path",
+        "path": "Canvas/Panel/Button"
+      },
+      "expected": "返回匹配节点 uuid 和详情",
+      "note": "",
+      "phase": "只读查询",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
+      }
+    },
+    {
+      "id": 13,
+      "tool": "scene_query",
+      "action": "find_by_path",
+      "title": "路径不存在",
+      "input": {
+        "action": "find_by_path",
+        "path": "NotExist/X"
+      },
+      "expected": "返回 {error:\"未找到路径\"}",
+      "note": "",
+      "phase": "只读查询",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
+      }
+    },
+    {
+      "id": 14,
+      "tool": "scene_query",
+      "action": "get_components",
+      "title": "获取组件列表",
+      "input": {
+        "action": "get_components",
+        "uuid": "<uuid>"
+      },
+      "expected": "返回 [{type:\"UITransform\",...},{type:\"Sprite\",...}]",
+      "note": "",
+      "phase": "只读查询",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
+      }
+    },
+    {
+      "id": 15,
+      "tool": "scene_query",
+      "action": "get_parent",
+      "title": "获取父节点",
+      "input": {
+        "action": "get_parent",
+        "uuid": "<uuid>"
+      },
+      "expected": "返回父节点 {uuid,name}",
+      "note": "",
+      "phase": "只读查询",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 5,
+        "note": "来自 tests/test-report.json，自动化执行通过（5ms）"
+      }
+    },
+    {
+      "id": 16,
+      "tool": "scene_query",
+      "action": "get_parent",
+      "title": "根节点",
+      "input": {
+        "action": "get_parent",
+        "uuid": "<scene-root>"
+      },
+      "expected": "返回 null 或 scene 根",
+      "note": "",
+      "phase": "只读查询",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
+      }
+    },
+    {
+      "id": 17,
+      "tool": "scene_query",
+      "action": "get_children",
+      "title": "直接子节点",
+      "input": {
+        "action": "get_children",
+        "uuid": "<uuid>"
+      },
+      "expected": "返回 [{uuid,name},...] 列表",
+      "note": "",
+      "phase": "只读查询",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
+      }
+    },
+    {
+      "id": 18,
+      "tool": "scene_query",
+      "action": "get_sibling",
+      "title": "兄弟节点",
+      "input": {
+        "action": "get_sibling",
+        "uuid": "<uuid>"
+      },
+      "expected": "返回同级节点列表",
+      "note": "",
+      "phase": "只读查询",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 4,
+        "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
+      }
+    },
+    {
+      "id": 19,
+      "tool": "scene_query",
+      "action": "get_world_position",
+      "title": "世界坐标",
+      "input": {
+        "action": "get_world_position",
+        "uuid": "<uuid>"
+      },
+      "expected": "返回 {x,y,z}",
+      "note": "",
+      "phase": "只读查询",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
+      }
+    },
+    {
+      "id": 20,
+      "tool": "scene_query",
+      "action": "get_world_rotation",
+      "title": "世界旋转",
+      "input": {
+        "action": "get_world_rotation",
+        "uuid": "<uuid>"
+      },
+      "expected": "返回 {x,y,z} 欧拉角",
+      "note": "",
+      "phase": "只读查询",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 7,
+        "note": "来自 tests/test-report.json，自动化执行通过（7ms）"
+      }
+    },
+    {
+      "id": 21,
+      "tool": "scene_query",
+      "action": "get_world_scale",
+      "title": "世界缩放",
+      "input": {
+        "action": "get_world_scale",
+        "uuid": "<uuid>"
+      },
+      "expected": "返回 {x,y,z}",
+      "note": "",
+      "phase": "只读查询",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
+      }
+    },
+    {
+      "id": 22,
+      "tool": "scene_query",
+      "action": "get_active_in_hierarchy",
+      "title": "节点激活",
+      "input": {
+        "action": "get_active_in_hierarchy",
+        "uuid": "<uuid>"
+      },
+      "expected": "返回 {activeInHierarchy:true/false}",
+      "note": "",
+      "phase": "只读查询",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
+      }
+    },
+    {
+      "id": 23,
+      "tool": "scene_query",
+      "action": "get_active_in_hierarchy",
+      "title": "父节点禁用",
+      "input": {
+        "action": "get_active_in_hierarchy",
+        "uuid": "<child>"
+      },
+      "expected": "返回 false（即使自身 active=true）",
+      "note": "",
+      "phase": "只读查询",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
+      }
+    },
+    {
+      "id": 24,
+      "tool": "scene_query",
+      "action": "get_node_bounds",
+      "title": "2D 边界",
+      "input": {
+        "action": "get_node_bounds",
+        "uuid": "<sprite>"
+      },
+      "expected": "返回 UITransform local/world rect",
+      "note": "",
+      "phase": "只读查询",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
+      }
+    },
+    {
+      "id": 25,
+      "tool": "scene_query",
+      "action": "get_node_bounds",
+      "title": "3D 边界",
+      "input": {
+        "action": "get_node_bounds",
+        "uuid": "<mesh>"
+      },
+      "expected": "返回 AABB {min,max,center,halfExtents}",
+      "note": "",
+      "phase": "只读查询",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 9,
+        "note": "来自 tests/test-report.json，自动化执行通过（9ms）"
+      }
+    },
+    {
+      "id": 26,
+      "tool": "scene_query",
+      "action": "find_nodes_by_name",
+      "title": "按名搜索",
+      "input": {
+        "action": "find_nodes_by_name",
+        "name": "Button"
+      },
+      "expected": "返回所有含 \"Button\" 的节点",
+      "note": "",
+      "phase": "只读查询",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 4,
+        "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
+      }
+    },
+    {
+      "id": 27,
+      "tool": "scene_query",
+      "action": "find_nodes_by_name",
+      "title": "无匹配",
+      "input": {
+        "action": "find_nodes_by_name",
+        "name": "XXXXXX"
+      },
+      "expected": "返回空数组 []",
+      "note": "",
+      "phase": "只读查询",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 9,
+        "note": "来自 tests/test-report.json，自动化执行通过（9ms）"
+      }
+    },
+    {
+      "id": 28,
+      "tool": "scene_query",
+      "action": "find_nodes_by_component",
+      "title": "按组件搜索",
+      "input": {
+        "action": "find_nodes_by_component",
+        "component": "Sprite"
+      },
+      "expected": "返回所有挂 Sprite 的节点",
+      "note": "",
+      "phase": "只读查询",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 5,
+        "note": "来自 tests/test-report.json，自动化执行通过（5ms）"
+      }
+    },
+    {
+      "id": 29,
+      "tool": "scene_query",
+      "action": "find_nodes_by_component",
+      "title": "自定义脚本",
+      "input": {
+        "action": "find_nodes_by_component",
+        "component": "PlayerController"
+      },
+      "expected": "返回挂该脚本的节点",
+      "note": "",
+      "phase": "只读查询",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 4,
+        "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
+      }
+    },
+    {
+      "id": 30,
+      "tool": "scene_query",
+      "action": "find_nodes_by_layer",
+      "title": "精确匹配",
+      "input": {
+        "action": "find_nodes_by_layer",
+        "layer": 33554432
+      },
+      "expected": "返回所有 UI_2D 层节点",
+      "note": "",
+      "phase": "只读查询",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 8,
+        "note": "来自 tests/test-report.json，自动化执行通过（8ms）"
+      }
+    },
+    {
+      "id": 31,
+      "tool": "scene_query",
+      "action": "find_nodes_by_layer",
+      "title": "掩码交集",
+      "input": {
+        "action": "find_nodes_by_layer",
+        "layer": 1,
+        "exact": false
+      },
+      "expected": "返回含 DEFAULT 位的节点",
+      "note": "",
+      "phase": "只读查询",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 4,
+        "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
+      }
+    },
+    {
+      "id": 32,
+      "tool": "scene_query",
+      "action": "get_component_property",
+      "title": "读 Label 文本",
+      "input": {
+        "action": "get_component_property",
+        "uuid": "<uuid>",
+        "component": "Label",
+        "property": "string"
+      },
+      "expected": "返回 {value:\"Hello World\"}",
+      "note": "",
+      "phase": "只读查询",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 6,
+        "note": "来自 tests/test-report.json，自动化执行通过（6ms）"
+      }
+    },
+    {
+      "id": 33,
+      "tool": "scene_query",
+      "action": "get_component_property",
+      "title": "读 spriteFrame",
+      "input": {
+        "action": "get_component_property",
+        "uuid": "<uuid>",
+        "component": "Sprite",
+        "property": "spriteFrame"
+      },
+      "expected": "返回 spriteFrame UUID",
+      "note": "",
+      "phase": "只读查询",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 4,
+        "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
+      }
+    },
+    {
+      "id": 34,
+      "tool": "scene_query",
+      "action": "get_node_components_properties",
+      "title": "全部组件属性",
+      "input": {
+        "action": "get_node_components_properties",
+        "uuid": "<uuid>"
+      },
+      "expected": "返回所有组件全部属性快照",
+      "note": "",
+      "phase": "只读查询",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 7,
+        "note": "来自 tests/test-report.json，自动化执行通过（7ms）"
+      }
+    },
+    {
+      "id": 35,
+      "tool": "scene_query",
+      "action": "get_camera_info",
+      "title": "查所有摄像机",
+      "input": {
+        "action": "get_camera_info"
+      },
+      "expected": "返回场景全部 Camera 信息列表",
+      "note": "",
+      "phase": "只读查询",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 4,
+        "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
+      }
+    },
+    {
+      "id": 36,
+      "tool": "scene_query",
+      "action": "get_camera_info",
+      "title": "指定摄像机",
+      "input": {
+        "action": "get_camera_info",
+        "uuid": "<cam>"
+      },
+      "expected": "返回 fov/near/far/projection 等参数",
+      "note": "",
+      "phase": "只读查询",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
+      }
+    },
+    {
+      "id": 37,
+      "tool": "scene_query",
+      "action": "get_canvas_info",
+      "title": "Canvas 信息",
+      "input": {
+        "action": "get_canvas_info"
+      },
+      "expected": "返回设计分辨率、适配模式等",
+      "note": "",
+      "phase": "只读查询",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
+      }
+    },
+    {
+      "id": 38,
+      "tool": "scene_query",
+      "action": "get_scene_globals",
+      "title": "全局设置",
+      "input": {
+        "action": "get_scene_globals"
+      },
+      "expected": "返回 ambient/fog/shadows 原始数据",
+      "note": "",
+      "phase": "只读查询",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 5,
+        "note": "来自 tests/test-report.json，自动化执行通过（5ms）"
+      }
+    },
+    {
+      "id": 39,
+      "tool": "scene_query",
+      "action": "get_scene_environment",
+      "title": "结构化环境",
+      "input": {
+        "action": "get_scene_environment"
+      },
+      "expected": "返回 {ambient:{skyColor,skyIllum},shadows,fog,skybox,octree}",
+      "note": "",
+      "phase": "只读查询",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
+      }
+    },
+    {
+      "id": 40,
+      "tool": "scene_query",
+      "action": "get_light_info",
+      "title": "所有灯光",
+      "input": {
+        "action": "get_light_info"
+      },
+      "expected": "返回全部灯光组件（类型/颜色/亮度/阴影）",
+      "note": "",
+      "phase": "只读查询",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 5,
+        "note": "来自 tests/test-report.json，自动化执行通过（5ms）"
+      }
+    },
+    {
+      "id": 41,
+      "tool": "scene_query",
+      "action": "get_light_info",
+      "title": "指定灯光",
+      "input": {
+        "action": "get_light_info",
+        "uuid": "<light>"
+      },
+      "expected": "仅返回该节点灯光信息",
+      "note": "",
+      "phase": "只读查询",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
+      }
+    },
+    {
+      "id": 42,
+      "tool": "scene_query",
+      "action": "get_material_info",
+      "title": "材质信息",
+      "input": {
+        "action": "get_material_info",
+        "uuid": "<renderer>"
+      },
+      "expected": "返回 {effectName,technique,passes[],uniforms}",
+      "note": "",
+      "phase": "只读查询",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
+      }
+    },
+    {
+      "id": 43,
+      "tool": "scene_query",
+      "action": "get_animation_state",
+      "title": "动画状态",
+      "input": {
+        "action": "get_animation_state",
+        "uuid": "<anim>"
+      },
+      "expected": "返回 {playing,currentClip,currentTime,clips[]}",
+      "note": "",
+      "phase": "只读查询",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 4,
+        "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
+      }
+    },
+    {
+      "id": 44,
+      "tool": "scene_query",
+      "action": "get_animation_state",
+      "title": "无动画组件",
+      "input": {
+        "action": "get_animation_state",
+        "uuid": "<no-anim>"
+      },
+      "expected": "返回 {error:\"没有 Animation 组件\"}",
+      "note": "",
+      "phase": "只读查询",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
+      }
+    },
+    {
+      "id": 45,
+      "tool": "scene_query",
+      "action": "get_collider_info",
+      "title": "碰撞器信息",
+      "input": {
+        "action": "get_collider_info",
+        "uuid": "<uuid>"
+      },
+      "expected": "返回碰撞器列表 + RigidBody 信息",
+      "note": "",
+      "phase": "只读查询",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
+      }
+    },
+    {
+      "id": 46,
+      "tool": "scene_query",
+      "action": "screen_to_world",
+      "title": "屏幕转世界",
+      "input": {
+        "action": "screen_to_world",
+        "screenX": 400,
+        "screenY": 300,
+        "screenZ": 0
+      },
+      "expected": "返回 {worldX,worldY,worldZ}",
+      "note": "",
+      "phase": "只读查询",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
+      }
+    },
+    {
+      "id": 47,
+      "tool": "scene_query",
+      "action": "screen_to_world",
+      "title": "指定摄像机",
+      "input": {
+        "action": "screen_to_world",
+        "uuid": "<cam>",
+        "screenX": 0,
+        "screenY": 0
+      },
+      "expected": "使用指定摄像机转换",
+      "note": "",
+      "phase": "只读查询",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 6,
+        "note": "来自 tests/test-report.json，自动化执行通过（6ms）"
+      }
+    },
+    {
+      "id": 48,
+      "tool": "scene_query",
+      "action": "world_to_screen",
+      "title": "世界转屏幕",
+      "input": {
+        "action": "world_to_screen",
+        "worldX": 100,
+        "worldY": 200,
+        "worldZ": 0
+      },
+      "expected": "返回 {screenX,screenY,screenZ}",
+      "note": "",
+      "phase": "只读查询",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 11,
+        "note": "来自 tests/test-report.json，自动化执行通过（11ms）"
+      }
+    },
+    {
+      "id": 49,
+      "tool": "scene_query",
+      "action": "check_script_ready",
+      "title": "脚本已编译",
+      "input": {
+        "action": "check_script_ready",
+        "script": "PlayerController"
+      },
+      "expected": "返回 {ready:true, isComponent:true}",
+      "note": "",
+      "phase": "只读查询",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 4,
+        "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
+      }
+    },
+    {
+      "id": 50,
+      "tool": "scene_query",
+      "action": "check_script_ready",
+      "title": "未就绪",
+      "input": {
+        "action": "check_script_ready",
+        "script": "NewScript"
+      },
+      "expected": "返回 {ready:false, message:\"尚未注册\"}",
+      "note": "",
+      "phase": "只读查询",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 7,
+        "note": "来自 tests/test-report.json，自动化执行通过（7ms）"
+      }
+    },
+    {
+      "id": 51,
+      "tool": "scene_query",
+      "action": "check_script_ready",
+      "title": "内置组件",
+      "input": {
+        "action": "check_script_ready",
+        "script": "Sprite"
+      },
+      "expected": "返回 {ready:true, isComponent:true}",
+      "note": "",
+      "phase": "只读查询",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 4,
+        "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
+      }
+    },
+    {
+      "id": 52,
+      "tool": "scene_query",
+      "action": "get_script_properties",
+      "title": "获取属性",
+      "input": {
+        "action": "get_script_properties",
+        "script": "PlayerController"
+      },
+      "expected": "返回 {properties:[{name:\"speed\",type:\"Float\",default:10},...]}",
+      "note": "",
+      "phase": "只读查询",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 4,
+        "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
+      }
+    },
+    {
+      "id": 53,
+      "tool": "scene_query",
+      "action": "get_script_properties",
+      "title": "无 @property",
+      "input": {
+        "action": "get_script_properties",
+        "script": "EmptyScript"
+      },
+      "expected": "返回 {propertyCount:0, properties:[]}",
+      "note": "",
+      "phase": "只读查询",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 4,
+        "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
+      }
+    },
+    {
+      "id": 54,
+      "tool": "scene_query",
+      "action": "get_script_properties",
+      "title": "不存在",
+      "input": {
+        "action": "get_script_properties",
+        "script": "XXX"
+      },
+      "expected": "返回 {error:\"未找到脚本类\"}",
+      "note": "",
+      "phase": "只读查询",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
+      }
+    },
+    {
+      "id": 55,
+      "tool": "scene_query",
+      "action": "get_current_selection",
+      "title": "有选中",
+      "input": {
+        "action": "get_current_selection"
+      },
+      "expected": "返回 {selected:[\"<uuid>\"], focused:{name,...}}",
+      "note": "",
+      "phase": "只读查询",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
+      }
+    },
+    {
+      "id": 56,
+      "tool": "scene_query",
+      "action": "get_current_selection",
+      "title": "无选中",
+      "input": {
+        "action": "get_current_selection"
+      },
+      "expected": "返回 {selected:[], message:\"当前没有选中节点\"}",
+      "note": "",
+      "phase": "只读查询",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
+      }
+    },
+    {
+      "id": 57,
+      "tool": "scene_query",
+      "action": "get_active_scene_focus",
+      "title": "有选中→返回详情",
+      "input": {
+        "action": "get_active_scene_focus"
+      },
+      "expected": "返回 {source:\"selection\", focus:{...}}",
+      "note": "",
+      "phase": "只读查询",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 10,
+        "note": "来自 tests/test-report.json，自动化执行通过（10ms）"
+      }
+    },
+    {
+      "id": 58,
+      "tool": "scene_query",
+      "action": "get_active_scene_focus",
+      "title": "无选中→返回统计",
+      "input": {
+        "action": "get_active_scene_focus"
+      },
+      "expected": "返回 {source:\"scene\", focus:{nodeCount,...}}",
+      "note": "",
+      "phase": "只读查询",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
+      }
+    },
+    {
+      "id": 59,
+      "tool": "scene_query",
+      "action": "list_all_scenes",
+      "title": "列出场景",
+      "input": {
+        "action": "list_all_scenes"
+      },
+      "expected": "返回 [{url:\"db://assets/scenes/Main.scene\",...},...]",
+      "note": "",
+      "phase": "只读查询",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 13,
+        "note": "来自 tests/test-report.json，自动化执行通过（13ms）"
+      }
+    },
+    {
+      "id": 60,
+      "tool": "scene_query",
+      "action": "validate_scene",
+      "title": "场景验证",
+      "input": {
+        "action": "validate_scene"
+      },
+      "expected": "返回 {issues:[],score:85}",
+      "note": "",
+      "phase": "只读查询",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
+      }
+    },
+    {
+      "id": 61,
+      "tool": "scene_query",
+      "action": "deep_validate_scene",
+      "title": "深度验证",
+      "input": {
+        "action": "deep_validate_scene"
+      },
+      "expected": "返回缺失资源、孤立节点、修复建议",
+      "note": "",
+      "phase": "只读查询",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 108,
+        "note": "来自 tests/test-report.json，自动化执行通过（108ms）"
+      }
+    },
+    {
+      "id": 62,
+      "tool": "scene_query",
+      "action": "detect_2d_3d",
+      "title": "2D 场景",
+      "input": {
+        "action": "detect_2d_3d"
+      },
+      "expected": "返回 {mode:\"2D\"}",
+      "note": "",
+      "phase": "只读查询",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 4,
+        "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
+      }
+    },
+    {
+      "id": 63,
+      "tool": "scene_query",
+      "action": "detect_2d_3d",
+      "title": "3D 场景",
+      "input": {
+        "action": "detect_2d_3d"
+      },
+      "expected": "返回 {mode:\"3D\"}",
+      "note": "",
+      "phase": "只读查询",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
+      }
+    },
+    {
+      "id": 64,
+      "tool": "scene_query",
+      "action": "detect_2d_3d",
+      "title": "混合场景",
+      "input": {
+        "action": "detect_2d_3d"
+      },
+      "expected": "返回 {mode:\"Mixed\"}",
+      "note": "",
+      "phase": "只读查询",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 4,
+        "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
+      }
+    },
+    {
+      "id": 65,
+      "tool": "scene_query",
+      "action": "performance_audit",
+      "title": "性能审计",
+      "input": {
+        "action": "performance_audit"
+      },
+      "expected": "返回 {issues[],metrics:{nodeCount,maxDepth},suggestions[]}",
+      "note": "",
+      "phase": "只读查询",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
+      }
+    },
+    {
+      "id": 66,
+      "tool": "scene_query",
+      "action": "list_available_components",
+      "title": "组件列表",
+      "input": {
+        "action": "list_available_components"
+      },
+      "expected": "返回引擎内置+自定义脚本组件，按类别分组",
+      "note": "",
+      "phase": "只读查询",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
+      }
+    },
+    {
+      "id": 67,
+      "tool": "scene_query",
+      "action": "scene_snapshot",
+      "title": "默认快照",
+      "input": {
+        "action": "scene_snapshot"
+      },
+      "expected": "返回场景状态快照（最多 500 节点）",
+      "note": "",
+      "phase": "只读查询",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 133,
+        "note": "来自 tests/test-report.json，自动化执行通过（133ms）"
+      }
+    },
+    {
+      "id": 68,
+      "tool": "scene_query",
+      "action": "scene_snapshot",
+      "title": "限制数量",
+      "input": {
+        "action": "scene_snapshot",
+        "maxNodes": 100
+      },
+      "expected": "返回最多 100 节点快照",
+      "note": "",
+      "phase": "只读查询",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 134,
+        "note": "来自 tests/test-report.json，自动化执行通过（134ms）"
+      }
+    },
+    {
+      "id": 69,
+      "tool": "scene_query",
+      "action": "scene_diff",
+      "title": "对比快照",
+      "input": {
+        "action": "scene_diff",
+        "snapshotA": {},
+        "snapshotB": {}
+      },
+      "expected": "返回 {added[],removed[],modified[]}",
+      "note": "",
+      "phase": "只读查询",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
+      }
+    },
+    {
+      "id": 70,
+      "tool": "scene_query",
+      "action": "export_scene_json",
+      "title": "导出 JSON",
+      "input": {
+        "action": "export_scene_json"
+      },
+      "expected": "返回完整场景节点树 JSON",
+      "note": "",
+      "phase": "只读查询",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 159,
+        "note": "来自 tests/test-report.json，自动化执行通过（159ms）"
+      }
+    },
+    {
+      "id": 71,
+      "tool": "scene_query",
+      "action": "measure_distance",
+      "title": "测量距离",
+      "input": {
+        "action": "measure_distance",
+        "uuidA": "<a>",
+        "uuidB": "<b>"
+      },
+      "expected": "返回 {distance2D,distance3D,delta:{x,y,z}}",
+      "note": "",
+      "phase": "只读查询",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 5,
+        "note": "来自 tests/test-report.json，自动化执行通过（5ms）"
+      }
+    },
+    {
+      "id": 72,
+      "tool": "scene_operation",
+      "action": "create_node",
+      "title": "创建空节点",
+      "input": {
+        "action": "create_node",
+        "name": "MyNode"
+      },
+      "expected": "返回 {uuid:\"<new>\"}，在场景根下",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 4,
+        "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
+      }
+    },
+    {
+      "id": 73,
+      "tool": "scene_operation",
+      "action": "create_node",
+      "title": "指定父节点",
+      "input": {
+        "action": "create_node",
+        "name": "Child",
+        "parentUuid": "<parent>"
+      },
+      "expected": "在父节点下创建子节点",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 4,
+        "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
+      }
+    },
+    {
+      "id": 74,
+      "tool": "scene_operation",
+      "action": "create_node",
+      "title": "指定排序",
+      "input": {
+        "action": "create_node",
+        "name": "First",
+        "parentUuid": "<p>",
+        "siblingIndex": 0
+      },
+      "expected": "插入到兄弟列表第一位",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 5,
+        "note": "来自 tests/test-report.json，自动化执行通过（5ms）"
+      }
+    },
+    {
+      "id": 75,
+      "tool": "scene_operation",
+      "action": "destroy_node",
+      "title": "删除节点",
+      "input": {
+        "action": "destroy_node",
+        "uuid": "<uuid>",
+        "confirmDangerous": true
+      },
+      "expected": "返回 {success:true}",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 9,
+        "note": "来自 tests/test-report.json，自动化执行通过（9ms）"
+      }
+    },
+    {
+      "id": 76,
+      "tool": "scene_operation",
+      "action": "destroy_node",
+      "title": "缺少确认",
+      "input": {
+        "action": "destroy_node",
+        "uuid": "<uuid>"
+      },
+      "expected": "返回 {error:\"需要 confirmDangerous=true\"}",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
+      }
+    },
+    {
+      "id": 77,
+      "tool": "scene_operation",
+      "action": "reparent",
+      "title": "移动到新父节点",
+      "input": {
+        "action": "reparent",
+        "uuid": "<child>",
+        "parentUuid": "<newP>"
+      },
+      "expected": "返回 {success:true}",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
+      }
+    },
+    {
+      "id": 78,
+      "tool": "scene_operation",
+      "action": "duplicate_node",
+      "title": "克隆含子节点",
+      "input": {
+        "action": "duplicate_node",
+        "uuid": "<uuid>"
+      },
+      "expected": "返回 {clonedUuid:\"<new>\"}",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 14,
+        "note": "来自 tests/test-report.json，自动化执行通过（14ms）"
+      }
+    },
+    {
+      "id": 79,
+      "tool": "scene_operation",
+      "action": "duplicate_node",
+      "title": "仅克隆自身",
+      "input": {
+        "action": "duplicate_node",
+        "uuid": "<uuid>",
+        "includeChildren": false
+      },
+      "expected": "不含子节点的克隆",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
+      }
+    },
+    {
+      "id": 80,
+      "tool": "scene_operation",
+      "action": "clear_children",
+      "title": "清空子节点",
+      "input": {
+        "action": "clear_children",
+        "uuid": "<uuid>",
+        "confirmDangerous": true
+      },
+      "expected": "删除全部子节点",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 4,
+        "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
+      }
+    },
+    {
+      "id": 81,
+      "tool": "scene_operation",
+      "action": "group_nodes",
+      "title": "编组",
+      "input": {
+        "action": "group_nodes",
+        "uuids": [
+          "<a>",
+          "<b>"
+        ],
+        "name": "Group"
+      },
+      "expected": "创建 Group 节点并将两个节点移入",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 5,
+        "note": "来自 tests/test-report.json，自动化执行通过（5ms）"
+      }
+    },
+    {
+      "id": 82,
+      "tool": "scene_operation",
+      "action": "set_position",
+      "title": "设本地位置",
+      "input": {
+        "action": "set_position",
+        "uuid": "<uuid>",
+        "x": 100,
+        "y": 200,
+        "z": 0
+      },
+      "expected": "本地坐标变为 (100,200,0)",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 4,
+        "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
+      }
+    },
+    {
+      "id": 83,
+      "tool": "scene_operation",
+      "action": "set_rotation",
+      "title": "设本地旋转",
+      "input": {
+        "action": "set_rotation",
+        "uuid": "<uuid>",
+        "x": 0,
+        "y": 45,
+        "z": 0
+      },
+      "expected": "绕 Y 轴旋转 45°",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 5,
+        "note": "来自 tests/test-report.json，自动化执行通过（5ms）"
+      }
+    },
+    {
+      "id": 84,
+      "tool": "scene_operation",
+      "action": "set_scale",
+      "title": "设缩放",
+      "input": {
+        "action": "set_scale",
+        "uuid": "<uuid>",
+        "x": 2,
+        "y": 2,
+        "z": 1
+      },
+      "expected": "放大 2 倍",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 4,
+        "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
+      }
+    },
+    {
+      "id": 85,
+      "tool": "scene_operation",
+      "action": "set_world_position",
+      "title": "设世界位置",
+      "input": {
+        "action": "set_world_position",
+        "uuid": "<uuid>",
+        "x": 0,
+        "y": 500,
+        "z": 0
+      },
+      "expected": "世界坐标设为 (0,500,0)",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 8,
+        "note": "来自 tests/test-report.json，自动化执行通过（8ms）"
+      }
+    },
+    {
+      "id": 86,
+      "tool": "scene_operation",
+      "action": "set_world_rotation",
+      "title": "设世界旋转",
+      "input": {
+        "action": "set_world_rotation",
+        "uuid": "<uuid>",
+        "x": 0,
+        "y": 90,
+        "z": 0
+      },
+      "expected": "世界旋转 (0,90,0)",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 6,
+        "note": "来自 tests/test-report.json，自动化执行通过（6ms）"
+      }
+    },
+    {
+      "id": 87,
+      "tool": "scene_operation",
+      "action": "set_world_scale",
+      "title": "设世界缩放",
+      "input": {
+        "action": "set_world_scale",
+        "uuid": "<uuid>",
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "expected": "世界缩放归一",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 9,
+        "note": "来自 tests/test-report.json，自动化执行通过（9ms）"
+      }
+    },
+    {
+      "id": 88,
+      "tool": "scene_operation",
+      "action": "reset_transform",
+      "title": "重置全部",
+      "input": {
+        "action": "reset_transform",
+        "uuid": "<uuid>"
+      },
+      "expected": "位置/旋转/缩放全部归零",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
+      }
+    },
+    {
+      "id": 89,
+      "tool": "scene_operation",
+      "action": "reset_transform",
+      "title": "仅重置位置",
+      "input": {
+        "action": "reset_transform",
+        "uuid": "<uuid>",
+        "resetRotation": false,
+        "resetScale": false
+      },
+      "expected": "仅位置归零",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
+      }
+    },
+    {
+      "id": 90,
+      "tool": "scene_operation",
+      "action": "set_name",
+      "title": "重命名",
+      "input": {
+        "action": "set_name",
+        "uuid": "<uuid>",
+        "name": "NewName"
+      },
+      "expected": "节点名变为 NewName",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 5,
+        "note": "来自 tests/test-report.json，自动化执行通过（5ms）"
+      }
+    },
+    {
+      "id": 91,
+      "tool": "scene_operation",
+      "action": "set_active",
+      "title": "禁用",
+      "input": {
+        "action": "set_active",
+        "uuid": "<uuid>",
+        "active": false
+      },
+      "expected": "节点及子节点不再渲染",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 7,
+        "note": "来自 tests/test-report.json，自动化执行通过（7ms）"
+      }
+    },
+    {
+      "id": 92,
+      "tool": "scene_operation",
+      "action": "set_active",
+      "title": "启用",
+      "input": {
+        "action": "set_active",
+        "uuid": "<uuid>",
+        "active": true
+      },
+      "expected": "节点恢复激活",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 6,
+        "note": "来自 tests/test-report.json，自动化执行通过（6ms）"
+      }
+    },
+    {
+      "id": 93,
+      "tool": "scene_operation",
+      "action": "set_layer",
+      "title": "设为 UI_2D",
+      "input": {
+        "action": "set_layer",
+        "uuid": "<uuid>",
+        "layer": 33554432
+      },
+      "expected": "Layer→UI_2D",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 4,
+        "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
+      }
+    },
+    {
+      "id": 94,
+      "tool": "scene_operation",
+      "action": "set_anchor_point",
+      "title": "锚点左上角",
+      "input": {
+        "action": "set_anchor_point",
+        "uuid": "<uuid>",
+        "anchorX": 0,
+        "anchorY": 1
+      },
+      "expected": "锚点变为 (0,1)",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 6,
+        "note": "来自 tests/test-report.json，自动化执行通过（6ms）"
+      }
+    },
+    {
+      "id": 95,
+      "tool": "scene_operation",
+      "action": "set_content_size",
+      "title": "设尺寸",
+      "input": {
+        "action": "set_content_size",
+        "uuid": "<uuid>",
+        "width": 400,
+        "height": 300
+      },
+      "expected": "UITransform 400×300",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
+      }
+    },
+    {
+      "id": 96,
+      "tool": "scene_operation",
+      "action": "move_node_up",
+      "title": "上移一位",
+      "input": {
+        "action": "move_node_up",
+        "uuid": "<uuid>"
+      },
+      "expected": "兄弟列表中上移",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
+      }
+    },
+    {
+      "id": 97,
+      "tool": "scene_operation",
+      "action": "move_node_down",
+      "title": "下移一位",
+      "input": {
+        "action": "move_node_down",
+        "uuid": "<uuid>"
+      },
+      "expected": "兄弟列表中下移",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
+      }
+    },
+    {
+      "id": 98,
+      "tool": "scene_operation",
+      "action": "set_sibling_index",
+      "title": "设排序",
+      "input": {
+        "action": "set_sibling_index",
+        "uuid": "<uuid>",
+        "index": 0
+      },
+      "expected": "移到第一位",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 4,
+        "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
+      }
+    },
+    {
+      "id": 99,
+      "tool": "scene_operation",
+      "action": "lock_node",
+      "title": "锁定",
+      "input": {
+        "action": "lock_node",
+        "uuid": "<uuid>"
+      },
+      "expected": "层级面板中锁定",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 4,
+        "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
+      }
+    },
+    {
+      "id": 100,
+      "tool": "scene_operation",
+      "action": "unlock_node",
+      "title": "解锁",
+      "input": {
+        "action": "unlock_node",
+        "uuid": "<uuid>"
+      },
+      "expected": "解除锁定",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
+      }
+    },
+    {
+      "id": 101,
+      "tool": "scene_operation",
+      "action": "hide_node",
+      "title": "隐藏",
+      "input": {
+        "action": "hide_node",
+        "uuid": "<uuid>"
+      },
+      "expected": "编辑器中不可见（运行时不影响）",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
+      }
+    },
+    {
+      "id": 102,
+      "tool": "scene_operation",
+      "action": "unhide_node",
+      "title": "取消隐藏",
+      "input": {
+        "action": "unhide_node",
+        "uuid": "<uuid>"
+      },
+      "expected": "恢复可见",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 5,
+        "note": "来自 tests/test-report.json，自动化执行通过（5ms）"
+      }
+    },
+    {
+      "id": 103,
+      "tool": "scene_operation",
+      "action": "add_component",
+      "title": "添加 Sprite",
+      "input": {
+        "action": "add_component",
+        "uuid": "<uuid>",
+        "component": "Sprite"
+      },
+      "expected": "成功添加",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 8,
+        "note": "来自 tests/test-report.json，自动化执行通过（8ms）"
+      }
+    },
+    {
+      "id": 104,
+      "tool": "scene_operation",
+      "action": "add_component",
+      "title": "添加自定义脚本",
+      "input": {
+        "action": "add_component",
+        "uuid": "<uuid>",
+        "component": "PlayerController"
+      },
+      "expected": "添加脚本组件",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
+      }
+    },
+    {
+      "id": 105,
+      "tool": "scene_operation",
+      "action": "remove_component",
+      "title": "移除组件",
+      "input": {
+        "action": "remove_component",
+        "uuid": "<uuid>",
+        "component": "Sprite"
+      },
+      "expected": "移除 Sprite",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
+      }
+    },
+    {
+      "id": 106,
+      "tool": "scene_operation",
+      "action": "set_property",
+      "title": "设 Label 文本",
+      "input": {
+        "action": "set_property",
+        "uuid": "<uuid>",
+        "component": "Label",
+        "property": "string",
+        "value": "Hello"
+      },
+      "expected": "显示文字变为 Hello",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
+      }
+    },
+    {
+      "id": 107,
+      "tool": "scene_operation",
+      "action": "set_property",
+      "title": "设颜色",
+      "input": {
+        "action": "set_property",
+        "uuid": "<uuid>",
+        "component": "Sprite",
+        "property": "color",
+        "value": {
+          "r": 255,
+          "g": 0,
+          "b": 0,
+          "a": 255
+        }
+      },
+      "expected": "变为红色",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 4,
+        "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
+      }
+    },
+    {
+      "id": 108,
+      "tool": "scene_operation",
+      "action": "reset_property",
+      "title": "重置属性",
+      "input": {
+        "action": "reset_property",
+        "uuid": "<uuid>",
+        "component": "Label",
+        "property": "fontSize"
+      },
+      "expected": "fontSize 恢复默认",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 10,
+        "note": "来自 tests/test-report.json，自动化执行通过（10ms）"
+      }
+    },
+    {
+      "id": 109,
+      "tool": "scene_operation",
+      "action": "reset_node_properties",
+      "title": "重置全部",
+      "input": {
+        "action": "reset_node_properties",
+        "uuid": "<uuid>"
+      },
+      "expected": "所有组件属性恢复默认",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
+      }
+    },
+    {
+      "id": 110,
+      "tool": "scene_operation",
+      "action": "reset_node_properties",
+      "title": "重置指定",
+      "input": {
+        "action": "reset_node_properties",
+        "uuid": "<uuid>",
+        "component": "Sprite"
+      },
+      "expected": "仅 Sprite 属性重置",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 6,
+        "note": "来自 tests/test-report.json，自动化执行通过（6ms）"
+      }
+    },
+    {
+      "id": 111,
+      "tool": "scene_operation",
+      "action": "call_component_method",
+      "title": "调用方法",
+      "input": {
+        "action": "call_component_method",
+        "uuid": "<uuid>",
+        "component": "Animation",
+        "methodName": "play",
+        "args": [
+          "idle"
+        ]
+      },
+      "expected": "播放 idle 动画",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 4,
+        "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
+      }
+    },
+    {
+      "id": 112,
+      "tool": "scene_operation",
+      "action": "batch_set_property",
+      "title": "批量设属性",
+      "input": {
+        "action": "batch_set_property",
+        "uuids": [
+          "<a>",
+          "<b>"
+        ],
+        "component": "Label",
+        "property": "fontSize",
+        "value": 24
+      },
+      "expected": "两个 Label.fontSize→24",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
+      }
+    },
+    {
+      "id": 113,
+      "tool": "scene_operation",
+      "action": "attach_script",
+      "title": "一键挂载+设属性",
+      "input": {
+        "action": "attach_script",
+        "uuid": "<uuid>",
+        "script": "PlayerController",
+        "properties": {
+          "speed": 15,
+          "maxHp": 100
+        }
+      },
+      "expected": "添加组件+设 speed=15,maxHp=100",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
+      }
+    },
+    {
+      "id": 114,
+      "tool": "scene_operation",
+      "action": "attach_script",
+      "title": "防重复",
+      "input": {
+        "action": "attach_script",
+        "uuid": "<uuid>",
+        "script": "PlayerController"
+      },
+      "expected": "已存在→{alreadyAttached:true}",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
+      }
+    },
+    {
+      "id": 115,
+      "tool": "scene_operation",
+      "action": "attach_script",
+      "title": "允许重复",
+      "input": {
+        "action": "attach_script",
+        "uuid": "<uuid>",
+        "script": "PlayerController",
+        "allowDuplicate": true
+      },
+      "expected": "再添加一个实例",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
+      }
+    },
+    {
+      "id": 116,
+      "tool": "scene_operation",
+      "action": "attach_script",
+      "title": "脚本未编译",
+      "input": {
+        "action": "attach_script",
+        "uuid": "<uuid>",
+        "script": "NewScript"
+      },
+      "expected": "返回 {error:\"脚本类未注册\"}",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 4,
+        "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
+      }
+    },
+    {
+      "id": 117,
+      "tool": "scene_operation",
+      "action": "set_component_properties",
+      "title": "批量设属性",
+      "input": {
+        "action": "set_component_properties",
+        "uuid": "<uuid>",
+        "component": "Label",
+        "properties": {
+          "string": "Hi",
+          "fontSize": 32
+        }
+      },
+      "expected": "一次设 string+fontSize",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 4,
+        "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
+      }
+    },
+    {
+      "id": 118,
+      "tool": "scene_operation",
+      "action": "set_component_properties",
+      "title": "部分失败",
+      "input": {
+        "action": "set_component_properties",
+        "uuid": "<uuid>",
+        "component": "Sprite",
+        "properties": {
+          "spriteFrame": "bad",
+          "color": {
+            "r": 0,
+            "g": 255,
+            "b": 0,
+            "a": 255
+          }
+        }
+      },
+      "expected": "color 成功,spriteFrame 报错",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 6,
+        "note": "来自 tests/test-report.json，自动化执行通过（6ms）"
+      }
+    },
+    {
+      "id": 119,
+      "tool": "scene_operation",
+      "action": "detach_script",
+      "title": "移除脚本",
+      "input": {
+        "action": "detach_script",
+        "uuid": "<uuid>",
+        "script": "PlayerController"
+      },
+      "expected": "返回 {success:true}",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 7,
+        "note": "来自 tests/test-report.json，自动化执行通过（7ms）"
+      }
+    },
+    {
+      "id": 120,
+      "tool": "scene_operation",
+      "action": "detach_script",
+      "title": "不存在",
+      "input": {
+        "action": "detach_script",
+        "uuid": "<uuid>",
+        "script": "NotExist"
+      },
+      "expected": "返回 {error:\"没有脚本\"}",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
+      }
+    },
+    {
+      "id": 121,
+      "tool": "scene_operation",
+      "action": "align_nodes",
+      "title": "水平居中",
+      "input": {
+        "action": "align_nodes",
+        "uuids": [
+          "<a>",
+          "<b>",
+          "<c>"
+        ],
+        "alignment": "center_h"
+      },
+      "expected": "三节点水平居中对齐",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
+      }
+    },
+    {
+      "id": 122,
+      "tool": "scene_operation",
+      "action": "align_nodes",
+      "title": "均匀分布",
+      "input": {
+        "action": "align_nodes",
+        "uuids": [
+          "<a>",
+          "<b>",
+          "<c>"
+        ],
+        "alignment": "distribute_h"
+      },
+      "expected": "水平均匀分布",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 4,
+        "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
+      }
+    },
+    {
+      "id": 123,
+      "tool": "scene_operation",
+      "action": "clipboard_copy",
+      "title": "复制",
+      "input": {
+        "action": "clipboard_copy",
+        "uuid": "<uuid>"
+      },
+      "expected": "节点存入剪贴板",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
+      }
+    },
+    {
+      "id": 124,
+      "tool": "scene_operation",
+      "action": "clipboard_paste",
+      "title": "粘贴",
+      "input": {
+        "action": "clipboard_paste",
+        "parentUuid": "<p>"
+      },
+      "expected": "从剪贴板粘贴到父节点下",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 10,
+        "note": "来自 tests/test-report.json，自动化执行通过（10ms）"
+      }
+    },
+    {
+      "id": 125,
+      "tool": "scene_operation",
+      "action": "create_prefab",
+      "title": "保存预制体",
+      "input": {
+        "action": "create_prefab",
+        "uuid": "<uuid>",
+        "savePath": "db://assets/prefabs/Hero.prefab"
+      },
+      "expected": "保存为 .prefab",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "fail",
+        "duration": "",
+        "note": "来自 tests/test-report.json，自动化失败：HTTP 500: Internal Server Error"
+      }
+    },
+    {
+      "id": 126,
+      "tool": "scene_operation",
+      "action": "instantiate_prefab",
+      "title": "实例化",
+      "input": {
+        "action": "instantiate_prefab",
+        "prefabUrl": "db://assets/prefabs/Hero.prefab"
+      },
+      "expected": "在场景根创建实例",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 10,
+        "note": "来自 tests/test-report.json，自动化执行通过（10ms）"
+      }
+    },
+    {
+      "id": 127,
+      "tool": "scene_operation",
+      "action": "instantiate_prefab",
+      "title": "指定父",
+      "input": {
+        "action": "instantiate_prefab",
+        "prefabUrl": "db://assets/prefabs/Enemy.prefab",
+        "parentUuid": "<p>"
+      },
+      "expected": "在父节点下实例化",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 4,
+        "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
+      }
+    },
+    {
+      "id": 128,
+      "tool": "scene_operation",
+      "action": "enter_prefab_edit",
+      "title": "进入编辑",
+      "input": {
+        "action": "enter_prefab_edit",
+        "uuid": "<prefab>"
+      },
+      "expected": "进入预制体编辑模式",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
+      }
+    },
+    {
+      "id": 129,
+      "tool": "scene_operation",
+      "action": "exit_prefab_edit",
+      "title": "退出编辑",
+      "input": {
+        "action": "exit_prefab_edit"
+      },
+      "expected": "返回场景编辑模式",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 1,
+        "note": "来自 tests/test-report.json，自动化执行通过（1ms）"
+      }
+    },
+    {
+      "id": 130,
+      "tool": "scene_operation",
+      "action": "apply_prefab",
+      "title": "应用更改",
+      "input": {
+        "action": "apply_prefab",
+        "uuid": "<uuid>"
+      },
+      "expected": "同步到预制体资源",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "fail",
+        "duration": "",
+        "note": "来自 tests/test-report.json，自动化失败：HTTP 500: Internal Server Error"
+      }
+    },
+    {
+      "id": 131,
+      "tool": "scene_operation",
+      "action": "restore_prefab",
+      "title": "恢复",
+      "input": {
+        "action": "restore_prefab",
+        "uuid": "<uuid>"
+      },
+      "expected": "恢复为原始状态",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 7,
+        "note": "来自 tests/test-report.json，自动化执行通过（7ms）"
+      }
+    },
+    {
+      "id": 132,
+      "tool": "scene_operation",
+      "action": "validate_prefab",
+      "title": "验证",
+      "input": {
+        "action": "validate_prefab",
+        "prefabUrl": "db://assets/prefabs/Hero.prefab"
+      },
+      "expected": "检查完整性和依赖",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
+      }
+    },
+    {
+      "id": 133,
+      "tool": "scene_operation",
+      "action": "create_ui_widget",
+      "title": "创建 Button",
+      "input": {
+        "action": "create_ui_widget",
+        "widgetType": "button",
+        "text": "点击"
+      },
+      "expected": "创建完整 Button 层级",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 8,
+        "note": "来自 tests/test-report.json，自动化执行通过（8ms）"
+      }
+    },
+    {
+      "id": 134,
+      "tool": "scene_operation",
+      "action": "create_ui_widget",
+      "title": "创建 Label",
+      "input": {
+        "action": "create_ui_widget",
+        "widgetType": "label",
+        "text": "Hello"
+      },
+      "expected": "创建 Label 节点",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 4,
+        "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
+      }
+    },
+    {
+      "id": 135,
+      "tool": "scene_operation",
+      "action": "create_ui_widget",
+      "title": "创建 Slider",
+      "input": {
+        "action": "create_ui_widget",
+        "widgetType": "slider"
+      },
+      "expected": "创建 Slider 层级",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 5,
+        "note": "来自 tests/test-report.json，自动化执行通过（5ms）"
+      }
+    },
+    {
+      "id": 136,
+      "tool": "scene_operation",
+      "action": "setup_particle",
+      "title": "火焰粒子",
+      "input": {
+        "action": "setup_particle",
+        "preset": "fire"
+      },
+      "expected": "创建火焰效果",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
+      }
+    },
+    {
+      "id": 137,
+      "tool": "scene_operation",
+      "action": "setup_particle",
+      "title": "默认粒子",
+      "input": {
+        "action": "setup_particle"
+      },
+      "expected": "创建默认粒子节点",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 9,
+        "note": "来自 tests/test-report.json，自动化执行通过（9ms）"
+      }
+    },
+    {
+      "id": 138,
+      "tool": "scene_operation",
+      "action": "create_skeleton_node",
+      "title": "Spine",
+      "input": {
+        "action": "create_skeleton_node",
+        "skeletonType": "spine"
+      },
+      "expected": "创建 Spine 节点",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 5,
+        "note": "来自 tests/test-report.json，自动化执行通过（5ms）"
+      }
+    },
+    {
+      "id": 139,
+      "tool": "scene_operation",
+      "action": "create_skeleton_node",
+      "title": "DragonBones",
+      "input": {
+        "action": "create_skeleton_node",
+        "skeletonType": "dragonbones"
+      },
+      "expected": "创建龙骨节点",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 5,
+        "note": "来自 tests/test-report.json，自动化执行通过（5ms）"
+      }
+    },
+    {
+      "id": 140,
+      "tool": "scene_operation",
+      "action": "generate_tilemap",
+      "title": "瓦片地图",
+      "input": {
+        "action": "generate_tilemap",
+        "name": "Level1"
+      },
+      "expected": "创建 TiledMap 节点",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 10,
+        "note": "来自 tests/test-report.json，自动化执行通过（10ms）"
+      }
+    },
+    {
+      "id": 141,
+      "tool": "scene_operation",
+      "action": "create_primitive",
+      "title": "Box+颜色",
+      "input": {
+        "action": "create_primitive",
+        "type": "box",
+        "color": {
+          "r": 255,
+          "g": 100,
+          "b": 50,
+          "a": 255
+        }
+      },
+      "expected": "创建橙色 Box",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 6,
+        "note": "来自 tests/test-report.json，自动化执行通过（6ms）"
+      }
+    },
+    {
+      "id": 142,
+      "tool": "scene_operation",
+      "action": "create_primitive",
+      "title": "Sphere+阴影",
+      "input": {
+        "action": "create_primitive",
+        "type": "sphere",
+        "shadowCasting": true,
+        "receiveShadow": true
+      },
+      "expected": "创建可投射阴影球体",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 8,
+        "note": "来自 tests/test-report.json，自动化执行通过（8ms）"
+      }
+    },
+    {
+      "id": 143,
+      "tool": "scene_operation",
+      "action": "create_primitive",
+      "title": "Cylinder",
+      "input": {
+        "action": "create_primitive",
+        "type": "cylinder"
+      },
+      "expected": "创建圆柱体",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 5,
+        "note": "来自 tests/test-report.json，自动化执行通过（5ms）"
+      }
+    },
+    {
+      "id": 144,
+      "tool": "scene_operation",
+      "action": "create_camera",
+      "title": "透视摄像机",
+      "input": {
+        "action": "create_camera",
+        "name": "MainCam",
+        "fov": 60,
+        "near": 0.1,
+        "far": 1000
+      },
+      "expected": "创建 FOV=60 摄像机",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 7,
+        "note": "来自 tests/test-report.json，自动化执行通过（7ms）"
+      }
+    },
+    {
+      "id": 145,
+      "tool": "scene_operation",
+      "action": "set_camera_property",
+      "title": "改 FOV",
+      "input": {
+        "action": "set_camera_property",
+        "uuid": "<cam>",
+        "fov": 45
+      },
+      "expected": "FOV→45°",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 5,
+        "note": "来自 tests/test-report.json，自动化执行通过（5ms）"
+      }
+    },
+    {
+      "id": 146,
+      "tool": "scene_operation",
+      "action": "set_camera_property",
+      "title": "设背景色",
+      "input": {
+        "action": "set_camera_property",
+        "uuid": "<cam>",
+        "clearColor": {
+          "r": 30,
+          "g": 30,
+          "b": 60,
+          "a": 255
+        }
+      },
+      "expected": "背景色→深蓝",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 4,
+        "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
+      }
+    },
+    {
+      "id": 147,
+      "tool": "scene_operation",
+      "action": "set_camera_look_at",
+      "title": "朝向原点",
+      "input": {
+        "action": "set_camera_look_at",
+        "uuid": "<cam>",
+        "targetX": 0,
+        "targetY": 0,
+        "targetZ": 0
+      },
+      "expected": "摄像机旋转朝向原点",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 7,
+        "note": "来自 tests/test-report.json，自动化执行通过（7ms）"
+      }
+    },
+    {
+      "id": 148,
+      "tool": "scene_operation",
+      "action": "camera_screenshot",
+      "title": "默认截图",
+      "input": {
+        "action": "camera_screenshot",
+        "width": 1024,
+        "height": 768
+      },
+      "expected": "返回截图数据",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 11,
+        "note": "来自 tests/test-report.json，自动化执行通过（11ms）"
+      }
+    },
+    {
+      "id": 149,
+      "tool": "scene_operation",
+      "action": "camera_screenshot",
+      "title": "指定摄像机",
+      "input": {
+        "action": "camera_screenshot",
+        "uuid": "<cam>",
+        "width": 512,
+        "height": 512
+      },
+      "expected": "使用指定摄像机截图",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 7,
+        "note": "来自 tests/test-report.json，自动化执行通过（7ms）"
+      }
+    },
+    {
+      "id": 150,
+      "tool": "scene_operation",
+      "action": "set_material_property",
+      "title": "设材质颜色",
+      "input": {
+        "action": "set_material_property",
+        "uuid": "<uuid>",
+        "uniforms": {
+          "mainColor": {
+            "r": 255,
+            "g": 0,
+            "b": 0,
+            "a": 255
+          }
+        }
+      },
+      "expected": "主颜色变红",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
+      }
+    },
+    {
+      "id": 151,
+      "tool": "scene_operation",
+      "action": "set_material_property",
+      "title": "设粗糙度",
+      "input": {
+        "action": "set_material_property",
+        "uuid": "<uuid>",
+        "uniforms": {
+          "roughness": 0.3,
+          "metallic": 0.8
+        }
+      },
+      "expected": "光滑金属质感",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 11,
+        "note": "来自 tests/test-report.json，自动化执行通过（11ms）"
+      }
+    },
+    {
+      "id": 152,
+      "tool": "scene_operation",
+      "action": "assign_builtin_material",
+      "title": "Unlit 材质",
+      "input": {
+        "action": "assign_builtin_material",
+        "uuid": "<uuid>",
+        "effectName": "builtin-unlit"
+      },
+      "expected": "切换到无光照材质",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
+      }
+    },
+    {
+      "id": 153,
+      "tool": "scene_operation",
+      "action": "assign_builtin_material",
+      "title": "带颜色",
+      "input": {
+        "action": "assign_builtin_material",
+        "uuid": "<uuid>",
+        "effectName": "builtin-standard",
+        "color": {
+          "r": 0,
+          "g": 255,
+          "b": 0,
+          "a": 255
+        }
+      },
+      "expected": "标准材质+绿色",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
+      }
+    },
+    {
+      "id": 154,
+      "tool": "scene_operation",
+      "action": "assign_project_material",
+      "title": "自定义材质",
+      "input": {
+        "action": "assign_project_material",
+        "uuid": "<uuid>",
+        "materialUrl": "db://assets/materials/Glass.mtl"
+      },
+      "expected": "使用项目材质",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
+      }
+    },
+    {
+      "id": 155,
+      "tool": "scene_operation",
+      "action": "set_material_define",
+      "title": "启用法线贴图",
+      "input": {
+        "action": "set_material_define",
+        "uuid": "<uuid>",
+        "defines": {
+          "USE_NORMAL_MAP": true
+        }
+      },
+      "expected": "Shader 宏启用并重编译",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
+      }
+    },
+    {
+      "id": 156,
+      "tool": "scene_operation",
+      "action": "clone_material",
+      "title": "克隆材质",
+      "input": {
+        "action": "clone_material",
+        "uuid": "<uuid>"
+      },
+      "expected": "共享材质→独立实例",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 5,
+        "note": "来自 tests/test-report.json，自动化执行通过（5ms）"
+      }
+    },
+    {
+      "id": 157,
+      "tool": "scene_operation",
+      "action": "swap_technique",
+      "title": "切换 Technique",
+      "input": {
+        "action": "swap_technique",
+        "uuid": "<uuid>",
+        "technique": 1
+      },
+      "expected": "切换到第 2 个渲染技术",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
+      }
+    },
+    {
+      "id": 158,
+      "tool": "scene_operation",
+      "action": "sprite_grayscale",
+      "title": "启用灰度",
+      "input": {
+        "action": "sprite_grayscale",
+        "uuid": "<uuid>",
+        "enable": true
+      },
+      "expected": "Sprite 变灰色",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 7,
+        "note": "来自 tests/test-report.json，自动化执行通过（7ms）"
+      }
+    },
+    {
+      "id": 159,
+      "tool": "scene_operation",
+      "action": "sprite_grayscale",
+      "title": "恢复彩色",
+      "input": {
+        "action": "sprite_grayscale",
+        "uuid": "<uuid>",
+        "enable": false
+      },
+      "expected": "Sprite 恢复彩色",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
+      }
+    },
+    {
+      "id": 160,
+      "tool": "scene_operation",
+      "action": "create_light",
+      "title": "平行光",
+      "input": {
+        "action": "create_light",
+        "lightType": "directional",
+        "rotationX": -45
+      },
+      "expected": "创建 45° 平行光",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 10,
+        "note": "来自 tests/test-report.json，自动化执行通过（10ms）"
+      }
+    },
+    {
+      "id": 161,
+      "tool": "scene_operation",
+      "action": "create_light",
+      "title": "聚光灯",
+      "input": {
+        "action": "create_light",
+        "lightType": "spot",
+        "x": 0,
+        "y": 5,
+        "z": 0,
+        "spotAngle": 60,
+        "range": 20
+      },
+      "expected": "创建聚光灯",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 5,
+        "note": "来自 tests/test-report.json，自动化执行通过（5ms）"
+      }
+    },
+    {
+      "id": 162,
+      "tool": "scene_operation",
+      "action": "set_light_property",
+      "title": "调亮度",
+      "input": {
+        "action": "set_light_property",
+        "uuid": "<light>",
+        "illuminance": 150000
+      },
+      "expected": "亮度→150000 lux",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 4,
+        "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
+      }
+    },
+    {
+      "id": 163,
+      "tool": "scene_operation",
+      "action": "set_light_property",
+      "title": "开阴影",
+      "input": {
+        "action": "set_light_property",
+        "uuid": "<light>",
+        "shadowEnabled": true,
+        "shadowPcf": 2
+      },
+      "expected": "启用 PCF2 阴影",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 6,
+        "note": "来自 tests/test-report.json，自动化执行通过（6ms）"
+      }
+    },
+    {
+      "id": 164,
+      "tool": "scene_operation",
+      "action": "set_scene_environment",
+      "title": "用预设",
+      "input": {
+        "action": "set_scene_environment",
+        "preset": "outdoor_day"
+      },
+      "expected": "一键应用户外白天环境",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 5,
+        "note": "来自 tests/test-report.json，自动化执行通过（5ms）"
+      }
+    },
+    {
+      "id": 165,
+      "tool": "scene_operation",
+      "action": "set_scene_environment",
+      "title": "设雾效",
+      "input": {
+        "action": "set_scene_environment",
+        "subsystem": "fog",
+        "enabled": true,
+        "fogDensity": 0.05,
+        "fogColor": {
+          "r": 200,
+          "g": 200,
+          "b": 220,
+          "a": 255
+        }
+      },
+      "expected": "启用淡蓝雾效",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 4,
+        "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
+      }
+    },
+    {
+      "id": 166,
+      "tool": "scene_operation",
+      "action": "set_scene_environment",
+      "title": "设环境光",
+      "input": {
+        "action": "set_scene_environment",
+        "subsystem": "ambient",
+        "skyIllum": 30000,
+        "skyColor": {
+          "r": 128,
+          "g": 160,
+          "b": 255,
+          "a": 255
+        }
+      },
+      "expected": "天空颜色→淡蓝",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
+      }
+    },
+    {
+      "id": 167,
+      "tool": "scene_operation",
+      "action": "bind_event",
+      "title": "绑定点击",
+      "input": {
+        "action": "bind_event",
+        "uuid": "<btn>",
+        "eventType": "click",
+        "component": "GameUI",
+        "handler": "onClickStart"
+      },
+      "expected": "Button 绑定 click→GameUI.onClickStart",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
+      }
+    },
+    {
+      "id": 168,
+      "tool": "scene_operation",
+      "action": "bind_event",
+      "title": "绑定滑块",
+      "input": {
+        "action": "bind_event",
+        "uuid": "<slider>",
+        "eventType": "slider",
+        "component": "Settings",
+        "handler": "onVolumeChange"
+      },
+      "expected": "Slider 绑定回调",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
+      }
+    },
+    {
+      "id": 169,
+      "tool": "scene_operation",
+      "action": "unbind_event",
+      "title": "移除指定",
+      "input": {
+        "action": "unbind_event",
+        "uuid": "<btn>",
+        "eventType": "click",
+        "handler": "onClickStart"
+      },
+      "expected": "移除匹配的 handler",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 4,
+        "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
+      }
+    },
+    {
+      "id": 170,
+      "tool": "scene_operation",
+      "action": "unbind_event",
+      "title": "清空全部",
+      "input": {
+        "action": "unbind_event",
+        "uuid": "<btn>",
+        "eventType": "click"
+      },
+      "expected": "移除所有 click 事件",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
+      }
+    },
+    {
+      "id": 171,
+      "tool": "scene_operation",
+      "action": "list_events",
+      "title": "列出事件",
+      "input": {
+        "action": "list_events",
+        "uuid": "<btn>"
+      },
+      "expected": "返回所有已绑定 UI 事件",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
+      }
+    },
+    {
+      "id": 172,
+      "tool": "scene_operation",
+      "action": "audio_setup",
+      "title": "添加音频",
+      "input": {
+        "action": "audio_setup",
+        "uuid": "<uuid>",
+        "volume": 0.8,
+        "loop": true,
+        "playOnAwake": true
+      },
+      "expected": "添加 AudioSource+配置",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 4,
+        "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
+      }
+    },
+    {
+      "id": 173,
+      "tool": "scene_operation",
+      "action": "setup_physics_world",
+      "title": "设重力",
+      "input": {
+        "action": "setup_physics_world",
+        "gravity": {
+          "x": 0,
+          "y": -20,
+          "z": 0
+        }
+      },
+      "expected": "物理世界重力加倍",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 6,
+        "note": "来自 tests/test-report.json，自动化执行通过（6ms）"
+      }
+    },
+    {
+      "id": 174,
+      "tool": "scene_operation",
+      "action": "batch",
+      "title": "批量操作",
+      "input": {
+        "action": "batch",
+        "operations": [
+          {
+            "action": "create_node",
+            "name": "A"
+          },
+          {
+            "action": "add_component",
+            "uuid": "$0.uuid",
+            "component": "Sprite"
+          }
+        ]
+      },
+      "expected": "创建节点 A 并添加 Sprite，$0.uuid 引用上一步结果",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 4,
+        "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
+      }
+    },
+    {
+      "id": 175,
+      "tool": "asset_operation",
+      "action": "list",
+      "title": "列出所有图片",
+      "input": {
+        "action": "list",
+        "pattern": "db://assets/**/*.png"
+      },
+      "expected": "返回所有 PNG 资源列表",
+      "note": "",
+      "phase": "资产与脚本",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 13,
+        "note": "来自 tests/test-report.json，自动化执行通过（13ms）"
+      }
+    },
+    {
+      "id": 176,
+      "tool": "asset_operation",
+      "action": "info",
+      "title": "资源信息",
+      "input": {
+        "action": "info",
+        "url": "db://assets/textures/hero.png"
+      },
+      "expected": "返回 {type,uuid,path,importer}",
+      "note": "",
+      "phase": "资产与脚本",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
+      }
+    },
+    {
+      "id": 177,
+      "tool": "asset_operation",
+      "action": "create",
+      "title": "创建文件",
+      "input": {
+        "action": "create",
+        "url": "db://assets/scripts/Test.ts",
+        "content": "import {_decorator} from \"cc\";"
+      },
+      "expected": "创建 TS 文件",
+      "note": "",
+      "phase": "资产与脚本",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 20010,
+        "note": "来自 tests/test-report.json，自动化执行通过（20010ms）"
+      }
+    },
+    {
+      "id": 178,
+      "tool": "asset_operation",
+      "action": "save",
+      "title": "覆盖保存",
+      "input": {
+        "action": "save",
+        "url": "db://assets/scripts/Test.ts",
+        "content": "...new code..."
+      },
+      "expected": "文件内容被覆盖",
+      "note": "",
+      "phase": "资产与脚本",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 20010,
+        "note": "来自 tests/test-report.json，自动化执行通过（20010ms）"
+      }
+    },
+    {
+      "id": 179,
+      "tool": "asset_operation",
+      "action": "delete",
+      "title": "删除资源",
+      "input": {
+        "action": "delete",
+        "url": "db://assets/old/unused.png"
+      },
+      "expected": "永久删除",
+      "note": "",
+      "phase": "资产与脚本",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 4,
+        "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
+      }
+    },
+    {
+      "id": 180,
+      "tool": "asset_operation",
+      "action": "move",
+      "title": "移动资源",
+      "input": {
+        "action": "move",
+        "sourceUrl": "db://assets/a.png",
+        "targetUrl": "db://assets/textures/a.png"
+      },
+      "expected": "资源移到 textures 目录",
+      "note": "",
+      "phase": "资产与脚本",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 20008,
+        "note": "来自 tests/test-report.json，自动化执行通过（20008ms）"
+      }
+    },
+    {
+      "id": 181,
+      "tool": "asset_operation",
+      "action": "copy",
+      "title": "复制资源",
+      "input": {
+        "action": "copy",
+        "sourceUrl": "db://assets/a.png",
+        "targetUrl": "db://assets/b.png"
+      },
+      "expected": "创建副本",
+      "note": "",
+      "phase": "资产与脚本",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 26,
+        "note": "来自 tests/test-report.json，自动化执行通过（26ms）"
+      }
+    },
+    {
+      "id": 182,
+      "tool": "asset_operation",
+      "action": "rename",
+      "title": "重命名",
+      "input": {
+        "action": "rename",
+        "url": "db://assets/old.png",
+        "newName": "new.png"
+      },
+      "expected": "文件改名为 new.png",
+      "note": "",
+      "phase": "资产与脚本",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 8,
+        "note": "来自 tests/test-report.json，自动化执行通过（8ms）"
+      }
+    },
+    {
+      "id": 183,
+      "tool": "asset_operation",
+      "action": "create_folder",
+      "title": "创建目录",
+      "input": {
+        "action": "create_folder",
+        "url": "db://assets/prefabs"
+      },
+      "expected": "创建 prefabs 目录",
+      "note": "",
+      "phase": "资产与脚本",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 20015,
+        "note": "来自 tests/test-report.json，自动化执行通过（20015ms）"
+      }
+    },
+    {
+      "id": 184,
+      "tool": "asset_operation",
+      "action": "import",
+      "title": "导入外部文件",
+      "input": {
+        "action": "import",
+        "sourcePath": "C:/art/hero.png",
+        "targetUrl": "db://assets/textures/hero.png"
+      },
+      "expected": "文件导入到 AssetDB",
+      "note": "",
+      "phase": "资产与脚本",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 20009,
+        "note": "来自 tests/test-report.json，自动化执行通过（20009ms）"
+      }
+    },
+    {
+      "id": 185,
+      "tool": "asset_operation",
+      "action": "batch_import",
+      "title": "批量导入",
+      "input": {
+        "action": "batch_import",
+        "files": [
+          {
+            "sourcePath": "C:/a.png",
+            "targetUrl": "db://assets/a.png"
+          },
+          {
+            "sourcePath": "C:/b.png",
+            "targetUrl": "db://assets/b.png"
+          }
+        ]
+      },
+      "expected": "两个文件同时导入",
+      "note": "",
+      "phase": "资产与脚本",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "fail",
+        "duration": "",
+        "note": "来自 tests/test-report.json，自动化失败：HTTP 500: Internal Server Error"
+      }
+    },
+    {
+      "id": 186,
+      "tool": "asset_operation",
+      "action": "open",
+      "title": "打开资源",
+      "input": {
+        "action": "open",
+        "url": "db://assets/scenes/Main.scene"
+      },
+      "expected": "在编辑器中打开",
+      "note": "",
+      "phase": "资产与脚本",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 7,
+        "note": "来自 tests/test-report.json，自动化执行通过（7ms）"
+      }
+    },
+    {
+      "id": 187,
+      "tool": "asset_operation",
+      "action": "refresh",
+      "title": "刷新全库",
+      "input": {
+        "action": "refresh"
+      },
+      "expected": "整个 AssetDB 刷新",
+      "note": "",
+      "phase": "资产与脚本",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 537,
+        "note": "来自 tests/test-report.json，自动化执行通过（537ms）"
+      }
+    },
+    {
+      "id": 188,
+      "tool": "asset_operation",
+      "action": "refresh",
+      "title": "刷新目录",
+      "input": {
+        "action": "refresh",
+        "url": "db://assets/textures"
+      },
+      "expected": "仅刷新 textures 目录",
+      "note": "",
+      "phase": "资产与脚本",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 523,
+        "note": "来自 tests/test-report.json，自动化执行通过（523ms）"
+      }
+    },
+    {
+      "id": 189,
+      "tool": "asset_operation",
+      "action": "reimport",
+      "title": "强制重新导入",
+      "input": {
+        "action": "reimport",
+        "url": "db://assets/textures/hero.png"
+      },
+      "expected": "资源重新导入处理",
+      "note": "",
+      "phase": "资产与脚本",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 16,
+        "note": "来自 tests/test-report.json，自动化执行通过（16ms）"
+      }
+    },
+    {
+      "id": 190,
+      "tool": "asset_operation",
+      "action": "show_in_explorer",
+      "title": "在资源管理器中显示",
+      "input": {
+        "action": "show_in_explorer",
+        "url": "db://assets/textures/hero.png"
+      },
+      "expected": "打开系统文件管理器定位到文件",
+      "note": "",
+      "phase": "资产与脚本",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 216,
+        "note": "来自 tests/test-report.json，自动化执行通过（216ms）"
+      }
+    },
+    {
+      "id": 191,
+      "tool": "asset_operation",
+      "action": "uuid_to_url",
+      "title": "UUID→URL",
+      "input": {
+        "action": "uuid_to_url",
+        "uuid": "<asset-uuid>"
+      },
+      "expected": "返回 db:// 路径",
+      "note": "",
+      "phase": "资产与脚本",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 5,
+        "note": "来自 tests/test-report.json，自动化执行通过（5ms）"
+      }
+    },
+    {
+      "id": 192,
+      "tool": "asset_operation",
+      "action": "url_to_uuid",
+      "title": "URL→UUID",
+      "input": {
+        "action": "url_to_uuid",
+        "url": "db://assets/textures/hero.png"
+      },
+      "expected": "返回 UUID 字符串",
+      "note": "",
+      "phase": "资产与脚本",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 9,
+        "note": "来自 tests/test-report.json，自动化执行通过（9ms）"
+      }
+    },
+    {
+      "id": 193,
+      "tool": "asset_operation",
+      "action": "get_dependencies",
+      "title": "查依赖",
+      "input": {
+        "action": "get_dependencies",
+        "url": "db://assets/prefabs/Hero.prefab"
+      },
+      "expected": "返回依赖的纹理、脚本等列表",
+      "note": "",
+      "phase": "资产与脚本",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 4,
+        "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
+      }
+    },
+    {
+      "id": 194,
+      "tool": "asset_operation",
+      "action": "get_dependents",
+      "title": "查被引用",
+      "input": {
+        "action": "get_dependents",
+        "url": "db://assets/textures/hero.png"
+      },
+      "expected": "返回引用此纹理的 Prefab/场景列表",
+      "note": "",
+      "phase": "资产与脚本",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
+      }
+    },
+    {
+      "id": 195,
+      "tool": "asset_operation",
+      "action": "get_meta",
+      "title": "获取 meta",
+      "input": {
+        "action": "get_meta",
+        "url": "db://assets/textures/hero.png"
+      },
+      "expected": "返回完整 .meta JSON",
+      "note": "",
+      "phase": "资产与脚本",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 4,
+        "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
+      }
+    },
+    {
+      "id": 196,
+      "tool": "asset_operation",
+      "action": "set_meta_property",
+      "title": "修改 meta",
+      "input": {
+        "action": "set_meta_property",
+        "url": "db://assets/textures/hero.png",
+        "property": "userData",
+        "value": {
+          "customTag": "player"
+        }
+      },
+      "expected": "userData 字段被修改",
+      "note": "",
+      "phase": "资产与脚本",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 12,
+        "note": "来自 tests/test-report.json，自动化执行通过（12ms）"
+      }
+    },
+    {
+      "id": 197,
+      "tool": "asset_operation",
+      "action": "get_asset_size",
+      "title": "文件大小",
+      "input": {
+        "action": "get_asset_size",
+        "url": "db://assets/textures/hero.png"
+      },
+      "expected": "返回 {bytes:102400,kb:\"100.0\",mb:\"0.10\"}",
+      "note": "",
+      "phase": "资产与脚本",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 9,
+        "note": "来自 tests/test-report.json，自动化执行通过（9ms）"
+      }
+    },
+    {
+      "id": 198,
+      "tool": "asset_operation",
+      "action": "search_by_type",
+      "title": "按类型搜索",
+      "input": {
+        "action": "search_by_type",
+        "type": "cc.Prefab"
+      },
+      "expected": "返回所有 Prefab 资源列表",
+      "note": "",
+      "phase": "资产与脚本",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 16,
+        "note": "来自 tests/test-report.json，自动化执行通过（16ms）"
+      }
+    },
+    {
+      "id": 199,
+      "tool": "asset_operation",
+      "action": "get_animation_clips",
+      "title": "所有动画片段",
+      "input": {
+        "action": "get_animation_clips"
+      },
+      "expected": "返回项目中全部 .anim 文件",
+      "note": "",
+      "phase": "资产与脚本",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 19,
+        "note": "来自 tests/test-report.json，自动化执行通过（19ms）"
+      }
+    },
+    {
+      "id": 200,
+      "tool": "asset_operation",
+      "action": "get_materials",
+      "title": "所有材质",
+      "input": {
+        "action": "get_materials"
+      },
+      "expected": "返回项目中全部 .mtl 文件",
+      "note": "",
+      "phase": "资产与脚本",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 16,
+        "note": "来自 tests/test-report.json，自动化执行通过（16ms）"
+      }
+    },
+    {
+      "id": 201,
+      "tool": "asset_operation",
+      "action": "clean_unused",
+      "title": "未使用资源",
+      "input": {
+        "action": "clean_unused"
+      },
+      "expected": "返回可能未使用的资源列表（需人工审查）",
+      "note": "",
+      "phase": "资产与脚本",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 28,
+        "note": "来自 tests/test-report.json，自动化执行通过（28ms）"
+      }
+    },
+    {
+      "id": 202,
+      "tool": "asset_operation",
+      "action": "validate_asset",
+      "title": "验证资源",
+      "input": {
+        "action": "validate_asset",
+        "url": "db://assets/textures/hero.png"
+      },
+      "expected": "返回 {valid:true/false,issues[]}",
+      "note": "",
+      "phase": "资产与脚本",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 17,
+        "note": "来自 tests/test-report.json，自动化执行通过（17ms）"
+      }
+    },
+    {
+      "id": 203,
+      "tool": "asset_operation",
+      "action": "export_asset_manifest",
+      "title": "导出清单",
+      "input": {
+        "action": "export_asset_manifest"
+      },
+      "expected": "返回完整资源清单+类型分布统计",
+      "note": "",
+      "phase": "资产与脚本",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 21,
+        "note": "来自 tests/test-report.json，自动化执行通过（21ms）"
+      }
+    },
+    {
+      "id": 204,
+      "tool": "asset_operation",
+      "action": "pack_atlas",
+      "title": "打包图集",
+      "input": {
+        "action": "pack_atlas",
+        "url": "db://assets/atlas/ui"
+      },
+      "expected": "触发图集重新打包",
+      "note": "",
+      "phase": "资产与脚本",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 29,
+        "note": "来自 tests/test-report.json，自动化执行通过（29ms）"
+      }
+    },
+    {
+      "id": 205,
+      "tool": "asset_operation",
+      "action": "slice_sprite",
+      "title": "九宫格切图",
+      "input": {
+        "action": "slice_sprite",
+        "url": "db://assets/ui/panel.png/spriteFrame",
+        "borderTop": 20,
+        "borderBottom": 20,
+        "borderLeft": 30,
+        "borderRight": 30
+      },
+      "expected": "设置九宫格边距",
+      "note": "",
+      "phase": "资产与脚本",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 25,
+        "note": "来自 tests/test-report.json，自动化执行通过（25ms）"
+      }
+    },
+    {
+      "id": 206,
+      "tool": "asset_operation",
+      "action": "create_material",
+      "title": "创建材质",
+      "input": {
+        "action": "create_material",
+        "url": "db://assets/materials/Glass.mtl",
+        "effectName": "builtin-standard",
+        "uniforms": {
+          "mainColor": {
+            "r": 200,
+            "g": 230,
+            "b": 255,
+            "a": 128
+          }
+        }
+      },
+      "expected": "创建半透明玻璃材质",
+      "note": "",
+      "phase": "资产与脚本",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "fail",
+        "duration": "",
+        "note": "来自 tests/test-report.json，自动化失败：HTTP 500: Internal Server Error"
+      }
+    },
+    {
+      "id": 207,
+      "tool": "asset_operation",
+      "action": "generate_script",
+      "title": "生成脚本",
+      "input": {
+        "action": "generate_script",
+        "url": "db://assets/scripts/Player.ts",
+        "className": "Player",
+        "scriptProperties": [
+          {
+            "name": "speed",
+            "type": "number",
+            "default": 10
+          }
+        ],
+        "lifecycle": [
+          "onLoad",
+          "update"
+        ]
+      },
+      "expected": "生成带 @property speed 和 onLoad/update 的脚本",
+      "note": "",
+      "phase": "资产与脚本",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "fail",
+        "duration": "",
+        "note": "来自 tests/test-report.json，自动化失败：HTTP 500: Internal Server Error"
+      }
+    },
+    {
+      "id": 208,
+      "tool": "editor_action",
+      "action": "save_scene",
+      "title": "保存场景",
+      "input": {
+        "action": "save_scene"
+      },
+      "expected": "当前场景保存到磁盘",
+      "note": "",
+      "phase": "编辑器联动",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 20013,
+        "note": "来自 tests/test-report.json，自动化执行通过（20013ms）"
+      }
+    },
+    {
+      "id": 209,
+      "tool": "editor_action",
+      "action": "open_scene",
+      "title": "按 URL 打开",
+      "input": {
+        "action": "open_scene",
+        "url": "db://assets/scenes/Main.scene"
+      },
+      "expected": "打开 Main 场景",
+      "note": "",
+      "phase": "编辑器联动",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 4,
+        "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
+      }
+    },
+    {
+      "id": 210,
+      "tool": "editor_action",
+      "action": "open_scene",
+      "title": "按 UUID 打开",
+      "input": {
+        "action": "open_scene",
+        "uuid": "<scene-uuid>"
+      },
+      "expected": "打开指定场景",
+      "note": "",
+      "phase": "编辑器联动",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
+      }
+    },
+    {
+      "id": 211,
+      "tool": "editor_action",
+      "action": "new_scene",
+      "title": "新建场景",
+      "input": {
+        "action": "new_scene"
+      },
+      "expected": "创建空场景",
+      "note": "",
+      "phase": "编辑器联动",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 1,
+        "note": "来自 tests/test-report.json，自动化执行通过（1ms）"
+      }
+    },
+    {
+      "id": 212,
+      "tool": "editor_action",
+      "action": "undo",
+      "title": "撤销",
+      "input": {
+        "action": "undo"
+      },
+      "expected": "撤销上一步操作",
+      "note": "",
+      "phase": "编辑器联动",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 20011,
+        "note": "来自 tests/test-report.json，自动化执行通过（20011ms）"
+      }
+    },
+    {
+      "id": 213,
+      "tool": "editor_action",
+      "action": "redo",
+      "title": "重做",
+      "input": {
+        "action": "redo"
+      },
+      "expected": "重做被撤销的操作",
+      "note": "",
+      "phase": "编辑器联动",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 20011,
+        "note": "来自 tests/test-report.json，自动化执行通过（20011ms）"
+      }
+    },
+    {
+      "id": 214,
+      "tool": "editor_action",
+      "action": "get_selection",
+      "title": "获取选中",
+      "input": {
+        "action": "get_selection"
+      },
+      "expected": "返回选中节点 UUID 数组",
+      "note": "",
+      "phase": "编辑器联动",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
+      }
+    },
+    {
+      "id": 215,
+      "tool": "editor_action",
+      "action": "select",
+      "title": "选中节点",
+      "input": {
+        "action": "select",
+        "uuids": [
+          "<uuid1>",
+          "<uuid2>"
+        ]
+      },
+      "expected": "两个节点被选中",
+      "note": "",
+      "phase": "编辑器联动",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
+      }
+    },
+    {
+      "id": 216,
+      "tool": "editor_action",
+      "action": "clear_selection",
+      "title": "清除选中",
+      "input": {
+        "action": "clear_selection"
+      },
+      "expected": "取消所有选中",
+      "note": "",
+      "phase": "编辑器联动",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
+      }
+    },
+    {
+      "id": 217,
+      "tool": "editor_action",
+      "action": "project_info",
+      "title": "项目信息",
+      "input": {
+        "action": "project_info"
+      },
+      "expected": "返回 {name,path,engineVersion}",
+      "note": "",
+      "phase": "编辑器联动",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 7,
+        "note": "来自 tests/test-report.json，自动化执行通过（7ms）"
+      }
+    },
+    {
+      "id": 218,
+      "tool": "editor_action",
+      "action": "build",
+      "title": "构建 Web",
+      "input": {
+        "action": "build",
+        "platform": "web-mobile"
+      },
+      "expected": "启动 Web Mobile 构建",
+      "note": "",
+      "phase": "编辑器联动",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 19,
+        "note": "来自 tests/test-report.json，自动化执行通过（19ms）"
+      }
+    },
+    {
+      "id": 219,
+      "tool": "editor_action",
+      "action": "build_query",
+      "title": "构建配置",
+      "input": {
+        "action": "build_query"
+      },
+      "expected": "返回当前构建配置和可用平台",
+      "note": "",
+      "phase": "编辑器联动",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 4,
+        "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
+      }
+    },
+    {
+      "id": 220,
+      "tool": "editor_action",
+      "action": "build_with_config",
+      "title": "详细构建",
+      "input": {
+        "action": "build_with_config",
+        "platform": "web-mobile",
+        "debug": true
+      },
+      "expected": "Debug 模式构建",
+      "note": "",
+      "phase": "编辑器联动",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
+      }
+    },
+    {
+      "id": 221,
+      "tool": "editor_action",
+      "action": "build_status",
+      "title": "构建状态",
+      "input": {
+        "action": "build_status"
+      },
+      "expected": "返回 {building:true/false}",
+      "note": "",
+      "phase": "编辑器联动",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
+      }
+    },
+    {
+      "id": 222,
+      "tool": "editor_action",
+      "action": "preview",
+      "title": "预览",
+      "input": {
+        "action": "preview"
+      },
+      "expected": "浏览器中打开预览",
+      "note": "",
+      "phase": "编辑器联动",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 20012,
+        "note": "来自 tests/test-report.json，自动化执行通过（20012ms）"
+      }
+    },
+    {
+      "id": 223,
+      "tool": "editor_action",
+      "action": "preview_refresh",
+      "title": "刷新预览",
+      "input": {
+        "action": "preview_refresh"
+      },
+      "expected": "预览页面刷新",
+      "note": "",
+      "phase": "编辑器联动",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
+      }
+    },
+    {
+      "id": 224,
+      "tool": "editor_action",
+      "action": "preview_status",
+      "title": "预览状态",
+      "input": {
+        "action": "preview_status"
+      },
+      "expected": "返回 {running,port}",
+      "note": "",
+      "phase": "编辑器联动",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 1,
+        "note": "来自 tests/test-report.json，自动化执行通过（1ms）"
+      }
+    },
+    {
+      "id": 225,
+      "tool": "editor_action",
+      "action": "send_message",
+      "title": "IPC 消息",
+      "input": {
+        "action": "send_message",
+        "module": "scene",
+        "message": "query-node",
+        "args": [
+          "<uuid>"
+        ]
+      },
+      "expected": "发送 IPC 消息到 scene 模块",
+      "note": "",
+      "phase": "编辑器联动",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "fail",
+        "duration": "",
+        "note": "来自 tests/test-report.json，自动化失败：HTTP 500: Internal Server Error"
+      }
+    },
+    {
+      "id": 226,
+      "tool": "editor_action",
+      "action": "focus_node",
+      "title": "聚焦节点",
+      "input": {
+        "action": "focus_node",
+        "uuid": "<uuid>"
+      },
+      "expected": "编辑器摄像机聚焦到该节点",
+      "note": "",
+      "phase": "编辑器联动",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 1,
+        "note": "来自 tests/test-report.json，自动化执行通过（1ms）"
+      }
+    },
+    {
+      "id": 227,
+      "tool": "editor_action",
+      "action": "open_panel",
+      "title": "打开面板",
+      "input": {
+        "action": "open_panel",
+        "panel": "console"
+      },
+      "expected": "打开控制台面板",
+      "note": "",
+      "phase": "编辑器联动",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
+      }
+    },
+    {
+      "id": 228,
+      "tool": "editor_action",
+      "action": "close_panel",
+      "title": "关闭面板",
+      "input": {
+        "action": "close_panel",
+        "panel": "console"
+      },
+      "expected": "关闭控制台面板",
+      "note": "",
+      "phase": "编辑器联动",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
+      }
+    },
+    {
+      "id": 229,
+      "tool": "editor_action",
+      "action": "query_panels",
+      "title": "列出面板",
+      "input": {
+        "action": "query_panels"
+      },
+      "expected": "返回所有可用面板名",
+      "note": "",
+      "phase": "编辑器联动",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
+      }
+    },
+    {
+      "id": 230,
+      "tool": "editor_action",
+      "action": "log",
+      "title": "输出日志",
+      "input": {
+        "action": "log",
+        "text": "Hello from AI"
+      },
+      "expected": "控制台输出 info 消息",
+      "note": "",
+      "phase": "编辑器联动",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 6,
+        "note": "来自 tests/test-report.json，自动化执行通过（6ms）"
+      }
+    },
+    {
+      "id": 231,
+      "tool": "editor_action",
+      "action": "warn",
+      "title": "输出警告",
+      "input": {
+        "action": "warn",
+        "text": "Something suspicious"
+      },
+      "expected": "控制台输出 warning",
+      "note": "",
+      "phase": "编辑器联动",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 7,
+        "note": "来自 tests/test-report.json，自动化执行通过（7ms）"
+      }
+    },
+    {
+      "id": 232,
+      "tool": "editor_action",
+      "action": "error",
+      "title": "输出错误",
+      "input": {
+        "action": "error",
+        "text": "Critical failure"
+      },
+      "expected": "控制台输出 error",
+      "note": "",
+      "phase": "编辑器联动",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 5,
+        "note": "来自 tests/test-report.json，自动化执行通过（5ms）"
+      }
+    },
+    {
+      "id": 233,
+      "tool": "editor_action",
+      "action": "clear_console",
+      "title": "清空控制台",
+      "input": {
+        "action": "clear_console"
+      },
+      "expected": "控制台清空",
+      "note": "",
+      "phase": "编辑器联动",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 7,
+        "note": "来自 tests/test-report.json，自动化执行通过（7ms）"
+      }
+    },
+    {
+      "id": 234,
+      "tool": "editor_action",
+      "action": "get_console_logs",
+      "title": "全部日志",
+      "input": {
+        "action": "get_console_logs"
+      },
+      "expected": "返回所有日志条目",
+      "note": "",
+      "phase": "编辑器联动",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
+      }
+    },
+    {
+      "id": 235,
+      "tool": "editor_action",
+      "action": "get_console_logs",
+      "title": "仅错误",
+      "input": {
+        "action": "get_console_logs",
+        "logType": "error",
+        "logCount": 10
+      },
+      "expected": "返回最近 10 条错误日志",
+      "note": "",
+      "phase": "编辑器联动",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
+      }
+    },
+    {
+      "id": 236,
+      "tool": "editor_action",
+      "action": "search_logs",
+      "title": "搜索日志",
+      "input": {
+        "action": "search_logs",
+        "keyword": "TypeError"
+      },
+      "expected": "返回含 TypeError 的日志",
+      "note": "",
+      "phase": "编辑器联动",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
+      }
+    },
+    {
+      "id": 237,
+      "tool": "editor_action",
+      "action": "get_packages",
+      "title": "已安装插件",
+      "input": {
+        "action": "get_packages"
+      },
+      "expected": "返回插件列表",
+      "note": "",
+      "phase": "编辑器联动",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 1,
+        "note": "来自 tests/test-report.json，自动化执行通过（1ms）"
+      }
+    },
+    {
+      "id": 238,
+      "tool": "editor_action",
+      "action": "reload_plugin",
+      "title": "重载插件",
+      "input": {
+        "action": "reload_plugin",
+        "module": "aura-for-cocos"
+      },
+      "expected": "插件热重载",
+      "note": "",
+      "phase": "编辑器联动",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 1,
+        "note": "来自 tests/test-report.json，自动化执行通过（1ms）"
+      }
+    },
+    {
+      "id": 239,
+      "tool": "editor_action",
+      "action": "inspect_asset",
+      "title": "查看资源",
+      "input": {
+        "action": "inspect_asset",
+        "uuid": "<asset-uuid>"
+      },
+      "expected": "Inspector 面板显示该资源",
+      "note": "",
+      "phase": "编辑器联动",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
+      }
+    },
+    {
+      "id": 240,
+      "tool": "editor_action",
+      "action": "open_preferences",
+      "title": "偏好设置",
+      "input": {
+        "action": "open_preferences"
+      },
+      "expected": "打开偏好设置面板",
+      "note": "",
+      "phase": "编辑器联动",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 7,
+        "note": "来自 tests/test-report.json，自动化执行通过（7ms）"
+      }
+    },
+    {
+      "id": 241,
+      "tool": "editor_action",
+      "action": "open_project_settings",
+      "title": "项目设置",
+      "input": {
+        "action": "open_project_settings"
+      },
+      "expected": "打开项目设置面板",
+      "note": "",
+      "phase": "编辑器联动",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
+      }
+    },
+    {
+      "id": 242,
+      "tool": "editor_action",
+      "action": "show_notification",
+      "title": "通知",
+      "input": {
+        "action": "show_notification",
+        "text": "操作完成！",
+        "title": "AI"
+      },
+      "expected": "弹出通知",
+      "note": "",
+      "phase": "编辑器联动",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 4,
+        "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
+      }
+    },
+    {
+      "id": 243,
+      "tool": "editor_action",
+      "action": "play_in_editor",
+      "title": "播放",
+      "input": {
+        "action": "play_in_editor"
+      },
+      "expected": "进入播放模式",
+      "note": "",
+      "phase": "编辑器联动",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 20008,
+        "note": "来自 tests/test-report.json，自动化执行通过（20008ms）"
+      }
+    },
+    {
+      "id": 244,
+      "tool": "editor_action",
+      "action": "pause_in_editor",
+      "title": "暂停",
+      "input": {
+        "action": "pause_in_editor"
+      },
+      "expected": "暂停播放",
+      "note": "",
+      "phase": "编辑器联动",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 1,
+        "note": "来自 tests/test-report.json，自动化执行通过（1ms）"
+      }
+    },
+    {
+      "id": 245,
+      "tool": "editor_action",
+      "action": "stop_in_editor",
+      "title": "停止",
+      "input": {
+        "action": "stop_in_editor"
+      },
+      "expected": "停止播放",
+      "note": "",
+      "phase": "编辑器联动",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 7,
+        "note": "来自 tests/test-report.json，自动化执行通过（7ms）"
+      }
+    },
+    {
+      "id": 246,
+      "tool": "editor_action",
+      "action": "step_in_editor",
+      "title": "单步帧",
+      "input": {
+        "action": "step_in_editor"
+      },
+      "expected": "执行一帧",
+      "note": "",
+      "phase": "编辑器联动",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 1,
+        "note": "来自 tests/test-report.json，自动化执行通过（1ms）"
+      }
+    },
+    {
+      "id": 247,
+      "tool": "editor_action",
+      "action": "move_scene_camera",
+      "title": "移动场景相机",
+      "input": {
+        "action": "move_scene_camera",
+        "uuid": "<uuid>"
+      },
+      "expected": "编辑器摄像机移动到节点",
+      "note": "",
+      "phase": "编辑器联动",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
+      }
+    },
+    {
+      "id": 248,
+      "tool": "editor_action",
+      "action": "take_scene_screenshot",
+      "title": "视口截图",
+      "input": {
+        "action": "take_scene_screenshot"
+      },
+      "expected": "截取场景编辑器画面",
+      "note": "",
+      "phase": "编辑器联动",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
+      }
+    },
+    {
+      "id": 249,
+      "tool": "editor_action",
+      "action": "set_transform_tool",
+      "title": "切 Gizmo",
+      "input": {
+        "action": "set_transform_tool",
+        "toolType": "rotation"
+      },
+      "expected": "切换到旋转工具",
+      "note": "",
+      "phase": "编辑器联动",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 1,
+        "note": "来自 tests/test-report.json，自动化执行通过（1ms）"
+      }
+    },
+    {
+      "id": 250,
+      "tool": "editor_action",
+      "action": "set_coordinate",
+      "title": "切坐标系",
+      "input": {
+        "action": "set_coordinate",
+        "coordinate": "world"
+      },
+      "expected": "切换到世界坐标系",
+      "note": "",
+      "phase": "编辑器联动",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 1,
+        "note": "来自 tests/test-report.json，自动化执行通过（1ms）"
+      }
+    },
+    {
+      "id": 251,
+      "tool": "editor_action",
+      "action": "toggle_grid",
+      "title": "显示网格",
+      "input": {
+        "action": "toggle_grid",
+        "visible": true
+      },
+      "expected": "显示编辑器网格",
+      "note": "",
+      "phase": "编辑器联动",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "fail",
+        "duration": "",
+        "note": "来自 tests/test-report.json，自动化失败：HTTP 500: Internal Server Error"
+      }
+    },
+    {
+      "id": 252,
+      "tool": "editor_action",
+      "action": "toggle_snap",
+      "title": "启用吸附",
+      "input": {
+        "action": "toggle_snap",
+        "enabled": true
+      },
+      "expected": "启用吸附模式",
+      "note": "",
+      "phase": "编辑器联动",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
+      }
+    },
+    {
+      "id": 253,
+      "tool": "editor_action",
+      "action": "set_view_mode",
+      "title": "切到 2D",
+      "input": {
+        "action": "set_view_mode",
+        "viewMode": "2d"
+      },
+      "expected": "场景视图切为 2D",
+      "note": "",
+      "phase": "编辑器联动",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 10,
+        "note": "来自 tests/test-report.json，自动化执行通过（10ms）"
+      }
+    },
+    {
+      "id": 254,
+      "tool": "editor_action",
+      "action": "set_view_mode",
+      "title": "切到 3D",
+      "input": {
+        "action": "set_view_mode",
+        "viewMode": "3d"
+      },
+      "expected": "场景视图切为 3D",
+      "note": "",
+      "phase": "编辑器联动",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
+      }
+    },
+    {
+      "id": 255,
+      "tool": "editor_action",
+      "action": "zoom_to_fit",
+      "title": "缩放适应",
+      "input": {
+        "action": "zoom_to_fit"
+      },
+      "expected": "视图缩放以适应所有节点",
+      "note": "",
+      "phase": "编辑器联动",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
+      }
+    },
+    {
+      "id": 256,
+      "tool": "engine_action",
+      "action": "set_frame_rate",
+      "title": "设 60 FPS",
+      "input": {
+        "action": "set_frame_rate",
+        "fps": 60
+      },
+      "expected": "帧率限制为 60",
+      "note": "",
+      "phase": "引擎专项",
+      "priority": "P3",
+      "edition": "pro",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 8,
+        "note": "来自 tests/test-report.json，自动化执行通过（8ms）"
+      }
+    },
+    {
+      "id": 257,
+      "tool": "engine_action",
+      "action": "set_frame_rate",
+      "title": "设 30 FPS",
+      "input": {
+        "action": "set_frame_rate",
+        "fps": 30
+      },
+      "expected": "省电模式 30 FPS",
+      "note": "",
+      "phase": "引擎专项",
+      "priority": "P3",
+      "edition": "pro",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 4,
+        "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
+      }
+    },
+    {
+      "id": 258,
+      "tool": "engine_action",
+      "action": "pause_engine",
+      "title": "暂停引擎",
+      "input": {
+        "action": "pause_engine"
+      },
+      "expected": "渲染和逻辑冻结",
+      "note": "",
+      "phase": "引擎专项",
+      "priority": "P3",
+      "edition": "pro",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
+      }
+    },
+    {
+      "id": 259,
+      "tool": "engine_action",
+      "action": "resume_engine",
+      "title": "恢复引擎",
+      "input": {
+        "action": "resume_engine"
+      },
+      "expected": "继续运行",
+      "note": "",
+      "phase": "引擎专项",
+      "priority": "P3",
+      "edition": "pro",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 4,
+        "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
+      }
+    },
+    {
+      "id": 260,
+      "tool": "engine_action",
+      "action": "get_system_info",
+      "title": "系统信息",
+      "input": {
+        "action": "get_system_info"
+      },
+      "expected": "返回 {os,browser,device,screenRes,gpu}",
+      "note": "",
+      "phase": "引擎专项",
+      "priority": "P3",
+      "edition": "pro",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
+      }
+    },
+    {
+      "id": 261,
+      "tool": "engine_action",
+      "action": "dump_texture_cache",
+      "title": "纹理缓存",
+      "input": {
+        "action": "dump_texture_cache"
+      },
+      "expected": "返回已缓存纹理列表+大小",
+      "note": "",
+      "phase": "引擎专项",
+      "priority": "P3",
+      "edition": "pro",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
+      }
+    },
+    {
+      "id": 262,
+      "tool": "engine_action",
+      "action": "get_render_stats",
+      "title": "渲染统计",
+      "input": {
+        "action": "get_render_stats"
+      },
+      "expected": "返回 {drawCalls,triangles,batches,fps}",
+      "note": "",
+      "phase": "引擎专项",
+      "priority": "P3",
+      "edition": "pro",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
+      }
+    },
+    {
+      "id": 263,
+      "tool": "engine_action",
+      "action": "get_memory_stats",
+      "title": "内存统计",
+      "input": {
+        "action": "get_memory_stats"
+      },
+      "expected": "返回 {heapUsed,rss,cachedAssets}",
+      "note": "",
+      "phase": "引擎专项",
+      "priority": "P3",
+      "edition": "pro",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 12,
+        "note": "来自 tests/test-report.json，自动化执行通过（12ms）"
+      }
+    },
+    {
+      "id": 264,
+      "tool": "engine_action",
+      "action": "get_editor_performance",
+      "title": "性能总览",
+      "input": {
+        "action": "get_editor_performance"
+      },
+      "expected": "返回 {fps,nodeCount,platform,paused}",
+      "note": "",
+      "phase": "引擎专项",
+      "priority": "P3",
+      "edition": "pro",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 4,
+        "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
+      }
+    },
+    {
+      "id": 265,
+      "tool": "animation_tool",
+      "action": "create_clip",
+      "title": "创建动画",
+      "input": {
+        "action": "create_clip",
+        "uuid": "<uuid>",
+        "duration": 1,
+        "wrapMode": "Loop",
+        "tracks": [
+          {
+            "property": "position",
+            "keyframes": [
+              {
+                "time": 0,
+                "value": {
+                  "x": 0,
+                  "y": 0,
+                  "z": 0
+                }
+              },
+              {
+                "time": 1,
+                "value": {
+                  "x": 100,
+                  "y": 0,
+                  "z": 0
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "expected": "创建左右移动循环动画",
+      "note": "",
+      "phase": "动画工作流",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 9,
+        "note": "来自 tests/test-report.json，自动化执行通过（9ms）"
+      }
+    },
+    {
+      "id": 266,
+      "tool": "animation_tool",
+      "action": "play",
+      "title": "播放默认",
+      "input": {
+        "action": "play",
+        "uuid": "<uuid>"
+      },
+      "expected": "播放默认动画片段",
+      "note": "",
+      "phase": "动画工作流",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 4,
+        "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
+      }
+    },
+    {
+      "id": 267,
+      "tool": "animation_tool",
+      "action": "play",
+      "title": "播放指定",
+      "input": {
+        "action": "play",
+        "uuid": "<uuid>",
+        "clipName": "walk"
+      },
+      "expected": "播放 walk 片段",
+      "note": "",
+      "phase": "动画工作流",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
+      }
+    },
+    {
+      "id": 268,
+      "tool": "animation_tool",
+      "action": "pause",
+      "title": "暂停",
+      "input": {
+        "action": "pause",
+        "uuid": "<uuid>"
+      },
+      "expected": "动画暂停",
+      "note": "",
+      "phase": "动画工作流",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
+      }
+    },
+    {
+      "id": 269,
+      "tool": "animation_tool",
+      "action": "resume",
+      "title": "恢复",
+      "input": {
+        "action": "resume",
+        "uuid": "<uuid>"
+      },
+      "expected": "继续播放",
+      "note": "",
+      "phase": "动画工作流",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
+      }
+    },
+    {
+      "id": 270,
+      "tool": "animation_tool",
+      "action": "stop",
+      "title": "停止",
+      "input": {
+        "action": "stop",
+        "uuid": "<uuid>"
+      },
+      "expected": "停止并重置",
+      "note": "",
+      "phase": "动画工作流",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
+      }
+    },
+    {
+      "id": 271,
+      "tool": "animation_tool",
+      "action": "get_state",
+      "title": "查状态",
+      "input": {
+        "action": "get_state",
+        "uuid": "<uuid>"
+      },
+      "expected": "返回 {playing,clip,time}",
+      "note": "",
+      "phase": "动画工作流",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
+      }
+    },
+    {
+      "id": 272,
+      "tool": "animation_tool",
+      "action": "list_clips",
+      "title": "列出片段",
+      "input": {
+        "action": "list_clips",
+        "uuid": "<uuid>"
+      },
+      "expected": "返回动画片段名称列表",
+      "note": "",
+      "phase": "动画工作流",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 6,
+        "note": "来自 tests/test-report.json，自动化执行通过（6ms）"
+      }
+    },
+    {
+      "id": 273,
+      "tool": "animation_tool",
+      "action": "set_current_time",
+      "title": "跳转时间",
+      "input": {
+        "action": "set_current_time",
+        "uuid": "<uuid>",
+        "time": 0.5
+      },
+      "expected": "跳转到 0.5 秒",
+      "note": "",
+      "phase": "动画工作流",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
+      }
+    },
+    {
+      "id": 274,
+      "tool": "animation_tool",
+      "action": "set_speed",
+      "title": "倍速播放",
+      "input": {
+        "action": "set_speed",
+        "uuid": "<uuid>",
+        "speed": 2
+      },
+      "expected": "2 倍速播放",
+      "note": "",
+      "phase": "动画工作流",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 4,
+        "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
+      }
+    },
+    {
+      "id": 275,
+      "tool": "animation_tool",
+      "action": "crossfade",
+      "title": "交叉淡入",
+      "input": {
+        "action": "crossfade",
+        "uuid": "<uuid>",
+        "clipName": "run",
+        "duration": 0.3
+      },
+      "expected": "0.3 秒内淡入 run 动画",
+      "note": "",
+      "phase": "动画工作流",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 4,
+        "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
+      }
+    },
+    {
+      "id": 276,
+      "tool": "physics_tool",
+      "action": "get_collider_info",
+      "title": "碰撞器详情",
+      "input": {
+        "action": "get_collider_info",
+        "uuid": "<uuid>"
+      },
+      "expected": "返回碰撞器+刚体信息",
+      "note": "",
+      "phase": "物理工作流",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 8,
+        "note": "来自 tests/test-report.json，自动化执行通过（8ms）"
+      }
+    },
+    {
+      "id": 277,
+      "tool": "physics_tool",
+      "action": "add_collider",
+      "title": "添加 Box2D",
+      "input": {
+        "action": "add_collider",
+        "uuid": "<uuid>",
+        "colliderType": "box2d"
+      },
+      "expected": "添加 BoxCollider2D",
+      "note": "",
+      "phase": "物理工作流",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 1,
+        "note": "来自 tests/test-report.json，自动化执行通过（1ms）"
+      }
+    },
+    {
+      "id": 278,
+      "tool": "physics_tool",
+      "action": "add_collider",
+      "title": "添加 Sphere3D",
+      "input": {
+        "action": "add_collider",
+        "uuid": "<uuid>",
+        "colliderType": "sphere3d"
+      },
+      "expected": "添加 SphereCollider",
+      "note": "",
+      "phase": "物理工作流",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
+      }
+    },
+    {
+      "id": 279,
+      "tool": "physics_tool",
+      "action": "set_collider_size",
+      "title": "设 Box 大小",
+      "input": {
+        "action": "set_collider_size",
+        "uuid": "<uuid>",
+        "width": 100,
+        "height": 80
+      },
+      "expected": "Box 碰撞器→100×80",
+      "note": "",
+      "phase": "物理工作流",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 7,
+        "note": "来自 tests/test-report.json，自动化执行通过（7ms）"
+      }
+    },
+    {
+      "id": 280,
+      "tool": "physics_tool",
+      "action": "add_rigidbody",
+      "title": "动态刚体",
+      "input": {
+        "action": "add_rigidbody",
+        "uuid": "<uuid>",
+        "bodyType": "Dynamic"
+      },
+      "expected": "添加动态刚体",
+      "note": "",
+      "phase": "物理工作流",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
+      }
+    },
+    {
+      "id": 281,
+      "tool": "physics_tool",
+      "action": "add_rigidbody",
+      "title": "静态刚体",
+      "input": {
+        "action": "add_rigidbody",
+        "uuid": "<uuid>",
+        "bodyType": "Static"
+      },
+      "expected": "添加静态刚体",
+      "note": "",
+      "phase": "物理工作流",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
+      }
+    },
+    {
+      "id": 282,
+      "tool": "physics_tool",
+      "action": "set_rigidbody_props",
+      "title": "设刚体属性",
+      "input": {
+        "action": "set_rigidbody_props",
+        "uuid": "<uuid>",
+        "mass": 5,
+        "linearDamping": 0.5,
+        "fixedRotation": true
+      },
+      "expected": "质量 5kg+线性阻尼 0.5+锁定旋转",
+      "note": "",
+      "phase": "物理工作流",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 1,
+        "note": "来自 tests/test-report.json，自动化执行通过（1ms）"
+      }
+    },
+    {
+      "id": 283,
+      "tool": "physics_tool",
+      "action": "set_physics_material",
+      "title": "设物理材质",
+      "input": {
+        "action": "set_physics_material",
+        "uuid": "<uuid>",
+        "friction": 0.3,
+        "restitution": 0.8
+      },
+      "expected": "摩擦 0.3+弹性 0.8",
+      "note": "",
+      "phase": "物理工作流",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
+      }
+    },
+    {
+      "id": 284,
+      "tool": "physics_tool",
+      "action": "set_collision_group",
+      "title": "设碰撞组",
+      "input": {
+        "action": "set_collision_group",
+        "uuid": "<uuid>",
+        "group": 2
+      },
+      "expected": "碰撞组→2",
+      "note": "",
+      "phase": "物理工作流",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 1,
+        "note": "来自 tests/test-report.json，自动化执行通过（1ms）"
+      }
+    },
+    {
+      "id": 285,
+      "tool": "physics_tool",
+      "action": "get_physics_world",
+      "title": "世界配置",
+      "input": {
+        "action": "get_physics_world"
+      },
+      "expected": "返回重力/时间步等参数",
+      "note": "",
+      "phase": "物理工作流",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
+      }
+    },
+    {
+      "id": 286,
+      "tool": "physics_tool",
+      "action": "set_physics_world",
+      "title": "设重力",
+      "input": {
+        "action": "set_physics_world",
+        "gravity": {
+          "x": 0,
+          "y": -20,
+          "z": 0
+        }
+      },
+      "expected": "重力→-20 m/s²",
+      "note": "",
+      "phase": "物理工作流",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 6,
+        "note": "来自 tests/test-report.json，自动化执行通过（6ms）"
+      }
+    },
+    {
+      "id": 287,
+      "tool": "physics_tool",
+      "action": "add_joint",
+      "title": "弹簧关节",
+      "input": {
+        "action": "add_joint",
+        "uuid": "<uuid>",
+        "jointType": "spring",
+        "connectedUuid": "<other>"
+      },
+      "expected": "两节点间添加弹簧关节",
+      "note": "",
+      "phase": "物理工作流",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
+      }
+    },
+    {
+      "id": 288,
+      "tool": "preferences",
+      "action": "get",
+      "title": "读偏好",
+      "input": {
+        "action": "get",
+        "key": "general.language",
+        "scope": "global"
+      },
+      "expected": "返回 {value:\"zh\"}",
+      "note": "",
+      "phase": "环境与连通",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
+      }
+    },
+    {
+      "id": 289,
+      "tool": "preferences",
+      "action": "set",
+      "title": "写偏好",
+      "input": {
+        "action": "set",
+        "key": "general.language",
+        "value": "en",
+        "scope": "global"
+      },
+      "expected": "语言改为英文",
+      "note": "",
+      "phase": "环境与连通",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
+      }
+    },
+    {
+      "id": 290,
+      "tool": "preferences",
+      "action": "list",
+      "title": "列出全部",
+      "input": {
+        "action": "list"
+      },
+      "expected": "返回所有偏好设置",
+      "note": "",
+      "phase": "环境与连通",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 1,
+        "note": "来自 tests/test-report.json，自动化执行通过（1ms）"
+      }
+    },
+    {
+      "id": 291,
+      "tool": "preferences",
+      "action": "get_global",
+      "title": "读全局",
+      "input": {
+        "action": "get_global",
+        "key": "general.theme"
+      },
+      "expected": "返回 {value:\"dark\"}",
+      "note": "",
+      "phase": "环境与连通",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
+      }
+    },
+    {
+      "id": 292,
+      "tool": "preferences",
+      "action": "set_global",
+      "title": "写全局",
+      "input": {
+        "action": "set_global",
+        "key": "general.theme",
+        "value": "light"
+      },
+      "expected": "主题改为亮色",
+      "note": "",
+      "phase": "环境与连通",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
+      }
+    },
+    {
+      "id": 293,
+      "tool": "preferences",
+      "action": "get_project",
+      "title": "读项目级",
+      "input": {
+        "action": "get_project",
+        "key": "builder.compressTexture"
+      },
+      "expected": "返回压缩纹理设置",
+      "note": "",
+      "phase": "环境与连通",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 1,
+        "note": "来自 tests/test-report.json，自动化执行通过（1ms）"
+      }
+    },
+    {
+      "id": 294,
+      "tool": "preferences",
+      "action": "set_project",
+      "title": "写项目级",
+      "input": {
+        "action": "set_project",
+        "key": "preview.port",
+        "value": 7456
+      },
+      "expected": "预览端口→7456",
+      "note": "",
+      "phase": "环境与连通",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
+      }
+    },
+    {
+      "id": 295,
+      "tool": "broadcast",
+      "action": "poll",
+      "title": "拉取事件",
+      "input": {
+        "action": "poll",
+        "since": 1700000000000
+      },
+      "expected": "返回该时间戳后的新事件列表",
+      "note": "",
+      "phase": "编辑器联动",
+      "priority": "P3",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 1,
+        "note": "来自 tests/test-report.json，自动化执行通过（1ms）"
+      }
+    },
+    {
+      "id": 296,
+      "tool": "broadcast",
+      "action": "history",
+      "title": "历史记录",
+      "input": {
+        "action": "history",
+        "limit": 10
+      },
+      "expected": "返回最近 10 条事件",
+      "note": "",
+      "phase": "编辑器联动",
+      "priority": "P3",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 4,
+        "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
+      }
+    },
+    {
+      "id": 297,
+      "tool": "broadcast",
+      "action": "clear",
+      "title": "清空队列",
+      "input": {
+        "action": "clear"
+      },
+      "expected": "事件队列清空",
+      "note": "",
+      "phase": "编辑器联动",
+      "priority": "P3",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 7,
+        "note": "来自 tests/test-report.json，自动化执行通过（7ms）"
+      }
+    },
+    {
+      "id": 298,
+      "tool": "broadcast",
+      "action": "send",
+      "title": "广播消息",
+      "input": {
+        "action": "send",
+        "channel": "ai:done",
+        "data": {
+          "task": "build_ui"
+        }
+      },
+      "expected": "广播自定义消息",
+      "note": "",
+      "phase": "编辑器联动",
+      "priority": "P3",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
+      }
+    },
+    {
+      "id": 299,
+      "tool": "broadcast",
+      "action": "send_ipc",
+      "title": "IPC 广播",
+      "input": {
+        "action": "send_ipc",
+        "module": "scene",
+        "message": "soft-reload"
+      },
+      "expected": "发送场景重载 IPC",
+      "note": "",
+      "phase": "编辑器联动",
+      "priority": "P3",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "fail",
+        "duration": "",
+        "note": "来自 tests/test-report.json，自动化失败：HTTP 500: Internal Server Error"
+      }
+    },
+    {
+      "id": 300,
+      "tool": "reference_image",
+      "action": "set",
+      "title": "显示参考图",
+      "input": {
+        "action": "set",
+        "opacity": 0.5
+      },
+      "expected": "参考图叠加层显示，透明度 50%",
+      "note": "",
+      "phase": "UI 与参考图",
+      "priority": "P3",
+      "edition": "pro",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
+      }
+    },
+    {
+      "id": 301,
+      "tool": "reference_image",
+      "action": "clear",
+      "title": "清除参考图",
+      "input": {
+        "action": "clear"
+      },
+      "expected": "隐藏所有参考图叠加",
+      "note": "",
+      "phase": "UI 与参考图",
+      "priority": "P3",
+      "edition": "pro",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 4,
+        "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
+      }
+    },
+    {
+      "id": 302,
+      "tool": "reference_image",
+      "action": "list",
+      "title": "列出参考图",
+      "input": {
+        "action": "list"
+      },
+      "expected": "返回场景中参考图节点列表",
+      "note": "",
+      "phase": "UI 与参考图",
+      "priority": "P3",
+      "edition": "pro",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
+      }
+    },
+    {
+      "id": 303,
+      "tool": "reference_image",
+      "action": "add",
+      "title": "添加参考图",
+      "input": {
+        "action": "add",
+        "imagePath": "db://assets/ui/mockup.png",
+        "opacity": 0.4
+      },
+      "expected": "添加参考图节点",
+      "note": "",
+      "phase": "UI 与参考图",
+      "priority": "P3",
+      "edition": "pro",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 20,
+        "note": "来自 tests/test-report.json，自动化执行通过（20ms）"
+      }
+    },
+    {
+      "id": 304,
+      "tool": "reference_image",
+      "action": "remove",
+      "title": "移除参考图",
+      "input": {
+        "action": "remove",
+        "refUuid": "<uuid>"
+      },
+      "expected": "删除指定参考图节点",
+      "note": "",
+      "phase": "UI 与参考图",
+      "priority": "P3",
+      "edition": "pro",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 4,
+        "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
+      }
+    },
+    {
+      "id": 305,
+      "tool": "reference_image",
+      "action": "set_transform",
+      "title": "调整位置",
+      "input": {
+        "action": "set_transform",
+        "refUuid": "<uuid>",
+        "x": 100,
+        "y": -50,
+        "scaleX": 0.8
+      },
+      "expected": "参考图移动+缩放",
+      "note": "",
+      "phase": "UI 与参考图",
+      "priority": "P3",
+      "edition": "pro",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 5,
+        "note": "来自 tests/test-report.json，自动化执行通过（5ms）"
+      }
+    },
+    {
+      "id": 306,
+      "tool": "reference_image",
+      "action": "set_opacity",
+      "title": "调透明度",
+      "input": {
+        "action": "set_opacity",
+        "refUuid": "<uuid>",
+        "opacity": 0.3
+      },
+      "expected": "透明度→30%",
+      "note": "",
+      "phase": "UI 与参考图",
+      "priority": "P3",
+      "edition": "pro",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 4,
+        "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
+      }
+    },
+    {
+      "id": 307,
+      "tool": "tool_management",
+      "action": "list_all",
+      "title": "列出工具",
+      "input": {
+        "action": "list_all"
+      },
+      "expected": "返回所有工具及启用状态",
+      "note": "",
+      "phase": "环境与连通",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
+      }
+    },
+    {
+      "id": 308,
+      "tool": "tool_management",
+      "action": "enable",
+      "title": "启用工具",
+      "input": {
+        "action": "enable",
+        "toolName": "physics_tool"
+      },
+      "expected": "physics_tool 重新启用",
+      "note": "",
+      "phase": "环境与连通",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
+      }
+    },
+    {
+      "id": 309,
+      "tool": "tool_management",
+      "action": "disable",
+      "title": "禁用工具",
+      "input": {
+        "action": "disable",
+        "toolName": "physics_tool"
+      },
+      "expected": "physics_tool 被禁用，减少 Token 消耗",
+      "note": "",
+      "phase": "环境与连通",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
+      }
+    },
+    {
+      "id": 310,
+      "tool": "tool_management",
+      "action": "get_stats",
+      "title": "工具统计",
+      "input": {
+        "action": "get_stats"
+      },
+      "expected": "返回 {totalTools:19,enabledTools:19,totalActions:236}",
+      "note": "",
+      "phase": "环境与连通",
+      "priority": "P2",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
+      }
+    },
+    {
+      "id": 311,
+      "tool": "execute_script",
+      "action": "execute_script",
+      "title": "调用 dispatchQuery",
+      "input": {
+        "method": "dispatchQuery",
+        "args": [
+          {
+            "action": "tree"
+          }
+        ]
+      },
+      "expected": "返回场景树",
+      "note": "",
+      "phase": "资产与脚本",
+      "priority": "P3",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 4,
+        "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
+      }
+    },
+    {
+      "id": 312,
+      "tool": "execute_script",
+      "action": "execute_script",
+      "title": "调用 setNodePosition",
+      "input": {
+        "method": "setNodePosition",
+        "args": [
+          "<uuid>",
+          100,
+          200,
+          0
+        ]
+      },
+      "expected": "节点位置被设置",
+      "note": "",
+      "phase": "资产与脚本",
+      "priority": "P3",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
+      }
+    },
+    {
+      "id": 313,
+      "tool": "register_custom_macro",
+      "action": "register_custom_macro",
+      "title": "注册快捷宏",
+      "input": {
+        "name": "quick_sprite",
+        "description": "快速创建 Sprite 节点",
+        "sceneMethodName": "createChildNode"
+      },
+      "expected": "注册为 macro_quick_sprite 工具",
+      "note": "",
+      "phase": "资产与脚本",
+      "priority": "P3",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 4,
+        "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
+      }
+    },
+    {
+      "id": 314,
+      "tool": "register_custom_macro",
+      "action": "register_custom_macro",
+      "title": "非白名单方法",
+      "input": {
+        "name": "bad",
+        "description": "test",
+        "sceneMethodName": "eval"
+      },
+      "expected": "返回 {error:\"方法不在白名单\"}",
+      "note": "",
+      "phase": "资产与脚本",
+      "priority": "P3",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
+      }
+    },
+    {
+      "id": 315,
+      "tool": "create_prefab_atomic",
+      "action": "create_prefab_atomic",
+      "title": "完整预制体",
+      "input": {
+        "prefabPath": "db://assets/prefabs/Enemy.prefab",
+        "nodeName": "Enemy",
+        "components": [
+          {
+            "type": "Sprite"
+          },
+          {
+            "type": "BoxCollider2D",
+            "properties": {
+              "size": {
+                "width": 64,
+                "height": 64
+              }
+            }
+          }
+        ],
+        "children": [
+          {
+            "name": "Label",
+            "components": [
+              {
+                "type": "Label",
+                "properties": {
+                  "string": "HP: 100"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "expected": "一步创建含 Sprite+碰撞器+子 Label 的预制体",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "fail",
+        "duration": "",
+        "note": "来自 tests/test-report.json，自动化失败：HTTP 500: Internal Server Error"
+      }
+    },
+    {
+      "id": 316,
+      "tool": "create_prefab_atomic",
+      "action": "create_prefab_atomic",
+      "title": "失败回滚",
+      "input": {
+        "prefabPath": "db://invalid/path.prefab"
+      },
+      "expected": "创建失败，临时节点自动清理",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
+      }
+    },
+    {
+      "id": 317,
+      "tool": "import_and_apply_texture",
+      "action": "import_and_apply_texture",
+      "title": "导入+应用",
+      "input": {
+        "sourcePath": "C:/art/hero.png",
+        "nodeUuid": "<sprite-node>"
+      },
+      "expected": "图片导入→SpriteFrame 设置→Sprite 显示新图片",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 20004,
+        "note": "来自 tests/test-report.json，自动化执行通过（20004ms）"
+      }
+    },
+    {
+      "id": 318,
+      "tool": "import_and_apply_texture",
+      "action": "import_and_apply_texture",
+      "title": "自动添加 Sprite",
+      "input": {
+        "sourcePath": "C:/art/bg.jpg",
+        "nodeUuid": "<empty-node>",
+        "autoAddSprite": true
+      },
+      "expected": "自动添加 Sprite 组件+设置纹理",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 20022,
+        "note": "来自 tests/test-report.json，自动化执行通过（20022ms）"
+      }
+    },
+    {
+      "id": 321,
+      "tool": "create_tween_animation_atomic",
+      "action": "create_tween_animation_atomic",
+      "title": "淡入动画",
+      "input": {
+        "nodeUuid": "<uuid>",
+        "clipName": "fadeIn",
+        "duration": 0.5,
+        "tracks": [
+          {
+            "component": "cc.UIOpacity",
+            "property": "opacity",
+            "keyframes": [
+              {
+                "time": 0,
+                "value": 0
+              },
+              {
+                "time": 0.5,
+                "value": 255,
+                "easing": "quadOut"
+              }
+            ]
+          }
+        ]
+      },
+      "expected": "创建 0.5 秒透明度从 0 到 255 的淡入动画",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
+      }
+    },
+    {
+      "id": 322,
+      "tool": "create_tween_animation_atomic",
+      "action": "create_tween_animation_atomic",
+      "title": "位移+旋转",
+      "input": {
+        "nodeUuid": "<uuid>",
+        "clipName": "move",
+        "duration": 2,
+        "wrapMode": "Loop",
+        "tracks": [
+          {
+            "property": "position",
+            "keyframes": [
+              {
+                "time": 0,
+                "value": {
+                  "x": 0,
+                  "y": 0,
+                  "z": 0
+                }
+              },
+              {
+                "time": 2,
+                "value": {
+                  "x": 200,
+                  "y": 0,
+                  "z": 0
+                }
+              }
+            ]
+          },
+          {
+            "property": "eulerAngles",
+            "keyframes": [
+              {
+                "time": 0,
+                "value": {
+                  "x": 0,
+                  "y": 0,
+                  "z": 0
+                }
+              },
+              {
+                "time": 2,
+                "value": {
+                  "x": 0,
+                  "y": 0,
+                  "z": 360
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "expected": "创建边移动边旋转的循环动画",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
+      }
+    },
+    {
+      "id": 323,
+      "tool": "auto_fit_physics_collider",
+      "action": "auto_fit_physics_collider",
+      "title": "自动适配",
+      "input": {
+        "nodeUuid": "<sprite-node>"
+      },
+      "expected": "根据 Sprite Alpha 生成 PolygonCollider2D",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 5,
+        "note": "来自 tests/test-report.json，自动化执行通过（5ms）"
+      }
+    },
+    {
+      "id": 324,
+      "tool": "auto_fit_physics_collider",
+      "action": "auto_fit_physics_collider",
+      "title": "指定 Box",
+      "input": {
+        "nodeUuid": "<uuid>",
+        "colliderType": "box"
+      },
+      "expected": "根据 UITransform 尺寸创建 BoxCollider2D",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 4,
+        "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
+      }
+    },
+    {
+      "id": 325,
+      "tool": "auto_fit_physics_collider",
+      "action": "auto_fit_physics_collider",
+      "title": "指定 Circle",
+      "input": {
+        "nodeUuid": "<uuid>",
+        "colliderType": "circle"
+      },
+      "expected": "创建 CircleCollider2D，radius=min(w,h)/2",
+      "note": "",
+      "phase": "核心改写",
+      "priority": "P1",
+      "edition": "community",
+      "aiBaseline": {
+        "status": "pass",
+        "duration": 4,
+        "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
+      }
+    },
+    {
+      "id": 326,
+      "tool": "script_scaffold",
+      "action": "list_templates",
+      "title": "列出脚本模板",
+      "input": {
+        "action": "list_templates"
+      },
+      "expected": "返回 6 个模板: controller/manager/ui-handler/data-model/singleton/fsm",
+      "note": "Pro Phase 4",
+      "phase": "资产与脚本",
+      "priority": "P3",
+      "edition": "pro",
+      "aiBaseline": {
+        "status": "pending",
+        "duration": "",
+        "note": ""
+      }
+    },
+    {
+      "id": 327,
+      "tool": "script_scaffold",
+      "action": "generate_component",
+      "title": "生成组件脚本",
+      "input": {
+        "action": "generate_component",
+        "className": "PlayerController",
+        "description": "控制角色移动"
+      },
+      "expected": "生成 PlayerController.ts 到 assets/scripts/",
+      "note": "",
+      "phase": "资产与脚本",
+      "priority": "P3",
+      "edition": "pro",
+      "aiBaseline": {
+        "status": "pending",
+        "duration": "",
+        "note": ""
+      }
+    },
+    {
+      "id": 328,
+      "tool": "script_scaffold",
+      "action": "generate_component",
+      "title": "缺少 className",
+      "input": {
+        "action": "generate_component"
+      },
+      "expected": "返回错误: 缺少 className",
+      "note": "参数校验",
+      "phase": "资产与脚本",
+      "priority": "P3",
+      "edition": "pro",
+      "aiBaseline": {
+        "status": "pending",
+        "duration": "",
+        "note": ""
+      }
+    },
+    {
+      "id": 329,
+      "tool": "script_scaffold",
+      "action": "from_template",
+      "title": "从模板生成",
+      "input": {
+        "action": "from_template",
+        "className": "GameManager",
+        "template": "singleton"
+      },
+      "expected": "生成单例管理器脚本",
+      "note": "",
+      "phase": "资产与脚本",
+      "priority": "P3",
+      "edition": "pro",
+      "aiBaseline": {
+        "status": "pending",
+        "duration": "",
+        "note": ""
+      }
+    },
+    {
+      "id": 330,
+      "tool": "script_scaffold",
+      "action": "generate_and_attach",
+      "title": "生成+挂载",
+      "input": {
+        "action": "generate_and_attach",
+        "className": "EnemyAI",
+        "uuid": "<uuid>",
+        "properties": [
+          {
+            "name": "speed",
+            "type": "number",
+            "default": 5
+          }
+        ]
+      },
+      "expected": "4 步: 生成→刷新→挂载→设属性",
+      "note": "核心一体化 action",
+      "phase": "资产与脚本",
+      "priority": "P3",
+      "edition": "pro",
+      "aiBaseline": {
+        "status": "pending",
+        "duration": "",
+        "note": ""
+      }
+    },
+    {
+      "id": 331,
+      "tool": "script_scaffold",
+      "action": "generate_and_attach",
+      "title": "缺少 uuid",
+      "input": {
+        "action": "generate_and_attach",
+        "className": "Foo"
+      },
+      "expected": "返回错误: 缺少 uuid",
+      "note": "参数校验",
+      "phase": "资产与脚本",
+      "priority": "P3",
+      "edition": "pro",
+      "aiBaseline": {
+        "status": "pending",
+        "duration": "",
+        "note": ""
+      }
+    },
+    {
+      "id": 332,
+      "tool": "script_scaffold",
+      "action": "add_properties",
+      "title": "追加属性",
+      "input": {
+        "action": "add_properties",
+        "className": "PlayerController",
+        "properties": [
+          {
+            "name": "jumpForce",
+            "type": "number",
+            "default": 12
+          }
+        ]
+      },
+      "expected": "追加 @property 声明",
+      "note": "",
+      "phase": "资产与脚本",
+      "priority": "P3",
+      "edition": "pro",
+      "aiBaseline": {
+        "status": "pending",
+        "duration": "",
+        "note": ""
+      }
+    },
+    {
+      "id": 333,
+      "tool": "script_scaffold",
+      "action": "generate_event_handler",
+      "title": "生成事件处理",
+      "input": {
+        "action": "generate_event_handler",
+        "className": "BtnHandler",
+        "uuid": "<uuid>",
+        "events": [
+          {
+            "event": "click",
+            "handler": "onBtnClick"
+          }
+        ]
+      },
+      "expected": "生成脚本→挂载→绑定 click",
+      "note": "",
+      "phase": "资产与脚本",
+      "priority": "P3",
+      "edition": "pro",
+      "aiBaseline": {
+        "status": "pending",
+        "duration": "",
+        "note": ""
+      }
+    },
+    {
+      "id": 334,
+      "tool": "script_scaffold",
+      "action": "generate_event_handler",
+      "title": "缺少 events",
+      "input": {
+        "action": "generate_event_handler",
+        "className": "X",
+        "uuid": "<uuid>"
+      },
+      "expected": "返回错误: 缺少 events",
+      "note": "参数校验",
+      "phase": "资产与脚本",
+      "priority": "P3",
+      "edition": "pro",
+      "aiBaseline": {
+        "status": "pending",
+        "duration": "",
+        "note": ""
+      }
+    },
+    {
+      "id": 335,
+      "tool": "animation_workflow",
+      "action": "create_transition",
+      "title": "淡入过渡",
+      "input": {
+        "action": "create_transition",
+        "uuid": "<uuid>",
+        "transitionType": "fade-in"
+      },
+      "expected": "创建 0.3s opacity 0→255 动画",
+      "note": "Pro Phase 4",
+      "phase": "动画工作流",
+      "priority": "P2",
+      "edition": "pro",
+      "aiBaseline": {
+        "status": "pending",
+        "duration": "",
+        "note": ""
+      }
+    },
+    {
+      "id": 336,
+      "tool": "animation_workflow",
+      "action": "create_transition",
+      "title": "弹跳进入",
+      "input": {
+        "action": "create_transition",
+        "uuid": "<uuid>",
+        "transitionType": "bounce-in"
+      },
+      "expected": "创建 0.5s scale 0→1.2→1 动画",
+      "note": "",
+      "phase": "动画工作流",
+      "priority": "P2",
+      "edition": "pro",
+      "aiBaseline": {
+        "status": "pending",
+        "duration": "",
+        "note": ""
+      }
+    },
+    {
+      "id": 337,
+      "tool": "animation_workflow",
+      "action": "create_transition",
+      "title": "自定义时长",
+      "input": {
+        "action": "create_transition",
+        "uuid": "<uuid>",
+        "transitionType": "slide-in-left",
+        "duration": 1
+      },
+      "expected": "创建 1.0s 左滑入动画",
+      "note": "",
+      "phase": "动画工作流",
+      "priority": "P2",
+      "edition": "pro",
+      "aiBaseline": {
+        "status": "pending",
+        "duration": "",
+        "note": ""
+      }
+    },
+    {
+      "id": 338,
+      "tool": "animation_workflow",
+      "action": "create_loop_animation",
+      "title": "浮动循环",
+      "input": {
+        "action": "create_loop_animation",
+        "uuid": "<uuid>",
+        "loopType": "float"
+      },
+      "expected": "创建 2s 上下浮动 Loop 动画",
+      "note": "",
+      "phase": "动画工作流",
+      "priority": "P2",
+      "edition": "pro",
+      "aiBaseline": {
+        "status": "pending",
+        "duration": "",
+        "note": ""
+      }
+    },
+    {
+      "id": 339,
+      "tool": "animation_workflow",
+      "action": "create_loop_animation",
+      "title": "旋转循环",
+      "input": {
+        "action": "create_loop_animation",
+        "uuid": "<uuid>",
+        "loopType": "rotate"
+      },
+      "expected": "创建 2s Z 轴 0→360 旋转动画",
+      "note": "",
+      "phase": "动画工作流",
+      "priority": "P2",
+      "edition": "pro",
+      "aiBaseline": {
+        "status": "pending",
+        "duration": "",
+        "note": ""
+      }
+    },
+    {
+      "id": 340,
+      "tool": "animation_workflow",
+      "action": "apply_preset",
+      "title": "idle 预设",
+      "input": {
+        "action": "apply_preset",
+        "uuid": "<uuid>",
+        "preset": "idle"
+      },
+      "expected": "创建 idle 呼吸循环动画",
+      "note": "",
+      "phase": "动画工作流",
+      "priority": "P2",
+      "edition": "pro",
+      "aiBaseline": {
+        "status": "pending",
+        "duration": "",
+        "note": ""
+      }
+    },
+    {
+      "id": 341,
+      "tool": "animation_workflow",
+      "action": "apply_preset",
+      "title": "attack 预设",
+      "input": {
+        "action": "apply_preset",
+        "uuid": "<uuid>",
+        "preset": "attack"
+      },
+      "expected": "创建 attack 缩放+位移动画",
+      "note": "",
+      "phase": "动画工作流",
+      "priority": "P2",
+      "edition": "pro",
+      "aiBaseline": {
+        "status": "pending",
+        "duration": "",
+        "note": ""
+      }
+    },
+    {
+      "id": 342,
+      "tool": "animation_workflow",
+      "action": "create_ui_animation",
+      "title": "按钮点击",
+      "input": {
+        "action": "create_ui_animation",
+        "uuid": "<uuid>",
+        "uiAnimType": "button-press"
+      },
+      "expected": "创建 0.15s 缩放反馈动画",
+      "note": "",
+      "phase": "动画工作流",
+      "priority": "P2",
+      "edition": "pro",
+      "aiBaseline": {
+        "status": "pending",
+        "duration": "",
+        "note": ""
+      }
+    },
+    {
+      "id": 343,
+      "tool": "animation_workflow",
+      "action": "create_ui_animation",
+      "title": "面板弹出",
+      "input": {
+        "action": "create_ui_animation",
+        "uuid": "<uuid>",
+        "uiAnimType": "panel-popup"
+      },
+      "expected": "创建 0.35s scale+opacity 弹出动画",
+      "note": "",
+      "phase": "动画工作流",
+      "priority": "P2",
+      "edition": "pro",
+      "aiBaseline": {
+        "status": "pending",
+        "duration": "",
+        "note": ""
+      }
+    },
+    {
+      "id": 344,
+      "tool": "animation_workflow",
+      "action": "create_from_description",
+      "title": "自然语言动画",
+      "input": {
+        "action": "create_from_description",
+        "uuid": "<uuid>",
+        "prompt": "让按钮弹跳进入"
+      },
+      "expected": "AI 解析→生成关键帧",
+      "note": "",
+      "phase": "动画工作流",
+      "priority": "P2",
+      "edition": "pro",
+      "aiBaseline": {
+        "status": "pending",
+        "duration": "",
+        "note": ""
+      }
+    },
+    {
+      "id": 345,
+      "tool": "animation_workflow",
+      "action": "create_from_description",
+      "title": "缺少 prompt",
+      "input": {
+        "action": "create_from_description",
+        "uuid": "<uuid>"
+      },
+      "expected": "返回错误: 缺少 prompt",
+      "note": "参数校验",
+      "phase": "动画工作流",
+      "priority": "P2",
+      "edition": "pro",
+      "aiBaseline": {
+        "status": "pending",
+        "duration": "",
+        "note": ""
+      }
+    },
+    {
+      "id": 346,
+      "tool": "animation_workflow",
+      "action": "create_sequence",
+      "title": "动画序列",
+      "input": {
+        "action": "create_sequence",
+        "uuid": "<uuid>",
+        "clips": [
+          {
+            "clipName": "intro",
+            "transitionType": "fade-in"
+          },
+          {
+            "clipName": "loop",
+            "loopType": "pulse"
+          }
+        ]
+      },
+      "expected": "创建 2 个剪辑",
+      "note": "",
+      "phase": "动画工作流",
+      "priority": "P2",
+      "edition": "pro",
+      "aiBaseline": {
+        "status": "pending",
+        "duration": "",
+        "note": ""
+      }
+    },
+    {
+      "id": 347,
+      "tool": "animation_workflow",
+      "action": "batch_animate",
+      "title": "批量入场",
+      "input": {
+        "action": "batch_animate",
+        "uuids": [
+          "<a>",
+          "<b>",
+          "<c>"
+        ],
+        "transitionType": "fade-in"
+      },
+      "expected": "3 个节点各创建 fade-in 动画",
+      "note": "",
+      "phase": "动画工作流",
+      "priority": "P2",
+      "edition": "pro",
+      "aiBaseline": {
+        "status": "pending",
+        "duration": "",
+        "note": ""
+      }
+    },
+    {
+      "id": 348,
+      "tool": "animation_workflow",
+      "action": "batch_animate",
+      "title": "缺少 uuids",
+      "input": {
+        "action": "batch_animate",
+        "transitionType": "fade-in"
+      },
+      "expected": "返回错误: 缺少 uuids",
+      "note": "参数校验",
+      "phase": "动画工作流",
+      "priority": "P2",
+      "edition": "pro",
+      "aiBaseline": {
+        "status": "pending",
+        "duration": "",
+        "note": ""
+      }
+    },
+    {
+      "id": 349,
+      "tool": "animation_workflow",
+      "action": "preview_animation",
+      "title": "预览动画",
+      "input": {
+        "action": "preview_animation",
+        "uuid": "<uuid>",
+        "clipName": "idle"
+      },
+      "expected": "播放 idle 动画",
+      "note": "",
+      "phase": "动画工作流",
+      "priority": "P2",
+      "edition": "pro",
+      "aiBaseline": {
+        "status": "pending",
+        "duration": "",
+        "note": ""
+      }
+    },
+    {
+      "id": 350,
+      "tool": "ui_generator",
+      "action": "create_login_page",
+      "title": "一键登录页",
+      "input": {
+        "action": "create_login_page"
+      },
+      "expected": "生成完整登录页: Canvas→根容器→邮箱+密码+按钮+社交登录",
+      "note": "Pro Phase 4",
+      "phase": "UI 与参考图",
+      "priority": "P2",
+      "edition": "pro",
+      "aiBaseline": {
+        "status": "pending",
+        "duration": "",
+        "note": ""
+      }
+    },
+    {
+      "id": 351,
+      "tool": "ui_generator",
+      "action": "create_settings_page",
+      "title": "一键设置页",
+      "input": {
+        "action": "create_settings_page"
+      },
+      "expected": "生成设置页: 音量滑块+开关+语言选择",
+      "note": "",
+      "phase": "UI 与参考图",
+      "priority": "P2",
+      "edition": "pro",
+      "aiBaseline": {
+        "status": "pending",
+        "duration": "",
+        "note": ""
+      }
+    },
+    {
+      "id": 352,
+      "tool": "ui_generator",
+      "action": "create_shop_page",
+      "title": "一键商店页",
+      "input": {
+        "action": "create_shop_page",
+        "itemCount": 6
+      },
+      "expected": "生成商店: ScrollView + 6 个商品卡片",
+      "note": "",
+      "phase": "UI 与参考图",
+      "priority": "P2",
+      "edition": "pro",
+      "aiBaseline": {
+        "status": "pending",
+        "duration": "",
+        "note": ""
+      }
+    },
+    {
+      "id": 353,
+      "tool": "ui_generator",
+      "action": "create_shop_page",
+      "title": "自定义商品数",
+      "input": {
+        "action": "create_shop_page",
+        "itemCount": 3
+      },
+      "expected": "生成 3 个商品卡片（少于默认 6 个）",
+      "note": "",
+      "phase": "UI 与参考图",
+      "priority": "P2",
+      "edition": "pro",
+      "aiBaseline": {
+        "status": "pending",
+        "duration": "",
+        "note": ""
+      }
+    },
+    {
+      "id": 354,
+      "tool": "ui_generator",
+      "action": "create_hud",
+      "title": "一键 HUD",
+      "input": {
+        "action": "create_hud"
+      },
+      "expected": "生成 HUD: 血条+分数+技能栏+小地图+暂停按钮",
+      "note": "",
+      "phase": "UI 与参考图",
+      "priority": "P2",
+      "edition": "pro",
+      "aiBaseline": {
+        "status": "pending",
+        "duration": "",
+        "note": ""
+      }
+    },
+    {
+      "id": 355,
+      "tool": "ui_generator",
+      "action": "create_dialog",
+      "title": "自定义对话框",
+      "input": {
+        "action": "create_dialog",
+        "title": "退出游戏?",
+        "content": "确定要退出吗?"
+      },
+      "expected": "生成对话框含自定义标题和内容",
+      "note": "",
+      "phase": "UI 与参考图",
+      "priority": "P2",
+      "edition": "pro",
+      "aiBaseline": {
+        "status": "pending",
+        "duration": "",
+        "note": ""
+      }
+    },
+    {
+      "id": 356,
+      "tool": "ui_generator",
+      "action": "create_inventory",
+      "title": "一键背包",
+      "input": {
+        "action": "create_inventory",
+        "columns": 4,
+        "itemCount": 16
+      },
+      "expected": "生成 4 列 16 格背包+详情面板",
+      "note": "",
+      "phase": "UI 与参考图",
+      "priority": "P2",
+      "edition": "pro",
+      "aiBaseline": {
+        "status": "pending",
+        "duration": "",
+        "note": ""
+      }
+    },
+    {
+      "id": 357,
+      "tool": "ui_generator",
+      "action": "create_custom_ui",
+      "title": "自定义 UI",
+      "input": {
+        "action": "create_custom_ui",
+        "prompt": "一个带标签页和滚动列表的界面"
+      },
+      "expected": "解析关键词→生成 TabBar + ScrollView",
+      "note": "",
+      "phase": "UI 与参考图",
+      "priority": "P2",
+      "edition": "pro",
+      "aiBaseline": {
+        "status": "pending",
+        "duration": "",
+        "note": ""
+      }
+    },
+    {
+      "id": 358,
+      "tool": "ui_generator",
+      "action": "create_custom_ui",
+      "title": "缺少 prompt",
+      "input": {
+        "action": "create_custom_ui"
+      },
+      "expected": "返回错误: 缺少 prompt",
+      "note": "参数校验",
+      "phase": "UI 与参考图",
+      "priority": "P2",
+      "edition": "pro",
+      "aiBaseline": {
+        "status": "pending",
+        "duration": "",
+        "note": ""
+      }
+    },
+    {
+      "id": 359,
+      "tool": "project_linter",
+      "action": "check_all",
+      "title": "全量检查",
+      "input": {
+        "action": "check_all"
+      },
+      "expected": "5 步: 3 个场景查询 + 1 资源查询 + 1 汇总分析",
+      "note": "Pro Phase 4",
+      "phase": "质量与诊断",
+      "priority": "P2",
+      "edition": "pro",
+      "aiBaseline": {
+        "status": "pending",
+        "duration": "",
+        "note": ""
+      }
+    },
+    {
+      "id": 360,
+      "tool": "project_linter",
+      "action": "check_naming",
+      "title": "命名检查",
+      "input": {
+        "action": "check_naming"
+      },
+      "expected": "返回不符合 PascalCase/kebab-case 的项",
+      "note": "",
+      "phase": "质量与诊断",
+      "priority": "P2",
+      "edition": "pro",
+      "aiBaseline": {
+        "status": "pending",
+        "duration": "",
+        "note": ""
+      }
+    },
+    {
+      "id": 361,
+      "tool": "project_linter",
+      "action": "check_hierarchy",
+      "title": "层级检查",
+      "input": {
+        "action": "check_hierarchy"
+      },
+      "expected": "返回深度>10 或子节点>50 的节点",
+      "note": "",
+      "phase": "质量与诊断",
+      "priority": "P2",
+      "edition": "pro",
+      "aiBaseline": {
+        "status": "pending",
+        "duration": "",
+        "note": ""
+      }
+    },
+    {
+      "id": 362,
+      "tool": "project_linter",
+      "action": "check_components",
+      "title": "组件检查",
+      "input": {
+        "action": "check_components"
+      },
+      "expected": "返回空 Sprite、缺 RigidBody 等问题",
+      "note": "",
+      "phase": "质量与诊断",
+      "priority": "P2",
+      "edition": "pro",
+      "aiBaseline": {
+        "status": "pending",
+        "duration": "",
+        "note": ""
+      }
+    },
+    {
+      "id": 363,
+      "tool": "project_linter",
+      "action": "check_assets",
+      "title": "资源检查",
+      "input": {
+        "action": "check_assets"
+      },
+      "expected": "返回未使用资源和命名违规",
+      "note": "",
+      "phase": "质量与诊断",
+      "priority": "P2",
+      "edition": "pro",
+      "aiBaseline": {
+        "status": "pending",
+        "duration": "",
+        "note": ""
+      }
+    },
+    {
+      "id": 364,
+      "tool": "project_linter",
+      "action": "check_performance",
+      "title": "性能检查",
+      "input": {
+        "action": "check_performance"
+      },
+      "expected": "返回节点数/DrawCall/纹理尺寸超标项",
+      "note": "",
+      "phase": "质量与诊断",
+      "priority": "P2",
+      "edition": "pro",
+      "aiBaseline": {
+        "status": "pending",
+        "duration": "",
+        "note": ""
+      }
+    },
+    {
+      "id": 365,
+      "tool": "project_linter",
+      "action": "auto_fix_naming",
+      "title": "自动修复命名",
+      "input": {
+        "action": "auto_fix_naming"
+      },
+      "expected": "批量重命名违规节点",
+      "note": "",
+      "phase": "质量与诊断",
+      "priority": "P2",
+      "edition": "pro",
+      "aiBaseline": {
+        "status": "pending",
+        "duration": "",
+        "note": ""
+      }
+    },
+    {
+      "id": 366,
+      "tool": "project_linter",
+      "action": "set_rules",
+      "title": "设置自定义规则",
+      "input": {
+        "action": "set_rules",
+        "rules": {
+          "naming": {
+            "nodePattern": "camelCase"
+          }
+        }
+      },
+      "expected": "规则保存到 .mcp-lint-rules.json",
+      "note": "",
+      "phase": "质量与诊断",
+      "priority": "P2",
+      "edition": "pro",
+      "aiBaseline": {
+        "status": "pending",
+        "duration": "",
+        "note": ""
+      }
+    },
+    {
+      "id": 367,
+      "tool": "project_linter",
+      "action": "set_rules",
+      "title": "缺少 rules",
+      "input": {
+        "action": "set_rules"
+      },
+      "expected": "返回错误: 缺少 rules",
+      "note": "参数校验",
+      "phase": "质量与诊断",
+      "priority": "P2",
+      "edition": "pro",
+      "aiBaseline": {
+        "status": "pending",
+        "duration": "",
+        "note": ""
+      }
+    },
+    {
+      "id": 368,
+      "tool": "operation_log",
+      "action": "get_history",
+      "title": "查看历史",
+      "input": {
+        "action": "get_history"
+      },
+      "expected": "返回最近 50 条操作记录",
+      "note": "Pro Phase 4",
+      "phase": "环境与连通",
+      "priority": "P3",
+      "edition": "pro",
+      "aiBaseline": {
+        "status": "pending",
+        "duration": "",
+        "note": ""
+      }
+    },
+    {
+      "id": 369,
+      "tool": "operation_log",
+      "action": "get_history",
+      "title": "过滤历史",
+      "input": {
+        "action": "get_history",
+        "filter": {
+          "tool": "scene_operation",
+          "limit": 20
+        }
+      },
+      "expected": "返回最近 20 条 scene_operation 操作",
+      "note": "",
+      "phase": "环境与连通",
+      "priority": "P3",
+      "edition": "pro",
+      "aiBaseline": {
+        "status": "pending",
+        "duration": "",
+        "note": ""
+      }
+    },
+    {
+      "id": 370,
+      "tool": "operation_log",
+      "action": "get_stats",
+      "title": "操作统计",
+      "input": {
+        "action": "get_stats"
+      },
+      "expected": "返回按工具/action 分组的统计",
+      "note": "",
+      "phase": "环境与连通",
+      "priority": "P3",
+      "edition": "pro",
+      "aiBaseline": {
+        "status": "pending",
+        "duration": "",
+        "note": ""
+      }
+    },
+    {
+      "id": 371,
+      "tool": "operation_log",
+      "action": "export_log",
+      "title": "导出 JSON",
+      "input": {
+        "action": "export_log",
+        "format": "json"
+      },
+      "expected": "操作日志保存到 assets/mcp-logs/",
+      "note": "",
+      "phase": "环境与连通",
+      "priority": "P3",
+      "edition": "pro",
+      "aiBaseline": {
+        "status": "pending",
+        "duration": "",
+        "note": ""
+      }
+    },
+    {
+      "id": 372,
+      "tool": "operation_log",
+      "action": "export_script",
+      "title": "导出脚本",
+      "input": {
+        "action": "export_script"
+      },
+      "expected": "生成可回放的 TypeScript 脚本",
+      "note": "",
+      "phase": "环境与连通",
+      "priority": "P3",
+      "edition": "pro",
+      "aiBaseline": {
+        "status": "pending",
+        "duration": "",
+        "note": ""
+      }
+    },
+    {
+      "id": 373,
+      "tool": "operation_log",
+      "action": "replay_last",
+      "title": "回放最近 5 步",
+      "input": {
+        "action": "replay_last",
+        "count": 5
+      },
+      "expected": "重放最近 5 个操作",
+      "note": "",
+      "phase": "环境与连通",
+      "priority": "P3",
+      "edition": "pro",
+      "aiBaseline": {
+        "status": "pending",
+        "duration": "",
+        "note": ""
+      }
+    },
+    {
+      "id": 374,
+      "tool": "operation_log",
+      "action": "replay_last",
+      "title": "默认回放 10 步",
+      "input": {
+        "action": "replay_last"
+      },
+      "expected": "重放最近 10 个操作",
+      "note": "",
+      "phase": "环境与连通",
+      "priority": "P3",
+      "edition": "pro",
+      "aiBaseline": {
+        "status": "pending",
+        "duration": "",
+        "note": ""
+      }
+    },
+    {
+      "id": 375,
+      "tool": "operation_log",
+      "action": "replay_from_log",
+      "title": "从日志回放",
+      "input": {
+        "action": "replay_from_log",
+        "log": [
+          {
+            "tool": "scene_operation",
+            "action": "create_node"
+          }
+        ]
+      },
+      "expected": "按日志逐条重放",
+      "note": "",
+      "phase": "环境与连通",
+      "priority": "P3",
+      "edition": "pro",
+      "aiBaseline": {
+        "status": "pending",
+        "duration": "",
+        "note": ""
+      }
+    },
+    {
+      "id": 376,
+      "tool": "operation_log",
+      "action": "replay_from_log",
+      "title": "缺少 log",
+      "input": {
+        "action": "replay_from_log"
+      },
+      "expected": "返回错误: 缺少 log",
+      "note": "参数校验",
+      "phase": "环境与连通",
+      "priority": "P3",
+      "edition": "pro",
+      "aiBaseline": {
+        "status": "pending",
+        "duration": "",
+        "note": ""
+      }
+    },
+    {
+      "id": 377,
+      "tool": "operation_log",
+      "action": "clear_history",
+      "title": "清空历史",
+      "input": {
+        "action": "clear_history",
+        "confirmDangerous": true
+      },
+      "expected": "操作历史已清空",
+      "note": "",
+      "phase": "环境与连通",
+      "priority": "P3",
+      "edition": "pro",
+      "aiBaseline": {
+        "status": "pending",
+        "duration": "",
+        "note": ""
+      }
+    },
+    {
+      "id": 378,
+      "tool": "operation_log",
+      "action": "clear_history",
+      "title": "未确认清空",
+      "input": {
+        "action": "clear_history"
+      },
+      "expected": "返回错误: 需要 confirmDangerous=true",
+      "note": "危险操作拦截",
+      "phase": "环境与连通",
+      "priority": "P3",
+      "edition": "pro",
+      "aiBaseline": {
+        "status": "pending",
+        "duration": "",
+        "note": ""
+      }
+    },
+    {
+      "id": 379,
+      "tool": "operation_log",
+      "action": "bookmark",
+      "title": "添加书签",
+      "input": {
+        "action": "bookmark",
+        "label": "before-refactor"
+      },
+      "expected": "书签 before-refactor 已添加",
+      "note": "",
+      "phase": "环境与连通",
+      "priority": "P3",
+      "edition": "pro",
+      "aiBaseline": {
+        "status": "pending",
+        "duration": "",
+        "note": ""
+      }
+    },
+    {
+      "id": 380,
+      "tool": "operation_log",
+      "action": "bookmark",
+      "title": "缺少 label",
+      "input": {
+        "action": "bookmark"
+      },
+      "expected": "返回错误: 缺少 label",
+      "note": "参数校验",
+      "phase": "环境与连通",
+      "priority": "P3",
+      "edition": "pro",
+      "aiBaseline": {
+        "status": "pending",
+        "duration": "",
+        "note": ""
+      }
+    }
+  ]
+};
