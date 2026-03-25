@@ -35,6 +35,7 @@
   };
   const SEVERITY_WEIGHT = { critical: 5, high: 4, medium: 3, low: 2, none: 1 };
   const FILTERS = { search: "", tool: "all", phase: "all", edition: "all", quick: "all" };
+  const ACTION_CASE_COUNTS = buildActionCaseCounts();
 
   const dom = {
     heroDesc: document.getElementById("heroDesc"),
@@ -440,6 +441,9 @@
     const updated = row.updatedAt
       ? new Date(row.updatedAt).toLocaleString("zh-CN", { hour12: false })
       : "未更新";
+    const scenarioType = classifyScenarioType(item);
+    const scenarioHint = buildScenarioHint(item, scenarioType);
+    const actionCaseCount = ACTION_CASE_COUNTS.get(actionKey(item)) || 1;
 
     return `
       <details class="case">
@@ -452,11 +456,27 @@
           <div class="case-meta">
             <div><strong>Tool</strong><div>${esc(item.tool)}</div></div>
             <div><strong>Action</strong><div>${esc(item.action)}</div></div>
-            <div><strong>备注</strong><div>${esc(item.note || "无")}</div></div>
+            <div><strong>场景类型</strong><div>${esc(scenarioType)}</div></div>
+            <div><strong>当前场景</strong><div>${esc(scenarioHint)}</div></div>
             <div><strong>最近更新</strong><div>${esc(updated)}</div></div>
           </div>
         </summary>
         <div class="case-body">
+          <section>
+            <strong>场景说明</strong>
+            <div class="muted-box">
+              当前用例测试的是 <strong>${esc(item.tool)}.${esc(item.action)}</strong> 的
+              <strong>${esc(scenarioType)}</strong>。
+              ${actionCaseCount > 1
+                ? `同一 action 目前拆成 ${actionCaseCount} 条场景用例，差异可能来自参数、环境或前置状态。`
+                : "当前 action 只有这一条场景用例。"}
+              ${item.note ? `前置说明：${esc(item.note)}。` : ""}
+            </div>
+          </section>
+          <section>
+            <strong>AI 端描述</strong>
+            <div class="muted-box">${renderAiDoc(item)}</div>
+          </section>
           <section>
             <strong>预期结果</strong>
             <div class="muted-box">${esc(item.expected || "未提供预期结果")}</div>
@@ -485,6 +505,73 @@
     return `<div><label>${esc(label)}</label><select data-id="${id}" data-case-select="${key}">${optionsHtml(value)}</select></div>`;
   }
 
+  function renderAiDoc(item) {
+    const aiDoc = item.aiDoc || {};
+    const toolSummary = aiDoc.toolSummary || "当前源码未提取到 tool 描述。";
+    const zhToolSummary = aiDoc.zhToolSummary || "当前没有可用的中文翻译。";
+    const actionDescription =
+      aiDoc.actionDescription
+      || "当前源码未找到这条 action 的 AI 描述。这通常表示测试用例超前、该能力来自 Pro/native，或描述还没补齐。";
+    const zhActionDescription =
+      aiDoc.zhActionDescription
+      || "当前没有可用的中文翻译。";
+    const naturalLanguageSpec = aiDoc.naturalLanguageSpec || {};
+    const naturalLanguageTest =
+      aiDoc.naturalLanguageTest
+      || "当前没有生成自然语言测试用例。";
+    const sourceFile = aiDoc.sourceFile
+      ? `来源：${esc(aiDoc.sourceFile)}`
+      : "来源：当前仓库源码中未定位到描述定义";
+
+    return `
+      <div><strong>Tool 描述（EN）：</strong>${esc(toolSummary)}</div>
+      <div class="section-gap-less"><strong>Tool 描述（ZH）：</strong>${esc(zhToolSummary)}</div>
+      <div class="section-gap-less"><strong>Action 描述（EN）：</strong>${esc(actionDescription)}</div>
+      <div class="section-gap-less"><strong>Action 描述（ZH）：</strong>${esc(zhActionDescription)}</div>
+      <div class="section-gap-less">
+        <strong>自然语言测试用例：</strong>
+        ${renderNaturalLanguageSpec(naturalLanguageSpec, naturalLanguageTest)}
+      </div>
+      <div class="tiny">${sourceFile}</div>
+    `;
+  }
+
+  function renderNaturalLanguageSpec(spec, fallbackText) {
+    if (!spec || !spec.aiInstruction) {
+      return esc(fallbackText);
+    }
+
+    const rows = [
+      ["AI 指令", spec.aiInstruction, true],
+      ["适用场景", spec.scenarioNarrative, true],
+      ["操作方式", spec.parameterNarrative, true],
+      ["验证重点", spec.verificationFocus],
+      ["动作目标", spec.actionGoal],
+      ["场景类型", spec.scenarioType],
+      ["场景名称", spec.scenarioTitle],
+      ["前置条件", spec.scenarioCondition],
+      ["MCP 调用", spec.mcpCall],
+      ["原始参数", spec.fullPayload],
+      ["预期结果", spec.expectedText],
+    ];
+
+    return `
+      <div class="nl-spec-grid">
+        ${rows
+          .map(
+            ([label, value, wide]) => `
+              <div class="nl-spec-item ${wide ? "is-wide" : ""}">
+                <div class="nl-spec-label">${esc(label)}</div>
+                <div class="nl-spec-value">${esc(value || "未提供")}</div>
+              </div>
+            `,
+          )
+          .join("")}
+      </div>
+      <div class="tiny section-gap">提示词原文：${esc(fallbackText)}</div>
+    `;
+  }
+
   function fieldText(id, key, label, value, placeholder) {
     return `<div><label>${esc(label)}</label><input type="text" data-id="${id}" data-case-text="${key}" value="${escAttr(value)}" placeholder="${escAttr(placeholder)}"></div>`;
   }
@@ -495,6 +582,84 @@
 
   function planBox(title, text) {
     return `<div class="plan"><strong>${esc(title)}</strong><div class="tiny">${esc(text)}</div></div>`;
+  }
+
+  function actionKey(item) {
+    return `${item.tool}::${item.action}`;
+  }
+
+  function buildActionCaseCounts() {
+    const counts = new Map();
+    DATA.cases.forEach((item) => {
+      const key = actionKey(item);
+      counts.set(key, (counts.get(key) || 0) + 1);
+    });
+    return counts;
+  }
+
+  function classifyScenarioType(item) {
+    const hasInput = item.input && Object.keys(item.input).some((key) => key !== "action");
+    const note = String(item.note || "").toLowerCase();
+    const expected = String(item.expected || "").toLowerCase();
+    const title = String(item.title || "").toLowerCase();
+    const envHints = [
+      "未启动",
+      "未加载",
+      "断开",
+      "插件",
+      "编辑器",
+      "bridge",
+      "连接",
+      "econnrefused",
+      "环境",
+      "启动后",
+    ];
+    const stateHints = [
+      "选中",
+      "为空",
+      "默认",
+      "当前",
+      "已存在",
+      "不存在",
+      "恢复",
+      "回退",
+      "状态",
+      "打开后",
+    ];
+    const combined = `${title} ${note} ${expected}`;
+
+    if (hasInput) {
+      return "参数场景";
+    }
+    if (envHints.some((hint) => combined.includes(hint))) {
+      return "环境场景";
+    }
+    if (stateHints.some((hint) => combined.includes(hint))) {
+      return "状态场景";
+    }
+    return "通用场景";
+  }
+
+  function buildScenarioHint(item, scenarioType) {
+    if (scenarioType === "参数场景") {
+      const entries = Object.entries(item.input || {}).filter(([key]) => key !== "action");
+      return entries.length
+        ? entries.map(([key, value]) => `${key}=${previewValue(value)}`).join("；")
+        : "当前场景没有额外参数";
+    }
+    if (item.note) {
+      return item.note;
+    }
+    if (item.expected) {
+      return item.expected;
+    }
+    return "未提供额外场景说明";
+  }
+
+  function previewValue(value) {
+    if (value === null) return "null";
+    if (typeof value === "string") return value;
+    return JSON.stringify(value);
   }
 
   function statusOptions() {
@@ -616,6 +781,7 @@
         "priority",
         "tool",
         "action",
+        "scenario_type",
         "title",
         "ai_status",
         "manual_status",
@@ -638,6 +804,7 @@
         item.priority,
         item.tool,
         item.action,
+        classifyScenarioType(item),
         item.title,
         row.aiStatus,
         row.manualStatus,

@@ -475,6 +475,38 @@ summary::-webkit-details-marker {
   margin-top: 12px;
 }
 
+.nl-spec-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.nl-spec-item {
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(31, 37, 35, 0.08);
+}
+
+.nl-spec-item.is-wide {
+  grid-column: 1 / -1;
+}
+
+.nl-spec-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 4px;
+}
+
+.nl-spec-value {
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--muted);
+  word-break: break-word;
+}
+
 @media (max-width: 1180px) {
   .layout {
     grid-template-columns: 1fr;
@@ -500,7 +532,8 @@ summary::-webkit-details-marker {
   .form-grid,
   .actions,
   .filters,
-  .case-grid {
+  .case-grid,
+  .nl-spec-grid {
     grid-template-columns: 1fr;
   }
 }
