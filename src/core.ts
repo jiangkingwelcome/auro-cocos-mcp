@@ -9,7 +9,7 @@ import { ErrorCategory, logIgnored, logWarn } from './error-utils';
 import { ensureTokenAsync, extractMcpToken } from './token-manager';
 import { updateRegistry, removeRegistry } from './registry';
 import { getProLicenseStatus, saveLicenseKey, type ProLicenseStatus } from './mcp/tools-pro-bridge';
-import { getConfigStatusAsync, configureIDE as configureIdeService } from './ide-config-service';
+import { getConfigStatusAsync, configureIDE as configureIdeService, removeIDE as removeIdeService } from './ide-config-service';
 import { registerAssetDbRoutes } from './routes/asset-db-routes';
 import { registerAnimatorRoutes } from './routes/animator-routes';
 import { registerConsoleRoutes } from './routes/console-routes';
@@ -634,11 +634,33 @@ export function configureIDE(...args: unknown[]) {
   const targetIDE = typeof args[0] === 'string' ? args[0] : 'cursor';
 
   try {
-    return configureIdeService(targetIDE, activePort, !!server);
+    const result = configureIdeService(targetIDE, activePort, !!server);
+    if (result.success) {
+      heavyStatusCache.updatedAt = 0;
+      refreshHeavyStatusInBackground(true);
+    }
+    return result;
   } catch (e: unknown) {
     const msg = e instanceof Error ? e.message : String(e);
     console.error(`[Aura] 配置 ${targetIDE} 失败:`, msg);
     return { success: false, message: `写入失败: ${msg}` };
+  }
+}
+
+export function removeIDE(...args: unknown[]) {
+  const targetIDE = typeof args[0] === 'string' ? args[0] : '';
+  if (!targetIDE) return { success: false, message: '缺少 IDE 参数' };
+  try {
+    const result = removeIdeService(targetIDE);
+    if (result.success) {
+      heavyStatusCache.updatedAt = 0;
+      refreshHeavyStatusInBackground(true);
+    }
+    return result;
+  } catch (e: unknown) {
+    const msg = e instanceof Error ? e.message : String(e);
+    console.error(`[Aura] 移除 ${targetIDE} 配置失败:`, msg);
+    return { success: false, message: `移除失败: ${msg}` };
   }
 }
 
@@ -709,6 +731,7 @@ export const methods = {
   restartServer,
   getServiceInfo,
   configureIDE,
+  removeIDE,
   getSettings,
   updateSettings,
   resetSettings,

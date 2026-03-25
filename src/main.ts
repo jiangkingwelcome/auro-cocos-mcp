@@ -34,6 +34,9 @@ export const methods = {
   configureCursor() {
     return core.configureIDE('cursor');
   },
+  removeIDE(...args: unknown[]) {
+    return core.removeIDE(...args);
+  },
   getSettings() {
     return core.getSettings();
   },

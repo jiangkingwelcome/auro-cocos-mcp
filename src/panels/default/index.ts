@@ -839,6 +839,7 @@ module.exports = Editor.Panel.define({
     /* ===== INJECT BUTTON FEEDBACK ===== */
     .config-ide-btn.inject-success { background: rgba(94,234,212,0.12) !important; border-color: rgba(94,234,212,0.3) !important; color: #5eead4 !important; }
     .config-ide-btn.inject-fail { background: rgba(241,76,76,0.12) !important; border-color: rgba(241,76,76,0.3) !important; color: #f14c4c !important; }
+    .config-ide-btn.inject-active { background: rgba(251,146,60,0.1) !important; border-color: rgba(251,146,60,0.35) !important; color: #fb923c !important; }
 
     /* ===== REFRESH SPIN ===== */
     @keyframes refreshSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
@@ -1455,30 +1456,35 @@ module.exports = Editor.Panel.define({
       btn.addEventListener('click', async (e) => {
         const button = e.currentTarget;
         const targetIDE = button && button.getAttribute ? button.getAttribute('data-ide') : null;
-        const originalText = button && 'textContent' in button ? button.textContent : '注入配置';
         if (!button || !targetIDE) {
           self.showConfigResult({ success: false, message: '配置失败: 无法识别目标 IDE' });
           return;
         }
 
+        const isActive = button.classList.contains('inject-active');
         button.setAttribute('disabled', '');
-        button.textContent = '⏳ Inject...';
-        let feedbackClass = 'inject-fail';
+        button.textContent = isActive ? '⏳ 移除中…' : '⏳ 注入中…';
         try {
           const result = await Promise.race([
-            Editor.Message.request(EXTENSION_NAME, 'configure-ide', targetIDE),
+            Editor.Message.request(EXTENSION_NAME, isActive ? 'remove-ide' : 'configure-ide', targetIDE),
             new Promise((_, reject) => setTimeout(() => reject(new Error('请求超时，请重试')), CONFIG_REQUEST_TIMEOUT_MS)),
           ]);
           self.showConfigResult(result);
-          feedbackClass = result.success ? 'inject-success' : 'inject-fail';
-          setTimeout(() => self.refreshStatus(), 500);
+          if (result.success) {
+            button.removeAttribute('disabled');
+            setTimeout(() => self.refreshStatus(), 500);
+          } else {
+            button.removeAttribute('disabled');
+            button.textContent = isActive ? '取消注入' : '注入配置';
+            button.classList.add('inject-fail');
+            setTimeout(() => button.classList.remove('inject-fail'), 2000);
+          }
         } catch (err) {
-          self.showConfigResult({ success: false, message: `配置失败: ${err.message || err}` });
-        } finally {
+          self.showConfigResult({ success: false, message: `操作失败: ${err.message || err}` });
           button.removeAttribute('disabled');
-          button.textContent = originalText;
-          button.classList.add(feedbackClass);
-          setTimeout(() => button.classList.remove(feedbackClass), 2000);
+          button.textContent = isActive ? '取消注入' : '注入配置';
+          button.classList.add('inject-fail');
+          setTimeout(() => button.classList.remove('inject-fail'), 2000);
         }
       });
     });
@@ -1688,22 +1694,33 @@ module.exports = Editor.Panel.define({
 
 
           if (info.configStatus) {
-            const updateStat = (id, exists) => {
+            const updateStat = (id, ideKey, exists) => {
               const el = self.$[id];
               el.textContent = exists ? '配置已就绪' : '未检测到配置';
               el.className = `ide-status ${exists ? 'ready' : 'unready'}`;
+              // 同步按钮状态
+              const btn = self.$.app.querySelector(`.config-ide-btn[data-ide="${ideKey}"]`);
+              if (btn && !btn.hasAttribute('disabled')) {
+                if (exists) {
+                  btn.textContent = '取消注入';
+                  btn.classList.add('inject-active');
+                } else {
+                  btn.textContent = '注入配置';
+                  btn.classList.remove('inject-active');
+                }
+              }
             };
-            updateStat('statusCursor', info.configStatus.cursor);
-            updateStat('statusWindsurf', info.configStatus.windsurf);
-            updateStat('statusClaude', info.configStatus.claude);
-            updateStat('statusTrae', info.configStatus.trae);
-            updateStat('statusKiro', info.configStatus.kiro);
-            updateStat('statusAntigravity', info.configStatus.antigravity);
-            updateStat('statusGeminiCli', info.configStatus['gemini-cli']);
-            updateStat('statusCodex', info.configStatus.codex);
-            updateStat('statusClaudeCode', info.configStatus['claude-code']);
-            updateStat('statusCodebuddy', info.configStatus.codebuddy);
-            updateStat('statusComate', info.configStatus.comate);
+            updateStat('statusCursor', 'cursor', info.configStatus.cursor);
+            updateStat('statusWindsurf', 'windsurf', info.configStatus.windsurf);
+            updateStat('statusClaude', 'claude', info.configStatus.claude);
+            updateStat('statusTrae', 'trae', info.configStatus.trae);
+            updateStat('statusKiro', 'kiro', info.configStatus.kiro);
+            updateStat('statusAntigravity', 'antigravity', info.configStatus.antigravity);
+            updateStat('statusGeminiCli', 'gemini-cli', info.configStatus['gemini-cli']);
+            updateStat('statusCodex', 'codex', info.configStatus.codex);
+            updateStat('statusClaudeCode', 'claude-code', info.configStatus['claude-code']);
+            updateStat('statusCodebuddy', 'codebuddy', info.configStatus.codebuddy);
+            updateStat('statusComate', 'comate', info.configStatus.comate);
           }
         } else {
           self.setOffline();

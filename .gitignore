@@ -27,3 +27,4 @@ native/*.node
 # native/src/, Cargo.toml, Cargo.lock, build.rs, index.js — committed
 aura-for-cocos-*.zip
 .mcp-update-state.json
+.claude/

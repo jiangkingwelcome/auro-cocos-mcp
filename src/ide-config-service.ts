@@ -14,6 +14,9 @@ export type IdeName = (typeof IDE_NAMES)[number];
 const TOML_IDES: ReadonlySet<string> = new Set(['codex']);
 const CLI_IDES: ReadonlySet<string> = new Set(['claude-code']);
 
+const KNOWN_SERVER_KEYS = ['aura-cocos', 'aura-for-cocos', 'cocos-bridge-ai-mcp', 'cocos-mcp-bridge'] as const;
+const CANONICAL_KEY = 'aura-cocos';
+
 function getAppDataPath(appName: string, fileName: string): string {
   return process.platform === 'win32'
     ? path.join(process.env.APPDATA || path.join(os.homedir(), 'AppData', 'Roaming'), appName, fileName)
@@ -176,7 +179,10 @@ function writeJsonConfig(configPath: string, targetIDE: string, activePort: numb
   const servers = config.mcpServers as Record<string, unknown>;
   const shimPath = getShimPath();
 
-  servers['aura-cocos'] = {
+  for (const key of KNOWN_SERVER_KEYS) {
+    if (key !== CANONICAL_KEY) delete servers[key];
+  }
+  servers[CANONICAL_KEY] = {
     command: 'node',
     args: [shimPath],
     env: {
@@ -270,6 +276,83 @@ function configureClaudeCode(activePort: number): { success: boolean; message: s
       success: false,
       message: `Claude Code 配置失败。请确保已安装 Claude Code CLI (npm install -g @anthropic-ai/claude-code)。\n\n错误: ${msg}`,
     };
+  }
+}
+
+export function removeIDE(targetIDE: string): { success: boolean; message: string } {
+  if (CLI_IDES.has(targetIDE)) {
+    try {
+      for (const key of KNOWN_SERVER_KEYS) {
+        try {
+          execSync(`claude mcp remove ${key}`, { encoding: 'utf-8', timeout: 10000, stdio: ['pipe', 'pipe', 'pipe'] });
+        } catch { /* may not exist */ }
+      }
+      console.log('[Aura] 已通过 claude mcp remove 移除 Claude Code MCP 配置');
+      invalidateConfigStatusCache();
+      return { success: true, message: '已成功移除 Claude Code 配置。' };
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : String(e);
+      return { success: false, message: `移除失败: ${msg}` };
+    }
+  }
+
+  if (TOML_IDES.has(targetIDE)) {
+    const configPath = getIdeConfigPath(targetIDE);
+    if (!configPath || !fs.existsSync(configPath)) {
+      return { success: false, message: '未找到配置文件，无需移除。' };
+    }
+    try {
+      let content = fs.readFileSync(configPath, 'utf-8');
+      let found = false;
+      for (const key of KNOWN_SERVER_KEYS) {
+        const escaped = key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const re = new RegExp(`\\n?\\[mcp_servers\\.${escaped}\\][\\s\\S]*?(?=\\n\\[|$)`);
+        if (re.test(content)) {
+          content = content.replace(re, '');
+          found = true;
+        }
+      }
+      if (!found) {
+        return { success: false, message: '配置文件中未找到 Aura 相关条目。' };
+      }
+      fs.writeFileSync(configPath, content, 'utf-8');
+      console.log(`[Aura] 已从 ${targetIDE} TOML 配置中移除 Aura 条目`);
+      invalidateConfigStatusCache();
+      return { success: true, message: `已成功移除 ${targetIDE} 配置，请重启 IDE 生效。` };
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : String(e);
+      return { success: false, message: `移除失败: ${msg}` };
+    }
+  }
+
+  // JSON IDE
+  const configPath = getIdeConfigPath(targetIDE);
+  if (!configPath || !fs.existsSync(configPath)) {
+    return { success: false, message: '未找到配置文件，无需移除。' };
+  }
+  try {
+    const config = JSON.parse(fs.readFileSync(configPath, 'utf-8')) as Record<string, unknown>;
+    const servers = config.mcpServers as Record<string, unknown> | undefined;
+    if (!servers) {
+      return { success: false, message: '配置文件中未找到 mcpServers。' };
+    }
+    const removed: string[] = [];
+    for (const key of KNOWN_SERVER_KEYS) {
+      if (servers[key]) {
+        delete servers[key];
+        removed.push(key);
+      }
+    }
+    if (removed.length === 0) {
+      return { success: false, message: '配置文件中未找到 Aura 相关条目。' };
+    }
+    fs.writeFileSync(configPath, JSON.stringify(config, null, 2), 'utf-8');
+    console.log(`[Aura] 已从 ${targetIDE} JSON 配置中移除: ${removed.join(', ')}`);
+    invalidateConfigStatusCache();
+    return { success: true, message: `已成功移除 ${targetIDE} 配置，请重启 IDE 生效。` };
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : String(e);
+    return { success: false, message: `移除失败: ${msg}` };
   }
 }
 

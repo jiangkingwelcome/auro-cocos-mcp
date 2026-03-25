@@ -71,6 +71,13 @@
           "configureIDE"
         ]
       },
+      "remove-ide": {
+        "public": true,
+        "description": "Remove IDE MCP configuration",
+        "methods": [
+          "removeIDE"
+        ]
+      },
       "get-settings": {
         "public": true,
         "description": "Get bridge settings",
