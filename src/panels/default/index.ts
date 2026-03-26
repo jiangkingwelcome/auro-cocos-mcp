@@ -11,6 +11,12 @@ module.exports = Editor.Panel.define({
   template: /* html */ `\n
     <div class="mcp-panel" id="app">
 
+      <!-- 初始加载遮罩：inline style 确保在样式表解析前就遮住白屏 -->
+      <div id="appLoading" style="position:absolute;inset:0;z-index:9999;background:#18181b;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px;transition:opacity 0.25s ease;pointer-events:none;">
+        <div class="loading-spinner"></div>
+        <span style="color:#52525b;font-size:11px;font-family:-apple-system,sans-serif;letter-spacing:1px;">AURA</span>
+      </div>
+
       <!-- Header -->
       <div class="panel-header">
         <div class="logo-icon">
@@ -70,9 +76,13 @@ module.exports = Editor.Panel.define({
                 <span class="stat-label" data-i18n="status.actions">ACTIONS</span>
                 <span class="stat-value" id="totalActionCount">-</span>
               </div>
-              <div class="stat-row">
+              <div class="stat-row stat-row-clickable" id="clientsRow" title="点击查看已连接的 AI 客户端">
                 <span class="stat-label" data-i18n="status.clients">CLIENTS</span>
                 <span class="stat-value" id="connectionCount">-</span>
+              </div>
+              <div class="clients-popover" id="clientsPopover" style="display:none;">
+                <div class="clients-popover-title">已连接的 AI 客户端</div>
+                <div class="clients-popover-list" id="clientsPopoverList"></div>
               </div>
               <div class="stat-row">
                 <span class="stat-label" data-i18n="status.port">PORT</span>
@@ -336,6 +346,16 @@ module.exports = Editor.Panel.define({
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :host { background: #18181b; display: block; height: 100%; }
 
+    /* 加载遮罩 spinner */
+    .loading-spinner {
+      width: 22px; height: 22px;
+      border: 2px solid #3f3f46;
+      border-top-color: #71717a;
+      border-radius: 50%;
+      animation: aura-spin 0.8s linear infinite;
+    }
+    @keyframes aura-spin { to { transform: rotate(360deg); } }
+
     .mcp-panel {
       color: #d4d4d8;
       font-size: 13px;
@@ -487,7 +507,7 @@ module.exports = Editor.Panel.define({
     /* ===== STATS LIST ===== */
     .stats-list {
       background: #27272a; border: 1px solid #3f3f46; border-radius: 6px;
-      padding: 4px 0;
+      padding: 4px 0; position: relative;
     }
     .stat-row {
       display: flex; align-items: center; justify-content: space-between;
@@ -501,6 +521,40 @@ module.exports = Editor.Panel.define({
     .stat-value {
       font-family: 'SF Mono', Consolas, 'Courier New', monospace;
       font-size: 14px; font-weight: 600; color: #e0e0e0;
+    }
+    .stat-row-clickable {
+      cursor: pointer; border-radius: 4px; transition: background 0.15s;
+      position: relative;
+    }
+    .stat-row-clickable:hover { background: rgba(255,255,255,0.05); }
+    .stat-row-clickable:hover .stat-label { color: #a0a0a0; }
+    .clients-popover {
+      position: absolute; left: 8px; right: 8px;
+      background: #1c1c1e; border: 1px solid #3f3f46; border-radius: 8px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.5); z-index: 999;
+      overflow: hidden; margin-top: 2px;
+    }
+    .clients-popover-title {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.08em; color: #858585; padding: 8px 12px 6px;
+      border-bottom: 1px solid #2a2a2e;
+    }
+    .clients-popover-list { padding: 4px 0; }
+    .clients-popover-item {
+      display: flex; align-items: center; gap: 8px;
+      padding: 7px 12px; font-size: 12px;
+    }
+    .clients-popover-item + .clients-popover-item { border-top: 1px solid #2a2a2e; }
+    .clients-popover-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: #22c55e; flex-shrink: 0;
+      box-shadow: 0 0 4px rgba(34,197,94,0.6);
+    }
+    .clients-popover-name { color: #e0e0e0; font-weight: 600; flex: 1; }
+    .clients-popover-ver { color: #858585; font-size: 11px; }
+    .clients-popover-ago { color: #6b7280; font-size: 11px; margin-left: auto; }
+    .clients-popover-empty {
+      padding: 10px 12px; color: #6b7280; font-size: 12px; text-align: center;
     }
     .value-changed { animation: valueFlash 0.5s ease-out; }
     @keyframes valueFlash {
@@ -945,6 +999,7 @@ module.exports = Editor.Panel.define({
     emptyState: '#emptyState',
     ctrlStatusLabel: '#ctrlStatusLabel',
     startBtn: '#startBtn', stopBtn: '#stopBtn', restartBtn: '#restartBtn',
+    clientsRow: '#clientsRow', clientsPopover: '#clientsPopover', clientsPopoverList: '#clientsPopoverList',
     statusCursor: '#statusCursor', statusWindsurf: '#statusWindsurf', statusClaude: '#statusClaude',
     statusTrae: '#statusTrae', statusKiro: '#statusKiro', statusAntigravity: '#statusAntigravity',
     statusGeminiCli: '#statusGeminiCli', statusCodex: '#statusCodex', statusClaudeCode: '#statusClaudeCode',
@@ -963,6 +1018,7 @@ module.exports = Editor.Panel.define({
     licenseError: '#licenseError', licenseKeyInput: '#licenseKeyInput', activateLicenseBtn: '#activateLicenseBtn',
     updateBanner: '#updateBanner',
     updateBtn: '#updateBtn',
+    appLoading: '#appLoading',
   },
 
   ready() {
@@ -1451,6 +1507,41 @@ module.exports = Editor.Panel.define({
       setTimeout(() => self.refreshStatus(), 1000);
     });
 
+    // ---- Clients Popover ----
+    self._connectedClients = [];
+    self.$.clientsRow.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const popover = self.$.clientsPopover;
+      const isOpen = popover.style.display !== 'none';
+      if (isOpen) {
+        popover.style.display = 'none';
+        return;
+      }
+      // 渲染客户端列表
+      const clients = self._connectedClients || [];
+      const now = Date.now();
+      if (clients.length === 0) {
+        self.$.clientsPopoverList.innerHTML = `<div class="clients-popover-empty">暂无已连接的 AI 客户端</div>`;
+      } else {
+        self.$.clientsPopoverList.innerHTML = clients.map(c => {
+          const ageSec = Math.floor((now - c.lastSeenMs) / 1000);
+          const agoStr = ageSec < 60 ? '刚刚' : ageSec < 3600 ? `${Math.floor(ageSec / 60)} 分钟前` : `${Math.floor(ageSec / 3600)} 小时前`;
+          const ver = c.version ? `<span class="clients-popover-ver">v${c.version}</span>` : '';
+          return `<div class="clients-popover-item">
+            <span class="clients-popover-dot"></span>
+            <span class="clients-popover-name">${c.name}</span>
+            ${ver}
+            <span class="clients-popover-ago">${agoStr}</span>
+          </div>`;
+        }).join('');
+      }
+      popover.style.display = '';
+    });
+    // 点击外部关闭 popover
+    document.addEventListener('click', () => {
+      if (self.$.clientsPopover) self.$.clientsPopover.style.display = 'none';
+    });
+
     const ideBtns = self.$.app.querySelectorAll('.config-ide-btn');
     ideBtns.forEach(btn => {
       btn.addEventListener('click', async (e) => {
@@ -1615,6 +1706,14 @@ module.exports = Editor.Panel.define({
     requestAnimationFrame(() => {
       self.refreshStatus();
       pollTimer = setInterval(() => self.refreshStatus(), POLL_INTERVAL);
+      // 兜底：最多 5 秒后强制移除加载遮罩，防止极端情况卡住
+      setTimeout(() => {
+        const loading = self.$.appLoading;
+        if (loading && loading.style.display !== 'none') {
+          loading.style.opacity = '0';
+          setTimeout(() => { loading.style.display = 'none'; }, 260);
+        }
+      }, 5000);
     });
   },
 
@@ -1671,6 +1770,7 @@ module.exports = Editor.Panel.define({
           self.$.editorVersion.textContent = info.editorVersion || '-';
 
           self.updateWithFlash(self.$.connectionCount, info.connectionCount ?? 0);
+          self._connectedClients = info.connectedClients || [];
           self.updateWithFlash(self.$.toolCount, info.toolCount ?? 0);
           self.updateWithFlash(self.$.totalActionCount, info.totalActionCount ?? 0);
           self.updateWithFlash(self.$.uptime, self.formatUptime(info.uptime ?? 0));
@@ -1740,6 +1840,15 @@ module.exports = Editor.Panel.define({
         self.setOffline();
       } finally {
         self._refreshInFlight = false;
+        // 首次加载完成后淡出遮罩（无论成功还是离线，都比白屏强）
+        if (!self._firstLoadDone) {
+          self._firstLoadDone = true;
+          const loading = self.$.appLoading;
+          if (loading) {
+            loading.style.opacity = '0';
+            setTimeout(() => { loading.style.display = 'none'; }, 260);
+          }
+        }
         if (self._refreshPending) {
           self._refreshPending = false;
           setTimeout(() => self.refreshStatus(), 0);

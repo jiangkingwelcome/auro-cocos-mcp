@@ -393,10 +393,6 @@ function createServer(): http.Server {
       }
 
       if (pathname === '/mcp') {
-        if (method !== 'POST') {
-          sendJson(req, res, { error: 'MCP endpoint 仅支持 POST' }, 405);
-          return;
-        }
         if (!mcpHost) {
           sendJson(req, res, { error: 'MCP Host 未初始化' }, 503);
           return;
@@ -404,6 +400,35 @@ function createServer(): http.Server {
         const providedToken = extractMcpToken(req);
         if (!providedToken || providedToken !== mcpToken) {
           sendJson(req, res, { error: 'MCP token 无效或缺失' }, 401);
+          return;
+        }
+
+        // SSE 长连接：GET /mcp with Accept: text/event-stream
+        // AI 编辑器通过此连接接收服务端推送通知（如工具列表变更），
+        // 并在 Cocos 重启后感知断连、自动重连。
+        if (method === 'GET' && req.headers['accept']?.includes('text/event-stream')) {
+          applyCorsHeaders(req, res);
+          res.writeHead(200, {
+            'Content-Type': 'text/event-stream',
+            'Cache-Control': 'no-cache',
+            'Connection': 'keep-alive',
+            'X-Accel-Buffering': 'no',
+          });
+          res.flushHeaders();
+          const cleanup = mcpHost.addSseClient(res);
+          // 每 30 秒发一次心跳注释，防止代理或防火墙断开空闲连接
+          const heartbeat = setInterval(() => {
+            try { res.write(': ping\n\n'); } catch { /* ignore */ }
+          }, 30_000);
+          req.on('close', () => {
+            clearInterval(heartbeat);
+            cleanup();
+          });
+          return;
+        }
+
+        if (method !== 'POST') {
+          sendJson(req, res, { error: 'MCP endpoint 仅支持 GET (SSE) 或 POST' }, 405);
           return;
         }
         const body = await readBody(req);
@@ -551,6 +576,7 @@ export function getServiceInfo() {
 
     let toolCount = 0;
     let connectionCount = 0;
+    let connectedClients: Array<{ name: string; version: string; lastSeenMs: number }> = [];
     let totalActionCount = 0;
     let toolNames: string[] = [];
     let allToolNames: string[] = [];
@@ -561,6 +587,7 @@ export function getServiceInfo() {
       try {
         toolCount = mcpHost.getToolCount();
         connectionCount = mcpHost.getConnectionCount();
+        connectedClients = mcpHost.getConnectedClients();
         totalActionCount = mcpHost.getTotalActionCount();
         toolNames = mcpHost.getToolNames();
         allToolNames = mcpHost.getAllToolNames();
@@ -585,6 +612,7 @@ export function getServiceInfo() {
       toolCount,
       totalActionCount,
       connectionCount,
+      connectedClients,
       toolNames,
       allToolNames,
       toolActions: heavyStatusCache.toolActions,
@@ -789,6 +817,7 @@ export function load() {
 export function unload() {
   console.log('[Aura] 插件卸载中...');
   unregisterBroadcastListeners();
+  mcpHost?.closeAllSseClients();
   stopServer();
   mcpHost = null;
   initialized = false;

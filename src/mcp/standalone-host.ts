@@ -1,3 +1,4 @@
+import type { ServerResponse } from 'http';
 import { LocalToolServer } from './local-tool-server';
 
 type JsonRpcId = string | number | null;
@@ -41,7 +42,12 @@ export class StandaloneMcpHost {
    * value: 该客户端上次 initialize 的时间戳。
    */
   private clientSessions = new Map<string, number>();
-  private hasReceivedAnyRequest = false;
+  /** 仅当真实 AI 客户端（非 shim）发过 initialize 时才为 true，用于插件重载后的计数补偿。 */
+  private hasReceivedRealClientRequest = false;
+
+  /** SSE 长连接客户端，key 为自增 id。 */
+  private sseClients = new Map<string, ServerResponse>();
+  private sseIdCounter = 0;
 
   constructor(
     private readonly options: {
@@ -88,28 +94,91 @@ export class StandaloneMcpHost {
     const result = this.options.toolServer.setToolEnabled(name, enabled);
     if (result.changed) {
       this.toolListVersion += 1;
+      this.broadcastSse('notifications/tools/list_changed', {});
     }
     return { ...result, toolListVersion: this.toolListVersion };
   }
 
+  /** shim 内部会话标识前缀，不计入用户可见的连接数。 */
+  private isShimClient(key: string): boolean {
+    return key.startsWith('cocos-stdio-shim') || key.startsWith('aura-stdio-shim');
+  }
+
   /**
    * 返回已连接的 AI 客户端数量。
-   * 按 clientInfo 去重：同一编辑器（相同 name+version）的多次 initialize 计为 1 个连接。
-   * stdio shim 内部重连会话（cocos-stdio-shim-*）不计入用户可见的连接数。
+   * SSE 长连接优先：有 SSE 客户端时直接返回 SSE 连接数（持久连接，最准确）。
+   * 否则按 clientInfo 去重的 HTTP 会话计数（同一编辑器多次 initialize 计为 1 个）。
+   * stdio shim 内部重连会话不计入用户可见的连接数。
    */
   getConnectionCount(): number {
+    // SSE 连接是持久的，最能反映真实在线状态
+    if (this.sseClients.size > 0) return this.sseClients.size;
     this.pruneStaleSessions();
     let count = 0;
     for (const key of this.clientSessions.keys()) {
-      if (!key.startsWith('cocos-stdio-shim')) count++;
+      if (!this.isShimClient(key)) count++;
     }
-    if (count === 0 && this.hasReceivedAnyRequest) return 1;
+    if (count === 0 && this.hasReceivedRealClientRequest) return 1;
     return count;
+  }
+
+  /**
+   * 注册一个 SSE 长连接客户端。
+   * 返回清理函数，在连接关闭时调用。
+   */
+  addSseClient(res: ServerResponse): () => void {
+    const id = String(++this.sseIdCounter);
+    this.sseClients.set(id, res);
+    this.hasReceivedRealClientRequest = true;
+    return () => {
+      this.sseClients.delete(id);
+    };
+  }
+
+  /**
+   * 关闭所有 SSE 长连接（插件卸载时调用，让 AI 编辑器感知断连并触发重连）。
+   */
+  closeAllSseClients(): void {
+    for (const res of this.sseClients.values()) {
+      try { res.end(); } catch { /* ignore */ }
+    }
+    this.sseClients.clear();
+  }
+
+  /**
+   * 向所有 SSE 客户端广播 JSON-RPC 通知。
+   */
+  private broadcastSse(method: string, params: Record<string, unknown> = {}): void {
+    if (this.sseClients.size === 0) return;
+    const msg = `data: ${JSON.stringify({ jsonrpc: '2.0', method, params })}\n\n`;
+    for (const [id, res] of this.sseClients) {
+      try {
+        res.write(msg);
+      } catch {
+        this.sseClients.delete(id);
+      }
+    }
+  }
+
+  /**
+   * 返回已连接的 AI 客户端列表（同 getConnectionCount 的过滤规则）。
+   */
+  getConnectedClients(): Array<{ name: string; version: string; lastSeenMs: number }> {
+    this.pruneStaleSessions();
+    const result: Array<{ name: string; version: string; lastSeenMs: number }> = [];
+    for (const [key, ts] of this.clientSessions) {
+      if (this.isShimClient(key)) continue;
+      const colonIdx = key.indexOf(':');
+      const name = colonIdx >= 0 ? key.slice(0, colonIdx) : key;
+      const version = colonIdx >= 0 ? key.slice(colonIdx + 1) : '';
+      result.push({ name, version, lastSeenMs: ts });
+    }
+    return result;
   }
 
   resetConnectionCount(): void {
     this.clientSessions.clear();
-    this.hasReceivedAnyRequest = false;
+    this.hasReceivedRealClientRequest = false;
   }
 
   private getClientKey(params: unknown): string {
@@ -157,15 +226,15 @@ export class StandaloneMcpHost {
 
     const isNotification = req.id === undefined;
 
-    // 标记：有请求进来过（用于插件重载后的自动补偿）
-    this.hasReceivedAnyRequest = true;
-
     try {
       switch (method) {
         case 'initialize': {
           this.pruneStaleSessions();
           const clientKey = this.getClientKey(req.params);
           this.clientSessions.set(clientKey, Date.now());
+          if (!this.isShimClient(clientKey)) {
+            this.hasReceivedRealClientRequest = true;
+          }
           const result = {
             protocolVersion: this.protocolVersion,
             capabilities: { tools: { listChanged: true } },
