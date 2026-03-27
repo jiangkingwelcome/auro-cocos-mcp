@@ -439,6 +439,8 @@ log(`started, node=${process.version}, pid=${process.pid}, COCOS_BRIDGE_PORT=${p
 // ---------------------------------------------------------------------------
 const HEALTH_CHECK_INTERVAL_MS = 15_000; // 每 15 秒探测一次
 let serverAlive = false;
+/** 上次健康检查看到的服务启动 ID，变化时说明服务重启过（即使重启极快也能感知）。 */
+let lastStartupId = '';
 
 const healthTimer = setInterval(async () => {
   const ports = resolvePortCandidates(process.env.COCOS_BRIDGE_PORT || process.env.BRIDGE_PORT, DEFAULT_PORTS);
@@ -455,10 +457,15 @@ const healthTimer = setInterval(async () => {
           discoveredToken = info.token;
         }
 
-        if (!serverAlive || oldEndpoint !== discoveredEndpoint) {
-          // 服务刚上线或端口变了 → 自动补发 initialize
+        const currentStartupId = (info && typeof info.startupId === 'string') ? info.startupId : '';
+        const serverRestarted = currentStartupId && currentStartupId !== lastStartupId;
+        if (currentStartupId) lastStartupId = currentStartupId;
+
+        if (!serverAlive || oldEndpoint !== discoveredEndpoint || serverRestarted) {
+          // 服务刚上线、端口变了、或 startupId 变化（说明重启过）→ 补发 initialize
           serverAlive = true;
-          log(`[healthcheck] MCP host detected at port ${port}, auto re-initializing...`);
+          const reason = serverRestarted ? 'server restarted (startupId changed)' : !serverAlive ? 'server came online' : 'endpoint changed';
+          log(`[healthcheck] MCP host detected at port ${port} (${reason}), auto re-initializing...`);
           await autoReInitialize({ endpoint: discoveredEndpoint, token: discoveredToken }, port);
         }
         return; // 找到了就不再继续扫描

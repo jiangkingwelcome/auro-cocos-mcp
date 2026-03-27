@@ -29,8 +29,13 @@ function rpcError(id: JsonRpcId, code: number, message: string, data?: unknown):
   return { jsonrpc: '2.0', id, error: { code, message, ...(data !== undefined ? { data } : {}) } };
 }
 
-/** 超过此时长未收到 init 的会话视为已断连（HTTP 无 client-disconnect 时用于清理）。 */
-const SESSION_TIMEOUT_MS = 5 * 60 * 1000;
+/**
+ * 超过此时长未收到 init 的会话视为已断连。
+ * stdio shim 每 15 秒健康检查一次，Cocos 重启后仅补发一次 initialize，
+ * 所以 session 需要足够长以覆盖整个编辑器会话周期（设为 1 小时）。
+ * SSE 长连接不受此限制，断线立即感知。
+ */
+const SESSION_TIMEOUT_MS = 60 * 60 * 1000;
 
 export class StandaloneMcpHost {
   private readonly protocolVersion = '2024-11-05';

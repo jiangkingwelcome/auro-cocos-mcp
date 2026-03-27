@@ -1,5 +1,13 @@
 // @ts-nocheck
 "use strict";
+
+// 在 JS 文件执行的第一时间（模板渲染前）把 webview 背景压黑，消除白色第一帧
+try {
+  const _s = document.createElement('style');
+  _s.textContent = 'html,body{background:#18181b!important;margin:0;padding:0;}';
+  (document.head || document.documentElement).appendChild(_s);
+} catch(_e) { /* 宿主环境不支持时静默忽略 */ }
+
 const EXTENSION_NAME = 'aura-for-cocos';
 const EXTENSION_VERSION = '1.0.14';
 const POLL_INTERVAL = 3000;
@@ -8,8 +16,9 @@ const CONFIG_REQUEST_TIMEOUT_MS = 10000;
 let pollTimer = null;
 
 module.exports = Editor.Panel.define({
-  template: /* html */ `\n
-    <div class="mcp-panel" id="app">
+  template: /* html */ `
+    <style>:host,html,body{background:#18181b!important;margin:0;padding:0;}#app{background:#18181b!important;}</style>
+    <div class="mcp-panel" id="app" style="background:#18181b;position:relative;height:100%;overflow:hidden;">
 
       <!-- 初始加载遮罩：inline style 确保在样式表解析前就遮住白屏 -->
       <div id="appLoading" style="position:absolute;inset:0;z-index:9999;background:#18181b;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px;transition:opacity 0.25s ease;pointer-events:none;">
@@ -1703,6 +1712,7 @@ module.exports = Editor.Panel.define({
     }
 
     // Defer first fetch so the browser can paint the skeleton frame first
+    self._loadingStartTime = Date.now();
     requestAnimationFrame(() => {
       self.refreshStatus();
       pollTimer = setInterval(() => self.refreshStatus(), POLL_INTERVAL);
@@ -1840,13 +1850,17 @@ module.exports = Editor.Panel.define({
         self.setOffline();
       } finally {
         self._refreshInFlight = false;
-        // 首次加载完成后淡出遮罩（无论成功还是离线，都比白屏强）
+        // 首次加载完成后淡出遮罩，最短显示 2 秒
         if (!self._firstLoadDone) {
           self._firstLoadDone = true;
           const loading = self.$.appLoading;
           if (loading) {
-            loading.style.opacity = '0';
-            setTimeout(() => { loading.style.display = 'none'; }, 260);
+            const elapsed = Date.now() - (self._loadingStartTime || 0);
+            const remaining = Math.max(0, 2000 - elapsed);
+            setTimeout(() => {
+              loading.style.opacity = '0';
+              setTimeout(() => { loading.style.display = 'none'; }, 260);
+            }, remaining);
           }
         }
         if (self._refreshPending) {

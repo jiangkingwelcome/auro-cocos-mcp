@@ -9,6 +9,7 @@ type ServiceRouteDeps = {
   getActivePort: () => number;
   getBridgeBase: () => string;
   getStartTime: () => number;
+  getStartupId: () => string;
   getRequestCount: () => number;
   getRouteCount: () => number;
   getRouteEntries: () => Array<{ method: string; path: string }>;
@@ -148,6 +149,7 @@ export function registerServiceRoutes(get: RouteRegistrar, post: RouteRegistrar,
       tokenHeader: 'X-MCP-Token',
       token: authenticated ? deps.getMcpToken() : '',
       protocol: 'jsonrpc-http',
+      startupId: deps.getStartupId(),
       serverInfo: deps.getMcpHost()?.getServerInfo() || null,
     };
   });

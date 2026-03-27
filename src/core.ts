@@ -45,6 +45,8 @@ let requestCount = 0;
 let mcpHost: StandaloneMcpHost | null = null;
 let mcpToken = '';
 let bridgeBase = '';
+/** 每次服务启动时生成的唯一 ID，shim 用来检测服务是否重启过（即使重启很快也能感知）。 */
+let startupId = '';
 
 let initialized = false;
 let initPromise: Promise<void> | null = null;
@@ -321,6 +323,7 @@ registerServiceRoutes(get, post, {
   getActivePort: () => activePort,
   getBridgeBase: () => bridgeBase,
   getStartTime: () => startTime,
+  getStartupId: () => startupId,
   getRequestCount: () => requestCount,
   getRouteCount: () => routes.length,
   getRouteEntries: () => routes.map((item) => ({ method: item.method, path: item.path })),
@@ -514,6 +517,7 @@ export async function startServer() {
     server = srv;
     activePort = port;
     startTime = Date.now();
+    startupId = Math.random().toString(36).slice(2) + Date.now().toString(36);
     requestCount = 0;
     bridgeBase = `http://127.0.0.1:${port}`;
     console.log(`[Aura] HTTP 服务已启动: ${bridgeBase}`);
