@@ -174,9 +174,36 @@ async function discoverHost() {
  */
 let needsReInitialize = false;
 
+/** 记住 AI 编辑器第一次 initialize 时传入的 clientInfo，重连时复用，让面板显示真实编辑器名 */
+let originalClientInfo = null;
+
+/**
+ * 向 MCP 服务端发送心跳，刷新 session 时间戳。
+ * 每 15 秒由健康检查触发，服务端收到后更新 lastSeen，
+ * 若 shim 进程死亡（编辑器关闭），45 秒内 session 会自动超时。
+ */
+async function sendHeartbeat(host) {
+  try {
+    const headers = {};
+    if (host.token) headers['X-MCP-Token'] = host.token;
+    await requestJson(host.endpoint, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({
+        jsonrpc: '2.0',
+        method: 'notifications/client-heartbeat',
+        params: { clientInfo: originalClientInfo },
+      }),
+    });
+  } catch {
+    // 心跳失败忽略，下次健康检查会处理
+  }
+}
+
 async function autoReInitialize(host, port) {
   log('auto re-initializing with new MCP host...');
   try {
+    const clientInfo = originalClientInfo || { name: 'aura-stdio-shim-reconnect', version: '1.0.0' };
     const initPayload = {
       jsonrpc: '2.0',
       id: `shim-reinit-${Date.now()}`,
@@ -184,7 +211,7 @@ async function autoReInitialize(host, port) {
       params: {
         protocolVersion: '2024-11-05',
         capabilities: {},
-        clientInfo: { name: 'aura-stdio-shim-reconnect', version: '1.0.0' },
+        clientInfo,
       },
     };
     const headers = {};
@@ -214,6 +241,14 @@ async function forwardToHost(payload, _retryCount = 0) {
       return forwardToHost(payload, _retryCount + 1);
     }
     throw e;
+  }
+
+  // 捕获 AI 编辑器的真实 clientInfo，重连时复用让面板显示正确的编辑器名
+  if (payload && payload.method === 'initialize' && payload.params && payload.params.clientInfo) {
+    if (!originalClientInfo) {
+      originalClientInfo = payload.params.clientInfo;
+      log(`[clientInfo] captured editor identity: ${JSON.stringify(originalClientInfo)}`);
+    }
   }
 
   try {
@@ -378,6 +413,9 @@ function sendDisconnect() {
   const payload = JSON.stringify({
     jsonrpc: '2.0',
     method: 'notifications/client-disconnect',
+    params: {
+      clientInfo: originalClientInfo || { name: 'cocos-stdio-shim', version: '1.0.0' },
+    },
   });
 
   // 用同步风格的 fire-and-forget，进程即将退出不等响应
@@ -437,7 +475,7 @@ log(`started, node=${process.version}, pid=${process.pid}, COCOS_BRIDGE_PORT=${p
 // 后台保活探针：主动检测 MCP 服务是否在线
 // Cocos 重启后，不用等 AI 发请求，shim 自己就能感知并自动重连。
 // ---------------------------------------------------------------------------
-const HEALTH_CHECK_INTERVAL_MS = 15_000; // 每 15 秒探测一次
+const HEALTH_CHECK_INTERVAL_MS = 8_000; // 每 8 秒探测一次（同时作为心跳，配合服务端 20s 超时）
 let serverAlive = false;
 /** 上次健康检查看到的服务启动 ID，变化时说明服务重启过（即使重启极快也能感知）。 */
 let lastStartupId = '';
@@ -467,6 +505,9 @@ const healthTimer = setInterval(async () => {
           const reason = serverRestarted ? 'server restarted (startupId changed)' : !serverAlive ? 'server came online' : 'endpoint changed';
           log(`[healthcheck] MCP host detected at port ${port} (${reason}), auto re-initializing...`);
           await autoReInitialize({ endpoint: discoveredEndpoint, token: discoveredToken }, port);
+        } else if (originalClientInfo) {
+          // 服务正常运行 → 发心跳，让服务端刷新 session 时间戳（防止超时断开）
+          await sendHeartbeat({ endpoint: discoveredEndpoint, token: discoveredToken });
         }
         return; // 找到了就不再继续扫描
       }

@@ -30,12 +30,12 @@ function rpcError(id: JsonRpcId, code: number, message: string, data?: unknown):
 }
 
 /**
- * 超过此时长未收到 init 的会话视为已断连。
- * stdio shim 每 15 秒健康检查一次，Cocos 重启后仅补发一次 initialize，
- * 所以 session 需要足够长以覆盖整个编辑器会话周期（设为 1 小时）。
+ * 超过此时长未收到 initialize 或心跳的会话视为已断连。
+ * stdio shim 每 15 秒发一次心跳（notifications/client-heartbeat），
+ * 因此 20 秒超时 = 2.5 个心跳周期容错，编辑器关闭后最多 20 秒内计数归零。
  * SSE 长连接不受此限制，断线立即感知。
  */
-const SESSION_TIMEOUT_MS = 60 * 60 * 1000;
+const SESSION_TIMEOUT_MS = 20 * 1000;
 
 export class StandaloneMcpHost {
   private readonly protocolVersion = '2024-11-05';
@@ -104,9 +104,12 @@ export class StandaloneMcpHost {
     return { ...result, toolListVersion: this.toolListVersion };
   }
 
-  /** shim 内部会话标识前缀，不计入用户可见的连接数。 */
+  /**
+   * shim 纯转发会话，不计入连接数。
+   * aura-stdio-shim-reconnect 是重连心跳，代表真实 AI 编辑器在线，不在此列。
+   */
   private isShimClient(key: string): boolean {
-    return key.startsWith('cocos-stdio-shim') || key.startsWith('aura-stdio-shim');
+    return key.startsWith('cocos-stdio-shim');
   }
 
   /**
@@ -123,7 +126,6 @@ export class StandaloneMcpHost {
     for (const key of this.clientSessions.keys()) {
       if (!this.isShimClient(key)) count++;
     }
-    if (count === 0 && this.hasReceivedRealClientRequest) return 1;
     return count;
   }
 
@@ -250,20 +252,28 @@ export class StandaloneMcpHost {
         }
         case 'notifications/initialized':
           return null;
-        case 'notifications/client-disconnect': {
-          // NOTE: HTTP transport has no session ID in disconnect notifications,
-          // so we can only do best-effort cleanup by removing the oldest session.
-          // If multiple IDEs are connected, the wrong session may be removed.
-          if (this.clientSessions.size === 0) return null;
-          let oldest: string | null = null;
-          let oldestT = Infinity;
-          for (const [k, t] of this.clientSessions) {
-            if (t < oldestT) {
-              oldestT = t;
-              oldest = k;
-            }
+        case 'notifications/client-heartbeat': {
+          // shim 每 15 秒发一次心跳，刷新 session 时间戳防止超时
+          const heartbeatKey = this.getClientKey(req.params);
+          if (heartbeatKey && heartbeatKey !== 'unknown:' && this.clientSessions.has(heartbeatKey)) {
+            this.clientSessions.set(heartbeatKey, Date.now());
           }
-          if (oldest !== null) this.clientSessions.delete(oldest);
+          return null;
+        }
+        case 'notifications/client-disconnect': {
+          // 优先用 params.clientInfo 精确删除对应 session（shim 断连时携带）
+          const disconnectKey = this.getClientKey(req.params);
+          if (disconnectKey && disconnectKey !== 'unknown:' && this.clientSessions.has(disconnectKey)) {
+            this.clientSessions.delete(disconnectKey);
+          } else {
+            // 兜底：删除最老的 session
+            let oldest: string | null = null;
+            let oldestT = Infinity;
+            for (const [k, t] of this.clientSessions) {
+              if (t < oldestT) { oldestT = t; oldest = k; }
+            }
+            if (oldest !== null) this.clientSessions.delete(oldest);
+          }
           return null;
         }
         case 'ping':
