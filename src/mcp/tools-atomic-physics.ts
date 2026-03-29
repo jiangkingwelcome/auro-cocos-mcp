@@ -1,11 +1,11 @@
 import { z } from 'zod';
 import type { LocalToolServer } from './local-tool-server';
 import type { BridgeToolContext } from './tools-shared';
-import { toInputSchema, extractSelectedNodeUuid, errorMessage } from './tools-shared';
+import { toInputSchema, extractSelectedNodeUuid, errorMessage, beginSceneRecording, endSceneRecording } from './tools-shared';
 import { ErrorCategory, logIgnored } from '../error-utils';
 
 export function registerPhysicsAtomicTool(server: LocalToolServer, ctx: BridgeToolContext): void {
-  const { bridgeGet, bridgePost, sceneMethod, editorMsg, text } = ctx;
+  const { bridgeGet, bridgePost, sceneMethod, editorMsg, text, sceneOp } = ctx;
 
   server.tool(
     'auto_fit_physics_collider',
@@ -107,14 +107,33 @@ colliderType: "box"(default)=BoxCollider2D, "polygon"=PolygonCollider2D (attempt
         }
 
         // ── Stage 3: call scene script autoFitCollider ──
+        // autoFitCollider 在 execute-scene-script 上下文执行，需从主进程包裹 begin/end-recording
+        // 并在之后 force-dirty，确保碰撞体修改被记录为场景变更
         stages.push('auto_fit_collider');
-        const fitResult = await sceneMethod('autoFitCollider', [{
-          uuid: nodeUuid,
-          colliderType: String(p.colliderType ?? 'auto'),
-          alphaThreshold: Number(p.alphaThreshold ?? 0.1),
-          simplifyTolerance: Number(p.simplifyTolerance ?? 2.0),
-          maxVertices: Number(p.maxVertices ?? 64),
-        }]) as Record<string, unknown>;
+        const recordId = await beginSceneRecording(editorMsg, [nodeUuid]);
+        let fitResult: Record<string, unknown>;
+        try {
+          fitResult = await sceneMethod('autoFitCollider', [{
+            uuid: nodeUuid,
+            colliderType: String(p.colliderType ?? 'auto'),
+            alphaThreshold: Number(p.alphaThreshold ?? 0.1),
+            simplifyTolerance: Number(p.simplifyTolerance ?? 2.0),
+            maxVertices: Number(p.maxVertices ?? 64),
+          }]) as Record<string, unknown>;
+          // force-dirty: 从主进程 touch 节点名称，触发 dirty 标记
+          try {
+            const dump = await editorMsg('scene', 'query-node', nodeUuid) as Record<string, unknown>;
+            const nameVal = (dump as { value?: { name?: { value?: string } } })?.value?.name?.value;
+            if (typeof nameVal === 'string' && nameVal) {
+              await editorMsg('scene', 'set-property', {
+                uuid: nodeUuid, path: 'name',
+                dump: { type: 'string', value: nameVal },
+              });
+            }
+          } catch { /* best-effort */ }
+        } finally {
+          await endSceneRecording(editorMsg, recordId);
+        }
 
         if (!fitResult || fitResult.error) {
           return text({
@@ -143,10 +162,7 @@ colliderType: "box"(default)=BoxCollider2D, "polygon"=PolygonCollider2D (attempt
             const compName = colliderType.replace('cc.', '');
             for (const [prop, val] of physicsProps) {
               try {
-                await sceneMethod('dispatchOperation', [{
-                  action: 'set_property', uuid: nodeUuid,
-                  component: compName, property: prop, value: val,
-                }]);
+                await sceneOp({ action: 'set_property', uuid: nodeUuid, component: compName, property: prop, value: val });
               } catch {
                 warnings.push(`设置 ${compName}.${prop} 失败`);
               }

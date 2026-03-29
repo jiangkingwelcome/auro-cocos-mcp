@@ -1,10 +1,34 @@
 import { z } from 'zod';
 import { LocalToolServer } from './local-tool-server';
 import type { BridgeToolContext } from './tools-shared';
-import { toInputSchema, errorMessage, AI_RULES, validateRequiredParams } from './tools-shared';
+import { toInputSchema, errorMessage, AI_RULES, beginSceneRecording, endSceneRecording, validateRequiredParams } from './tools-shared';
 
 export function registerPhysicsTools(server: LocalToolServer, ctx: BridgeToolContext): void {
-  const { sceneMethod, text } = ctx;
+  const { sceneMethod, editorMsg, text, sceneOp } = ctx;
+
+  // 物理写操作：从主进程包裹 begin-recording + dispatchPhysicsAction + force-dirty + end-recording
+  async function physicsWriteOp(action: Record<string, unknown>): Promise<Record<string, unknown>> {
+    const uuid = String(action.uuid ?? '');
+    const recordId = await beginSceneRecording(editorMsg, uuid ? [uuid] : []);
+    try {
+      const r = await sceneMethod('dispatchPhysicsAction', [action]) as Record<string, unknown>;
+      if (uuid) {
+        try {
+          const dump = await editorMsg('scene', 'query-node', uuid) as Record<string, unknown>;
+          const nameVal = (dump as { value?: { name?: { value?: string } } })?.value?.name?.value;
+          if (typeof nameVal === 'string' && nameVal) {
+            await editorMsg('scene', 'set-property', {
+              uuid, path: 'name',
+              dump: { type: 'string', value: nameVal },
+            });
+          }
+        } catch { /* force-dirty is best-effort */ }
+      }
+      return r;
+    } finally {
+      await endSceneRecording(editorMsg, recordId);
+    }
+  }
 
   server.tool(
     'physics_tool',
@@ -106,52 +130,41 @@ Returns: add_collider→{success,uuid,colliderType}. add_rigidbody→{success,uu
             };
             const compName = TYPE_MAP[String(p.colliderType ?? '')] ?? '';
             if (!compName) return text({ error: `未知 colliderType: ${p.colliderType}` }, true);
-            return text(await sceneMethod('dispatchOperation', [{
-              action: 'add_component', uuid: p.uuid, component: compName,
-            }]));
+            return text(await sceneOp({ action: 'add_component', uuid: p.uuid, component: compName }));
           }
           case 'set_collider_size': {
             // Dispatch to scene script which can read the node's collider and set size
-            return text(await sceneMethod('dispatchPhysicsAction', [p]));
+            return text(await physicsWriteOp(p));
           }
           case 'add_rigidbody': {
             const is2d = p.is2d !== false; // default 2D
             const compName = is2d ? 'RigidBody2D' : 'RigidBody';
-            const addResult = await sceneMethod('dispatchOperation', [{
-              action: 'add_component', uuid: p.uuid, component: compName,
-            }]);
+            const addResult = await sceneOp({ action: 'add_component', uuid: p.uuid, component: compName });
             // Set body type if specified
             if (p.bodyType) {
               const typeMap: Record<string, number> = { Dynamic: 2, Static: 0, Kinematic: 1 };
               const typeVal = typeMap[String(p.bodyType)] ?? 2;
-              await sceneMethod('dispatchOperation', [{
-                action: 'set_property', uuid: p.uuid, component: compName, property: 'type', value: typeVal,
-              }]);
+              await sceneOp({ action: 'set_property', uuid: p.uuid, component: compName, property: 'type', value: typeVal });
             }
             return text(addResult);
           }
           case 'set_rigidbody_props': {
-            return text(await sceneMethod('dispatchPhysicsAction', [p]));
+            return text(await physicsWriteOp(p));
           }
           case 'set_physics_material': {
-            return text(await sceneMethod('dispatchPhysicsAction', [p]));
+            return text(await physicsWriteOp(p));
           }
           case 'set_collision_group': {
-            return text(await sceneMethod('dispatchPhysicsAction', [p]));
+            return text(await physicsWriteOp(p));
           }
           case 'get_physics_world': {
             return text(await sceneMethod('dispatchPhysicsAction', [{ action: 'get_physics_world' }]));
           }
           case 'set_physics_world': {
-            return text(await sceneMethod('dispatchOperation', [{
-              action: 'setup_physics_world',
-              gravity: p.gravity,
-              allowSleep: p.allowSleep,
-              fixedTimeStep: p.fixedTimeStep,
-            }]));
+            return text(await sceneOp({ action: 'setup_physics_world', gravity: p.gravity, allowSleep: p.allowSleep, fixedTimeStep: p.fixedTimeStep }));
           }
           case 'add_joint': {
-            return text(await sceneMethod('dispatchPhysicsAction', [p]));
+            return text(await physicsWriteOp(p));
           }
           default:
             return text({ error: `未知的物理 action: ${p.action}` }, true);

@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import type { LocalToolServer } from './local-tool-server';
 import type { BridgeToolContext } from './tools-shared';
-import { toInputSchema, normalizeDbUrl, sanitizeDbUrl, ensureAssetDirectory, extractSelectedNodeUuid, errorMessage } from './tools-shared';
+import { toInputSchema, normalizeDbUrl, sanitizeDbUrl, ensureAssetDirectory, extractSelectedNodeUuid, errorMessage, beginSceneRecording, endSceneRecording } from './tools-shared';
 import { ErrorCategory, logIgnored } from '../error-utils';
 
 const keyframeSchema = z.object({
@@ -40,7 +40,7 @@ const trackSchema = z.object({
 });
 
 export function registerAnimationAtomicTool(server: LocalToolServer, ctx: BridgeToolContext): void {
-  const { bridgeGet, bridgePost, sceneMethod, editorMsg, text } = ctx;
+  const { bridgeGet, bridgePost, sceneMethod, editorMsg, text, sceneOp } = ctx;
 
   server.tool(
     'create_tween_animation_atomic',
@@ -128,15 +128,34 @@ Prerequisites: Node must exist. If nodeUuid omitted, uses current selection. tra
           return text({ success: false, error: '缺少 tracks 参数（至少需要一条动画轨道）' }, true);
         }
 
-        const clipResult = await sceneMethod('createAnimationClip', [{
-          uuid: nodeUuid,
-          clipName: typeof p.clipName === 'string' ? p.clipName : undefined,
-          duration: Number(p.duration ?? 1),
-          wrapMode: String(p.wrapMode ?? 'Normal'),
-          speed: Number(p.speed ?? 1),
-          sample: Number(p.sample ?? 60),
-          tracks,
-        }]) as Record<string, unknown>;
+        // createAnimationClip 在 execute-scene-script 上下文执行，需从主进程包裹 begin/end-recording
+        // 并在之后 force-dirty，确保动画组件修改被记录为场景变更
+        const recordId = await beginSceneRecording(editorMsg, [nodeUuid]);
+        let clipResult: Record<string, unknown>;
+        try {
+          clipResult = await sceneMethod('createAnimationClip', [{
+            uuid: nodeUuid,
+            clipName: typeof p.clipName === 'string' ? p.clipName : undefined,
+            duration: Number(p.duration ?? 1),
+            wrapMode: String(p.wrapMode ?? 'Normal'),
+            speed: Number(p.speed ?? 1),
+            sample: Number(p.sample ?? 60),
+            tracks,
+          }]) as Record<string, unknown>;
+          // force-dirty: 从主进程 touch 节点名称，触发 dirty 标记
+          try {
+            const dump = await editorMsg('scene', 'query-node', nodeUuid) as Record<string, unknown>;
+            const nameVal = (dump as { value?: { name?: { value?: string } } })?.value?.name?.value;
+            if (typeof nameVal === 'string' && nameVal) {
+              await editorMsg('scene', 'set-property', {
+                uuid: nodeUuid, path: 'name',
+                dump: { type: 'string', value: nameVal },
+              });
+            }
+          } catch { /* best-effort */ }
+        } finally {
+          await endSceneRecording(editorMsg, recordId);
+        }
 
         if (!clipResult || clipResult.error) {
           return text({
@@ -190,13 +209,7 @@ Prerequisites: Node must exist. If nodeUuid omitted, uses current selection. tra
           stages.push('auto_play');
           try {
             const clipName = (p.clipName as string) || 'default';
-            await sceneMethod('dispatchOperation', [{
-              action: 'call_component_method',
-              uuid: nodeUuid,
-              component: 'Animation',
-              methodName: 'play',
-              args: [clipName],
-            }]);
+            await sceneOp({ action: 'call_component_method', uuid: nodeUuid, component: 'Animation', methodName: 'play', args: [clipName] });
           } catch (e) {
             logIgnored(ErrorCategory.ENGINE_API, 'autoPlay 调用失败', e);
             warnings.push('autoPlay 调用失败，可能需要手动播放');

@@ -5,6 +5,8 @@ import {
   toInputSchema,
   errorMessage,
   AI_RULES,
+  beginSceneRecording,
+  endSceneRecording,
   normalizeDbUrl,
   sanitizeDbUrl,
   ensureAssetDirectory,
@@ -139,12 +141,31 @@ export function registerAnimationTools(server: LocalToolServer, ctx: BridgeToolC
   }
 
   async function attachSavedClipAsset(nodeUuid: string, assetUuid: string): Promise<Record<string, unknown>> {
-    const defaultClipResult = await sceneMethod('setComponentProperty', [
-      nodeUuid,
-      'Animation',
-      'defaultClip',
-      { __uuid__: assetUuid },
-    ]) as Record<string, unknown>;
+    // setComponentProperty 运行在 execute-scene-script 上下文中，不会自动触发 dirty。
+    // 用 begin-recording + force-dirty + end-recording 从扩展主进程确保 dirty 被正确标记。
+    const recordId = await beginSceneRecording(editorMsg, [nodeUuid]);
+    let defaultClipResult: Record<string, unknown>;
+    try {
+      defaultClipResult = await sceneMethod('setComponentProperty', [
+        nodeUuid,
+        'Animation',
+        'defaultClip',
+        { __uuid__: assetUuid },
+      ]) as Record<string, unknown>;
+      // force-dirty
+      try {
+        const dump = await editorMsg('scene', 'query-node', nodeUuid) as Record<string, unknown>;
+        const nameVal = (dump as { value?: { name?: { value?: string } } })?.value?.name?.value;
+        if (typeof nameVal === 'string' && nameVal) {
+          await editorMsg('scene', 'set-property', {
+            uuid: nodeUuid, path: 'name',
+            dump: { type: 'string', value: nameVal },
+          });
+        }
+      } catch { /* best-effort */ }
+    } finally {
+      await endSceneRecording(editorMsg, recordId);
+    }
     if (defaultClipResult?.error) {
       return { error: `已保存 .anim 资产，但回绑 Animation.defaultClip 失败: ${defaultClipResult.error}` };
     }

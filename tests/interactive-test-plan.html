@@ -18,7 +18,9 @@
         <div class="top-note">
           <div>数据来源：<code>tests/test-cases.json</code> + <code>tests/test-report.json</code></div>
           <div>生成时间：<span id="generatedAt">-</span></div>
-          <div>本地保存：浏览器 <code>localStorage</code></div>
+          <div>本地保存：浏览器 <code>localStorage</code>（键名 <code>auro-cocos-interactive-test-plan-v2</code>；与仓库 <code>manualVerification</code> 同步的人工默认状态会在首次加载时预填）</div>
+          <div>用例的<strong>前置条件</strong>与<strong>建议前置步骤（MCP）</strong>来自 <code>tests/test-cases.json</code> 的 <code>prerequisites</code> / <code>setupSteps</code>（由生成脚本写入 <code>interactive-test-plan.data.js</code>）。改 JSON 后请执行 <code>node scripts/generate-interactive-test-plan.mjs</code>。</div>
+          <div>MCP 人工测试协议：<code>docs/testing/MCP_MANUAL_TEST_PROTOCOL.md</code></div>
         </div>
       </div>
       <div class="stats" id="heroStats"></div>
@@ -95,7 +97,7 @@
             <div><label>Tool</label><select id="toolFilter"></select></div>
             <div><label>阶段</label><select id="phaseFilter"></select></div>
             <div><label>版本归属</label><select id="editionFilter"><option value="all">全部版本</option><option value="community">仅社区版</option><option value="pro">仅 Pro / 扩展</option></select></div>
-            <div><label>快捷过滤</label><select id="quickFilter"><option value="all">全部</option><option value="manual-pending">仅看人工待测</option><option value="ai-fail">仅看 AI 失败</option><option value="manual-fail">仅看人工失败</option><option value="open-issues">仅看有问题记录</option><option value="dual-pass">仅看双通过</option></select></div>
+            <div><label>快捷过滤</label><select id="quickFilter"><option value="all">全部</option><option value="manual-pending">仅看人工待测</option><option value="needs-retest">仅看需复测（数据标记）</option><option value="ai-fail">仅看 AI 失败</option><option value="manual-fail">仅看人工失败</option><option value="uncertain">仅看存疑</option><option value="open-issues">仅看有问题记录</option><option value="dual-pass">仅看双通过</option></select></div>
           </div>
           <div class="actions section-gap">
             <button id="clearFilters">清空筛选</button>

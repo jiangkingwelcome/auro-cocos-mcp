@@ -3,6 +3,8 @@ import { ErrorCategory, logIgnored } from '../error-utils';
 import {
   type BridgeToolContext,
   toInputSchema,
+  beginSceneRecording,
+  endSceneRecording,
   normalizeParams,
   normalizeComponentName,
   withGuardrailHints,
@@ -16,7 +18,7 @@ import {
 import type { LocalToolServer } from './local-tool-server';
 
 export function registerSceneTools(server: LocalToolServer, ctx: BridgeToolContext): void {
-  const { bridgeGet, bridgePost, sceneMethod, editorMsg, text } = ctx;
+  const { bridgeGet, bridgePost, sceneMethod, editorMsg, text, sceneOp } = ctx;
   const toStructuredToolResult = (result: unknown, successMeta: Record<string, unknown>, fallbackResult?: unknown) => {
     if (result && typeof result === 'object' && ('success' in result || 'error' in result)) {
       const merged = { ...successMeta, ...(result as Record<string, unknown>) };
@@ -24,6 +26,14 @@ export function registerSceneTools(server: LocalToolServer, ctx: BridgeToolConte
       return text(merged, Boolean(failed));
     }
     return text({ success: true, ...successMeta, ...(result === undefined ? (fallbackResult === undefined ? {} : { result: fallbackResult }) : { result }) });
+  };
+  const forceDirtyNodeTouch = async (uuid: string, name: string): Promise<void> => {
+    if (!uuid || !name) return;
+    await editorMsg('scene', 'set-property', {
+      uuid,
+      path: 'name',
+      dump: { type: 'string', value: name },
+    });
   };
 
   const NEW_QUERY_ACTIONS = new Set(['measure_distance', 'scene_snapshot', 'scene_diff', 'performance_audit', 'export_scene_json', 'deep_validate_scene', 'get_node_bounds', 'find_nodes_by_layer', 'get_animation_state', 'get_collider_info', 'get_material_info', 'get_light_info', 'get_scene_environment', 'screen_to_world', 'world_to_screen', 'check_script_ready', 'get_script_properties']);
@@ -532,7 +542,36 @@ Common errors: "未找到节点"=bad UUID; "未找到父节点"=parent not found
           try {
             const prefabUuid = await editorMsg('asset-db', 'query-uuid', prefabUrl);
             if (!prefabUuid) return text({ error: `预制体不存在: ${prefabUrl}` }, true);
-            const result = await sceneMethod('instantiatePrefab', [String(prefabUuid), p.parentUuid || '']);
+            const sceneTree = await sceneMethod('dispatchQuery', [{ action: 'tree', includeInternal: true }]) as Record<string, unknown>;
+            const sceneRootUuid = String(sceneTree?.uuid ?? sceneTree?._id ?? '');
+            const parentTarget = String(p.parentUuid ?? '');
+            const recordId = await beginSceneRecording(editorMsg, [parentTarget || sceneRootUuid]);
+            let result: unknown;
+            try {
+              result = await sceneMethod('instantiatePrefab', [String(prefabUuid), p.parentUuid || '']);
+              // instantiatePrefab 运行在 execute-scene-script 上下文，需从主进程 force-dirty
+              const r = result as Record<string, unknown>;
+              const touchUuid = String(r?.uuid ?? r?.instanceUuid ?? '');
+              if (touchUuid) {
+                const touchRecordId = await beginSceneRecording(editorMsg, [touchUuid]);
+                try {
+                  const dump = await editorMsg('scene', 'query-node', touchUuid) as Record<string, unknown>;
+                  const nameVal = (dump as { value?: { name?: { value?: string } } })?.value?.name?.value;
+                  if (typeof nameVal === 'string' && nameVal) {
+                    await editorMsg('scene', 'set-property', {
+                      uuid: touchUuid, path: 'name',
+                      dump: { type: 'string', value: nameVal },
+                    });
+                  }
+                } catch {
+                  /* best-effort */
+                } finally {
+                  await endSceneRecording(editorMsg, touchRecordId);
+                }
+              }
+            } finally {
+              await endSceneRecording(editorMsg, recordId);
+            }
             return toStructuredToolResult(result, { action: 'instantiate_prefab', prefabUrl, method: 'scene-script' }, 'instantiated');
           } catch (err: unknown) {
             return text({ error: `实例化预制体失败: ${errorMessage(err)}` }, true);
@@ -724,7 +763,7 @@ Common errors: "未找到节点"=bad UUID; "未找到父节点"=parent not found
           'ensure_2d_canvas',
         ]);
         if (NEW_SCENE_OPS.has(String(p.action))) {
-          const tryResult = withGuardrailHints(await sceneMethod('dispatchOperation', [p])) as Record<string, unknown>;
+          const tryResult = withGuardrailHints(await sceneOp(p as Record<string, unknown>)) as Record<string, unknown>;
           if (!tryResult?.error || !String(tryResult.error).includes('未知的操作 action')) {
             if (tryResult?.success && COMPONENT_CHANGING_OPS.has(String(p.action))) {
               const affUuid = String(tryResult.uuid ?? p.uuid ?? '');
@@ -741,7 +780,7 @@ Common errors: "未找到节点"=bad UUID; "未找到父节点"=parent not found
           return text(fallbackResult, Boolean(fallbackResult?.error));
         }
 
-        const result = withGuardrailHints(await sceneMethod('dispatchOperation', [p])) as Record<string, unknown>;
+        const result = withGuardrailHints(await sceneOp(p as Record<string, unknown>)) as Record<string, unknown>;
         // 如果有路径规范化警告，附加到返回值
         if (guardrailWarnings.length && result && typeof result === 'object') {
           (result as Record<string, unknown>)._pathWarnings = guardrailWarnings;
@@ -751,6 +790,18 @@ Common errors: "未找到节点"=bad UUID; "未找到父节点"=parent not found
             (typeof result.uuid === 'string' && result.uuid) ||
             (typeof result.clonedUuid === 'string' && result.clonedUuid) ||
             '';
+          if (String(p.action) === 'create_node' && affectedUuid) {
+            const touchedName =
+              (typeof result.name === 'string' && result.name) ||
+              (typeof p.name === 'string' && p.name) ||
+              'New Node';
+            try {
+              await forceDirtyNodeTouch(affectedUuid, touchedName);
+              (result as Record<string, unknown>)._forcedDirty = true;
+            } catch (e) {
+              logIgnored(ErrorCategory.EDITOR_IPC, 'create_node 后补记 dirty 失败', e);
+            }
+          }
           if (affectedUuid) {
             try {
               await bridgePost('/api/editor/select', { uuids: [affectedUuid], forceRefresh: true });
@@ -780,7 +831,7 @@ type FallbackCtx = {
 };
 
 async function fallbackSceneOperation(action: string, p: Record<string, unknown>, ctx: FallbackCtx): Promise<unknown> {
-  const { sceneMethod } = ctx;
+  const { sceneMethod, editorMsg } = ctx;
   const op = (a: string, extra: Record<string, unknown> = {}) =>
     sceneMethod('dispatchOperation', [{ action: a, ...extra }]) as Promise<Record<string, unknown>>;
   const query = (a: string, extra: Record<string, unknown> = {}) =>
@@ -805,48 +856,70 @@ async function fallbackSceneOperation(action: string, p: Record<string, unknown>
         return { success: true, canvasUuid: existing.uuid, canvasName: existing.name, created: false, message: '场景已有 Canvas，直接复用' };
       }
 
-      const root = await op('create_node', { name: canvasName });
-      if (root.error) return { error: `创建 Canvas 节点失败: ${root.error}` };
-      const canvasUuid = String(root.uuid);
+      const sceneTree = await sceneMethod('dispatchQuery', [{ action: 'tree', includeInternal: true }]) as Record<string, unknown>;
+      const sceneRootUuid = String(sceneTree?.uuid ?? sceneTree?._id ?? '');
+      // 从扩展主进程发 begin-recording，确保整个 Canvas 创建在一个 undo 事务内并标记 dirty
+      const recordId = await beginSceneRecording(editorMsg, sceneRootUuid ? [sceneRootUuid] : []);
+      try {
+        // 直接从扩展主进程调用 create-node（不走 execute-scene-script），确保触发 dirty 标记
+        const rawCanvas = await editorMsg('scene', 'create-node', { name: canvasName });
+        const rawCanvasObj = rawCanvas as Record<string, unknown>;
+        const canvasUuid = String(rawCanvasObj?.uuid ?? rawCanvasObj?._id ?? (typeof rawCanvas === 'string' ? rawCanvas : ''));
+        if (!canvasUuid) return { error: '创建 Canvas 节点失败（IPC 未返回 UUID）' };
 
-      const addCanvasResult = await op('add_component', { uuid: canvasUuid, component: 'Canvas' }) as Record<string, unknown>;
-      if (!addCanvasResult.success) {
-        await op('destroy_node', { uuid: canvasUuid, confirmDangerous: true });
-        return { error: `Canvas 组件添加失败 (可能引擎版本不支持): ${addCanvasResult.error ?? '未知错误'}。场景模板可能已自带 Canvas，请用 scene_query action=tree 确认。` };
-      }
+        // 直接从扩展主进程添加 Canvas 组件
+        try {
+          await editorMsg('scene', 'create-component', { uuid: canvasUuid, component: 'cc.Canvas' });
+        } catch (e) {
+          try { await editorMsg('scene', 'remove-node', { uuid: canvasUuid }); } catch {}
+          return { error: `Canvas 组件添加失败 (可能引擎版本不支持): ${e instanceof Error ? e.message : String(e)}。场景模板可能已自带 Canvas，请用 scene_query action=tree 确认。` };
+        }
 
-      await op('set_layer', { uuid: canvasUuid, layer: UI_2D_LAYER });
+        await op('set_layer', { uuid: canvasUuid, layer: UI_2D_LAYER });
 
-      const cameraNodeResult = await op('create_node', { parentUuid: canvasUuid, name: 'Camera' });
-      if (cameraNodeResult.error) {
+        // 直接从扩展主进程创建 Camera 子节点
+        let cameraUuid = '';
+        try {
+          const rawCamera = await editorMsg('scene', 'create-node', { parent: canvasUuid, name: 'Camera' });
+          const rawCameraObj = rawCamera as Record<string, unknown>;
+          cameraUuid = String(rawCameraObj?.uuid ?? rawCameraObj?._id ?? (typeof rawCamera === 'string' ? rawCamera : ''));
+        } catch (e) {
+          logIgnored(ErrorCategory.ENGINE_API, 'ensure_2d_canvas: 创建 Camera 子节点失败', e);
+        }
+
+        if (!cameraUuid) {
+          return {
+            success: true, canvasUuid, canvasName, created: true,
+            warning: '已创建 Canvas 但 Camera 子节点创建失败，可能需要手动添加',
+            layer: UI_2D_LAYER,
+          };
+        }
+
+        // 直接从扩展主进程添加 Camera 组件
+        await editorMsg('scene', 'create-component', { uuid: cameraUuid, component: 'cc.Camera' });
+        await op('set_layer', { uuid: cameraUuid, layer: UI_2D_LAYER });
+
+        try {
+          await op('set_camera_property', {
+            uuid: cameraUuid,
+            projection: 0, clearFlags: 6, priority: 1,
+            visibility: UI_2D_LAYER, orthoHeight: designHeight / 2,
+          });
+        } catch (e) {
+          logIgnored(ErrorCategory.ENGINE_API, 'ensure_2d_canvas: 配置 Camera 属性失败', e);
+        }
+
         return {
           success: true, canvasUuid, canvasName, created: true,
-          warning: '已创建 Canvas 但 Camera 子节点创建失败，可能需要手动添加',
+          cameraUuid,
+          designResolution: { width: designWidth, height: designHeight },
+          camera: { projection: 'ortho', clearFlags: 6, priority: 1, visibility: UI_2D_LAYER, orthoHeight: designHeight / 2 },
           layer: UI_2D_LAYER,
+          hint: '在此 Canvas 下创建的子节点需要设置 layer=33554432 (UI_2D) 才能被 Canvas Camera 渲染',
         };
+      } finally {
+        await endSceneRecording(editorMsg, recordId);
       }
-      const cameraUuid = String(cameraNodeResult.uuid);
-      await op('add_component', { uuid: cameraUuid, component: 'Camera' });
-      await op('set_layer', { uuid: cameraUuid, layer: UI_2D_LAYER });
-
-      try {
-        await ctx.sceneMethod('dispatchOperation', [{
-          action: 'set_camera_property', uuid: cameraUuid,
-          projection: 0, clearFlags: 6, priority: 1,
-          visibility: UI_2D_LAYER, orthoHeight: designHeight / 2,
-        }]);
-      } catch (e) {
-        logIgnored(ErrorCategory.ENGINE_API, 'ensure_2d_canvas: 配置 Camera 属性失败', e);
-      }
-
-      return {
-        success: true, canvasUuid, canvasName, created: true,
-        cameraUuid,
-        designResolution: { width: designWidth, height: designHeight },
-        camera: { projection: 'ortho', clearFlags: 6, priority: 1, visibility: UI_2D_LAYER, orthoHeight: designHeight / 2 },
-        layer: UI_2D_LAYER,
-        hint: '在此 Canvas 下创建的子节点需要设置 layer=33554432 (UI_2D) 才能被 Canvas Camera 渲染',
-      };
     }
 
     default:

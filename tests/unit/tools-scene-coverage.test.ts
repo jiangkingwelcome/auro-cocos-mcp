@@ -3,10 +3,12 @@ import { buildCocosToolServer, type BridgeToolContext } from '../../src/mcp/tool
 import type { ToolCallResult } from '../../src/mcp/local-tool-server';
 
 function makeCtx(overrides: Partial<BridgeToolContext> = {}): BridgeToolContext {
+  const sceneMethod = overrides.sceneMethod ?? vi.fn().mockResolvedValue({ success: true });
   return {
     bridgeGet: vi.fn().mockResolvedValue({}),
     bridgePost: vi.fn().mockResolvedValue({ success: true }),
-    sceneMethod: vi.fn().mockResolvedValue({ success: true }),
+    sceneMethod,
+    sceneOp: overrides.sceneOp ?? (async (params: Record<string, unknown>) => sceneMethod('dispatchOperation', [params])),
     editorMsg: vi.fn().mockResolvedValue({}),
     text: (data: unknown, isError?: boolean): ToolCallResult => ({
       content: [{ type: 'text', text: JSON.stringify(data) }],
@@ -125,6 +127,51 @@ describe('scene_query — standard dispatchQuery actions', () => {
     expect(data.message).toBe('当前没有选中节点');
   });
 
+  it('流程：create_node 后用返回的 uuid 调 node_detail 可取 rotation/layer 等字段', async () => {
+    const newUuid = 'created-node-uuid';
+    const sceneMethod = vi.fn()
+      .mockResolvedValueOnce({ success: true, uuid: newUuid, name: 'ProbeNode' })
+      .mockResolvedValueOnce({
+        uuid: newUuid,
+        name: 'ProbeNode',
+        active: true,
+        path: 'Scene/ProbeNode',
+        position: { x: 1, y: 2, z: 3 },
+        rotation: { x: 0, y: 45, z: 0 },
+        scale: { x: 1, y: 1, z: 1 },
+        layer: 1073741824,
+        childCount: 0,
+        components: ['cc.UITransform'],
+      });
+    const server = buildCocosToolServer(makeCtx({ sceneMethod }));
+    const created = await server.callTool('scene_operation', { action: 'create_node', name: 'ProbeNode' });
+    expect(created.isError).toBeFalsy();
+    const detail = await server.callTool('scene_query', { action: 'node_detail', uuid: newUuid });
+    expect(detail.isError).toBeFalsy();
+    const data = parse(detail);
+    expect(data.rotation).toEqual({ x: 0, y: 45, z: 0 });
+    expect(data.layer).toBe(1073741824);
+    expect(data.position).toEqual({ x: 1, y: 2, z: 3 });
+    expect(sceneMethod).toHaveBeenNthCalledWith(1, 'dispatchOperation', [expect.objectContaining({ action: 'create_node', name: 'ProbeNode' })]);
+    expect(sceneMethod).toHaveBeenNthCalledWith(2, 'dispatchQuery', [expect.objectContaining({ action: 'node_detail', uuid: newUuid })]);
+  });
+
+  it('get_components 返回体中每项组件含 name 与 type（与场景脚本 getNodeComponents 一致）', async () => {
+    const sceneMethod = vi.fn().mockResolvedValue({
+      uuid: 'u1',
+      name: 'Main Camera',
+      components: [
+        { name: 'cc.Camera', type: 'Camera' },
+      ],
+    });
+    const server = buildCocosToolServer(makeCtx({ sceneMethod }));
+    const result = await server.callTool('scene_query', { action: 'get_components', uuid: 'u1' });
+    expect(result.isError).toBeFalsy();
+    const data = parse(result);
+    expect(data.components[0].name).toBe('cc.Camera');
+    expect(data.components[0].type).toBe('Camera');
+  });
+
   it('get_active_scene_focus with selection returns selection detail', async () => {
     const bridgeGet = vi.fn().mockResolvedValue({ selected: ['focus-uuid'] });
     const sceneMethod = vi.fn().mockResolvedValue({ name: 'FocusNode' });
@@ -221,14 +268,19 @@ describe('scene_query — NEW_QUERY_ACTIONS (dispatchQuery with fallback)', () =
 // scene_operation — standard dispatchOperation actions
 // ═══════════════════════════════════════════════════════════════════════════════
 describe('scene_operation — standard dispatchOperation actions', () => {
-  it('create_node calls dispatchOperation', async () => {
-    const sceneMethod = vi.fn().mockResolvedValue({ success: true, uuid: 'new-uuid' });
+  it('create_node calls dispatchOperation and touches name to force dirty', async () => {
+    const sceneMethod = vi.fn().mockResolvedValue({ success: true, uuid: 'new-uuid', name: 'TestNode' });
     const editorMsg = vi.fn().mockResolvedValue({});
     const bridgePost = vi.fn().mockResolvedValue({ success: true });
     const server = buildCocosToolServer(makeCtx({ sceneMethod, editorMsg, bridgePost }));
     const result = await server.callTool('scene_operation', { action: 'create_node', name: 'TestNode' });
     expect(result.isError).toBeFalsy();
     expect(sceneMethod).toHaveBeenCalledWith('dispatchOperation', [expect.objectContaining({ action: 'create_node', name: 'TestNode' })]);
+    expect(editorMsg).toHaveBeenCalledWith('scene', 'set-property', {
+      uuid: 'new-uuid',
+      path: 'name',
+      dump: { type: 'string', value: 'TestNode' },
+    });
   });
 
   it('destroy_node blocked without confirmDangerous', async () => {
@@ -514,12 +566,30 @@ describe('scene_operation — NEW_SCENE_OPS (dispatchOperation with fallback)', 
     });
   }
 
-  it('reset_transform calls editorMsg reset-node', async () => {
-    const editorMsg = vi.fn().mockResolvedValue({});
-    const server = buildCocosToolServer(makeCtx({ editorMsg }));
+  it('batch preserves operations payload for dispatchOperation', async () => {
+    const sceneMethod = vi.fn().mockResolvedValue({ success: true });
+    const server = buildCocosToolServer(makeCtx({ sceneMethod }));
+    const operations = [{ action: 'set_name', uuid: 'u', name: 'N' }];
+
+    const result = await server.callTool('scene_operation', { action: 'batch', operations });
+
+    expect(result.isError).toBeFalsy();
+    expect(sceneMethod).toHaveBeenCalledWith('dispatchOperation', [
+      expect.objectContaining({ action: 'batch', operations }),
+    ]);
+  });
+
+  it('reset_transform calls dispatchOperation（场景内通过 set-property 重置变换，非 editorMsg reset-node）', async () => {
+    const sceneMethod = vi.fn().mockResolvedValue({
+      success: true,
+      uuid: 'u1',
+      name: 'N',
+      reset: { position: true, rotation: true, scale: true },
+    });
+    const server = buildCocosToolServer(makeCtx({ sceneMethod }));
     const result = await server.callTool('scene_operation', { action: 'reset_transform', uuid: 'u1' });
     expect(result.isError).toBeFalsy();
-    expect(editorMsg).toHaveBeenCalledWith('scene', 'reset-node', { uuid: 'u1' });
+    expect(sceneMethod).toHaveBeenCalledWith('dispatchOperation', [expect.objectContaining({ action: 'reset_transform', uuid: 'u1' })]);
   });
 
   it('reset_node_properties queries components then calls editorMsg reset-component', async () => {

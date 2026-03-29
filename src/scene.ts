@@ -137,14 +137,50 @@ async function notifyEditorComponentProperty(
 // these IPC messages (silently ignored).
 
 let _recordingDepth = 0;
+let _recordingToken: string | null = null;
 
-async function beginRecording(): Promise<boolean> {
+function getRecordingTargetsForParams(scene: CocosNode, params: Record<string, unknown>): string[] {
+  const uuid = String(params.uuid ?? '').trim();
+  if (uuid) return [uuid];
+  const action = String(params.action ?? '').trim();
+  if (action === 'create_node') {
+    const parentUuid = String(params.parentUuid ?? '').trim();
+    if (parentUuid) return [parentUuid];
+    const sceneUuid = String(scene.uuid ?? scene._id ?? '').trim();
+    return sceneUuid ? [sceneUuid] : [];
+  }
+  if (action === 'batch' && Array.isArray(params.operations)) {
+    const uuids = params.operations
+      .map((item) => {
+        if (!item || typeof item !== 'object') return '';
+        const entry = item as Record<string, unknown>;
+        const itemUuid = String(entry.uuid ?? '').trim();
+        if (itemUuid) return itemUuid;
+        if (String(entry.action ?? '') === 'create_node') {
+          return String(entry.parentUuid ?? '').trim();
+        }
+        return '';
+      })
+      .filter(Boolean);
+    if (uuids.length > 0) return uuids;
+    const sceneUuid = String(scene.uuid ?? scene._id ?? '').trim();
+    return sceneUuid ? [sceneUuid] : [];
+  }
+  return [];
+}
+
+async function beginRecording(targetUuids: string[] = []): Promise<boolean> {
   _recordingDepth++;
   if (_recordingDepth > 1) return true; // nested — already recording
   try {
-    await Editor.Message.request('scene', 'begin-recording');
+    const normalized = targetUuids
+      .map((item) => String(item ?? '').trim())
+      .filter(Boolean);
+    const token = await Editor.Message.request('scene', 'begin-recording', normalized, null);
+    _recordingToken = token === undefined || token === null || token === '' ? null : String(token);
     return true;
   } catch (e) {
+    _recordingToken = null;
     logIgnored(ErrorCategory.EDITOR_IPC, 'begin-recording 不可用，Undo 记录跳过', e);
     return false;
   }
@@ -154,9 +190,15 @@ async function endRecording(): Promise<boolean> {
   _recordingDepth = Math.max(0, _recordingDepth - 1);
   if (_recordingDepth > 0) return true; // still nested
   try {
-    await Editor.Message.request('scene', 'end-recording');
+    if (_recordingToken) {
+      await Editor.Message.request('scene', 'end-recording', _recordingToken);
+    } else {
+      await Editor.Message.request('scene', 'end-recording');
+    }
+    _recordingToken = null;
     return true;
   } catch (e) {
+    _recordingToken = null;
     logIgnored(ErrorCategory.EDITOR_IPC, 'end-recording 失败', e);
     return false;
   }
@@ -181,12 +223,69 @@ async function ipcCreateNode(parentUuid: string, name: string): Promise<string> 
   throw new Error(`create-node IPC 返回了无法识别的格式: ${JSON.stringify(result)}`);
 }
 
+/** 判断 `ctor` 是否为 `cc.Component` 子类（用于区分引擎内置组件名 vs 用户脚本短类名） */
+function isEngineComponentConstructor(ctor: unknown, componentBase: unknown): boolean {
+  if (!ctor || !componentBase) return false;
+  const { js } = require('cc') as CocosCC;
+  const isChild = js.isChildClassOf;
+  if (typeof isChild !== 'function') return false;
+  try {
+    return !!isChild(ctor, componentBase);
+  } catch {
+    return false;
+  }
+}
+
+function isComponentConstructor(ctor: unknown, componentBase: unknown): boolean {
+  if (!ctor || !componentBase) return false;
+  if (isEngineComponentConstructor(ctor, componentBase)) return true;
+  if (typeof ctor === 'function' && typeof componentBase === 'function') {
+    return ctor === componentBase || ctor.prototype instanceof componentBase;
+  }
+  return false;
+}
+
+function resolveComponentClass(cc: CocosCC, componentName: string): unknown {
+  const exactClass = cc.js.getClassByName(componentName);
+  if (exactClass) return exactClass;
+  if (!componentName.startsWith('cc.')) return cc.js.getClassByName(`cc.${componentName}`);
+  return null;
+}
+
+function buildNonComponentClassError(cc: CocosCC, componentName: string, label = '组件类') {
+  const componentBase = cc.js.getClassByName('cc.Component') || cc.Component;
+  if (componentName.startsWith('cc.')) {
+    const shortName = componentName.slice(3);
+    const shortClass = shortName ? cc.js.getClassByName(shortName) : null;
+    if (shortClass && isComponentConstructor(shortClass, componentBase)) {
+      return {
+        error: `${label} "${componentName}" 不是 cc.Component 子类`,
+        hint: `检测到 "${shortName}" 是已注册组件。自定义脚本不要带 "cc." 前缀，请改传 "${shortName}"。`,
+      };
+    }
+  }
+  return {
+    error: `${label} "${componentName}" 不是 cc.Component 子类`,
+    hint: '请确认传入的是 @ccclass 注册名，并且该类继承自 Component。',
+  };
+}
+
 /** 编辑器 create-component / remove-component 的组件名字符串（cc.Label / sp.Skeleton 等） */
 function editorComponentIpcName(componentName: string): string {
   if (componentName.startsWith('cc.')) return componentName;
   // 扩展模块：sp.*、dragonBones.* — 不可再加 cc. 前缀
   if (componentName.includes('.')) return componentName;
-  return `cc.${componentName}`;
+  // 仅当 `cc.${shortName}` 在引擎中确实是 cc.Component 子类时才加 cc. 前缀。
+  // 否则（用户脚本 @ccclass('Test')、或 cc.Test 等非 Component 占位）必须原样传递类名，
+  // 否则会触发编辑器报错：ctor with name cc.Test is not child class of Component。
+  const { js } = require('cc') as CocosCC;
+  const ccPrefixed = `cc.${componentName}`;
+  const ccCls = js.getClassByName(ccPrefixed);
+  const compBase = js.getClassByName('cc.Component');
+  if (ccCls && compBase && isEngineComponentConstructor(ccCls, compBase)) {
+    return ccPrefixed;
+  }
+  return componentName;
 }
 
 async function ipcCreateComponent(nodeUuid: string, componentName: string): Promise<void> {
@@ -437,11 +536,14 @@ export const methods = {
     if (!scene) return { error: '没有打开的场景' };
     const node = findNodeByUuid(scene, uuid);
     if (!node) return { error: `未找到节点: ${uuid}` };
+    const ea = node.eulerAngles;
     return {
       uuid: node.uuid ?? node._id, name: node.name, active: node.active,
       path: getNodePath(node),
       position: node.position ? { x: node.position.x, y: node.position.y, z: node.position.z } : null,
+      rotation: ea != null ? { x: ea.x, y: ea.y, z: ea.z } : null,
       scale: node.scale ? { x: node.scale.x, y: node.scale.y, z: node.scale.z } : null,
+      layer: node.layer,
       childCount: node.children.length,
       components: (node._components ?? []).map(getComponentName),
     };
@@ -469,9 +571,11 @@ export const methods = {
     if (!scene) return { error: '没有打开的场景' };
     const node = findNodeByUuid(scene, uuid);
     if (!node) return { error: `未找到节点: ${uuid}` };
-    const comps = (node._components ?? []).map((comp) => ({
-      name: getComponentName(comp),
-    }));
+    const comps = (node._components ?? []).map((comp) => {
+      const name = getComponentName(comp);
+      const type = name.replace(/^cc\./, '');
+      return { name, type };
+    });
     return { uuid, name: node.name, components: comps };
   },
 
@@ -733,13 +837,28 @@ export const methods = {
   },
 
   addComponent(uuid: string, componentName: string) {
-    const { js } = getCC();
+    const cc = getCC();
+    const { js, Component } = cc;
     const scene = getScene();
     if (!scene) return { error: '没有打开的场景' };
     const node = findNodeByUuid(scene, uuid);
     if (!node) return { error: `未找到节点: ${uuid}` };
-    const compClass = js.getClassByName(componentName) || js.getClassByName('cc.' + componentName);
+    const compClass = resolveComponentClass(cc, componentName);
     if (!compClass) return { error: `未找到组件类: ${componentName}` };
+    const componentBase = js.getClassByName('cc.Component') || Component;
+    if (!isComponentConstructor(compClass, componentBase)) {
+      return buildNonComponentClassError(cc, componentName);
+    }
+    if (node.getComponent?.(compClass)) {
+      return {
+        success: true,
+        uuid,
+        name: node.name,
+        component: componentName,
+        alreadyAttached: true,
+        message: `组件 ${componentName} 已存在，跳过重复添加。`,
+      };
+    }
 
     return (async () => {
       await ipcCreateComponent(uuid, componentName);
@@ -1121,7 +1240,7 @@ export const methods = {
 
     // Wrap ALL operations with begin-recording / end-recording for Undo
     return (async () => {
-      await beginRecording();
+      await beginRecording(getRecordingTargetsForParams(scene, params));
       try {
         const result = handler(this, scene, params);
         // handler may return a promise (async operations) or a plain value

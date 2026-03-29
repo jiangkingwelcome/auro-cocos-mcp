@@ -230,25 +230,183 @@ function requiresAuth(method: string, pathname: string): boolean {
 
 function initializeMcpHost(serverVersion = packageVersion) {
   if (mcpHost) return;
+  const _sceneMethod = async (method: string, args: unknown[] = []) =>
+    withTimeout(
+      Editor.Message.request('scene', 'execute-scene-script', {
+        name: EXTENSION_NAME,
+        method,
+        args,
+      }),
+      REQUEST_TIMEOUT_MS,
+      `sceneMethod(${method})`,
+    );
+  const _editorMsg = (module: string, message: string, ...args: unknown[]) =>
+    withTimeout(
+      Editor.Message.request(module, message, ...args),
+      REQUEST_TIMEOUT_MS,
+      `editorMsg(${module}, ${message})`,
+    );
+  const _querySceneRootUuid = async (): Promise<string> => {
+    try {
+      const tree = await _sceneMethod('dispatchQuery', [{ action: 'tree', includeInternal: true }]) as Record<string, unknown>;
+      const uuid = tree?.uuid ?? tree?._id;
+      return uuid ? String(uuid) : '';
+    } catch {
+      return '';
+    }
+  };
+  const _beginSceneRecording = async (targets: string[] = []): Promise<string | null> => {
+    try {
+      const normalized = targets
+        .map((item) => String(item ?? '').trim())
+        .filter(Boolean);
+      const recordId = await _editorMsg('scene', 'begin-recording', normalized, null);
+      return recordId === undefined || recordId === null || recordId === '' ? null : String(recordId);
+    } catch {
+      return null;
+    }
+  };
+  const _endSceneRecording = async (recordId: string | null): Promise<void> => {
+    try {
+      if (recordId) {
+        await _editorMsg('scene', 'end-recording', recordId);
+        return;
+      }
+      await _editorMsg('scene', 'end-recording');
+    } catch {
+      /* ignore */
+    }
+  };
+  const _recordingTargetsForOp = async (op: Record<string, unknown>): Promise<string[]> => {
+    const action = String(op.action ?? '');
+    const uuid = String(op.uuid ?? '').trim();
+    if (uuid) return [uuid];
+    if (action === 'create_node') {
+      const parentUuid = String(op.parentUuid ?? '').trim();
+      if (parentUuid) return [parentUuid];
+      const rootUuid = await _querySceneRootUuid();
+      return rootUuid ? [rootUuid] : [];
+    }
+    if (action === 'batch' && Array.isArray(op.operations)) {
+      const uuids = op.operations
+        .map((item) => {
+          if (!item || typeof item !== 'object') return '';
+          const entry = item as Record<string, unknown>;
+          const itemUuid = String(entry.uuid ?? '').trim();
+          if (itemUuid) return itemUuid;
+          if (String(entry.action ?? '') === 'create_node') {
+            return String(entry.parentUuid ?? '').trim();
+          }
+          return '';
+        })
+        .filter(Boolean);
+      if (uuids.length > 0) return uuids;
+      const rootUuid = await _querySceneRootUuid();
+      return rootUuid ? [rootUuid] : [];
+    }
+    return [];
+  };
+  // Run an operation via execute-scene-script, then force-dirty from the main process.
+  // Cocos Creator 3.8.x: IPC calls from execute-scene-script preview context do NOT mark the
+  // scene dirty unless they are wrapped in the editor's real recording transaction.
+  const _sceneOpFallback = async (op: Record<string, unknown>): Promise<unknown> => {
+    const r = await _sceneMethod('dispatchOperation', [op]) as Record<string, unknown>;
+    const touchUuid = String(r?.uuid ?? r?.clonedUuid ?? op.uuid ?? '');
+    if (touchUuid) {
+      const recordId = await _beginSceneRecording([touchUuid]);
+      try {
+        await _editorMsg('scene', 'set-property', {
+          uuid: touchUuid, path: 'active',
+          dump: { type: 'Boolean', value: false },
+        });
+        await _editorMsg('scene', 'set-property', {
+          uuid: touchUuid, path: 'active',
+          dump: { type: 'Boolean', value: true },
+        });
+      } catch {
+        /* force-dirty is best-effort */
+      } finally {
+        await _endSceneRecording(recordId);
+      }
+    }
+    return r;
+  };
   const tools = buildCocosToolServer({
     bridgeGet: async (apiPath, params) => invokeRoute('GET', apiPath, params ?? {}, null),
     bridgePost: async (apiPath, body) => invokeRoute('POST', apiPath, {}, body ?? null),
-    sceneMethod: async (method, args = []) =>
-      withTimeout(
-        Editor.Message.request('scene', 'execute-scene-script', {
-          name: EXTENSION_NAME,
-          method,
-          args,
-        }),
-        REQUEST_TIMEOUT_MS,
-        `sceneMethod(${method})`,
-      ),
-    editorMsg: (module, message, ...args) =>
-      withTimeout(
-        Editor.Message.request(module, message, ...args),
-        REQUEST_TIMEOUT_MS,
-        `editorMsg(${module}, ${message})`,
-      ),
+    sceneMethod: _sceneMethod,
+    editorMsg: _editorMsg,
+    sceneOp: async (params) => {
+      const p = params as Record<string, unknown>;
+      const action = String(p.action ?? '');
+      const recordId = await _beginSceneRecording(await _recordingTargetsForOp(p));
+      const _isSceneDirty = async (): Promise<boolean> => {
+        try {
+          return Boolean(await _editorMsg('scene', 'query-dirty'));
+        } catch {
+          return false;
+        }
+      };
+      // Force-dirty a node by performing a reversible real write from the main process.
+      // In some 3.8.x builds, create-node / same-value set-property still won't mark the scene dirty.
+      // Temporarily changing the name and restoring it inside a real recording transaction
+      // guarantees the node enters the serialized save path.
+      const _forceDirtyNode = async (uuid: string, desiredName?: string): Promise<boolean> => {
+        const forceRecordId = await _beginSceneRecording([uuid]);
+        try {
+          if (await _isSceneDirty()) return true;
+          const baseName = desiredName || 'New Node';
+          const tempName = `${baseName}__aura_dirty__`;
+          await _editorMsg('scene', 'set-property', {
+            uuid, path: 'name',
+            dump: { type: 'string', value: tempName },
+          });
+          await _editorMsg('scene', 'set-property', {
+            uuid, path: 'name',
+            dump: { type: 'string', value: baseName },
+          });
+          return await _isSceneDirty();
+        } catch {
+          return false;
+        } finally {
+          await _endSceneRecording(forceRecordId);
+        }
+      };
+      try {
+        if (action === 'create_node') {
+          const parentUuid = String(p.parentUuid ?? '');
+          const name = String(p.name ?? 'New Node');
+          const raw = await _editorMsg('scene', 'create-node', { parent: parentUuid || undefined, name });
+          const rawObj = raw as Record<string, unknown>;
+          const uuid = rawObj?.uuid ?? rawObj?._id ?? (typeof raw === 'string' ? raw : '');
+          if (uuid) {
+            const dirtyMarked = await _forceDirtyNode(String(uuid), name);
+            return { success: true, uuid: String(uuid), name, _dirtyMarked: dirtyMarked };
+          }
+          return await _sceneOpFallback(params);
+        }
+        if (action === 'add_component') {
+          const uuid = String(p.uuid ?? '');
+          const component = String(p.component ?? '');
+          if (uuid && component) {
+            const compName = component.startsWith('cc.') || component.includes('.') ? component : `cc.${component}`;
+            await _editorMsg('scene', 'create-component', { uuid, component: compName });
+            await _forceDirtyNode(uuid);
+            return { success: true, uuid, component };
+          }
+        }
+        if (action === 'remove_node') {
+          const uuid = String(p.uuid ?? '');
+          if (uuid) {
+            await _editorMsg('scene', 'remove-node', { uuid });
+            return { success: true, uuid };
+          }
+        }
+        return await _sceneOpFallback(params);
+      } finally {
+        await _endSceneRecording(recordId);
+      }
+    },
     text: textResponse,
     isAutoRollbackEnabled: () => currentSettings.autoRollback,
   });

@@ -39,6 +39,49 @@ function getFailureReason(result: unknown, fallback: string): string {
   return fallback;
 }
 
+function isComponentSubclass(cc: CocosCC, cls: unknown): boolean {
+  const { js, Component } = cc;
+  const componentBase = js.getClassByName?.('cc.Component') || Component;
+  if (!cls || !componentBase) return false;
+  const isChild = js.isChildClassOf;
+  if (typeof isChild === 'function') {
+    try {
+      return !!isChild(cls, componentBase);
+    } catch {
+      // Fall through to prototype-based detection.
+    }
+  }
+  if (typeof cls === 'function' && typeof componentBase === 'function') {
+    return cls === componentBase || cls.prototype instanceof componentBase;
+  }
+  return false;
+}
+
+function resolveRegisteredClass(cc: CocosCC, className: string): unknown {
+  const { js } = cc;
+  const exactClass = js.getClassByName(className);
+  if (exactClass) return exactClass;
+  if (!className.startsWith('cc.')) return js.getClassByName(`cc.${className}`);
+  return null;
+}
+
+function buildNonComponentClassError(cc: CocosCC, className: string, label: string) {
+  if (className.startsWith('cc.')) {
+    const shortName = className.slice(3);
+    const shortClass = shortName ? cc.js.getClassByName(shortName) : null;
+    if (shortClass && isComponentSubclass(cc, shortClass)) {
+      return {
+        error: `${label} "${className}" 不是 cc.Component 子类`,
+        hint: `检测到 "${shortName}" 是已注册组件。自定义脚本不要带 "cc." 前缀，请改传 "${shortName}"。`,
+      };
+    }
+  }
+  return {
+    error: `${label} "${className}" 不是 cc.Component 子类`,
+    hint: '请确认传入的是 @ccclass 注册名，并且该类继承自 Component。',
+  };
+}
+
 async function expectSuccessfulResult(resultOrPromise: unknown, fallback: string): Promise<Record<string, unknown> & { success: true }> {
   const result = await Promise.resolve(resultOrPromise);
   if (isSuccessfulResult(result)) return result;
@@ -951,7 +994,31 @@ export function buildOperationHandlers(deps: SceneOperationDeps): Map<string, Op
         ['set_scale', (self, _s, p) => self.setNodeScale(String(p.uuid ?? ''), Number(p.x ?? 1), Number(p.y ?? 1), Number(p.z ?? 1))],
         ['set_name', (self, _s, p) => self.setNodeName(String(p.uuid ?? ''), String(p.name ?? 'Node'))],
         ['set_active', (self, _s, p) => self.setNodeActive(String(p.uuid ?? ''), Boolean(p.active ?? true))],
-        ['add_component', (self, _s, p) => self.addComponent(String(p.uuid ?? ''), String(p.component ?? ''))],
+        ['add_component', (self, scene, p) => {
+                const cc = getCC();
+                const uuid = String(p.uuid ?? '');
+                const componentName = String(p.component ?? '');
+                const r = requireNode(scene, uuid);
+                if ('error' in r)
+                    return r;
+                const cls = resolveRegisteredClass(cc, componentName);
+                if (!cls)
+                    return { error: `未找到组件类: ${componentName}` };
+                if (!isComponentSubclass(cc, cls))
+                    return buildNonComponentClassError(cc, componentName, '组件类');
+                const existing = r.node.getComponent?.(cls);
+                if (existing) {
+                    return {
+                        success: true,
+                        uuid,
+                        name: r.node.name,
+                        component: componentName,
+                        alreadyAttached: true,
+                        message: `组件 ${componentName} 已存在，跳过重复添加。`,
+                    };
+                }
+                return self.addComponent(uuid, componentName);
+            }],
         ['remove_component', (self, _s, p) => self.removeComponent(String(p.uuid ?? ''), String(p.component ?? ''))],
         ['set_property', (self, _s, p) => self.setComponentProperty(String(p.uuid ?? ''), String(p.component ?? ''), String(p.property ?? ''), p.value)],
         ['duplicate_node', (_self, scene, p) => {
@@ -3439,12 +3506,15 @@ export function buildOperationHandlers(deps: SceneOperationDeps): Map<string, Op
                 const r = requireNode(scene, uuid);
                 if ('error' in r)
                     return r;
-                const cls = js.getClassByName(scriptName) || js.getClassByName('cc.' + scriptName);
+                const cls = resolveRegisteredClass(cc, scriptName);
                 if (!cls) {
                     return {
                         error: `脚本类 "${scriptName}" 未注册`,
                         hint: '可能原因: 1) 脚本尚未编译完成，请稍后重试; 2) 类名不正确; 3) 脚本文件不存在。可用 check_script_ready 查询编译状态。',
                     };
+                }
+                if (!isComponentSubclass(cc, cls)) {
+                    return buildNonComponentClassError(cc, scriptName, '脚本类');
                 }
                 const existing = r.node.getComponent?.(cls);
                 if (existing && !p.allowDuplicate) {

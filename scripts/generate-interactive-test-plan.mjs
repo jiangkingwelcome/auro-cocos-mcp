@@ -83,7 +83,7 @@ function derivePriority(tool) {
   return "P3";
 }
 
-function deriveEdition(tool) {
+function deriveEdition(tool, actionMatched = true) {
   const proExclusiveTools = new Set([
     "engine_action",
     "reference_image",
@@ -97,7 +97,15 @@ function deriveEdition(tool) {
     "operation_log",
   ]);
 
+  if (tool === "editor_action" && !actionMatched) {
+    return "pro";
+  }
+
   return proExclusiveTools.has(tool) ? "pro" : "community";
+}
+
+function isRateLimitedErrorMessage(message) {
+  return /HTTP\s*429|Too Many Requests/i.test(String(message || ""));
 }
 
 function normalizeReportStatus(status) {
@@ -129,10 +137,13 @@ function buildAiBaseline(report) {
   }
 
   for (const error of report.errors || []) {
+    const errorMessage = error.error || "未提供错误信息";
     baseline.set(error.id, {
-      status: "fail",
+      status: isRateLimitedErrorMessage(errorMessage) ? "blocked" : "fail",
       duration: "",
-      note: `来自 tests/test-report.json，自动化失败：${error.error || "未提供错误信息"}`,
+      note: isRateLimitedErrorMessage(errorMessage)
+        ? `来自 tests/test-report.json，自动化受限流影响：${errorMessage}`
+        : `来自 tests/test-report.json，自动化失败：${errorMessage}`,
     });
   }
 
@@ -1475,7 +1486,27 @@ function buildData() {
       matched: Boolean(actionDescription),
       toolFound: Boolean(toolDoc),
     };
-    const naturalLanguageSpec = buildNaturalLanguageSpec(item, aiDoc);
+    let naturalLanguageSpec = buildNaturalLanguageSpec(item, aiDoc);
+    if (Array.isArray(item.setupSteps) && item.setupSteps.length > 0) {
+      const hint =
+        " 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。";
+      naturalLanguageSpec = { ...naturalLanguageSpec, aiInstruction: naturalLanguageSpec.aiInstruction + hint };
+    }
+
+    const manualVerification = item.manualVerification || "";
+    const manualBaseline = {
+      status: "pending",
+      note: manualVerification,
+    };
+    if (manualVerification.startsWith("通过")) {
+      manualBaseline.status = "pass";
+    } else if (manualVerification.startsWith("失败")) {
+      manualBaseline.status = "fail";
+    } else if (manualVerification.startsWith("阻塞")) {
+      manualBaseline.status = "blocked";
+    } else if (manualVerification.startsWith("存疑")) {
+      manualBaseline.status = "uncertain";
+    }
 
     return {
       id: item.id,
@@ -1485,15 +1516,21 @@ function buildData() {
       input: item.input || {},
       expected: item.expected || "",
       note: item.note || "",
+      /** 与 interactive-test-plan.app.js 对齐：页面「前置条件」「建议前置步骤」来自 test-cases.json */
+      prerequisites: item.prerequisites || "",
+      setupSteps: Array.isArray(item.setupSteps) ? item.setupSteps : [],
       phase: derivePhase(item.tool),
       priority: derivePriority(item.tool),
-      edition: deriveEdition(item.tool),
+      edition: deriveEdition(item.tool, Boolean(actionDescription)),
       aiDoc: {
         ...aiDoc,
         naturalLanguageSpec,
         naturalLanguageTest: buildNaturalLanguageTestCase(naturalLanguageSpec),
       },
       aiBaseline: baseline,
+      manualBaseline,
+      needsRetest: item.needsRetest || false,
+      retestReason: item.retestReason || "",
     };
   });
 

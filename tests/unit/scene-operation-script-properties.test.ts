@@ -1,7 +1,9 @@
 import { describe, expect, it, vi } from 'vitest';
 import { buildOperationHandlers, type SceneOperationDeps } from '../../src/scene-operation-handlers-impl';
 
-class TestScript {}
+class MockComponent {}
+class TestScript extends MockComponent {}
+class NonComponentScript {}
 
 function makeNode(component: Record<string, unknown>) {
   return {
@@ -19,11 +21,14 @@ function makeNode(component: Record<string, unknown>) {
 function makeDeps(node: any, overrides: Partial<SceneOperationDeps> = {}): SceneOperationDeps {
   return {
     getCC: () => ({
+      Component: MockComponent,
       js: {
         getClassByName: vi.fn((name: string) => {
+          if (name === 'cc.Component') return MockComponent;
           if (name === 'TestScript' || name === 'cc.TestScript') return TestScript;
           return null;
         }),
+        isChildClassOf: vi.fn((child: unknown, parent: unknown) => parent === MockComponent && child === TestScript),
       },
     } as any),
     findNodeByUuid: vi.fn(() => node),
@@ -136,6 +141,32 @@ describe('scene-operation script properties', () => {
     });
   });
 
+  it('add_component 对已存在组件直接返回 alreadyAttached', async () => {
+    const comp: Record<string, unknown> = {};
+    const node = makeNode(comp);
+    const deps = makeDeps(node);
+    const handlers = buildOperationHandlers(deps);
+    const addComponent = vi.fn();
+
+    const result = await handlers.get('add_component')!(
+      {
+        addComponent,
+      } as any,
+      {} as any,
+      {
+        uuid: 'node-1',
+        component: 'TestScript',
+      },
+    );
+
+    expect(addComponent).not.toHaveBeenCalled();
+    expect(result).toEqual(expect.objectContaining({
+      success: true,
+      component: 'TestScript',
+      alreadyAttached: true,
+    }));
+  });
+
   it('attach_script 设置属性时对不支持值不再 runtime-only 假成功', async () => {
     const comp: Record<string, unknown> = {};
     const node = makeNode(comp);
@@ -184,5 +215,82 @@ describe('scene-operation script properties', () => {
     });
     expect(comp.unsupported).toBeUndefined();
     expect((result as any).assignedRuntimeOnly).toBeUndefined();
+  });
+
+  it('attach_script 对误传 cc. 前缀的自定义脚本返回明确错误并跳过 addComponent', async () => {
+    const comp: Record<string, unknown> = {};
+    const node = makeNode(comp);
+    const deps = makeDeps(node, {
+      getCC: () => ({
+        Component: MockComponent,
+        js: {
+          getClassByName: vi.fn((name: string) => {
+            if (name === 'cc.Component') return MockComponent;
+            if (name === 'cc.Test') return NonComponentScript;
+            if (name === 'Test') return TestScript;
+            return null;
+          }),
+          isChildClassOf: vi.fn((child: unknown, parent: unknown) => parent === MockComponent && child === TestScript),
+        },
+      } as any),
+    });
+    const handlers = buildOperationHandlers(deps);
+    const addComponent = vi.fn();
+
+    const result = await handlers.get('attach_script')!(
+      {
+        addComponent,
+        setComponentProperty: vi.fn(),
+      } as any,
+      {} as any,
+      {
+        uuid: 'node-1',
+        script: 'cc.Test',
+      },
+    );
+
+    expect(addComponent).not.toHaveBeenCalled();
+    expect(result).toEqual(expect.objectContaining({
+      error: '脚本类 "cc.Test" 不是 cc.Component 子类',
+      hint: expect.stringContaining('请改传 "Test"'),
+    }));
+  });
+
+  it('attach_script 对非 Component 脚本直接拒绝', async () => {
+    const comp: Record<string, unknown> = {};
+    const node = makeNode(comp);
+    const deps = makeDeps(node, {
+      getCC: () => ({
+        Component: MockComponent,
+        js: {
+          getClassByName: vi.fn((name: string) => {
+            if (name === 'cc.Component') return MockComponent;
+            if (name === 'NonComponentScript') return NonComponentScript;
+            return null;
+          }),
+          isChildClassOf: vi.fn(() => false),
+        },
+      } as any),
+    });
+    const handlers = buildOperationHandlers(deps);
+    const addComponent = vi.fn();
+
+    const result = await handlers.get('attach_script')!(
+      {
+        addComponent,
+        setComponentProperty: vi.fn(),
+      } as any,
+      {} as any,
+      {
+        uuid: 'node-1',
+        script: 'NonComponentScript',
+      },
+    );
+
+    expect(addComponent).not.toHaveBeenCalled();
+    expect(result).toEqual(expect.objectContaining({
+      error: '脚本类 "NonComponentScript" 不是 cc.Component 子类',
+      hint: expect.stringContaining('继承自 Component'),
+    }));
   });
 });

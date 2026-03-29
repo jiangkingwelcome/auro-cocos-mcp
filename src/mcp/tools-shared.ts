@@ -38,6 +38,8 @@ export interface BridgeToolContext {
   bridgePost: (path: string, body?: unknown) => Promise<unknown>;
   sceneMethod: (method: string, args?: unknown[]) => Promise<unknown>;
   editorMsg: (module: string, message: string, ...args: unknown[]) => Promise<unknown>;
+  /** 从扩展主进程包裹 begin-recording + dispatchOperation + end-recording，确保 dirty 标记正确设置 */
+  sceneOp: (params: Record<string, unknown>) => Promise<unknown>;
   text: (data: unknown, isError?: boolean) => ToolCallResult;
   isAutoRollbackEnabled?: () => boolean;
 }
@@ -134,6 +136,40 @@ export function extractSelectedNodeUuid(selectionResult: unknown): string {
   if (!Array.isArray(selected) || !selected.length) return '';
   const first = selected[0];
   return typeof first === 'string' ? first : '';
+}
+
+export function normalizeRecordingTargets(targets: Array<string | null | undefined>): string[] {
+  return targets
+    .map((item) => String(item ?? '').trim())
+    .filter(Boolean);
+}
+
+export async function beginSceneRecording(
+  editorMsg: BridgeToolContext['editorMsg'],
+  targets: Array<string | null | undefined> = [],
+): Promise<string | null> {
+  try {
+    const normalized = normalizeRecordingTargets(targets);
+    const token = await editorMsg('scene', 'begin-recording', normalized, null);
+    return token === undefined || token === null || token === '' ? null : String(token);
+  } catch {
+    return null;
+  }
+}
+
+export async function endSceneRecording(
+  editorMsg: BridgeToolContext['editorMsg'],
+  recordId: string | null,
+): Promise<void> {
+  try {
+    if (recordId) {
+      await editorMsg('scene', 'end-recording', recordId);
+      return;
+    }
+    await editorMsg('scene', 'end-recording');
+  } catch {
+    /* ignore */
+  }
 }
 
 export interface NormalizeResult {

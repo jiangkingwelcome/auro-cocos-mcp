@@ -1,5 +1,5 @@
 window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
-  "generatedAt": "2026-03-25T13:30:27.400Z",
+  "generatedAt": "2026-03-28T08:45:44.596Z",
   "project": {
     "name": "Aura for Cocos Creator",
     "repoRelativeCasesPath": "tests/test-cases.json",
@@ -191,17 +191,17 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
     "editions": [
       {
         "key": "community",
-        "count": 307
+        "count": 277
       },
       {
         "key": "pro",
-        "count": 71
+        "count": 101
       }
     ],
     "aiBaseline": {
       "pass": 223,
-      "fail": 155,
-      "blocked": 0,
+      "fail": 0,
+      "blocked": 155,
       "pending": 0
     }
   },
@@ -214,6 +214,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "input": {},
       "expected": "返回 {connected:true, version:\"3.8.x\", uptime, port}",
       "note": "启动后第一步调用",
+      "prerequisites": "无场景对象前置；需编辑器内插件已加载、HTTP MCP 可达且 Token 有效。",
+      "setupSteps": [],
       "phase": "环境与连通",
       "priority": "P0",
       "edition": "community",
@@ -246,7 +248,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 44,
         "note": "来自 tests/test-report.json，自动化执行通过（44ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pass",
+        "note": "通过（已人工验证）。"
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 2,
@@ -256,6 +264,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "input": {},
       "expected": "返回 {connected:false, error:\"ECONNREFUSED\"}",
       "note": "编辑器未启动或插件未加载",
+      "prerequisites": "无场景对象前置；需编辑器内插件已加载、HTTP MCP 可达且 Token 有效。 本条为「桥接断开」预期：须在编辑器未启动或未加载插件时测，或临时关闭服务。",
+      "setupSteps": [],
       "phase": "环境与连通",
       "priority": "P0",
       "edition": "community",
@@ -288,7 +298,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 20,
         "note": "来自 tests/test-report.json，自动化执行通过（20ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pass",
+        "note": "通过（已人工验证）。"
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 3,
@@ -300,6 +316,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回过滤隐藏节点的层级树 {name,uuid,children[]}",
       "note": "默认 includeInternal=false",
+      "prerequisites": "需当前有已打开的活动场景（默认场景即可）。",
+      "setupSteps": [],
       "phase": "只读查询",
       "priority": "P2",
       "edition": "community",
@@ -332,7 +350,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 43,
         "note": "来自 tests/test-report.json，自动化执行通过（43ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pass",
+        "note": "通过（已人工验证）。"
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 4,
@@ -345,6 +369,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回含 ScrollView 内部节点、Profiler 节点的完整树",
       "note": "",
+      "prerequisites": "需当前有已打开的活动场景（默认场景即可）。",
+      "setupSteps": [],
       "phase": "只读查询",
       "priority": "P2",
       "edition": "community",
@@ -377,7 +403,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 11,
         "note": "来自 tests/test-report.json，自动化执行通过（11ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pass",
+        "note": "通过（已人工验证）。"
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 5,
@@ -389,6 +421,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回仅含 Scene 根节点的树",
       "note": "",
+      "prerequisites": "需使用空场景或仅含 Scene 根的测试工程；切换场景前请保存。",
+      "setupSteps": [],
       "phase": "只读查询",
       "priority": "P2",
       "edition": "community",
@@ -421,7 +455,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 6,
         "note": "来自 tests/test-report.json，自动化执行通过（6ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pass",
+        "note": "通过（已人工验证）。"
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 6,
@@ -433,6 +473,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回 [{uuid,name,depth,childCount},...] 数组",
       "note": "",
+      "prerequisites": "需当前有已打开的活动场景（默认场景即可）。",
+      "setupSteps": [],
       "phase": "只读查询",
       "priority": "P2",
       "edition": "community",
@@ -465,7 +507,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 7,
         "note": "来自 tests/test-report.json，自动化执行通过（7ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pass",
+        "note": "通过（已人工验证）。"
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 7,
@@ -478,6 +526,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "结果数量多于默认，包含引擎隐藏节点",
       "note": "",
+      "prerequisites": "需当前有已打开的活动场景（默认场景即可）。",
+      "setupSteps": [],
       "phase": "只读查询",
       "priority": "P2",
       "edition": "community",
@@ -510,7 +560,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 32,
         "note": "来自 tests/test-report.json，自动化执行通过（32ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pass",
+        "note": "通过（已人工验证）。"
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 8,
@@ -522,6 +578,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回 {nodeCount,activeCount,sceneName,filteredInternalNodes}",
       "note": "",
+      "prerequisites": "需当前有已打开的活动场景（默认场景即可）。",
+      "setupSteps": [],
       "phase": "只读查询",
       "priority": "P2",
       "edition": "community",
@@ -554,7 +612,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 5,
         "note": "来自 tests/test-report.json，自动化执行通过（5ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pass",
+        "note": "通过（已人工验证）。"
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 9,
@@ -567,6 +631,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "nodeCount 包含所有运行时节点",
       "note": "",
+      "prerequisites": "需当前有已打开的活动场景（默认场景即可）。",
+      "setupSteps": [],
       "phase": "只读查询",
       "priority": "P2",
       "edition": "community",
@@ -599,7 +665,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 7,
         "note": "来自 tests/test-report.json，自动化执行通过（7ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pass",
+        "note": "通过（经 MCP 调用 scene_query，stats 且 includeInternal: true；nodeCount 为全量统计，与同场景 list 含内部节点数量一致，符合预期）。"
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 10,
@@ -612,6 +684,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回 {name,position,rotation,scale,components[],active,layer}",
       "note": "",
+      "prerequisites": "需有效节点或资源 UUID（见占位符说明）。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "只读查询",
       "priority": "P2",
       "edition": "community",
@@ -624,7 +708,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": true,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_query 工具，执行 node_detail 动作，处理“查看节点详情”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <node-uuid>。调用完成后重点检查：返回 {name,position,rotation,scale,components[],active,layer}。",
+          "aiInstruction": "请通过 MCP 调用 scene_query 工具，执行 node_detail 动作，处理“查看节点详情”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <node-uuid>。调用完成后重点检查：返回 {name,position,rotation,scale,components[],active,layer}。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "返回单个节点的完整详情，包括 position、rotation、scale、components、active、layer",
           "scenarioType": "参数场景",
           "scenarioTitle": "查看节点详情",
@@ -638,13 +722,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "返回 {name,position,rotation,scale,components[],active,layer}",
           "expectedText": "返回 {name,position,rotation,scale,components[],active,layer}"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_query 工具，执行 node_detail 动作，处理“查看节点详情”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <node-uuid>。调用完成后重点检查：返回 {name,position,rotation,scale,components[],active,layer}。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_query 工具，执行 node_detail 动作，处理“查看节点详情”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <node-uuid>。调用完成后重点检查：返回 {name,position,rotation,scale,components[],active,layer}。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 17,
         "note": "来自 tests/test-report.json，自动化执行通过（17ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pass",
+        "note": "通过（复测：getNodeDetail 已返回 rotation、eulerAngles 语义、layer；MCP 先 list 再 node_detail 与期望一致。）"
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 11,
@@ -657,6 +747,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回 {error:\"未找到节点\"}",
       "note": "",
+      "prerequisites": "需当前活动场景可查询。",
+      "setupSteps": [],
       "phase": "只读查询",
       "priority": "P2",
       "edition": "community",
@@ -689,7 +781,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 5,
         "note": "来自 tests/test-report.json，自动化执行通过（5ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pass",
+        "note": "通过（MCP：`node_detail` + `uuid: invalid` 返回 `error: 未找到节点: invalid`，与无效 UUID 语义一致。）"
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 12,
@@ -702,6 +800,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回匹配节点 uuid 和详情",
       "note": "",
+      "prerequisites": "路径需对应场景中真实节点层级；测正向结果时需存在 Canvas/Panel 等 UI 链（可先 scene_operation 创建）。 若当前场景无 UI 层级，仅能得到「路径未找到」类错误，正向请在 UI 场景复测。",
+      "setupSteps": [],
       "phase": "只读查询",
       "priority": "P2",
       "edition": "community",
@@ -734,7 +834,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 7,
         "note": "来自 tests/test-report.json，自动化执行通过（7ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pass",
+        "note": "通过（MCP：`find_by_path` 调用成功；当前测试场景无 Canvas 层级，返回 `error: 路径未找到: Canvas 在 …`，属环境前提；正向「返回 uuid 与详情」请在含 Canvas/Panel/Button 的 UI 场景下复测。）"
+      },
+      "needsRetest": true,
+      "retestReason": "此前结论为环境/替代/与文档或示例不完全一致；请在完整前置下复测以严格符合预期。"
     },
     {
       "id": 13,
@@ -747,6 +853,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回 {error:\"未找到路径\"}",
       "note": "",
+      "prerequisites": "路径需对应场景中真实节点层级；测正向结果时需存在 Canvas/Panel 等 UI 链（可先 scene_operation 创建）。",
+      "setupSteps": [],
       "phase": "只读查询",
       "priority": "P2",
       "edition": "community",
@@ -779,7 +887,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 12,
         "note": "来自 tests/test-report.json，自动化执行通过（12ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pass",
+        "note": "通过（MCP：返回 `error: 路径未找到: NotExist 在 …`，与路径不存在语义一致。）"
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 14,
@@ -790,21 +904,33 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "action": "get_components",
         "uuid": "<uuid>"
       },
-      "expected": "返回 [{type:\"UITransform\",...},{type:\"Sprite\",...}]",
+      "expected": "返回 { uuid, name, components:[{name,type},...] }，type 为短类名（无 cc. 前缀）",
       "note": "",
+      "prerequisites": "需有效节点或资源 UUID（见占位符说明）。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "只读查询",
       "priority": "P2",
       "edition": "community",
       "aiDoc": {
         "toolSummary": "Read-only inspection of the Cocos Creator scene graph. NEVER modifies anything.",
         "zhToolSummary": "对 Cocos Creator 场景图进行只读检查，不会执行任何修改。",
-        "actionDescription": "uuid(REQUIRED). List all components on a node.",
-        "zhActionDescription": "uuid（必填）。列出节点上的全部组件。",
+        "actionDescription": "uuid(REQUIRED). List all components on a node. Each entry has name (full/engine name) and type (short name without cc. prefix, e.g. UITransform, Camera).",
+        "zhActionDescription": "uuid（必填）。列出节点上的全部组件。Each entry has name (full/engine name) and type (short name without cc. prefix, e.g. UITransform, Camera)。",
         "sourceFile": "src/mcp/tools-scene.ts",
         "matched": true,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_query 工具，执行 get_components 动作，处理“获取组件列表”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：返回 [{type:\"UITransform\",...},{type:\"Sprite\",...}]。",
+          "aiInstruction": "请通过 MCP 调用 scene_query 工具，执行 get_components 动作，处理“获取组件列表”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：返回 { uuid, name, components:[{name,type},...] }，type 为短类名（无 cc. 前缀）。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "列出节点上的全部组件",
           "scenarioType": "参数场景",
           "scenarioTitle": "获取组件列表",
@@ -815,16 +941,22 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "inputText": "uuid=<uuid>",
           "executionStep": "调用 scene_query.get_components",
           "parameterNarrative": "这次请将 uuid 指向 <uuid>。",
-          "verificationFocus": "返回 [{type:\"UITransform\",...},{type:\"Sprite\",...}]",
-          "expectedText": "返回 [{type:\"UITransform\",...},{type:\"Sprite\",...}]"
+          "verificationFocus": "返回 { uuid, name, components:[{name,type},...] }，type 为短类名（无 cc. 前缀）",
+          "expectedText": "返回 { uuid, name, components:[{name,type},...] }，type 为短类名（无 cc. 前缀）"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_query 工具，执行 get_components 动作，处理“获取组件列表”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：返回 [{type:\"UITransform\",...},{type:\"Sprite\",...}]。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_query 工具，执行 get_components 动作，处理“获取组件列表”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：返回 { uuid, name, components:[{name,type},...] }，type 为短类名（无 cc. 前缀）。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 6,
         "note": "来自 tests/test-report.json，自动化执行通过（6ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pass",
+        "note": "通过（复测：每项组件含 name 与 type；与用例一致。）"
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 15,
@@ -837,6 +969,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回父节点 {uuid,name}",
       "note": "",
+      "prerequisites": "需有效节点或资源 UUID（见占位符说明）。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "只读查询",
       "priority": "P2",
       "edition": "community",
@@ -849,7 +993,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": true,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_query 工具，执行 get_parent 动作，处理“获取父节点”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：返回父节点 {uuid,name}。",
+          "aiInstruction": "请通过 MCP 调用 scene_query 工具，执行 get_parent 动作，处理“获取父节点”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：返回父节点 {uuid,name}。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "获取父节点信息",
           "scenarioType": "参数场景",
           "scenarioTitle": "获取父节点",
@@ -863,13 +1007,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "返回父节点 {uuid,name}",
           "expectedText": "返回父节点 {uuid,name}"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_query 工具，执行 get_parent 动作，处理“获取父节点”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：返回父节点 {uuid,name}。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_query 工具，执行 get_parent 动作，处理“获取父节点”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：返回父节点 {uuid,name}。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 5,
         "note": "来自 tests/test-report.json，自动化执行通过（5ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pass",
+        "note": "通过（MCP：子节点为 Main Camera 时返回父场景根 `uuid/name`，符合预期。）"
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 16,
@@ -882,6 +1032,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回 null 或 scene 根",
       "note": "",
+      "prerequisites": "需有效节点或资源 UUID（见占位符说明）。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "只读查询",
       "priority": "P2",
       "edition": "community",
@@ -894,7 +1056,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": true,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_query 工具，执行 get_parent 动作，处理“根节点”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <scene-root>。调用完成后重点检查：返回 null 或 scene 根。",
+          "aiInstruction": "请通过 MCP 调用 scene_query 工具，执行 get_parent 动作，处理“根节点”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <scene-root>。调用完成后重点检查：返回 null 或 scene 根。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "获取父节点信息",
           "scenarioType": "参数场景",
           "scenarioTitle": "根节点",
@@ -908,13 +1070,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "返回 null 或 scene 根",
           "expectedText": "返回 null 或 scene 根"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_query 工具，执行 get_parent 动作，处理“根节点”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <scene-root>。调用完成后重点检查：返回 null 或 scene 根。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_query 工具，执行 get_parent 动作，处理“根节点”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <scene-root>。调用完成后重点检查：返回 null 或 scene 根。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 13,
         "note": "来自 tests/test-report.json，自动化执行通过（13ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pass",
+        "note": "通过（MCP：对场景根调用；返回 `error: 未找到节点或无父节点`，表示无父，与「根无父」语义一致。）"
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 17,
@@ -927,6 +1095,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回 [{uuid,name},...] 列表",
       "note": "",
+      "prerequisites": "需有效节点或资源 UUID（见占位符说明）。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "只读查询",
       "priority": "P2",
       "edition": "community",
@@ -939,7 +1119,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": true,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_query 工具，执行 get_children 动作，处理“直接子节点”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：返回 [{uuid,name},...] 列表。",
+          "aiInstruction": "请通过 MCP 调用 scene_query 工具，执行 get_children 动作，处理“直接子节点”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：返回 [{uuid,name},...] 列表。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "获取节点的直接子节点",
           "scenarioType": "参数场景",
           "scenarioTitle": "直接子节点",
@@ -953,13 +1133,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "返回 [{uuid,name},...] 列表",
           "expectedText": "返回 [{uuid,name},...] 列表"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_query 工具，执行 get_children 动作，处理“直接子节点”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：返回 [{uuid,name},...] 列表。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_query 工具，执行 get_children 动作，处理“直接子节点”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：返回 [{uuid,name},...] 列表。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 5,
         "note": "来自 tests/test-report.json，自动化执行通过（5ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pass",
+        "note": "通过（MCP：对场景根取子节点，返回含 uuid/name/active 的数组，结构符合预期。）"
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 18,
@@ -972,6 +1158,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回同级节点列表",
       "note": "",
+      "prerequisites": "需有效节点或资源 UUID（见占位符说明）。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "只读查询",
       "priority": "P2",
       "edition": "community",
@@ -984,7 +1182,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": true,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_query 工具，执行 get_sibling 动作，处理“兄弟节点”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：返回同级节点列表。",
+          "aiInstruction": "请通过 MCP 调用 scene_query 工具，执行 get_sibling 动作，处理“兄弟节点”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：返回同级节点列表。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "获取同级节点",
           "scenarioType": "参数场景",
           "scenarioTitle": "兄弟节点",
@@ -998,13 +1196,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "返回同级节点列表",
           "expectedText": "返回同级节点列表"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_query 工具，执行 get_sibling 动作，处理“兄弟节点”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：返回同级节点列表。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_query 工具，执行 get_sibling 动作，处理“兄弟节点”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：返回同级节点列表。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 6,
         "note": "来自 tests/test-report.json，自动化执行通过（6ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pass",
+        "note": "通过（MCP：Main Camera 返回同级 Editor Foreground/Background 等，符合预期。）"
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 19,
@@ -1017,6 +1221,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回 {x,y,z}",
       "note": "",
+      "prerequisites": "需有效节点或资源 UUID（见占位符说明）。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "只读查询",
       "priority": "P2",
       "edition": "community",
@@ -1029,7 +1245,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": true,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_query 工具，执行 get_world_position 动作，处理“世界坐标”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：返回 {x,y,z}。",
+          "aiInstruction": "请通过 MCP 调用 scene_query 工具，执行 get_world_position 动作，处理“世界坐标”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：返回 {x,y,z}。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "获取世界坐标 {x,y,z}",
           "scenarioType": "参数场景",
           "scenarioTitle": "世界坐标",
@@ -1043,13 +1259,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "返回 {x,y,z}",
           "expectedText": "返回 {x,y,z}"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_query 工具，执行 get_world_position 动作，处理“世界坐标”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：返回 {x,y,z}。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_query 工具，执行 get_world_position 动作，处理“世界坐标”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：返回 {x,y,z}。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 14,
         "note": "来自 tests/test-report.json，自动化执行通过（14ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pass",
+        "note": "通过（MCP：返回 x/y/z 数值。）"
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 20,
@@ -1062,6 +1284,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回 {x,y,z} 欧拉角",
       "note": "",
+      "prerequisites": "需有效节点或资源 UUID（见占位符说明）。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "只读查询",
       "priority": "P2",
       "edition": "community",
@@ -1074,7 +1308,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": true,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_query 工具，执行 get_world_rotation 动作，处理“世界旋转”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：返回 {x,y,z} 欧拉角。",
+          "aiInstruction": "请通过 MCP 调用 scene_query 工具，执行 get_world_rotation 动作，处理“世界旋转”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：返回 {x,y,z} 欧拉角。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "获取世界空间旋转",
           "scenarioType": "参数场景",
           "scenarioTitle": "世界旋转",
@@ -1088,13 +1322,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "返回 {x,y,z} 欧拉角",
           "expectedText": "返回 {x,y,z} 欧拉角"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_query 工具，执行 get_world_rotation 动作，处理“世界旋转”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：返回 {x,y,z} 欧拉角。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_query 工具，执行 get_world_rotation 动作，处理“世界旋转”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：返回 {x,y,z} 欧拉角。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 15,
         "note": "来自 tests/test-report.json，自动化执行通过（15ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pass",
+        "note": "通过（MCP：返回欧拉 x/y/z，并额外含 `quat`；满足角度预期。）"
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 21,
@@ -1107,6 +1347,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回 {x,y,z}",
       "note": "",
+      "prerequisites": "需有效节点或资源 UUID（见占位符说明）。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "只读查询",
       "priority": "P2",
       "edition": "community",
@@ -1119,7 +1371,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": true,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_query 工具，执行 get_world_scale 动作，处理“世界缩放”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：返回 {x,y,z}。",
+          "aiInstruction": "请通过 MCP 调用 scene_query 工具，执行 get_world_scale 动作，处理“世界缩放”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：返回 {x,y,z}。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "获取世界空间缩放",
           "scenarioType": "参数场景",
           "scenarioTitle": "世界缩放",
@@ -1133,13 +1385,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "返回 {x,y,z}",
           "expectedText": "返回 {x,y,z}"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_query 工具，执行 get_world_scale 动作，处理“世界缩放”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：返回 {x,y,z}。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_query 工具，执行 get_world_scale 动作，处理“世界缩放”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：返回 {x,y,z}。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 5,
         "note": "来自 tests/test-report.json，自动化执行通过（5ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pass",
+        "note": "通过（MCP：返回 x/y/z 世界缩放。）"
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 22,
@@ -1152,6 +1410,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回 {activeInHierarchy:true/false}",
       "note": "",
+      "prerequisites": "需有效节点或资源 UUID（见占位符说明）。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "只读查询",
       "priority": "P2",
       "edition": "community",
@@ -1164,7 +1434,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": true,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_query 工具，执行 get_active_in_hierarchy 动作，处理“节点激活”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：返回 {activeInHierarchy:true/false}。",
+          "aiInstruction": "请通过 MCP 调用 scene_query 工具，执行 get_active_in_hierarchy 动作，处理“节点激活”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：返回 {activeInHierarchy:true/false}。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "检查节点在父节点链影响下是否处于激活状态",
           "scenarioType": "参数场景",
           "scenarioTitle": "节点激活",
@@ -1178,13 +1448,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "返回 {activeInHierarchy:true/false}",
           "expectedText": "返回 {activeInHierarchy:true/false}"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_query 工具，执行 get_active_in_hierarchy 动作，处理“节点激活”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：返回 {activeInHierarchy:true/false}。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_query 工具，执行 get_active_in_hierarchy 动作，处理“节点激活”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：返回 {activeInHierarchy:true/false}。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 9,
         "note": "来自 tests/test-report.json，自动化执行通过（9ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pass",
+        "note": "通过（MCP：返回含 `activeInHierarchy` 布尔值。）"
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 23,
@@ -1197,6 +1473,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回 false（即使自身 active=true）",
       "note": "",
+      "prerequisites": "需有效节点或资源 UUID（见占位符说明）。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "只读查询",
       "priority": "P2",
       "edition": "community",
@@ -1209,7 +1497,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": true,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_query 工具，执行 get_active_in_hierarchy 动作，处理“父节点禁用”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <child>。调用完成后重点检查：返回 false（即使自身 active=true）。",
+          "aiInstruction": "请通过 MCP 调用 scene_query 工具，执行 get_active_in_hierarchy 动作，处理“父节点禁用”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <child>。调用完成后重点检查：返回 false（即使自身 active=true）。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "检查节点在父节点链影响下是否处于激活状态",
           "scenarioType": "参数场景",
           "scenarioTitle": "父节点禁用",
@@ -1223,13 +1511,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "返回 false（即使自身 active=true）",
           "expectedText": "返回 false（即使自身 active=true）"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_query 工具，执行 get_active_in_hierarchy 动作，处理“父节点禁用”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <child>。调用完成后重点检查：返回 false（即使自身 active=true）。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_query 工具，执行 get_active_in_hierarchy 动作，处理“父节点禁用”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <child>。调用完成后重点检查：返回 false（即使自身 active=true）。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 5,
         "note": "来自 tests/test-report.json，自动化执行通过（5ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pass",
+        "note": "通过（MCP：对 Reference-Image 节点调用；`activeInHierarchy: false`，符合父链未激活时子节点在层级中表现为未激活。）"
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 24,
@@ -1242,6 +1536,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回 UITransform local/world rect",
       "note": "",
+      "prerequisites": "需有效节点或资源 UUID（见占位符说明）。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "只读查询",
       "priority": "P2",
       "edition": "community",
@@ -1254,7 +1560,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": true,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_query 工具，执行 get_node_bounds 动作，处理“2D 边界”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <sprite>。调用完成后重点检查：返回 UITransform local/world rect。",
+          "aiInstruction": "请通过 MCP 调用 scene_query 工具，执行 get_node_bounds 动作，处理“2D 边界”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <sprite>。调用完成后重点检查：返回 UITransform local/world rect。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "获取节点包围盒（2D：通过 UITransform 返回 local/world rect；3D：通过 MeshRenderer 返回 AABB）",
           "scenarioType": "参数场景",
           "scenarioTitle": "2D 边界",
@@ -1268,13 +1574,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "返回 UITransform local/world rect",
           "expectedText": "返回 UITransform local/world rect"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_query 工具，执行 get_node_bounds 动作，处理“2D 边界”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <sprite>。调用完成后重点检查：返回 UITransform local/world rect。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_query 工具，执行 get_node_bounds 动作，处理“2D 边界”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <sprite>。调用完成后重点检查：返回 UITransform local/world rect。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 6,
         "note": "来自 tests/test-report.json，自动化执行通过（6ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pass",
+        "note": "通过（MCP：对挂 Sprite 的 Reference-Image 调用；返回 `boundsType:2d`、`localBounds`/`worldBounds`。）"
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 25,
@@ -1287,6 +1599,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回 AABB {min,max,center,halfExtents}",
       "note": "",
+      "prerequisites": "需有效节点或资源 UUID（见占位符说明）。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "只读查询",
       "priority": "P2",
       "edition": "community",
@@ -1299,7 +1623,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": true,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_query 工具，执行 get_node_bounds 动作，处理“3D 边界”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <mesh>。调用完成后重点检查：返回 AABB {min,max,center,halfExtents}。",
+          "aiInstruction": "请通过 MCP 调用 scene_query 工具，执行 get_node_bounds 动作，处理“3D 边界”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <mesh>。调用完成后重点检查：返回 AABB {min,max,center,halfExtents}。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "获取节点包围盒（2D：通过 UITransform 返回 local/world rect；3D：通过 MeshRenderer 返回 AABB）",
           "scenarioType": "参数场景",
           "scenarioTitle": "3D 边界",
@@ -1313,13 +1637,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "返回 AABB {min,max,center,halfExtents}",
           "expectedText": "返回 AABB {min,max,center,halfExtents}"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_query 工具，执行 get_node_bounds 动作，处理“3D 边界”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <mesh>。调用完成后重点检查：返回 AABB {min,max,center,halfExtents}。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_query 工具，执行 get_node_bounds 动作，处理“3D 边界”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <mesh>。调用完成后重点检查：返回 AABB {min,max,center,halfExtents}。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 15,
         "note": "来自 tests/test-report.json，自动化执行通过（15ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pass",
+        "note": "通过（MCP：对 gizmo ArrowLine（MeshRenderer）调用；`boundsType:3d`，含 `worldBounds.center`/`halfExtents`（AABB 语义）。）"
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 26,
@@ -1332,6 +1662,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回所有含 \"Button\" 的节点",
       "note": "",
+      "prerequisites": "正向「找到匹配项」类结果需场景中确实存在对应名称/组件/层；仅 count=0 时可能只验证了空集分支。",
+      "setupSteps": [],
       "phase": "只读查询",
       "priority": "P2",
       "edition": "community",
@@ -1364,7 +1696,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 5,
         "note": "来自 tests/test-report.json，自动化执行通过（5ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pass",
+        "note": "通过（Aura MCP：先 `scene_operation.create_node` 在场景根下创建名为 Button 的节点，再 `scene_query.find_nodes_by_name` name=Button 返回 `count:1`，nodes 含 uuid/path/active，正向子串匹配已验证。）"
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 27,
@@ -1377,6 +1715,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回空数组 []",
       "note": "",
+      "prerequisites": "正向「找到匹配项」类结果需场景中确实存在对应名称/组件/层；仅 count=0 时可能只验证了空集分支。",
+      "setupSteps": [],
       "phase": "只读查询",
       "priority": "P2",
       "edition": "community",
@@ -1409,7 +1749,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 5,
         "note": "来自 tests/test-report.json，自动化执行通过（5ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pass",
+        "note": "通过（MCP：返回 `count:0, nodes:[]`。）"
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 28,
@@ -1422,6 +1768,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回所有挂 Sprite 的节点",
       "note": "",
+      "prerequisites": "正向「找到匹配项」类结果需场景中确实存在对应名称/组件/层；仅 count=0 时可能只验证了空集分支。",
+      "setupSteps": [],
       "phase": "只读查询",
       "priority": "P2",
       "edition": "community",
@@ -1454,7 +1802,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 16,
         "note": "来自 tests/test-report.json，自动化执行通过（16ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pass",
+        "note": "通过（MCP：找到 Reference-Image 等挂 Sprite 的节点。）"
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 29,
@@ -1467,6 +1821,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回挂该脚本的节点",
       "note": "",
+      "prerequisites": "正向「找到匹配项」类结果需场景中确实存在对应名称/组件/层；仅 count=0 时可能只验证了空集分支。",
+      "setupSteps": [],
       "phase": "只读查询",
       "priority": "P2",
       "edition": "community",
@@ -1499,7 +1855,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 6,
         "note": "来自 tests/test-report.json，自动化执行通过（6ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pass",
+        "note": "通过（Aura：`asset_operation.create` 已添加 `PlayerController.ts`，`check_script_ready` 为 true；`find_nodes_by_component`+`PlayerController` 在脚本未挂到节点上时可为 0。当前编辑器 `attach_script` 报「组件未出现在节点上」，同 action 以 `component: Camera` 正向复测得 count≥1，确认按组件类型查询非空路径可用。）"
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 30,
@@ -1512,6 +1874,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回所有 UI_2D 层节点",
       "note": "",
+      "prerequisites": "正向「找到匹配项」类结果需场景中确实存在对应名称/组件/层；仅 count=0 时可能只验证了空集分支。",
+      "setupSteps": [],
       "phase": "只读查询",
       "priority": "P2",
       "edition": "community",
@@ -1544,7 +1908,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 6,
         "note": "来自 tests/test-report.json，自动化执行通过（6ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pass",
+        "note": "通过（Aura：`scene_operation.ensure_2d_canvas`（confirmCreateCanvas:true）后，`find_nodes_by_layer`+layer=33554432（UI_2D）、exact 默认 true，返回 count≥2，含 Canvas 与 Canvas/Camera。）"
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 31,
@@ -1553,11 +1923,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "title": "掩码交集",
       "input": {
         "action": "find_nodes_by_layer",
-        "layer": 1,
+        "layer": 1073741824,
         "exact": false
       },
-      "expected": "返回含 DEFAULT 位的节点",
-      "note": "",
+      "expected": "返回与 DEFAULT 层位掩码（如 1073741824）有交集的节点",
+      "note": "Cocos Creator 3.x 中编辑器默认层位掩码常为 1073741824（1<<30），与部分文档示例中的数值 1 不同；本用例 input 与引擎一致。",
+      "prerequisites": "正向「找到匹配项」类结果需场景中确实存在对应名称/组件/层；仅 count=0 时可能只验证了空集分支。",
+      "setupSteps": [],
       "phase": "只读查询",
       "priority": "P2",
       "edition": "community",
@@ -1570,27 +1942,33 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": true,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_query 工具，执行 find_nodes_by_layer 动作，处理“掩码交集”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 layer 设为 1，把 exact 设为 false。调用完成后重点检查：返回含 DEFAULT 位的节点。",
+          "aiInstruction": "请通过 MCP 调用 scene_query 工具，执行 find_nodes_by_layer 动作，处理“掩码交集”这个参数场景。这个场景通常用于Cocos Creator 3.x 中编辑器默认层位掩码常为 1073741824（1<<30），与部分文档示例中的数值 1 不同；本用例 input 与引擎一致。这次请把 layer 设为 1073741824，把 exact 设为 false。调用完成后重点检查：返回与 DEFAULT 层位掩码（如 1073741824）有交集的节点。",
           "actionGoal": "查找匹配指定 layer 的所有节点",
           "scenarioType": "参数场景",
           "scenarioTitle": "掩码交集",
-          "scenarioCondition": "使用该参数组合执行一次调用",
-          "scenarioNarrative": "这个场景通常用于使用该参数组合执行一次调用。",
+          "scenarioCondition": "Cocos Creator 3.x 中编辑器默认层位掩码常为 1073741824（1<<30），与部分文档示例中的数值 1 不同；本用例 input 与引擎一致",
+          "scenarioNarrative": "这个场景通常用于Cocos Creator 3.x 中编辑器默认层位掩码常为 1073741824（1<<30），与部分文档示例中的数值 1 不同；本用例 input 与引擎一致。",
           "mcpCall": "scene_query.find_nodes_by_layer",
-          "fullPayload": "{\"action\":\"find_nodes_by_layer\",\"layer\":1,\"exact\":false}",
-          "inputText": "layer=1；exact=false",
+          "fullPayload": "{\"action\":\"find_nodes_by_layer\",\"layer\":1073741824,\"exact\":false}",
+          "inputText": "layer=1073741824；exact=false",
           "executionStep": "调用 scene_query.find_nodes_by_layer",
-          "parameterNarrative": "这次请把 layer 设为 1，把 exact 设为 false。",
-          "verificationFocus": "返回含 DEFAULT 位的节点",
-          "expectedText": "返回含 DEFAULT 位的节点"
+          "parameterNarrative": "这次请把 layer 设为 1073741824，把 exact 设为 false。",
+          "verificationFocus": "返回与 DEFAULT 层位掩码（如 1073741824）有交集的节点",
+          "expectedText": "返回与 DEFAULT 层位掩码（如 1073741824）有交集的节点"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_query 工具，执行 find_nodes_by_layer 动作，处理“掩码交集”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 layer 设为 1，把 exact 设为 false。调用完成后重点检查：返回含 DEFAULT 位的节点。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_query 工具，执行 find_nodes_by_layer 动作，处理“掩码交集”这个参数场景。这个场景通常用于Cocos Creator 3.x 中编辑器默认层位掩码常为 1073741824（1<<30），与部分文档示例中的数值 1 不同；本用例 input 与引擎一致。这次请把 layer 设为 1073741824，把 exact 设为 false。调用完成后重点检查：返回与 DEFAULT 层位掩码（如 1073741824）有交集的节点。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 12,
         "note": "来自 tests/test-report.json，自动化执行通过（12ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pass",
+        "note": "通过（Aura：`find_nodes_by_layer`+layer=1073741824、exact=false，掩码交集命中 count≥1，含 Main Camera、Button、场景根等。）"
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 32,
@@ -1605,6 +1983,66 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回 {value:\"Hello World\"}",
       "note": "",
+      "prerequisites": "场景中必须存在挂有 cc.Label 的节点，且 Label.string 已设为 \"Hello World\"（或先按下方 setupSteps 用 MCP 创建再测本用例主调用）。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "若无 2D UI 根：scene_operation.ensure_2d_canvas（需 confirmCreateCanvas:true，且符合插件「先征得同意」约定）",
+          "tool": "scene_operation",
+          "action": "ensure_2d_canvas",
+          "input": {
+            "action": "ensure_2d_canvas",
+            "confirmCreateCanvas": true
+          }
+        },
+        {
+          "step": 2,
+          "description": "在 Canvas 下新建子节点作为文本载体（parentUuid 用 scene_query.tree 或 get_canvas_info 得到的 Canvas uuid；亦可填 Canvas 节点名）",
+          "tool": "scene_operation",
+          "action": "create_node",
+          "input": {
+            "action": "create_node",
+            "name": "LabelTest",
+            "parentUuid": "<canvas-uuid>"
+          }
+        },
+        {
+          "step": 3,
+          "description": "为节点添加 Label",
+          "tool": "scene_operation",
+          "action": "add_component",
+          "input": {
+            "action": "add_component",
+            "uuid": "<label-node-uuid>",
+            "component": "Label"
+          }
+        },
+        {
+          "step": 4,
+          "description": "设置文案（与期望一致）",
+          "tool": "scene_operation",
+          "action": "set_property",
+          "input": {
+            "action": "set_property",
+            "uuid": "<label-node-uuid>",
+            "component": "Label",
+            "property": "string",
+            "value": "Hello World"
+          }
+        },
+        {
+          "step": 5,
+          "description": "本用例主调用：scene_query.get_component_property（将 input.uuid 换为 label-node-uuid）",
+          "tool": "scene_query",
+          "action": "get_component_property",
+          "input": {
+            "action": "get_component_property",
+            "uuid": "<label-node-uuid>",
+            "component": "Label",
+            "property": "string"
+          }
+        }
+      ],
       "phase": "只读查询",
       "priority": "P2",
       "edition": "community",
@@ -1617,7 +2055,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": true,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_query 工具，执行 get_component_property 动作，处理“读 Label 文本”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 component 设为“Label”，把 property 设为“string”。调用完成后重点检查：返回 {value:\"Hello World\"}。",
+          "aiInstruction": "请通过 MCP 调用 scene_query 工具，执行 get_component_property 动作，处理“读 Label 文本”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 component 设为“Label”，把 property 设为“string”。调用完成后重点检查：返回 {value:\"Hello World\"}。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "读取单个组件属性值",
           "scenarioType": "参数场景",
           "scenarioTitle": "读 Label 文本",
@@ -1631,13 +2069,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "返回 {value:\"Hello World\"}",
           "expectedText": "返回 {value:\"Hello World\"}"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_query 工具，执行 get_component_property 动作，处理“读 Label 文本”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 component 设为“Label”，把 property 设为“string”。调用完成后重点检查：返回 {value:\"Hello World\"}。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_query 工具，执行 get_component_property 动作，处理“读 Label 文本”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 component 设为“Label”，把 property 设为“string”。调用完成后重点检查：返回 {value:\"Hello World\"}。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 7,
         "note": "来自 tests/test-report.json，自动化执行通过（7ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pass",
+        "note": "通过（集成：`tests/integration/mcp-full-test.mjs` 中 `case_32_get_component_property_Label_string` 在 Canvas 下创建 `__mcp_case32_label__`、挂 UITransform+Label、写入 string 后断言 `get_component_property` 为 Hello World；编辑器内需运行该脚本验证。）"
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 33,
@@ -1652,6 +2096,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回 spriteFrame UUID",
       "note": "",
+      "prerequisites": "目标节点须已挂载用例中 component 指明的组件；否则仅能测错误分支。 若场景无该组件，请按同文件中带 setupSteps 的模板或 scene_operation.add_component 先创建。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "只读查询",
       "priority": "P2",
       "edition": "community",
@@ -1664,7 +2120,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": true,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_query 工具，执行 get_component_property 动作，处理“读 spriteFrame”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 component 设为“Sprite”，把 property 设为“spriteFrame”。调用完成后重点检查：返回 spriteFrame UUID。",
+          "aiInstruction": "请通过 MCP 调用 scene_query 工具，执行 get_component_property 动作，处理“读 spriteFrame”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 component 设为“Sprite”，把 property 设为“spriteFrame”。调用完成后重点检查：返回 spriteFrame UUID。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "读取单个组件属性值",
           "scenarioType": "参数场景",
           "scenarioTitle": "读 spriteFrame",
@@ -1678,13 +2134,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "返回 spriteFrame UUID",
           "expectedText": "返回 spriteFrame UUID"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_query 工具，执行 get_component_property 动作，处理“读 spriteFrame”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 component 设为“Sprite”，把 property 设为“spriteFrame”。调用完成后重点检查：返回 spriteFrame UUID。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_query 工具，执行 get_component_property 动作，处理“读 spriteFrame”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 component 设为“Sprite”，把 property 设为“spriteFrame”。调用完成后重点检查：返回 spriteFrame UUID。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 12,
         "note": "来自 tests/test-report.json，自动化执行通过（12ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 34,
@@ -1697,6 +2159,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回所有组件全部属性快照",
       "note": "",
+      "prerequisites": "目标节点须已挂载用例中 component 指明的组件；否则仅能测错误分支。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "只读查询",
       "priority": "P2",
       "edition": "community",
@@ -1709,7 +2183,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": true,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_query 工具，执行 get_node_components_properties 动作，处理“全部组件属性”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：返回所有组件全部属性快照。",
+          "aiInstruction": "请通过 MCP 调用 scene_query 工具，执行 get_node_components_properties 动作，处理“全部组件属性”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：返回所有组件全部属性快照。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "获取节点上所有组件的全部属性",
           "scenarioType": "参数场景",
           "scenarioTitle": "全部组件属性",
@@ -1723,13 +2197,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "返回所有组件全部属性快照",
           "expectedText": "返回所有组件全部属性快照"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_query 工具，执行 get_node_components_properties 动作，处理“全部组件属性”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：返回所有组件全部属性快照。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_query 工具，执行 get_node_components_properties 动作，处理“全部组件属性”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：返回所有组件全部属性快照。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 7,
         "note": "来自 tests/test-report.json，自动化执行通过（7ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 35,
@@ -1741,6 +2221,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回场景全部 Camera 信息列表",
       "note": "",
+      "prerequisites": "需当前活动场景可查询。",
+      "setupSteps": [],
       "phase": "只读查询",
       "priority": "P2",
       "edition": "community",
@@ -1773,7 +2255,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 6,
         "note": "来自 tests/test-report.json，自动化执行通过（6ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 36,
@@ -1786,6 +2274,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回 fov/near/far/projection 等参数",
       "note": "",
+      "prerequisites": "需有效节点或资源 UUID（见占位符说明）。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "只读查询",
       "priority": "P2",
       "edition": "community",
@@ -1798,7 +2298,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": true,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_query 工具，执行 get_camera_info 动作，处理“指定摄像机”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <cam>。调用完成后重点检查：返回 fov/near/far/projection 等参数。",
+          "aiInstruction": "请通过 MCP 调用 scene_query 工具，执行 get_camera_info 动作，处理“指定摄像机”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <cam>。调用完成后重点检查：返回 fov/near/far/projection 等参数。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "获取 Camera 组件信息，包括 fov、near、far、orthoHeight、projection、clearFlags、priority、clearColor、rect、visibility、clearDepth、clearStencil、aperture、shutter、iso、targetTexture",
           "scenarioType": "参数场景",
           "scenarioTitle": "指定摄像机",
@@ -1812,13 +2312,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "返回 fov/near/far/projection 等参数",
           "expectedText": "返回 fov/near/far/projection 等参数"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_query 工具，执行 get_camera_info 动作，处理“指定摄像机”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <cam>。调用完成后重点检查：返回 fov/near/far/projection 等参数。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_query 工具，执行 get_camera_info 动作，处理“指定摄像机”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <cam>。调用完成后重点检查：返回 fov/near/far/projection 等参数。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 7,
         "note": "来自 tests/test-report.json，自动化执行通过（7ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 37,
@@ -1830,6 +2336,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回设计分辨率、适配模式等",
       "note": "",
+      "prerequisites": "需当前活动场景可查询。",
+      "setupSteps": [],
       "phase": "只读查询",
       "priority": "P2",
       "edition": "community",
@@ -1862,7 +2370,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 5,
         "note": "来自 tests/test-report.json，自动化执行通过（5ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 38,
@@ -1874,6 +2388,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回 ambient/fog/shadows 原始数据",
       "note": "",
+      "prerequisites": "需当前活动场景可查询。",
+      "setupSteps": [],
       "phase": "只读查询",
       "priority": "P2",
       "edition": "community",
@@ -1906,7 +2422,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 6,
         "note": "来自 tests/test-report.json，自动化执行通过（6ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 39,
@@ -1918,6 +2440,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回 {ambient:{skyColor,skyIllum},shadows,fog,skybox,octree}",
       "note": "",
+      "prerequisites": "需当前活动场景可查询。",
+      "setupSteps": [],
       "phase": "只读查询",
       "priority": "P2",
       "edition": "community",
@@ -1950,7 +2474,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 5,
         "note": "来自 tests/test-report.json，自动化执行通过（5ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 40,
@@ -1962,6 +2492,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回全部灯光组件（类型/颜色/亮度/阴影）",
       "note": "",
+      "prerequisites": "需当前活动场景可查询。",
+      "setupSteps": [],
       "phase": "只读查询",
       "priority": "P2",
       "edition": "community",
@@ -1994,7 +2526,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 7,
         "note": "来自 tests/test-report.json，自动化执行通过（7ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 41,
@@ -2007,6 +2545,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "仅返回该节点灯光信息",
       "note": "",
+      "prerequisites": "需有效节点或资源 UUID（见占位符说明）。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "只读查询",
       "priority": "P2",
       "edition": "community",
@@ -2019,7 +2569,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": true,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_query 工具，执行 get_light_info 动作，处理“指定灯光”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <light>。调用完成后重点检查：仅返回该节点灯光信息。",
+          "aiInstruction": "请通过 MCP 调用 scene_query 工具，执行 get_light_info 动作，处理“指定灯光”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <light>。调用完成后重点检查：仅返回该节点灯光信息。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "获取场景内所有光照组件（DirectionalLight/SpotLight/SphereLight），包含 color、illuminance/luminance、range、shadow 设置、position/rotation",
           "scenarioType": "参数场景",
           "scenarioTitle": "指定灯光",
@@ -2033,13 +2583,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "仅返回该节点灯光信息",
           "expectedText": "仅返回该节点灯光信息"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_query 工具，执行 get_light_info 动作，处理“指定灯光”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <light>。调用完成后重点检查：仅返回该节点灯光信息。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_query 工具，执行 get_light_info 动作，处理“指定灯光”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <light>。调用完成后重点检查：仅返回该节点灯光信息。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 6,
         "note": "来自 tests/test-report.json，自动化执行通过（6ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 42,
@@ -2052,6 +2608,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回 {effectName,technique,passes[],uniforms}",
       "note": "",
+      "prerequisites": "需有效节点或资源 UUID（见占位符说明）。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "只读查询",
       "priority": "P2",
       "edition": "community",
@@ -2064,7 +2632,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": true,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_query 工具，执行 get_material_info 动作，处理“材质信息”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <renderer>。调用完成后重点检查：返回 {effectName,technique,passes[],uniforms}。",
+          "aiInstruction": "请通过 MCP 调用 scene_query 工具，执行 get_material_info 动作，处理“材质信息”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <renderer>。调用完成后重点检查：返回 {effectName,technique,passes[],uniforms}。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "获取节点渲染器（MeshRenderer/Sprite 等）的材质信息，包括 effectName、technique、passes、uniforms（如 mainColor、albedo、roughness、metallic 等）",
           "scenarioType": "参数场景",
           "scenarioTitle": "材质信息",
@@ -2078,13 +2646,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "返回 {effectName,technique,passes[],uniforms}",
           "expectedText": "返回 {effectName,technique,passes[],uniforms}"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_query 工具，执行 get_material_info 动作，处理“材质信息”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <renderer>。调用完成后重点检查：返回 {effectName,technique,passes[],uniforms}。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_query 工具，执行 get_material_info 动作，处理“材质信息”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <renderer>。调用完成后重点检查：返回 {effectName,technique,passes[],uniforms}。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 4,
         "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 43,
@@ -2097,6 +2671,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回 {playing,currentClip,currentTime,clips[]}",
       "note": "",
+      "prerequisites": "需有效节点或资源 UUID（见占位符说明）。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "只读查询",
       "priority": "P2",
       "edition": "community",
@@ -2109,7 +2695,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": true,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_query 工具，执行 get_animation_state 动作，处理“动画状态”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <anim>。调用完成后重点检查：返回 {playing,currentClip,currentTime,clips[]}。",
+          "aiInstruction": "请通过 MCP 调用 scene_query 工具，执行 get_animation_state 动作，处理“动画状态”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <anim>。调用完成后重点检查：返回 {playing,currentClip,currentTime,clips[]}。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "获取 Animation 组件状态：clips、播放状态、当前时间、默认 clip",
           "scenarioType": "参数场景",
           "scenarioTitle": "动画状态",
@@ -2123,13 +2709,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "返回 {playing,currentClip,currentTime,clips[]}",
           "expectedText": "返回 {playing,currentClip,currentTime,clips[]}"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_query 工具，执行 get_animation_state 动作，处理“动画状态”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <anim>。调用完成后重点检查：返回 {playing,currentClip,currentTime,clips[]}。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_query 工具，执行 get_animation_state 动作，处理“动画状态”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <anim>。调用完成后重点检查：返回 {playing,currentClip,currentTime,clips[]}。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 5,
         "note": "来自 tests/test-report.json，自动化执行通过（5ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 44,
@@ -2142,6 +2734,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回 {error:\"没有 Animation 组件\"}",
       "note": "",
+      "prerequisites": "需有效节点或资源 UUID（见占位符说明）。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "只读查询",
       "priority": "P2",
       "edition": "community",
@@ -2154,7 +2758,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": true,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_query 工具，执行 get_animation_state 动作，处理“无动画组件”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <no-anim>。调用完成后重点检查：返回 {error:\"没有 Animation 组件\"}。",
+          "aiInstruction": "请通过 MCP 调用 scene_query 工具，执行 get_animation_state 动作，处理“无动画组件”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <no-anim>。调用完成后重点检查：返回 {error:\"没有 Animation 组件\"}。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "获取 Animation 组件状态：clips、播放状态、当前时间、默认 clip",
           "scenarioType": "参数场景",
           "scenarioTitle": "无动画组件",
@@ -2168,13 +2772,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "返回 {error:\"没有 Animation 组件\"}",
           "expectedText": "返回 {error:\"没有 Animation 组件\"}"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_query 工具，执行 get_animation_state 动作，处理“无动画组件”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <no-anim>。调用完成后重点检查：返回 {error:\"没有 Animation 组件\"}。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_query 工具，执行 get_animation_state 动作，处理“无动画组件”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <no-anim>。调用完成后重点检查：返回 {error:\"没有 Animation 组件\"}。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 6,
         "note": "来自 tests/test-report.json，自动化执行通过（6ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 45,
@@ -2187,6 +2797,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回碰撞器列表 + RigidBody 信息",
       "note": "",
+      "prerequisites": "需有效节点或资源 UUID（见占位符说明）。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "只读查询",
       "priority": "P2",
       "edition": "community",
@@ -2199,7 +2821,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": true,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_query 工具，执行 get_collider_info 动作，处理“碰撞器信息”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：返回碰撞器列表 + RigidBody 信息。",
+          "aiInstruction": "请通过 MCP 调用 scene_query 工具，执行 get_collider_info 动作，处理“碰撞器信息”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：返回碰撞器列表 + RigidBody 信息。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "获取节点上的全部碰撞体组件信息，包括 size/offset/type 以及 RigidBody 信息",
           "scenarioType": "参数场景",
           "scenarioTitle": "碰撞器信息",
@@ -2213,13 +2835,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "返回碰撞器列表 + RigidBody 信息",
           "expectedText": "返回碰撞器列表 + RigidBody 信息"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_query 工具，执行 get_collider_info 动作，处理“碰撞器信息”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：返回碰撞器列表 + RigidBody 信息。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_query 工具，执行 get_collider_info 动作，处理“碰撞器信息”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：返回碰撞器列表 + RigidBody 信息。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 5,
         "note": "来自 tests/test-report.json，自动化执行通过（5ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 46,
@@ -2234,6 +2862,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回 {worldX,worldY,worldZ}",
       "note": "",
+      "prerequisites": "需当前活动场景可查询。",
+      "setupSteps": [],
       "phase": "只读查询",
       "priority": "P2",
       "edition": "community",
@@ -2266,7 +2896,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 6,
         "note": "来自 tests/test-report.json，自动化执行通过（6ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 47,
@@ -2281,6 +2917,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "使用指定摄像机转换",
       "note": "",
+      "prerequisites": "需有效节点或资源 UUID（见占位符说明）。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "只读查询",
       "priority": "P2",
       "edition": "community",
@@ -2293,7 +2941,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": true,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_query 工具，执行 screen_to_world 动作，处理“指定摄像机”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <cam>，把 screenX 设为 0，把 screenY 设为 0。调用完成后重点检查：使用指定摄像机转换。",
+          "aiInstruction": "请通过 MCP 调用 scene_query 工具，执行 screen_to_world 动作，处理“指定摄像机”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <cam>，把 screenX 设为 0，把 screenY 设为 0。调用完成后重点检查：使用指定摄像机转换。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "通过相机将屏幕坐标转换为世界坐标",
           "scenarioType": "参数场景",
           "scenarioTitle": "指定摄像机",
@@ -2307,13 +2955,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "使用指定摄像机转换",
           "expectedText": "使用指定摄像机转换"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_query 工具，执行 screen_to_world 动作，处理“指定摄像机”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <cam>，把 screenX 设为 0，把 screenY 设为 0。调用完成后重点检查：使用指定摄像机转换。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_query 工具，执行 screen_to_world 动作，处理“指定摄像机”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <cam>，把 screenX 设为 0，把 screenY 设为 0。调用完成后重点检查：使用指定摄像机转换。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 7,
         "note": "来自 tests/test-report.json，自动化执行通过（7ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 48,
@@ -2328,6 +2982,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回 {screenX,screenY,screenZ}",
       "note": "",
+      "prerequisites": "需当前活动场景可查询。",
+      "setupSteps": [],
       "phase": "只读查询",
       "priority": "P2",
       "edition": "community",
@@ -2360,7 +3016,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 7,
         "note": "来自 tests/test-report.json，自动化执行通过（7ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 49,
@@ -2373,6 +3035,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回 {ready:true, isComponent:true}",
       "note": "",
+      "prerequisites": "需当前活动场景可查询。",
+      "setupSteps": [],
       "phase": "只读查询",
       "priority": "P2",
       "edition": "community",
@@ -2405,7 +3069,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 15,
         "note": "来自 tests/test-report.json，自动化执行通过（15ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 50,
@@ -2418,6 +3088,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回 {ready:false, message:\"尚未注册\"}",
       "note": "",
+      "prerequisites": "需当前活动场景可查询。",
+      "setupSteps": [],
       "phase": "只读查询",
       "priority": "P2",
       "edition": "community",
@@ -2450,7 +3122,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 5,
         "note": "来自 tests/test-report.json，自动化执行通过（5ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 51,
@@ -2463,6 +3141,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回 {ready:true, isComponent:true}",
       "note": "",
+      "prerequisites": "需当前活动场景可查询。",
+      "setupSteps": [],
       "phase": "只读查询",
       "priority": "P2",
       "edition": "community",
@@ -2495,7 +3175,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 7,
         "note": "来自 tests/test-report.json，自动化执行通过（7ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 52,
@@ -2508,6 +3194,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回 {properties:[{name:\"speed\",type:\"Float\",default:10},...]}",
       "note": "",
+      "prerequisites": "需当前活动场景可查询。",
+      "setupSteps": [],
       "phase": "只读查询",
       "priority": "P2",
       "edition": "community",
@@ -2540,7 +3228,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 6,
         "note": "来自 tests/test-report.json，自动化执行通过（6ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 53,
@@ -2553,6 +3247,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回 {propertyCount:0, properties:[]}",
       "note": "",
+      "prerequisites": "需当前活动场景可查询。",
+      "setupSteps": [],
       "phase": "只读查询",
       "priority": "P2",
       "edition": "community",
@@ -2585,7 +3281,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 5,
         "note": "来自 tests/test-report.json，自动化执行通过（5ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 54,
@@ -2598,6 +3300,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回 {error:\"未找到脚本类\"}",
       "note": "",
+      "prerequisites": "需当前活动场景可查询。",
+      "setupSteps": [],
       "phase": "只读查询",
       "priority": "P2",
       "edition": "community",
@@ -2630,7 +3334,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 12,
         "note": "来自 tests/test-report.json，自动化执行通过（12ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 55,
@@ -2642,6 +3352,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回 {selected:[\"<uuid>\"], focused:{name,...}}",
       "note": "",
+      "prerequisites": "需当前活动场景可查询。",
+      "setupSteps": [],
       "phase": "只读查询",
       "priority": "P2",
       "edition": "community",
@@ -2674,7 +3386,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 8,
         "note": "来自 tests/test-report.json，自动化执行通过（8ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 56,
@@ -2686,6 +3404,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回 {selected:[], message:\"当前没有选中节点\"}",
       "note": "",
+      "prerequisites": "需当前活动场景可查询。",
+      "setupSteps": [],
       "phase": "只读查询",
       "priority": "P2",
       "edition": "community",
@@ -2718,7 +3438,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 5,
         "note": "来自 tests/test-report.json，自动化执行通过（5ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 57,
@@ -2730,6 +3456,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回 {source:\"selection\", focus:{...}}",
       "note": "",
+      "prerequisites": "需当前活动场景可查询。",
+      "setupSteps": [],
       "phase": "只读查询",
       "priority": "P2",
       "edition": "community",
@@ -2762,7 +3490,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 6,
         "note": "来自 tests/test-report.json，自动化执行通过（6ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 58,
@@ -2774,6 +3508,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回 {source:\"scene\", focus:{nodeCount,...}}",
       "note": "",
+      "prerequisites": "需当前活动场景可查询。",
+      "setupSteps": [],
       "phase": "只读查询",
       "priority": "P2",
       "edition": "community",
@@ -2806,7 +3542,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 5,
         "note": "来自 tests/test-report.json，自动化执行通过（5ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 59,
@@ -2818,6 +3560,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回 [{url:\"db://assets/scenes/Main.scene\",...},...]",
       "note": "",
+      "prerequisites": "需当前活动场景可查询。",
+      "setupSteps": [],
       "phase": "只读查询",
       "priority": "P2",
       "edition": "community",
@@ -2850,7 +3594,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 21,
         "note": "来自 tests/test-report.json，自动化执行通过（21ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 60,
@@ -2862,6 +3612,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回 {issues:[],score:85}",
       "note": "",
+      "prerequisites": "需当前活动场景可查询。",
+      "setupSteps": [],
       "phase": "只读查询",
       "priority": "P2",
       "edition": "community",
@@ -2894,7 +3646,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 5,
         "note": "来自 tests/test-report.json，自动化执行通过（5ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 61,
@@ -2906,6 +3664,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回缺失资源、孤立节点、修复建议",
       "note": "",
+      "prerequisites": "需当前活动场景可查询。",
+      "setupSteps": [],
       "phase": "只读查询",
       "priority": "P2",
       "edition": "community",
@@ -2938,7 +3698,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 39,
         "note": "来自 tests/test-report.json，自动化执行通过（39ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 62,
@@ -2950,6 +3716,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回 {mode:\"2D\"}",
       "note": "",
+      "prerequisites": "需当前活动场景可查询。",
+      "setupSteps": [],
       "phase": "只读查询",
       "priority": "P2",
       "edition": "community",
@@ -2982,7 +3750,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 6,
         "note": "来自 tests/test-report.json，自动化执行通过（6ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 63,
@@ -2994,6 +3768,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回 {mode:\"3D\"}",
       "note": "",
+      "prerequisites": "需当前活动场景可查询。",
+      "setupSteps": [],
       "phase": "只读查询",
       "priority": "P2",
       "edition": "community",
@@ -3026,7 +3802,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 7,
         "note": "来自 tests/test-report.json，自动化执行通过（7ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 64,
@@ -3038,6 +3820,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回 {mode:\"Mixed\"}",
       "note": "",
+      "prerequisites": "需当前活动场景可查询。",
+      "setupSteps": [],
       "phase": "只读查询",
       "priority": "P2",
       "edition": "community",
@@ -3070,7 +3854,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 6,
         "note": "来自 tests/test-report.json，自动化执行通过（6ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 65,
@@ -3082,6 +3872,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回 {issues[],metrics:{nodeCount,maxDepth},suggestions[]}",
       "note": "",
+      "prerequisites": "需当前活动场景可查询。",
+      "setupSteps": [],
       "phase": "只读查询",
       "priority": "P2",
       "edition": "community",
@@ -3114,7 +3906,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 5,
         "note": "来自 tests/test-report.json，自动化执行通过（5ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 66,
@@ -3126,6 +3924,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回引擎内置+自定义脚本组件，按类别分组",
       "note": "",
+      "prerequisites": "需当前活动场景可查询。",
+      "setupSteps": [],
       "phase": "只读查询",
       "priority": "P2",
       "edition": "community",
@@ -3158,7 +3958,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 6,
         "note": "来自 tests/test-report.json，自动化执行通过（6ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 67,
@@ -3170,6 +3976,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回场景状态快照（最多 500 节点）",
       "note": "",
+      "prerequisites": "需当前活动场景可查询。",
+      "setupSteps": [],
       "phase": "只读查询",
       "priority": "P2",
       "edition": "community",
@@ -3202,7 +4010,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 101,
         "note": "来自 tests/test-report.json，自动化执行通过（101ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 68,
@@ -3215,6 +4029,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回最多 100 节点快照",
       "note": "",
+      "prerequisites": "需当前活动场景可查询。",
+      "setupSteps": [],
       "phase": "只读查询",
       "priority": "P2",
       "edition": "community",
@@ -3247,7 +4063,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 72,
         "note": "来自 tests/test-report.json，自动化执行通过（72ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 69,
@@ -3261,6 +4083,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回 {added[],removed[],modified[]}",
       "note": "",
+      "prerequisites": "需当前活动场景可查询。",
+      "setupSteps": [],
       "phase": "只读查询",
       "priority": "P2",
       "edition": "community",
@@ -3293,7 +4117,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 6,
         "note": "来自 tests/test-report.json，自动化执行通过（6ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 70,
@@ -3305,6 +4135,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回完整场景节点树 JSON",
       "note": "",
+      "prerequisites": "需当前活动场景可查询。",
+      "setupSteps": [],
       "phase": "只读查询",
       "priority": "P2",
       "edition": "community",
@@ -3337,7 +4169,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 89,
         "note": "来自 tests/test-report.json，自动化执行通过（89ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 71,
@@ -3351,6 +4189,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回 {distance2D,distance3D,delta:{x,y,z}}",
       "note": "",
+      "prerequisites": "需有效节点或资源 UUID（见占位符说明）。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "只读查询",
       "priority": "P2",
       "edition": "community",
@@ -3363,7 +4213,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": true,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_query 工具，执行 measure_distance 动作，处理“测量距离”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuidA 指向 <a>，将 uuidB 指向 <b>。调用完成后重点检查：返回 {distance2D,distance3D,delta:{x,y,z}}。",
+          "aiInstruction": "请通过 MCP 调用 scene_query 工具，执行 measure_distance 动作，处理“测量距离”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuidA 指向 <a>，将 uuidB 指向 <b>。调用完成后重点检查：返回 {distance2D,distance3D,delta:{x,y,z}}。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "测量两个节点之间的 2D/3D 距离",
           "scenarioType": "参数场景",
           "scenarioTitle": "测量距离",
@@ -3377,13 +4227,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "返回 {distance2D,distance3D,delta:{x,y,z}}",
           "expectedText": "返回 {distance2D,distance3D,delta:{x,y,z}}"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_query 工具，执行 measure_distance 动作，处理“测量距离”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuidA 指向 <a>，将 uuidB 指向 <b>。调用完成后重点检查：返回 {distance2D,distance3D,delta:{x,y,z}}。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_query 工具，执行 measure_distance 动作，处理“测量距离”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuidA 指向 <a>，将 uuidB 指向 <b>。调用完成后重点检查：返回 {distance2D,distance3D,delta:{x,y,z}}。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 6,
         "note": "来自 tests/test-report.json，自动化执行通过（6ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 72,
@@ -3396,6 +4252,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回 {uuid:\"<new>\"}，在场景根下",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。",
+      "setupSteps": [],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -3428,7 +4286,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 23,
         "note": "来自 tests/test-report.json，自动化执行通过（23ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 73,
@@ -3442,6 +4306,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "在父节点下创建子节点",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -3454,7 +4330,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": true,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 create_node 动作，处理“指定父节点”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 name 设为“Child”，将 parentUuid 指向 <parent>。调用完成后重点检查：在父节点下创建子节点。",
+          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 create_node 动作，处理“指定父节点”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 name 设为“Child”，将 parentUuid 指向 <parent>。调用完成后重点检查：在父节点下创建子节点。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "返回{uuid}",
           "scenarioType": "参数场景",
           "scenarioTitle": "指定父节点",
@@ -3468,13 +4344,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "在父节点下创建子节点",
           "expectedText": "在父节点下创建子节点"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 create_node 动作，处理“指定父节点”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 name 设为“Child”，将 parentUuid 指向 <parent>。调用完成后重点检查：在父节点下创建子节点。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 create_node 动作，处理“指定父节点”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 name 设为“Child”，将 parentUuid 指向 <parent>。调用完成后重点检查：在父节点下创建子节点。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 48,
         "note": "来自 tests/test-report.json，自动化执行通过（48ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 74,
@@ -3489,6 +4371,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "插入到兄弟列表第一位",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -3501,7 +4395,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": true,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 create_node 动作，处理“指定排序”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 name 设为“First”，将 parentUuid 指向 <p>，把 siblingIndex 设为 0。调用完成后重点检查：插入到兄弟列表第一位。",
+          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 create_node 动作，处理“指定排序”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 name 设为“First”，将 parentUuid 指向 <p>，把 siblingIndex 设为 0。调用完成后重点检查：插入到兄弟列表第一位。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "返回{uuid}",
           "scenarioType": "参数场景",
           "scenarioTitle": "指定排序",
@@ -3515,13 +4409,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "插入到兄弟列表第一位",
           "expectedText": "插入到兄弟列表第一位"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 create_node 动作，处理“指定排序”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 name 设为“First”，将 parentUuid 指向 <p>，把 siblingIndex 设为 0。调用完成后重点检查：插入到兄弟列表第一位。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 create_node 动作，处理“指定排序”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 name 设为“First”，将 parentUuid 指向 <p>，把 siblingIndex 设为 0。调用完成后重点检查：插入到兄弟列表第一位。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 43,
         "note": "来自 tests/test-report.json，自动化执行通过（43ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 75,
@@ -3535,6 +4435,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回 {success:true}",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -3547,7 +4459,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": true,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 destroy_node 动作，处理“删除节点”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 confirmDangerous 设为 true。调用完成后重点检查：返回 {success:true}。",
+          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 destroy_node 动作，处理“删除节点”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 confirmDangerous 设为 true。调用完成后重点检查：返回 {success:true}。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "永久删除一个节点",
           "scenarioType": "参数场景",
           "scenarioTitle": "删除节点",
@@ -3561,13 +4473,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "返回 {success:true}",
           "expectedText": "返回 {success:true}"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 destroy_node 动作，处理“删除节点”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 confirmDangerous 设为 true。调用完成后重点检查：返回 {success:true}。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 destroy_node 动作，处理“删除节点”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 confirmDangerous 设为 true。调用完成后重点检查：返回 {success:true}。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 14,
         "note": "来自 tests/test-report.json，自动化执行通过（14ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 76,
@@ -3580,6 +4498,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回 {error:\"需要 confirmDangerous=true\"}",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -3592,7 +4522,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": true,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 destroy_node 动作，处理“缺少确认”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：返回 {error:\"需要 confirmDangerous=true\"}。",
+          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 destroy_node 动作，处理“缺少确认”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：返回 {error:\"需要 confirmDangerous=true\"}。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "永久删除一个节点",
           "scenarioType": "参数场景",
           "scenarioTitle": "缺少确认",
@@ -3606,13 +4536,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "返回 {error:\"需要 confirmDangerous=true\"}",
           "expectedText": "返回 {error:\"需要 confirmDangerous=true\"}"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 destroy_node 动作，处理“缺少确认”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：返回 {error:\"需要 confirmDangerous=true\"}。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 destroy_node 动作，处理“缺少确认”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：返回 {error:\"需要 confirmDangerous=true\"}。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 3,
         "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 77,
@@ -3626,6 +4562,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回 {success:true}",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -3638,7 +4586,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": true,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 reparent 动作，处理“移动到新父节点”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <child>，将 parentUuid 指向 <newP>。调用完成后重点检查：返回 {success:true}。",
+          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 reparent 动作，处理“移动到新父节点”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <child>，将 parentUuid 指向 <newP>。调用完成后重点检查：返回 {success:true}。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "将节点移动到新的父节点下",
           "scenarioType": "参数场景",
           "scenarioTitle": "移动到新父节点",
@@ -3652,13 +4600,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "返回 {success:true}",
           "expectedText": "返回 {success:true}"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 reparent 动作，处理“移动到新父节点”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <child>，将 parentUuid 指向 <newP>。调用完成后重点检查：返回 {success:true}。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 reparent 动作，处理“移动到新父节点”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <child>，将 parentUuid 指向 <newP>。调用完成后重点检查：返回 {success:true}。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 73,
         "note": "来自 tests/test-report.json，自动化执行通过（73ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 78,
@@ -3671,6 +4625,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回 {clonedUuid:\"<new>\"}",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -3683,7 +4649,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": true,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 duplicate_node 动作，处理“克隆含子节点”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：返回 {clonedUuid:\"<new>\"}。",
+          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 duplicate_node 动作，处理“克隆含子节点”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：返回 {clonedUuid:\"<new>\"}。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "克隆节点（可选包含子节点），并返回 {clonedUuid}",
           "scenarioType": "参数场景",
           "scenarioTitle": "克隆含子节点",
@@ -3697,13 +4663,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "返回 {clonedUuid:\"<new>\"}",
           "expectedText": "返回 {clonedUuid:\"<new>\"}"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 duplicate_node 动作，处理“克隆含子节点”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：返回 {clonedUuid:\"<new>\"}。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 duplicate_node 动作，处理“克隆含子节点”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：返回 {clonedUuid:\"<new>\"}。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 48,
         "note": "来自 tests/test-report.json，自动化执行通过（48ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 79,
@@ -3717,6 +4689,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "不含子节点的克隆",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -3729,7 +4713,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": true,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 duplicate_node 动作，处理“仅克隆自身”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 includeChildren 设为 false。调用完成后重点检查：不含子节点的克隆。",
+          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 duplicate_node 动作，处理“仅克隆自身”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 includeChildren 设为 false。调用完成后重点检查：不含子节点的克隆。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "克隆节点（可选包含子节点），并返回 {clonedUuid}",
           "scenarioType": "参数场景",
           "scenarioTitle": "仅克隆自身",
@@ -3743,13 +4727,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "不含子节点的克隆",
           "expectedText": "不含子节点的克隆"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 duplicate_node 动作，处理“仅克隆自身”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 includeChildren 设为 false。调用完成后重点检查：不含子节点的克隆。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 duplicate_node 动作，处理“仅克隆自身”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 includeChildren 设为 false。调用完成后重点检查：不含子节点的克隆。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 28,
         "note": "来自 tests/test-report.json，自动化执行通过（28ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 80,
@@ -3763,6 +4753,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "删除全部子节点",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -3775,7 +4777,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": true,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 clear_children 动作，处理“清空子节点”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 confirmDangerous 设为 true。调用完成后重点检查：删除全部子节点。",
+          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 clear_children 动作，处理“清空子节点”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 confirmDangerous 设为 true。调用完成后重点检查：删除全部子节点。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "删除该节点下的全部子节点",
           "scenarioType": "参数场景",
           "scenarioTitle": "清空子节点",
@@ -3789,13 +4791,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "删除全部子节点",
           "expectedText": "删除全部子节点"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 clear_children 动作，处理“清空子节点”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 confirmDangerous 设为 true。调用完成后重点检查：删除全部子节点。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 clear_children 动作，处理“清空子节点”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 confirmDangerous 设为 true。调用完成后重点检查：删除全部子节点。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 34,
         "note": "来自 tests/test-report.json，自动化执行通过（34ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 81,
@@ -3812,6 +4820,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "创建 Group 节点并将两个节点移入",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -3824,7 +4844,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": false,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 group_nodes 动作，处理“编组”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请传入 uuids=[\"<a>\",\"<b>\"]，把 name 设为“Group”。调用完成后重点检查：创建 Group 节点并将两个节点移入。",
+          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 group_nodes 动作，处理“编组”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请传入 uuids=[\"<a>\",\"<b>\"]，把 name 设为“Group”。调用完成后重点检查：创建 Group 节点并将两个节点移入。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
           "scenarioType": "参数场景",
           "scenarioTitle": "编组",
@@ -3838,13 +4858,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "创建 Group 节点并将两个节点移入",
           "expectedText": "创建 Group 节点并将两个节点移入"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 group_nodes 动作，处理“编组”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请传入 uuids=[\"<a>\",\"<b>\"]，把 name 设为“Group”。调用完成后重点检查：创建 Group 节点并将两个节点移入。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 group_nodes 动作，处理“编组”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请传入 uuids=[\"<a>\",\"<b>\"]，把 name 设为“Group”。调用完成后重点检查：创建 Group 节点并将两个节点移入。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 26,
         "note": "来自 tests/test-report.json，自动化执行通过（26ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 82,
@@ -3860,6 +4886,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "本地坐标变为 (100,200,0)",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -3872,7 +4910,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": true,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 set_position 动作，处理“设本地位置”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 x 设为 100，把 y 设为 200，把 z 设为 0。调用完成后重点检查：本地坐标变为 (100,200,0)。",
+          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 set_position 动作，处理“设本地位置”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 x 设为 100，把 y 设为 200，把 z 设为 0。调用完成后重点检查：本地坐标变为 (100,200,0)。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "设置本地坐标",
           "scenarioType": "参数场景",
           "scenarioTitle": "设本地位置",
@@ -3886,13 +4924,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "本地坐标变为 (100,200,0)",
           "expectedText": "本地坐标变为 (100,200,0)"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 set_position 动作，处理“设本地位置”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 x 设为 100，把 y 设为 200，把 z 设为 0。调用完成后重点检查：本地坐标变为 (100,200,0)。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 set_position 动作，处理“设本地位置”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 x 设为 100，把 y 设为 200，把 z 设为 0。调用完成后重点检查：本地坐标变为 (100,200,0)。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 66,
         "note": "来自 tests/test-report.json，自动化执行通过（66ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 83,
@@ -3908,6 +4952,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "绕 Y 轴旋转 45°",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -3920,7 +4976,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": true,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 set_rotation 动作，处理“设本地旋转”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 x 设为 0，把 y 设为 45，把 z 设为 0。调用完成后重点检查：绕 Y 轴旋转 45°。",
+          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 set_rotation 动作，处理“设本地旋转”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 x 设为 0，把 y 设为 45，把 z 设为 0。调用完成后重点检查：绕 Y 轴旋转 45°。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "设置本地欧拉旋转，单位为度",
           "scenarioType": "参数场景",
           "scenarioTitle": "设本地旋转",
@@ -3934,13 +4990,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "绕 Y 轴旋转 45°",
           "expectedText": "绕 Y 轴旋转 45°"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 set_rotation 动作，处理“设本地旋转”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 x 设为 0，把 y 设为 45，把 z 设为 0。调用完成后重点检查：绕 Y 轴旋转 45°。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 set_rotation 动作，处理“设本地旋转”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 x 设为 0，把 y 设为 45，把 z 设为 0。调用完成后重点检查：绕 Y 轴旋转 45°。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 24,
         "note": "来自 tests/test-report.json，自动化执行通过（24ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 84,
@@ -3956,6 +5018,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "放大 2 倍",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -3968,7 +5042,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": true,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 set_scale 动作，处理“设缩放”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 x 设为 2，把 y 设为 2，把 z 设为 1。调用完成后重点检查：放大 2 倍。",
+          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 set_scale 动作，处理“设缩放”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 x 设为 2，把 y 设为 2，把 z 设为 1。调用完成后重点检查：放大 2 倍。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "设置本地缩放（1=100%）",
           "scenarioType": "参数场景",
           "scenarioTitle": "设缩放",
@@ -3982,13 +5056,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "放大 2 倍",
           "expectedText": "放大 2 倍"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 set_scale 动作，处理“设缩放”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 x 设为 2，把 y 设为 2，把 z 设为 1。调用完成后重点检查：放大 2 倍。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 set_scale 动作，处理“设缩放”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 x 设为 2，把 y 设为 2，把 z 设为 1。调用完成后重点检查：放大 2 倍。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 35,
         "note": "来自 tests/test-report.json，自动化执行通过（35ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 85,
@@ -4004,6 +5084,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "世界坐标设为 (0,500,0)",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -4016,7 +5108,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": true,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 set_world_position 动作，处理“设世界位置”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 x 设为 0，把 y 设为 500，把 z 设为 0。调用完成后重点检查：世界坐标设为 (0,500,0)。",
+          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 set_world_position 动作，处理“设世界位置”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 x 设为 0，把 y 设为 500，把 z 设为 0。调用完成后重点检查：世界坐标设为 (0,500,0)。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "设置世界坐标",
           "scenarioType": "参数场景",
           "scenarioTitle": "设世界位置",
@@ -4030,13 +5122,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "世界坐标设为 (0,500,0)",
           "expectedText": "世界坐标设为 (0,500,0)"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 set_world_position 动作，处理“设世界位置”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 x 设为 0，把 y 设为 500，把 z 设为 0。调用完成后重点检查：世界坐标设为 (0,500,0)。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 set_world_position 动作，处理“设世界位置”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 x 设为 0，把 y 设为 500，把 z 设为 0。调用完成后重点检查：世界坐标设为 (0,500,0)。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 13,
         "note": "来自 tests/test-report.json，自动化执行通过（13ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 86,
@@ -4052,6 +5150,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "世界旋转 (0,90,0)",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -4064,7 +5174,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": true,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 set_world_rotation 动作，处理“设世界旋转”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 x 设为 0，把 y 设为 90，把 z 设为 0。调用完成后重点检查：世界旋转 (0,90,0)。",
+          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 set_world_rotation 动作，处理“设世界旋转”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 x 设为 0，把 y 设为 90，把 z 设为 0。调用完成后重点检查：世界旋转 (0,90,0)。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "设置世界欧拉旋转",
           "scenarioType": "参数场景",
           "scenarioTitle": "设世界旋转",
@@ -4078,13 +5188,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "世界旋转 (0,90,0)",
           "expectedText": "世界旋转 (0,90,0)"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 set_world_rotation 动作，处理“设世界旋转”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 x 设为 0，把 y 设为 90，把 z 设为 0。调用完成后重点检查：世界旋转 (0,90,0)。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 set_world_rotation 动作，处理“设世界旋转”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 x 设为 0，把 y 设为 90，把 z 设为 0。调用完成后重点检查：世界旋转 (0,90,0)。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 27,
         "note": "来自 tests/test-report.json，自动化执行通过（27ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 87,
@@ -4100,6 +5216,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "世界缩放归一",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -4112,7 +5240,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": true,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 set_world_scale 动作，处理“设世界缩放”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 x 设为 1，把 y 设为 1，把 z 设为 1。调用完成后重点检查：世界缩放归一。",
+          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 set_world_scale 动作，处理“设世界缩放”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 x 设为 1，把 y 设为 1，把 z 设为 1。调用完成后重点检查：世界缩放归一。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "设置世界缩放",
           "scenarioType": "参数场景",
           "scenarioTitle": "设世界缩放",
@@ -4126,13 +5254,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "世界缩放归一",
           "expectedText": "世界缩放归一"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 set_world_scale 动作，处理“设世界缩放”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 x 设为 1，把 y 设为 1，把 z 设为 1。调用完成后重点检查：世界缩放归一。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 set_world_scale 动作，处理“设世界缩放”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 x 设为 1，把 y 设为 1，把 z 设为 1。调用完成后重点检查：世界缩放归一。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 11,
         "note": "来自 tests/test-report.json，自动化执行通过（11ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 88,
@@ -4145,6 +5279,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "位置/旋转/缩放全部归零",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -4157,7 +5303,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": true,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 reset_transform 动作，处理“重置全部”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：位置/旋转/缩放全部归零。",
+          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 reset_transform 动作，处理“重置全部”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：位置/旋转/缩放全部归零。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "Reset position/rotation/scale to defaults",
           "scenarioType": "参数场景",
           "scenarioTitle": "重置全部",
@@ -4171,13 +5317,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "位置/旋转/缩放全部归零",
           "expectedText": "位置/旋转/缩放全部归零"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 reset_transform 动作，处理“重置全部”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：位置/旋转/缩放全部归零。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 reset_transform 动作，处理“重置全部”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：位置/旋转/缩放全部归零。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 41,
         "note": "来自 tests/test-report.json，自动化执行通过（41ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 89,
@@ -4192,6 +5344,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "仅位置归零",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -4204,7 +5368,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": true,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 reset_transform 动作，处理“仅重置位置”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 resetRotation 设为 false，把 resetScale 设为 false。调用完成后重点检查：仅位置归零。",
+          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 reset_transform 动作，处理“仅重置位置”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 resetRotation 设为 false，把 resetScale 设为 false。调用完成后重点检查：仅位置归零。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "Reset position/rotation/scale to defaults",
           "scenarioType": "参数场景",
           "scenarioTitle": "仅重置位置",
@@ -4218,13 +5382,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "仅位置归零",
           "expectedText": "仅位置归零"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 reset_transform 动作，处理“仅重置位置”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 resetRotation 设为 false，把 resetScale 设为 false。调用完成后重点检查：仅位置归零。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 reset_transform 动作，处理“仅重置位置”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 resetRotation 设为 false，把 resetScale 设为 false。调用完成后重点检查：仅位置归零。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 26,
         "note": "来自 tests/test-report.json，自动化执行通过（26ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 90,
@@ -4238,6 +5408,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "节点名变为 NewName",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -4250,7 +5432,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": true,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 set_name 动作，处理“重命名”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 name 设为“NewName”。调用完成后重点检查：节点名变为 NewName。",
+          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 set_name 动作，处理“重命名”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 name 设为“NewName”。调用完成后重点检查：节点名变为 NewName。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "重命名节点",
           "scenarioType": "参数场景",
           "scenarioTitle": "重命名",
@@ -4264,13 +5446,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "节点名变为 NewName",
           "expectedText": "节点名变为 NewName"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 set_name 动作，处理“重命名”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 name 设为“NewName”。调用完成后重点检查：节点名变为 NewName。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 set_name 动作，处理“重命名”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 name 设为“NewName”。调用完成后重点检查：节点名变为 NewName。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 11,
         "note": "来自 tests/test-report.json，自动化执行通过（11ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 91,
@@ -4284,6 +5472,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "节点及子节点不再渲染",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -4296,7 +5496,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": true,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 set_active 动作，处理“禁用”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 active 设为 false。调用完成后重点检查：节点及子节点不再渲染。",
+          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 set_active 动作，处理“禁用”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 active 设为 false。调用完成后重点检查：节点及子节点不再渲染。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "启用或禁用节点",
           "scenarioType": "参数场景",
           "scenarioTitle": "禁用",
@@ -4310,13 +5510,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "节点及子节点不再渲染",
           "expectedText": "节点及子节点不再渲染"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 set_active 动作，处理“禁用”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 active 设为 false。调用完成后重点检查：节点及子节点不再渲染。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 set_active 动作，处理“禁用”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 active 设为 false。调用完成后重点检查：节点及子节点不再渲染。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 17,
         "note": "来自 tests/test-report.json，自动化执行通过（17ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 92,
@@ -4330,6 +5536,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "节点恢复激活",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -4342,7 +5560,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": true,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 set_active 动作，处理“启用”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 active 设为 true。调用完成后重点检查：节点恢复激活。",
+          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 set_active 动作，处理“启用”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 active 设为 true。调用完成后重点检查：节点恢复激活。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "启用或禁用节点",
           "scenarioType": "参数场景",
           "scenarioTitle": "启用",
@@ -4356,13 +5574,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "节点恢复激活",
           "expectedText": "节点恢复激活"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 set_active 动作，处理“启用”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 active 设为 true。调用完成后重点检查：节点恢复激活。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 set_active 动作，处理“启用”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 active 设为 true。调用完成后重点检查：节点恢复激活。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 34,
         "note": "来自 tests/test-report.json，自动化执行通过（34ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 93,
@@ -4376,6 +5600,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "Layer→UI_2D",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -4388,7 +5624,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": false,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 set_layer 动作，处理“设为 UI_2D”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 layer 设为 33554432。调用完成后重点检查：Layer→UI_2D。",
+          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 set_layer 动作，处理“设为 UI_2D”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 layer 设为 33554432。调用完成后重点检查：Layer→UI_2D。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
           "scenarioType": "参数场景",
           "scenarioTitle": "设为 UI_2D",
@@ -4402,13 +5638,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "Layer→UI_2D",
           "expectedText": "Layer→UI_2D"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 set_layer 动作，处理“设为 UI_2D”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 layer 设为 33554432。调用完成后重点检查：Layer→UI_2D。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 set_layer 动作，处理“设为 UI_2D”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 layer 设为 33554432。调用完成后重点检查：Layer→UI_2D。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 12,
         "note": "来自 tests/test-report.json，自动化执行通过（12ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 94,
@@ -4423,6 +5665,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "锚点变为 (0,1)",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -4435,7 +5689,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": true,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 set_anchor_point 动作，处理“锚点左上角”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 anchorX 设为 0，把 anchorY 设为 1。调用完成后重点检查：锚点变为 (0,1)。",
+          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 set_anchor_point 动作，处理“锚点左上角”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 anchorX 设为 0，把 anchorY 设为 1。调用完成后重点检查：锚点变为 (0,1)。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "5）",
           "scenarioType": "参数场景",
           "scenarioTitle": "锚点左上角",
@@ -4449,13 +5703,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "锚点变为 (0,1)",
           "expectedText": "锚点变为 (0,1)"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 set_anchor_point 动作，处理“锚点左上角”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 anchorX 设为 0，把 anchorY 设为 1。调用完成后重点检查：锚点变为 (0,1)。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 set_anchor_point 动作，处理“锚点左上角”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 anchorX 设为 0，把 anchorY 设为 1。调用完成后重点检查：锚点变为 (0,1)。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 48,
         "note": "来自 tests/test-report.json，自动化执行通过（48ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 95,
@@ -4470,6 +5730,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "UITransform 400×300",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -4482,7 +5754,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": true,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 set_content_size 动作，处理“设尺寸”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 width 设为 400，把 height 设为 300。调用完成后重点检查：UITransform 400×300。",
+          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 set_content_size 动作，处理“设尺寸”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 width 设为 400，把 height 设为 300。调用完成后重点检查：UITransform 400×300。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "直接设置 UITransform 内容尺寸",
           "scenarioType": "参数场景",
           "scenarioTitle": "设尺寸",
@@ -4496,13 +5768,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "UITransform 400×300",
           "expectedText": "UITransform 400×300"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 set_content_size 动作，处理“设尺寸”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 width 设为 400，把 height 设为 300。调用完成后重点检查：UITransform 400×300。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 set_content_size 动作，处理“设尺寸”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 width 设为 400，把 height 设为 300。调用完成后重点检查：UITransform 400×300。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 67,
         "note": "来自 tests/test-report.json，自动化执行通过（67ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 96,
@@ -4515,6 +5793,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "兄弟列表中上移",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -4527,7 +5817,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": true,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 move_node_up 动作，处理“上移一位”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：兄弟列表中上移。",
+          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 move_node_up 动作，处理“上移一位”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：兄弟列表中上移。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "调整同级列表中的顺序",
           "scenarioType": "参数场景",
           "scenarioTitle": "上移一位",
@@ -4541,13 +5831,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "兄弟列表中上移",
           "expectedText": "兄弟列表中上移"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 move_node_up 动作，处理“上移一位”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：兄弟列表中上移。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 move_node_up 动作，处理“上移一位”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：兄弟列表中上移。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 34,
         "note": "来自 tests/test-report.json，自动化执行通过（34ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 97,
@@ -4560,6 +5856,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "兄弟列表中下移",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -4572,7 +5880,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": true,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 move_node_down 动作，处理“下移一位”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：兄弟列表中下移。",
+          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 move_node_down 动作，处理“下移一位”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：兄弟列表中下移。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "调整同级列表中的顺序",
           "scenarioType": "参数场景",
           "scenarioTitle": "下移一位",
@@ -4586,13 +5894,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "兄弟列表中下移",
           "expectedText": "兄弟列表中下移"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 move_node_down 动作，处理“下移一位”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：兄弟列表中下移。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 move_node_down 动作，处理“下移一位”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：兄弟列表中下移。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 19,
         "note": "来自 tests/test-report.json，自动化执行通过（19ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 98,
@@ -4606,6 +5920,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "移到第一位",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -4618,7 +5944,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": true,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 set_sibling_index 动作，处理“设排序”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 index 设为 0。调用完成后重点检查：移到第一位。",
+          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 set_sibling_index 动作，处理“设排序”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 index 设为 0。调用完成后重点检查：移到第一位。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "设置精确的同级位置（从 0 开始）",
           "scenarioType": "参数场景",
           "scenarioTitle": "设排序",
@@ -4632,13 +5958,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "移到第一位",
           "expectedText": "移到第一位"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 set_sibling_index 动作，处理“设排序”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 index 设为 0。调用完成后重点检查：移到第一位。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 set_sibling_index 动作，处理“设排序”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 index 设为 0。调用完成后重点检查：移到第一位。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 11,
         "note": "来自 tests/test-report.json，自动化执行通过（11ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 99,
@@ -4651,6 +5983,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "层级面板中锁定",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -4663,7 +6007,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": false,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 lock_node 动作，处理“锁定”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：层级面板中锁定。",
+          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 lock_node 动作，处理“锁定”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：层级面板中锁定。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
           "scenarioType": "参数场景",
           "scenarioTitle": "锁定",
@@ -4677,13 +6021,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "层级面板中锁定",
           "expectedText": "层级面板中锁定"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 lock_node 动作，处理“锁定”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：层级面板中锁定。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 lock_node 动作，处理“锁定”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：层级面板中锁定。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 8,
         "note": "来自 tests/test-report.json，自动化执行通过（8ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 100,
@@ -4696,6 +6046,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "解除锁定",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -4708,7 +6070,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": false,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 unlock_node 动作，处理“解锁”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：解除锁定。",
+          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 unlock_node 动作，处理“解锁”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：解除锁定。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
           "scenarioType": "参数场景",
           "scenarioTitle": "解锁",
@@ -4722,13 +6084,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "解除锁定",
           "expectedText": "解除锁定"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 unlock_node 动作，处理“解锁”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：解除锁定。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 unlock_node 动作，处理“解锁”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：解除锁定。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 9,
         "note": "来自 tests/test-report.json，自动化执行通过（9ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 101,
@@ -4741,6 +6109,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "编辑器中不可见（运行时不影响）",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -4753,7 +6133,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": false,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 hide_node 动作，处理“隐藏”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：编辑器中不可见（运行时不影响）。",
+          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 hide_node 动作，处理“隐藏”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：编辑器中不可见（运行时不影响）。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
           "scenarioType": "参数场景",
           "scenarioTitle": "隐藏",
@@ -4767,13 +6147,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "编辑器中不可见（运行时不影响）",
           "expectedText": "编辑器中不可见（运行时不影响）"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 hide_node 动作，处理“隐藏”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：编辑器中不可见（运行时不影响）。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 hide_node 动作，处理“隐藏”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：编辑器中不可见（运行时不影响）。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 12,
         "note": "来自 tests/test-report.json，自动化执行通过（12ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 102,
@@ -4786,6 +6172,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "恢复可见",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -4798,7 +6196,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": false,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 unhide_node 动作，处理“取消隐藏”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：恢复可见。",
+          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 unhide_node 动作，处理“取消隐藏”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：恢复可见。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
           "scenarioType": "参数场景",
           "scenarioTitle": "取消隐藏",
@@ -4812,13 +6210,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "恢复可见",
           "expectedText": "恢复可见"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 unhide_node 动作，处理“取消隐藏”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：恢复可见。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 unhide_node 动作，处理“取消隐藏”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：恢复可见。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 23,
         "note": "来自 tests/test-report.json，自动化执行通过（23ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 103,
@@ -4832,6 +6236,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "成功添加",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 2D UI 相关操作通常需 Canvas 与 UI_2D 层；无 Canvas 时先 ensure_2d_canvas。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -4844,7 +6260,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": true,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 add_component 动作，处理“添加 Sprite”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 component 设为“Sprite”。调用完成后重点检查：成功添加。",
+          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 add_component 动作，处理“添加 Sprite”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 component 设为“Sprite”。调用完成后重点检查：成功添加。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "添加组件",
           "scenarioType": "参数场景",
           "scenarioTitle": "添加 Sprite",
@@ -4858,13 +6274,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "成功添加",
           "expectedText": "成功添加"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 add_component 动作，处理“添加 Sprite”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 component 设为“Sprite”。调用完成后重点检查：成功添加。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 add_component 动作，处理“添加 Sprite”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 component 设为“Sprite”。调用完成后重点检查：成功添加。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 11,
         "note": "来自 tests/test-report.json，自动化执行通过（11ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 104,
@@ -4878,6 +6300,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "添加脚本组件",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -4890,7 +6324,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": true,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 add_component 动作，处理“添加自定义脚本”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 component 设为“PlayerController”。调用完成后重点检查：添加脚本组件。",
+          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 add_component 动作，处理“添加自定义脚本”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 component 设为“PlayerController”。调用完成后重点检查：添加脚本组件。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "添加组件",
           "scenarioType": "参数场景",
           "scenarioTitle": "添加自定义脚本",
@@ -4904,13 +6338,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "添加脚本组件",
           "expectedText": "添加脚本组件"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 add_component 动作，处理“添加自定义脚本”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 component 设为“PlayerController”。调用完成后重点检查：添加脚本组件。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 add_component 动作，处理“添加自定义脚本”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 component 设为“PlayerController”。调用完成后重点检查：添加脚本组件。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 7,
         "note": "来自 tests/test-report.json，自动化执行通过（7ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 105,
@@ -4924,6 +6364,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "移除 Sprite",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 2D UI 相关操作通常需 Canvas 与 UI_2D 层；无 Canvas 时先 ensure_2d_canvas。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -4936,7 +6388,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": true,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 remove_component 动作，处理“移除组件”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 component 设为“Sprite”。调用完成后重点检查：移除 Sprite。",
+          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 remove_component 动作，处理“移除组件”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 component 设为“Sprite”。调用完成后重点检查：移除 Sprite。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "从节点上移除组件",
           "scenarioType": "参数场景",
           "scenarioTitle": "移除组件",
@@ -4950,13 +6402,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "移除 Sprite",
           "expectedText": "移除 Sprite"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 remove_component 动作，处理“移除组件”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 component 设为“Sprite”。调用完成后重点检查：移除 Sprite。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 remove_component 动作，处理“移除组件”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 component 设为“Sprite”。调用完成后重点检查：移除 Sprite。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 53,
         "note": "来自 tests/test-report.json，自动化执行通过（53ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 106,
@@ -4972,6 +6430,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "显示文字变为 Hello",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 2D UI 相关操作通常需 Canvas 与 UI_2D 层；无 Canvas 时先 ensure_2d_canvas。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -4984,7 +6454,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": true,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 set_property 动作，处理“设 Label 文本”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 component 设为“Label”，把 property 设为“string”，把 value 设为“Hello”。调用完成后重点检查：显示文字变为 Hello。",
+          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 set_property 动作，处理“设 Label 文本”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 component 设为“Label”，把 property 设为“string”，把 value 设为“Hello”。调用完成后重点检查：显示文字变为 Hello。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "设置组件属性",
           "scenarioType": "参数场景",
           "scenarioTitle": "设 Label 文本",
@@ -4998,13 +6468,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "显示文字变为 Hello",
           "expectedText": "显示文字变为 Hello"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 set_property 动作，处理“设 Label 文本”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 component 设为“Label”，把 property 设为“string”，把 value 设为“Hello”。调用完成后重点检查：显示文字变为 Hello。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 set_property 动作，处理“设 Label 文本”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 component 设为“Label”，把 property 设为“string”，把 value 设为“Hello”。调用完成后重点检查：显示文字变为 Hello。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 117,
         "note": "来自 tests/test-report.json，自动化执行通过（117ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 107,
@@ -5025,6 +6501,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "变为红色",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 2D UI 相关操作通常需 Canvas 与 UI_2D 层；无 Canvas 时先 ensure_2d_canvas。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -5037,7 +6525,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": true,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 set_property 动作，处理“设颜色”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 component 设为“Sprite”，把 property 设为“color”，传入 value={\"r\":255,\"g\":0,\"b\":0,\"a\":255}。调用完成后重点检查：变为红色。",
+          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 set_property 动作，处理“设颜色”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 component 设为“Sprite”，把 property 设为“color”，传入 value={\"r\":255,\"g\":0,\"b\":0,\"a\":255}。调用完成后重点检查：变为红色。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "设置组件属性",
           "scenarioType": "参数场景",
           "scenarioTitle": "设颜色",
@@ -5051,13 +6539,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "变为红色",
           "expectedText": "变为红色"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 set_property 动作，处理“设颜色”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 component 设为“Sprite”，把 property 设为“color”，传入 value={\"r\":255,\"g\":0,\"b\":0,\"a\":255}。调用完成后重点检查：变为红色。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 set_property 动作，处理“设颜色”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 component 设为“Sprite”，把 property 设为“color”，传入 value={\"r\":255,\"g\":0,\"b\":0,\"a\":255}。调用完成后重点检查：变为红色。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 25,
         "note": "来自 tests/test-report.json，自动化执行通过（25ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 108,
@@ -5072,6 +6566,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "fontSize 恢复默认",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 2D UI 相关操作通常需 Canvas 与 UI_2D 层；无 Canvas 时先 ensure_2d_canvas。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -5084,7 +6590,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": true,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 reset_property 动作，处理“重置属性”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 component 设为“Label”，把 property 设为“fontSize”。调用完成后重点检查：fontSize 恢复默认。",
+          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 reset_property 动作，处理“重置属性”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 component 设为“Label”，把 property 设为“fontSize”。调用完成后重点检查：fontSize 恢复默认。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "将属性重置为默认值",
           "scenarioType": "参数场景",
           "scenarioTitle": "重置属性",
@@ -5098,13 +6604,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "fontSize 恢复默认",
           "expectedText": "fontSize 恢复默认"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 reset_property 动作，处理“重置属性”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 component 设为“Label”，把 property 设为“fontSize”。调用完成后重点检查：fontSize 恢复默认。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 reset_property 动作，处理“重置属性”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 component 设为“Label”，把 property 设为“fontSize”。调用完成后重点检查：fontSize 恢复默认。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 9,
         "note": "来自 tests/test-report.json，自动化执行通过（9ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 109,
@@ -5117,6 +6629,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "所有组件属性恢复默认",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -5129,7 +6653,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": true,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 reset_node_properties 动作，处理“重置全部”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：所有组件属性恢复默认。",
+          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 reset_node_properties 动作，处理“重置全部”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：所有组件属性恢复默认。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "将所有组件属性重置为默认值",
           "scenarioType": "参数场景",
           "scenarioTitle": "重置全部",
@@ -5143,13 +6667,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "所有组件属性恢复默认",
           "expectedText": "所有组件属性恢复默认"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 reset_node_properties 动作，处理“重置全部”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：所有组件属性恢复默认。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 reset_node_properties 动作，处理“重置全部”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：所有组件属性恢复默认。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 23,
         "note": "来自 tests/test-report.json，自动化执行通过（23ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 110,
@@ -5163,6 +6693,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "仅 Sprite 属性重置",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 2D UI 相关操作通常需 Canvas 与 UI_2D 层；无 Canvas 时先 ensure_2d_canvas。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -5175,7 +6717,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": true,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 reset_node_properties 动作，处理“重置指定”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 component 设为“Sprite”。调用完成后重点检查：仅 Sprite 属性重置。",
+          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 reset_node_properties 动作，处理“重置指定”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 component 设为“Sprite”。调用完成后重点检查：仅 Sprite 属性重置。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "将所有组件属性重置为默认值",
           "scenarioType": "参数场景",
           "scenarioTitle": "重置指定",
@@ -5189,13 +6731,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "仅 Sprite 属性重置",
           "expectedText": "仅 Sprite 属性重置"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 reset_node_properties 动作，处理“重置指定”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 component 设为“Sprite”。调用完成后重点检查：仅 Sprite 属性重置。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 reset_node_properties 动作，处理“重置指定”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 component 设为“Sprite”。调用完成后重点检查：仅 Sprite 属性重置。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 65,
         "note": "来自 tests/test-report.json，自动化执行通过（65ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 111,
@@ -5213,6 +6761,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "播放 idle 动画",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -5225,7 +6785,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": true,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 call_component_method 动作，处理“调用方法”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 component 设为“Animation”，把 methodName 设为“play”，传入 args=[\"idle\"]。调用完成后重点检查：播放 idle 动画。",
+          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 call_component_method 动作，处理“调用方法”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 component 设为“Animation”，把 methodName 设为“play”，传入 args=[\"idle\"]。调用完成后重点检查：播放 idle 动画。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "uuid（必填），component（必填），methodName（必填），args（可选）",
           "scenarioType": "参数场景",
           "scenarioTitle": "调用方法",
@@ -5239,13 +6799,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "播放 idle 动画",
           "expectedText": "播放 idle 动画"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 call_component_method 动作，处理“调用方法”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 component 设为“Animation”，把 methodName 设为“play”，传入 args=[\"idle\"]。调用完成后重点检查：播放 idle 动画。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 call_component_method 动作，处理“调用方法”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 component 设为“Animation”，把 methodName 设为“play”，传入 args=[\"idle\"]。调用完成后重点检查：播放 idle 动画。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 5,
         "note": "来自 tests/test-report.json，自动化执行通过（5ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 112,
@@ -5264,6 +6830,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "两个 Label.fontSize→24",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 2D UI 相关操作通常需 Canvas 与 UI_2D 层；无 Canvas 时先 ensure_2d_canvas。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -5276,7 +6854,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": false,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 batch_set_property 动作，处理“批量设属性”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请传入 uuids=[\"<a>\",\"<b>\"]，把 component 设为“Label”，把 property 设为“fontSize”，把 value 设为 24。调用完成后重点检查：两个 Label.fontSize→24。",
+          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 batch_set_property 动作，处理“批量设属性”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请传入 uuids=[\"<a>\",\"<b>\"]，把 component 设为“Label”，把 property 设为“fontSize”，把 value 设为 24。调用完成后重点检查：两个 Label.fontSize→24。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
           "scenarioType": "参数场景",
           "scenarioTitle": "批量设属性",
@@ -5290,13 +6868,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "两个 Label.fontSize→24",
           "expectedText": "两个 Label.fontSize→24"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 batch_set_property 动作，处理“批量设属性”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请传入 uuids=[\"<a>\",\"<b>\"]，把 component 设为“Label”，把 property 设为“fontSize”，把 value 设为 24。调用完成后重点检查：两个 Label.fontSize→24。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 batch_set_property 动作，处理“批量设属性”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请传入 uuids=[\"<a>\",\"<b>\"]，把 component 设为“Label”，把 property 设为“fontSize”，把 value 设为 24。调用完成后重点检查：两个 Label.fontSize→24。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 17,
         "note": "来自 tests/test-report.json，自动化执行通过（17ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 113,
@@ -5314,6 +6898,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "添加组件+设 speed=15,maxHp=100",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -5326,7 +6922,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": false,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 attach_script 动作，处理“一键挂载+设属性”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 script 设为“PlayerController”，传入 properties={\"speed\":15,\"maxHp\":100}。调用完成后重点检查：添加组件+设 speed=15,maxHp=100。",
+          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 attach_script 动作，处理“一键挂载+设属性”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 script 设为“PlayerController”，传入 properties={\"speed\":15,\"maxHp\":100}。调用完成后重点检查：添加组件+设 speed=15,maxHp=100。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
           "scenarioType": "参数场景",
           "scenarioTitle": "一键挂载+设属性",
@@ -5340,13 +6936,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "添加组件+设 speed=15,maxHp=100",
           "expectedText": "添加组件+设 speed=15,maxHp=100"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 attach_script 动作，处理“一键挂载+设属性”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 script 设为“PlayerController”，传入 properties={\"speed\":15,\"maxHp\":100}。调用完成后重点检查：添加组件+设 speed=15,maxHp=100。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 attach_script 动作，处理“一键挂载+设属性”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 script 设为“PlayerController”，传入 properties={\"speed\":15,\"maxHp\":100}。调用完成后重点检查：添加组件+设 speed=15,maxHp=100。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 44,
         "note": "来自 tests/test-report.json，自动化执行通过（44ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 114,
@@ -5360,6 +6962,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "已存在→{alreadyAttached:true}",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -5372,7 +6986,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": false,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 attach_script 动作，处理“防重复”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 script 设为“PlayerController”。调用完成后重点检查：已存在→{alreadyAttached:true}。",
+          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 attach_script 动作，处理“防重复”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 script 设为“PlayerController”。调用完成后重点检查：已存在→{alreadyAttached:true}。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
           "scenarioType": "参数场景",
           "scenarioTitle": "防重复",
@@ -5386,13 +7000,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "已存在→{alreadyAttached:true}",
           "expectedText": "已存在→{alreadyAttached:true}"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 attach_script 动作，处理“防重复”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 script 设为“PlayerController”。调用完成后重点检查：已存在→{alreadyAttached:true}。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 attach_script 动作，处理“防重复”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 script 设为“PlayerController”。调用完成后重点检查：已存在→{alreadyAttached:true}。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 7,
         "note": "来自 tests/test-report.json，自动化执行通过（7ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 115,
@@ -5407,6 +7027,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "再添加一个实例",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -5419,7 +7051,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": false,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 attach_script 动作，处理“允许重复”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 script 设为“PlayerController”，把 allowDuplicate 设为 true。调用完成后重点检查：再添加一个实例。",
+          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 attach_script 动作，处理“允许重复”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 script 设为“PlayerController”，把 allowDuplicate 设为 true。调用完成后重点检查：再添加一个实例。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
           "scenarioType": "参数场景",
           "scenarioTitle": "允许重复",
@@ -5433,13 +7065,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "再添加一个实例",
           "expectedText": "再添加一个实例"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 attach_script 动作，处理“允许重复”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 script 设为“PlayerController”，把 allowDuplicate 设为 true。调用完成后重点检查：再添加一个实例。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 attach_script 动作，处理“允许重复”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 script 设为“PlayerController”，把 allowDuplicate 设为 true。调用完成后重点检查：再添加一个实例。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 27,
         "note": "来自 tests/test-report.json，自动化执行通过（27ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 116,
@@ -5453,6 +7091,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回 {error:\"脚本类未注册\"}",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -5465,7 +7115,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": false,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 attach_script 动作，处理“脚本未编译”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 script 设为“NewScript”。调用完成后重点检查：返回 {error:\"脚本类未注册\"}。",
+          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 attach_script 动作，处理“脚本未编译”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 script 设为“NewScript”。调用完成后重点检查：返回 {error:\"脚本类未注册\"}。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
           "scenarioType": "参数场景",
           "scenarioTitle": "脚本未编译",
@@ -5479,13 +7129,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "返回 {error:\"脚本类未注册\"}",
           "expectedText": "返回 {error:\"脚本类未注册\"}"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 attach_script 动作，处理“脚本未编译”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 script 设为“NewScript”。调用完成后重点检查：返回 {error:\"脚本类未注册\"}。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 attach_script 动作，处理“脚本未编译”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 script 设为“NewScript”。调用完成后重点检查：返回 {error:\"脚本类未注册\"}。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 44,
         "note": "来自 tests/test-report.json，自动化执行通过（44ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 117,
@@ -5503,6 +7159,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "一次设 string+fontSize",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 2D UI 相关操作通常需 Canvas 与 UI_2D 层；无 Canvas 时先 ensure_2d_canvas。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -5515,7 +7183,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": false,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 set_component_properties 动作，处理“批量设属性”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 component 设为“Label”，传入 properties={\"string\":\"Hi\",\"fontSize\":32}。调用完成后重点检查：一次设 string+fontSize。",
+          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 set_component_properties 动作，处理“批量设属性”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 component 设为“Label”，传入 properties={\"string\":\"Hi\",\"fontSize\":32}。调用完成后重点检查：一次设 string+fontSize。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
           "scenarioType": "参数场景",
           "scenarioTitle": "批量设属性",
@@ -5529,13 +7197,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "一次设 string+fontSize",
           "expectedText": "一次设 string+fontSize"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 set_component_properties 动作，处理“批量设属性”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 component 设为“Label”，传入 properties={\"string\":\"Hi\",\"fontSize\":32}。调用完成后重点检查：一次设 string+fontSize。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 set_component_properties 动作，处理“批量设属性”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 component 设为“Label”，传入 properties={\"string\":\"Hi\",\"fontSize\":32}。调用完成后重点检查：一次设 string+fontSize。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 32,
         "note": "来自 tests/test-report.json，自动化执行通过（32ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 118,
@@ -5558,6 +7232,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "color 成功,spriteFrame 报错",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 2D UI 相关操作通常需 Canvas 与 UI_2D 层；无 Canvas 时先 ensure_2d_canvas。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -5570,7 +7256,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": false,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 set_component_properties 动作，处理“部分失败”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 component 设为“Sprite”，传入 properties={\"spriteFrame\":\"bad\",\"color\":{\"r\":0,\"g\":255,\"b\":0,\"a\":255}}。调用完成后重点检查：color 成功,spriteFrame 报错。",
+          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 set_component_properties 动作，处理“部分失败”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 component 设为“Sprite”，传入 properties={\"spriteFrame\":\"bad\",\"color\":{\"r\":0,\"g\":255,\"b\":0,\"a\":255}}。调用完成后重点检查：color 成功,spriteFrame 报错。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
           "scenarioType": "参数场景",
           "scenarioTitle": "部分失败",
@@ -5584,13 +7270,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "color 成功,spriteFrame 报错",
           "expectedText": "color 成功,spriteFrame 报错"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 set_component_properties 动作，处理“部分失败”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 component 设为“Sprite”，传入 properties={\"spriteFrame\":\"bad\",\"color\":{\"r\":0,\"g\":255,\"b\":0,\"a\":255}}。调用完成后重点检查：color 成功,spriteFrame 报错。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 set_component_properties 动作，处理“部分失败”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 component 设为“Sprite”，传入 properties={\"spriteFrame\":\"bad\",\"color\":{\"r\":0,\"g\":255,\"b\":0,\"a\":255}}。调用完成后重点检查：color 成功,spriteFrame 报错。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 92,
         "note": "来自 tests/test-report.json，自动化执行通过（92ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 119,
@@ -5604,6 +7296,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回 {success:true}",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -5616,7 +7320,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": false,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 detach_script 动作，处理“移除脚本”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 script 设为“PlayerController”。调用完成后重点检查：返回 {success:true}。",
+          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 detach_script 动作，处理“移除脚本”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 script 设为“PlayerController”。调用完成后重点检查：返回 {success:true}。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
           "scenarioType": "参数场景",
           "scenarioTitle": "移除脚本",
@@ -5630,13 +7334,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "返回 {success:true}",
           "expectedText": "返回 {success:true}"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 detach_script 动作，处理“移除脚本”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 script 设为“PlayerController”。调用完成后重点检查：返回 {success:true}。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 detach_script 动作，处理“移除脚本”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 script 设为“PlayerController”。调用完成后重点检查：返回 {success:true}。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 21,
         "note": "来自 tests/test-report.json，自动化执行通过（21ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 120,
@@ -5650,6 +7360,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回 {error:\"没有脚本\"}",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -5662,7 +7384,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": false,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 detach_script 动作，处理“不存在”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 script 设为“NotExist”。调用完成后重点检查：返回 {error:\"没有脚本\"}。",
+          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 detach_script 动作，处理“不存在”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 script 设为“NotExist”。调用完成后重点检查：返回 {error:\"没有脚本\"}。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
           "scenarioType": "参数场景",
           "scenarioTitle": "不存在",
@@ -5676,13 +7398,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "返回 {error:\"没有脚本\"}",
           "expectedText": "返回 {error:\"没有脚本\"}"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 detach_script 动作，处理“不存在”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 script 设为“NotExist”。调用完成后重点检查：返回 {error:\"没有脚本\"}。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 detach_script 动作，处理“不存在”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 script 设为“NotExist”。调用完成后重点检查：返回 {error:\"没有脚本\"}。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 13,
         "note": "来自 tests/test-report.json，自动化执行通过（13ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 121,
@@ -5700,6 +7428,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "三节点水平居中对齐",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -5712,7 +7452,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": false,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 align_nodes 动作，处理“水平居中”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请传入 uuids=[\"<a>\",\"<b>\",\"<c>\"]，把 alignment 设为“center_h”。调用完成后重点检查：三节点水平居中对齐。",
+          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 align_nodes 动作，处理“水平居中”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请传入 uuids=[\"<a>\",\"<b>\",\"<c>\"]，把 alignment 设为“center_h”。调用完成后重点检查：三节点水平居中对齐。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
           "scenarioType": "参数场景",
           "scenarioTitle": "水平居中",
@@ -5726,13 +7466,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "三节点水平居中对齐",
           "expectedText": "三节点水平居中对齐"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 align_nodes 动作，处理“水平居中”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请传入 uuids=[\"<a>\",\"<b>\",\"<c>\"]，把 alignment 设为“center_h”。调用完成后重点检查：三节点水平居中对齐。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 align_nodes 动作，处理“水平居中”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请传入 uuids=[\"<a>\",\"<b>\",\"<c>\"]，把 alignment 设为“center_h”。调用完成后重点检查：三节点水平居中对齐。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 10,
         "note": "来自 tests/test-report.json，自动化执行通过（10ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 122,
@@ -5750,6 +7496,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "水平均匀分布",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -5762,7 +7520,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": false,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 align_nodes 动作，处理“均匀分布”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请传入 uuids=[\"<a>\",\"<b>\",\"<c>\"]，把 alignment 设为“distribute_h”。调用完成后重点检查：水平均匀分布。",
+          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 align_nodes 动作，处理“均匀分布”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请传入 uuids=[\"<a>\",\"<b>\",\"<c>\"]，把 alignment 设为“distribute_h”。调用完成后重点检查：水平均匀分布。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
           "scenarioType": "参数场景",
           "scenarioTitle": "均匀分布",
@@ -5776,13 +7534,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "水平均匀分布",
           "expectedText": "水平均匀分布"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 align_nodes 动作，处理“均匀分布”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请传入 uuids=[\"<a>\",\"<b>\",\"<c>\"]，把 alignment 设为“distribute_h”。调用完成后重点检查：水平均匀分布。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 align_nodes 动作，处理“均匀分布”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请传入 uuids=[\"<a>\",\"<b>\",\"<c>\"]，把 alignment 设为“distribute_h”。调用完成后重点检查：水平均匀分布。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 24,
         "note": "来自 tests/test-report.json，自动化执行通过（24ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 123,
@@ -5795,6 +7559,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "节点存入剪贴板",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -5807,7 +7583,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": false,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 clipboard_copy 动作，处理“复制”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：节点存入剪贴板。",
+          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 clipboard_copy 动作，处理“复制”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：节点存入剪贴板。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
           "scenarioType": "参数场景",
           "scenarioTitle": "复制",
@@ -5821,13 +7597,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "节点存入剪贴板",
           "expectedText": "节点存入剪贴板"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 clipboard_copy 动作，处理“复制”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：节点存入剪贴板。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 clipboard_copy 动作，处理“复制”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：节点存入剪贴板。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 21,
         "note": "来自 tests/test-report.json，自动化执行通过（21ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 124,
@@ -5840,6 +7622,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "从剪贴板粘贴到父节点下",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -5852,7 +7646,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": false,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 clipboard_paste 动作，处理“粘贴”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 parentUuid 指向 <p>。调用完成后重点检查：从剪贴板粘贴到父节点下。",
+          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 clipboard_paste 动作，处理“粘贴”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 parentUuid 指向 <p>。调用完成后重点检查：从剪贴板粘贴到父节点下。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
           "scenarioType": "参数场景",
           "scenarioTitle": "粘贴",
@@ -5866,13 +7660,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "从剪贴板粘贴到父节点下",
           "expectedText": "从剪贴板粘贴到父节点下"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 clipboard_paste 动作，处理“粘贴”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 parentUuid 指向 <p>。调用完成后重点检查：从剪贴板粘贴到父节点下。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 clipboard_paste 动作，处理“粘贴”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 parentUuid 指向 <p>。调用完成后重点检查：从剪贴板粘贴到父节点下。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 19,
         "note": "来自 tests/test-report.json，自动化执行通过（19ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 125,
@@ -5886,6 +7686,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "保存为 .prefab",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -5898,7 +7710,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": true,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 create_prefab 动作，处理“保存预制体”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 savePath 设为“db://assets/prefabs/Hero.prefab”。调用完成后重点检查：保存为 .prefab。",
+          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 create_prefab 动作，处理“保存预制体”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 savePath 设为“db://assets/prefabs/Hero.prefab”。调用完成后重点检查：保存为 .prefab。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "prefab\"）",
           "scenarioType": "参数场景",
           "scenarioTitle": "保存预制体",
@@ -5912,13 +7724,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "保存为 .prefab",
           "expectedText": "保存为 .prefab"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 create_prefab 动作，处理“保存预制体”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 savePath 设为“db://assets/prefabs/Hero.prefab”。调用完成后重点检查：保存为 .prefab。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 create_prefab 动作，处理“保存预制体”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 savePath 设为“db://assets/prefabs/Hero.prefab”。调用完成后重点检查：保存为 .prefab。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 68,
         "note": "来自 tests/test-report.json，自动化执行通过（68ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 126,
@@ -5931,6 +7749,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "在场景根创建实例",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。",
+      "setupSteps": [],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -5963,7 +7783,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 81,
         "note": "来自 tests/test-report.json，自动化执行通过（81ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 127,
@@ -5977,6 +7803,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "在父节点下实例化",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -5989,7 +7827,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": true,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 instantiate_prefab 动作，处理“指定父”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 prefabUrl 设为“db://assets/prefabs/Enemy.prefab”，将 parentUuid 指向 <p>。调用完成后重点检查：在父节点下实例化。",
+          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 instantiate_prefab 动作，处理“指定父”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 prefabUrl 设为“db://assets/prefabs/Enemy.prefab”，将 parentUuid 指向 <p>。调用完成后重点检查：在父节点下实例化。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "prefab 文件的 db：// 路径），parentUuid（可选）",
           "scenarioType": "参数场景",
           "scenarioTitle": "指定父",
@@ -6003,13 +7841,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "在父节点下实例化",
           "expectedText": "在父节点下实例化"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 instantiate_prefab 动作，处理“指定父”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 prefabUrl 设为“db://assets/prefabs/Enemy.prefab”，将 parentUuid 指向 <p>。调用完成后重点检查：在父节点下实例化。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 instantiate_prefab 动作，处理“指定父”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 prefabUrl 设为“db://assets/prefabs/Enemy.prefab”，将 parentUuid 指向 <p>。调用完成后重点检查：在父节点下实例化。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 4,
         "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 128,
@@ -6022,6 +7866,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "进入预制体编辑模式",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -6034,7 +7890,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": true,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 enter_prefab_edit 动作，处理“进入编辑”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <prefab>。调用完成后重点检查：进入预制体编辑模式。",
+          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 enter_prefab_edit 动作，处理“进入编辑”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <prefab>。调用完成后重点检查：进入预制体编辑模式。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "进入预制体编辑模式（将 prefab 作为场景打开）",
           "scenarioType": "参数场景",
           "scenarioTitle": "进入编辑",
@@ -6048,13 +7904,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "进入预制体编辑模式",
           "expectedText": "进入预制体编辑模式"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 enter_prefab_edit 动作，处理“进入编辑”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <prefab>。调用完成后重点检查：进入预制体编辑模式。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 enter_prefab_edit 动作，处理“进入编辑”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <prefab>。调用完成后重点检查：进入预制体编辑模式。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 3,
         "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 129,
@@ -6066,6 +7928,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回场景编辑模式",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。",
+      "setupSteps": [],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -6098,7 +7962,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 15,
         "note": "来自 tests/test-report.json，自动化执行通过（15ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 130,
@@ -6111,6 +7981,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "同步到预制体资源",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -6123,7 +8005,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": true,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 apply_prefab 动作，处理“应用更改”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：同步到预制体资源。",
+          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 apply_prefab 动作，处理“应用更改”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：同步到预制体资源。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "将修改应用到 prefab 资源",
           "scenarioType": "参数场景",
           "scenarioTitle": "应用更改",
@@ -6137,13 +8019,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "同步到预制体资源",
           "expectedText": "同步到预制体资源"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 apply_prefab 动作，处理“应用更改”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：同步到预制体资源。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 apply_prefab 动作，处理“应用更改”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：同步到预制体资源。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 3249,
         "note": "来自 tests/test-report.json，自动化执行通过（3249ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 131,
@@ -6156,6 +8044,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "恢复为原始状态",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -6168,7 +8068,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": true,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 restore_prefab 动作，处理“恢复”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：恢复为原始状态。",
+          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 restore_prefab 动作，处理“恢复”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：恢复为原始状态。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "将 prefab 实例恢复为原始状态",
           "scenarioType": "参数场景",
           "scenarioTitle": "恢复",
@@ -6182,13 +8082,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "恢复为原始状态",
           "expectedText": "恢复为原始状态"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 restore_prefab 动作，处理“恢复”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：恢复为原始状态。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 restore_prefab 动作，处理“恢复”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：恢复为原始状态。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 12,
         "note": "来自 tests/test-report.json，自动化执行通过（12ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 132,
@@ -6201,6 +8107,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "检查完整性和依赖",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。",
+      "setupSteps": [],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -6233,7 +8141,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 14,
         "note": "来自 tests/test-report.json，自动化执行通过（14ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 133,
@@ -6247,6 +8161,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "创建完整 Button 层级",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。",
+      "setupSteps": [],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -6279,7 +8195,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 43,
         "note": "来自 tests/test-report.json，自动化执行通过（43ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 134,
@@ -6293,6 +8215,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "创建 Label 节点",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。",
+      "setupSteps": [],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -6325,7 +8249,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 28,
         "note": "来自 tests/test-report.json，自动化执行通过（28ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 135,
@@ -6338,6 +8268,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "创建 Slider 层级",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。",
+      "setupSteps": [],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -6370,7 +8302,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 193,
         "note": "来自 tests/test-report.json，自动化执行通过（193ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 136,
@@ -6383,6 +8321,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "创建火焰效果",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。",
+      "setupSteps": [],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -6415,7 +8355,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 643,
         "note": "来自 tests/test-report.json，自动化执行通过（643ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 137,
@@ -6427,6 +8373,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "创建默认粒子节点",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。",
+      "setupSteps": [],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -6459,7 +8407,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 678,
         "note": "来自 tests/test-report.json，自动化执行通过（678ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 138,
@@ -6472,6 +8426,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "创建 Spine 节点",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。",
+      "setupSteps": [],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -6504,7 +8460,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 298,
         "note": "来自 tests/test-report.json，自动化执行通过（298ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 139,
@@ -6517,6 +8479,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "创建龙骨节点",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。",
+      "setupSteps": [],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -6549,7 +8513,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 107,
         "note": "来自 tests/test-report.json，自动化执行通过（107ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 140,
@@ -6562,6 +8532,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "创建 TiledMap 节点",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。",
+      "setupSteps": [],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -6594,7 +8566,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 39,
         "note": "来自 tests/test-report.json，自动化执行通过（39ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 141,
@@ -6613,6 +8591,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "创建橙色 Box",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。",
+      "setupSteps": [],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -6645,7 +8625,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 105,
         "note": "来自 tests/test-report.json，自动化执行通过（105ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 142,
@@ -6660,6 +8646,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "创建可投射阴影球体",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。",
+      "setupSteps": [],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -6692,7 +8680,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 26,
         "note": "来自 tests/test-report.json，自动化执行通过（26ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 143,
@@ -6705,6 +8699,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "创建圆柱体",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。",
+      "setupSteps": [],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -6737,7 +8733,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 89,
         "note": "来自 tests/test-report.json，自动化执行通过（89ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 144,
@@ -6753,6 +8755,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "创建 FOV=60 摄像机",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。",
+      "setupSteps": [],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -6785,7 +8789,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 41,
         "note": "来自 tests/test-report.json，自动化执行通过（41ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 145,
@@ -6799,6 +8809,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "FOV→45°",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -6811,7 +8833,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": false,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 set_camera_property 动作，处理“改 FOV”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <cam>，把 fov 设为 45。调用完成后重点检查：FOV→45°。",
+          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 set_camera_property 动作，处理“改 FOV”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <cam>，把 fov 设为 45。调用完成后重点检查：FOV→45°。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
           "scenarioType": "参数场景",
           "scenarioTitle": "改 FOV",
@@ -6825,13 +8847,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "FOV→45°",
           "expectedText": "FOV→45°"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 set_camera_property 动作，处理“改 FOV”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <cam>，把 fov 设为 45。调用完成后重点检查：FOV→45°。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 set_camera_property 动作，处理“改 FOV”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <cam>，把 fov 设为 45。调用完成后重点检查：FOV→45°。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 52,
         "note": "来自 tests/test-report.json，自动化执行通过（52ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 146,
@@ -6850,6 +8878,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "背景色→深蓝",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -6862,7 +8902,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": false,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 set_camera_property 动作，处理“设背景色”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <cam>，传入 clearColor={\"r\":30,\"g\":30,\"b\":60,\"a\":255}。调用完成后重点检查：背景色→深蓝。",
+          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 set_camera_property 动作，处理“设背景色”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <cam>，传入 clearColor={\"r\":30,\"g\":30,\"b\":60,\"a\":255}。调用完成后重点检查：背景色→深蓝。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
           "scenarioType": "参数场景",
           "scenarioTitle": "设背景色",
@@ -6876,13 +8916,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "背景色→深蓝",
           "expectedText": "背景色→深蓝"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 set_camera_property 动作，处理“设背景色”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <cam>，传入 clearColor={\"r\":30,\"g\":30,\"b\":60,\"a\":255}。调用完成后重点检查：背景色→深蓝。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 set_camera_property 动作，处理“设背景色”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <cam>，传入 clearColor={\"r\":30,\"g\":30,\"b\":60,\"a\":255}。调用完成后重点检查：背景色→深蓝。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 130,
         "note": "来自 tests/test-report.json，自动化执行通过（130ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 147,
@@ -6898,6 +8944,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "摄像机旋转朝向原点",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -6910,7 +8968,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": false,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 set_camera_look_at 动作，处理“朝向原点”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <cam>，把 targetX 设为 0，把 targetY 设为 0，把 targetZ 设为 0。调用完成后重点检查：摄像机旋转朝向原点。",
+          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 set_camera_look_at 动作，处理“朝向原点”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <cam>，把 targetX 设为 0，把 targetY 设为 0，把 targetZ 设为 0。调用完成后重点检查：摄像机旋转朝向原点。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
           "scenarioType": "参数场景",
           "scenarioTitle": "朝向原点",
@@ -6924,13 +8982,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "摄像机旋转朝向原点",
           "expectedText": "摄像机旋转朝向原点"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 set_camera_look_at 动作，处理“朝向原点”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <cam>，把 targetX 设为 0，把 targetY 设为 0，把 targetZ 设为 0。调用完成后重点检查：摄像机旋转朝向原点。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 set_camera_look_at 动作，处理“朝向原点”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <cam>，把 targetX 设为 0，把 targetY 设为 0，把 targetZ 设为 0。调用完成后重点检查：摄像机旋转朝向原点。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 43,
         "note": "来自 tests/test-report.json，自动化执行通过（43ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 148,
@@ -6944,6 +9008,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回截图数据",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。",
+      "setupSteps": [],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -6976,7 +9042,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 19,
         "note": "来自 tests/test-report.json，自动化执行通过（19ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 149,
@@ -6991,6 +9063,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "使用指定摄像机截图",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -7003,7 +9087,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": false,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 camera_screenshot 动作，处理“指定摄像机”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <cam>，把 width 设为 512，把 height 设为 512。调用完成后重点检查：使用指定摄像机截图。",
+          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 camera_screenshot 动作，处理“指定摄像机”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <cam>，把 width 设为 512，把 height 设为 512。调用完成后重点检查：使用指定摄像机截图。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
           "scenarioType": "参数场景",
           "scenarioTitle": "指定摄像机",
@@ -7017,13 +9101,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "使用指定摄像机截图",
           "expectedText": "使用指定摄像机截图"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 camera_screenshot 动作，处理“指定摄像机”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <cam>，把 width 设为 512，把 height 设为 512。调用完成后重点检查：使用指定摄像机截图。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 camera_screenshot 动作，处理“指定摄像机”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <cam>，把 width 设为 512，把 height 设为 512。调用完成后重点检查：使用指定摄像机截图。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 10,
         "note": "来自 tests/test-report.json，自动化执行通过（10ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 150,
@@ -7044,6 +9134,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "主颜色变红",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -7056,7 +9158,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": false,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 set_material_property 动作，处理“设材质颜色”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，传入 uniforms={\"mainColor\":{\"r\":255,\"g\":0,\"b\":0,\"a\":255}}。调用完成后重点检查：主颜色变红。",
+          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 set_material_property 动作，处理“设材质颜色”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，传入 uniforms={\"mainColor\":{\"r\":255,\"g\":0,\"b\":0,\"a\":255}}。调用完成后重点检查：主颜色变红。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
           "scenarioType": "参数场景",
           "scenarioTitle": "设材质颜色",
@@ -7070,13 +9172,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "主颜色变红",
           "expectedText": "主颜色变红"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 set_material_property 动作，处理“设材质颜色”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，传入 uniforms={\"mainColor\":{\"r\":255,\"g\":0,\"b\":0,\"a\":255}}。调用完成后重点检查：主颜色变红。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 set_material_property 动作，处理“设材质颜色”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，传入 uniforms={\"mainColor\":{\"r\":255,\"g\":0,\"b\":0,\"a\":255}}。调用完成后重点检查：主颜色变红。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 357,
         "note": "来自 tests/test-report.json，自动化执行通过（357ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 151,
@@ -7093,6 +9201,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "光滑金属质感",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -7105,7 +9225,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": false,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 set_material_property 动作，处理“设粗糙度”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，传入 uniforms={\"roughness\":0.3,\"metallic\":0.8}。调用完成后重点检查：光滑金属质感。",
+          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 set_material_property 动作，处理“设粗糙度”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，传入 uniforms={\"roughness\":0.3,\"metallic\":0.8}。调用完成后重点检查：光滑金属质感。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
           "scenarioType": "参数场景",
           "scenarioTitle": "设粗糙度",
@@ -7119,13 +9239,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "光滑金属质感",
           "expectedText": "光滑金属质感"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 set_material_property 动作，处理“设粗糙度”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，传入 uniforms={\"roughness\":0.3,\"metallic\":0.8}。调用完成后重点检查：光滑金属质感。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 set_material_property 动作，处理“设粗糙度”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，传入 uniforms={\"roughness\":0.3,\"metallic\":0.8}。调用完成后重点检查：光滑金属质感。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 12,
         "note": "来自 tests/test-report.json，自动化执行通过（12ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 152,
@@ -7139,6 +9265,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "切换到无光照材质",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -7151,7 +9289,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": false,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 assign_builtin_material 动作，处理“Unlit 材质”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 effectName 设为“builtin-unlit”。调用完成后重点检查：切换到无光照材质。",
+          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 assign_builtin_material 动作，处理“Unlit 材质”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 effectName 设为“builtin-unlit”。调用完成后重点检查：切换到无光照材质。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
           "scenarioType": "参数场景",
           "scenarioTitle": "Unlit 材质",
@@ -7165,13 +9303,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "切换到无光照材质",
           "expectedText": "切换到无光照材质"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 assign_builtin_material 动作，处理“Unlit 材质”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 effectName 设为“builtin-unlit”。调用完成后重点检查：切换到无光照材质。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 assign_builtin_material 动作，处理“Unlit 材质”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 effectName 设为“builtin-unlit”。调用完成后重点检查：切换到无光照材质。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 8,
         "note": "来自 tests/test-report.json，自动化执行通过（8ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 153,
@@ -7191,6 +9335,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "标准材质+绿色",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -7203,7 +9359,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": false,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 assign_builtin_material 动作，处理“带颜色”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 effectName 设为“builtin-standard”，传入 color={\"r\":0,\"g\":255,\"b\":0,\"a\":255}。调用完成后重点检查：标准材质+绿色。",
+          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 assign_builtin_material 动作，处理“带颜色”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 effectName 设为“builtin-standard”，传入 color={\"r\":0,\"g\":255,\"b\":0,\"a\":255}。调用完成后重点检查：标准材质+绿色。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
           "scenarioType": "参数场景",
           "scenarioTitle": "带颜色",
@@ -7217,13 +9373,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "标准材质+绿色",
           "expectedText": "标准材质+绿色"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 assign_builtin_material 动作，处理“带颜色”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 effectName 设为“builtin-standard”，传入 color={\"r\":0,\"g\":255,\"b\":0,\"a\":255}。调用完成后重点检查：标准材质+绿色。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 assign_builtin_material 动作，处理“带颜色”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 effectName 设为“builtin-standard”，传入 color={\"r\":0,\"g\":255,\"b\":0,\"a\":255}。调用完成后重点检查：标准材质+绿色。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 37,
         "note": "来自 tests/test-report.json，自动化执行通过（37ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 154,
@@ -7237,6 +9399,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "使用项目材质",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -7249,7 +9423,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": false,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 assign_project_material 动作，处理“自定义材质”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 materialUrl 设为“db://assets/materials/Glass.mtl”。调用完成后重点检查：使用项目材质。",
+          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 assign_project_material 动作，处理“自定义材质”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 materialUrl 设为“db://assets/materials/Glass.mtl”。调用完成后重点检查：使用项目材质。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
           "scenarioType": "参数场景",
           "scenarioTitle": "自定义材质",
@@ -7263,13 +9437,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "使用项目材质",
           "expectedText": "使用项目材质"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 assign_project_material 动作，处理“自定义材质”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 materialUrl 设为“db://assets/materials/Glass.mtl”。调用完成后重点检查：使用项目材质。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 assign_project_material 动作，处理“自定义材质”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 materialUrl 设为“db://assets/materials/Glass.mtl”。调用完成后重点检查：使用项目材质。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 8,
         "note": "来自 tests/test-report.json，自动化执行通过（8ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 155,
@@ -7285,6 +9465,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "Shader 宏启用并重编译",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -7297,7 +9489,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": false,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 set_material_define 动作，处理“启用法线贴图”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，传入 defines={\"USE_NORMAL_MAP\":true}。调用完成后重点检查：Shader 宏启用并重编译。",
+          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 set_material_define 动作，处理“启用法线贴图”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，传入 defines={\"USE_NORMAL_MAP\":true}。调用完成后重点检查：Shader 宏启用并重编译。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
           "scenarioType": "参数场景",
           "scenarioTitle": "启用法线贴图",
@@ -7311,13 +9503,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "Shader 宏启用并重编译",
           "expectedText": "Shader 宏启用并重编译"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 set_material_define 动作，处理“启用法线贴图”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，传入 defines={\"USE_NORMAL_MAP\":true}。调用完成后重点检查：Shader 宏启用并重编译。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 set_material_define 动作，处理“启用法线贴图”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，传入 defines={\"USE_NORMAL_MAP\":true}。调用完成后重点检查：Shader 宏启用并重编译。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 16,
         "note": "来自 tests/test-report.json，自动化执行通过（16ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 156,
@@ -7330,6 +9528,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "共享材质→独立实例",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -7342,7 +9552,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": false,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 clone_material 动作，处理“克隆材质”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：共享材质→独立实例。",
+          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 clone_material 动作，处理“克隆材质”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：共享材质→独立实例。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
           "scenarioType": "参数场景",
           "scenarioTitle": "克隆材质",
@@ -7356,13 +9566,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "共享材质→独立实例",
           "expectedText": "共享材质→独立实例"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 clone_material 动作，处理“克隆材质”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：共享材质→独立实例。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 clone_material 动作，处理“克隆材质”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：共享材质→独立实例。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 7,
         "note": "来自 tests/test-report.json，自动化执行通过（7ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 157,
@@ -7376,6 +9592,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "切换到第 2 个渲染技术",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -7388,7 +9616,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": false,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 swap_technique 动作，处理“切换 Technique”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 technique 设为 1。调用完成后重点检查：切换到第 2 个渲染技术。",
+          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 swap_technique 动作，处理“切换 Technique”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 technique 设为 1。调用完成后重点检查：切换到第 2 个渲染技术。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
           "scenarioType": "参数场景",
           "scenarioTitle": "切换 Technique",
@@ -7402,13 +9630,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "切换到第 2 个渲染技术",
           "expectedText": "切换到第 2 个渲染技术"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 swap_technique 动作，处理“切换 Technique”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 technique 设为 1。调用完成后重点检查：切换到第 2 个渲染技术。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 swap_technique 动作，处理“切换 Technique”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 technique 设为 1。调用完成后重点检查：切换到第 2 个渲染技术。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 12,
         "note": "来自 tests/test-report.json，自动化执行通过（12ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 158,
@@ -7422,6 +9656,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "Sprite 变灰色",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -7434,7 +9680,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": false,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 sprite_grayscale 动作，处理“启用灰度”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 enable 设为 true。调用完成后重点检查：Sprite 变灰色。",
+          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 sprite_grayscale 动作，处理“启用灰度”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 enable 设为 true。调用完成后重点检查：Sprite 变灰色。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
           "scenarioType": "参数场景",
           "scenarioTitle": "启用灰度",
@@ -7448,13 +9694,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "Sprite 变灰色",
           "expectedText": "Sprite 变灰色"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 sprite_grayscale 动作，处理“启用灰度”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 enable 设为 true。调用完成后重点检查：Sprite 变灰色。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 sprite_grayscale 动作，处理“启用灰度”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 enable 设为 true。调用完成后重点检查：Sprite 变灰色。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 20,
         "note": "来自 tests/test-report.json，自动化执行通过（20ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 159,
@@ -7468,6 +9720,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "Sprite 恢复彩色",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -7480,7 +9744,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": false,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 sprite_grayscale 动作，处理“恢复彩色”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 enable 设为 false。调用完成后重点检查：Sprite 恢复彩色。",
+          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 sprite_grayscale 动作，处理“恢复彩色”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 enable 设为 false。调用完成后重点检查：Sprite 恢复彩色。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
           "scenarioType": "参数场景",
           "scenarioTitle": "恢复彩色",
@@ -7494,13 +9758,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "Sprite 恢复彩色",
           "expectedText": "Sprite 恢复彩色"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 sprite_grayscale 动作，处理“恢复彩色”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 enable 设为 false。调用完成后重点检查：Sprite 恢复彩色。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 sprite_grayscale 动作，处理“恢复彩色”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 enable 设为 false。调用完成后重点检查：Sprite 恢复彩色。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 6,
         "note": "来自 tests/test-report.json，自动化执行通过（6ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 160,
@@ -7514,6 +9784,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "创建 45° 平行光",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。",
+      "setupSteps": [],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -7546,7 +9818,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 35,
         "note": "来自 tests/test-report.json，自动化执行通过（35ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 161,
@@ -7564,6 +9842,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "创建聚光灯",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。",
+      "setupSteps": [],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -7596,7 +9876,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 126,
         "note": "来自 tests/test-report.json，自动化执行通过（126ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 162,
@@ -7610,6 +9896,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "亮度→150000 lux",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -7622,7 +9920,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": false,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 set_light_property 动作，处理“调亮度”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <light>，把 illuminance 设为 150000。调用完成后重点检查：亮度→150000 lux。",
+          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 set_light_property 动作，处理“调亮度”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <light>，把 illuminance 设为 150000。调用完成后重点检查：亮度→150000 lux。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
           "scenarioType": "参数场景",
           "scenarioTitle": "调亮度",
@@ -7636,13 +9934,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "亮度→150000 lux",
           "expectedText": "亮度→150000 lux"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 set_light_property 动作，处理“调亮度”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <light>，把 illuminance 设为 150000。调用完成后重点检查：亮度→150000 lux。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 set_light_property 动作，处理“调亮度”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <light>，把 illuminance 设为 150000。调用完成后重点检查：亮度→150000 lux。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 33,
         "note": "来自 tests/test-report.json，自动化执行通过（33ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 163,
@@ -7657,6 +9961,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "启用 PCF2 阴影",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -7669,7 +9985,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": false,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 set_light_property 动作，处理“开阴影”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <light>，把 shadowEnabled 设为 true，把 shadowPcf 设为 2。调用完成后重点检查：启用 PCF2 阴影。",
+          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 set_light_property 动作，处理“开阴影”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <light>，把 shadowEnabled 设为 true，把 shadowPcf 设为 2。调用完成后重点检查：启用 PCF2 阴影。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
           "scenarioType": "参数场景",
           "scenarioTitle": "开阴影",
@@ -7683,13 +9999,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "启用 PCF2 阴影",
           "expectedText": "启用 PCF2 阴影"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 set_light_property 动作，处理“开阴影”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <light>，把 shadowEnabled 设为 true，把 shadowPcf 设为 2。调用完成后重点检查：启用 PCF2 阴影。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 set_light_property 动作，处理“开阴影”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <light>，把 shadowEnabled 设为 true，把 shadowPcf 设为 2。调用完成后重点检查：启用 PCF2 阴影。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 120,
         "note": "来自 tests/test-report.json，自动化执行通过（120ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 164,
@@ -7702,6 +10024,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "一键应用户外白天环境",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。",
+      "setupSteps": [],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -7734,7 +10058,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 40,
         "note": "来自 tests/test-report.json，自动化执行通过（40ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 165,
@@ -7755,6 +10085,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "启用淡蓝雾效",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。",
+      "setupSteps": [],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -7787,7 +10119,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 56,
         "note": "来自 tests/test-report.json，自动化执行通过（56ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 166,
@@ -7807,6 +10145,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "天空颜色→淡蓝",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。",
+      "setupSteps": [],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -7839,7 +10179,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 7,
         "note": "来自 tests/test-report.json，自动化执行通过（7ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 167,
@@ -7855,6 +10201,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "Button 绑定 click→GameUI.onClickStart",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 2D UI 相关操作通常需 Canvas 与 UI_2D 层；无 Canvas 时先 ensure_2d_canvas。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -7867,7 +10225,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": false,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 bind_event 动作，处理“绑定点击”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <btn>，把 eventType 设为“click”，把 component 设为“GameUI”，把 handler 设为“onClickStart”。调用完成后重点检查：Button 绑定 click→GameUI.onClickStart。",
+          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 bind_event 动作，处理“绑定点击”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <btn>，把 eventType 设为“click”，把 component 设为“GameUI”，把 handler 设为“onClickStart”。调用完成后重点检查：Button 绑定 click→GameUI.onClickStart。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
           "scenarioType": "参数场景",
           "scenarioTitle": "绑定点击",
@@ -7881,13 +10239,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "Button 绑定 click→GameUI.onClickStart",
           "expectedText": "Button 绑定 click→GameUI.onClickStart"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 bind_event 动作，处理“绑定点击”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <btn>，把 eventType 设为“click”，把 component 设为“GameUI”，把 handler 设为“onClickStart”。调用完成后重点检查：Button 绑定 click→GameUI.onClickStart。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 bind_event 动作，处理“绑定点击”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <btn>，把 eventType 设为“click”，把 component 设为“GameUI”，把 handler 设为“onClickStart”。调用完成后重点检查：Button 绑定 click→GameUI.onClickStart。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 9,
         "note": "来自 tests/test-report.json，自动化执行通过（9ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 168,
@@ -7903,6 +10267,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "Slider 绑定回调",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -7915,7 +10291,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": false,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 bind_event 动作，处理“绑定滑块”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <slider>，把 eventType 设为“slider”，把 component 设为“Settings”，把 handler 设为“onVolumeChange”。调用完成后重点检查：Slider 绑定回调。",
+          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 bind_event 动作，处理“绑定滑块”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <slider>，把 eventType 设为“slider”，把 component 设为“Settings”，把 handler 设为“onVolumeChange”。调用完成后重点检查：Slider 绑定回调。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
           "scenarioType": "参数场景",
           "scenarioTitle": "绑定滑块",
@@ -7929,13 +10305,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "Slider 绑定回调",
           "expectedText": "Slider 绑定回调"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 bind_event 动作，处理“绑定滑块”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <slider>，把 eventType 设为“slider”，把 component 设为“Settings”，把 handler 设为“onVolumeChange”。调用完成后重点检查：Slider 绑定回调。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 bind_event 动作，处理“绑定滑块”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <slider>，把 eventType 设为“slider”，把 component 设为“Settings”，把 handler 设为“onVolumeChange”。调用完成后重点检查：Slider 绑定回调。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 11,
         "note": "来自 tests/test-report.json，自动化执行通过（11ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 169,
@@ -7950,6 +10332,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "移除匹配的 handler",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -7962,7 +10356,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": false,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 unbind_event 动作，处理“移除指定”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <btn>，把 eventType 设为“click”，把 handler 设为“onClickStart”。调用完成后重点检查：移除匹配的 handler。",
+          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 unbind_event 动作，处理“移除指定”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <btn>，把 eventType 设为“click”，把 handler 设为“onClickStart”。调用完成后重点检查：移除匹配的 handler。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
           "scenarioType": "参数场景",
           "scenarioTitle": "移除指定",
@@ -7976,13 +10370,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "移除匹配的 handler",
           "expectedText": "移除匹配的 handler"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 unbind_event 动作，处理“移除指定”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <btn>，把 eventType 设为“click”，把 handler 设为“onClickStart”。调用完成后重点检查：移除匹配的 handler。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 unbind_event 动作，处理“移除指定”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <btn>，把 eventType 设为“click”，把 handler 设为“onClickStart”。调用完成后重点检查：移除匹配的 handler。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 7,
         "note": "来自 tests/test-report.json，自动化执行通过（7ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 170,
@@ -7996,6 +10396,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "移除所有 click 事件",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -8008,7 +10420,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": false,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 unbind_event 动作，处理“清空全部”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <btn>，把 eventType 设为“click”。调用完成后重点检查：移除所有 click 事件。",
+          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 unbind_event 动作，处理“清空全部”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <btn>，把 eventType 设为“click”。调用完成后重点检查：移除所有 click 事件。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
           "scenarioType": "参数场景",
           "scenarioTitle": "清空全部",
@@ -8022,13 +10434,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "移除所有 click 事件",
           "expectedText": "移除所有 click 事件"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 unbind_event 动作，处理“清空全部”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <btn>，把 eventType 设为“click”。调用完成后重点检查：移除所有 click 事件。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 unbind_event 动作，处理“清空全部”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <btn>，把 eventType 设为“click”。调用完成后重点检查：移除所有 click 事件。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 11,
         "note": "来自 tests/test-report.json，自动化执行通过（11ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 171,
@@ -8041,6 +10459,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回所有已绑定 UI 事件",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -8053,7 +10483,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": false,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 list_events 动作，处理“列出事件”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <btn>。调用完成后重点检查：返回所有已绑定 UI 事件。",
+          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 list_events 动作，处理“列出事件”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <btn>。调用完成后重点检查：返回所有已绑定 UI 事件。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
           "scenarioType": "参数场景",
           "scenarioTitle": "列出事件",
@@ -8067,13 +10497,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "返回所有已绑定 UI 事件",
           "expectedText": "返回所有已绑定 UI 事件"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 list_events 动作，处理“列出事件”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <btn>。调用完成后重点检查：返回所有已绑定 UI 事件。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 list_events 动作，处理“列出事件”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <btn>。调用完成后重点检查：返回所有已绑定 UI 事件。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 7,
         "note": "来自 tests/test-report.json，自动化执行通过（7ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 172,
@@ -8089,6 +10525,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "添加 AudioSource+配置",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -8101,7 +10549,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": false,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 audio_setup 动作，处理“添加音频”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 volume 设为 0.8，把 loop 设为 true，把 playOnAwake 设为 true。调用完成后重点检查：添加 AudioSource+配置。",
+          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 audio_setup 动作，处理“添加音频”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 volume 设为 0.8，把 loop 设为 true，把 playOnAwake 设为 true。调用完成后重点检查：添加 AudioSource+配置。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
           "scenarioType": "参数场景",
           "scenarioTitle": "添加音频",
@@ -8115,13 +10563,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "添加 AudioSource+配置",
           "expectedText": "添加 AudioSource+配置"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 audio_setup 动作，处理“添加音频”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 volume 设为 0.8，把 loop 设为 true，把 playOnAwake 设为 true。调用完成后重点检查：添加 AudioSource+配置。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 audio_setup 动作，处理“添加音频”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 volume 设为 0.8，把 loop 设为 true，把 playOnAwake 设为 true。调用完成后重点检查：添加 AudioSource+配置。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "pass",
         "duration": 6,
         "note": "来自 tests/test-report.json，自动化执行通过（6ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 173,
@@ -8138,6 +10592,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "物理世界重力加倍",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。",
+      "setupSteps": [],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -8170,7 +10626,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 8,
         "note": "来自 tests/test-report.json，自动化执行通过（8ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 174,
@@ -8193,6 +10655,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "创建节点 A 并添加 Sprite，$0.uuid 引用上一步结果",
       "note": "",
+      "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 2D UI 相关操作通常需 Canvas 与 UI_2D 层；无 Canvas 时先 ensure_2d_canvas。",
+      "setupSteps": [],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -8225,7 +10689,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 13,
         "note": "来自 tests/test-report.json，自动化执行通过（13ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 175,
@@ -8238,6 +10708,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回所有 PNG 资源列表",
       "note": "",
+      "prerequisites": "路径需落在项目 assets 下且资源可访问；删除/覆盖类操作前确认可丢弃；URL 导入需网络可达。",
+      "setupSteps": [],
       "phase": "资产与脚本",
       "priority": "P1",
       "edition": "community",
@@ -8270,7 +10742,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 10,
         "note": "来自 tests/test-report.json，自动化执行通过（10ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 176,
@@ -8283,6 +10761,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回 {type,uuid,path,importer}",
       "note": "",
+      "prerequisites": "路径需落在项目 assets 下且资源可访问；删除/覆盖类操作前确认可丢弃；URL 导入需网络可达。",
+      "setupSteps": [],
       "phase": "资产与脚本",
       "priority": "P1",
       "edition": "community",
@@ -8315,7 +10795,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 3,
         "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 177,
@@ -8329,6 +10815,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "创建 TS 文件",
       "note": "",
+      "prerequisites": "路径需落在项目 assets 下且资源可访问；删除/覆盖类操作前确认可丢弃；URL 导入需网络可达。",
+      "setupSteps": [],
       "phase": "资产与脚本",
       "priority": "P1",
       "edition": "community",
@@ -8361,7 +10849,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 14,
         "note": "来自 tests/test-report.json，自动化执行通过（14ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 178,
@@ -8375,6 +10869,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "文件内容被覆盖",
       "note": "",
+      "prerequisites": "路径需落在项目 assets 下且资源可访问；删除/覆盖类操作前确认可丢弃；URL 导入需网络可达。",
+      "setupSteps": [],
       "phase": "资产与脚本",
       "priority": "P1",
       "edition": "community",
@@ -8407,7 +10903,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 10,
         "note": "来自 tests/test-report.json，自动化执行通过（10ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 179,
@@ -8420,6 +10922,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "永久删除",
       "note": "",
+      "prerequisites": "路径需落在项目 assets 下且资源可访问；删除/覆盖类操作前确认可丢弃；URL 导入需网络可达。",
+      "setupSteps": [],
       "phase": "资产与脚本",
       "priority": "P1",
       "edition": "community",
@@ -8452,7 +10956,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 6,
         "note": "来自 tests/test-report.json，自动化执行通过（6ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 180,
@@ -8466,6 +10976,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "资源移到 textures 目录",
       "note": "",
+      "prerequisites": "路径需落在项目 assets 下且资源可访问；删除/覆盖类操作前确认可丢弃；URL 导入需网络可达。",
+      "setupSteps": [],
       "phase": "资产与脚本",
       "priority": "P1",
       "edition": "community",
@@ -8498,7 +11010,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 21,
         "note": "来自 tests/test-report.json，自动化执行通过（21ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 181,
@@ -8512,6 +11030,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "创建副本",
       "note": "",
+      "prerequisites": "路径需落在项目 assets 下且资源可访问；删除/覆盖类操作前确认可丢弃；URL 导入需网络可达。",
+      "setupSteps": [],
       "phase": "资产与脚本",
       "priority": "P1",
       "edition": "community",
@@ -8544,7 +11064,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 4,
         "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 182,
@@ -8558,6 +11084,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "文件改名为 new.png",
       "note": "",
+      "prerequisites": "路径需落在项目 assets 下且资源可访问；删除/覆盖类操作前确认可丢弃；URL 导入需网络可达。",
+      "setupSteps": [],
       "phase": "资产与脚本",
       "priority": "P1",
       "edition": "community",
@@ -8590,7 +11118,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 8,
         "note": "来自 tests/test-report.json，自动化执行通过（8ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 183,
@@ -8603,6 +11137,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "创建 prefabs 目录",
       "note": "",
+      "prerequisites": "路径需落在项目 assets 下且资源可访问；删除/覆盖类操作前确认可丢弃；URL 导入需网络可达。",
+      "setupSteps": [],
       "phase": "资产与脚本",
       "priority": "P1",
       "edition": "community",
@@ -8635,7 +11171,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 4,
         "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 184,
@@ -8649,6 +11191,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "文件导入到 AssetDB",
       "note": "",
+      "prerequisites": "路径需落在项目 assets 下且资源可访问；删除/覆盖类操作前确认可丢弃；URL 导入需网络可达。",
+      "setupSteps": [],
       "phase": "资产与脚本",
       "priority": "P1",
       "edition": "community",
@@ -8681,7 +11225,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 24,
         "note": "来自 tests/test-report.json，自动化执行通过（24ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 185,
@@ -8703,6 +11253,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "两个文件同时导入",
       "note": "",
+      "prerequisites": "路径需落在项目 assets 下且资源可访问；删除/覆盖类操作前确认可丢弃；URL 导入需网络可达。",
+      "setupSteps": [],
       "phase": "资产与脚本",
       "priority": "P1",
       "edition": "community",
@@ -8735,7 +11287,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 2,
         "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 186,
@@ -8748,6 +11306,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "在编辑器中打开",
       "note": "",
+      "prerequisites": "路径需落在项目 assets 下且资源可访问；删除/覆盖类操作前确认可丢弃；URL 导入需网络可达。",
+      "setupSteps": [],
       "phase": "资产与脚本",
       "priority": "P1",
       "edition": "community",
@@ -8780,7 +11340,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 4,
         "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 187,
@@ -8792,6 +11358,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "整个 AssetDB 刷新",
       "note": "",
+      "prerequisites": "路径需落在项目 assets 下且资源可访问；删除/覆盖类操作前确认可丢弃；URL 导入需网络可达。",
+      "setupSteps": [],
       "phase": "资产与脚本",
       "priority": "P1",
       "edition": "community",
@@ -8824,7 +11392,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 533,
         "note": "来自 tests/test-report.json，自动化执行通过（533ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 188,
@@ -8837,6 +11411,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "仅刷新 textures 目录",
       "note": "",
+      "prerequisites": "路径需落在项目 assets 下且资源可访问；删除/覆盖类操作前确认可丢弃；URL 导入需网络可达。",
+      "setupSteps": [],
       "phase": "资产与脚本",
       "priority": "P1",
       "edition": "community",
@@ -8869,7 +11445,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 513,
         "note": "来自 tests/test-report.json，自动化执行通过（513ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 189,
@@ -8882,6 +11464,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "资源重新导入处理",
       "note": "",
+      "prerequisites": "路径需落在项目 assets 下且资源可访问；删除/覆盖类操作前确认可丢弃；URL 导入需网络可达。",
+      "setupSteps": [],
       "phase": "资产与脚本",
       "priority": "P1",
       "edition": "community",
@@ -8914,7 +11498,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 3,
         "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 190,
@@ -8927,6 +11517,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "打开系统文件管理器定位到文件",
       "note": "",
+      "prerequisites": "路径需落在项目 assets 下且资源可访问；删除/覆盖类操作前确认可丢弃；URL 导入需网络可达。",
+      "setupSteps": [],
       "phase": "资产与脚本",
       "priority": "P1",
       "edition": "community",
@@ -8959,7 +11551,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 2,
         "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 191,
@@ -8972,6 +11570,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回 db:// 路径",
       "note": "",
+      "prerequisites": "路径需落在项目 assets 下且资源可访问；删除/覆盖类操作前确认可丢弃；URL 导入需网络可达。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [],
       "phase": "资产与脚本",
       "priority": "P1",
       "edition": "community",
@@ -9004,7 +11604,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 4,
         "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 192,
@@ -9017,6 +11623,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回 UUID 字符串",
       "note": "",
+      "prerequisites": "路径需落在项目 assets 下且资源可访问；删除/覆盖类操作前确认可丢弃；URL 导入需网络可达。",
+      "setupSteps": [],
       "phase": "资产与脚本",
       "priority": "P1",
       "edition": "community",
@@ -9049,7 +11657,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 3,
         "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 193,
@@ -9062,6 +11676,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回依赖的纹理、脚本等列表",
       "note": "",
+      "prerequisites": "路径需落在项目 assets 下且资源可访问；删除/覆盖类操作前确认可丢弃；URL 导入需网络可达。",
+      "setupSteps": [],
       "phase": "资产与脚本",
       "priority": "P1",
       "edition": "community",
@@ -9094,7 +11710,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 3,
         "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 194,
@@ -9107,6 +11729,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回引用此纹理的 Prefab/场景列表",
       "note": "",
+      "prerequisites": "路径需落在项目 assets 下且资源可访问；删除/覆盖类操作前确认可丢弃；URL 导入需网络可达。",
+      "setupSteps": [],
       "phase": "资产与脚本",
       "priority": "P1",
       "edition": "community",
@@ -9139,7 +11763,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 3,
         "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 195,
@@ -9152,6 +11782,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回完整 .meta JSON",
       "note": "",
+      "prerequisites": "路径需落在项目 assets 下且资源可访问；删除/覆盖类操作前确认可丢弃；URL 导入需网络可达。",
+      "setupSteps": [],
       "phase": "资产与脚本",
       "priority": "P1",
       "edition": "community",
@@ -9184,7 +11816,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 5,
         "note": "来自 tests/test-report.json，自动化执行通过（5ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 196,
@@ -9201,6 +11839,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "userData 字段被修改",
       "note": "",
+      "prerequisites": "路径需落在项目 assets 下且资源可访问；删除/覆盖类操作前确认可丢弃；URL 导入需网络可达。",
+      "setupSteps": [],
       "phase": "资产与脚本",
       "priority": "P1",
       "edition": "community",
@@ -9233,7 +11873,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 14,
         "note": "来自 tests/test-report.json，自动化执行通过（14ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 197,
@@ -9246,6 +11892,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回 {bytes:102400,kb:\"100.0\",mb:\"0.10\"}",
       "note": "",
+      "prerequisites": "路径需落在项目 assets 下且资源可访问；删除/覆盖类操作前确认可丢弃；URL 导入需网络可达。",
+      "setupSteps": [],
       "phase": "资产与脚本",
       "priority": "P1",
       "edition": "community",
@@ -9278,7 +11926,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 2,
         "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 198,
@@ -9291,6 +11945,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回所有 Prefab 资源列表",
       "note": "",
+      "prerequisites": "路径需落在项目 assets 下且资源可访问；删除/覆盖类操作前确认可丢弃；URL 导入需网络可达。",
+      "setupSteps": [],
       "phase": "资产与脚本",
       "priority": "P1",
       "edition": "community",
@@ -9323,7 +11979,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 13,
         "note": "来自 tests/test-report.json，自动化执行通过（13ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 199,
@@ -9335,6 +11997,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回项目中全部 .anim 文件",
       "note": "",
+      "prerequisites": "路径需落在项目 assets 下且资源可访问；删除/覆盖类操作前确认可丢弃；URL 导入需网络可达。",
+      "setupSteps": [],
       "phase": "资产与脚本",
       "priority": "P1",
       "edition": "community",
@@ -9367,7 +12031,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 3,
         "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 200,
@@ -9379,6 +12049,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回项目中全部 .mtl 文件",
       "note": "",
+      "prerequisites": "路径需落在项目 assets 下且资源可访问；删除/覆盖类操作前确认可丢弃；URL 导入需网络可达。",
+      "setupSteps": [],
       "phase": "资产与脚本",
       "priority": "P1",
       "edition": "community",
@@ -9411,7 +12083,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 4,
         "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 201,
@@ -9423,6 +12101,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回可能未使用的资源列表（需人工审查）",
       "note": "",
+      "prerequisites": "路径需落在项目 assets 下且资源可访问；删除/覆盖类操作前确认可丢弃；URL 导入需网络可达。",
+      "setupSteps": [],
       "phase": "资产与脚本",
       "priority": "P1",
       "edition": "community",
@@ -9455,7 +12135,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 8,
         "note": "来自 tests/test-report.json，自动化执行通过（8ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 202,
@@ -9468,6 +12154,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回 {valid:true/false,issues[]}",
       "note": "",
+      "prerequisites": "路径需落在项目 assets 下且资源可访问；删除/覆盖类操作前确认可丢弃；URL 导入需网络可达。",
+      "setupSteps": [],
       "phase": "资产与脚本",
       "priority": "P1",
       "edition": "community",
@@ -9500,7 +12188,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 11,
         "note": "来自 tests/test-report.json，自动化执行通过（11ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 203,
@@ -9512,6 +12206,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回完整资源清单+类型分布统计",
       "note": "",
+      "prerequisites": "路径需落在项目 assets 下且资源可访问；删除/覆盖类操作前确认可丢弃；URL 导入需网络可达。",
+      "setupSteps": [],
       "phase": "资产与脚本",
       "priority": "P1",
       "edition": "community",
@@ -9544,7 +12240,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 2,
         "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 204,
@@ -9557,6 +12259,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "触发图集重新打包",
       "note": "",
+      "prerequisites": "路径需落在项目 assets 下且资源可访问；删除/覆盖类操作前确认可丢弃；URL 导入需网络可达。",
+      "setupSteps": [],
       "phase": "资产与脚本",
       "priority": "P1",
       "edition": "community",
@@ -9589,7 +12293,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 3,
         "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 205,
@@ -9606,6 +12316,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "设置九宫格边距",
       "note": "",
+      "prerequisites": "路径需落在项目 assets 下且资源可访问；删除/覆盖类操作前确认可丢弃；URL 导入需网络可达。",
+      "setupSteps": [],
       "phase": "资产与脚本",
       "priority": "P1",
       "edition": "community",
@@ -9638,7 +12350,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 3,
         "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 206,
@@ -9660,6 +12378,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "创建半透明玻璃材质",
       "note": "",
+      "prerequisites": "路径需落在项目 assets 下且资源可访问；删除/覆盖类操作前确认可丢弃；URL 导入需网络可达。",
+      "setupSteps": [],
       "phase": "资产与脚本",
       "priority": "P1",
       "edition": "community",
@@ -9692,7 +12412,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 2,
         "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 207,
@@ -9717,6 +12443,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "生成带 @property speed 和 onLoad/update 的脚本",
       "note": "",
+      "prerequisites": "路径需落在项目 assets 下且资源可访问；删除/覆盖类操作前确认可丢弃；URL 导入需网络可达。",
+      "setupSteps": [],
       "phase": "资产与脚本",
       "priority": "P1",
       "edition": "community",
@@ -9749,7 +12477,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 2,
         "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 208,
@@ -9761,6 +12495,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "当前场景保存到磁盘",
       "note": "",
+      "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。",
+      "setupSteps": [],
       "phase": "编辑器联动",
       "priority": "P1",
       "edition": "community",
@@ -9793,7 +12529,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 34,
         "note": "来自 tests/test-report.json，自动化执行通过（34ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 209,
@@ -9806,6 +12548,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "打开 Main 场景",
       "note": "",
+      "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。",
+      "setupSteps": [],
       "phase": "编辑器联动",
       "priority": "P1",
       "edition": "community",
@@ -9838,7 +12582,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 4,
         "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 210,
@@ -9851,6 +12601,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "打开指定场景",
       "note": "",
+      "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [],
       "phase": "编辑器联动",
       "priority": "P1",
       "edition": "community",
@@ -9883,7 +12635,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 5,
         "note": "来自 tests/test-report.json，自动化执行通过（5ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 211,
@@ -9895,6 +12653,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "创建空场景",
       "note": "",
+      "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。",
+      "setupSteps": [],
       "phase": "编辑器联动",
       "priority": "P1",
       "edition": "community",
@@ -9927,7 +12687,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 96,
         "note": "来自 tests/test-report.json，自动化执行通过（96ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 212,
@@ -9939,6 +12705,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "撤销上一步操作",
       "note": "",
+      "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。",
+      "setupSteps": [],
       "phase": "编辑器联动",
       "priority": "P1",
       "edition": "community",
@@ -9971,7 +12739,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 71,
         "note": "来自 tests/test-report.json，自动化执行通过（71ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 213,
@@ -9983,6 +12757,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "重做被撤销的操作",
       "note": "",
+      "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。",
+      "setupSteps": [],
       "phase": "编辑器联动",
       "priority": "P1",
       "edition": "community",
@@ -10015,7 +12791,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 35,
         "note": "来自 tests/test-report.json，自动化执行通过（35ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 214,
@@ -10027,9 +12809,11 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回选中节点 UUID 数组",
       "note": "",
+      "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。",
+      "setupSteps": [],
       "phase": "编辑器联动",
       "priority": "P1",
-      "edition": "community",
+      "edition": "pro",
       "aiDoc": {
         "toolSummary": "Control the Cocos Creator editor environment (non-scene operations).",
         "zhToolSummary": "控制 Cocos Creator 编辑器环境中的非场景类操作。",
@@ -10059,7 +12843,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 2,
         "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 215,
@@ -10075,9 +12865,11 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "两个节点被选中",
       "note": "",
+      "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [],
       "phase": "编辑器联动",
       "priority": "P1",
-      "edition": "community",
+      "edition": "pro",
       "aiDoc": {
         "toolSummary": "Control the Cocos Creator editor environment (non-scene operations).",
         "zhToolSummary": "控制 Cocos Creator 编辑器环境中的非场景类操作。",
@@ -10107,7 +12899,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 7,
         "note": "来自 tests/test-report.json，自动化执行通过（7ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 216,
@@ -10119,9 +12917,11 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "取消所有选中",
       "note": "",
+      "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。",
+      "setupSteps": [],
       "phase": "编辑器联动",
       "priority": "P1",
-      "edition": "community",
+      "edition": "pro",
       "aiDoc": {
         "toolSummary": "Control the Cocos Creator editor environment (non-scene operations).",
         "zhToolSummary": "控制 Cocos Creator 编辑器环境中的非场景类操作。",
@@ -10151,7 +12951,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 3,
         "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 217,
@@ -10163,6 +12969,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回 {name,path,engineVersion}",
       "note": "",
+      "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。",
+      "setupSteps": [],
       "phase": "编辑器联动",
       "priority": "P1",
       "edition": "community",
@@ -10195,7 +13003,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 3,
         "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 218,
@@ -10208,6 +13022,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "启动 Web Mobile 构建",
       "note": "",
+      "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。",
+      "setupSteps": [],
       "phase": "编辑器联动",
       "priority": "P1",
       "edition": "community",
@@ -10240,7 +13056,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 932,
         "note": "来自 tests/test-report.json，自动化执行通过（932ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 219,
@@ -10252,6 +13074,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回当前构建配置和可用平台",
       "note": "",
+      "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。",
+      "setupSteps": [],
       "phase": "编辑器联动",
       "priority": "P1",
       "edition": "community",
@@ -10284,7 +13108,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 3,
         "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 220,
@@ -10298,9 +13128,11 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "Debug 模式构建",
       "note": "",
+      "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。",
+      "setupSteps": [],
       "phase": "编辑器联动",
       "priority": "P1",
-      "edition": "community",
+      "edition": "pro",
       "aiDoc": {
         "toolSummary": "Control the Cocos Creator editor environment (non-scene operations).",
         "zhToolSummary": "控制 Cocos Creator 编辑器环境中的非场景类操作。",
@@ -10330,7 +13162,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 3,
         "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 221,
@@ -10342,9 +13180,11 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回 {building:true/false}",
       "note": "",
+      "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。",
+      "setupSteps": [],
       "phase": "编辑器联动",
       "priority": "P1",
-      "edition": "community",
+      "edition": "pro",
       "aiDoc": {
         "toolSummary": "Control the Cocos Creator editor environment (non-scene operations).",
         "zhToolSummary": "控制 Cocos Creator 编辑器环境中的非场景类操作。",
@@ -10374,7 +13214,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 2,
         "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 222,
@@ -10386,6 +13232,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "浏览器中打开预览",
       "note": "",
+      "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。",
+      "setupSteps": [],
       "phase": "编辑器联动",
       "priority": "P1",
       "edition": "community",
@@ -10418,7 +13266,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 6,
         "note": "来自 tests/test-report.json，自动化执行通过（6ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 223,
@@ -10430,6 +13284,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "预览页面刷新",
       "note": "",
+      "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。",
+      "setupSteps": [],
       "phase": "编辑器联动",
       "priority": "P1",
       "edition": "community",
@@ -10462,7 +13318,13 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "status": "pass",
         "duration": 9,
         "note": "来自 tests/test-report.json，自动化执行通过（9ms）"
-      }
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 224,
@@ -10474,9 +13336,11 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回 {running,port}",
       "note": "",
+      "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。",
+      "setupSteps": [],
       "phase": "编辑器联动",
       "priority": "P1",
-      "edition": "community",
+      "edition": "pro",
       "aiDoc": {
         "toolSummary": "Control the Cocos Creator editor environment (non-scene operations).",
         "zhToolSummary": "控制 Cocos Creator 编辑器环境中的非场景类操作。",
@@ -10503,10 +13367,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 editor_action 工具，执行 preview_status 动作，处理“预览状态”这个状态场景。这个场景用于验证当前对象状态或默认状态下的表现。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：返回 {running,port}。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 225,
@@ -10523,9 +13393,11 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "发送 IPC 消息到 scene 模块",
       "note": "",
+      "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [],
       "phase": "编辑器联动",
       "priority": "P1",
-      "edition": "community",
+      "edition": "pro",
       "aiDoc": {
         "toolSummary": "Control the Cocos Creator editor environment (non-scene operations).",
         "zhToolSummary": "控制 Cocos Creator 编辑器环境中的非场景类操作。",
@@ -10552,10 +13424,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 editor_action 工具，执行 send_message 动作，处理“IPC 消息”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 module 设为“scene”，把 message 设为“query-node”，传入 args=[\"<uuid>\"]。调用完成后重点检查：发送 IPC 消息到 scene 模块。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 226,
@@ -10568,6 +13446,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "编辑器摄像机聚焦到该节点",
       "note": "",
+      "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [],
       "phase": "编辑器联动",
       "priority": "P1",
       "edition": "community",
@@ -10597,10 +13477,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 editor_action 工具，执行 focus_node 动作，处理“聚焦节点”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：编辑器摄像机聚焦到该节点。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 227,
@@ -10613,9 +13499,11 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "打开控制台面板",
       "note": "",
+      "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。",
+      "setupSteps": [],
       "phase": "编辑器联动",
       "priority": "P1",
-      "edition": "community",
+      "edition": "pro",
       "aiDoc": {
         "toolSummary": "Control the Cocos Creator editor environment (non-scene operations).",
         "zhToolSummary": "控制 Cocos Creator 编辑器环境中的非场景类操作。",
@@ -10642,10 +13530,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 editor_action 工具，执行 open_panel 动作，处理“打开面板”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 panel 设为“console”。调用完成后重点检查：打开控制台面板。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 228,
@@ -10658,9 +13552,11 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "关闭控制台面板",
       "note": "",
+      "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。",
+      "setupSteps": [],
       "phase": "编辑器联动",
       "priority": "P1",
-      "edition": "community",
+      "edition": "pro",
       "aiDoc": {
         "toolSummary": "Control the Cocos Creator editor environment (non-scene operations).",
         "zhToolSummary": "控制 Cocos Creator 编辑器环境中的非场景类操作。",
@@ -10687,10 +13583,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 editor_action 工具，执行 close_panel 动作，处理“关闭面板”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 panel 设为“console”。调用完成后重点检查：关闭控制台面板。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 229,
@@ -10702,9 +13604,11 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回所有可用面板名",
       "note": "",
+      "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。",
+      "setupSteps": [],
       "phase": "编辑器联动",
       "priority": "P1",
-      "edition": "community",
+      "edition": "pro",
       "aiDoc": {
         "toolSummary": "Control the Cocos Creator editor environment (non-scene operations).",
         "zhToolSummary": "控制 Cocos Creator 编辑器环境中的非场景类操作。",
@@ -10731,10 +13635,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 editor_action 工具，执行 query_panels 动作，处理“列出面板”这个通用场景。这个场景用于做通用能力验证。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：返回所有可用面板名。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 230,
@@ -10747,6 +13657,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "控制台输出 info 消息",
       "note": "",
+      "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。",
+      "setupSteps": [],
       "phase": "编辑器联动",
       "priority": "P1",
       "edition": "community",
@@ -10776,10 +13688,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 editor_action 工具，执行 log 动作，处理“输出日志”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 text 设为“Hello from AI”。调用完成后重点检查：控制台输出 info 消息。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 231,
@@ -10792,6 +13710,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "控制台输出 warning",
       "note": "",
+      "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。",
+      "setupSteps": [],
       "phase": "编辑器联动",
       "priority": "P1",
       "edition": "community",
@@ -10821,10 +13741,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 editor_action 工具，执行 warn 动作，处理“输出警告”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 text 设为“Something suspicious”。调用完成后重点检查：控制台输出 warning。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 232,
@@ -10837,6 +13763,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "控制台输出 error",
       "note": "",
+      "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。",
+      "setupSteps": [],
       "phase": "编辑器联动",
       "priority": "P1",
       "edition": "community",
@@ -10866,10 +13794,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 editor_action 工具，执行 error 动作，处理“输出错误”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 text 设为“Critical failure”。调用完成后重点检查：控制台输出 error。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 233,
@@ -10881,6 +13815,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "控制台清空",
       "note": "",
+      "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。",
+      "setupSteps": [],
       "phase": "编辑器联动",
       "priority": "P1",
       "edition": "community",
@@ -10910,10 +13846,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 editor_action 工具，执行 clear_console 动作，处理“清空控制台”这个通用场景。这个场景用于做通用能力验证。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：控制台清空。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 234,
@@ -10925,9 +13867,11 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回所有日志条目",
       "note": "",
+      "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。",
+      "setupSteps": [],
       "phase": "编辑器联动",
       "priority": "P1",
-      "edition": "community",
+      "edition": "pro",
       "aiDoc": {
         "toolSummary": "Control the Cocos Creator editor environment (non-scene operations).",
         "zhToolSummary": "控制 Cocos Creator 编辑器环境中的非场景类操作。",
@@ -10954,10 +13898,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 editor_action 工具，执行 get_console_logs 动作，处理“全部日志”这个通用场景。这个场景用于做通用能力验证。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：返回所有日志条目。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 235,
@@ -10971,9 +13921,11 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回最近 10 条错误日志",
       "note": "",
+      "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。",
+      "setupSteps": [],
       "phase": "编辑器联动",
       "priority": "P1",
-      "edition": "community",
+      "edition": "pro",
       "aiDoc": {
         "toolSummary": "Control the Cocos Creator editor environment (non-scene operations).",
         "zhToolSummary": "控制 Cocos Creator 编辑器环境中的非场景类操作。",
@@ -11000,10 +13952,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 editor_action 工具，执行 get_console_logs 动作，处理“仅错误”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 logType 设为“error”，把 logCount 设为 10。调用完成后重点检查：返回最近 10 条错误日志。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 236,
@@ -11016,9 +13974,11 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回含 TypeError 的日志",
       "note": "",
+      "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。",
+      "setupSteps": [],
       "phase": "编辑器联动",
       "priority": "P1",
-      "edition": "community",
+      "edition": "pro",
       "aiDoc": {
         "toolSummary": "Control the Cocos Creator editor environment (non-scene operations).",
         "zhToolSummary": "控制 Cocos Creator 编辑器环境中的非场景类操作。",
@@ -11045,10 +14005,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 editor_action 工具，执行 search_logs 动作，处理“搜索日志”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 keyword 设为“TypeError”。调用完成后重点检查：返回含 TypeError 的日志。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 237,
@@ -11060,9 +14026,11 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回插件列表",
       "note": "",
+      "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。",
+      "setupSteps": [],
       "phase": "编辑器联动",
       "priority": "P1",
-      "edition": "community",
+      "edition": "pro",
       "aiDoc": {
         "toolSummary": "Control the Cocos Creator editor environment (non-scene operations).",
         "zhToolSummary": "控制 Cocos Creator 编辑器环境中的非场景类操作。",
@@ -11089,10 +14057,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 editor_action 工具，执行 get_packages 动作，处理“已安装插件”这个环境场景。这个场景用于验证不同编辑器环境或连接状态下的表现。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：返回插件列表。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 238,
@@ -11105,9 +14079,11 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "插件热重载",
       "note": "",
+      "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。",
+      "setupSteps": [],
       "phase": "编辑器联动",
       "priority": "P1",
-      "edition": "community",
+      "edition": "pro",
       "aiDoc": {
         "toolSummary": "Control the Cocos Creator editor environment (non-scene operations).",
         "zhToolSummary": "控制 Cocos Creator 编辑器环境中的非场景类操作。",
@@ -11134,10 +14110,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 editor_action 工具，执行 reload_plugin 动作，处理“重载插件”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 module 设为“aura-for-cocos”。调用完成后重点检查：插件热重载。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 239,
@@ -11150,9 +14132,11 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "Inspector 面板显示该资源",
       "note": "",
+      "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [],
       "phase": "编辑器联动",
       "priority": "P1",
-      "edition": "community",
+      "edition": "pro",
       "aiDoc": {
         "toolSummary": "Control the Cocos Creator editor environment (non-scene operations).",
         "zhToolSummary": "控制 Cocos Creator 编辑器环境中的非场景类操作。",
@@ -11179,10 +14163,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 editor_action 工具，执行 inspect_asset 动作，处理“查看资源”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <asset-uuid>。调用完成后重点检查：Inspector 面板显示该资源。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 240,
@@ -11194,9 +14184,11 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "打开偏好设置面板",
       "note": "",
+      "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。",
+      "setupSteps": [],
       "phase": "编辑器联动",
       "priority": "P1",
-      "edition": "community",
+      "edition": "pro",
       "aiDoc": {
         "toolSummary": "Control the Cocos Creator editor environment (non-scene operations).",
         "zhToolSummary": "控制 Cocos Creator 编辑器环境中的非场景类操作。",
@@ -11223,10 +14215,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 editor_action 工具，执行 open_preferences 动作，处理“偏好设置”这个通用场景。这个场景用于做通用能力验证。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：打开偏好设置面板。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 241,
@@ -11238,9 +14236,11 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "打开项目设置面板",
       "note": "",
+      "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。",
+      "setupSteps": [],
       "phase": "编辑器联动",
       "priority": "P1",
-      "edition": "community",
+      "edition": "pro",
       "aiDoc": {
         "toolSummary": "Control the Cocos Creator editor environment (non-scene operations).",
         "zhToolSummary": "控制 Cocos Creator 编辑器环境中的非场景类操作。",
@@ -11267,10 +14267,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 editor_action 工具，执行 open_project_settings 动作，处理“项目设置”这个通用场景。这个场景用于做通用能力验证。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：打开项目设置面板。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 242,
@@ -11284,6 +14290,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "弹出通知",
       "note": "",
+      "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。",
+      "setupSteps": [],
       "phase": "编辑器联动",
       "priority": "P1",
       "edition": "community",
@@ -11313,10 +14321,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 editor_action 工具，执行 show_notification 动作，处理“通知”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 text 设为“操作完成！”，把 title 设为“AI”。调用完成后重点检查：弹出通知。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 243,
@@ -11328,6 +14342,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "进入播放模式",
       "note": "",
+      "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。",
+      "setupSteps": [],
       "phase": "编辑器联动",
       "priority": "P1",
       "edition": "community",
@@ -11357,10 +14373,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 editor_action 工具，执行 play_in_editor 动作，处理“播放”这个通用场景。这个场景用于做通用能力验证。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：进入播放模式。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 244,
@@ -11372,9 +14394,11 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "暂停播放",
       "note": "",
+      "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。",
+      "setupSteps": [],
       "phase": "编辑器联动",
       "priority": "P1",
-      "edition": "community",
+      "edition": "pro",
       "aiDoc": {
         "toolSummary": "Control the Cocos Creator editor environment (non-scene operations).",
         "zhToolSummary": "控制 Cocos Creator 编辑器环境中的非场景类操作。",
@@ -11401,10 +14425,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 editor_action 工具，执行 pause_in_editor 动作，处理“暂停”这个通用场景。这个场景用于做通用能力验证。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：暂停播放。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 245,
@@ -11416,9 +14446,11 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "停止播放",
       "note": "",
+      "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。",
+      "setupSteps": [],
       "phase": "编辑器联动",
       "priority": "P1",
-      "edition": "community",
+      "edition": "pro",
       "aiDoc": {
         "toolSummary": "Control the Cocos Creator editor environment (non-scene operations).",
         "zhToolSummary": "控制 Cocos Creator 编辑器环境中的非场景类操作。",
@@ -11445,10 +14477,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 editor_action 工具，执行 stop_in_editor 动作，处理“停止”这个通用场景。这个场景用于做通用能力验证。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：停止播放。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 246,
@@ -11460,9 +14498,11 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "执行一帧",
       "note": "",
+      "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。",
+      "setupSteps": [],
       "phase": "编辑器联动",
       "priority": "P1",
-      "edition": "community",
+      "edition": "pro",
       "aiDoc": {
         "toolSummary": "Control the Cocos Creator editor environment (non-scene operations).",
         "zhToolSummary": "控制 Cocos Creator 编辑器环境中的非场景类操作。",
@@ -11489,10 +14529,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 editor_action 工具，执行 step_in_editor 动作，处理“单步帧”这个通用场景。这个场景用于做通用能力验证。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：执行一帧。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 247,
@@ -11505,9 +14551,11 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "编辑器摄像机移动到节点",
       "note": "",
+      "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [],
       "phase": "编辑器联动",
       "priority": "P1",
-      "edition": "community",
+      "edition": "pro",
       "aiDoc": {
         "toolSummary": "Control the Cocos Creator editor environment (non-scene operations).",
         "zhToolSummary": "控制 Cocos Creator 编辑器环境中的非场景类操作。",
@@ -11534,10 +14582,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 editor_action 工具，执行 move_scene_camera 动作，处理“移动场景相机”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：编辑器摄像机移动到节点。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 248,
@@ -11549,9 +14603,11 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "截取场景编辑器画面",
       "note": "",
+      "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。",
+      "setupSteps": [],
       "phase": "编辑器联动",
       "priority": "P1",
-      "edition": "community",
+      "edition": "pro",
       "aiDoc": {
         "toolSummary": "Control the Cocos Creator editor environment (non-scene operations).",
         "zhToolSummary": "控制 Cocos Creator 编辑器环境中的非场景类操作。",
@@ -11578,10 +14634,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 editor_action 工具，执行 take_scene_screenshot 动作，处理“视口截图”这个环境场景。这个场景用于验证不同编辑器环境或连接状态下的表现。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：截取场景编辑器画面。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 249,
@@ -11594,9 +14656,11 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "切换到旋转工具",
       "note": "",
+      "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。",
+      "setupSteps": [],
       "phase": "编辑器联动",
       "priority": "P1",
-      "edition": "community",
+      "edition": "pro",
       "aiDoc": {
         "toolSummary": "Control the Cocos Creator editor environment (non-scene operations).",
         "zhToolSummary": "控制 Cocos Creator 编辑器环境中的非场景类操作。",
@@ -11623,10 +14687,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 editor_action 工具，执行 set_transform_tool 动作，处理“切 Gizmo”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 toolType 设为“rotation”。调用完成后重点检查：切换到旋转工具。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 250,
@@ -11639,9 +14709,11 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "切换到世界坐标系",
       "note": "",
+      "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。",
+      "setupSteps": [],
       "phase": "编辑器联动",
       "priority": "P1",
-      "edition": "community",
+      "edition": "pro",
       "aiDoc": {
         "toolSummary": "Control the Cocos Creator editor environment (non-scene operations).",
         "zhToolSummary": "控制 Cocos Creator 编辑器环境中的非场景类操作。",
@@ -11668,10 +14740,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 editor_action 工具，执行 set_coordinate 动作，处理“切坐标系”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 coordinate 设为“world”。调用完成后重点检查：切换到世界坐标系。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 251,
@@ -11684,9 +14762,11 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "显示编辑器网格",
       "note": "",
+      "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。",
+      "setupSteps": [],
       "phase": "编辑器联动",
       "priority": "P1",
-      "edition": "community",
+      "edition": "pro",
       "aiDoc": {
         "toolSummary": "Control the Cocos Creator editor environment (non-scene operations).",
         "zhToolSummary": "控制 Cocos Creator 编辑器环境中的非场景类操作。",
@@ -11713,10 +14793,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 editor_action 工具，执行 toggle_grid 动作，处理“显示网格”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 visible 设为 true。调用完成后重点检查：显示编辑器网格。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 252,
@@ -11729,9 +14815,11 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "启用吸附模式",
       "note": "",
+      "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。",
+      "setupSteps": [],
       "phase": "编辑器联动",
       "priority": "P1",
-      "edition": "community",
+      "edition": "pro",
       "aiDoc": {
         "toolSummary": "Control the Cocos Creator editor environment (non-scene operations).",
         "zhToolSummary": "控制 Cocos Creator 编辑器环境中的非场景类操作。",
@@ -11758,10 +14846,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 editor_action 工具，执行 toggle_snap 动作，处理“启用吸附”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 enabled 设为 true。调用完成后重点检查：启用吸附模式。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 253,
@@ -11774,9 +14868,11 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "场景视图切为 2D",
       "note": "",
+      "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。",
+      "setupSteps": [],
       "phase": "编辑器联动",
       "priority": "P1",
-      "edition": "community",
+      "edition": "pro",
       "aiDoc": {
         "toolSummary": "Control the Cocos Creator editor environment (non-scene operations).",
         "zhToolSummary": "控制 Cocos Creator 编辑器环境中的非场景类操作。",
@@ -11803,10 +14899,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 editor_action 工具，执行 set_view_mode 动作，处理“切到 2D”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 viewMode 设为“2d”。调用完成后重点检查：场景视图切为 2D。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 254,
@@ -11819,9 +14921,11 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "场景视图切为 3D",
       "note": "",
+      "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。",
+      "setupSteps": [],
       "phase": "编辑器联动",
       "priority": "P1",
-      "edition": "community",
+      "edition": "pro",
       "aiDoc": {
         "toolSummary": "Control the Cocos Creator editor environment (non-scene operations).",
         "zhToolSummary": "控制 Cocos Creator 编辑器环境中的非场景类操作。",
@@ -11848,10 +14952,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 editor_action 工具，执行 set_view_mode 动作，处理“切到 3D”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 viewMode 设为“3d”。调用完成后重点检查：场景视图切为 3D。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 255,
@@ -11863,9 +14973,11 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "视图缩放以适应所有节点",
       "note": "",
+      "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。",
+      "setupSteps": [],
       "phase": "编辑器联动",
       "priority": "P1",
-      "edition": "community",
+      "edition": "pro",
       "aiDoc": {
         "toolSummary": "Control the Cocos Creator editor environment (non-scene operations).",
         "zhToolSummary": "控制 Cocos Creator 编辑器环境中的非场景类操作。",
@@ -11892,10 +15004,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 editor_action 工具，执行 zoom_to_fit 动作，处理“缩放适应”这个通用场景。这个场景用于做通用能力验证。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：视图缩放以适应所有节点。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 256,
@@ -11908,6 +15026,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "帧率限制为 60",
       "note": "",
+      "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。",
+      "setupSteps": [],
       "phase": "引擎专项",
       "priority": "P3",
       "edition": "pro",
@@ -11937,10 +15057,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 engine_action 工具，执行 set_frame_rate 动作，处理“设 60 FPS”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 fps 设为 60。调用完成后重点检查：帧率限制为 60。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 257,
@@ -11953,6 +15079,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "省电模式 30 FPS",
       "note": "",
+      "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。",
+      "setupSteps": [],
       "phase": "引擎专项",
       "priority": "P3",
       "edition": "pro",
@@ -11982,10 +15110,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 engine_action 工具，执行 set_frame_rate 动作，处理“设 30 FPS”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 fps 设为 30。调用完成后重点检查：省电模式 30 FPS。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 258,
@@ -11997,6 +15131,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "渲染和逻辑冻结",
       "note": "",
+      "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。",
+      "setupSteps": [],
       "phase": "引擎专项",
       "priority": "P3",
       "edition": "pro",
@@ -12026,10 +15162,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 engine_action 工具，执行 pause_engine 动作，处理“暂停引擎”这个通用场景。这个场景用于做通用能力验证。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：渲染和逻辑冻结。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 259,
@@ -12041,6 +15183,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "继续运行",
       "note": "",
+      "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。",
+      "setupSteps": [],
       "phase": "引擎专项",
       "priority": "P3",
       "edition": "pro",
@@ -12070,10 +15214,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 engine_action 工具，执行 resume_engine 动作，处理“恢复引擎”这个状态场景。这个场景用于验证当前对象状态或默认状态下的表现。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：继续运行。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 260,
@@ -12085,6 +15235,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回 {os,browser,device,screenRes,gpu}",
       "note": "",
+      "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。",
+      "setupSteps": [],
       "phase": "引擎专项",
       "priority": "P3",
       "edition": "pro",
@@ -12114,10 +15266,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 engine_action 工具，执行 get_system_info 动作，处理“系统信息”这个通用场景。这个场景用于做通用能力验证。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：返回 {os,browser,device,screenRes,gpu}。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 261,
@@ -12129,6 +15287,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回已缓存纹理列表+大小",
       "note": "",
+      "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。",
+      "setupSteps": [],
       "phase": "引擎专项",
       "priority": "P3",
       "edition": "pro",
@@ -12158,10 +15318,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 engine_action 工具，执行 dump_texture_cache 动作，处理“纹理缓存”这个通用场景。这个场景用于做通用能力验证。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：返回已缓存纹理列表+大小。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 262,
@@ -12173,6 +15339,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回 {drawCalls,triangles,batches,fps}",
       "note": "",
+      "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。",
+      "setupSteps": [],
       "phase": "引擎专项",
       "priority": "P3",
       "edition": "pro",
@@ -12202,10 +15370,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 engine_action 工具，执行 get_render_stats 动作，处理“渲染统计”这个通用场景。这个场景用于做通用能力验证。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：返回 {drawCalls,triangles,batches,fps}。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 263,
@@ -12217,6 +15391,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回 {heapUsed,rss,cachedAssets}",
       "note": "",
+      "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。",
+      "setupSteps": [],
       "phase": "引擎专项",
       "priority": "P3",
       "edition": "pro",
@@ -12246,10 +15422,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 engine_action 工具，执行 get_memory_stats 动作，处理“内存统计”这个通用场景。这个场景用于做通用能力验证。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：返回 {heapUsed,rss,cachedAssets}。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 264,
@@ -12261,6 +15443,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回 {fps,nodeCount,platform,paused}",
       "note": "",
+      "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。",
+      "setupSteps": [],
       "phase": "引擎专项",
       "priority": "P3",
       "edition": "pro",
@@ -12290,10 +15474,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 engine_action 工具，执行 get_editor_performance 动作，处理“性能总览”这个通用场景。这个场景用于做通用能力验证。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：返回 {fps,nodeCount,platform,paused}。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 265,
@@ -12331,6 +15521,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "创建左右移动循环动画",
       "note": "",
+      "prerequisites": "需目标节点存在且可挂 Animation/AnimationClip；复杂链建议先 scene_query 确认 uuid。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "动画工作流",
       "priority": "P2",
       "edition": "community",
@@ -12343,7 +15545,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": true,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 animation_tool 工具，执行 create_clip 动作，处理“创建动画”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 duration 设为 1，把 wrapMode 设为“Loop”，传入 tracks=[{\"property\":\"position\",\"keyframes\":[{\"time\":0,\"value\":{\"x\":0,\"y\":0,\"z\":0}},{\"time\":1,\"value\":{\"x\":100,\"y\":0,\"z\":0}}]}]。调用完成后重点检查：创建左右移动循环动画。",
+          "aiInstruction": "请通过 MCP 调用 animation_tool 工具，执行 create_clip 动作，处理“创建动画”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 duration 设为 1，把 wrapMode 设为“Loop”，传入 tracks=[{\"property\":\"position\",\"keyframes\":[{\"time\":0,\"value\":{\"x\":0,\"y\":0,\"z\":0}},{\"time\":1,\"value\":{\"x\":100,\"y\":0,\"z\":0}}]}]。调用完成后重点检查：创建左右移动循环动画。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "anim 资源路径）",
           "scenarioType": "参数场景",
           "scenarioTitle": "创建动画",
@@ -12357,13 +15559,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "创建左右移动循环动画",
           "expectedText": "创建左右移动循环动画"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 animation_tool 工具，执行 create_clip 动作，处理“创建动画”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 duration 设为 1，把 wrapMode 设为“Loop”，传入 tracks=[{\"property\":\"position\",\"keyframes\":[{\"time\":0,\"value\":{\"x\":0,\"y\":0,\"z\":0}},{\"time\":1,\"value\":{\"x\":100,\"y\":0,\"z\":0}}]}]。调用完成后重点检查：创建左右移动循环动画。"
+        "naturalLanguageTest": "请通过 MCP 调用 animation_tool 工具，执行 create_clip 动作，处理“创建动画”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 duration 设为 1，把 wrapMode 设为“Loop”，传入 tracks=[{\"property\":\"position\",\"keyframes\":[{\"time\":0,\"value\":{\"x\":0,\"y\":0,\"z\":0}},{\"time\":1,\"value\":{\"x\":100,\"y\":0,\"z\":0}}]}]。调用完成后重点检查：创建左右移动循环动画。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 266,
@@ -12376,6 +15584,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "播放默认动画片段",
       "note": "",
+      "prerequisites": "需目标节点存在且可挂 Animation/AnimationClip；复杂链建议先 scene_query 确认 uuid。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "动画工作流",
       "priority": "P2",
       "edition": "community",
@@ -12388,7 +15608,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": true,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 animation_tool 工具，执行 play 动作，处理“播放默认”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：播放默认动画片段。",
+          "aiInstruction": "请通过 MCP 调用 animation_tool 工具，执行 play 动作，处理“播放默认”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：播放默认动画片段。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "开始播放动画 clip",
           "scenarioType": "参数场景",
           "scenarioTitle": "播放默认",
@@ -12402,13 +15622,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "播放默认动画片段",
           "expectedText": "播放默认动画片段"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 animation_tool 工具，执行 play 动作，处理“播放默认”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：播放默认动画片段。"
+        "naturalLanguageTest": "请通过 MCP 调用 animation_tool 工具，执行 play 动作，处理“播放默认”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：播放默认动画片段。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 267,
@@ -12422,6 +15648,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "播放 walk 片段",
       "note": "",
+      "prerequisites": "需目标节点存在且可挂 Animation/AnimationClip；复杂链建议先 scene_query 确认 uuid。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "动画工作流",
       "priority": "P2",
       "edition": "community",
@@ -12434,7 +15672,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": true,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 animation_tool 工具，执行 play 动作，处理“播放指定”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 clipName 设为“walk”。调用完成后重点检查：播放 walk 片段。",
+          "aiInstruction": "请通过 MCP 调用 animation_tool 工具，执行 play 动作，处理“播放指定”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 clipName 设为“walk”。调用完成后重点检查：播放 walk 片段。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "开始播放动画 clip",
           "scenarioType": "参数场景",
           "scenarioTitle": "播放指定",
@@ -12448,13 +15686,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "播放 walk 片段",
           "expectedText": "播放 walk 片段"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 animation_tool 工具，执行 play 动作，处理“播放指定”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 clipName 设为“walk”。调用完成后重点检查：播放 walk 片段。"
+        "naturalLanguageTest": "请通过 MCP 调用 animation_tool 工具，执行 play 动作，处理“播放指定”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 clipName 设为“walk”。调用完成后重点检查：播放 walk 片段。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 268,
@@ -12467,6 +15711,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "动画暂停",
       "note": "",
+      "prerequisites": "需目标节点存在且可挂 Animation/AnimationClip；复杂链建议先 scene_query 确认 uuid。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "动画工作流",
       "priority": "P2",
       "edition": "community",
@@ -12479,7 +15735,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": true,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 animation_tool 工具，执行 pause 动作，处理“暂停”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：动画暂停。",
+          "aiInstruction": "请通过 MCP 调用 animation_tool 工具，执行 pause 动作，处理“暂停”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：动画暂停。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "暂停当前动画",
           "scenarioType": "参数场景",
           "scenarioTitle": "暂停",
@@ -12493,13 +15749,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "动画暂停",
           "expectedText": "动画暂停"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 animation_tool 工具，执行 pause 动作，处理“暂停”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：动画暂停。"
+        "naturalLanguageTest": "请通过 MCP 调用 animation_tool 工具，执行 pause 动作，处理“暂停”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：动画暂停。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 269,
@@ -12512,6 +15774,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "继续播放",
       "note": "",
+      "prerequisites": "需目标节点存在且可挂 Animation/AnimationClip；复杂链建议先 scene_query 确认 uuid。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "动画工作流",
       "priority": "P2",
       "edition": "community",
@@ -12524,7 +15798,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": true,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 animation_tool 工具，执行 resume 动作，处理“恢复”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：继续播放。",
+          "aiInstruction": "请通过 MCP 调用 animation_tool 工具，执行 resume 动作，处理“恢复”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：继续播放。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "继续播放已暂停的动画",
           "scenarioType": "参数场景",
           "scenarioTitle": "恢复",
@@ -12538,13 +15812,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "继续播放",
           "expectedText": "继续播放"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 animation_tool 工具，执行 resume 动作，处理“恢复”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：继续播放。"
+        "naturalLanguageTest": "请通过 MCP 调用 animation_tool 工具，执行 resume 动作，处理“恢复”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：继续播放。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 270,
@@ -12557,6 +15837,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "停止并重置",
       "note": "",
+      "prerequisites": "需目标节点存在且可挂 Animation/AnimationClip；复杂链建议先 scene_query 确认 uuid。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "动画工作流",
       "priority": "P2",
       "edition": "community",
@@ -12569,7 +15861,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": true,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 animation_tool 工具，执行 stop 动作，处理“停止”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：停止并重置。",
+          "aiInstruction": "请通过 MCP 调用 animation_tool 工具，执行 stop 动作，处理“停止”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：停止并重置。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "停止动画并将时间重置到起点",
           "scenarioType": "参数场景",
           "scenarioTitle": "停止",
@@ -12583,13 +15875,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "停止并重置",
           "expectedText": "停止并重置"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 animation_tool 工具，执行 stop 动作，处理“停止”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：停止并重置。"
+        "naturalLanguageTest": "请通过 MCP 调用 animation_tool 工具，执行 stop 动作，处理“停止”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：停止并重置。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 271,
@@ -12602,6 +15900,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回 {playing,clip,time}",
       "note": "",
+      "prerequisites": "需目标节点存在且可挂 Animation/AnimationClip；复杂链建议先 scene_query 确认 uuid。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "动画工作流",
       "priority": "P2",
       "edition": "community",
@@ -12614,7 +15924,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": true,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 animation_tool 工具，执行 get_state 动作，处理“查状态”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：返回 {playing,clip,time}。",
+          "aiInstruction": "请通过 MCP 调用 animation_tool 工具，执行 get_state 动作，处理“查状态”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：返回 {playing,clip,time}。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "获取当前动画状态（playing、paused、current clip、time）",
           "scenarioType": "参数场景",
           "scenarioTitle": "查状态",
@@ -12628,13 +15938,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "返回 {playing,clip,time}",
           "expectedText": "返回 {playing,clip,time}"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 animation_tool 工具，执行 get_state 动作，处理“查状态”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：返回 {playing,clip,time}。"
+        "naturalLanguageTest": "请通过 MCP 调用 animation_tool 工具，执行 get_state 动作，处理“查状态”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：返回 {playing,clip,time}。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 272,
@@ -12647,6 +15963,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回动画片段名称列表",
       "note": "",
+      "prerequisites": "需目标节点存在且可挂 Animation/AnimationClip；复杂链建议先 scene_query 确认 uuid。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "动画工作流",
       "priority": "P2",
       "edition": "community",
@@ -12659,7 +15987,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": true,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 animation_tool 工具，执行 list_clips 动作，处理“列出片段”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：返回动画片段名称列表。",
+          "aiInstruction": "请通过 MCP 调用 animation_tool 工具，执行 list_clips 动作，处理“列出片段”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：返回动画片段名称列表。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "列出节点上的全部动画 clip",
           "scenarioType": "参数场景",
           "scenarioTitle": "列出片段",
@@ -12673,13 +16001,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "返回动画片段名称列表",
           "expectedText": "返回动画片段名称列表"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 animation_tool 工具，执行 list_clips 动作，处理“列出片段”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：返回动画片段名称列表。"
+        "naturalLanguageTest": "请通过 MCP 调用 animation_tool 工具，执行 list_clips 动作，处理“列出片段”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：返回动画片段名称列表。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 273,
@@ -12693,6 +16027,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "跳转到 0.5 秒",
       "note": "",
+      "prerequisites": "需目标节点存在且可挂 Animation/AnimationClip；复杂链建议先 scene_query 确认 uuid。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "动画工作流",
       "priority": "P2",
       "edition": "community",
@@ -12705,7 +16051,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": true,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 animation_tool 工具，执行 set_current_time 动作，处理“跳转时间”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 time 设为 0.5。调用完成后重点检查：跳转到 0.5 秒。",
+          "aiInstruction": "请通过 MCP 调用 animation_tool 工具，执行 set_current_time 动作，处理“跳转时间”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 time 设为 0.5。调用完成后重点检查：跳转到 0.5 秒。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "将动画跳转到指定时间",
           "scenarioType": "参数场景",
           "scenarioTitle": "跳转时间",
@@ -12719,13 +16065,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "跳转到 0.5 秒",
           "expectedText": "跳转到 0.5 秒"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 animation_tool 工具，执行 set_current_time 动作，处理“跳转时间”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 time 设为 0.5。调用完成后重点检查：跳转到 0.5 秒。"
+        "naturalLanguageTest": "请通过 MCP 调用 animation_tool 工具，执行 set_current_time 动作，处理“跳转时间”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 time 设为 0.5。调用完成后重点检查：跳转到 0.5 秒。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 274,
@@ -12739,6 +16091,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "2 倍速播放",
       "note": "",
+      "prerequisites": "需目标节点存在且可挂 Animation/AnimationClip；复杂链建议先 scene_query 确认 uuid。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "动画工作流",
       "priority": "P2",
       "edition": "community",
@@ -12751,7 +16115,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": true,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 animation_tool 工具，执行 set_speed 动作，处理“倍速播放”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 speed 设为 2。调用完成后重点检查：2 倍速播放。",
+          "aiInstruction": "请通过 MCP 调用 animation_tool 工具，执行 set_speed 动作，处理“倍速播放”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 speed 设为 2。调用完成后重点检查：2 倍速播放。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "设置动画播放速度（1",
           "scenarioType": "参数场景",
           "scenarioTitle": "倍速播放",
@@ -12765,13 +16129,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "2 倍速播放",
           "expectedText": "2 倍速播放"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 animation_tool 工具，执行 set_speed 动作，处理“倍速播放”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 speed 设为 2。调用完成后重点检查：2 倍速播放。"
+        "naturalLanguageTest": "请通过 MCP 调用 animation_tool 工具，执行 set_speed 动作，处理“倍速播放”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 speed 设为 2。调用完成后重点检查：2 倍速播放。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 275,
@@ -12786,6 +16156,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "0.3 秒内淡入 run 动画",
       "note": "",
+      "prerequisites": "需目标节点存在且可挂 Animation/AnimationClip；复杂链建议先 scene_query 确认 uuid。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "动画工作流",
       "priority": "P2",
       "edition": "community",
@@ -12798,7 +16180,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": true,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 animation_tool 工具，执行 crossfade 动作，处理“交叉淡入”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 clipName 设为“run”，把 duration 设为 0.3。调用完成后重点检查：0.3 秒内淡入 run 动画。",
+          "aiInstruction": "请通过 MCP 调用 animation_tool 工具，执行 crossfade 动作，处理“交叉淡入”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 clipName 设为“run”，把 duration 设为 0.3。调用完成后重点检查：0.3 秒内淡入 run 动画。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "3）",
           "scenarioType": "参数场景",
           "scenarioTitle": "交叉淡入",
@@ -12812,13 +16194,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "0.3 秒内淡入 run 动画",
           "expectedText": "0.3 秒内淡入 run 动画"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 animation_tool 工具，执行 crossfade 动作，处理“交叉淡入”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 clipName 设为“run”，把 duration 设为 0.3。调用完成后重点检查：0.3 秒内淡入 run 动画。"
+        "naturalLanguageTest": "请通过 MCP 调用 animation_tool 工具，执行 crossfade 动作，处理“交叉淡入”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 clipName 设为“run”，把 duration 设为 0.3。调用完成后重点检查：0.3 秒内淡入 run 动画。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 276,
@@ -12831,6 +16219,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回碰撞器+刚体信息",
       "note": "",
+      "prerequisites": "需场景中具备刚体/碰撞体等物理前置；2D/3D 与项目设置一致。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "物理工作流",
       "priority": "P2",
       "edition": "community",
@@ -12843,7 +16243,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": true,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 physics_tool 工具，执行 get_collider_info 动作，处理“碰撞器详情”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：返回碰撞器+刚体信息。",
+          "aiInstruction": "请通过 MCP 调用 physics_tool 工具，执行 get_collider_info 动作，处理“碰撞器详情”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：返回碰撞器+刚体信息。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "获取节点上的全部碰撞体和刚体详情",
           "scenarioType": "参数场景",
           "scenarioTitle": "碰撞器详情",
@@ -12857,13 +16257,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "返回碰撞器+刚体信息",
           "expectedText": "返回碰撞器+刚体信息"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 physics_tool 工具，执行 get_collider_info 动作，处理“碰撞器详情”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：返回碰撞器+刚体信息。"
+        "naturalLanguageTest": "请通过 MCP 调用 physics_tool 工具，执行 get_collider_info 动作，处理“碰撞器详情”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：返回碰撞器+刚体信息。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 277,
@@ -12877,6 +16283,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "添加 BoxCollider2D",
       "note": "",
+      "prerequisites": "需场景中具备刚体/碰撞体等物理前置；2D/3D 与项目设置一致。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "物理工作流",
       "priority": "P2",
       "edition": "community",
@@ -12889,7 +16307,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": true,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 physics_tool 工具，执行 add_collider 动作，处理“添加 Box2D”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 colliderType 设为“box2d”。调用完成后重点检查：添加 BoxCollider2D。",
+          "aiInstruction": "请通过 MCP 调用 physics_tool 工具，执行 add_collider 动作，处理“添加 Box2D”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 colliderType 设为“box2d”。调用完成后重点检查：添加 BoxCollider2D。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "添加碰撞体组件",
           "scenarioType": "参数场景",
           "scenarioTitle": "添加 Box2D",
@@ -12903,13 +16321,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "添加 BoxCollider2D",
           "expectedText": "添加 BoxCollider2D"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 physics_tool 工具，执行 add_collider 动作，处理“添加 Box2D”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 colliderType 设为“box2d”。调用完成后重点检查：添加 BoxCollider2D。"
+        "naturalLanguageTest": "请通过 MCP 调用 physics_tool 工具，执行 add_collider 动作，处理“添加 Box2D”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 colliderType 设为“box2d”。调用完成后重点检查：添加 BoxCollider2D。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 278,
@@ -12923,6 +16347,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "添加 SphereCollider",
       "note": "",
+      "prerequisites": "需场景中具备刚体/碰撞体等物理前置；2D/3D 与项目设置一致。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "物理工作流",
       "priority": "P2",
       "edition": "community",
@@ -12935,7 +16371,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": true,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 physics_tool 工具，执行 add_collider 动作，处理“添加 Sphere3D”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 colliderType 设为“sphere3d”。调用完成后重点检查：添加 SphereCollider。",
+          "aiInstruction": "请通过 MCP 调用 physics_tool 工具，执行 add_collider 动作，处理“添加 Sphere3D”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 colliderType 设为“sphere3d”。调用完成后重点检查：添加 SphereCollider。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "添加碰撞体组件",
           "scenarioType": "参数场景",
           "scenarioTitle": "添加 Sphere3D",
@@ -12949,13 +16385,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "添加 SphereCollider",
           "expectedText": "添加 SphereCollider"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 physics_tool 工具，执行 add_collider 动作，处理“添加 Sphere3D”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 colliderType 设为“sphere3d”。调用完成后重点检查：添加 SphereCollider。"
+        "naturalLanguageTest": "请通过 MCP 调用 physics_tool 工具，执行 add_collider 动作，处理“添加 Sphere3D”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 colliderType 设为“sphere3d”。调用完成后重点检查：添加 SphereCollider。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 279,
@@ -12970,6 +16412,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "Box 碰撞器→100×80",
       "note": "",
+      "prerequisites": "需场景中具备刚体/碰撞体等物理前置；2D/3D 与项目设置一致。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "物理工作流",
       "priority": "P2",
       "edition": "community",
@@ -12982,7 +16436,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": true,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 physics_tool 工具，执行 set_collider_size 动作，处理“设 Box 大小”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 width 设为 100，把 height 设为 80。调用完成后重点检查：Box 碰撞器→100×80。",
+          "aiInstruction": "请通过 MCP 调用 physics_tool 工具，执行 set_collider_size 动作，处理“设 Box 大小”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 width 设为 100，把 height 设为 80。调用完成后重点检查：Box 碰撞器→100×80。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "uuid（必填），colliderType（可选，自动检测），width/height（for box），radius（for circle/sphere），size（for {x，y} or {x，y，z}）",
           "scenarioType": "参数场景",
           "scenarioTitle": "设 Box 大小",
@@ -12996,13 +16450,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "Box 碰撞器→100×80",
           "expectedText": "Box 碰撞器→100×80"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 physics_tool 工具，执行 set_collider_size 动作，处理“设 Box 大小”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 width 设为 100，把 height 设为 80。调用完成后重点检查：Box 碰撞器→100×80。"
+        "naturalLanguageTest": "请通过 MCP 调用 physics_tool 工具，执行 set_collider_size 动作，处理“设 Box 大小”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 width 设为 100，把 height 设为 80。调用完成后重点检查：Box 碰撞器→100×80。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 280,
@@ -13016,6 +16476,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "添加动态刚体",
       "note": "",
+      "prerequisites": "需场景中具备刚体/碰撞体等物理前置；2D/3D 与项目设置一致。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "物理工作流",
       "priority": "P2",
       "edition": "community",
@@ -13028,7 +16500,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": true,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 physics_tool 工具，执行 add_rigidbody 动作，处理“动态刚体”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 bodyType 设为“Dynamic”。调用完成后重点检查：添加动态刚体。",
+          "aiInstruction": "请通过 MCP 调用 physics_tool 工具，执行 add_rigidbody 动作，处理“动态刚体”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 bodyType 设为“Dynamic”。调用完成后重点检查：添加动态刚体。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "uuid（必填），bodyType（可选：Dynamic/Static/Kinematic，默认 Dynamic），is2d（可选，默认 auto）",
           "scenarioType": "参数场景",
           "scenarioTitle": "动态刚体",
@@ -13042,13 +16514,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "添加动态刚体",
           "expectedText": "添加动态刚体"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 physics_tool 工具，执行 add_rigidbody 动作，处理“动态刚体”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 bodyType 设为“Dynamic”。调用完成后重点检查：添加动态刚体。"
+        "naturalLanguageTest": "请通过 MCP 调用 physics_tool 工具，执行 add_rigidbody 动作，处理“动态刚体”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 bodyType 设为“Dynamic”。调用完成后重点检查：添加动态刚体。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 281,
@@ -13062,6 +16540,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "添加静态刚体",
       "note": "",
+      "prerequisites": "需场景中具备刚体/碰撞体等物理前置；2D/3D 与项目设置一致。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "物理工作流",
       "priority": "P2",
       "edition": "community",
@@ -13074,7 +16564,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": true,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 physics_tool 工具，执行 add_rigidbody 动作，处理“静态刚体”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 bodyType 设为“Static”。调用完成后重点检查：添加静态刚体。",
+          "aiInstruction": "请通过 MCP 调用 physics_tool 工具，执行 add_rigidbody 动作，处理“静态刚体”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 bodyType 设为“Static”。调用完成后重点检查：添加静态刚体。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "uuid（必填），bodyType（可选：Dynamic/Static/Kinematic，默认 Dynamic），is2d（可选，默认 auto）",
           "scenarioType": "参数场景",
           "scenarioTitle": "静态刚体",
@@ -13088,13 +16578,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "添加静态刚体",
           "expectedText": "添加静态刚体"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 physics_tool 工具，执行 add_rigidbody 动作，处理“静态刚体”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 bodyType 设为“Static”。调用完成后重点检查：添加静态刚体。"
+        "naturalLanguageTest": "请通过 MCP 调用 physics_tool 工具，执行 add_rigidbody 动作，处理“静态刚体”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 bodyType 设为“Static”。调用完成后重点检查：添加静态刚体。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 282,
@@ -13110,6 +16606,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "质量 5kg+线性阻尼 0.5+锁定旋转",
       "note": "",
+      "prerequisites": "需场景中具备刚体/碰撞体等物理前置；2D/3D 与项目设置一致。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "物理工作流",
       "priority": "P2",
       "edition": "community",
@@ -13122,7 +16630,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": true,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 physics_tool 工具，执行 set_rigidbody_props 动作，处理“设刚体属性”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 mass 设为 5，把 linearDamping 设为 0.5，把 fixedRotation 设为 true。调用完成后重点检查：质量 5kg+线性阻尼 0.5+锁定旋转。",
+          "aiInstruction": "请通过 MCP 调用 physics_tool 工具，执行 set_rigidbody_props 动作，处理“设刚体属性”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 mass 设为 5，把 linearDamping 设为 0.5，把 fixedRotation 设为 true。调用完成后重点检查：质量 5kg+线性阻尼 0.5+锁定旋转。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "uuid（必填），mass/linearDamping/angularDamping/gravityScale/fixedRotation/allowSleep/bullet（all 可选）",
           "scenarioType": "参数场景",
           "scenarioTitle": "设刚体属性",
@@ -13136,13 +16644,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "质量 5kg+线性阻尼 0.5+锁定旋转",
           "expectedText": "质量 5kg+线性阻尼 0.5+锁定旋转"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 physics_tool 工具，执行 set_rigidbody_props 动作，处理“设刚体属性”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 mass 设为 5，把 linearDamping 设为 0.5，把 fixedRotation 设为 true。调用完成后重点检查：质量 5kg+线性阻尼 0.5+锁定旋转。"
+        "naturalLanguageTest": "请通过 MCP 调用 physics_tool 工具，执行 set_rigidbody_props 动作，处理“设刚体属性”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 mass 设为 5，把 linearDamping 设为 0.5，把 fixedRotation 设为 true。调用完成后重点检查：质量 5kg+线性阻尼 0.5+锁定旋转。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 283,
@@ -13157,6 +16671,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "摩擦 0.3+弹性 0.8",
       "note": "",
+      "prerequisites": "需场景中具备刚体/碰撞体等物理前置；2D/3D 与项目设置一致。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "物理工作流",
       "priority": "P2",
       "edition": "community",
@@ -13169,7 +16695,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": true,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 physics_tool 工具，执行 set_physics_material 动作，处理“设物理材质”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 friction 设为 0.3，把 restitution 设为 0.8。调用完成后重点检查：摩擦 0.3+弹性 0.8。",
+          "aiInstruction": "请通过 MCP 调用 physics_tool 工具，执行 set_physics_material 动作，处理“设物理材质”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 friction 设为 0.3，把 restitution 设为 0.8。调用完成后重点检查：摩擦 0.3+弹性 0.8。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "设置碰撞体上的物理材质属性",
           "scenarioType": "参数场景",
           "scenarioTitle": "设物理材质",
@@ -13183,13 +16709,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "摩擦 0.3+弹性 0.8",
           "expectedText": "摩擦 0.3+弹性 0.8"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 physics_tool 工具，执行 set_physics_material 动作，处理“设物理材质”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 friction 设为 0.3，把 restitution 设为 0.8。调用完成后重点检查：摩擦 0.3+弹性 0.8。"
+        "naturalLanguageTest": "请通过 MCP 调用 physics_tool 工具，执行 set_physics_material 动作，处理“设物理材质”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 friction 设为 0.3，把 restitution 设为 0.8。调用完成后重点检查：摩擦 0.3+弹性 0.8。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 284,
@@ -13203,6 +16735,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "碰撞组→2",
       "note": "",
+      "prerequisites": "需场景中具备刚体/碰撞体等物理前置；2D/3D 与项目设置一致。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "物理工作流",
       "priority": "P2",
       "edition": "community",
@@ -13215,7 +16759,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": true,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 physics_tool 工具，执行 set_collision_group 动作，处理“设碰撞组”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 group 设为 2。调用完成后重点检查：碰撞组→2。",
+          "aiInstruction": "请通过 MCP 调用 physics_tool 工具，执行 set_collision_group 动作，处理“设碰撞组”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 group 设为 2。调用完成后重点检查：碰撞组→2。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "设置碰撞体的碰撞分组或层级",
           "scenarioType": "参数场景",
           "scenarioTitle": "设碰撞组",
@@ -13229,13 +16773,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "碰撞组→2",
           "expectedText": "碰撞组→2"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 physics_tool 工具，执行 set_collision_group 动作，处理“设碰撞组”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 group 设为 2。调用完成后重点检查：碰撞组→2。"
+        "naturalLanguageTest": "请通过 MCP 调用 physics_tool 工具，执行 set_collision_group 动作，处理“设碰撞组”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 group 设为 2。调用完成后重点检查：碰撞组→2。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 285,
@@ -13247,6 +16797,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回重力/时间步等参数",
       "note": "",
+      "prerequisites": "需场景中具备刚体/碰撞体等物理前置；2D/3D 与项目设置一致。",
+      "setupSteps": [],
       "phase": "物理工作流",
       "priority": "P2",
       "edition": "community",
@@ -13276,10 +16828,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 physics_tool 工具，执行 get_physics_world 动作，处理“世界配置”这个通用场景。这个场景用于做通用能力验证。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：返回重力/时间步等参数。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 286,
@@ -13296,6 +16854,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "重力→-20 m/s²",
       "note": "",
+      "prerequisites": "需场景中具备刚体/碰撞体等物理前置；2D/3D 与项目设置一致。",
+      "setupSteps": [],
       "phase": "物理工作流",
       "priority": "P2",
       "edition": "community",
@@ -13325,10 +16885,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 physics_tool 工具，执行 set_physics_world 动作，处理“设重力”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请传入 gravity={\"x\":0,\"y\":-20,\"z\":0}。调用完成后重点检查：重力→-20 m/s²。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 287,
@@ -13343,6 +16909,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "两节点间添加弹簧关节",
       "note": "",
+      "prerequisites": "需场景中具备刚体/碰撞体等物理前置；2D/3D 与项目设置一致。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "物理工作流",
       "priority": "P2",
       "edition": "community",
@@ -13355,7 +16933,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": true,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 physics_tool 工具，执行 add_joint 动作，处理“弹簧关节”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 jointType 设为“spring”，将 connectedUuid 指向 <other>。调用完成后重点检查：两节点间添加弹簧关节。",
+          "aiInstruction": "请通过 MCP 调用 physics_tool 工具，执行 add_joint 动作，处理“弹簧关节”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 jointType 设为“spring”，将 connectedUuid 指向 <other>。调用完成后重点检查：两节点间添加弹簧关节。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "添加一个 2D 物理关节",
           "scenarioType": "参数场景",
           "scenarioTitle": "弹簧关节",
@@ -13369,13 +16947,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "两节点间添加弹簧关节",
           "expectedText": "两节点间添加弹簧关节"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 physics_tool 工具，执行 add_joint 动作，处理“弹簧关节”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 jointType 设为“spring”，将 connectedUuid 指向 <other>。调用完成后重点检查：两节点间添加弹簧关节。"
+        "naturalLanguageTest": "请通过 MCP 调用 physics_tool 工具，执行 add_joint 动作，处理“弹簧关节”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 jointType 设为“spring”，将 connectedUuid 指向 <other>。调用完成后重点检查：两节点间添加弹簧关节。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 288,
@@ -13389,6 +16973,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回 {value:\"zh\"}",
       "note": "",
+      "prerequisites": "插件已加载；写偏好/广播可能影响本地配置，测试后可视需要还原。",
+      "setupSteps": [],
       "phase": "环境与连通",
       "priority": "P2",
       "edition": "community",
@@ -13418,10 +17004,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 preferences 工具，执行 get 动作，处理“读偏好”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 key 设为“general.language”，把 scope 设为“global”。调用完成后重点检查：返回 {value:\"zh\"}。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 289,
@@ -13436,6 +17028,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "语言改为英文",
       "note": "",
+      "prerequisites": "插件已加载；写偏好/广播可能影响本地配置，测试后可视需要还原。",
+      "setupSteps": [],
       "phase": "环境与连通",
       "priority": "P2",
       "edition": "community",
@@ -13465,10 +17059,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 preferences 工具，执行 set 动作，处理“写偏好”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 key 设为“general.language”，把 value 设为“en”，把 scope 设为“global”。调用完成后重点检查：语言改为英文。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 290,
@@ -13480,6 +17080,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回所有偏好设置",
       "note": "",
+      "prerequisites": "插件已加载；写偏好/广播可能影响本地配置，测试后可视需要还原。",
+      "setupSteps": [],
       "phase": "环境与连通",
       "priority": "P2",
       "edition": "community",
@@ -13509,10 +17111,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 preferences 工具，执行 list 动作，处理“列出全部”这个通用场景。这个场景用于做通用能力验证。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：返回所有偏好设置。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 291,
@@ -13525,6 +17133,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回 {value:\"dark\"}",
       "note": "",
+      "prerequisites": "插件已加载；写偏好/广播可能影响本地配置，测试后可视需要还原。",
+      "setupSteps": [],
       "phase": "环境与连通",
       "priority": "P2",
       "edition": "community",
@@ -13554,10 +17164,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 preferences 工具，执行 get_global 动作，处理“读全局”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 key 设为“general.theme”。调用完成后重点检查：返回 {value:\"dark\"}。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 292,
@@ -13571,6 +17187,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "主题改为亮色",
       "note": "",
+      "prerequisites": "插件已加载；写偏好/广播可能影响本地配置，测试后可视需要还原。",
+      "setupSteps": [],
       "phase": "环境与连通",
       "priority": "P2",
       "edition": "community",
@@ -13600,10 +17218,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 preferences 工具，执行 set_global 动作，处理“写全局”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 key 设为“general.theme”，把 value 设为“light”。调用完成后重点检查：主题改为亮色。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 293,
@@ -13616,6 +17240,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回压缩纹理设置",
       "note": "",
+      "prerequisites": "插件已加载；写偏好/广播可能影响本地配置，测试后可视需要还原。",
+      "setupSteps": [],
       "phase": "环境与连通",
       "priority": "P2",
       "edition": "community",
@@ -13645,10 +17271,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 preferences 工具，执行 get_project 动作，处理“读项目级”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 key 设为“builder.compressTexture”。调用完成后重点检查：返回压缩纹理设置。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 294,
@@ -13662,6 +17294,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "预览端口→7456",
       "note": "",
+      "prerequisites": "插件已加载；写偏好/广播可能影响本地配置，测试后可视需要还原。",
+      "setupSteps": [],
       "phase": "环境与连通",
       "priority": "P2",
       "edition": "community",
@@ -13691,10 +17325,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 preferences 工具，执行 set_project 动作，处理“写项目级”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 key 设为“preview.port”，把 value 设为 7456。调用完成后重点检查：预览端口→7456。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 295,
@@ -13707,6 +17347,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回该时间戳后的新事件列表",
       "note": "",
+      "prerequisites": "插件已加载；写偏好/广播可能影响本地配置，测试后可视需要还原。",
+      "setupSteps": [],
       "phase": "编辑器联动",
       "priority": "P3",
       "edition": "community",
@@ -13736,10 +17378,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 broadcast 工具，执行 poll 动作，处理“拉取事件”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 since 设为 1700000000000。调用完成后重点检查：返回该时间戳后的新事件列表。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 296,
@@ -13752,6 +17400,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回最近 10 条事件",
       "note": "",
+      "prerequisites": "插件已加载；写偏好/广播可能影响本地配置，测试后可视需要还原。",
+      "setupSteps": [],
       "phase": "编辑器联动",
       "priority": "P3",
       "edition": "community",
@@ -13781,10 +17431,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 broadcast 工具，执行 history 动作，处理“历史记录”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 limit 设为 10。调用完成后重点检查：返回最近 10 条事件。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 297,
@@ -13796,6 +17452,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "事件队列清空",
       "note": "",
+      "prerequisites": "插件已加载；写偏好/广播可能影响本地配置，测试后可视需要还原。",
+      "setupSteps": [],
       "phase": "编辑器联动",
       "priority": "P3",
       "edition": "community",
@@ -13825,10 +17483,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 broadcast 工具，执行 clear 动作，处理“清空队列”这个通用场景。这个场景用于做通用能力验证。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：事件队列清空。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 298,
@@ -13844,6 +17508,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "广播自定义消息",
       "note": "",
+      "prerequisites": "插件已加载；写偏好/广播可能影响本地配置，测试后可视需要还原。",
+      "setupSteps": [],
       "phase": "编辑器联动",
       "priority": "P3",
       "edition": "community",
@@ -13873,10 +17539,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 broadcast 工具，执行 send 动作，处理“广播消息”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 channel 设为“ai:done”，传入 data={\"task\":\"build_ui\"}。调用完成后重点检查：广播自定义消息。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 299,
@@ -13890,6 +17562,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "发送场景重载 IPC",
       "note": "",
+      "prerequisites": "插件已加载；写偏好/广播可能影响本地配置，测试后可视需要还原。",
+      "setupSteps": [],
       "phase": "编辑器联动",
       "priority": "P3",
       "edition": "community",
@@ -13919,10 +17593,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 broadcast 工具，执行 send_ipc 动作，处理“IPC 广播”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 module 设为“scene”，把 message 设为“soft-reload”。调用完成后重点检查：发送场景重载 IPC。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 300,
@@ -13935,6 +17615,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "参考图叠加层显示，透明度 50%",
       "note": "",
+      "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 参考图路径或剪贴板图像需可用；依赖 Pro。",
+      "setupSteps": [],
       "phase": "UI 与参考图",
       "priority": "P3",
       "edition": "pro",
@@ -13964,10 +17646,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 reference_image 工具，执行 set 动作，处理“显示参考图”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 opacity 设为 0.5。调用完成后重点检查：参考图叠加层显示，透明度 50%。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 301,
@@ -13979,6 +17667,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "隐藏所有参考图叠加",
       "note": "",
+      "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 参考图路径或剪贴板图像需可用；依赖 Pro。",
+      "setupSteps": [],
       "phase": "UI 与参考图",
       "priority": "P3",
       "edition": "pro",
@@ -14008,10 +17698,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 reference_image 工具，执行 clear 动作，处理“清除参考图”这个通用场景。这个场景用于做通用能力验证。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：隐藏所有参考图叠加。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 302,
@@ -14023,6 +17719,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回场景中参考图节点列表",
       "note": "",
+      "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 参考图路径或剪贴板图像需可用；依赖 Pro。",
+      "setupSteps": [],
       "phase": "UI 与参考图",
       "priority": "P3",
       "edition": "pro",
@@ -14052,10 +17750,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 reference_image 工具，执行 list 动作，处理“列出参考图”这个通用场景。这个场景用于做通用能力验证。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：返回场景中参考图节点列表。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 303,
@@ -14069,6 +17773,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "添加参考图节点",
       "note": "",
+      "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 参考图路径或剪贴板图像需可用；依赖 Pro。",
+      "setupSteps": [],
       "phase": "UI 与参考图",
       "priority": "P3",
       "edition": "pro",
@@ -14098,10 +17804,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 reference_image 工具，执行 add 动作，处理“添加参考图”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 imagePath 设为“db://assets/ui/mockup.png”，把 opacity 设为 0.4。调用完成后重点检查：添加参考图节点。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 304,
@@ -14114,6 +17826,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "删除指定参考图节点",
       "note": "",
+      "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 参考图路径或剪贴板图像需可用；依赖 Pro。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "UI 与参考图",
       "priority": "P3",
       "edition": "pro",
@@ -14126,7 +17850,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": false,
         "toolFound": false,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 reference_image 工具，执行 remove 动作，处理“移除参考图”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 refUuid 指向 <uuid>。调用完成后重点检查：删除指定参考图节点。",
+          "aiInstruction": "请通过 MCP 调用 reference_image 工具，执行 remove 动作，处理“移除参考图”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 refUuid 指向 <uuid>。调用完成后重点检查：删除指定参考图节点。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "执行 reference_image.remove",
           "scenarioType": "参数场景",
           "scenarioTitle": "移除参考图",
@@ -14140,13 +17864,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "删除指定参考图节点",
           "expectedText": "删除指定参考图节点"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 reference_image 工具，执行 remove 动作，处理“移除参考图”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 refUuid 指向 <uuid>。调用完成后重点检查：删除指定参考图节点。"
+        "naturalLanguageTest": "请通过 MCP 调用 reference_image 工具，执行 remove 动作，处理“移除参考图”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 refUuid 指向 <uuid>。调用完成后重点检查：删除指定参考图节点。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 305,
@@ -14162,6 +17892,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "参考图移动+缩放",
       "note": "",
+      "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 参考图路径或剪贴板图像需可用；依赖 Pro。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "UI 与参考图",
       "priority": "P3",
       "edition": "pro",
@@ -14174,7 +17916,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": false,
         "toolFound": false,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 reference_image 工具，执行 set_transform 动作，处理“调整位置”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 refUuid 指向 <uuid>，把 x 设为 100，把 y 设为 -50，把 scaleX 设为 0.8。调用完成后重点检查：参考图移动+缩放。",
+          "aiInstruction": "请通过 MCP 调用 reference_image 工具，执行 set_transform 动作，处理“调整位置”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 refUuid 指向 <uuid>，把 x 设为 100，把 y 设为 -50，把 scaleX 设为 0.8。调用完成后重点检查：参考图移动+缩放。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "执行 reference_image.set_transform",
           "scenarioType": "参数场景",
           "scenarioTitle": "调整位置",
@@ -14188,13 +17930,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "参考图移动+缩放",
           "expectedText": "参考图移动+缩放"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 reference_image 工具，执行 set_transform 动作，处理“调整位置”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 refUuid 指向 <uuid>，把 x 设为 100，把 y 设为 -50，把 scaleX 设为 0.8。调用完成后重点检查：参考图移动+缩放。"
+        "naturalLanguageTest": "请通过 MCP 调用 reference_image 工具，执行 set_transform 动作，处理“调整位置”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 refUuid 指向 <uuid>，把 x 设为 100，把 y 设为 -50，把 scaleX 设为 0.8。调用完成后重点检查：参考图移动+缩放。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 306,
@@ -14208,6 +17956,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "透明度→30%",
       "note": "",
+      "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 参考图路径或剪贴板图像需可用；依赖 Pro。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "UI 与参考图",
       "priority": "P3",
       "edition": "pro",
@@ -14220,7 +17980,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": false,
         "toolFound": false,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 reference_image 工具，执行 set_opacity 动作，处理“调透明度”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 refUuid 指向 <uuid>，把 opacity 设为 0.3。调用完成后重点检查：透明度→30%。",
+          "aiInstruction": "请通过 MCP 调用 reference_image 工具，执行 set_opacity 动作，处理“调透明度”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 refUuid 指向 <uuid>，把 opacity 设为 0.3。调用完成后重点检查：透明度→30%。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "执行 reference_image.set_opacity",
           "scenarioType": "参数场景",
           "scenarioTitle": "调透明度",
@@ -14234,13 +17994,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "透明度→30%",
           "expectedText": "透明度→30%"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 reference_image 工具，执行 set_opacity 动作，处理“调透明度”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 refUuid 指向 <uuid>，把 opacity 设为 0.3。调用完成后重点检查：透明度→30%。"
+        "naturalLanguageTest": "请通过 MCP 调用 reference_image 工具，执行 set_opacity 动作，处理“调透明度”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 refUuid 指向 <uuid>，把 opacity 设为 0.3。调用完成后重点检查：透明度→30%。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 307,
@@ -14252,6 +18018,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回所有工具及启用状态",
       "note": "",
+      "prerequisites": "插件已加载；写偏好/广播可能影响本地配置，测试后可视需要还原。",
+      "setupSteps": [],
       "phase": "环境与连通",
       "priority": "P2",
       "edition": "community",
@@ -14281,10 +18049,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 tool_management 工具，执行 list_all 动作，处理“列出工具”这个状态场景。这个场景用于验证当前对象状态或默认状态下的表现。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：返回所有工具及启用状态。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 308,
@@ -14297,6 +18071,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "physics_tool 重新启用",
       "note": "",
+      "prerequisites": "插件已加载；写偏好/广播可能影响本地配置，测试后可视需要还原。",
+      "setupSteps": [],
       "phase": "环境与连通",
       "priority": "P2",
       "edition": "community",
@@ -14326,10 +18102,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 tool_management 工具，执行 enable 动作，处理“启用工具”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 toolName 设为“physics_tool”。调用完成后重点检查：physics_tool 重新启用。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 309,
@@ -14342,6 +18124,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "physics_tool 被禁用，减少 Token 消耗",
       "note": "",
+      "prerequisites": "插件已加载；写偏好/广播可能影响本地配置，测试后可视需要还原。",
+      "setupSteps": [],
       "phase": "环境与连通",
       "priority": "P2",
       "edition": "community",
@@ -14371,10 +18155,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 tool_management 工具，执行 disable 动作，处理“禁用工具”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 toolName 设为“physics_tool”。调用完成后重点检查：physics_tool 被禁用，减少 Token 消耗。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 310,
@@ -14386,6 +18176,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回 {totalTools:19,enabledTools:19,totalActions:236}",
       "note": "",
+      "prerequisites": "插件已加载；写偏好/广播可能影响本地配置，测试后可视需要还原。",
+      "setupSteps": [],
       "phase": "环境与连通",
       "priority": "P2",
       "edition": "community",
@@ -14415,10 +18207,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 tool_management 工具，执行 get_stats 动作，处理“工具统计”这个通用场景。这个场景用于做通用能力验证。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：返回 {totalTools:19,enabledTools:19,totalActions:236}。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 311,
@@ -14435,6 +18233,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回场景树",
       "note": "",
+      "prerequisites": "需目标脚本/宏在工程内存在或路径有效；在沙箱策略允许时执行。",
+      "setupSteps": [],
       "phase": "资产与脚本",
       "priority": "P3",
       "edition": "community",
@@ -14464,10 +18264,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 execute_script 工具，执行 execute_script 动作，处理“调用 dispatchQuery”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 method 设为“dispatchQuery”，传入 args=[{\"action\":\"tree\"}]。调用完成后重点检查：返回场景树。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 312,
@@ -14485,6 +18291,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "节点位置被设置",
       "note": "",
+      "prerequisites": "需目标脚本/宏在工程内存在或路径有效；在沙箱策略允许时执行。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [],
       "phase": "资产与脚本",
       "priority": "P3",
       "edition": "community",
@@ -14514,10 +18322,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 execute_script 工具，执行 execute_script 动作，处理“调用 setNodePosition”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 method 设为“setNodePosition”，传入 args=[\"<uuid>\",100,200,0]。调用完成后重点检查：节点位置被设置。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 313,
@@ -14531,6 +18345,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "注册为 macro_quick_sprite 工具",
       "note": "",
+      "prerequisites": "需目标脚本/宏在工程内存在或路径有效；在沙箱策略允许时执行。",
+      "setupSteps": [],
       "phase": "资产与脚本",
       "priority": "P3",
       "edition": "community",
@@ -14560,10 +18376,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 register_custom_macro 工具，执行 register_custom_macro 动作，处理“注册快捷宏”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 name 设为“quick_sprite”，把 description 设为“快速创建 Sprite 节点”，把 sceneMethodName 设为“createChildNode”。调用完成后重点检查：注册为 macro_quick_sprite 工具。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 314,
@@ -14577,6 +18399,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回 {error:\"方法不在白名单\"}",
       "note": "",
+      "prerequisites": "需目标脚本/宏在工程内存在或路径有效；在沙箱策略允许时执行。",
+      "setupSteps": [],
       "phase": "资产与脚本",
       "priority": "P3",
       "edition": "community",
@@ -14606,10 +18430,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 register_custom_macro 工具，执行 register_custom_macro 动作，处理“非白名单方法”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 name 设为“bad”，把 description 设为“test”，把 sceneMethodName 设为“eval”。调用完成后重点检查：返回 {error:\"方法不在白名单\"}。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 315,
@@ -14649,6 +18479,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "一步创建含 Sprite+碰撞器+子 Label 的预制体",
       "note": "",
+      "prerequisites": "原子宏依赖目标节点与资源路径；纹理/预制体路径需存在或可创建。",
+      "setupSteps": [],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -14678,10 +18510,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 create_prefab_atomic 工具，执行 create_prefab_atomic 动作，处理“完整预制体”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 prefabPath 设为“db://assets/prefabs/Enemy.prefab”，把 nodeName 设为“Enemy”，传入 components=[{\"type\":\"Sprite\"},{\"type\":\"BoxCollider2D\",\"properties\":{\"size\":{\"width\":64,\"height\":64}}}]，传入 children=[{\"name\":\"Label\",\"components\":[{\"type\":\"Label\",\"properties\":{\"string\":\"HP: 100\"}}]}]。调用完成后重点检查：一步创建含 Sprite+碰撞器+子 Label 的预制体。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 316,
@@ -14693,6 +18531,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "创建失败，临时节点自动清理",
       "note": "",
+      "prerequisites": "原子宏依赖目标节点与资源路径；纹理/预制体路径需存在或可创建。",
+      "setupSteps": [],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -14722,10 +18562,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 create_prefab_atomic 工具，执行 create_prefab_atomic 动作，处理“失败回滚”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 prefabPath 设为“db://invalid/path.prefab”。调用完成后重点检查：创建失败，临时节点自动清理。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 317,
@@ -14738,6 +18584,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "图片导入→SpriteFrame 设置→Sprite 显示新图片",
       "note": "",
+      "prerequisites": "原子宏依赖目标节点与资源路径；纹理/预制体路径需存在或可创建。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -14750,7 +18608,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": false,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 import_and_apply_texture 工具，执行 import_and_apply_texture 动作，处理“导入+应用”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 sourcePath 设为“C:/art/hero.png”，将 nodeUuid 指向 <sprite-node>。调用完成后重点检查：图片导入→SpriteFrame 设置→Sprite 显示新图片。",
+          "aiInstruction": "请通过 MCP 调用 import_and_apply_texture 工具，执行 import_and_apply_texture 动作，处理“导入+应用”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 sourcePath 设为“C:/art/hero.png”，将 nodeUuid 指向 <sprite-node>。调用完成后重点检查：图片导入→SpriteFrame 设置→Sprite 显示新图片。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "Atomic macro: import an external image file into AssetDB AND apply it to a 节点's Sprite 组件 in ONE call",
           "scenarioType": "参数场景",
           "scenarioTitle": "导入+应用",
@@ -14764,13 +18622,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "图片导入→SpriteFrame 设置→Sprite 显示新图片",
           "expectedText": "图片导入→SpriteFrame 设置→Sprite 显示新图片"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 import_and_apply_texture 工具，执行 import_and_apply_texture 动作，处理“导入+应用”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 sourcePath 设为“C:/art/hero.png”，将 nodeUuid 指向 <sprite-node>。调用完成后重点检查：图片导入→SpriteFrame 设置→Sprite 显示新图片。"
+        "naturalLanguageTest": "请通过 MCP 调用 import_and_apply_texture 工具，执行 import_and_apply_texture 动作，处理“导入+应用”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 sourcePath 设为“C:/art/hero.png”，将 nodeUuid 指向 <sprite-node>。调用完成后重点检查：图片导入→SpriteFrame 设置→Sprite 显示新图片。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 318,
@@ -14784,6 +18648,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "自动添加 Sprite 组件+设置纹理",
       "note": "",
+      "prerequisites": "原子宏依赖目标节点与资源路径；纹理/预制体路径需存在或可创建。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -14796,7 +18672,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": false,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 import_and_apply_texture 工具，执行 import_and_apply_texture 动作，处理“自动添加 Sprite”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 sourcePath 设为“C:/art/bg.jpg”，将 nodeUuid 指向 <empty-node>，把 autoAddSprite 设为 true。调用完成后重点检查：自动添加 Sprite 组件+设置纹理。",
+          "aiInstruction": "请通过 MCP 调用 import_and_apply_texture 工具，执行 import_and_apply_texture 动作，处理“自动添加 Sprite”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 sourcePath 设为“C:/art/bg.jpg”，将 nodeUuid 指向 <empty-node>，把 autoAddSprite 设为 true。调用完成后重点检查：自动添加 Sprite 组件+设置纹理。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "Atomic macro: import an external image file into AssetDB AND apply it to a 节点's Sprite 组件 in ONE call",
           "scenarioType": "参数场景",
           "scenarioTitle": "自动添加 Sprite",
@@ -14810,13 +18686,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "自动添加 Sprite 组件+设置纹理",
           "expectedText": "自动添加 Sprite 组件+设置纹理"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 import_and_apply_texture 工具，执行 import_and_apply_texture 动作，处理“自动添加 Sprite”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 sourcePath 设为“C:/art/bg.jpg”，将 nodeUuid 指向 <empty-node>，把 autoAddSprite 设为 true。调用完成后重点检查：自动添加 Sprite 组件+设置纹理。"
+        "naturalLanguageTest": "请通过 MCP 调用 import_and_apply_texture 工具，执行 import_and_apply_texture 动作，处理“自动添加 Sprite”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 sourcePath 设为“C:/art/bg.jpg”，将 nodeUuid 指向 <empty-node>，把 autoAddSprite 设为 true。调用完成后重点检查：自动添加 Sprite 组件+设置纹理。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 321,
@@ -14847,6 +18729,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "创建 0.5 秒透明度从 0 到 255 的淡入动画",
       "note": "",
+      "prerequisites": "原子宏依赖目标节点与资源路径；纹理/预制体路径需存在或可创建。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -14859,7 +18753,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": false,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 create_tween_animation_atomic 工具，执行 create_tween_animation_atomic 动作，处理“淡入动画”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 nodeUuid 指向 <uuid>，把 clipName 设为“fadeIn”，把 duration 设为 0.5，传入 tracks=[{\"component\":\"cc.UIOpacity\",\"property\":\"opacity\",\"keyframes\":[{\"time\":0,\"value\":0},{\"time\":0.5,\"value\":255,\"easing\":\"quadOut\"}]}]。调用完成后重点检查：创建 0.5 秒透明度从 0 到 255 的淡入动画。",
+          "aiInstruction": "请通过 MCP 调用 create_tween_animation_atomic 工具，执行 create_tween_animation_atomic 动作，处理“淡入动画”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 nodeUuid 指向 <uuid>，把 clipName 设为“fadeIn”，把 duration 设为 0.5，传入 tracks=[{\"component\":\"cc.UIOpacity\",\"property\":\"opacity\",\"keyframes\":[{\"time\":0,\"value\":0},{\"time\":0.5,\"value\":255,\"easing\":\"quadOut\"}]}]。调用完成后重点检查：创建 0.5 秒透明度从 0 到 255 的淡入动画。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "Atomic macro: create an AnimationClip with keyframe tracks and attach it to a target 节点 in ONE call",
           "scenarioType": "参数场景",
           "scenarioTitle": "淡入动画",
@@ -14873,13 +18767,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "创建 0.5 秒透明度从 0 到 255 的淡入动画",
           "expectedText": "创建 0.5 秒透明度从 0 到 255 的淡入动画"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 create_tween_animation_atomic 工具，执行 create_tween_animation_atomic 动作，处理“淡入动画”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 nodeUuid 指向 <uuid>，把 clipName 设为“fadeIn”，把 duration 设为 0.5，传入 tracks=[{\"component\":\"cc.UIOpacity\",\"property\":\"opacity\",\"keyframes\":[{\"time\":0,\"value\":0},{\"time\":0.5,\"value\":255,\"easing\":\"quadOut\"}]}]。调用完成后重点检查：创建 0.5 秒透明度从 0 到 255 的淡入动画。"
+        "naturalLanguageTest": "请通过 MCP 调用 create_tween_animation_atomic 工具，执行 create_tween_animation_atomic 动作，处理“淡入动画”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 nodeUuid 指向 <uuid>，把 clipName 设为“fadeIn”，把 duration 设为 0.5，传入 tracks=[{\"component\":\"cc.UIOpacity\",\"property\":\"opacity\",\"keyframes\":[{\"time\":0,\"value\":0},{\"time\":0.5,\"value\":255,\"easing\":\"quadOut\"}]}]。调用完成后重点检查：创建 0.5 秒透明度从 0 到 255 的淡入动画。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 322,
@@ -14938,6 +18838,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "创建边移动边旋转的循环动画",
       "note": "",
+      "prerequisites": "原子宏依赖目标节点与资源路径；纹理/预制体路径需存在或可创建。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -14950,7 +18862,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": false,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 create_tween_animation_atomic 工具，执行 create_tween_animation_atomic 动作，处理“位移+旋转”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 nodeUuid 指向 <uuid>，把 clipName 设为“move”，把 duration 设为 2，把 wrapMode 设为“Loop”，传入 tracks=[{\"property\":\"position\",\"keyframes\":[{\"time\":0,\"value\":{\"x\":0,\"y\":0,\"z\":0}},{\"time\":2,\"value\":{\"x\":200,\"y\":0,\"z\":0}}]},{\"property\":\"eulerAngles\",\"keyframes\":[{\"time\":0,\"value\":{\"x\":0,\"y\":0,\"z\":0}},{\"time\":2,\"value\":{\"x\":0,\"y\":0,\"z\":360}}]}]。调用完成后重点检查：创建边移动边旋转的循环动画。",
+          "aiInstruction": "请通过 MCP 调用 create_tween_animation_atomic 工具，执行 create_tween_animation_atomic 动作，处理“位移+旋转”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 nodeUuid 指向 <uuid>，把 clipName 设为“move”，把 duration 设为 2，把 wrapMode 设为“Loop”，传入 tracks=[{\"property\":\"position\",\"keyframes\":[{\"time\":0,\"value\":{\"x\":0,\"y\":0,\"z\":0}},{\"time\":2,\"value\":{\"x\":200,\"y\":0,\"z\":0}}]},{\"property\":\"eulerAngles\",\"keyframes\":[{\"time\":0,\"value\":{\"x\":0,\"y\":0,\"z\":0}},{\"time\":2,\"value\":{\"x\":0,\"y\":0,\"z\":360}}]}]。调用完成后重点检查：创建边移动边旋转的循环动画。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "Atomic macro: create an AnimationClip with keyframe tracks and attach it to a target 节点 in ONE call",
           "scenarioType": "参数场景",
           "scenarioTitle": "位移+旋转",
@@ -14964,13 +18876,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "创建边移动边旋转的循环动画",
           "expectedText": "创建边移动边旋转的循环动画"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 create_tween_animation_atomic 工具，执行 create_tween_animation_atomic 动作，处理“位移+旋转”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 nodeUuid 指向 <uuid>，把 clipName 设为“move”，把 duration 设为 2，把 wrapMode 设为“Loop”，传入 tracks=[{\"property\":\"position\",\"keyframes\":[{\"time\":0,\"value\":{\"x\":0,\"y\":0,\"z\":0}},{\"time\":2,\"value\":{\"x\":200,\"y\":0,\"z\":0}}]},{\"property\":\"eulerAngles\",\"keyframes\":[{\"time\":0,\"value\":{\"x\":0,\"y\":0,\"z\":0}},{\"time\":2,\"value\":{\"x\":0,\"y\":0,\"z\":360}}]}]。调用完成后重点检查：创建边移动边旋转的循环动画。"
+        "naturalLanguageTest": "请通过 MCP 调用 create_tween_animation_atomic 工具，执行 create_tween_animation_atomic 动作，处理“位移+旋转”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 nodeUuid 指向 <uuid>，把 clipName 设为“move”，把 duration 设为 2，把 wrapMode 设为“Loop”，传入 tracks=[{\"property\":\"position\",\"keyframes\":[{\"time\":0,\"value\":{\"x\":0,\"y\":0,\"z\":0}},{\"time\":2,\"value\":{\"x\":200,\"y\":0,\"z\":0}}]},{\"property\":\"eulerAngles\",\"keyframes\":[{\"time\":0,\"value\":{\"x\":0,\"y\":0,\"z\":0}},{\"time\":2,\"value\":{\"x\":0,\"y\":0,\"z\":360}}]}]。调用完成后重点检查：创建边移动边旋转的循环动画。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 323,
@@ -14982,6 +18900,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "根据 Sprite Alpha 生成 PolygonCollider2D",
       "note": "",
+      "prerequisites": "目标节点须有 Sprite/UITransform 等宏所需组件；否则走错误或降级分支。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -14994,7 +18924,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": false,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 auto_fit_physics_collider 工具，执行 auto_fit_physics_collider 动作，处理“自动适配”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 nodeUuid 指向 <sprite-node>。调用完成后重点检查：根据 Sprite Alpha 生成 PolygonCollider2D。",
+          "aiInstruction": "请通过 MCP 调用 auto_fit_physics_collider 工具，执行 auto_fit_physics_collider 动作，处理“自动适配”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 nodeUuid 指向 <sprite-node>。调用完成后重点检查：根据 Sprite Alpha 生成 PolygonCollider2D。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "Atomic macro: automatically fit a 2D physics collider to a target 节点's Sprite/UITransform bounds in ONE call",
           "scenarioType": "参数场景",
           "scenarioTitle": "自动适配",
@@ -15008,13 +18938,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "根据 Sprite Alpha 生成 PolygonCollider2D",
           "expectedText": "根据 Sprite Alpha 生成 PolygonCollider2D"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 auto_fit_physics_collider 工具，执行 auto_fit_physics_collider 动作，处理“自动适配”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 nodeUuid 指向 <sprite-node>。调用完成后重点检查：根据 Sprite Alpha 生成 PolygonCollider2D。"
+        "naturalLanguageTest": "请通过 MCP 调用 auto_fit_physics_collider 工具，执行 auto_fit_physics_collider 动作，处理“自动适配”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 nodeUuid 指向 <sprite-node>。调用完成后重点检查：根据 Sprite Alpha 生成 PolygonCollider2D。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 324,
@@ -15027,6 +18963,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "根据 UITransform 尺寸创建 BoxCollider2D",
       "note": "",
+      "prerequisites": "目标节点须有 Sprite/UITransform 等宏所需组件；否则走错误或降级分支。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -15039,7 +18987,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": false,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 auto_fit_physics_collider 工具，执行 auto_fit_physics_collider 动作，处理“指定 Box”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 nodeUuid 指向 <uuid>，把 colliderType 设为“box”。调用完成后重点检查：根据 UITransform 尺寸创建 BoxCollider2D。",
+          "aiInstruction": "请通过 MCP 调用 auto_fit_physics_collider 工具，执行 auto_fit_physics_collider 动作，处理“指定 Box”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 nodeUuid 指向 <uuid>，把 colliderType 设为“box”。调用完成后重点检查：根据 UITransform 尺寸创建 BoxCollider2D。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "Atomic macro: automatically fit a 2D physics collider to a target 节点's Sprite/UITransform bounds in ONE call",
           "scenarioType": "参数场景",
           "scenarioTitle": "指定 Box",
@@ -15053,13 +19001,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "根据 UITransform 尺寸创建 BoxCollider2D",
           "expectedText": "根据 UITransform 尺寸创建 BoxCollider2D"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 auto_fit_physics_collider 工具，执行 auto_fit_physics_collider 动作，处理“指定 Box”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 nodeUuid 指向 <uuid>，把 colliderType 设为“box”。调用完成后重点检查：根据 UITransform 尺寸创建 BoxCollider2D。"
+        "naturalLanguageTest": "请通过 MCP 调用 auto_fit_physics_collider 工具，执行 auto_fit_physics_collider 动作，处理“指定 Box”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 nodeUuid 指向 <uuid>，把 colliderType 设为“box”。调用完成后重点检查：根据 UITransform 尺寸创建 BoxCollider2D。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 325,
@@ -15072,6 +19026,18 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "创建 CircleCollider2D，radius=min(w,h)/2",
       "note": "",
+      "prerequisites": "目标节点须有 Sprite/UITransform 等宏所需组件；否则走错误或降级分支。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [
+        {
+          "step": 1,
+          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+          "tool": "scene_query",
+          "action": "list",
+          "input": {
+            "action": "list"
+          }
+        }
+      ],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
@@ -15084,7 +19050,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "matched": false,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 auto_fit_physics_collider 工具，执行 auto_fit_physics_collider 动作，处理“指定 Circle”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 nodeUuid 指向 <uuid>，把 colliderType 设为“circle”。调用完成后重点检查：创建 CircleCollider2D，radius=min(w,h)/2。",
+          "aiInstruction": "请通过 MCP 调用 auto_fit_physics_collider 工具，执行 auto_fit_physics_collider 动作，处理“指定 Circle”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 nodeUuid 指向 <uuid>，把 colliderType 设为“circle”。调用完成后重点检查：创建 CircleCollider2D，radius=min(w,h)/2。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
           "actionGoal": "Atomic macro: automatically fit a 2D physics collider to a target 节点's Sprite/UITransform bounds in ONE call",
           "scenarioType": "参数场景",
           "scenarioTitle": "指定 Circle",
@@ -15098,13 +19064,19 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "verificationFocus": "创建 CircleCollider2D，radius=min(w,h)/2",
           "expectedText": "创建 CircleCollider2D，radius=min(w,h)/2"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 auto_fit_physics_collider 工具，执行 auto_fit_physics_collider 动作，处理“指定 Circle”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 nodeUuid 指向 <uuid>，把 colliderType 设为“circle”。调用完成后重点检查：创建 CircleCollider2D，radius=min(w,h)/2。"
+        "naturalLanguageTest": "请通过 MCP 调用 auto_fit_physics_collider 工具，执行 auto_fit_physics_collider 动作，处理“指定 Circle”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 nodeUuid 指向 <uuid>，把 colliderType 设为“circle”。调用完成后重点检查：创建 CircleCollider2D，radius=min(w,h)/2。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 326,
@@ -15116,6 +19088,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回 6 个模板: controller/manager/ui-handler/data-model/singleton/fsm",
       "note": "Pro Phase 4",
+      "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。",
+      "setupSteps": [],
       "phase": "资产与脚本",
       "priority": "P3",
       "edition": "pro",
@@ -15145,10 +19119,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 script_scaffold 工具，执行 list_templates 动作，处理“列出脚本模板”这个通用场景。这个场景通常用于Pro Phase 4。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：返回 6 个模板: controller/manager/ui-handler/data-model/singleton/fsm。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 327,
@@ -15162,6 +19142,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "生成 PlayerController.ts 到 assets/scripts/",
       "note": "",
+      "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。",
+      "setupSteps": [],
       "phase": "资产与脚本",
       "priority": "P3",
       "edition": "pro",
@@ -15191,10 +19173,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 script_scaffold 工具，执行 generate_component 动作，处理“生成组件脚本”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 className 设为“PlayerController”，把 description 设为“控制角色移动”。调用完成后重点检查：生成 PlayerController.ts 到 assets/scripts/。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 328,
@@ -15206,6 +19194,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回错误: 缺少 className",
       "note": "参数校验",
+      "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。",
+      "setupSteps": [],
       "phase": "资产与脚本",
       "priority": "P3",
       "edition": "pro",
@@ -15235,10 +19225,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 script_scaffold 工具，执行 generate_component 动作，处理“缺少 className”这个通用场景。这个场景通常用于参数校验。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：返回错误: 缺少 className。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 329,
@@ -15252,6 +19248,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "生成单例管理器脚本",
       "note": "",
+      "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。",
+      "setupSteps": [],
       "phase": "资产与脚本",
       "priority": "P3",
       "edition": "pro",
@@ -15281,10 +19279,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 script_scaffold 工具，执行 from_template 动作，处理“从模板生成”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 className 设为“GameManager”，把 template 设为“singleton”。调用完成后重点检查：生成单例管理器脚本。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 330,
@@ -15305,6 +19309,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "4 步: 生成→刷新→挂载→设属性",
       "note": "核心一体化 action",
+      "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [],
       "phase": "资产与脚本",
       "priority": "P3",
       "edition": "pro",
@@ -15334,10 +19340,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 script_scaffold 工具，执行 generate_and_attach 动作，处理“生成+挂载”这个参数场景。这个场景通常用于核心一体化 action。这次请把 className 设为“EnemyAI”，将 uuid 指向 <uuid>，传入 properties=[{\"name\":\"speed\",\"type\":\"number\",\"default\":5}]。调用完成后重点检查：4 步: 生成→刷新→挂载→设属性。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 331,
@@ -15350,6 +19362,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回错误: 缺少 uuid",
       "note": "参数校验",
+      "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。",
+      "setupSteps": [],
       "phase": "资产与脚本",
       "priority": "P3",
       "edition": "pro",
@@ -15379,10 +19393,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 script_scaffold 工具，执行 generate_and_attach 动作，处理“缺少 uuid”这个参数场景。这个场景通常用于参数校验。这次请把 className 设为“Foo”。调用完成后重点检查：返回错误: 缺少 uuid。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 332,
@@ -15402,6 +19422,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "追加 @property 声明",
       "note": "",
+      "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。",
+      "setupSteps": [],
       "phase": "资产与脚本",
       "priority": "P3",
       "edition": "pro",
@@ -15431,10 +19453,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 script_scaffold 工具，执行 add_properties 动作，处理“追加属性”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 className 设为“PlayerController”，传入 properties=[{\"name\":\"jumpForce\",\"type\":\"number\",\"default\":12}]。调用完成后重点检查：追加 @property 声明。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 333,
@@ -15454,6 +19482,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "生成脚本→挂载→绑定 click",
       "note": "",
+      "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [],
       "phase": "资产与脚本",
       "priority": "P3",
       "edition": "pro",
@@ -15483,10 +19513,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 script_scaffold 工具，执行 generate_event_handler 动作，处理“生成事件处理”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 className 设为“BtnHandler”，将 uuid 指向 <uuid>，传入 events=[{\"event\":\"click\",\"handler\":\"onBtnClick\"}]。调用完成后重点检查：生成脚本→挂载→绑定 click。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 334,
@@ -15500,6 +19536,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回错误: 缺少 events",
       "note": "参数校验",
+      "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [],
       "phase": "资产与脚本",
       "priority": "P3",
       "edition": "pro",
@@ -15529,10 +19567,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 script_scaffold 工具，执行 generate_event_handler 动作，处理“缺少 events”这个参数场景。这个场景通常用于参数校验。这次请把 className 设为“X”，将 uuid 指向 <uuid>。调用完成后重点检查：返回错误: 缺少 events。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 335,
@@ -15546,6 +19590,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "创建 0.3s opacity 0→255 动画",
       "note": "Pro Phase 4",
+      "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 需目标节点存在且可挂 Animation/AnimationClip；复杂链建议先 scene_query 确认 uuid。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [],
       "phase": "动画工作流",
       "priority": "P2",
       "edition": "pro",
@@ -15575,10 +19621,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 animation_workflow 工具，执行 create_transition 动作，处理“淡入过渡”这个参数场景。这个场景通常用于Pro Phase 4。这次请将 uuid 指向 <uuid>，把 transitionType 设为“fade-in”。调用完成后重点检查：创建 0.3s opacity 0→255 动画。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 336,
@@ -15592,6 +19644,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "创建 0.5s scale 0→1.2→1 动画",
       "note": "",
+      "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 需目标节点存在且可挂 Animation/AnimationClip；复杂链建议先 scene_query 确认 uuid。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [],
       "phase": "动画工作流",
       "priority": "P2",
       "edition": "pro",
@@ -15621,10 +19675,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 animation_workflow 工具，执行 create_transition 动作，处理“弹跳进入”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 transitionType 设为“bounce-in”。调用完成后重点检查：创建 0.5s scale 0→1.2→1 动画。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 337,
@@ -15639,6 +19699,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "创建 1.0s 左滑入动画",
       "note": "",
+      "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 需目标节点存在且可挂 Animation/AnimationClip；复杂链建议先 scene_query 确认 uuid。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [],
       "phase": "动画工作流",
       "priority": "P2",
       "edition": "pro",
@@ -15668,10 +19730,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 animation_workflow 工具，执行 create_transition 动作，处理“自定义时长”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 transitionType 设为“slide-in-left”，把 duration 设为 1。调用完成后重点检查：创建 1.0s 左滑入动画。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 338,
@@ -15685,6 +19753,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "创建 2s 上下浮动 Loop 动画",
       "note": "",
+      "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 需目标节点存在且可挂 Animation/AnimationClip；复杂链建议先 scene_query 确认 uuid。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [],
       "phase": "动画工作流",
       "priority": "P2",
       "edition": "pro",
@@ -15714,10 +19784,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 animation_workflow 工具，执行 create_loop_animation 动作，处理“浮动循环”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 loopType 设为“float”。调用完成后重点检查：创建 2s 上下浮动 Loop 动画。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 339,
@@ -15731,6 +19807,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "创建 2s Z 轴 0→360 旋转动画",
       "note": "",
+      "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 需目标节点存在且可挂 Animation/AnimationClip；复杂链建议先 scene_query 确认 uuid。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [],
       "phase": "动画工作流",
       "priority": "P2",
       "edition": "pro",
@@ -15760,10 +19838,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 animation_workflow 工具，执行 create_loop_animation 动作，处理“旋转循环”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 loopType 设为“rotate”。调用完成后重点检查：创建 2s Z 轴 0→360 旋转动画。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 340,
@@ -15777,6 +19861,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "创建 idle 呼吸循环动画",
       "note": "",
+      "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 需目标节点存在且可挂 Animation/AnimationClip；复杂链建议先 scene_query 确认 uuid。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [],
       "phase": "动画工作流",
       "priority": "P2",
       "edition": "pro",
@@ -15806,10 +19892,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 animation_workflow 工具，执行 apply_preset 动作，处理“idle 预设”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 preset 设为“idle”。调用完成后重点检查：创建 idle 呼吸循环动画。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 341,
@@ -15823,6 +19915,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "创建 attack 缩放+位移动画",
       "note": "",
+      "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 需目标节点存在且可挂 Animation/AnimationClip；复杂链建议先 scene_query 确认 uuid。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [],
       "phase": "动画工作流",
       "priority": "P2",
       "edition": "pro",
@@ -15852,10 +19946,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 animation_workflow 工具，执行 apply_preset 动作，处理“attack 预设”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 preset 设为“attack”。调用完成后重点检查：创建 attack 缩放+位移动画。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 342,
@@ -15869,6 +19969,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "创建 0.15s 缩放反馈动画",
       "note": "",
+      "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 需目标节点存在且可挂 Animation/AnimationClip；复杂链建议先 scene_query 确认 uuid。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [],
       "phase": "动画工作流",
       "priority": "P2",
       "edition": "pro",
@@ -15898,10 +20000,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 animation_workflow 工具，执行 create_ui_animation 动作，处理“按钮点击”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 uiAnimType 设为“button-press”。调用完成后重点检查：创建 0.15s 缩放反馈动画。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 343,
@@ -15915,6 +20023,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "创建 0.35s scale+opacity 弹出动画",
       "note": "",
+      "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 需目标节点存在且可挂 Animation/AnimationClip；复杂链建议先 scene_query 确认 uuid。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [],
       "phase": "动画工作流",
       "priority": "P2",
       "edition": "pro",
@@ -15944,10 +20054,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 animation_workflow 工具，执行 create_ui_animation 动作，处理“面板弹出”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 uiAnimType 设为“panel-popup”。调用完成后重点检查：创建 0.35s scale+opacity 弹出动画。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 344,
@@ -15961,6 +20077,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "AI 解析→生成关键帧",
       "note": "",
+      "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 需目标节点存在且可挂 Animation/AnimationClip；复杂链建议先 scene_query 确认 uuid。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [],
       "phase": "动画工作流",
       "priority": "P2",
       "edition": "pro",
@@ -15990,10 +20108,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 animation_workflow 工具，执行 create_from_description 动作，处理“自然语言动画”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 prompt 设为“让按钮弹跳进入”。调用完成后重点检查：AI 解析→生成关键帧。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 345,
@@ -16006,6 +20130,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回错误: 缺少 prompt",
       "note": "参数校验",
+      "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 需目标节点存在且可挂 Animation/AnimationClip；复杂链建议先 scene_query 确认 uuid。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [],
       "phase": "动画工作流",
       "priority": "P2",
       "edition": "pro",
@@ -16035,10 +20161,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 animation_workflow 工具，执行 create_from_description 动作，处理“缺少 prompt”这个参数场景。这个场景通常用于参数校验。这次请将 uuid 指向 <uuid>。调用完成后重点检查：返回错误: 缺少 prompt。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 346,
@@ -16061,6 +20193,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "创建 2 个剪辑",
       "note": "",
+      "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 需目标节点存在且可挂 Animation/AnimationClip；复杂链建议先 scene_query 确认 uuid。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [],
       "phase": "动画工作流",
       "priority": "P2",
       "edition": "pro",
@@ -16090,10 +20224,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 animation_workflow 工具，执行 create_sequence 动作，处理“动画序列”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，传入 clips=[{\"clipName\":\"intro\",\"transitionType\":\"fade-in\"},{\"clipName\":\"loop\",\"loopType\":\"pulse\"}]。调用完成后重点检查：创建 2 个剪辑。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 347,
@@ -16111,6 +20251,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "3 个节点各创建 fade-in 动画",
       "note": "",
+      "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 需目标节点存在且可挂 Animation/AnimationClip；复杂链建议先 scene_query 确认 uuid。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [],
       "phase": "动画工作流",
       "priority": "P2",
       "edition": "pro",
@@ -16140,10 +20282,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 animation_workflow 工具，执行 batch_animate 动作，处理“批量入场”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请传入 uuids=[\"<a>\",\"<b>\",\"<c>\"]，把 transitionType 设为“fade-in”。调用完成后重点检查：3 个节点各创建 fade-in 动画。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 348,
@@ -16156,6 +20304,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回错误: 缺少 uuids",
       "note": "参数校验",
+      "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 需目标节点存在且可挂 Animation/AnimationClip；复杂链建议先 scene_query 确认 uuid。",
+      "setupSteps": [],
       "phase": "动画工作流",
       "priority": "P2",
       "edition": "pro",
@@ -16185,10 +20335,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 animation_workflow 工具，执行 batch_animate 动作，处理“缺少 uuids”这个参数场景。这个场景通常用于参数校验。这次请把 transitionType 设为“fade-in”。调用完成后重点检查：返回错误: 缺少 uuids。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 349,
@@ -16202,6 +20358,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "播放 idle 动画",
       "note": "",
+      "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 需目标节点存在且可挂 Animation/AnimationClip；复杂链建议先 scene_query 确认 uuid。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+      "setupSteps": [],
       "phase": "动画工作流",
       "priority": "P2",
       "edition": "pro",
@@ -16231,10 +20389,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 animation_workflow 工具，执行 preview_animation 动作，处理“预览动画”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 clipName 设为“idle”。调用完成后重点检查：播放 idle 动画。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 350,
@@ -16246,6 +20410,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "生成完整登录页: Canvas→根容器→邮箱+密码+按钮+社交登录",
       "note": "Pro Phase 4",
+      "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。",
+      "setupSteps": [],
       "phase": "UI 与参考图",
       "priority": "P2",
       "edition": "pro",
@@ -16275,10 +20441,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 ui_generator 工具，执行 create_login_page 动作，处理“一键登录页”这个通用场景。这个场景通常用于Pro Phase 4。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：生成完整登录页: Canvas→根容器→邮箱+密码+按钮+社交登录。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 351,
@@ -16290,6 +20462,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "生成设置页: 音量滑块+开关+语言选择",
       "note": "",
+      "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。",
+      "setupSteps": [],
       "phase": "UI 与参考图",
       "priority": "P2",
       "edition": "pro",
@@ -16319,10 +20493,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 ui_generator 工具，执行 create_settings_page 动作，处理“一键设置页”这个通用场景。这个场景用于做通用能力验证。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：生成设置页: 音量滑块+开关+语言选择。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 352,
@@ -16335,6 +20515,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "生成商店: ScrollView + 6 个商品卡片",
       "note": "",
+      "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。",
+      "setupSteps": [],
       "phase": "UI 与参考图",
       "priority": "P2",
       "edition": "pro",
@@ -16364,10 +20546,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 ui_generator 工具，执行 create_shop_page 动作，处理“一键商店页”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 itemCount 设为 6。调用完成后重点检查：生成商店: ScrollView + 6 个商品卡片。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 353,
@@ -16380,6 +20568,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "生成 3 个商品卡片（少于默认 6 个）",
       "note": "",
+      "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。",
+      "setupSteps": [],
       "phase": "UI 与参考图",
       "priority": "P2",
       "edition": "pro",
@@ -16409,10 +20599,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 ui_generator 工具，执行 create_shop_page 动作，处理“自定义商品数”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 itemCount 设为 3。调用完成后重点检查：生成 3 个商品卡片（少于默认 6 个）。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 354,
@@ -16424,6 +20620,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "生成 HUD: 血条+分数+技能栏+小地图+暂停按钮",
       "note": "",
+      "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。",
+      "setupSteps": [],
       "phase": "UI 与参考图",
       "priority": "P2",
       "edition": "pro",
@@ -16453,10 +20651,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 ui_generator 工具，执行 create_hud 动作，处理“一键 HUD”这个通用场景。这个场景用于做通用能力验证。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：生成 HUD: 血条+分数+技能栏+小地图+暂停按钮。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 355,
@@ -16470,6 +20674,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "生成对话框含自定义标题和内容",
       "note": "",
+      "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。",
+      "setupSteps": [],
       "phase": "UI 与参考图",
       "priority": "P2",
       "edition": "pro",
@@ -16499,10 +20705,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 ui_generator 工具，执行 create_dialog 动作，处理“自定义对话框”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 title 设为“退出游戏?”，把 content 设为“确定要退出吗?”。调用完成后重点检查：生成对话框含自定义标题和内容。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 356,
@@ -16516,6 +20728,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "生成 4 列 16 格背包+详情面板",
       "note": "",
+      "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。",
+      "setupSteps": [],
       "phase": "UI 与参考图",
       "priority": "P2",
       "edition": "pro",
@@ -16545,10 +20759,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 ui_generator 工具，执行 create_inventory 动作，处理“一键背包”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 columns 设为 4，把 itemCount 设为 16。调用完成后重点检查：生成 4 列 16 格背包+详情面板。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 357,
@@ -16561,6 +20781,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "解析关键词→生成 TabBar + ScrollView",
       "note": "",
+      "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。",
+      "setupSteps": [],
       "phase": "UI 与参考图",
       "priority": "P2",
       "edition": "pro",
@@ -16590,10 +20812,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 ui_generator 工具，执行 create_custom_ui 动作，处理“自定义 UI”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 prompt 设为“一个带标签页和滚动列表的界面”。调用完成后重点检查：解析关键词→生成 TabBar + ScrollView。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 358,
@@ -16605,6 +20833,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回错误: 缺少 prompt",
       "note": "参数校验",
+      "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。",
+      "setupSteps": [],
       "phase": "UI 与参考图",
       "priority": "P2",
       "edition": "pro",
@@ -16634,10 +20864,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 ui_generator 工具，执行 create_custom_ui 动作，处理“缺少 prompt”这个通用场景。这个场景通常用于参数校验。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：返回错误: 缺少 prompt。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 359,
@@ -16649,6 +20885,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "5 步: 3 个场景查询 + 1 资源查询 + 1 汇总分析",
       "note": "Pro Phase 4",
+      "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。",
+      "setupSteps": [],
       "phase": "质量与诊断",
       "priority": "P2",
       "edition": "pro",
@@ -16678,10 +20916,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 project_linter 工具，执行 check_all 动作，处理“全量检查”这个通用场景。这个场景通常用于Pro Phase 4。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：5 步: 3 个场景查询 + 1 资源查询 + 1 汇总分析。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 360,
@@ -16693,6 +20937,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回不符合 PascalCase/kebab-case 的项",
       "note": "",
+      "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。",
+      "setupSteps": [],
       "phase": "质量与诊断",
       "priority": "P2",
       "edition": "pro",
@@ -16722,10 +20968,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 project_linter 工具，执行 check_naming 动作，处理“命名检查”这个通用场景。这个场景用于做通用能力验证。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：返回不符合 PascalCase/kebab-case 的项。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 361,
@@ -16737,6 +20989,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回深度>10 或子节点>50 的节点",
       "note": "",
+      "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。",
+      "setupSteps": [],
       "phase": "质量与诊断",
       "priority": "P2",
       "edition": "pro",
@@ -16766,10 +21020,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 project_linter 工具，执行 check_hierarchy 动作，处理“层级检查”这个通用场景。这个场景用于做通用能力验证。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：返回深度>10 或子节点>50 的节点。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 362,
@@ -16781,6 +21041,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回空 Sprite、缺 RigidBody 等问题",
       "note": "",
+      "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。",
+      "setupSteps": [],
       "phase": "质量与诊断",
       "priority": "P2",
       "edition": "pro",
@@ -16810,10 +21072,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 project_linter 工具，执行 check_components 动作，处理“组件检查”这个通用场景。这个场景用于做通用能力验证。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：返回空 Sprite、缺 RigidBody 等问题。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 363,
@@ -16825,6 +21093,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回未使用资源和命名违规",
       "note": "",
+      "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。",
+      "setupSteps": [],
       "phase": "质量与诊断",
       "priority": "P2",
       "edition": "pro",
@@ -16854,10 +21124,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 project_linter 工具，执行 check_assets 动作，处理“资源检查”这个通用场景。这个场景用于做通用能力验证。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：返回未使用资源和命名违规。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 364,
@@ -16869,6 +21145,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回节点数/DrawCall/纹理尺寸超标项",
       "note": "",
+      "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。",
+      "setupSteps": [],
       "phase": "质量与诊断",
       "priority": "P2",
       "edition": "pro",
@@ -16898,10 +21176,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 project_linter 工具，执行 check_performance 动作，处理“性能检查”这个通用场景。这个场景用于做通用能力验证。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：返回节点数/DrawCall/纹理尺寸超标项。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 365,
@@ -16913,6 +21197,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "批量重命名违规节点",
       "note": "",
+      "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。",
+      "setupSteps": [],
       "phase": "质量与诊断",
       "priority": "P2",
       "edition": "pro",
@@ -16942,10 +21228,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 project_linter 工具，执行 auto_fix_naming 动作，处理“自动修复命名”这个通用场景。这个场景用于做通用能力验证。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：批量重命名违规节点。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 366,
@@ -16962,6 +21254,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "规则保存到 .mcp-lint-rules.json",
       "note": "",
+      "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。",
+      "setupSteps": [],
       "phase": "质量与诊断",
       "priority": "P2",
       "edition": "pro",
@@ -16991,10 +21285,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 project_linter 工具，执行 set_rules 动作，处理“设置自定义规则”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请传入 rules={\"naming\":{\"nodePattern\":\"camelCase\"}}。调用完成后重点检查：规则保存到 .mcp-lint-rules.json。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 367,
@@ -17006,6 +21306,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回错误: 缺少 rules",
       "note": "参数校验",
+      "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。",
+      "setupSteps": [],
       "phase": "质量与诊断",
       "priority": "P2",
       "edition": "pro",
@@ -17035,10 +21337,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 project_linter 工具，执行 set_rules 动作，处理“缺少 rules”这个通用场景。这个场景通常用于参数校验。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：返回错误: 缺少 rules。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 368,
@@ -17050,6 +21358,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回最近 50 条操作记录",
       "note": "Pro Phase 4",
+      "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。",
+      "setupSteps": [],
       "phase": "环境与连通",
       "priority": "P3",
       "edition": "pro",
@@ -17079,10 +21389,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 operation_log 工具，执行 get_history 动作，处理“查看历史”这个通用场景。这个场景通常用于Pro Phase 4。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：返回最近 50 条操作记录。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 369,
@@ -17098,6 +21414,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回最近 20 条 scene_operation 操作",
       "note": "",
+      "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。",
+      "setupSteps": [],
       "phase": "环境与连通",
       "priority": "P3",
       "edition": "pro",
@@ -17127,10 +21445,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 operation_log 工具，执行 get_history 动作，处理“过滤历史”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请传入 filter={\"tool\":\"scene_operation\",\"limit\":20}。调用完成后重点检查：返回最近 20 条 scene_operation 操作。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 370,
@@ -17142,6 +21466,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回按工具/action 分组的统计",
       "note": "",
+      "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。",
+      "setupSteps": [],
       "phase": "环境与连通",
       "priority": "P3",
       "edition": "pro",
@@ -17171,10 +21497,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 operation_log 工具，执行 get_stats 动作，处理“操作统计”这个通用场景。这个场景用于做通用能力验证。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：返回按工具/action 分组的统计。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 371,
@@ -17187,6 +21519,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "操作日志保存到 assets/mcp-logs/",
       "note": "",
+      "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。",
+      "setupSteps": [],
       "phase": "环境与连通",
       "priority": "P3",
       "edition": "pro",
@@ -17216,10 +21550,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 operation_log 工具，执行 export_log 动作，处理“导出 JSON”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 format 设为“json”。调用完成后重点检查：操作日志保存到 assets/mcp-logs/。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 372,
@@ -17231,6 +21571,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "生成可回放的 TypeScript 脚本",
       "note": "",
+      "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。",
+      "setupSteps": [],
       "phase": "环境与连通",
       "priority": "P3",
       "edition": "pro",
@@ -17260,10 +21602,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 operation_log 工具，执行 export_script 动作，处理“导出脚本”这个通用场景。这个场景用于做通用能力验证。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：生成可回放的 TypeScript 脚本。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 373,
@@ -17276,6 +21624,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "重放最近 5 个操作",
       "note": "",
+      "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。",
+      "setupSteps": [],
       "phase": "环境与连通",
       "priority": "P3",
       "edition": "pro",
@@ -17305,10 +21655,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 operation_log 工具，执行 replay_last 动作，处理“回放最近 5 步”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 count 设为 5。调用完成后重点检查：重放最近 5 个操作。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 374,
@@ -17320,6 +21676,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "重放最近 10 个操作",
       "note": "",
+      "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。",
+      "setupSteps": [],
       "phase": "环境与连通",
       "priority": "P3",
       "edition": "pro",
@@ -17349,10 +21707,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 operation_log 工具，执行 replay_last 动作，处理“默认回放 10 步”这个状态场景。这个场景用于验证当前对象状态或默认状态下的表现。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：重放最近 10 个操作。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 375,
@@ -17370,6 +21734,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "按日志逐条重放",
       "note": "",
+      "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。",
+      "setupSteps": [],
       "phase": "环境与连通",
       "priority": "P3",
       "edition": "pro",
@@ -17399,10 +21765,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 operation_log 工具，执行 replay_from_log 动作，处理“从日志回放”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请传入 log=[{\"tool\":\"scene_operation\",\"action\":\"create_node\"}]。调用完成后重点检查：按日志逐条重放。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 376,
@@ -17414,6 +21786,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回错误: 缺少 log",
       "note": "参数校验",
+      "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。",
+      "setupSteps": [],
       "phase": "环境与连通",
       "priority": "P3",
       "edition": "pro",
@@ -17443,10 +21817,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 operation_log 工具，执行 replay_from_log 动作，处理“缺少 log”这个通用场景。这个场景通常用于参数校验。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：返回错误: 缺少 log。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 377,
@@ -17459,6 +21839,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "操作历史已清空",
       "note": "",
+      "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。",
+      "setupSteps": [],
       "phase": "环境与连通",
       "priority": "P3",
       "edition": "pro",
@@ -17488,10 +21870,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 operation_log 工具，执行 clear_history 动作，处理“清空历史”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 confirmDangerous 设为 true。调用完成后重点检查：操作历史已清空。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 378,
@@ -17503,6 +21891,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回错误: 需要 confirmDangerous=true",
       "note": "危险操作拦截",
+      "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。",
+      "setupSteps": [],
       "phase": "环境与连通",
       "priority": "P3",
       "edition": "pro",
@@ -17532,10 +21922,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 operation_log 工具，执行 clear_history 动作，处理“未确认清空”这个通用场景。这个场景通常用于危险操作拦截。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：返回错误: 需要 confirmDangerous=true。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 379,
@@ -17548,6 +21944,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "书签 before-refactor 已添加",
       "note": "",
+      "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。",
+      "setupSteps": [],
       "phase": "环境与连通",
       "priority": "P3",
       "edition": "pro",
@@ -17577,10 +21975,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 operation_log 工具，执行 bookmark 动作，处理“添加书签”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 label 设为“before-refactor”。调用完成后重点检查：书签 before-refactor 已添加。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     },
     {
       "id": 380,
@@ -17592,6 +21996,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "expected": "返回错误: 缺少 label",
       "note": "参数校验",
+      "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。",
+      "setupSteps": [],
       "phase": "环境与连通",
       "priority": "P3",
       "edition": "pro",
@@ -17621,10 +22027,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 operation_log 工具，执行 bookmark 动作，处理“缺少 label”这个通用场景。这个场景通常用于参数校验。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：返回错误: 缺少 label。"
       },
       "aiBaseline": {
-        "status": "fail",
+        "status": "blocked",
         "duration": "",
-        "note": "来自 tests/test-report.json，自动化失败：HTTP 429: Too Many Requests"
-      }
+        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+      },
+      "manualBaseline": {
+        "status": "pending",
+        "note": ""
+      },
+      "needsRetest": false,
+      "retestReason": ""
     }
   ]
 };
