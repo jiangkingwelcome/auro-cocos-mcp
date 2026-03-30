@@ -103,7 +103,7 @@ async function forceDirty(ctx: BridgeToolContext, uuids: string[]): Promise<void
         uuid, path: 'active',
         dump: { type: 'Boolean', value: true },
       });
-    } catch { /* best-effort */ }
+    } catch (_ignored) { /* best-effort */ }
   }
 }
 
@@ -150,14 +150,6 @@ export async function executePlan(
 
   const needsDirty = planMayModifyScene(plan.calls);
 
-  // [DIRTY-DEBUG] 临时诊断日志，确认 executor 执行路径
-  console.log('[DIRTY-DEBUG] executePlan calls:', JSON.stringify(plan.calls.map(c => ({
-    type: c.type,
-    ...(c.type === 'sceneMethod' ? { method: c.method } : {}),
-    ...(c.type === 'editorMsg' ? { module: c.module, message: c.message } : {}),
-  }))));
-  console.log('[DIRTY-DEBUG] needsDirty:', needsDirty);
-
   const preKnownUuids = collectUuids(plan.calls, []);
   const recordId = needsDirty ? await beginSceneRecording(ctx.editorMsg, preKnownUuids) : null;
 
@@ -171,8 +163,6 @@ export async function executePlan(
       // Collect UUIDs from BOTH call args AND results — newly created node
       // UUIDs are returned in results, not present in the original call args.
       const uuids = collectUuids(plan.calls, results);
-      console.log('[DIRTY-DEBUG] forceDirty uuids:', uuids);
-      console.log('[DIRTY-DEBUG] results:', JSON.stringify(results).slice(0, 300));
       await forceDirty(ctx, uuids);
     }
     return ctx.text(results.length === 1 ? results[0] : results);

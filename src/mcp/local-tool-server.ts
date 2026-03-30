@@ -302,7 +302,7 @@ export class LocalToolServer {
       const elapsed = Date.now() - startMs;
 
       if (result.isError) {
-        console.warn(`[MCP] #${callId} ✗ ${tag} ${elapsed}ms — ${extractResultSummary(result)}`);
+        console.log(`[MCP] #${callId} ✗ ${tag} ${elapsed}ms — ${extractResultSummary(result)}`);
       } else {
         console.log(`[MCP] #${callId} ✓ ${tag} ${elapsed}ms`);
       }
@@ -310,7 +310,7 @@ export class LocalToolServer {
     } catch (err: unknown) {
       const elapsed = Date.now() - startMs;
       const message = err instanceof Error ? err.message : String(err);
-      console.error(`[MCP] #${callId} ✗✗ ${tag} ${elapsed}ms — EXCEPTION: ${message}`);
+      console.log(`[MCP] #${callId} ✗✗ ${tag} ${elapsed}ms — EXCEPTION: ${message}`);
       return toErrorResult(`工具执行失败: ${message}`);
     }
   }

@@ -163,6 +163,7 @@ export class StandaloneMcpHost {
         res.write(msg);
       } catch {
         this.sseClients.delete(id);
+        try { res.end(); } catch { /* already closed */ }
       }
     }
   }

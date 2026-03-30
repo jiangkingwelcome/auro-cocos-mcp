@@ -227,7 +227,7 @@ async function ipcCreateNode(parentUuid: string, name: string): Promise<string> 
 function isEngineComponentConstructor(ctor: unknown, componentBase: unknown): boolean {
   if (!ctor || !componentBase) return false;
   const { js } = require('cc') as CocosCC;
-  const isChild = js.isChildClassOf;
+  const isChild = (js as { isChildClassOf?: (a: unknown, b: unknown) => boolean }).isChildClassOf;
   if (typeof isChild !== 'function') return false;
   try {
     return !!isChild(ctor, componentBase);

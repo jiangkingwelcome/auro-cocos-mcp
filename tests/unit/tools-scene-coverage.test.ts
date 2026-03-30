@@ -640,12 +640,17 @@ describe('scene_operation — ensure_2d_canvas', () => {
       if (method === 'dispatchQuery' && params.action === 'get_canvas_info') {
         return Promise.resolve({ canvases: [] });
       }
-      if (method === 'dispatchOperation' && params.action === 'create_node') {
-        return Promise.resolve({ success: true, uuid: 'new-canvas-uuid' });
-      }
       return Promise.resolve({ success: true });
     });
-    const server = buildCocosToolServer(makeCtx({ sceneMethod }));
+    const editorMsg = vi.fn().mockImplementation((module: string, message: string, ...args: unknown[]) => {
+      if (module === 'scene' && message === 'create-node') {
+        const params = args[0] as Record<string, unknown>;
+        if (!params?.parent) return Promise.resolve({ uuid: 'new-canvas-uuid' }); // Canvas 节点
+        return Promise.resolve({ uuid: 'new-camera-uuid' }); // Camera 子节点
+      }
+      return Promise.resolve({});
+    });
+    const server = buildCocosToolServer(makeCtx({ sceneMethod, editorMsg }));
 
     const result = await server.callTool('scene_operation', { action: 'ensure_2d_canvas', confirmCreateCanvas: true });
     expect(result.isError).toBeFalsy();
@@ -665,12 +670,17 @@ describe('scene_operation — ensure_2d_canvas', () => {
       if (method === 'dispatchQuery' && params.action === 'get_canvas_info') {
         return Promise.resolve({ canvases: [] });
       }
-      if (method === 'dispatchOperation' && params.action === 'create_node') {
-        return Promise.resolve({ success: true, uuid: 'canvas-uuid' });
-      }
       return Promise.resolve({ success: true });
     });
-    const server = buildCocosToolServer(makeCtx({ sceneMethod }));
+    const editorMsg = vi.fn().mockImplementation((module: string, message: string, ...args: unknown[]) => {
+      if (module === 'scene' && message === 'create-node') {
+        const params = args[0] as Record<string, unknown>;
+        if (!params?.parent) return Promise.resolve({ uuid: 'canvas-uuid' });
+        return Promise.resolve({ uuid: 'camera-uuid' });
+      }
+      return Promise.resolve({});
+    });
+    const server = buildCocosToolServer(makeCtx({ sceneMethod, editorMsg }));
 
     const result = await server.callTool('scene_operation', { action: 'ensure_2d_canvas', confirmCreateCanvas: true, designHeight: 1280 });
     const data = parse(result);
@@ -681,9 +691,16 @@ describe('scene_operation — ensure_2d_canvas', () => {
     const sceneMethod = vi.fn()
       .mockResolvedValueOnce({ error: '未知的操作 action: ensure_2d_canvas' })
       .mockResolvedValueOnce({ canvases: [{ uuid: 'editor-canvas', name: 'Reference-Image-Canvas', path: '/Editor Scene Background/Reference-Image-Canvas' }] })
-      .mockResolvedValueOnce({ success: true, uuid: 'new-canvas' }) // create_node
       .mockResolvedValue({ success: true });
-    const server = buildCocosToolServer(makeCtx({ sceneMethod }));
+    const editorMsg = vi.fn().mockImplementation((module: string, message: string, ...args: unknown[]) => {
+      if (module === 'scene' && message === 'create-node') {
+        const params = args[0] as Record<string, unknown>;
+        if (!params?.parent) return Promise.resolve({ uuid: 'new-canvas' });
+        return Promise.resolve({ uuid: 'new-camera' });
+      }
+      return Promise.resolve({});
+    });
+    const server = buildCocosToolServer(makeCtx({ sceneMethod, editorMsg }));
 
     const result = await server.callTool('scene_operation', { action: 'ensure_2d_canvas', confirmCreateCanvas: true });
     const data = parse(result);

@@ -271,8 +271,7 @@ describe('LocalToolServer — 调用日志', () => {
     logSpy.mockRestore();
   });
 
-  it('业务错误（isError）输出 warn 日志', async () => {
-    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+  it('业务错误（isError）输出 log 日志（含 ✗）', async () => {
     const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
     const server = new LocalToolServer();
     server.tool('fail_biz', 'business error', {}, async () => ({
@@ -282,23 +281,20 @@ describe('LocalToolServer — 调用日志', () => {
 
     await server.callTool('fail_biz', {});
 
-    const warns = warnSpy.mock.calls.map(c => c[0]);
-    expect(warns.some((l: string) => l.includes('[MCP]') && l.includes('✗') && l.includes('fail_biz') && l.includes('节点不存在'))).toBe(true);
-    warnSpy.mockRestore();
+    const logs = logSpy.mock.calls.map(c => c[0]);
+    expect(logs.some((l: string) => l.includes('[MCP]') && l.includes('✗') && l.includes('fail_biz') && l.includes('节点不存在'))).toBe(true);
     logSpy.mockRestore();
   });
 
-  it('异常抛出输出 error 日志', async () => {
-    const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+  it('异常抛出输出 log 日志（含 ✗✗ EXCEPTION）', async () => {
     const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
     const server = new LocalToolServer();
     server.tool('fail_throw', 'throws', {}, async () => { throw new Error('boom'); });
 
     await server.callTool('fail_throw', {});
 
-    const errors = errorSpy.mock.calls.map(c => c[0]);
-    expect(errors.some((l: string) => l.includes('[MCP]') && l.includes('✗✗') && l.includes('EXCEPTION') && l.includes('boom'))).toBe(true);
-    errorSpy.mockRestore();
+    const logs = logSpy.mock.calls.map(c => c[0]);
+    expect(logs.some((l: string) => l.includes('[MCP]') && l.includes('✗✗') && l.includes('EXCEPTION') && l.includes('boom'))).toBe(true);
     logSpy.mockRestore();
   });
 

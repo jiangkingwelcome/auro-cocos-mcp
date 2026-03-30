@@ -111,10 +111,17 @@ describe('bridge-settings', () => {
       expect(result.maxBodySizeBytes).toBe(52_428_800);
     });
 
-    it('toggles boolean fields', () => {
+    it('loopbackOnly 只能设为 true（不能通过 API 设为 false）', () => {
+      // loopbackOnly=false 被安全策略拦截，值保持不变
       const result = applySettingsUpdate(DEFAULT_SETTINGS, { loopbackOnly: false, autoRollback: false });
-      expect(result.loopbackOnly).toBe(false);
+      expect(result.loopbackOnly).toBe(true);
       expect(result.autoRollback).toBe(false);
+    });
+
+    it('loopbackOnly 可以设为 true（幂等）', () => {
+      const base = { ...DEFAULT_SETTINGS, loopbackOnly: true };
+      const result = applySettingsUpdate(base, { loopbackOnly: true });
+      expect(result.loopbackOnly).toBe(true);
     });
 
     it('ignores non-matching types', () => {

@@ -4,10 +4,12 @@ import { buildCocosToolServer, type BridgeToolContext } from '../../src/mcp/tool
 import type { ToolCallResult } from '../../src/mcp/local-tool-server';
 
 function makeCtx(overrides: Partial<BridgeToolContext> = {}): BridgeToolContext {
+  const sceneMethod = overrides.sceneMethod ?? vi.fn().mockResolvedValue({ success: true });
   return {
     bridgeGet: vi.fn().mockResolvedValue({}),
     bridgePost: vi.fn().mockResolvedValue({ success: true }),
-    sceneMethod: vi.fn().mockResolvedValue({ success: true }),
+    sceneMethod,
+    sceneOp: overrides.sceneOp ?? (async (params: Record<string, unknown>) => sceneMethod('dispatchOperation', [params])),
     editorMsg: vi.fn().mockResolvedValue({}),
     text: (data: unknown, isError?: boolean): ToolCallResult => ({
       content: [{ type: 'text', text: JSON.stringify(data) }],
@@ -25,11 +27,20 @@ function parse(result: ToolCallResult): unknown {
 // create_prefab_atomic
 // ─────────────────────────────────────────────────────────────────────────────
 describe('create_prefab_atomic — 正常流程', () => {
+  // 实现通过 editorMsg('scene', 'create-node') 创建节点，sceneMethod 仅用于 tree query 和 setNodePosition 等
+  function makeCreateNodeEditorMsg(nodeUuid = 'temp-node-uuid', childUuid = 'child-uuid') {
+    return vi.fn().mockImplementation((module: string, message: string, ...args: unknown[]) => {
+      if (module === 'scene' && message === 'create-node') {
+        const params = args[0] as Record<string, unknown>;
+        return Promise.resolve({ uuid: params?.parent ? childUuid : nodeUuid });
+      }
+      return Promise.resolve({});
+    });
+  }
+
   it('完整流程：创建节点 → 创建预制体 → 刷新 → 清理', async () => {
-    const sceneMethod = vi.fn()
-      .mockResolvedValueOnce({ uuid: 'temp-node-uuid' })  // createChildNode
-      .mockResolvedValueOnce({});                          // destroyNode（清理）
-    const editorMsg = vi.fn().mockResolvedValue({ prefabUuid: 'new-prefab-uuid' });
+    const sceneMethod = vi.fn().mockResolvedValue({ success: true }); // tree query 等
+    const editorMsg = makeCreateNodeEditorMsg('temp-node-uuid');
     const bridgePost = vi.fn().mockResolvedValue({ success: true });
     const server = buildCocosToolServer(makeCtx({ sceneMethod, editorMsg, bridgePost }));
 
@@ -48,10 +59,8 @@ describe('create_prefab_atomic — 正常流程', () => {
   });
 
   it('路径透传：大写 Prefabs 原样保留（CASE_NORMALIZE_MAP 已清空）', async () => {
-    const sceneMethod = vi.fn()
-      .mockResolvedValueOnce({ uuid: 'temp-uuid' })
-      .mockResolvedValueOnce({});
-    const editorMsg = vi.fn().mockResolvedValue({});
+    const sceneMethod = vi.fn().mockResolvedValue({ success: true });
+    const editorMsg = makeCreateNodeEditorMsg('temp-uuid');
     const server = buildCocosToolServer(makeCtx({ sceneMethod, editorMsg }));
 
     const result = await server.callTool('create_prefab_atomic', {
@@ -64,9 +73,8 @@ describe('create_prefab_atomic — 正常流程', () => {
   });
 
   it('cleanupSourceNode=false 不清理临时节点', async () => {
-    const sceneMethod = vi.fn()
-      .mockResolvedValueOnce({ uuid: 'temp-uuid' });
-    const editorMsg = vi.fn().mockResolvedValue({});
+    const sceneMethod = vi.fn().mockResolvedValue({ success: true }); // 只调用一次：tree query
+    const editorMsg = makeCreateNodeEditorMsg('temp-uuid');
     const server = buildCocosToolServer(makeCtx({ sceneMethod, editorMsg }));
 
     const result = await server.callTool('create_prefab_atomic', {
@@ -78,16 +86,13 @@ describe('create_prefab_atomic — 正常流程', () => {
     expect(data.success).toBe(true);
     // rootNodeUuid 应该是实际 uuid，不是 "(已清理)"
     expect(data.rootNodeUuid).toBe('temp-uuid');
-    // destroyNode 不应被调用（只调用了 createChildNode）
+    // sceneMethod 只调用一次（tree query），不含 destroyNode
     expect(sceneMethod).toHaveBeenCalledTimes(1);
   });
 
   it('带组件：添加 Sprite 组件', async () => {
-    const sceneMethod = vi.fn()
-      .mockResolvedValueOnce({ uuid: 'temp-uuid' }) // createChildNode
-      .mockResolvedValueOnce({ success: true })       // addComponent
-      .mockResolvedValueOnce({});                     // destroyNode
-    const editorMsg = vi.fn().mockResolvedValue({});
+    const sceneMethod = vi.fn().mockResolvedValue({ success: true }); // tree query + addComponent
+    const editorMsg = makeCreateNodeEditorMsg('temp-uuid');
     const server = buildCocosToolServer(makeCtx({ sceneMethod, editorMsg }));
 
     const result = await server.callTool('create_prefab_atomic', {
@@ -101,11 +106,8 @@ describe('create_prefab_atomic — 正常流程', () => {
   });
 
   it('带子节点：创建 Viewport 子节点', async () => {
-    const sceneMethod = vi.fn()
-      .mockResolvedValueOnce({ uuid: 'root-uuid' })     // createChildNode (root)
-      .mockResolvedValueOnce({ uuid: 'child-uuid' })    // createChildNode (child)
-      .mockResolvedValueOnce({});                        // destroyNode
-    const editorMsg = vi.fn().mockResolvedValue({});
+    const sceneMethod = vi.fn().mockResolvedValue({ success: true });
+    const editorMsg = makeCreateNodeEditorMsg('root-uuid', 'child-uuid');
     const server = buildCocosToolServer(makeCtx({ sceneMethod, editorMsg }));
 
     const result = await server.callTool('create_prefab_atomic', {
@@ -119,11 +121,8 @@ describe('create_prefab_atomic — 正常流程', () => {
   });
 
   it('带 position 设置', async () => {
-    const sceneMethod = vi.fn()
-      .mockResolvedValueOnce({ uuid: 'temp-uuid' }) // createChildNode
-      .mockResolvedValueOnce({ success: true })       // setNodePosition
-      .mockResolvedValueOnce({});                     // destroyNode
-    const editorMsg = vi.fn().mockResolvedValue({});
+    const sceneMethod = vi.fn().mockResolvedValue({ success: true }); // tree query + setNodePosition
+    const editorMsg = makeCreateNodeEditorMsg('temp-uuid');
     const server = buildCocosToolServer(makeCtx({ sceneMethod, editorMsg }));
 
     const result = await server.callTool('create_prefab_atomic', {
@@ -154,15 +153,19 @@ describe('create_prefab_atomic — 失败与回滚', () => {
   });
 
   it('editorMsg create-prefab 失败时自动回滚删除临时节点', async () => {
-    const sceneMethod = vi.fn()
-      .mockResolvedValueOnce({ uuid: 'temp-uuid' }) // createChildNode 成功
-      .mockResolvedValueOnce({});                    // destroyNode（回滚备选）
-    // Mock 链：
-    // 1. query-asset-info (dir check) → { exists: true }（目录已存在，跳过 create-asset）
-    // 2. create-prefab → reject
-    // 3. remove-node (rollback) → resolve
+    const sceneMethod = vi.fn().mockResolvedValue({ success: true }); // tree query 等
+    // Mock 链（与实现调用顺序一致）：
+    // 1. asset-db query-asset-info → dir exists
+    // 2. scene begin-recording → {}
+    // 3. scene create-node → { uuid: 'temp-uuid' }
+    // 4. scene end-recording → {}
+    // 5. scene create-prefab → reject
+    // 6. scene remove-node (rollback) → resolve
     const editorMsg = vi.fn()
       .mockResolvedValueOnce({ type: 'directory' })        // query-asset-info → dir exists
+      .mockResolvedValueOnce({})                            // begin-recording
+      .mockResolvedValueOnce({ uuid: 'temp-uuid' })        // create-node → 获得 tempNodeUuid
+      .mockResolvedValueOnce({})                            // end-recording
       .mockRejectedValueOnce(new Error('创建预制体失败'))  // create-prefab 失败
       .mockResolvedValue({});                               // remove-node（回滚）
     const server = buildCocosToolServer(makeCtx({ sceneMethod, editorMsg }));
@@ -181,9 +184,16 @@ describe('create_prefab_atomic — 失败与回滚', () => {
 
   it('回滚本身失败时，rollback 记录失败信息', async () => {
     const sceneMethod = vi.fn()
-      .mockResolvedValueOnce({ uuid: 'temp-uuid' })  // createChildNode 成功
-      .mockRejectedValueOnce(new Error('无法删除节点')); // destroyNode 失败
-    const editorMsg = vi.fn().mockRejectedValue(new Error('预制体创建失败'));
+      .mockResolvedValueOnce({ success: true })              // tree query
+      .mockRejectedValueOnce(new Error('无法删除节点'));     // destroyNode 备用回滚也失败
+    // Mock 链：create-node 成功 → create-prefab 失败 → remove-node 回滚失败 → destroyNode 备用也失败
+    const editorMsg = vi.fn()
+      .mockResolvedValueOnce({ type: 'directory' })          // query-asset-info
+      .mockResolvedValueOnce({})                              // begin-recording
+      .mockResolvedValueOnce({ uuid: 'temp-uuid' })          // create-node → tempNodeUuid
+      .mockResolvedValueOnce({})                              // end-recording
+      .mockRejectedValueOnce(new Error('创建预制体失败'))    // create-prefab 失败
+      .mockRejectedValue(new Error('无法删除节点'));          // remove-node 回滚失败
     const server = buildCocosToolServer(makeCtx({ sceneMethod, editorMsg }));
 
     const result = await server.callTool('create_prefab_atomic', {

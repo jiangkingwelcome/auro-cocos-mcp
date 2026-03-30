@@ -31,11 +31,13 @@ export function registerIpcBridgeRoutes(post: RouteRegistrar, extensionName: str
     if (!SCENE_SCRIPT_WHITELIST.has(payload.method)) {
       return { error: `方法 "${payload.method}" 不在白名单中。允许: ${[...SCENE_SCRIPT_WHITELIST].join(', ')}` };
     }
+    const args = Array.isArray(payload.args) ? payload.args : [];
+    if (args.length > 50) return { error: 'args 参数最多允许 50 个元素' };
     try {
       return await ipc('scene', 'execute-scene-script', {
         name: extensionName,
         method: payload.method,
-        args: payload.args || [],
+        args,
       });
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : String(err);

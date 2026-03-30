@@ -7,10 +7,12 @@ import type { ToolCallResult } from '../../src/mcp/local-tool-server';
 // ─────────────────────────────────────────────────────────────────────────────
 
 function makeCtx(overrides: Partial<BridgeToolContext> = {}): BridgeToolContext {
+    const sceneMethod = overrides.sceneMethod ?? vi.fn().mockResolvedValue({});
     return {
         bridgeGet: vi.fn().mockResolvedValue({}),
         bridgePost: vi.fn().mockResolvedValue({}),
-        sceneMethod: vi.fn().mockResolvedValue({}),
+        sceneMethod,
+        sceneOp: overrides.sceneOp ?? (async (params: Record<string, unknown>) => sceneMethod('dispatchOperation', [params])),
         editorMsg: vi.fn().mockResolvedValue({}),
         text(data: unknown, isError?: boolean): ToolCallResult {
             return { content: [{ type: 'text', text: JSON.stringify(data) }], isError: !!isError };

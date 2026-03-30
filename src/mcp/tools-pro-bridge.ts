@@ -221,6 +221,6 @@ function getLicenseFilePath(): string {
 }
 
 function maskKey(key: string): string {
-  if (!key || key.length < 10) return '';
-  return key.substring(0, 10) + '...';
+  if (!key) return '';
+  return '****';
 }

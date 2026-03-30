@@ -1,4 +1,6 @@
 import fs from 'fs';
+import os from 'os';
+import path from 'path';
 import { ErrorCategory, logError, logIgnored } from './error-utils';
 
 export interface BridgeSettings {
@@ -63,10 +65,13 @@ let settingsWriteQueue: Promise<void> = Promise.resolve();
 
 export function saveSettingsAsync(settingsFile: string, settings: BridgeSettings): Promise<void> {
   settingsWriteQueue = settingsWriteQueue.then(async () => {
+    const tmpFile = path.join(os.tmpdir(), `aura-settings-${Date.now()}.tmp`);
     try {
-      await fs.promises.writeFile(settingsFile, JSON.stringify(settings, null, 2), 'utf-8');
+      await fs.promises.writeFile(tmpFile, JSON.stringify(settings, null, 2), 'utf-8');
+      await fs.promises.rename(tmpFile, settingsFile);
     } catch (e) {
       logError(ErrorCategory.CONFIG, '保存设置文件失败', e);
+      try { await fs.promises.unlink(tmpFile); } catch { /* ignore cleanup error */ }
     }
   });
   return settingsWriteQueue;
@@ -77,8 +82,8 @@ export function applySettingsUpdate(currentSettings: BridgeSettings, payload: Pa
   if (typeof payload.rateLimitPerMinute === 'number') {
     next.rateLimitPerMinute = Math.max(10, Math.min(10000, payload.rateLimitPerMinute));
   }
-  if (typeof payload.loopbackOnly === 'boolean') {
-    next.loopbackOnly = payload.loopbackOnly;
+  if (payload.loopbackOnly === true) {
+    next.loopbackOnly = true;
   }
   if (typeof payload.maxBodySizeBytes === 'number') {
     next.maxBodySizeBytes = Math.max(65536, Math.min(52_428_800, payload.maxBodySizeBytes));

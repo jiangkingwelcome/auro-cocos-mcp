@@ -820,11 +820,11 @@ export function getServiceInfo() {
   }
 }
 
-export function configureIDE(...args: unknown[]) {
+export async function configureIDE(...args: unknown[]) {
   const targetIDE = typeof args[0] === 'string' ? args[0] : 'cursor';
 
   try {
-    const result = configureIdeService(targetIDE, activePort, !!server);
+    const result = await configureIdeService(targetIDE, activePort, !!server);
     if (result.success) {
       heavyStatusCache.updatedAt = 0;
       refreshHeavyStatusInBackground(true);
@@ -837,11 +837,11 @@ export function configureIDE(...args: unknown[]) {
   }
 }
 
-export function removeIDE(...args: unknown[]) {
+export async function removeIDE(...args: unknown[]) {
   const targetIDE = typeof args[0] === 'string' ? args[0] : '';
   if (!targetIDE) return { success: false, message: '缺少 IDE 参数' };
   try {
-    const result = removeIdeService(targetIDE);
+    const result = await removeIdeService(targetIDE);
     if (result.success) {
       heavyStatusCache.updatedAt = 0;
       refreshHeavyStatusInBackground(true);
