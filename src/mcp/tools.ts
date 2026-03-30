@@ -36,7 +36,11 @@ export type { BridgeToolContext };
  */
 export function buildCocosToolServer(ctx: BridgeToolContext): LocalToolServer {
   const server = new LocalToolServer();
-  const { bridgeGet, text } = ctx;
+  const normalizedCtx: BridgeToolContext = {
+    ...ctx,
+    sceneOp: ctx.sceneOp ?? ((params: Record<string, unknown>) => ctx.sceneMethod('dispatchOperation', [params])),
+  };
+  const { bridgeGet, text } = normalizedCtx;
 
   // bridge_status is always available (registered by either path)
   server.tool('bridge_status', `Check the Cocos Creator MCP bridge connection status, editor version, capabilities, and environment info.
@@ -62,7 +66,7 @@ capabilities.aiRulesVersion: current AI Rules version for cache invalidation.`, 
 
   // ── Try Pro Edition (Rust native module) ──
   // If loaded, Rust provides ALL tools — JS tools are skipped entirely.
-  const proLoaded = tryRegisterProTools(server, ctx);
+  const proLoaded = tryRegisterProTools(server, normalizedCtx);
 
   if (proLoaded) {
     console.log('[MCP] Pro Edition active — all tools provided by native module');
@@ -71,14 +75,14 @@ capabilities.aiRulesVersion: current AI Rules version for cache invalidation.`, 
 
   // ── Community Edition (JS, open source, frozen) ──
   console.log('[MCP] Community Edition — JS tools registered');
-  registerSceneTools(server, ctx);
-  registerAssetTools(server, ctx);
-  registerEditorTools(server, ctx);
-  registerMiscTools(server, ctx);
-  registerAtomicTools(server, ctx);
-  registerScriptTools(server, ctx);
-  registerAnimationTools(server, ctx);
-  registerPhysicsTools(server, ctx);
+  registerSceneTools(server, normalizedCtx);
+  registerAssetTools(server, normalizedCtx);
+  registerEditorTools(server, normalizedCtx);
+  registerMiscTools(server, normalizedCtx);
+  registerAtomicTools(server, normalizedCtx);
+  registerScriptTools(server, normalizedCtx);
+  registerAnimationTools(server, normalizedCtx);
+  registerPhysicsTools(server, normalizedCtx);
 
   return server;
 }

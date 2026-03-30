@@ -77,7 +77,7 @@ describe('scene recording transaction wiring', () => {
     expect(editorMsg).toHaveBeenCalledWith('scene', 'end-recording', 'record-root');
   });
 
-  it('ensure_2d_canvas uses scene root as recording target in fallback path', async () => {
+  it('ensure_2d_canvas fallback path still wraps creation in a recording transaction', async () => {
     const sceneMethod = vi.fn().mockImplementation((method: string, args: unknown[]) => {
       const params = Array.isArray(args) ? args[0] as Record<string, unknown> : {};
       if (method === 'dispatchOperation' && params.action === 'ensure_2d_canvas') {
@@ -85,9 +85,6 @@ describe('scene recording transaction wiring', () => {
       }
       if (method === 'dispatchQuery' && params.action === 'get_canvas_info') {
         return Promise.resolve({ canvases: [] });
-      }
-      if (method === 'dispatchQuery' && params.action === 'tree') {
-        return Promise.resolve({ uuid: 'scene-root' });
       }
       return Promise.resolve({ success: true });
     });
@@ -111,7 +108,7 @@ describe('scene recording transaction wiring', () => {
     const data = parse(result);
     expect(data.created).toBe(true);
     expect(data.canvasUuid).toBe('canvas-uuid');
-    expect(editorMsg).toHaveBeenCalledWith('scene', 'begin-recording', ['scene-root'], null);
+    expect(editorMsg).toHaveBeenCalledWith('scene', 'begin-recording', [], null);
     expect(editorMsg).toHaveBeenCalledWith('scene', 'end-recording', 'record-canvas');
   });
 

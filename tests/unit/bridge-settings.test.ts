@@ -2,7 +2,15 @@ import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import fs from 'fs';
 import path from 'path';
 import os from 'os';
-import { loadSettings, saveSettings, applySettingsUpdate, DEFAULT_SETTINGS, type BridgeSettings } from '../../src/bridge-settings';
+import {
+  loadSettings,
+  loadSettingsAsync,
+  saveSettings,
+  saveSettingsAsync,
+  applySettingsUpdate,
+  DEFAULT_SETTINGS,
+  type BridgeSettings,
+} from '../../src/bridge-settings';
 
 describe('bridge-settings', () => {
   let tmpDir: string;
@@ -83,6 +91,37 @@ describe('bridge-settings', () => {
     });
   });
 
+  describe('saveSettingsAsync', () => {
+    it('writes settings to file atomically', async () => {
+      const custom: BridgeSettings = {
+        rateLimitPerMinute: 321,
+        loopbackOnly: true,
+        maxBodySizeBytes: 654_321,
+        autoRollback: false,
+      };
+
+      await saveSettingsAsync(settingsFile, custom);
+
+      const raw = JSON.parse(fs.readFileSync(settingsFile, 'utf-8'));
+      expect(raw).toEqual(custom);
+      const tempFiles = fs.readdirSync(tmpDir).filter((name) => name.endsWith('.tmp'));
+      expect(tempFiles).toEqual([]);
+    });
+
+    it('loadSettingsAsync reads the saved settings', async () => {
+      const custom: BridgeSettings = {
+        rateLimitPerMinute: 456,
+        loopbackOnly: false,
+        maxBodySizeBytes: 2_222_222,
+        autoRollback: true,
+      };
+
+      await saveSettingsAsync(settingsFile, custom);
+      const loaded = await loadSettingsAsync(settingsFile);
+      expect(loaded).toEqual(custom);
+    });
+  });
+
   describe('applySettingsUpdate', () => {
     it('updates only provided fields', () => {
       const result = applySettingsUpdate(DEFAULT_SETTINGS, { rateLimitPerMinute: 500 });
@@ -111,10 +150,16 @@ describe('bridge-settings', () => {
       expect(result.maxBodySizeBytes).toBe(52_428_800);
     });
 
-    it('toggles boolean fields', () => {
+    it('does not allow API to downgrade loopbackOnly to false', () => {
       const result = applySettingsUpdate(DEFAULT_SETTINGS, { loopbackOnly: false, autoRollback: false });
-      expect(result.loopbackOnly).toBe(false);
+      expect(result.loopbackOnly).toBe(true);
       expect(result.autoRollback).toBe(false);
+    });
+
+    it('allows API to upgrade loopbackOnly back to true', () => {
+      const current = { ...DEFAULT_SETTINGS, loopbackOnly: false };
+      const result = applySettingsUpdate(current, { loopbackOnly: true });
+      expect(result.loopbackOnly).toBe(true);
     });
 
     it('ignores non-matching types', () => {

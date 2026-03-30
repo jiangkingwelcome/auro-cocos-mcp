@@ -39,7 +39,7 @@ export interface BridgeToolContext {
   sceneMethod: (method: string, args?: unknown[]) => Promise<unknown>;
   editorMsg: (module: string, message: string, ...args: unknown[]) => Promise<unknown>;
   /** 从扩展主进程包裹 begin-recording + dispatchOperation + end-recording，确保 dirty 标记正确设置 */
-  sceneOp: (params: Record<string, unknown>) => Promise<unknown>;
+  sceneOp?: (params: Record<string, unknown>) => Promise<unknown>;
   text: (data: unknown, isError?: boolean) => ToolCallResult;
   isAutoRollbackEnabled?: () => boolean;
 }
@@ -395,7 +395,6 @@ export const REQUIRED_PARAMS: Record<string, string[]> = {
   'scene_operation.restore_prefab': ['uuid'],
   'scene_operation.validate_prefab': ['prefabUrl'],
   'scene_operation.batch': ['operations'],
-  'scene_operation.create_ui_widget': ['widgetType'],
   'scene_operation.align_nodes': ['uuids', 'alignment'],
   'scene_operation.audio_setup': ['uuid'],
   'scene_operation.create_skeleton_node': ['skeletonType'],

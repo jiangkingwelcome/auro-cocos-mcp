@@ -24,10 +24,19 @@ function normalizeStructuredResult(result: unknown, fallback: Record<string, unk
   return { success: true, ...fallback, ...(result === undefined ? {} : { result }) };
 }
 
+function validateArgsLength(args: unknown[] | undefined) {
+  if (Array.isArray(args) && args.length > 50) {
+    return { error: 'args 长度不能超过 50' };
+  }
+  return null;
+}
+
 export function registerIpcBridgeRoutes(post: RouteRegistrar, extensionName: string): void {
   post('/api/scene/execute-script', async (_params, body) => {
     const payload = (body && typeof body === 'object' ? body : {}) as { method?: string; args?: unknown[] };
     if (!payload.method) return { error: '缺少 method 参数' };
+    const argsLengthError = validateArgsLength(payload.args);
+    if (argsLengthError) return argsLengthError;
     if (!SCENE_SCRIPT_WHITELIST.has(payload.method)) {
       return { error: `方法 "${payload.method}" 不在白名单中。允许: ${[...SCENE_SCRIPT_WHITELIST].join(', ')}` };
     }
@@ -46,6 +55,8 @@ export function registerIpcBridgeRoutes(post: RouteRegistrar, extensionName: str
   post('/api/message/send', async (_params, body) => {
     const payload = (body && typeof body === 'object' ? body : {}) as { module?: string; message?: string; args?: unknown[] };
     if (!payload.module || !payload.message) return { error: '缺少 module 或 message 参数' };
+    const argsLengthError = validateArgsLength(payload.args);
+    if (argsLengthError) return argsLengthError;
     if (!IPC_ALLOWED_MODULES.has(payload.module)) {
       return { error: `模块 "${payload.module}" 不在允许列表中。允许: ${[...IPC_ALLOWED_MODULES].join(', ')}` };
     }

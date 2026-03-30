@@ -407,27 +407,6 @@ describe('scene_operation — standard dispatchOperation actions', () => {
     expect(sceneMethod).toHaveBeenCalledWith('dispatchOperation', [expect.objectContaining({ action: 'set_sibling_index' })]);
   });
 
-  const simpleUuidOps = [
-    'lock_node', 'unlock_node', 'hide_node', 'unhide_node',
-  ];
-  for (const action of simpleUuidOps) {
-    it(`${action} calls dispatchOperation`, async () => {
-      const sceneMethod = vi.fn().mockResolvedValue({ success: true });
-      const server = buildCocosToolServer(makeCtx({ sceneMethod }));
-      const result = await server.callTool('scene_operation', { action, uuid: 'u1' });
-      expect(result.isError).toBeFalsy();
-      expect(sceneMethod).toHaveBeenCalledWith('dispatchOperation', [expect.objectContaining({ action, uuid: 'u1' })]);
-    });
-  }
-
-  it('set_layer calls dispatchOperation', async () => {
-    const sceneMethod = vi.fn().mockResolvedValue({ success: true });
-    const server = buildCocosToolServer(makeCtx({ sceneMethod }));
-    const result = await server.callTool('scene_operation', { action: 'set_layer', uuid: 'u1', layer: 33554432 });
-    expect(result.isError).toBeFalsy();
-    expect(sceneMethod).toHaveBeenCalledWith('dispatchOperation', [expect.objectContaining({ action: 'set_layer' })]);
-  });
-
   it('call_component_method calls editorMsg execute-component-method', async () => {
     const editorMsg = vi.fn().mockResolvedValue({});
     const server = buildCocosToolServer(makeCtx({ editorMsg }));
@@ -438,22 +417,6 @@ describe('scene_operation — standard dispatchOperation actions', () => {
     });
   });
 
-  it('clear_children blocked without confirmDangerous', async () => {
-    const server = buildCocosToolServer(makeCtx());
-    const result = await server.callTool('scene_operation', { action: 'clear_children', uuid: 'u1' });
-    expect(result.isError).toBe(true);
-  });
-
-  it('clear_children queries children then calls editorMsg remove-node for each', async () => {
-    const sceneMethod = vi.fn().mockResolvedValue({ children: [{ uuid: 'c1' }, { uuid: 'c2' }] });
-    const editorMsg = vi.fn().mockResolvedValue({});
-    const server = buildCocosToolServer(makeCtx({ sceneMethod, editorMsg }));
-    const result = await server.callTool('scene_operation', { action: 'clear_children', uuid: 'u1', confirmDangerous: true });
-    expect(result.isError).toBeFalsy();
-    expect(sceneMethod).toHaveBeenCalledWith('dispatchQuery', [{ action: 'get_children', uuid: 'u1' }]);
-    expect(editorMsg).toHaveBeenCalledWith('scene', 'remove-node', { uuid: 'c1' });
-    expect(editorMsg).toHaveBeenCalledWith('scene', 'remove-node', { uuid: 'c2' });
-  });
 });
 
 describe('scene_operation — prefab & clipboard actions (editorMsg)', () => {
@@ -463,22 +426,6 @@ describe('scene_operation — prefab & clipboard actions (editorMsg)', () => {
     const result = await server.callTool('scene_operation', { action: 'create_prefab', uuid: 'u1', savePath: 'db://assets/prefabs/Test.prefab' });
     expect(result.isError).toBeFalsy();
     expect(editorMsg).toHaveBeenCalledWith('scene', 'create-prefab', 'u1', 'db://assets/prefabs/Test.prefab');
-  });
-
-  it('clipboard_copy 透传 dispatchOperation', async () => {
-    const sceneMethod = vi.fn().mockResolvedValue({ success: true });
-    const server = buildCocosToolServer(makeCtx({ sceneMethod }));
-    const result = await server.callTool('scene_operation', { action: 'clipboard_copy', uuid: 'u1' });
-    expect(result.isError).toBeFalsy();
-    expect(sceneMethod).toHaveBeenCalledWith('dispatchOperation', [expect.objectContaining({ action: 'clipboard_copy', uuid: 'u1' })]);
-  });
-
-  it('clipboard_paste 透传 dispatchOperation', async () => {
-    const sceneMethod = vi.fn().mockResolvedValue({ success: true });
-    const server = buildCocosToolServer(makeCtx({ sceneMethod }));
-    const result = await server.callTool('scene_operation', { action: 'clipboard_paste', parentUuid: 'u1' });
-    expect(result.isError).toBeFalsy();
-    expect(sceneMethod).toHaveBeenCalledWith('dispatchOperation', [expect.objectContaining({ action: 'clipboard_paste', parentUuid: 'u1' })]);
   });
 
   it('instantiate_prefab calls editorMsg', async () => {
@@ -519,40 +466,8 @@ describe('scene_operation — prefab & clipboard actions (editorMsg)', () => {
 
 describe('scene_operation — NEW_SCENE_OPS (dispatchOperation with fallback)', () => {
   const newSceneOps: Array<{ action: string; params: Record<string, unknown> }> = [
-    { action: 'batch', params: { operations: [{ action: 'set_name', uuid: 'u', name: 'N' }] } },
-    { action: 'create_ui_widget', params: { widgetType: 'button' } },
-    { action: 'setup_particle', params: {} },
-    { action: 'align_nodes', params: { uuids: ['a', 'b'], alignment: 'left' } },
-    { action: 'audio_setup', params: { uuid: 'u1' } },
-    { action: 'setup_physics_world', params: {} },
-    { action: 'create_skeleton_node', params: { skeletonType: 'spine' } },
-    { action: 'generate_tilemap', params: {} },
-    { action: 'create_primitive', params: { type: 'box' } },
-    { action: 'set_camera_look_at', params: { uuid: 'u1', targetX: 0, targetY: 0, targetZ: 0 } },
-    { action: 'set_camera_property', params: { uuid: 'u1' } },
-    { action: 'create_camera', params: {} },
-    { action: 'set_material_property', params: { uuid: 'u1', uniforms: { mainColor: { r: 255, g: 0, b: 0, a: 255 } } } },
-    { action: 'assign_builtin_material', params: { uuid: 'u1' } },
-    { action: 'bind_event', params: { uuid: 'u1', eventType: 'click', component: 'MyScript', handler: 'onClick' } },
-    { action: 'unbind_event', params: { uuid: 'u1', eventType: 'click' } },
-    { action: 'list_events', params: { uuid: 'u1' } },
-    // reset_transform and reset_node_properties use editorMsg IPC — tested separately below
     { action: 'set_anchor_point', params: { uuid: 'u1' } },
     { action: 'set_content_size', params: { uuid: 'u1', width: 100, height: 50 } },
-    { action: 'batch_set_property', params: { uuids: ['a', 'b'], component: 'Label', property: 'string', value: 'Hi' } },
-    { action: 'group_nodes', params: { uuids: ['a', 'b'] } },
-    { action: 'create_light', params: { lightType: 'directional' } },
-    { action: 'set_light_property', params: { uuid: 'u1' } },
-    { action: 'set_scene_environment', params: { subsystem: 'ambient' } },
-    { action: 'set_material_define', params: { uuid: 'u1', defines: { USE_ALBEDO_MAP: true } } },
-    { action: 'assign_project_material', params: { uuid: 'u1', materialUrl: 'db://assets/materials/Wood.mtl' } },
-    { action: 'clone_material', params: { uuid: 'u1' } },
-    { action: 'swap_technique', params: { uuid: 'u1', technique: 1 } },
-    { action: 'sprite_grayscale', params: { uuid: 'u1' } },
-    { action: 'camera_screenshot', params: {} },
-    { action: 'attach_script', params: { uuid: 'u1', script: 'PlayerCtrl' } },
-    { action: 'set_component_properties', params: { uuid: 'u1', component: 'Label', properties: { string: 'Hi' } } },
-    { action: 'detach_script', params: { uuid: 'u1', script: 'PlayerCtrl' } },
     { action: 'ensure_2d_canvas', params: { confirmCreateCanvas: true } },
   ];
 
@@ -565,19 +480,6 @@ describe('scene_operation — NEW_SCENE_OPS (dispatchOperation with fallback)', 
       expect(sceneMethod).toHaveBeenCalledWith('dispatchOperation', [expect.objectContaining({ action })]);
     });
   }
-
-  it('batch preserves operations payload for dispatchOperation', async () => {
-    const sceneMethod = vi.fn().mockResolvedValue({ success: true });
-    const server = buildCocosToolServer(makeCtx({ sceneMethod }));
-    const operations = [{ action: 'set_name', uuid: 'u', name: 'N' }];
-
-    const result = await server.callTool('scene_operation', { action: 'batch', operations });
-
-    expect(result.isError).toBeFalsy();
-    expect(sceneMethod).toHaveBeenCalledWith('dispatchOperation', [
-      expect.objectContaining({ action: 'batch', operations }),
-    ]);
-  });
 
   it('reset_transform calls dispatchOperation（场景内通过 set-property 重置变换，非 editorMsg reset-node）', async () => {
     const sceneMethod = vi.fn().mockResolvedValue({
@@ -592,17 +494,6 @@ describe('scene_operation — NEW_SCENE_OPS (dispatchOperation with fallback)', 
     expect(sceneMethod).toHaveBeenCalledWith('dispatchOperation', [expect.objectContaining({ action: 'reset_transform', uuid: 'u1' })]);
   });
 
-  it('reset_node_properties queries components then calls editorMsg reset-component', async () => {
-    const sceneMethod = vi.fn().mockResolvedValue({ components: [{ type: 'cc.Sprite' }, { type: 'cc.Label' }] });
-    const editorMsg = vi.fn().mockResolvedValue({});
-    const server = buildCocosToolServer(makeCtx({ sceneMethod, editorMsg }));
-    const result = await server.callTool('scene_operation', { action: 'reset_node_properties', uuid: 'u1' });
-    expect(result.isError).toBeFalsy();
-    expect(sceneMethod).toHaveBeenCalledWith('dispatchQuery', [{ action: 'get_components', uuid: 'u1' }]);
-    expect(editorMsg).toHaveBeenCalledWith('scene', 'reset-component', { uuid: 'u1', component: 'cc.Sprite' });
-    expect(editorMsg).toHaveBeenCalledWith('scene', 'reset-component', { uuid: 'u1', component: 'cc.Label' });
-  });
-
   it('exception in scene_operation returns error', async () => {
     const sceneMethod = vi.fn().mockRejectedValue(new Error('scene crashed'));
     const server = buildCocosToolServer(makeCtx({ sceneMethod }));
@@ -611,6 +502,66 @@ describe('scene_operation — NEW_SCENE_OPS (dispatchOperation with fallback)', 
     const data = parse(result);
     expect(data.error).toContain('scene crashed');
   });
+});
+
+describe('scene_operation — Pro-only actions are unavailable in Community Edition', () => {
+  const proOnlyActions: Array<{ action: string; params: Record<string, unknown> }> = [
+    { action: 'lock_node', params: { uuid: 'u1' } },
+    { action: 'unlock_node', params: { uuid: 'u1' } },
+    { action: 'hide_node', params: { uuid: 'u1' } },
+    { action: 'unhide_node', params: { uuid: 'u1' } },
+    { action: 'set_layer', params: { uuid: 'u1', layer: 33554432 } },
+    { action: 'clear_children', params: { uuid: 'u1', confirmDangerous: true } },
+    { action: 'reset_node_properties', params: { uuid: 'u1' } },
+    { action: 'batch', params: { operations: [{ action: 'set_name', uuid: 'u1', name: 'N' }] } },
+    { action: 'batch_set_property', params: { uuids: ['a', 'b'], component: 'Label', property: 'string', value: 'Hi' } },
+    { action: 'group_nodes', params: { uuids: ['a', 'b'], name: 'Group' } },
+    { action: 'align_nodes', params: { uuids: ['a', 'b'], alignment: 'left' } },
+    { action: 'clipboard_copy', params: { uuid: 'u1' } },
+    { action: 'clipboard_paste', params: { parentUuid: 'u1' } },
+    { action: 'create_ui_widget', params: { widgetType: 'button', text: 'Test' } },
+    { action: 'setup_particle', params: { preset: 'fire' } },
+    { action: 'audio_setup', params: { uuid: 'u1' } },
+    { action: 'setup_physics_world', params: { gravity: { x: 0, y: -320, z: 0 } } },
+    { action: 'create_skeleton_node', params: { skeletonType: 'spine' } },
+    { action: 'generate_tilemap', params: { name: 'Level1' } },
+    { action: 'create_primitive', params: { type: 'box' } },
+    { action: 'create_camera', params: { name: 'MainCamera' } },
+    { action: 'set_camera_look_at', params: { uuid: 'u1', targetX: 0, targetY: 0, targetZ: 0 } },
+    { action: 'set_camera_property', params: { uuid: 'u1', property: 'fov', value: 45 } },
+    { action: 'camera_screenshot', params: { uuid: 'u1' } },
+    { action: 'set_material_property', params: { uuid: 'u1', uniforms: { mainColor: { r: 255, g: 0, b: 0, a: 255 } } } },
+    { action: 'assign_builtin_material', params: { uuid: 'u1', effectName: 'builtin-unlit' } },
+    { action: 'set_material_define', params: { uuid: 'u1', defines: { USE_ALBEDO_MAP: true } } },
+    { action: 'assign_project_material', params: { uuid: 'u1', materialUrl: 'db://assets/materials/Wood.mtl' } },
+    { action: 'clone_material', params: { uuid: 'u1' } },
+    { action: 'swap_technique', params: { uuid: 'u1', technique: 1 } },
+    { action: 'sprite_grayscale', params: { uuid: 'u1', enable: true } },
+    { action: 'create_light', params: { lightType: 'directional' } },
+    { action: 'set_light_property', params: { uuid: 'u1', property: 'illuminance', value: 10000 } },
+    { action: 'set_scene_environment', params: { preset: 'outdoor_day' } },
+    { action: 'bind_event', params: { uuid: 'u1', eventType: 'click', component: 'GameUI', handler: 'onClick' } },
+    { action: 'unbind_event', params: { uuid: 'u1', eventType: 'click' } },
+    { action: 'list_events', params: { uuid: 'u1' } },
+    { action: 'attach_script', params: { uuid: 'u1', script: 'PlayerCtrl' } },
+    { action: 'set_component_properties', params: { uuid: 'u1', component: 'Label', properties: { string: 'Hi' } } },
+    { action: 'detach_script', params: { uuid: 'u1', script: 'PlayerCtrl' } },
+  ];
+
+  for (const { action, params } of proOnlyActions) {
+    it(`${action} is rejected by the community schema`, async () => {
+      const sceneMethod = vi.fn().mockResolvedValue({ success: true });
+      const editorMsg = vi.fn().mockResolvedValue({ success: true });
+      const server = buildCocosToolServer(makeCtx({ sceneMethod, editorMsg }));
+
+      const result = await server.callTool('scene_operation', { action, ...params });
+      const data = parse(result);
+
+      expect(sceneMethod).not.toHaveBeenCalled();
+      expect(editorMsg).not.toHaveBeenCalled();
+      expect(data?.success).not.toBe(true);
+    });
+  }
 });
 
 // ═══════════════════════════════════════════════════════════════════════════════

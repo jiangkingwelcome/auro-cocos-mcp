@@ -5,7 +5,8 @@ import { toInputSchema, extractSelectedNodeUuid, errorMessage, beginSceneRecordi
 import { ErrorCategory, logIgnored } from '../error-utils';
 
 export function registerPhysicsAtomicTool(server: LocalToolServer, ctx: BridgeToolContext): void {
-  const { bridgeGet, bridgePost, sceneMethod, editorMsg, text, sceneOp } = ctx;
+  const { bridgeGet, bridgePost, sceneMethod, editorMsg, text } = ctx;
+  const sceneOp = ctx.sceneOp ?? ((params: Record<string, unknown>) => sceneMethod('dispatchOperation', [params]));
 
   server.tool(
     'auto_fit_physics_collider',

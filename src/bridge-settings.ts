@@ -1,4 +1,5 @@
 import fs from 'fs';
+import path from 'path';
 import { ErrorCategory, logError, logIgnored } from './error-utils';
 
 export interface BridgeSettings {
@@ -63,9 +64,21 @@ let settingsWriteQueue: Promise<void> = Promise.resolve();
 
 export function saveSettingsAsync(settingsFile: string, settings: BridgeSettings): Promise<void> {
   settingsWriteQueue = settingsWriteQueue.then(async () => {
+    let tempFile = '';
     try {
-      await fs.promises.writeFile(settingsFile, JSON.stringify(settings, null, 2), 'utf-8');
+      const dir = path.dirname(settingsFile);
+      const fileName = path.basename(settingsFile);
+      tempFile = path.join(dir, `.${fileName}.${process.pid}.${Date.now()}.tmp`);
+      await fs.promises.writeFile(tempFile, JSON.stringify(settings, null, 2), 'utf-8');
+      await fs.promises.rename(tempFile, settingsFile);
     } catch (e) {
+      if (tempFile) {
+        try {
+          await fs.promises.rm(tempFile, { force: true });
+        } catch (_ignored) {
+          // best-effort temp cleanup
+        }
+      }
       logError(ErrorCategory.CONFIG, '保存设置文件失败', e);
     }
   });
@@ -77,8 +90,8 @@ export function applySettingsUpdate(currentSettings: BridgeSettings, payload: Pa
   if (typeof payload.rateLimitPerMinute === 'number') {
     next.rateLimitPerMinute = Math.max(10, Math.min(10000, payload.rateLimitPerMinute));
   }
-  if (typeof payload.loopbackOnly === 'boolean') {
-    next.loopbackOnly = payload.loopbackOnly;
+  if (payload.loopbackOnly === true) {
+    next.loopbackOnly = true;
   }
   if (typeof payload.maxBodySizeBytes === 'number') {
     next.maxBodySizeBytes = Math.max(65536, Math.min(52_428_800, payload.maxBodySizeBytes));

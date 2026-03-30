@@ -253,6 +253,22 @@ describe('StandaloneMcpHost — 未知方法', () => {
   });
 });
 
+describe('StandaloneMcpHost — SSE cleanup', () => {
+  it('broadcastSse 写失败时会关闭并移除连接', () => {
+    const { host } = makeHost();
+    const end = vi.fn();
+    const write = vi.fn(() => {
+      throw new Error('socket closed');
+    });
+
+    (host as any).sseClients.set('broken-client', { write, end });
+    (host as any).broadcastSse('notifications/tools/list_changed', {});
+
+    expect(end).toHaveBeenCalledTimes(1);
+    expect((host as any).sseClients.has('broken-client')).toBe(false);
+  });
+});
+
 // ─────────────────────────────────────────────────────────────────────────────
 // 9. 非法 Payload
 // ─────────────────────────────────────────────────────────────────────────────

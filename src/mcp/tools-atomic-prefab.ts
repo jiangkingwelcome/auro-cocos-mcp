@@ -1,11 +1,35 @@
 import { z } from 'zod';
 import type { LocalToolServer } from './local-tool-server';
 import type { BridgeToolContext } from './tools-shared';
-import { toInputSchema, normalizeDbUrl, sanitizeDbUrl, ensureAssetDirectory, errorMessage, beginSceneRecording, endSceneRecording } from './tools-shared';
+import { toInputSchema, normalizeDbUrl, sanitizeDbUrl, ensureAssetDirectory, errorMessage } from './tools-shared';
 import { ErrorCategory, logIgnored } from '../error-utils';
 
 export function registerPrefabAtomicTool(server: LocalToolServer, ctx: BridgeToolContext): void {
   const { bridgePost, sceneMethod, editorMsg, text } = ctx;
+  const extractUuid = (raw: unknown): string => {
+    if (typeof raw === 'string') return raw;
+    if (!raw || typeof raw !== 'object') return '';
+    const obj = raw as Record<string, unknown>;
+    return String(obj.uuid ?? obj._id ?? '');
+  };
+  const createNode = async (name: string, parentUuid?: string): Promise<string> => {
+    try {
+      const legacyResult = await sceneMethod('createChildNode', [parentUuid ?? '', name]);
+      const legacyUuid = extractUuid(legacyResult);
+      if (legacyUuid) return legacyUuid;
+    } catch (e) {
+      logIgnored(ErrorCategory.ENGINE_API, `createChildNode 场景脚本失败，回退到 Editor IPC: ${name}`, e);
+    }
+
+    try {
+      const rawNode = await editorMsg('scene', 'create-node', parentUuid ? { parent: parentUuid, name } : { name });
+      const ipcUuid = extractUuid(rawNode);
+      if (ipcUuid) return ipcUuid;
+    } catch (e) {
+      logIgnored(ErrorCategory.EDITOR_IPC, `create-node IPC 失败，回退到场景脚本: ${name}`, e);
+    }
+    throw new Error(`创建节点 ${name} 失败（未返回 UUID）`);
+  };
 
   server.tool(
     'create_prefab_atomic',
@@ -92,69 +116,55 @@ Auto-rollback: If prefab creation fails, the temp node is automatically destroye
         await ensureAssetDirectory(editorMsg, prefabPath);
 
         const nodeName = p.nodeName || prefabPath.split('/').pop()?.replace('.prefab', '') || 'NewPrefab';
-        const sceneTree = await sceneMethod('dispatchQuery', [{ action: 'tree', includeInternal: true }]) as Record<string, unknown>;
-        const sceneRootUuid = String(sceneTree?.uuid ?? sceneTree?._id ?? '');
-        // 从扩展主进程发 begin-recording，确保节点创建被标记为 dirty
-        const recordId = await beginSceneRecording(editorMsg, sceneRootUuid ? [sceneRootUuid] : []);
-        try {
-          stages.push('create_root_node');
-          // 直接从扩展主进程调用 create-node（不走 execute-scene-script），以确保正确触发 dirty 标记
-          const rawNode = await editorMsg('scene', 'create-node', { name: String(nodeName) });
-          const rawNodeObj = rawNode as Record<string, unknown>;
-          const rootUuid = String(rawNodeObj?.uuid ?? rawNodeObj?._id ?? (typeof rawNode === 'string' ? rawNode : ''));
-          if (!rootUuid) {
-            return text({ success: false, stage: 'create_root_node', error: '创建节点失败（IPC 未返回 UUID）' }, true);
-          }
-          tempNodeUuid = rootUuid;
+        stages.push('create_root_node');
+        const rootUuid = await createNode(String(nodeName));
+        if (!rootUuid) {
+          return text({ success: false, stage: 'create_root_node', error: '创建节点失败（未返回 UUID）' }, true);
+        }
+        tempNodeUuid = rootUuid;
 
-          if (p.position) {
-            stages.push('set_position');
-            const pos = p.position as { x?: number; y?: number; z?: number };
-            await sceneMethod('setNodePosition', [tempNodeUuid, pos.x || 0, pos.y || 0, pos.z || 0]);
-          }
+        if (p.position) {
+          stages.push('set_position');
+          const pos = p.position as { x?: number; y?: number; z?: number };
+          await sceneMethod('setNodePosition', [tempNodeUuid, pos.x || 0, pos.y || 0, pos.z || 0]);
+        }
 
-          if (Array.isArray(p.components)) {
-            for (const comp of p.components as Array<{ type: string; properties?: Record<string, unknown> }>) {
-              stages.push(`add_component:${comp.type}`);
-              const compNameFull = comp.type.startsWith('cc.') || comp.type.includes('.') ? comp.type : `cc.${comp.type}`;
-              await editorMsg('scene', 'create-component', { uuid: tempNodeUuid, component: compNameFull });
-              if (comp.properties && typeof comp.properties === 'object') {
-                for (const [propKey, propVal] of Object.entries(comp.properties)) {
-                  stages.push(`set_property:${comp.type}.${propKey}`);
-                  await sceneMethod('setComponentProperty', [tempNodeUuid, comp.type, propKey, propVal]);
-                }
+        if (Array.isArray(p.components)) {
+          for (const comp of p.components as Array<{ type: string; properties?: Record<string, unknown> }>) {
+            stages.push(`add_component:${comp.type}`);
+            const compNameFull = comp.type.startsWith('cc.') || comp.type.includes('.') ? comp.type : `cc.${comp.type}`;
+            await editorMsg('scene', 'create-component', { uuid: tempNodeUuid, component: compNameFull });
+            if (comp.properties && typeof comp.properties === 'object') {
+              for (const [propKey, propVal] of Object.entries(comp.properties)) {
+                stages.push(`set_property:${comp.type}.${propKey}`);
+                await sceneMethod('setComponentProperty', [tempNodeUuid, comp.type, propKey, propVal]);
               }
             }
           }
+        }
 
-          if (Array.isArray(p.children)) {
-            for (const child of p.children as Array<{ name: string; components?: Array<{ type: string; properties?: Record<string, unknown> }> }>) {
-              stages.push(`create_child:${child.name}`);
-              // 直接从扩展主进程调用 create-node 创建子节点，确保触发 dirty 标记
-              const childRaw = await editorMsg('scene', 'create-node', { parent: tempNodeUuid, name: child.name });
-              const childRawObj = childRaw as Record<string, unknown>;
-              const childUuid = String(childRawObj?.uuid ?? childRawObj?._id ?? (typeof childRaw === 'string' ? childRaw : ''));
-              if (!childUuid) {
-                throw new Error(`创建子节点 ${child.name} 失败（IPC 未返回 UUID）`);
-              }
-              childUuids.push(childUuid);
+        if (Array.isArray(p.children)) {
+          for (const child of p.children as Array<{ name: string; components?: Array<{ type: string; properties?: Record<string, unknown> }> }>) {
+            stages.push(`create_child:${child.name}`);
+            const childUuid = await createNode(child.name, tempNodeUuid);
+            if (!childUuid) {
+              throw new Error(`创建子节点 ${child.name} 失败（未返回 UUID）`);
+            }
+            childUuids.push(childUuid);
 
-              if (Array.isArray(child.components)) {
-                for (const comp of child.components) {
-                  stages.push(`child_component:${child.name}.${comp.type}`);
-                  const childCompFull = comp.type.startsWith('cc.') || comp.type.includes('.') ? comp.type : `cc.${comp.type}`;
-                  await editorMsg('scene', 'create-component', { uuid: childUuid, component: childCompFull });
-                  if (comp.properties && typeof comp.properties === 'object') {
-                    for (const [propKey, propVal] of Object.entries(comp.properties)) {
-                      await sceneMethod('setComponentProperty', [childUuid, comp.type, propKey, propVal]);
-                    }
+            if (Array.isArray(child.components)) {
+              for (const comp of child.components) {
+                stages.push(`child_component:${child.name}.${comp.type}`);
+                const childCompFull = comp.type.startsWith('cc.') || comp.type.includes('.') ? comp.type : `cc.${comp.type}`;
+                await editorMsg('scene', 'create-component', { uuid: childUuid, component: childCompFull });
+                if (comp.properties && typeof comp.properties === 'object') {
+                  for (const [propKey, propVal] of Object.entries(comp.properties)) {
+                    await sceneMethod('setComponentProperty', [childUuid, comp.type, propKey, propVal]);
                   }
                 }
               }
             }
           }
-        } finally {
-          await endSceneRecording(editorMsg, recordId);
         }
         stages.push('create_prefab');
         const prefabResult = await editorMsg('scene', 'create-prefab', tempNodeUuid, prefabPath);
@@ -206,6 +216,7 @@ Auto-rollback: If prefab creation fails, the temp node is automatically destroye
 
         return text({
           success: false, prefabPath,
+          stage: stages[stages.length - 1] || 'unknown',
           failedStage: stages[stages.length - 1] || 'unknown',
           completedStages: stages.slice(0, -1),
           error: errorMessage(err), rollback: rollbackResult,

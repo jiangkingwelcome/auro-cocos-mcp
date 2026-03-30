@@ -1,7 +1,7 @@
 import fs from 'fs';
 import os from 'os';
 import path from 'path';
-import { execSync } from 'child_process';
+import { exec } from 'child_process';
 import { ErrorCategory, logIgnored } from './error-utils';
 
 export const IDE_NAMES = [
@@ -16,6 +16,27 @@ const CLI_IDES: ReadonlySet<string> = new Set(['claude-code']);
 
 const KNOWN_SERVER_KEYS = ['aura-cocos', 'aura-for-cocos', 'cocos-bridge-ai-mcp', 'cocos-mcp-bridge'] as const;
 const CANONICAL_KEY = 'aura-cocos';
+
+type ExecAsyncOptions = {
+  encoding?: BufferEncoding;
+  timeout?: number;
+  stdio?: ['pipe', 'pipe', 'pipe'];
+};
+
+function execAsync(command: string, options: ExecAsyncOptions = {}): Promise<{ stdout: string; stderr: string }> {
+  return new Promise((resolve, reject) => {
+    exec(command, options, (err, stdout, stderr) => {
+      if (err) {
+        reject(err);
+        return;
+      }
+      resolve({
+        stdout: typeof stdout === 'string' ? stdout : String(stdout ?? ''),
+        stderr: typeof stderr === 'string' ? stderr : String(stderr ?? ''),
+      });
+    });
+  });
+}
 
 function getAppDataPath(appName: string, fileName: string): string {
   return process.platform === 'win32'
@@ -77,9 +98,8 @@ function hasClaudeCodeEntry(): boolean {
     return _claudeCodeCached;
   }
   try {
-    const { exec } = require('child_process');
     exec('claude mcp list', { encoding: 'utf-8', timeout: 5000 }, (err: Error | null, stdout: string) => {
-      _claudeCodeCached = !err && typeof stdout === 'string' && (stdout.includes('aura-cocos') || stdout.includes('aura-cocos'));
+      _claudeCodeCached = !err && typeof stdout === 'string' && (stdout.includes('aura-cocos') || stdout.includes('aura-for-cocos'));
       _claudeCodeCacheTs = Date.now();
     });
   } catch {
@@ -255,14 +275,14 @@ function writeTomlConfig(configPath: string, targetIDE: string, activePort: numb
   };
 }
 
-function configureClaudeCode(activePort: number): { success: boolean; message: string } {
+async function configureClaudeCode(activePort: number): Promise<{ success: boolean; message: string }> {
   const shimPath = getShimPath();
   try {
     try {
-      execSync('claude mcp remove --scope user aura-cocos', { encoding: 'utf-8', timeout: 10000, stdio: ['pipe', 'pipe', 'pipe'] });
+      await execAsync('claude mcp remove --scope user aura-cocos', { encoding: 'utf-8', timeout: 10000, stdio: ['pipe', 'pipe', 'pipe'] });
     } catch { /* may not exist yet */ }
 
-    execSync(
+    await execAsync(
       `claude mcp add --scope user aura-cocos -e COCOS_BRIDGE_PORT=${activePort} -- node "${shimPath}"`,
       { encoding: 'utf-8', timeout: 10000, stdio: ['pipe', 'pipe', 'pipe'] },
     );
@@ -281,12 +301,12 @@ function configureClaudeCode(activePort: number): { success: boolean; message: s
   }
 }
 
-export function removeIDE(targetIDE: string): { success: boolean; message: string } {
+export async function removeIDE(targetIDE: string): Promise<{ success: boolean; message: string }> {
   if (CLI_IDES.has(targetIDE)) {
     try {
       for (const key of KNOWN_SERVER_KEYS) {
         try {
-          execSync(`claude mcp remove --scope user ${key}`, { encoding: 'utf-8', timeout: 10000, stdio: ['pipe', 'pipe', 'pipe'] });
+          await execAsync(`claude mcp remove --scope user ${key}`, { encoding: 'utf-8', timeout: 10000, stdio: ['pipe', 'pipe', 'pipe'] });
         } catch { /* may not exist */ }
       }
       console.log('[Aura] 已通过 claude mcp remove 移除 Claude Code MCP 配置');
@@ -358,14 +378,14 @@ export function removeIDE(targetIDE: string): { success: boolean; message: strin
   }
 }
 
-export function configureIDE(targetIDE: string, activePort: number, isRunning: boolean) {
+export async function configureIDE(targetIDE: string, activePort: number, isRunning: boolean): Promise<{ success: boolean; message: string; configPath?: string }> {
   if (!isRunning || !activePort) {
     return { success: false, message: '服务未启动，请先启动 Aura 服务' };
   }
 
   let result;
   if (CLI_IDES.has(targetIDE)) {
-    result = configureClaudeCode(activePort);
+    result = await configureClaudeCode(activePort);
   } else {
     const configPath = getIdeConfigPath(targetIDE);
     if (!configPath) {

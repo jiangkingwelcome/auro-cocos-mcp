@@ -162,6 +162,7 @@ export class StandaloneMcpHost {
       try {
         res.write(msg);
       } catch {
+        try { res.end(); } catch { /* ignore */ }
         this.sseClients.delete(id);
       }
     }

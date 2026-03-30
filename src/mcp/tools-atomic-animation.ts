@@ -40,7 +40,8 @@ const trackSchema = z.object({
 });
 
 export function registerAnimationAtomicTool(server: LocalToolServer, ctx: BridgeToolContext): void {
-  const { bridgeGet, bridgePost, sceneMethod, editorMsg, text, sceneOp } = ctx;
+  const { bridgeGet, bridgePost, sceneMethod, editorMsg, text } = ctx;
+  const sceneOp = ctx.sceneOp ?? ((params: Record<string, unknown>) => sceneMethod('dispatchOperation', [params]));
 
   server.tool(
     'create_tween_animation_atomic',

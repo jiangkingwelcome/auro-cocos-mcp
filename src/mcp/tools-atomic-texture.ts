@@ -7,6 +7,7 @@ import { ErrorCategory, logIgnored } from '../error-utils';
 
 export function registerTextureAtomicTool(server: LocalToolServer, ctx: BridgeToolContext): void {
   const { bridgeGet, bridgePost, sceneMethod, editorMsg, text } = ctx;
+  const sceneOp = ctx.sceneOp ?? ((params: Record<string, unknown>) => sceneMethod('dispatchOperation', [params]));
   const getFailureReason = (result: unknown, fallback: string): string => {
     if (result && typeof result === 'object') {
       if ('error' in result && result.error) return String(result.error);
@@ -174,7 +175,7 @@ Common errors: "未选中节点"=no nodeUuid and nothing selected; sourcePath fi
 
         if (!componentExists(currentComponents, 'UITransform')) {
           stages.push('ensure_ui_transform');
-          const addUiTransformResult = await sceneMethod('dispatchOperation', [{ action: 'add_component', uuid: nodeUuid, component: 'UITransform' }]);
+          const addUiTransformResult = await sceneOp({ action: 'add_component', uuid: nodeUuid, component: 'UITransform' });
           if (isFailedResult(addUiTransformResult)) {
             return text({ success: false, error: getFailureReason(addUiTransformResult, '添加 UITransform 组件失败'), stages }, true);
           }
@@ -189,7 +190,7 @@ Common errors: "未选中节点"=no nodeUuid and nothing selected; sourcePath fi
         if (p.autoAddSprite !== false) {
           if (!spriteExists) {
             stages.push('ensure_sprite_component');
-            const addSpriteResult = await sceneMethod('dispatchOperation', [{ action: 'add_component', uuid: nodeUuid, component: 'Sprite' }]);
+            const addSpriteResult = await sceneOp({ action: 'add_component', uuid: nodeUuid, component: 'Sprite' });
             if (isFailedResult(addSpriteResult)) {
               return text({ success: false, error: getFailureReason(addSpriteResult, '添加 Sprite 组件失败'), stages }, true);
             }
@@ -221,10 +222,7 @@ Common errors: "未选中节点"=no nodeUuid and nothing selected; sourcePath fi
         }
 
         stages.push('apply_sprite_frame');
-        const setResult = await sceneMethod('dispatchOperation', [{
-          action: 'set_property', uuid: nodeUuid, component: 'Sprite',
-          property: 'spriteFrame', value: { __uuid__: spriteFrameUuid },
-        }]) as Record<string, unknown>;
+        const setResult = await sceneOp({ action: 'set_property', uuid: nodeUuid, component: 'Sprite', property: 'spriteFrame', value: { __uuid__: spriteFrameUuid } }) as Record<string, unknown>;
         if (isFailedResult(setResult)) {
           return text({ success: false, error: getFailureReason(setResult, '自动挂载 spriteFrame 失败'), stages }, true);
         }

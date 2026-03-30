@@ -105,12 +105,12 @@ describe('新增功能 — 属性重置', () => {
 // 5. 剪贴板操作 (clipboard_copy / clipboard_paste)
 // ═════════════════════════════════════════════════════════════════════════════
 describe('新增功能 — 剪贴板操作（社区版边界）', () => {
-    it('clipboard_copy / clipboard_paste 透传到 scene_operation（由引擎侧决定可用性）', async () => {
+    it('clipboard_copy / clipboard_paste 在社区版返回未开放', async () => {
         const server = buildCocosToolServer(makeCtx());
         const copyResult = await server.callTool('scene_operation', { action: 'clipboard_copy', uuid: 'node-1' });
         const pasteResult = await server.callTool('scene_operation', { action: 'clipboard_paste', parentUuid: 'parent-1' });
-        expect(copyResult.isError).toBeFalsy();
-        expect(pasteResult.isError).toBeFalsy();
+        expect(copyResult.isError).toBe(true);
+        expect(pasteResult.isError).toBe(true);
     });
 });
 

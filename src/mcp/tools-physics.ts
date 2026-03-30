@@ -4,7 +4,8 @@ import type { BridgeToolContext } from './tools-shared';
 import { toInputSchema, errorMessage, AI_RULES, beginSceneRecording, endSceneRecording, validateRequiredParams } from './tools-shared';
 
 export function registerPhysicsTools(server: LocalToolServer, ctx: BridgeToolContext): void {
-  const { sceneMethod, editorMsg, text, sceneOp } = ctx;
+  const { sceneMethod, editorMsg, text } = ctx;
+  const sceneOp = ctx.sceneOp ?? ((params: Record<string, unknown>) => sceneMethod('dispatchOperation', [params]));
 
   // 物理写操作：从主进程包裹 begin-recording + dispatchPhysicsAction + force-dirty + end-recording
   async function physicsWriteOp(action: Record<string, unknown>): Promise<Record<string, unknown>> {

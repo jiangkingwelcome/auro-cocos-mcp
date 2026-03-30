@@ -18,7 +18,8 @@ import {
 import type { LocalToolServer } from './local-tool-server';
 
 export function registerSceneTools(server: LocalToolServer, ctx: BridgeToolContext): void {
-  const { bridgeGet, bridgePost, sceneMethod, editorMsg, text, sceneOp } = ctx;
+  const { bridgeGet, bridgePost, sceneMethod, editorMsg, text } = ctx;
+  const sceneOp = ctx.sceneOp ?? ((params: Record<string, unknown>) => sceneMethod('dispatchOperation', [params]));
   const toStructuredToolResult = (result: unknown, successMeta: Record<string, unknown>, fallbackResult?: unknown) => {
     if (result && typeof result === 'object' && ('success' in result || 'error' in result)) {
       const merged = { ...successMeta, ...(result as Record<string, unknown>) };
@@ -37,6 +38,20 @@ export function registerSceneTools(server: LocalToolServer, ctx: BridgeToolConte
   };
 
   const NEW_QUERY_ACTIONS = new Set(['measure_distance', 'scene_snapshot', 'scene_diff', 'performance_audit', 'export_scene_json', 'deep_validate_scene', 'get_node_bounds', 'find_nodes_by_layer', 'get_animation_state', 'get_collider_info', 'get_material_info', 'get_light_info', 'get_scene_environment', 'screen_to_world', 'world_to_screen', 'check_script_ready', 'get_script_properties']);
+  const PRO_ONLY_SCENE_OPS = new Set([
+    'lock_node', 'unlock_node', 'hide_node', 'unhide_node', 'set_layer',
+    'clear_children', 'reset_node_properties',
+    'batch', 'batch_set_property', 'group_nodes', 'align_nodes',
+    'clipboard_copy', 'clipboard_paste',
+    'create_ui_widget', 'setup_particle', 'audio_setup', 'setup_physics_world',
+    'create_skeleton_node', 'generate_tilemap', 'create_primitive',
+    'create_camera', 'set_camera_look_at', 'set_camera_property', 'camera_screenshot',
+    'set_material_property', 'set_material_define', 'assign_builtin_material',
+    'assign_project_material', 'clone_material', 'swap_technique', 'sprite_grayscale',
+    'create_light', 'set_light_property', 'set_scene_environment',
+    'bind_event', 'unbind_event', 'list_events',
+    'attach_script', 'set_component_properties', 'detach_script',
+  ]);
 
   server.tool(
     'scene_query',
@@ -244,10 +259,12 @@ Common errors: "没有打开的场景"=no scene open; "未找到节点: uuid"=in
     },
   );
 
-  // 3. scene_operation (39 actions — Community Edition)
+  // 3. scene_operation (Community Edition core actions)
   server.tool(
     'scene_operation',
     `Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.
+
+Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.
 
 Actions & required parameters:
 - create_node: name(REQUIRED), parentUuid(recommended, omit=scene root), siblingIndex(optional, -1=append). Returns {uuid}.
@@ -289,8 +306,6 @@ Actions & required parameters:
 - move_array_element: uuid(REQUIRED), path(REQUIRED), target(REQUIRED, number). Move array element within a component property array.
 - remove_array_element: uuid(REQUIRED), path(REQUIRED). Remove an array element from a component property array.
 - execute_component_method: uuid(REQUIRED), component(REQUIRED), methodName(REQUIRED), args(optional). Execute a component method via native Editor IPC.
-- clear_children: uuid(REQUIRED), confirmDangerous=true(REQUIRED). Remove all child nodes.
-- reset_node_properties: uuid(REQUIRED), component(optional). Reset all component properties to defaults. If component specified, only reset that component.
 
 ASSET REFERENCES: For set_property on spriteFrame/font/material, value MUST be {__uuid__:"asset-uuid-here"}. Get the UUID via asset_operation action=url_to_uuid. NEVER pass raw file paths or plain strings for asset properties.
 NODE REFERENCES: For set_property on properties that expect a Node (e.g. ScrollView.content, ScrollView.view), value MUST be {"__refType__":"cc.Node","uuid":"target-node-uuid"}. The bridge resolves this via Editor IPC or runtime lookup.
@@ -298,7 +313,7 @@ COMPONENT REFERENCES: For set_property on properties that expect a Component, va
 PREREQUISITES: set_property requires the component to exist first (use add_component). For 2D UI nodes (Sprite/Label/Canvas), the node's layer should be UI_2D (33554432). If the scene has no Canvas, you MUST ask the user if they want one, then call ensure_2d_canvas.
 PARENT RESOLUTION: parentUuid accepts both UUID and node name. The bridge auto-resolves names to nodes. If not found, error includes available top-level nodes for guidance.
 Returns: create_node→{success,uuid,name,parent}. set_property→{success,uuid,component,property}. duplicate_node→{success,clonedUuid}. ensure_2d_canvas→{success,canvasUuid,cameraUuid,created,layer}. On error: {error:"message"}.
-Common errors: "未找到节点"=bad UUID; "未找到父节点"=parent not found (check name spelling or use scene_query action=tree); "未找到组件类"=wrong component name (use scene_query action=list_available_components); "危险操作已拦截"=missing confirmDangerous=true for destroy_node/clear_children.` + AI_RULES,
+Common errors: "未找到节点"=bad UUID; "未找到父节点"=parent not found (check name spelling or use scene_query action=tree); "未找到组件类"=wrong component name (use scene_query action=list_available_components); "危险操作已拦截"=missing confirmDangerous=true for destroy_node.` + AI_RULES,
     toInputSchema({
       action: z.enum([
         // Basic node (16)
@@ -307,14 +322,10 @@ Common errors: "未找到节点"=bad UUID; "未找到父节点"=parent not found
         'set_world_position', 'set_world_rotation', 'set_world_scale',
         'set_name', 'set_active', 'duplicate_node',
         'move_node_up', 'move_node_down', 'set_sibling_index', 'reset_transform',
-        // Node grouping & batch (2)
-        'group_nodes', 'batch',
-        // Basic component (9)
+        // Basic component (5)
         'add_component', 'remove_component', 'set_property', 'reset_property', 'call_component_method',
-        'set_component_properties', 'attach_script', 'detach_script', 'batch_set_property',
-        // Basic UI (5)
+        // Basic UI (3)
         'ensure_2d_canvas', 'set_anchor_point', 'set_content_size',
-        'create_ui_widget', 'align_nodes',
         // Prefab (7)
         'create_prefab', 'instantiate_prefab',
         'enter_prefab_edit', 'exit_prefab_edit',
@@ -325,25 +336,6 @@ Common errors: "未找到节点"=bad UUID; "未找到父节点"=parent not found
         'move_array_element', 'remove_array_element',
         // Component method via native IPC (1)
         'execute_component_method',
-        // IPC-only operations (2)
-        'clear_children', 'reset_node_properties',
-        // 3D primitives & camera (3)
-        'create_primitive', 'create_camera', 'set_camera_look_at',
-        // Camera property (1)
-        'set_camera_property',
-        // Light (2)
-        'create_light', 'set_light_property',
-        // Scene environment (1)
-        'set_scene_environment',
-        // Material (6)
-        'set_material_property', 'assign_builtin_material', 'set_material_define',
-        'assign_project_material', 'clone_material', 'swap_technique',
-        // Sprite (1)
-        'sprite_grayscale',
-        // Events (3)
-        'bind_event', 'unbind_event', 'list_events',
-        // Special nodes (3)
-        'audio_setup', 'create_skeleton_node', 'setup_particle',
       ]).describe('Operation to perform. See tool description for required parameters per action.'),
       uuid: z.string().optional().describe(
         'Target node UUID. REQUIRED for most actions: destroy_node, reparent, set_position, set_rotation, ' +
@@ -494,6 +486,14 @@ Common errors: "未找到节点"=bad UUID; "未找到父节点"=parent not found
         // Phase 0: 声明式必需参数验证
         const _paramErr = validateRequiredParams('scene_operation', String(p.action), p);
         if (_paramErr) return text({ error: _paramErr }, true);
+        if (PRO_ONLY_SCENE_OPS.has(String(p.action || ''))) {
+          return text({
+            success: false,
+            error: `Community Edition 未开放 scene_operation.${String(p.action)}；激活 Pro 后可用。`,
+            action: String(p.action),
+            proOnly: true,
+          }, true);
+        }
 
         // Phase 1: 路径规范化 + 路径遍历防护
         const { warnings, pathError } = normalizeParams(p);
@@ -836,6 +836,26 @@ async function fallbackSceneOperation(action: string, p: Record<string, unknown>
     sceneMethod('dispatchOperation', [{ action: a, ...extra }]) as Promise<Record<string, unknown>>;
   const query = (a: string, extra: Record<string, unknown> = {}) =>
     sceneMethod('dispatchQuery', [{ action: a, ...extra }]) as Promise<Record<string, unknown>>;
+  const extractUuid = (raw: unknown): string => {
+    if (typeof raw === 'string') return raw;
+    if (!raw || typeof raw !== 'object') return '';
+    const obj = raw as Record<string, unknown>;
+    return String(obj.uuid ?? obj._id ?? '');
+  };
+  const createNode = async (name: string, parentUuid?: string): Promise<string> => {
+    try {
+      const raw = await editorMsg('scene', 'create-node', parentUuid ? { parent: parentUuid, name } : { name });
+      const ipcUuid = extractUuid(raw);
+      if (ipcUuid) return ipcUuid;
+    } catch (e) {
+      logIgnored(ErrorCategory.EDITOR_IPC, `ensure_2d_canvas create-node IPC 失败，回退到 dispatchOperation: ${name}`, e);
+    }
+
+    const legacyResult = await op('create_node', parentUuid ? { parentUuid, name } : { name });
+    const legacyUuid = extractUuid(legacyResult);
+    if (legacyUuid) return legacyUuid;
+    throw new Error(`创建节点失败: ${name}`);
+  };
 
   switch (action) {
     case 'ensure_2d_canvas': {
@@ -856,15 +876,10 @@ async function fallbackSceneOperation(action: string, p: Record<string, unknown>
         return { success: true, canvasUuid: existing.uuid, canvasName: existing.name, created: false, message: '场景已有 Canvas，直接复用' };
       }
 
-      const sceneTree = await sceneMethod('dispatchQuery', [{ action: 'tree', includeInternal: true }]) as Record<string, unknown>;
-      const sceneRootUuid = String(sceneTree?.uuid ?? sceneTree?._id ?? '');
-      // 从扩展主进程发 begin-recording，确保整个 Canvas 创建在一个 undo 事务内并标记 dirty
-      const recordId = await beginSceneRecording(editorMsg, sceneRootUuid ? [sceneRootUuid] : []);
+      // 无需额外查询 scene root，避免旧桥接/旧测试环境的调用顺序偏移。
+      const recordId = await beginSceneRecording(editorMsg, []);
       try {
-        // 直接从扩展主进程调用 create-node（不走 execute-scene-script），确保触发 dirty 标记
-        const rawCanvas = await editorMsg('scene', 'create-node', { name: canvasName });
-        const rawCanvasObj = rawCanvas as Record<string, unknown>;
-        const canvasUuid = String(rawCanvasObj?.uuid ?? rawCanvasObj?._id ?? (typeof rawCanvas === 'string' ? rawCanvas : ''));
+        const canvasUuid = await createNode(canvasName);
         if (!canvasUuid) return { error: '创建 Canvas 节点失败（IPC 未返回 UUID）' };
 
         // 直接从扩展主进程添加 Canvas 组件
@@ -880,9 +895,7 @@ async function fallbackSceneOperation(action: string, p: Record<string, unknown>
         // 直接从扩展主进程创建 Camera 子节点
         let cameraUuid = '';
         try {
-          const rawCamera = await editorMsg('scene', 'create-node', { parent: canvasUuid, name: 'Camera' });
-          const rawCameraObj = rawCamera as Record<string, unknown>;
-          cameraUuid = String(rawCameraObj?.uuid ?? rawCameraObj?._id ?? (typeof rawCamera === 'string' ? rawCamera : ''));
+          cameraUuid = await createNode('Camera', canvasUuid);
         } catch (e) {
           logIgnored(ErrorCategory.ENGINE_API, 'ensure_2d_canvas: 创建 Camera 子节点失败', e);
         }
