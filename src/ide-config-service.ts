@@ -147,6 +147,8 @@ export function invalidateConfigStatusCache(): void {
   _configStatusCache = null;
   _configStatusCacheTs = 0;
   _configStatusAsyncPromise = null;
+  _claudeCodeCached = null;
+  _claudeCodeCacheTs = 0;
 }
 
 function getShimPath(): string {
@@ -257,11 +259,11 @@ function configureClaudeCode(activePort: number): { success: boolean; message: s
   const shimPath = getShimPath();
   try {
     try {
-      execSync('claude mcp remove aura-cocos', { encoding: 'utf-8', timeout: 10000, stdio: ['pipe', 'pipe', 'pipe'] });
+      execSync('claude mcp remove --scope user aura-cocos', { encoding: 'utf-8', timeout: 10000, stdio: ['pipe', 'pipe', 'pipe'] });
     } catch { /* may not exist yet */ }
 
     execSync(
-      `claude mcp add aura-cocos -e COCOS_BRIDGE_PORT=${activePort} -- node "${shimPath}"`,
+      `claude mcp add --scope user aura-cocos -e COCOS_BRIDGE_PORT=${activePort} -- node "${shimPath}"`,
       { encoding: 'utf-8', timeout: 10000, stdio: ['pipe', 'pipe', 'pipe'] },
     );
 
@@ -284,7 +286,7 @@ export function removeIDE(targetIDE: string): { success: boolean; message: strin
     try {
       for (const key of KNOWN_SERVER_KEYS) {
         try {
-          execSync(`claude mcp remove ${key}`, { encoding: 'utf-8', timeout: 10000, stdio: ['pipe', 'pipe', 'pipe'] });
+          execSync(`claude mcp remove --scope user ${key}`, { encoding: 'utf-8', timeout: 10000, stdio: ['pipe', 'pipe', 'pipe'] });
         } catch { /* may not exist */ }
       }
       console.log('[Aura] 已通过 claude mcp remove 移除 Claude Code MCP 配置');
