@@ -18,6 +18,10 @@ with open('test-cases.csv', 'w', encoding='utf-8-sig', newline='') as f:
         '输入参数(JSON)',
         '期望结果',
         '备注',
+        '前置条件',
+        'setupSteps(JSON)',
+        '需复测',
+        '复测原因',
         '测试状态',
         '实际结果',
         '测试人员',
@@ -27,6 +31,10 @@ with open('test-cases.csv', 'w', encoding='utf-8-sig', newline='') as f:
     # 写入数据
     for case in test_cases:
         input_json = json.dumps(case['input'], ensure_ascii=False)
+        prereq = case.get('prerequisites') or ''
+        setup = json.dumps(case.get('setupSteps') or [], ensure_ascii=False) if case.get('setupSteps') else ''
+        need_ret = '是' if case.get('needsRetest') else ''
+        rr = case.get('retestReason') or ''
 
         writer.writerow([
             case['id'],
@@ -36,6 +44,10 @@ with open('test-cases.csv', 'w', encoding='utf-8-sig', newline='') as f:
             input_json,
             case['expected'],
             case['note'],
+            prereq,
+            setup,
+            need_ret,
+            rr,
             '',  # 测试状态（待填写）
             '',  # 实际结果（待填写）
             '',  # 测试人员（待填写）

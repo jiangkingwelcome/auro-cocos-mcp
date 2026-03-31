@@ -185,7 +185,7 @@ Modify the Cocos Creator scene graph (write operations).
 | `prefabUrl` | string | — | Prefab URL for `instantiate_prefab`, `validate_prefab` |
 | `confirmDangerous` | boolean | — | Must be `true` for destructive actions |
 | `operations` | array | — | Operation array for `action=batch` |
-| `widgetType` | enum | — | UI widget type for `create_ui_widget` |
+| `widgetType` | enum | Pro | UI widget type for Pro-only `create_ui_widget` |
 | `text` | string | — | Display text for UI widgets |
 
 ### Actions — Community Edition (31)
@@ -237,7 +237,7 @@ Modify the Cocos Creator scene graph (write operations).
 | `align_nodes` | `uuids`, `alignment` | Align/distribute multiple nodes (left/right/center_h/top/bottom/center_v/distribute_h/distribute_v) |
 | `clipboard_copy` | `uuid` | Copy node to clipboard |
 | `clipboard_paste` | `parentUuid` | Paste from clipboard |
-| `create_ui_widget` | `widgetType`, `parentUuid` | Create complete UI widget (button/label/sprite/toggle/slider/progressbar/editbox) |
+| `create_ui_widget` | `widgetType`, `parentUuid` | Pro only. Create complete UI widget (button/label/sprite/toggle/slider/progressbar/editbox) |
 | `setup_particle` | `parentUuid`, `preset` | Create particle system (fire/smoke/rain/snow/sparkle/explosion) |
 | `audio_setup` | `uuid`, `volume`, `loop` | Add/configure AudioSource component |
 | `setup_physics_world` | `gravity`, `mode` | Configure 2D/3D physics world |

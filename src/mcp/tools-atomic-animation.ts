@@ -39,6 +39,85 @@ const trackSchema = z.object({
   ),
 });
 
+async function queryAnimationState(
+  sceneMethod: BridgeToolContext['sceneMethod'],
+  uuid: string,
+): Promise<Record<string, unknown>> {
+  return await sceneMethod('dispatchQuery', [{ action: 'get_animation_state', uuid }]) as Record<string, unknown>;
+}
+
+async function attachSavedClipAsset(params: {
+  nodeUuid: string;
+  assetUuid: string;
+  sceneMethod: BridgeToolContext['sceneMethod'];
+  editorMsg: BridgeToolContext['editorMsg'];
+  playOnLoad?: boolean;
+}): Promise<Record<string, unknown>> {
+  const { nodeUuid, assetUuid, sceneMethod, editorMsg, playOnLoad } = params;
+  const recordId = await beginSceneRecording(editorMsg, [nodeUuid]);
+  let clipsResult: Record<string, unknown>;
+  let defaultClipResult: Record<string, unknown>;
+  let playOnLoadResult: Record<string, unknown> | null = null;
+
+  try {
+    clipsResult = await sceneMethod('setComponentProperty', [
+      nodeUuid,
+      'Animation',
+      'clips',
+      [{ __uuid__: assetUuid }],
+    ]) as Record<string, unknown>;
+    if (clipsResult?.error) {
+      return { error: `已保存 .anim 资产，但回绑 Animation.clips 失败: ${clipsResult.error}` };
+    }
+
+    defaultClipResult = await sceneMethod('setComponentProperty', [
+      nodeUuid,
+      'Animation',
+      'defaultClip',
+      { __uuid__: assetUuid },
+    ]) as Record<string, unknown>;
+    if (defaultClipResult?.error) {
+      return { error: `已保存 .anim 资产，但回绑 Animation.defaultClip 失败: ${defaultClipResult.error}` };
+    }
+
+    if (playOnLoad) {
+      playOnLoadResult = await sceneMethod('setComponentProperty', [
+        nodeUuid,
+        'Animation',
+        'playOnLoad',
+        true,
+      ]) as Record<string, unknown>;
+      if (playOnLoadResult?.error) {
+        return { error: `已保存 .anim 资产，但设置 Animation.playOnLoad 失败: ${playOnLoadResult.error}` };
+      }
+    }
+
+    try {
+      const dump = await editorMsg('scene', 'query-node', nodeUuid) as Record<string, unknown>;
+      const nameVal = (dump as { value?: { name?: { value?: string } } })?.value?.name?.value;
+      if (typeof nameVal === 'string' && nameVal) {
+        await editorMsg('scene', 'set-property', {
+          uuid: nodeUuid,
+          path: 'name',
+          dump: { type: 'string', value: nameVal },
+        });
+      }
+    } catch { /* best-effort */ }
+  } finally {
+    await endSceneRecording(editorMsg, recordId);
+  }
+
+  const stateAfter = await queryAnimationState(sceneMethod, nodeUuid);
+  return {
+    bound: true,
+    assetUuid,
+    clipsResult,
+    defaultClipResult,
+    ...(playOnLoadResult ? { playOnLoadResult } : {}),
+    stateAfter,
+  };
+}
+
 export function registerAnimationAtomicTool(server: LocalToolServer, ctx: BridgeToolContext): void {
   const { bridgeGet, bridgePost, sceneMethod, editorMsg, text } = ctx;
   const sceneOp = ctx.sceneOp ?? ((params: Record<string, unknown>) => sceneMethod('dispatchOperation', [params]));
@@ -167,6 +246,7 @@ Prerequisites: Node must exist. If nodeUuid omitted, uses current selection. tra
 
         // ── Stage 3: best-effort save as .anim asset ──
         let saveResult: Record<string, unknown> | null = null;
+        let assetBinding: Record<string, unknown> | null = null;
         const savePath = typeof p.savePath === 'string' ? p.savePath : '';
         if (savePath) {
           const pathErr = sanitizeDbUrl(savePath);
@@ -186,23 +266,54 @@ Prerequisites: Node must exist. If nodeUuid omitted, uses current selection. tra
             const clipName = (p.clipName as string) || finalPath.split('/').pop()?.replace('.anim', '') || 'NewClip';
             const animJson = buildAnimJson(clipName, Number(p.duration ?? 1), String(p.wrapMode ?? 'Normal'), Number(p.speed ?? 1), Number(p.sample ?? 60), tracks);
 
-            saveResult = await bridgePost('/api/asset-db/create-asset', {
+            const createAssetResult = await bridgePost('/api/asset-db/create-asset', {
               url: finalPath,
               content: JSON.stringify(animJson, null, 2),
             }) as Record<string, unknown>;
 
-            if (saveResult?.error) {
-              warnings.push(`保存 .anim 资产失败: ${saveResult.error}，动画已在场景中生效但未落盘`);
+            if (createAssetResult?.error) {
+              warnings.push(`保存 .anim 资产失败: ${createAssetResult.error}，动画已在场景中生效但未落盘`);
               saveResult = null;
             } else {
+              const info = await editorMsg('asset-db', 'query-asset-info', finalPath) as { uuid?: string } | null;
+              saveResult = {
+                saved: true,
+                path: finalPath,
+                ...(info?.uuid ? { uuid: info.uuid } : {}),
+              };
               stages.push('refresh_asset_db');
               try {
                 await bridgePost('/api/asset-db/refresh', { url: finalPath.substring(0, finalPath.lastIndexOf('/')) });
               } catch (e) { logIgnored(ErrorCategory.ASSET_OPERATION, '动画保存后刷新资源数据库失败（非关键）', e); }
+              if (info?.uuid) {
+                assetBinding = await attachSavedClipAsset({
+                  nodeUuid,
+                  assetUuid: info.uuid,
+                  sceneMethod,
+                  editorMsg,
+                  playOnLoad: Boolean(p.autoPlay),
+                });
+                if (assetBinding?.error) {
+                  warnings.push(String(assetBinding.error));
+                  assetBinding = null;
+                }
+                // .anim 已落地且 defaultClip 已回绑，保存场景以完全持久化
+                stages.push('save_scene');
+                try {
+                  await editorMsg('scene', 'save-scene');
+                } catch (saveSceneErr: unknown) {
+                  warnings.push(`场景自动保存失败（请手动 Ctrl+S）: ${errorMessage(saveSceneErr)}`);
+                }
+              } else {
+                warnings.push('动画资产已保存，但未能获取 UUID，无法回绑到 Animation 组件。');
+              }
             }
           } catch (saveErr: unknown) {
             warnings.push(`保存 .anim 资产异常: ${errorMessage(saveErr)}，动画已在场景中生效但未落盘`);
           }
+        } else {
+          // 无 savePath：clip 仅在运行时内存（editorSyncSkipped=true），无法持久化
+          warnings.push('未提供 savePath，动画 clip 仅存在于运行时内存，重载场景后将丢失。请提供 savePath 参数。');
         }
 
         // ── Stage 4: auto-play if requested ──
@@ -237,6 +348,7 @@ Prerequisites: Node must exist. If nodeUuid omitted, uses current selection. tra
           speed: clipResult.speed,
           attach: clipResult.attach,
           savedAsset: saveResult ? { saved: true, path: savePath } : null,
+          assetBinding,
           stages,
           ...(warnings.length ? { warnings } : {}),
         });

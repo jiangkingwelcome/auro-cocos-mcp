@@ -686,15 +686,23 @@ describe('create_tween_animation_atomic — 正常流程', () => {
   });
 
   it('带 savePath 时尝试保存 .anim 资产', async () => {
-    const sceneMethod = vi.fn().mockImplementation((method: string) => {
+    const sceneMethod = vi.fn().mockImplementation((method: string, args?: unknown[]) => {
       if (method === 'dispatchQuery') return Promise.resolve({ uuid: 'node-uuid', name: 'Hero' });
       if (method === 'createAnimationClip') return Promise.resolve({
         success: true, clipDuration: 1, trackCount: 1, keyframeTimesCount: 2,
         wrapMode: 'Normal', speed: 1, attach: { attached: true },
       });
+      if (method === 'setComponentProperty') {
+        const property = Array.isArray(args) ? args[2] : '';
+        return Promise.resolve({ success: true, property, resolvedViaEditorIPC: true });
+      }
       return Promise.resolve({ success: true });
     });
-    const editorMsg = vi.fn().mockResolvedValue({});
+    const editorMsg = vi.fn().mockImplementation(async (_module: string, message: string) => {
+      if (message === 'query-asset-info') return { uuid: 'asset-uuid-1' };
+      if (message === 'query-node') return { value: { name: { value: 'Hero' } } };
+      return {};
+    });
     const bridgePost = vi.fn().mockResolvedValue({ success: true });
     const server = buildCocosToolServer(makeCtx({ sceneMethod, editorMsg, bridgePost }));
 
@@ -708,6 +716,58 @@ describe('create_tween_animation_atomic — 正常流程', () => {
     expect(data.success).toBe(true);
     expect(data.stages).toContain('save_anim_asset');
     expect(data.savedAsset).toBeTruthy();
+    expect(data.assetBinding).toEqual(expect.objectContaining({
+      bound: true,
+      assetUuid: 'asset-uuid-1',
+    }));
+    expect(sceneMethod).toHaveBeenCalledWith('setComponentProperty', [
+      'node-uuid',
+      'Animation',
+      'clips',
+      [{ __uuid__: 'asset-uuid-1' }],
+    ]);
+    expect(sceneMethod).toHaveBeenCalledWith('setComponentProperty', [
+      'node-uuid',
+      'Animation',
+      'defaultClip',
+      { __uuid__: 'asset-uuid-1' },
+    ]);
+  });
+
+  it('保存成功但 Animation.defaultClip 回绑失败时给出 warning', async () => {
+    const sceneMethod = vi.fn().mockImplementation((method: string, args?: unknown[]) => {
+      if (method === 'dispatchQuery') return Promise.resolve({ uuid: 'node-uuid', name: 'Hero' });
+      if (method === 'createAnimationClip') return Promise.resolve({
+        success: true, clipDuration: 1, trackCount: 1, keyframeTimesCount: 2,
+        wrapMode: 'Normal', speed: 1, attach: { attached: true },
+      });
+      if (method === 'setComponentProperty') {
+        const property = Array.isArray(args) ? args[2] : '';
+        if (property === 'defaultClip') return Promise.resolve({ error: 'decodePatch failed' });
+        return Promise.resolve({ success: true, property, resolvedViaEditorIPC: true });
+      }
+      return Promise.resolve({ success: true });
+    });
+    const editorMsg = vi.fn().mockImplementation(async (_module: string, message: string) => {
+      if (message === 'query-asset-info') return { uuid: 'asset-uuid-1' };
+      if (message === 'query-node') return { value: { name: { value: 'Hero' } } };
+      return {};
+    });
+    const bridgePost = vi.fn().mockResolvedValue({ success: true });
+    const server = buildCocosToolServer(makeCtx({ sceneMethod, editorMsg, bridgePost }));
+
+    const result = await server.callTool('create_tween_animation_atomic', {
+      nodeUuid: 'node-uuid',
+      savePath: 'db://assets/animations/hero-move.anim',
+      tracks: [{ property: 'position', keyframes: [{ time: 0, value: 0 }, { time: 1, value: 100 }] }],
+    });
+
+    const data = parse(result) as any;
+    expect(data.success).toBe(true);
+    expect(data.assetBinding).toBeNull();
+    expect(data.warnings).toEqual(expect.arrayContaining([
+      expect.stringContaining('回绑 Animation.defaultClip 失败'),
+    ]));
   });
 
   it('透传 clipName/speed/wrapMode 到 createAnimationClip，并按引擎枚举落盘', async () => {

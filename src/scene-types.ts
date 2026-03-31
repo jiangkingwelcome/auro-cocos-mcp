@@ -337,6 +337,8 @@ export interface CocosCC {
   js: {
     getClassByName(name: string): any;
     getClassName?(cls: any): string;
+    /** 若存在，用于判断 `cc.${shortName}` 是否为引擎内置 Component（避免把用户脚本名如 Test 误发成 cc.Test） */
+    isChildClassOf?(child: unknown, parent: unknown): boolean;
     _nameToClass?: Record<string, any>;
     _registeredClassNames?: Record<string, any>;
   };

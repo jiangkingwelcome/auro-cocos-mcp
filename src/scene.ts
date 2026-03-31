@@ -252,6 +252,92 @@ function resolveComponentClass(cc: CocosCC, componentName: string): unknown {
   return null;
 }
 
+type SerializablePropertyDump =
+  | { kind: 'primitive'; dumpType: 'boolean' | 'number' | 'string'; value: boolean | number | string }
+  | { kind: 'editor-dump'; dumpType: 'cc.Color' | 'cc.Rect' | 'cc.Size' | 'cc.Vec3' | 'cc.Vec2'; value: Record<string, unknown> }
+  | { kind: 'unsupported'; reason: string };
+
+function classifySerializablePropertyValue(value: unknown): SerializablePropertyDump {
+  if (typeof value === 'boolean' || typeof value === 'number' || typeof value === 'string') {
+    return {
+      kind: 'primitive',
+      dumpType: typeof value === 'boolean' ? 'boolean' : typeof value === 'number' ? 'number' : 'string',
+      value,
+    };
+  }
+
+  if (value && typeof value === 'object' && !Array.isArray(value)) {
+    const obj = value as Record<string, unknown>;
+
+    if ('r' in obj) {
+      return {
+        kind: 'editor-dump',
+        dumpType: 'cc.Color',
+        value: {
+          r: Math.max(0, Math.min(255, Number(obj.r ?? 0))),
+          g: Math.max(0, Math.min(255, Number(obj.g ?? 0))),
+          b: Math.max(0, Math.min(255, Number(obj.b ?? 0))),
+          a: Math.max(0, Math.min(255, Number(obj.a ?? 255))),
+        },
+      };
+    }
+
+    if ('width' in obj || 'height' in obj) {
+      if ('x' in obj || 'y' in obj) {
+        return {
+          kind: 'editor-dump',
+          dumpType: 'cc.Rect',
+          value: {
+            x: Number(obj.x ?? 0),
+            y: Number(obj.y ?? 0),
+            width: Number(obj.width ?? 0),
+            height: Number(obj.height ?? 0),
+          },
+        };
+      }
+      return {
+        kind: 'editor-dump',
+        dumpType: 'cc.Size',
+        value: {
+          width: Number(obj.width ?? 0),
+          height: Number(obj.height ?? 0),
+        },
+      };
+    }
+
+    if ('x' in obj || 'y' in obj || 'z' in obj || 'w' in obj) {
+      if ('w' in obj) {
+        return { kind: 'unsupported', reason: 'Vec4 目前未实现稳定持久化' };
+      }
+      if ('z' in obj) {
+        return {
+          kind: 'editor-dump',
+          dumpType: 'cc.Vec3',
+          value: {
+            x: Number(obj.x ?? 0),
+            y: Number(obj.y ?? 0),
+            z: Number(obj.z ?? 0),
+          },
+        };
+      }
+      return {
+        kind: 'editor-dump',
+        dumpType: 'cc.Vec2',
+        value: {
+          x: Number(obj.x ?? 0),
+          y: Number(obj.y ?? 0),
+        },
+      };
+    }
+  }
+
+  if (Array.isArray(value)) {
+    return { kind: 'unsupported', reason: '数组值暂未实现稳定持久化' };
+  }
+
+  return { kind: 'unsupported', reason: '复杂对象值暂未实现稳定持久化' };
+}
+
 function buildNonComponentClassError(cc: CocosCC, componentName: string, label = '组件类') {
   const componentBase = cc.js.getClassByName('cc.Component') || cc.Component;
   if (componentName.startsWith('cc.')) {
@@ -1089,26 +1175,21 @@ export const methods = {
       })();
     }
 
-    if (Array.isArray(value)) {
-      return { error: `属性 "${property}" 的数组值暂未实现稳定持久化，请改用专用操作或资源引用数组。` };
-    }
-
-    if (value && typeof value === 'object') {
-      return { error: `属性 "${property}" 的复杂对象值暂未实现稳定持久化，请改用专用操作。` };
-    }
-
     const compIndex = (node._components ?? []).indexOf(comp);
     if (compIndex < 0) return { error: `无法定位组件索引: ${componentName}` };
     const propPath = `__comps__.${compIndex}.${property}`;
-    const dumpType = typeof value === 'boolean' ? 'boolean'
-      : typeof value === 'number' ? 'number'
-      : typeof value === 'string' ? 'string'
-      : null;
-    if (!dumpType) {
-      return { error: `属性 "${property}" 的值类型 "${typeof value}" 暂未实现稳定持久化` };
+    const classified = classifySerializablePropertyValue(value);
+    if (classified.kind === 'unsupported') {
+      if (Array.isArray(value)) {
+        return { error: `属性 "${property}" 的数组值暂未实现稳定持久化，请改用专用操作或资源引用数组。` };
+      }
+      return { error: `属性 "${property}" 的${classified.reason}，请改用专用操作。` };
     }
     return (async () => {
-      const ok = await notifyEditorProperty(uuid, propPath, { type: dumpType, value });
+      const ok = await notifyEditorProperty(uuid, propPath, {
+        type: classified.dumpType,
+        value: classified.value,
+      });
       if (!ok) {
         return {
           success: false,
@@ -1119,7 +1200,11 @@ export const methods = {
           error: `set-property IPC 未能持久化属性 "${property}"，已阻止仅运行时修改`,
         };
       }
-      comp[property] = value;
+      try {
+        comp[property] = value;
+      } catch {
+        // Editor IPC has already persisted the value; runtime assignment is best-effort only.
+      }
       return {
         success: true,
         uuid,

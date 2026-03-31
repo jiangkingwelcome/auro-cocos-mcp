@@ -3,6 +3,13 @@
 
 // 在 JS 文件执行的第一时间（模板渲染前）把 webview 背景压黑，消除白色第一帧
 try {
+  document.documentElement.style.background = '#18181b';
+  document.documentElement.style.colorScheme = 'dark';
+  if (document.body) {
+    document.body.style.background = '#18181b';
+    document.body.style.margin = '0';
+    document.body.style.padding = '0';
+  }
   const _s = document.createElement('style');
   _s.textContent = 'html,body{background:#18181b!important;margin:0;padding:0;}';
   (document.head || document.documentElement).appendChild(_s);
@@ -12,6 +19,9 @@ const EXTENSION_NAME = 'aura-for-cocos';
 const EXTENSION_VERSION = '1.0.14';
 const POLL_INTERVAL = 3000;
 const CONFIG_REQUEST_TIMEOUT_MS = 10000;
+const MIN_LOADING_VISIBLE_MS = 180;
+const LOADING_FADE_MS = 260;
+const LOADING_FORCE_HIDE_MS = 5000;
 
 let pollTimer = null;
 
@@ -1225,6 +1235,7 @@ module.exports = Editor.Panel.define({
 
     // Pro 独占工具（社区版永远不会注册的）
     const PRO_EXCLUSIVE_TOOLS = new Set([
+      'setup_ui_layout',
       'engine_action', 'reference_image',
       'scene_generator', 'batch_engine', 'scene_audit',
     ]);
@@ -1711,24 +1722,25 @@ module.exports = Editor.Panel.define({
       });
     }
 
-    // Defer first fetch so the browser can paint the skeleton frame first
+    // Delay the first status fetch until after the shell has had a chance to paint.
     self._loadingStartTime = Date.now();
     requestAnimationFrame(() => {
-      self.refreshStatus();
-      pollTimer = setInterval(() => self.refreshStatus(), POLL_INTERVAL);
-      // 兜底：最多 5 秒后强制移除加载遮罩，防止极端情况卡住
-      setTimeout(() => {
-        const loading = self.$.appLoading;
-        if (loading && loading.style.display !== 'none') {
-          loading.style.opacity = '0';
-          setTimeout(() => { loading.style.display = 'none'; }, 260);
-        }
-      }, 5000);
+      requestAnimationFrame(() => {
+        self.refreshStatus();
+        pollTimer = setInterval(() => self.refreshStatus(), POLL_INTERVAL);
+        // 兜底：最多 5 秒后强制移除加载遮罩，防止极端情况卡住。
+        self._loadingForceHideTimer = setTimeout(() => {
+          self.hideLoadingOverlay(true);
+        }, LOADING_FORCE_HIDE_MS);
+      });
     });
   },
 
   close() {
     if (pollTimer) { clearInterval(pollTimer); pollTimer = null; }
+    if (this._loadingHideTimer) { clearTimeout(this._loadingHideTimer); this._loadingHideTimer = null; }
+    if (this._loadingFadeTimer) { clearTimeout(this._loadingFadeTimer); this._loadingFadeTimer = null; }
+    if (this._loadingForceHideTimer) { clearTimeout(this._loadingForceHideTimer); this._loadingForceHideTimer = null; }
   },
 
   methods: {
@@ -1749,6 +1761,39 @@ module.exports = Editor.Panel.define({
         void el.offsetWidth;
         el.classList.add('value-changed');
       }
+    },
+
+    hideLoadingOverlay(force = false) {
+      const self = this;
+      if (self._loadingHidden) return;
+      const loading = self.$?.appLoading;
+      if (!loading) {
+        self._loadingHidden = true;
+        return;
+      }
+      if (self._loadingForceHideTimer) {
+        clearTimeout(self._loadingForceHideTimer);
+        self._loadingForceHideTimer = null;
+      }
+
+      if (self._loadingHideTimer) {
+        clearTimeout(self._loadingHideTimer);
+        self._loadingHideTimer = null;
+      }
+      if (self._loadingFadeTimer) {
+        clearTimeout(self._loadingFadeTimer);
+        self._loadingFadeTimer = null;
+      }
+
+      const elapsed = Date.now() - (self._loadingStartTime || 0);
+      const remaining = force ? 0 : Math.max(0, MIN_LOADING_VISIBLE_MS - elapsed);
+      self._loadingHideTimer = setTimeout(() => {
+        loading.style.opacity = '0';
+        self._loadingFadeTimer = setTimeout(() => {
+          loading.style.display = 'none';
+          self._loadingHidden = true;
+        }, LOADING_FADE_MS);
+      }, remaining);
     },
 
     async refreshStatus() {
@@ -1850,18 +1895,10 @@ module.exports = Editor.Panel.define({
         self.setOffline();
       } finally {
         self._refreshInFlight = false;
-        // 首次加载完成后淡出遮罩，最短显示 2 秒
+        // 首次加载完成后尽快淡出遮罩，只保留很短的最小显示时间避免闪烁。
         if (!self._firstLoadDone) {
           self._firstLoadDone = true;
-          const loading = self.$.appLoading;
-          if (loading) {
-            const elapsed = Date.now() - (self._loadingStartTime || 0);
-            const remaining = Math.max(0, 2000 - elapsed);
-            setTimeout(() => {
-              loading.style.opacity = '0';
-              setTimeout(() => { loading.style.display = 'none'; }, 260);
-            }, remaining);
-          }
+          self.hideLoadingOverlay();
         }
         if (self._refreshPending) {
           self._refreshPending = false;

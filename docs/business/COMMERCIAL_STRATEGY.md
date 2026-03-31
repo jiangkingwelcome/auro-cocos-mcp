@@ -95,7 +95,7 @@ list, info, create, save, delete, move, copy, rename, import, open, refresh, cre
 - animation_tool (10 actions)
 - physics_tool (10 actions)
 
-`setup_ui_layout` 已从社区版 JS 注册链移除，仅保留为 Pro 能力。
+`setup_ui_layout` 与 `create_ui_widget` 已从社区版 JS 注册链移除，仅保留为 Pro 能力。
 
 **社区版合计: 187 actions（以 docs/trust-metrics.json 为准）**
 

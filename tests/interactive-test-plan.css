@@ -316,6 +316,10 @@ button:hover {
   color: var(--blocked);
 }
 
+.metric.uncertain .value {
+  color: #b45309;
+}
+
 .metric.community .value {
   color: var(--brand);
 }
@@ -374,6 +378,11 @@ button:hover {
   background: var(--warn-soft);
 }
 
+.badge.uncertain {
+  color: #b45309;
+  background: rgba(180, 83, 9, 0.12);
+}
+
 .badge.blocked {
   background: var(--blocked-soft);
 }
@@ -395,6 +404,7 @@ button:hover {
 
 details.case {
   overflow: hidden;
+  scroll-margin-top: 16px;
 }
 
 summary {

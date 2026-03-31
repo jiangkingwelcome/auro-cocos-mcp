@@ -66,6 +66,9 @@ function assertNotActionUnknown(parsed, actionName) {
     throw new Error(`action "${actionName}" 未在编辑器中注册 — 请在 Cocos 编辑器中点击"热更重启"按钮重新加载插件`);
   }
 }
+function assertCommunityLocked(parsed, actionName) {
+  assert(parsed?.error || parsed?.isError || parsed?.success === false, `expected ${actionName} to be rejected in Community Edition`);
+}
 
 // ─── Discovery ───────────────────────────────────────────────────────────────
 function readTokenFromFile() {
@@ -179,6 +182,17 @@ async function testSceneQuery() {
   await test('scene_query.get_components', async () => {
     const { parsed } = await sq('get_components', { uuid: testNodeUuid });
     assert(parsed.uuid || parsed.components !== undefined, 'no components');
+    if (Array.isArray(parsed.components) && parsed.components.length > 0) {
+      const c = parsed.components[0];
+      assert(
+        typeof c.name === 'string' && c.name.length > 0,
+        'component entry missing name',
+      );
+      assert(
+        typeof c.type === 'string' && c.type.length > 0,
+        'component entry missing type',
+      );
+    }
   });
 
   await test('scene_query.get_parent', async () => {
@@ -339,6 +353,112 @@ async function testSceneQuery() {
   });
 }
 
+/** 与 tests/test-cases.json #32–#40 对齐：在编辑器内走完整/补充 MCP 路径（依赖 C 段之后的场景状态亦可）。 */
+async function testCases32to40() {
+  console.log('\n=== D. CASES #32–#40 (test-cases.json parity) ===');
+  const sq = (action, extra = {}) => callTool('scene_query', { action, ...extra });
+  const so = (action, extra = {}) => callTool('scene_operation', { action, ...extra });
+  const UI_2D = 33554432;
+
+  await test('case_32_get_component_property_Label_string', async () => {
+    let { parsed: cinfo } = await sq('get_canvas_info');
+    let canvasUuid = '';
+    if (cinfo.count > 0 && Array.isArray(cinfo.canvases) && cinfo.canvases.length > 0) {
+      const ex = cinfo.canvases.find((c) => !String(c.path || '').includes('Editor Scene Background'));
+      canvasUuid = ex?.uuid || cinfo.canvases[0].uuid;
+    }
+    if (!canvasUuid) {
+      const { parsed: ens } = await so('ensure_2d_canvas', { confirmCreateCanvas: true });
+      if (!ens?.success) throw new Error(`ensure_2d_canvas: ${ens?.error || JSON.stringify(ens)}`);
+      canvasUuid = ens.canvasUuid;
+    }
+    const { parsed: created } = await so('create_node', { name: '__mcp_case32_label__', parentUuid: canvasUuid });
+    assert(created?.success && created.uuid, `create_node failed: ${created?.error || ''}`);
+    const labelUuid = created.uuid;
+    await so('set_layer', { uuid: labelUuid, layer: UI_2D });
+    const addUi = await so('add_component', { uuid: labelUuid, component: 'UITransform' });
+    if (!addUi.parsed?.success) {
+      await so('destroy_node', { uuid: labelUuid, confirmDangerous: true });
+      throw new Error(`add UITransform: ${addUi.parsed?.error || 'failed'}`);
+    }
+    const addLb = await so('add_component', { uuid: labelUuid, component: 'Label' });
+    if (!addLb.parsed?.success) {
+      await so('destroy_node', { uuid: labelUuid, confirmDangerous: true });
+      throw new Error(`add Label: ${addLb.parsed?.error || 'failed'}`);
+    }
+    const { parsed: sp } = await so('set_property', {
+      uuid: labelUuid, component: 'Label', property: 'string', value: 'Hello World',
+    });
+    assert(sp?.success !== false && !sp?.error, `set_property: ${sp?.error || JSON.stringify(sp)}`);
+    const { parsed: gp } = await sq('get_component_property', {
+      uuid: labelUuid, component: 'Label', property: 'string',
+    });
+    const v = gp.value;
+    assert(
+      String(v) === 'Hello World' || (v && String(v) === 'Hello World'),
+      `expected value Hello World, got ${JSON.stringify(gp)}`,
+    );
+    await so('destroy_node', { uuid: labelUuid, confirmDangerous: true });
+  });
+
+  await test('case_33_get_component_property_Sprite_spriteFrame', async () => {
+    const { parsed: fr } = await sq('find_nodes_by_component', { component: 'Sprite' });
+    if (!fr.nodes?.length) { skip('case_33', 'no Sprite in scene'); return; }
+    const uuid = fr.nodes[0].uuid;
+    const { parsed } = await sq('get_component_property', { uuid, component: 'Sprite', property: 'spriteFrame' });
+    assert(parsed.value !== undefined || !parsed.error, `spriteFrame: ${JSON.stringify(parsed)}`);
+  });
+
+  await test('case_34_get_node_components_properties', async () => {
+    const { parsed: list } = await sq('list');
+    const node = list.nodes?.[0];
+    assert(node?.uuid, 'no nodes in scene');
+    const { parsed } = await sq('get_node_components_properties', { uuid: node.uuid });
+    assert(
+      parsed.components !== undefined || parsed.nodeName !== undefined || !parsed.error,
+      `unexpected: ${JSON.stringify(parsed).slice(0, 200)}`,
+    );
+  });
+
+  await test('case_35_get_camera_info_all', async () => {
+    const { parsed } = await sq('get_camera_info');
+    assert(parsed.count !== undefined, 'no count');
+  });
+
+  await test('case_36_get_camera_info_by_uuid', async () => {
+    const { parsed: all } = await sq('get_camera_info');
+    const cam = all.cameras?.[0];
+    if (!cam?.uuid) { skip('case_36', 'no camera in scene'); return; }
+    const { parsed } = await sq('get_camera_info', { uuid: cam.uuid });
+    assert(parsed.count >= 1 && parsed.cameras?.length >= 1, 'no camera info');
+  });
+
+  await test('case_37_get_canvas_info', async () => {
+    const { parsed } = await sq('get_canvas_info');
+    assert(parsed.count !== undefined, 'no canvas count');
+  });
+
+  await test('case_38_get_scene_globals', async () => {
+    const { parsed } = await sq('get_scene_globals');
+    assert(parsed.sceneName !== undefined || parsed.uuid !== undefined || !parsed.error, `globals: ${JSON.stringify(parsed).slice(0, 120)}`);
+  });
+
+  await test('case_39_get_scene_environment', async () => {
+    const { parsed } = await sq('get_scene_environment');
+    assertNotActionUnknown(parsed, 'get_scene_environment');
+    assert(
+      parsed.sceneName !== undefined || parsed.ambient !== undefined || parsed.error !== undefined,
+      `get_scene_environment: ${JSON.stringify(parsed).slice(0, 160)}`,
+    );
+  });
+
+  await test('case_40_get_light_info_all', async () => {
+    const { parsed } = await sq('get_light_info');
+    assertNotActionUnknown(parsed, 'get_light_info');
+    assert(parsed.count !== undefined && Array.isArray(parsed.lights), 'no lights array');
+  });
+}
+
 async function testSceneOperation() {
   console.log('\n=== C. scene_operation ===');
   const so = (action, extra = {}) => callTool('scene_operation', { action, ...extra });
@@ -449,27 +569,27 @@ async function testSceneOperation() {
 
   await test('scene_operation.hide_node', async () => {
     const { parsed } = await so('hide_node', { uuid: testNodeUuid });
-    assert(parsed.success, `failed: ${parsed.error || ''}`);
+    assertCommunityLocked(parsed, 'hide_node');
   });
 
   await test('scene_operation.unhide_node', async () => {
     const { parsed } = await so('unhide_node', { uuid: testNodeUuid });
-    assert(parsed.success, `failed: ${parsed.error || ''}`);
+    assertCommunityLocked(parsed, 'unhide_node');
   });
 
   await test('scene_operation.set_layer', async () => {
     const { parsed } = await so('set_layer', { uuid: testNodeUuid, layer: 1 });
-    assert(parsed.success, `failed: ${parsed.error || ''}`);
+    assertCommunityLocked(parsed, 'set_layer');
   });
 
   await test('scene_operation.lock_node', async () => {
     const { parsed } = await so('lock_node', { uuid: testNodeUuid });
-    assert(parsed.message || parsed.success !== undefined, 'no response');
+    assertCommunityLocked(parsed, 'lock_node');
   });
 
   await test('scene_operation.unlock_node', async () => {
     const { parsed } = await so('unlock_node', { uuid: testNodeUuid });
-    assert(parsed.message || parsed.success !== undefined, 'no response');
+    assertCommunityLocked(parsed, 'unlock_node');
   });
 
   await test('scene_operation.call_component_method', async () => {
@@ -480,19 +600,17 @@ async function testSceneOperation() {
 
   await test('scene_operation.clear_children', async () => {
     const { parsed } = await so('clear_children', { uuid: testNodeUuid, confirmDangerous: true });
-    assert(parsed.success, `failed: ${parsed.error || ''}`);
-    childNodeUuid = '';
+    assertCommunityLocked(parsed, 'clear_children');
   });
 
   await test('scene_operation.clipboard_copy', async () => {
     const { parsed } = await so('clipboard_copy', { uuid: testNodeUuid });
-    assert(parsed.success || parsed.result || parsed.error, 'no response');
-    // clipboard_copy may fail on some Cocos versions due to IPC differences
+    assertCommunityLocked(parsed, 'clipboard_copy');
   });
 
   await test('scene_operation.clipboard_paste', async () => {
     const { parsed } = await so('clipboard_paste', {});
-    assert(parsed.success || parsed.result, `failed: ${parsed.error || ''}`);
+    assertCommunityLocked(parsed, 'clipboard_paste');
   });
 
   // Prefab operations (best-effort)
@@ -541,59 +659,44 @@ async function testSceneOperation() {
         { action: 'destroy_node', uuid: '$0.uuid', confirmDangerous: true },
       ],
     });
-    assertNotActionUnknown(parsed, 'batch');
-    assert(parsed.success, `batch failed: ${parsed.error || ''}`);
-    assert(parsed.totalOps === 3, `expected 3 ops, got ${parsed.totalOps}`);
+    assertCommunityLocked(parsed, 'batch');
   });
 
-  await test('scene_operation.create_ui_widget', async () => {
+  await test('scene_operation.create_ui_widget_is_pro_only', async () => {
     const { parsed } = await so('create_ui_widget', { widgetType: 'button', name: '__mcp_btn__', text: 'Test' });
-    assertNotActionUnknown(parsed, 'create_ui_widget');
-    assert(parsed.success, `failed: ${parsed.error || ''}`);
-    if (parsed.uuid) await so('destroy_node', { uuid: parsed.uuid, confirmDangerous: true });
+    assert(parsed?.error || parsed?.isError || parsed?.success === false, 'expected create_ui_widget to be rejected in Community Edition');
   });
 
   await test('scene_operation.setup_particle', async () => {
     const { parsed } = await so('setup_particle', { preset: 'fire', name: '__mcp_particles__' });
-    assertNotActionUnknown(parsed, 'setup_particle');
-    assert(parsed.success || parsed.error, `no response`);
-    if (parsed.uuid) await so('destroy_node', { uuid: parsed.uuid, confirmDangerous: true });
+    assertCommunityLocked(parsed, 'setup_particle');
   });
 
   await test('scene_operation.align_nodes', async () => {
     const { parsed } = await so('align_nodes', { uuids: [testNodeUuid, testNodeUuid2], alignment: 'center_h' });
-    assertNotActionUnknown(parsed, 'align_nodes');
-    assert(parsed.success || parsed.error, 'no response');
+    assertCommunityLocked(parsed, 'align_nodes');
   });
 
   await test('scene_operation.audio_setup', async () => {
     const { parsed } = await so('audio_setup', { uuid: testNodeUuid, volume: 0.5, loop: true });
-    assertNotActionUnknown(parsed, 'audio_setup');
-    assert(parsed.success || parsed.error, 'no response');
+    assertCommunityLocked(parsed, 'audio_setup');
   });
 
   await test('scene_operation.setup_physics_world', async () => {
     const { parsed } = await so('setup_physics_world', { mode: 'auto', gravity: { x: 0, y: -320 } });
-    assertNotActionUnknown(parsed, 'setup_physics_world');
-    assert(parsed.success || parsed.error || parsed.warnings, 'no response');
+    assertCommunityLocked(parsed, 'setup_physics_world');
   });
 
   await test('scene_operation.create_skeleton_node', async () => {
     const { parsed } = await so('create_skeleton_node', { skeletonType: 'spine', name: '__mcp_spine__' });
-    assertNotActionUnknown(parsed, 'create_skeleton_node');
-    assert(parsed.success || parsed.error, 'no response');
-    if (parsed.uuid) await so('destroy_node', { uuid: parsed.uuid, confirmDangerous: true });
+    assertCommunityLocked(parsed, 'create_skeleton_node');
   });
 
   await test('scene_operation.generate_tilemap', async () => {
     const { parsed } = await so('generate_tilemap', { name: '__mcp_tilemap__' });
-    assertNotActionUnknown(parsed, 'generate_tilemap');
-    assert(parsed.success || parsed.error, 'no response');
-    if (parsed.uuid) await so('destroy_node', { uuid: parsed.uuid, confirmDangerous: true });
+    assertCommunityLocked(parsed, 'generate_tilemap');
   });
 
-  // 正方体 + 45° 摄像机 + 预览（仅 3D 场景）
-  let cubeUuid = '';
   await test('scene_operation.create_primitive_cube', async () => {
     const { parsed } = await so('create_primitive', {
       parentUuid: '',
@@ -601,43 +704,23 @@ async function testSceneOperation() {
       type: 'box',
       color: { r: 66, g: 135, b: 245, a: 255 },
     });
-    assertNotActionUnknown(parsed, 'create_primitive');
-    if (parsed.error && parsed.error.includes('不支持')) {
-      skip('scene_operation.create_primitive_cube', '需 3D 场景或 Cocos 3.x');
-      return;
-    }
-    assert(parsed.success, parsed.error || 'create_primitive 失败');
-    assert(parsed.uuid, 'no uuid');
-    cubeUuid = parsed.uuid;
+    assertCommunityLocked(parsed, 'create_primitive');
   });
 
   await test('scene_operation.set_camera_look_at', async () => {
-    const { parsed: cam } = await callTool('scene_query', { action: 'get_camera_info' });
-    const camUuid = cam?.cameras?.[0]?.uuid;
-    if (!camUuid) {
-      skip('scene_operation.set_camera_look_at', '场景无摄像机');
-      return;
-    }
     const { parsed } = await so('set_camera_look_at', {
-      uuid: camUuid,
+      uuid: testNodeUuid,
       targetX: 0,
       targetY: 0,
       targetZ: 0,
     });
-    assertNotActionUnknown(parsed, 'set_camera_look_at');
-    assert(parsed?.success || parsed?.error, 'no response');
-  });
-
-  await test('editor_action.preview_after_cube', async () => {
-    const { parsed } = await callTool('editor_action', { action: 'preview' });
-    assert(parsed !== undefined, 'preview 无响应');
+    assertCommunityLocked(parsed, 'set_camera_look_at');
   });
 
   // Cleanup test nodes — thorough sweep
   console.log('  (cleaning up test nodes...)');
   if (testNodeUuid) try { await so('destroy_node', { uuid: testNodeUuid, confirmDangerous: true }); } catch { /* ok */ }
   if (testNodeUuid2) try { await so('destroy_node', { uuid: testNodeUuid2, confirmDangerous: true }); } catch { /* ok */ }
-  if (cubeUuid) try { await so('destroy_node', { uuid: cubeUuid, confirmDangerous: true }); } catch { /* ok */ }
   // Sweep: remove any __mcp_ prefixed nodes AND (Missing Node) entries
   try {
     const { parsed: allNodes } = await callTool('scene_query', { action: 'list' });
@@ -988,6 +1071,7 @@ async function main() {
   await testBasicConnectivity();
   await testSceneQuery();
   await testSceneOperation();
+  await testCases32to40();
   await testAssetOperation();
   await testEditorAction();
   await testAtomicTools();

@@ -6,7 +6,11 @@
     "title": "基本连通性检查",
     "input": {},
     "expected": "返回 {connected:true, version:\"3.8.x\", uptime, port}",
-    "note": "启动后第一步调用"
+    "note": "启动后第一步调用",
+    "prerequisites": "无场景对象前置；需编辑器内插件已加载、HTTP MCP 可达且 Token 有效。",
+    "setupSteps": [],
+    "needsRetest": false,
+    "manualVerification": "通过（已人工验证）。"
   },
   {
     "id": 2,
@@ -15,7 +19,11 @@
     "title": "桥接断开",
     "input": {},
     "expected": "返回 {connected:false, error:\"ECONNREFUSED\"}",
-    "note": "编辑器未启动或插件未加载"
+    "note": "编辑器未启动或插件未加载",
+    "prerequisites": "无场景对象前置；需编辑器内插件已加载、HTTP MCP 可达且 Token 有效。 本条为「桥接断开」预期：须在编辑器未启动或未加载插件时测，或临时关闭服务。",
+    "setupSteps": [],
+    "needsRetest": false,
+    "manualVerification": "通过（已人工验证）。"
   },
   {
     "id": 3,
@@ -26,7 +34,11 @@
       "action": "tree"
     },
     "expected": "返回过滤隐藏节点的层级树 {name,uuid,children[]}",
-    "note": "默认 includeInternal=false"
+    "note": "默认 includeInternal=false",
+    "prerequisites": "需当前有已打开的活动场景（默认场景即可）。",
+    "setupSteps": [],
+    "needsRetest": false,
+    "manualVerification": "通过（已人工验证）。"
   },
   {
     "id": 4,
@@ -38,7 +50,11 @@
       "includeInternal": true
     },
     "expected": "返回含 ScrollView 内部节点、Profiler 节点的完整树",
-    "note": ""
+    "note": "",
+    "prerequisites": "需当前有已打开的活动场景（默认场景即可）。",
+    "setupSteps": [],
+    "needsRetest": false,
+    "manualVerification": "通过（已人工验证）。"
   },
   {
     "id": 5,
@@ -49,7 +65,11 @@
       "action": "tree"
     },
     "expected": "返回仅含 Scene 根节点的树",
-    "note": ""
+    "note": "",
+    "prerequisites": "需使用空场景或仅含 Scene 根的测试工程；切换场景前请保存。",
+    "setupSteps": [],
+    "needsRetest": false,
+    "manualVerification": "通过（已人工验证）。"
   },
   {
     "id": 6,
@@ -60,7 +80,11 @@
       "action": "list"
     },
     "expected": "返回 [{uuid,name,depth,childCount},...] 数组",
-    "note": ""
+    "note": "",
+    "prerequisites": "需当前有已打开的活动场景（默认场景即可）。",
+    "setupSteps": [],
+    "needsRetest": false,
+    "manualVerification": "通过（已人工验证）。"
   },
   {
     "id": 7,
@@ -72,7 +96,11 @@
       "includeInternal": true
     },
     "expected": "结果数量多于默认，包含引擎隐藏节点",
-    "note": ""
+    "note": "",
+    "prerequisites": "需当前有已打开的活动场景（默认场景即可）。",
+    "setupSteps": [],
+    "needsRetest": false,
+    "manualVerification": "通过（已人工验证）。"
   },
   {
     "id": 8,
@@ -83,7 +111,11 @@
       "action": "stats"
     },
     "expected": "返回 {nodeCount,activeCount,sceneName,filteredInternalNodes}",
-    "note": ""
+    "note": "",
+    "prerequisites": "需当前有已打开的活动场景（默认场景即可）。",
+    "setupSteps": [],
+    "needsRetest": false,
+    "manualVerification": "通过（已人工验证）。"
   },
   {
     "id": 9,
@@ -95,7 +127,11 @@
       "includeInternal": true
     },
     "expected": "nodeCount 包含所有运行时节点",
-    "note": ""
+    "note": "",
+    "manualVerification": "通过（经 MCP 调用 scene_query，stats 且 includeInternal: true；nodeCount 为全量统计，与同场景 list 含内部节点数量一致，符合预期）。",
+    "prerequisites": "需当前有已打开的活动场景（默认场景即可）。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 10,
@@ -107,7 +143,21 @@
       "uuid": "<node-uuid>"
     },
     "expected": "返回 {name,position,rotation,scale,components[],active,layer}",
-    "note": ""
+    "note": "",
+    "manualVerification": "通过（复测：getNodeDetail 已返回 rotation、eulerAngles 语义、layer；MCP 先 list 再 node_detail 与期望一致。）",
+    "prerequisites": "需有效节点或资源 UUID（见占位符说明）。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 11,
@@ -119,7 +169,11 @@
       "uuid": "invalid"
     },
     "expected": "返回 {error:\"未找到节点\"}",
-    "note": ""
+    "note": "",
+    "manualVerification": "通过（MCP：`node_detail` + `uuid: invalid` 返回 `error: 未找到节点: invalid`，与无效 UUID 语义一致。）",
+    "prerequisites": "需当前活动场景可查询。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 12,
@@ -131,7 +185,12 @@
       "path": "Canvas/Panel/Button"
     },
     "expected": "返回匹配节点 uuid 和详情",
-    "note": ""
+    "note": "",
+    "manualVerification": "通过（MCP：`find_by_path` 调用成功；当前测试场景无 Canvas 层级，返回 `error: 路径未找到: Canvas 在 …`，属环境前提；正向「返回 uuid 与详情」请在含 Canvas/Panel/Button 的 UI 场景下复测。）",
+    "prerequisites": "路径需对应场景中真实节点层级；测正向结果时需存在 Canvas/Panel 等 UI 链（可先 scene_operation 创建）。 若当前场景无 UI 层级，仅能得到「路径未找到」类错误，正向请在 UI 场景复测。",
+    "setupSteps": [],
+    "needsRetest": true,
+    "retestReason": "此前结论为环境/替代/与文档或示例不完全一致；请在完整前置下复测以严格符合预期。"
   },
   {
     "id": 13,
@@ -143,7 +202,11 @@
       "path": "NotExist/X"
     },
     "expected": "返回 {error:\"未找到路径\"}",
-    "note": ""
+    "note": "",
+    "manualVerification": "通过（MCP：返回 `error: 路径未找到: NotExist 在 …`，与路径不存在语义一致。）",
+    "prerequisites": "路径需对应场景中真实节点层级；测正向结果时需存在 Canvas/Panel 等 UI 链（可先 scene_operation 创建）。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 14,
@@ -154,8 +217,22 @@
       "action": "get_components",
       "uuid": "<uuid>"
     },
-    "expected": "返回 [{type:\"UITransform\",...},{type:\"Sprite\",...}]",
-    "note": ""
+    "expected": "返回 { uuid, name, components:[{name,type},...] }，type 为短类名（无 cc. 前缀）",
+    "note": "",
+    "manualVerification": "通过（复测：每项组件含 name 与 type；与用例一致。）",
+    "prerequisites": "需有效节点或资源 UUID（见占位符说明）。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 15,
@@ -167,7 +244,21 @@
       "uuid": "<uuid>"
     },
     "expected": "返回父节点 {uuid,name}",
-    "note": ""
+    "note": "",
+    "manualVerification": "通过（MCP：子节点为 Main Camera 时返回父场景根 `uuid/name`，符合预期。）",
+    "prerequisites": "需有效节点或资源 UUID（见占位符说明）。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 16,
@@ -179,7 +270,21 @@
       "uuid": "<scene-root>"
     },
     "expected": "返回 null 或 scene 根",
-    "note": ""
+    "note": "",
+    "manualVerification": "通过（MCP：对场景根调用；返回 `error: 未找到节点或无父节点`，表示无父，与「根无父」语义一致。）",
+    "prerequisites": "需有效节点或资源 UUID（见占位符说明）。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 17,
@@ -191,7 +296,21 @@
       "uuid": "<uuid>"
     },
     "expected": "返回 [{uuid,name},...] 列表",
-    "note": ""
+    "note": "",
+    "manualVerification": "通过（MCP：对场景根取子节点，返回含 uuid/name/active 的数组，结构符合预期。）",
+    "prerequisites": "需有效节点或资源 UUID（见占位符说明）。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 18,
@@ -203,7 +322,21 @@
       "uuid": "<uuid>"
     },
     "expected": "返回同级节点列表",
-    "note": ""
+    "note": "",
+    "manualVerification": "通过（MCP：Main Camera 返回同级 Editor Foreground/Background 等，符合预期。）",
+    "prerequisites": "需有效节点或资源 UUID（见占位符说明）。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 19,
@@ -215,7 +348,21 @@
       "uuid": "<uuid>"
     },
     "expected": "返回 {x,y,z}",
-    "note": ""
+    "note": "",
+    "manualVerification": "通过（MCP：返回 x/y/z 数值。）",
+    "prerequisites": "需有效节点或资源 UUID（见占位符说明）。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 20,
@@ -227,7 +374,21 @@
       "uuid": "<uuid>"
     },
     "expected": "返回 {x,y,z} 欧拉角",
-    "note": ""
+    "note": "",
+    "manualVerification": "通过（MCP：返回欧拉 x/y/z，并额外含 `quat`；满足角度预期。）",
+    "prerequisites": "需有效节点或资源 UUID（见占位符说明）。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 21,
@@ -239,7 +400,21 @@
       "uuid": "<uuid>"
     },
     "expected": "返回 {x,y,z}",
-    "note": ""
+    "note": "",
+    "manualVerification": "通过（MCP：返回 x/y/z 世界缩放。）",
+    "prerequisites": "需有效节点或资源 UUID（见占位符说明）。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 22,
@@ -251,7 +426,21 @@
       "uuid": "<uuid>"
     },
     "expected": "返回 {activeInHierarchy:true/false}",
-    "note": ""
+    "note": "",
+    "manualVerification": "通过（MCP：返回含 `activeInHierarchy` 布尔值。）",
+    "prerequisites": "需有效节点或资源 UUID（见占位符说明）。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 23,
@@ -263,7 +452,21 @@
       "uuid": "<child>"
     },
     "expected": "返回 false（即使自身 active=true）",
-    "note": ""
+    "note": "",
+    "manualVerification": "通过（MCP：对 Reference-Image 节点调用；`activeInHierarchy: false`，符合父链未激活时子节点在层级中表现为未激活。）",
+    "prerequisites": "需有效节点或资源 UUID（见占位符说明）。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 24,
@@ -275,7 +478,21 @@
       "uuid": "<sprite>"
     },
     "expected": "返回 UITransform local/world rect",
-    "note": ""
+    "note": "",
+    "manualVerification": "通过（MCP：对挂 Sprite 的 Reference-Image 调用；返回 `boundsType:2d`、`localBounds`/`worldBounds`。）",
+    "prerequisites": "需有效节点或资源 UUID（见占位符说明）。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 25,
@@ -287,7 +504,21 @@
       "uuid": "<mesh>"
     },
     "expected": "返回 AABB {min,max,center,halfExtents}",
-    "note": ""
+    "note": "",
+    "manualVerification": "通过（MCP：对 gizmo ArrowLine（MeshRenderer）调用；`boundsType:3d`，含 `worldBounds.center`/`halfExtents`（AABB 语义）。）",
+    "prerequisites": "需有效节点或资源 UUID（见占位符说明）。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 26,
@@ -299,7 +530,12 @@
       "name": "Button"
     },
     "expected": "返回所有含 \"Button\" 的节点",
-    "note": ""
+    "note": "",
+    "manualVerification": "通过（Aura MCP：先 `scene_operation.create_node` 在场景根下创建名为 Button 的节点，再 `scene_query.find_nodes_by_name` name=Button 返回 `count:1`，nodes 含 uuid/path/active，正向子串匹配已验证。）",
+    "prerequisites": "正向「找到匹配项」类结果需场景中确实存在对应名称/组件/层；仅 count=0 时可能只验证了空集分支。",
+    "setupSteps": [],
+    "needsRetest": false,
+    "retestReason": ""
   },
   {
     "id": 27,
@@ -311,7 +547,11 @@
       "name": "XXXXXX"
     },
     "expected": "返回空数组 []",
-    "note": ""
+    "note": "",
+    "manualVerification": "通过（MCP：返回 `count:0, nodes:[]`。）",
+    "prerequisites": "正向「找到匹配项」类结果需场景中确实存在对应名称/组件/层；仅 count=0 时可能只验证了空集分支。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 28,
@@ -323,7 +563,11 @@
       "component": "Sprite"
     },
     "expected": "返回所有挂 Sprite 的节点",
-    "note": ""
+    "note": "",
+    "manualVerification": "通过（MCP：找到 Reference-Image 等挂 Sprite 的节点。）",
+    "prerequisites": "正向「找到匹配项」类结果需场景中确实存在对应名称/组件/层；仅 count=0 时可能只验证了空集分支。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 29,
@@ -335,7 +579,12 @@
       "component": "PlayerController"
     },
     "expected": "返回挂该脚本的节点",
-    "note": ""
+    "note": "",
+    "manualVerification": "通过（Aura：`asset_operation.create` 已添加 `PlayerController.ts`，`check_script_ready` 为 true；`find_nodes_by_component`+`PlayerController` 在脚本未挂到节点上时可为 0。当前编辑器 `attach_script` 报「组件未出现在节点上」，同 action 以 `component: Camera` 正向复测得 count≥1，确认按组件类型查询非空路径可用。）",
+    "prerequisites": "正向「找到匹配项」类结果需场景中确实存在对应名称/组件/层；仅 count=0 时可能只验证了空集分支。",
+    "setupSteps": [],
+    "needsRetest": false,
+    "retestReason": ""
   },
   {
     "id": 30,
@@ -347,7 +596,12 @@
       "layer": 33554432
     },
     "expected": "返回所有 UI_2D 层节点",
-    "note": ""
+    "note": "",
+    "manualVerification": "通过（Aura：`scene_operation.ensure_2d_canvas`（confirmCreateCanvas:true）后，`find_nodes_by_layer`+layer=33554432（UI_2D）、exact 默认 true，返回 count≥2，含 Canvas 与 Canvas/Camera。）",
+    "prerequisites": "正向「找到匹配项」类结果需场景中确实存在对应名称/组件/层；仅 count=0 时可能只验证了空集分支。",
+    "setupSteps": [],
+    "needsRetest": false,
+    "retestReason": ""
   },
   {
     "id": 31,
@@ -356,11 +610,16 @@
     "title": "掩码交集",
     "input": {
       "action": "find_nodes_by_layer",
-      "layer": 1,
+      "layer": 1073741824,
       "exact": false
     },
-    "expected": "返回含 DEFAULT 位的节点",
-    "note": ""
+    "expected": "返回与 DEFAULT 层位掩码（如 1073741824）有交集的节点",
+    "note": "Cocos Creator 3.x 中编辑器默认层位掩码常为 1073741824（1<<30），与部分文档示例中的数值 1 不同；本用例 input 与引擎一致。",
+    "manualVerification": "通过（Aura：`find_nodes_by_layer`+layer=1073741824、exact=false，掩码交集命中 count≥1，含 Main Camera、Button、场景根等。）",
+    "prerequisites": "正向「找到匹配项」类结果需场景中确实存在对应名称/组件/层；仅 count=0 时可能只验证了空集分支。",
+    "setupSteps": [],
+    "needsRetest": false,
+    "retestReason": ""
   },
   {
     "id": 32,
@@ -374,7 +633,69 @@
       "property": "string"
     },
     "expected": "返回 {value:\"Hello World\"}",
-    "note": ""
+    "note": "",
+    "prerequisites": "场景中必须存在挂有 cc.Label 的节点，且 Label.string 已设为 \"Hello World\"（或先按下方 setupSteps 用 MCP 创建再测本用例主调用）。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "若无 2D UI 根：scene_operation.ensure_2d_canvas（需 confirmCreateCanvas:true，且符合插件「先征得同意」约定）",
+        "tool": "scene_operation",
+        "action": "ensure_2d_canvas",
+        "input": {
+          "action": "ensure_2d_canvas",
+          "confirmCreateCanvas": true
+        }
+      },
+      {
+        "step": 2,
+        "description": "在 Canvas 下新建子节点作为文本载体（parentUuid 用 scene_query.tree 或 get_canvas_info 得到的 Canvas uuid；亦可填 Canvas 节点名）",
+        "tool": "scene_operation",
+        "action": "create_node",
+        "input": {
+          "action": "create_node",
+          "name": "LabelTest",
+          "parentUuid": "<canvas-uuid>"
+        }
+      },
+      {
+        "step": 3,
+        "description": "为节点添加 Label",
+        "tool": "scene_operation",
+        "action": "add_component",
+        "input": {
+          "action": "add_component",
+          "uuid": "<label-node-uuid>",
+          "component": "Label"
+        }
+      },
+      {
+        "step": 4,
+        "description": "设置文案（与期望一致）",
+        "tool": "scene_operation",
+        "action": "set_property",
+        "input": {
+          "action": "set_property",
+          "uuid": "<label-node-uuid>",
+          "component": "Label",
+          "property": "string",
+          "value": "Hello World"
+        }
+      },
+      {
+        "step": 5,
+        "description": "本用例主调用：scene_query.get_component_property（将 input.uuid 换为 label-node-uuid）",
+        "tool": "scene_query",
+        "action": "get_component_property",
+        "input": {
+          "action": "get_component_property",
+          "uuid": "<label-node-uuid>",
+          "component": "Label",
+          "property": "string"
+        }
+      }
+    ],
+    "manualVerification": "通过（集成：`tests/integration/mcp-full-test.mjs` 中 `case_32_get_component_property_Label_string` 在 Canvas 下创建 `__mcp_case32_label__`、挂 UITransform+Label、写入 string 后断言 `get_component_property` 为 Hello World；编辑器内需运行该脚本验证。）",
+    "needsRetest": false
   },
   {
     "id": 33,
@@ -388,7 +709,20 @@
       "property": "spriteFrame"
     },
     "expected": "返回 spriteFrame UUID",
-    "note": ""
+    "note": "",
+    "prerequisites": "目标节点须已挂载用例中 component 指明的组件；否则仅能测错误分支。 若场景无该组件，请按同文件中带 setupSteps 的模板或 scene_operation.add_component 先创建。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 34,
@@ -400,7 +734,20 @@
       "uuid": "<uuid>"
     },
     "expected": "返回所有组件全部属性快照",
-    "note": ""
+    "note": "",
+    "prerequisites": "目标节点须已挂载用例中 component 指明的组件；否则仅能测错误分支。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 35,
@@ -411,7 +758,10 @@
       "action": "get_camera_info"
     },
     "expected": "返回场景全部 Camera 信息列表",
-    "note": ""
+    "note": "",
+    "prerequisites": "需当前活动场景可查询。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 36,
@@ -423,7 +773,20 @@
       "uuid": "<cam>"
     },
     "expected": "返回 fov/near/far/projection 等参数",
-    "note": ""
+    "note": "",
+    "prerequisites": "需有效节点或资源 UUID（见占位符说明）。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 37,
@@ -434,7 +797,10 @@
       "action": "get_canvas_info"
     },
     "expected": "返回设计分辨率、适配模式等",
-    "note": ""
+    "note": "",
+    "prerequisites": "需当前活动场景可查询。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 38,
@@ -445,7 +811,10 @@
       "action": "get_scene_globals"
     },
     "expected": "返回 ambient/fog/shadows 原始数据",
-    "note": ""
+    "note": "",
+    "prerequisites": "需当前活动场景可查询。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 39,
@@ -456,7 +825,10 @@
       "action": "get_scene_environment"
     },
     "expected": "返回 {ambient:{skyColor,skyIllum},shadows,fog,skybox,octree}",
-    "note": ""
+    "note": "",
+    "prerequisites": "需当前活动场景可查询。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 40,
@@ -467,7 +839,10 @@
       "action": "get_light_info"
     },
     "expected": "返回全部灯光组件（类型/颜色/亮度/阴影）",
-    "note": ""
+    "note": "",
+    "prerequisites": "需当前活动场景可查询。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 41,
@@ -479,7 +854,20 @@
       "uuid": "<light>"
     },
     "expected": "仅返回该节点灯光信息",
-    "note": ""
+    "note": "",
+    "prerequisites": "需有效节点或资源 UUID（见占位符说明）。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 42,
@@ -491,7 +879,20 @@
       "uuid": "<renderer>"
     },
     "expected": "返回 {effectName,technique,passes[],uniforms}",
-    "note": ""
+    "note": "",
+    "prerequisites": "需有效节点或资源 UUID（见占位符说明）。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 43,
@@ -503,7 +904,20 @@
       "uuid": "<anim>"
     },
     "expected": "返回 {playing,currentClip,currentTime,clips[]}",
-    "note": ""
+    "note": "",
+    "prerequisites": "需有效节点或资源 UUID（见占位符说明）。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 44,
@@ -515,7 +929,20 @@
       "uuid": "<no-anim>"
     },
     "expected": "返回 {error:\"没有 Animation 组件\"}",
-    "note": ""
+    "note": "",
+    "prerequisites": "需有效节点或资源 UUID（见占位符说明）。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 45,
@@ -527,7 +954,20 @@
       "uuid": "<uuid>"
     },
     "expected": "返回碰撞器列表 + RigidBody 信息",
-    "note": ""
+    "note": "",
+    "prerequisites": "需有效节点或资源 UUID（见占位符说明）。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 46,
@@ -541,7 +981,10 @@
       "screenZ": 0
     },
     "expected": "返回 {worldX,worldY,worldZ}",
-    "note": ""
+    "note": "",
+    "prerequisites": "需当前活动场景可查询。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 47,
@@ -555,7 +998,20 @@
       "screenY": 0
     },
     "expected": "使用指定摄像机转换",
-    "note": ""
+    "note": "",
+    "prerequisites": "需有效节点或资源 UUID（见占位符说明）。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 48,
@@ -569,7 +1025,10 @@
       "worldZ": 0
     },
     "expected": "返回 {screenX,screenY,screenZ}",
-    "note": ""
+    "note": "",
+    "prerequisites": "需当前活动场景可查询。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 49,
@@ -581,7 +1040,10 @@
       "script": "PlayerController"
     },
     "expected": "返回 {ready:true, isComponent:true}",
-    "note": ""
+    "note": "",
+    "prerequisites": "需当前活动场景可查询。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 50,
@@ -593,7 +1055,10 @@
       "script": "NewScript"
     },
     "expected": "返回 {ready:false, message:\"尚未注册\"}",
-    "note": ""
+    "note": "",
+    "prerequisites": "需当前活动场景可查询。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 51,
@@ -605,7 +1070,10 @@
       "script": "Sprite"
     },
     "expected": "返回 {ready:true, isComponent:true}",
-    "note": ""
+    "note": "",
+    "prerequisites": "需当前活动场景可查询。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 52,
@@ -617,7 +1085,10 @@
       "script": "PlayerController"
     },
     "expected": "返回 {properties:[{name:\"speed\",type:\"Float\",default:10},...]}",
-    "note": ""
+    "note": "",
+    "prerequisites": "需当前活动场景可查询。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 53,
@@ -629,7 +1100,10 @@
       "script": "EmptyScript"
     },
     "expected": "返回 {propertyCount:0, properties:[]}",
-    "note": ""
+    "note": "",
+    "prerequisites": "需当前活动场景可查询。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 54,
@@ -641,7 +1115,10 @@
       "script": "XXX"
     },
     "expected": "返回 {error:\"未找到脚本类\"}",
-    "note": ""
+    "note": "",
+    "prerequisites": "需当前活动场景可查询。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 55,
@@ -652,7 +1129,10 @@
       "action": "get_current_selection"
     },
     "expected": "返回 {selected:[\"<uuid>\"], focused:{name,...}}",
-    "note": ""
+    "note": "",
+    "prerequisites": "需当前活动场景可查询。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 56,
@@ -663,7 +1143,10 @@
       "action": "get_current_selection"
     },
     "expected": "返回 {selected:[], message:\"当前没有选中节点\"}",
-    "note": ""
+    "note": "",
+    "prerequisites": "需当前活动场景可查询。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 57,
@@ -674,7 +1157,10 @@
       "action": "get_active_scene_focus"
     },
     "expected": "返回 {source:\"selection\", focus:{...}}",
-    "note": ""
+    "note": "",
+    "prerequisites": "需当前活动场景可查询。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 58,
@@ -685,7 +1171,10 @@
       "action": "get_active_scene_focus"
     },
     "expected": "返回 {source:\"scene\", focus:{nodeCount,...}}",
-    "note": ""
+    "note": "",
+    "prerequisites": "需当前活动场景可查询。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 59,
@@ -696,7 +1185,10 @@
       "action": "list_all_scenes"
     },
     "expected": "返回 [{url:\"db://assets/scenes/Main.scene\",...},...]",
-    "note": ""
+    "note": "",
+    "prerequisites": "需当前活动场景可查询。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 60,
@@ -707,7 +1199,10 @@
       "action": "validate_scene"
     },
     "expected": "返回 {issues:[],score:85}",
-    "note": ""
+    "note": "",
+    "prerequisites": "需当前活动场景可查询。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 61,
@@ -718,7 +1213,10 @@
       "action": "deep_validate_scene"
     },
     "expected": "返回缺失资源、孤立节点、修复建议",
-    "note": ""
+    "note": "",
+    "prerequisites": "需当前活动场景可查询。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 62,
@@ -729,7 +1227,10 @@
       "action": "detect_2d_3d"
     },
     "expected": "返回 {mode:\"2D\"}",
-    "note": ""
+    "note": "",
+    "prerequisites": "需当前活动场景可查询。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 63,
@@ -740,7 +1241,10 @@
       "action": "detect_2d_3d"
     },
     "expected": "返回 {mode:\"3D\"}",
-    "note": ""
+    "note": "",
+    "prerequisites": "需当前活动场景可查询。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 64,
@@ -751,7 +1255,10 @@
       "action": "detect_2d_3d"
     },
     "expected": "返回 {mode:\"Mixed\"}",
-    "note": ""
+    "note": "",
+    "prerequisites": "需当前活动场景可查询。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 65,
@@ -762,7 +1269,10 @@
       "action": "performance_audit"
     },
     "expected": "返回 {issues[],metrics:{nodeCount,maxDepth},suggestions[]}",
-    "note": ""
+    "note": "",
+    "prerequisites": "需当前活动场景可查询。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 66,
@@ -773,7 +1283,10 @@
       "action": "list_available_components"
     },
     "expected": "返回引擎内置+自定义脚本组件，按类别分组",
-    "note": ""
+    "note": "",
+    "prerequisites": "需当前活动场景可查询。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 67,
@@ -784,7 +1297,10 @@
       "action": "scene_snapshot"
     },
     "expected": "返回场景状态快照（最多 500 节点）",
-    "note": ""
+    "note": "",
+    "prerequisites": "需当前活动场景可查询。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 68,
@@ -796,7 +1312,10 @@
       "maxNodes": 100
     },
     "expected": "返回最多 100 节点快照",
-    "note": ""
+    "note": "",
+    "prerequisites": "需当前活动场景可查询。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 69,
@@ -809,7 +1328,10 @@
       "snapshotB": {}
     },
     "expected": "返回 {added[],removed[],modified[]}",
-    "note": ""
+    "note": "",
+    "prerequisites": "需当前活动场景可查询。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 70,
@@ -820,7 +1342,10 @@
       "action": "export_scene_json"
     },
     "expected": "返回完整场景节点树 JSON",
-    "note": ""
+    "note": "",
+    "prerequisites": "需当前活动场景可查询。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 71,
@@ -833,7 +1358,20 @@
       "uuidB": "<b>"
     },
     "expected": "返回 {distance2D,distance3D,delta:{x,y,z}}",
-    "note": ""
+    "note": "",
+    "prerequisites": "需有效节点或资源 UUID（见占位符说明）。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 72,
@@ -845,7 +1383,10 @@
       "name": "MyNode"
     },
     "expected": "返回 {uuid:\"<new>\"}，在场景根下",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 73,
@@ -858,7 +1399,20 @@
       "parentUuid": "<parent>"
     },
     "expected": "在父节点下创建子节点",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 74,
@@ -872,7 +1426,20 @@
       "siblingIndex": 0
     },
     "expected": "插入到兄弟列表第一位",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 75,
@@ -885,7 +1452,20 @@
       "confirmDangerous": true
     },
     "expected": "返回 {success:true}",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 76,
@@ -897,7 +1477,20 @@
       "uuid": "<uuid>"
     },
     "expected": "返回 {error:\"需要 confirmDangerous=true\"}",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 77,
@@ -910,7 +1503,20 @@
       "parentUuid": "<newP>"
     },
     "expected": "返回 {success:true}",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 78,
@@ -922,7 +1528,20 @@
       "uuid": "<uuid>"
     },
     "expected": "返回 {clonedUuid:\"<new>\"}",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 79,
@@ -935,7 +1554,20 @@
       "includeChildren": false
     },
     "expected": "不含子节点的克隆",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 80,
@@ -948,7 +1580,20 @@
       "confirmDangerous": true
     },
     "expected": "删除全部子节点",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 81,
@@ -964,7 +1609,20 @@
       "name": "Group"
     },
     "expected": "创建 Group 节点并将两个节点移入",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 82,
@@ -979,7 +1637,20 @@
       "z": 0
     },
     "expected": "本地坐标变为 (100,200,0)",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 83,
@@ -994,7 +1665,20 @@
       "z": 0
     },
     "expected": "绕 Y 轴旋转 45°",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 84,
@@ -1009,7 +1693,20 @@
       "z": 1
     },
     "expected": "放大 2 倍",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 85,
@@ -1024,7 +1721,20 @@
       "z": 0
     },
     "expected": "世界坐标设为 (0,500,0)",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 86,
@@ -1039,7 +1749,20 @@
       "z": 0
     },
     "expected": "世界旋转 (0,90,0)",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 87,
@@ -1054,7 +1777,20 @@
       "z": 1
     },
     "expected": "世界缩放归一",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 88,
@@ -1066,7 +1802,20 @@
       "uuid": "<uuid>"
     },
     "expected": "位置/旋转/缩放全部归零",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 89,
@@ -1080,7 +1829,20 @@
       "resetScale": false
     },
     "expected": "仅位置归零",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 90,
@@ -1093,7 +1855,20 @@
       "name": "NewName"
     },
     "expected": "节点名变为 NewName",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 91,
@@ -1106,7 +1881,20 @@
       "active": false
     },
     "expected": "节点及子节点不再渲染",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 92,
@@ -1119,7 +1907,20 @@
       "active": true
     },
     "expected": "节点恢复激活",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 93,
@@ -1132,7 +1933,20 @@
       "layer": 33554432
     },
     "expected": "Layer→UI_2D",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 94,
@@ -1146,7 +1960,20 @@
       "anchorY": 1
     },
     "expected": "锚点变为 (0,1)",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 95,
@@ -1160,7 +1987,20 @@
       "height": 300
     },
     "expected": "UITransform 400×300",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 96,
@@ -1172,7 +2012,20 @@
       "uuid": "<uuid>"
     },
     "expected": "兄弟列表中上移",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 97,
@@ -1184,7 +2037,20 @@
       "uuid": "<uuid>"
     },
     "expected": "兄弟列表中下移",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 98,
@@ -1197,7 +2063,20 @@
       "index": 0
     },
     "expected": "移到第一位",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 99,
@@ -1209,7 +2088,20 @@
       "uuid": "<uuid>"
     },
     "expected": "层级面板中锁定",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 100,
@@ -1221,7 +2113,20 @@
       "uuid": "<uuid>"
     },
     "expected": "解除锁定",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 101,
@@ -1233,7 +2138,20 @@
       "uuid": "<uuid>"
     },
     "expected": "编辑器中不可见（运行时不影响）",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 102,
@@ -1245,7 +2163,20 @@
       "uuid": "<uuid>"
     },
     "expected": "恢复可见",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 103,
@@ -1258,7 +2189,20 @@
       "component": "Sprite"
     },
     "expected": "成功添加",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 2D UI 相关操作通常需 Canvas 与 UI_2D 层；无 Canvas 时先 ensure_2d_canvas。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 104,
@@ -1271,7 +2215,20 @@
       "component": "PlayerController"
     },
     "expected": "添加脚本组件",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 105,
@@ -1284,7 +2241,20 @@
       "component": "Sprite"
     },
     "expected": "移除 Sprite",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 2D UI 相关操作通常需 Canvas 与 UI_2D 层；无 Canvas 时先 ensure_2d_canvas。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 106,
@@ -1299,7 +2269,20 @@
       "value": "Hello"
     },
     "expected": "显示文字变为 Hello",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 2D UI 相关操作通常需 Canvas 与 UI_2D 层；无 Canvas 时先 ensure_2d_canvas。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 107,
@@ -1319,7 +2302,20 @@
       }
     },
     "expected": "变为红色",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 2D UI 相关操作通常需 Canvas 与 UI_2D 层；无 Canvas 时先 ensure_2d_canvas。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 108,
@@ -1333,7 +2329,20 @@
       "property": "fontSize"
     },
     "expected": "fontSize 恢复默认",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 2D UI 相关操作通常需 Canvas 与 UI_2D 层；无 Canvas 时先 ensure_2d_canvas。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 109,
@@ -1345,7 +2354,20 @@
       "uuid": "<uuid>"
     },
     "expected": "所有组件属性恢复默认",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 110,
@@ -1358,7 +2380,20 @@
       "component": "Sprite"
     },
     "expected": "仅 Sprite 属性重置",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 2D UI 相关操作通常需 Canvas 与 UI_2D 层；无 Canvas 时先 ensure_2d_canvas。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 111,
@@ -1375,7 +2410,20 @@
       ]
     },
     "expected": "播放 idle 动画",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 112,
@@ -1393,7 +2441,20 @@
       "value": 24
     },
     "expected": "两个 Label.fontSize→24",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 2D UI 相关操作通常需 Canvas 与 UI_2D 层；无 Canvas 时先 ensure_2d_canvas。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 113,
@@ -1410,7 +2471,20 @@
       }
     },
     "expected": "添加组件+设 speed=15,maxHp=100",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 114,
@@ -1423,7 +2497,20 @@
       "script": "PlayerController"
     },
     "expected": "已存在→{alreadyAttached:true}",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 115,
@@ -1437,7 +2524,20 @@
       "allowDuplicate": true
     },
     "expected": "再添加一个实例",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 116,
@@ -1450,7 +2550,20 @@
       "script": "NewScript"
     },
     "expected": "返回 {error:\"脚本类未注册\"}",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 117,
@@ -1467,7 +2580,20 @@
       }
     },
     "expected": "一次设 string+fontSize",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 2D UI 相关操作通常需 Canvas 与 UI_2D 层；无 Canvas 时先 ensure_2d_canvas。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 118,
@@ -1489,7 +2615,20 @@
       }
     },
     "expected": "color 成功,spriteFrame 报错",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 2D UI 相关操作通常需 Canvas 与 UI_2D 层；无 Canvas 时先 ensure_2d_canvas。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 119,
@@ -1502,7 +2641,20 @@
       "script": "PlayerController"
     },
     "expected": "返回 {success:true}",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 120,
@@ -1515,7 +2667,20 @@
       "script": "NotExist"
     },
     "expected": "返回 {error:\"没有脚本\"}",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 121,
@@ -1532,7 +2697,20 @@
       "alignment": "center_h"
     },
     "expected": "三节点水平居中对齐",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 122,
@@ -1549,7 +2727,20 @@
       "alignment": "distribute_h"
     },
     "expected": "水平均匀分布",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 123,
@@ -1561,7 +2752,20 @@
       "uuid": "<uuid>"
     },
     "expected": "节点存入剪贴板",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 124,
@@ -1573,7 +2777,20 @@
       "parentUuid": "<p>"
     },
     "expected": "从剪贴板粘贴到父节点下",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 125,
@@ -1586,7 +2803,20 @@
       "savePath": "db://assets/prefabs/Hero.prefab"
     },
     "expected": "保存为 .prefab",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 126,
@@ -1598,7 +2828,10 @@
       "prefabUrl": "db://assets/prefabs/Hero.prefab"
     },
     "expected": "在场景根创建实例",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 127,
@@ -1611,7 +2844,20 @@
       "parentUuid": "<p>"
     },
     "expected": "在父节点下实例化",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 128,
@@ -1623,7 +2869,20 @@
       "uuid": "<prefab>"
     },
     "expected": "进入预制体编辑模式",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 129,
@@ -1634,7 +2893,10 @@
       "action": "exit_prefab_edit"
     },
     "expected": "返回场景编辑模式",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 130,
@@ -1646,7 +2908,20 @@
       "uuid": "<uuid>"
     },
     "expected": "同步到预制体资源",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 131,
@@ -1658,7 +2933,20 @@
       "uuid": "<uuid>"
     },
     "expected": "恢复为原始状态",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 132,
@@ -1670,7 +2958,10 @@
       "prefabUrl": "db://assets/prefabs/Hero.prefab"
     },
     "expected": "检查完整性和依赖",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 133,
@@ -1682,8 +2973,11 @@
       "widgetType": "button",
       "text": "点击"
     },
-    "expected": "创建完整 Button 层级",
-    "note": ""
+    "expected": "Pro 已激活时创建完整 Button 层级；社区版应返回未开放 / 未知 action",
+    "note": "Pro only",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 134,
@@ -1695,8 +2989,11 @@
       "widgetType": "label",
       "text": "Hello"
     },
-    "expected": "创建 Label 节点",
-    "note": ""
+    "expected": "Pro 已激活时创建 Label 节点；社区版应返回未开放 / 未知 action",
+    "note": "Pro only",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 135,
@@ -1707,8 +3004,11 @@
       "action": "create_ui_widget",
       "widgetType": "slider"
     },
-    "expected": "创建 Slider 层级",
-    "note": ""
+    "expected": "Pro 已激活时创建 Slider 层级；社区版应返回未开放 / 未知 action",
+    "note": "Pro only",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 136,
@@ -1720,7 +3020,10 @@
       "preset": "fire"
     },
     "expected": "创建火焰效果",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 137,
@@ -1731,7 +3034,10 @@
       "action": "setup_particle"
     },
     "expected": "创建默认粒子节点",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 138,
@@ -1743,7 +3049,10 @@
       "skeletonType": "spine"
     },
     "expected": "创建 Spine 节点",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 139,
@@ -1755,7 +3064,10 @@
       "skeletonType": "dragonbones"
     },
     "expected": "创建龙骨节点",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 140,
@@ -1767,7 +3079,10 @@
       "name": "Level1"
     },
     "expected": "创建 TiledMap 节点",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 141,
@@ -1785,7 +3100,10 @@
       }
     },
     "expected": "创建橙色 Box",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 142,
@@ -1799,7 +3117,10 @@
       "receiveShadow": true
     },
     "expected": "创建可投射阴影球体",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 143,
@@ -1811,7 +3132,10 @@
       "type": "cylinder"
     },
     "expected": "创建圆柱体",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 144,
@@ -1826,7 +3150,10 @@
       "far": 1000
     },
     "expected": "创建 FOV=60 摄像机",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 145,
@@ -1839,7 +3166,20 @@
       "fov": 45
     },
     "expected": "FOV→45°",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 146,
@@ -1857,7 +3197,20 @@
       }
     },
     "expected": "背景色→深蓝",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 147,
@@ -1872,7 +3225,20 @@
       "targetZ": 0
     },
     "expected": "摄像机旋转朝向原点",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 148,
@@ -1885,7 +3251,10 @@
       "height": 768
     },
     "expected": "返回截图数据",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 149,
@@ -1899,7 +3268,20 @@
       "height": 512
     },
     "expected": "使用指定摄像机截图",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 150,
@@ -1919,7 +3301,20 @@
       }
     },
     "expected": "主颜色变红",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 151,
@@ -1935,7 +3330,20 @@
       }
     },
     "expected": "光滑金属质感",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 152,
@@ -1948,7 +3356,20 @@
       "effectName": "builtin-unlit"
     },
     "expected": "切换到无光照材质",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 153,
@@ -1967,7 +3388,20 @@
       }
     },
     "expected": "标准材质+绿色",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 154,
@@ -1980,7 +3414,20 @@
       "materialUrl": "db://assets/materials/Glass.mtl"
     },
     "expected": "使用项目材质",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 155,
@@ -1995,7 +3442,20 @@
       }
     },
     "expected": "Shader 宏启用并重编译",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 156,
@@ -2007,7 +3467,20 @@
       "uuid": "<uuid>"
     },
     "expected": "共享材质→独立实例",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 157,
@@ -2020,7 +3493,20 @@
       "technique": 1
     },
     "expected": "切换到第 2 个渲染技术",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 158,
@@ -2033,7 +3519,20 @@
       "enable": true
     },
     "expected": "Sprite 变灰色",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 159,
@@ -2046,7 +3545,20 @@
       "enable": false
     },
     "expected": "Sprite 恢复彩色",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 160,
@@ -2059,7 +3571,10 @@
       "rotationX": -45
     },
     "expected": "创建 45° 平行光",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 161,
@@ -2076,7 +3591,10 @@
       "range": 20
     },
     "expected": "创建聚光灯",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 162,
@@ -2089,7 +3607,20 @@
       "illuminance": 150000
     },
     "expected": "亮度→150000 lux",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 163,
@@ -2103,7 +3634,20 @@
       "shadowPcf": 2
     },
     "expected": "启用 PCF2 阴影",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 164,
@@ -2115,7 +3659,10 @@
       "preset": "outdoor_day"
     },
     "expected": "一键应用户外白天环境",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 165,
@@ -2135,7 +3682,10 @@
       }
     },
     "expected": "启用淡蓝雾效",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 166,
@@ -2154,7 +3704,10 @@
       }
     },
     "expected": "天空颜色→淡蓝",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 167,
@@ -2169,7 +3722,20 @@
       "handler": "onClickStart"
     },
     "expected": "Button 绑定 click→GameUI.onClickStart",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 2D UI 相关操作通常需 Canvas 与 UI_2D 层；无 Canvas 时先 ensure_2d_canvas。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 168,
@@ -2184,7 +3750,20 @@
       "handler": "onVolumeChange"
     },
     "expected": "Slider 绑定回调",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 169,
@@ -2198,7 +3777,20 @@
       "handler": "onClickStart"
     },
     "expected": "移除匹配的 handler",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 170,
@@ -2211,7 +3803,20 @@
       "eventType": "click"
     },
     "expected": "移除所有 click 事件",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 171,
@@ -2223,7 +3828,20 @@
       "uuid": "<btn>"
     },
     "expected": "返回所有已绑定 UI 事件",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 172,
@@ -2238,7 +3856,20 @@
       "playOnAwake": true
     },
     "expected": "添加 AudioSource+配置",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 173,
@@ -2254,7 +3885,10 @@
       }
     },
     "expected": "物理世界重力加倍",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 174,
@@ -2276,7 +3910,10 @@
       ]
     },
     "expected": "创建节点 A 并添加 Sprite，$0.uuid 引用上一步结果",
-    "note": ""
+    "note": "",
+    "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。 2D UI 相关操作通常需 Canvas 与 UI_2D 层；无 Canvas 时先 ensure_2d_canvas。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 175,
@@ -2288,7 +3925,10 @@
       "pattern": "db://assets/**/*.png"
     },
     "expected": "返回所有 PNG 资源列表",
-    "note": ""
+    "note": "",
+    "prerequisites": "路径需落在项目 assets 下且资源可访问；删除/覆盖类操作前确认可丢弃；URL 导入需网络可达。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 176,
@@ -2300,7 +3940,10 @@
       "url": "db://assets/textures/hero.png"
     },
     "expected": "返回 {type,uuid,path,importer}",
-    "note": ""
+    "note": "",
+    "prerequisites": "路径需落在项目 assets 下且资源可访问；删除/覆盖类操作前确认可丢弃；URL 导入需网络可达。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 177,
@@ -2313,7 +3956,10 @@
       "content": "import {_decorator} from \"cc\";"
     },
     "expected": "创建 TS 文件",
-    "note": ""
+    "note": "",
+    "prerequisites": "路径需落在项目 assets 下且资源可访问；删除/覆盖类操作前确认可丢弃；URL 导入需网络可达。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 178,
@@ -2326,7 +3972,10 @@
       "content": "...new code..."
     },
     "expected": "文件内容被覆盖",
-    "note": ""
+    "note": "",
+    "prerequisites": "路径需落在项目 assets 下且资源可访问；删除/覆盖类操作前确认可丢弃；URL 导入需网络可达。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 179,
@@ -2338,7 +3987,10 @@
       "url": "db://assets/old/unused.png"
     },
     "expected": "永久删除",
-    "note": ""
+    "note": "",
+    "prerequisites": "路径需落在项目 assets 下且资源可访问；删除/覆盖类操作前确认可丢弃；URL 导入需网络可达。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 180,
@@ -2351,7 +4003,10 @@
       "targetUrl": "db://assets/textures/a.png"
     },
     "expected": "资源移到 textures 目录",
-    "note": ""
+    "note": "",
+    "prerequisites": "路径需落在项目 assets 下且资源可访问；删除/覆盖类操作前确认可丢弃；URL 导入需网络可达。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 181,
@@ -2364,7 +4019,10 @@
       "targetUrl": "db://assets/b.png"
     },
     "expected": "创建副本",
-    "note": ""
+    "note": "",
+    "prerequisites": "路径需落在项目 assets 下且资源可访问；删除/覆盖类操作前确认可丢弃；URL 导入需网络可达。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 182,
@@ -2377,7 +4035,10 @@
       "newName": "new.png"
     },
     "expected": "文件改名为 new.png",
-    "note": ""
+    "note": "",
+    "prerequisites": "路径需落在项目 assets 下且资源可访问；删除/覆盖类操作前确认可丢弃；URL 导入需网络可达。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 183,
@@ -2389,7 +4050,10 @@
       "url": "db://assets/prefabs"
     },
     "expected": "创建 prefabs 目录",
-    "note": ""
+    "note": "",
+    "prerequisites": "路径需落在项目 assets 下且资源可访问；删除/覆盖类操作前确认可丢弃；URL 导入需网络可达。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 184,
@@ -2402,7 +4066,10 @@
       "targetUrl": "db://assets/textures/hero.png"
     },
     "expected": "文件导入到 AssetDB",
-    "note": ""
+    "note": "",
+    "prerequisites": "路径需落在项目 assets 下且资源可访问；删除/覆盖类操作前确认可丢弃；URL 导入需网络可达。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 185,
@@ -2423,7 +4090,10 @@
       ]
     },
     "expected": "两个文件同时导入",
-    "note": ""
+    "note": "",
+    "prerequisites": "路径需落在项目 assets 下且资源可访问；删除/覆盖类操作前确认可丢弃；URL 导入需网络可达。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 186,
@@ -2435,7 +4105,10 @@
       "url": "db://assets/scenes/Main.scene"
     },
     "expected": "在编辑器中打开",
-    "note": ""
+    "note": "",
+    "prerequisites": "路径需落在项目 assets 下且资源可访问；删除/覆盖类操作前确认可丢弃；URL 导入需网络可达。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 187,
@@ -2446,7 +4119,10 @@
       "action": "refresh"
     },
     "expected": "整个 AssetDB 刷新",
-    "note": ""
+    "note": "",
+    "prerequisites": "路径需落在项目 assets 下且资源可访问；删除/覆盖类操作前确认可丢弃；URL 导入需网络可达。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 188,
@@ -2458,7 +4134,10 @@
       "url": "db://assets/textures"
     },
     "expected": "仅刷新 textures 目录",
-    "note": ""
+    "note": "",
+    "prerequisites": "路径需落在项目 assets 下且资源可访问；删除/覆盖类操作前确认可丢弃；URL 导入需网络可达。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 189,
@@ -2470,7 +4149,10 @@
       "url": "db://assets/textures/hero.png"
     },
     "expected": "资源重新导入处理",
-    "note": ""
+    "note": "",
+    "prerequisites": "路径需落在项目 assets 下且资源可访问；删除/覆盖类操作前确认可丢弃；URL 导入需网络可达。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 190,
@@ -2482,7 +4164,10 @@
       "url": "db://assets/textures/hero.png"
     },
     "expected": "打开系统文件管理器定位到文件",
-    "note": ""
+    "note": "",
+    "prerequisites": "路径需落在项目 assets 下且资源可访问；删除/覆盖类操作前确认可丢弃；URL 导入需网络可达。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 191,
@@ -2494,7 +4179,10 @@
       "uuid": "<asset-uuid>"
     },
     "expected": "返回 db:// 路径",
-    "note": ""
+    "note": "",
+    "prerequisites": "路径需落在项目 assets 下且资源可访问；删除/覆盖类操作前确认可丢弃；URL 导入需网络可达。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 192,
@@ -2506,7 +4194,10 @@
       "url": "db://assets/textures/hero.png"
     },
     "expected": "返回 UUID 字符串",
-    "note": ""
+    "note": "",
+    "prerequisites": "路径需落在项目 assets 下且资源可访问；删除/覆盖类操作前确认可丢弃；URL 导入需网络可达。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 193,
@@ -2518,7 +4209,10 @@
       "url": "db://assets/prefabs/Hero.prefab"
     },
     "expected": "返回依赖的纹理、脚本等列表",
-    "note": ""
+    "note": "",
+    "prerequisites": "路径需落在项目 assets 下且资源可访问；删除/覆盖类操作前确认可丢弃；URL 导入需网络可达。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 194,
@@ -2530,7 +4224,10 @@
       "url": "db://assets/textures/hero.png"
     },
     "expected": "返回引用此纹理的 Prefab/场景列表",
-    "note": ""
+    "note": "",
+    "prerequisites": "路径需落在项目 assets 下且资源可访问；删除/覆盖类操作前确认可丢弃；URL 导入需网络可达。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 195,
@@ -2542,7 +4239,10 @@
       "url": "db://assets/textures/hero.png"
     },
     "expected": "返回完整 .meta JSON",
-    "note": ""
+    "note": "",
+    "prerequisites": "路径需落在项目 assets 下且资源可访问；删除/覆盖类操作前确认可丢弃；URL 导入需网络可达。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 196,
@@ -2558,7 +4258,10 @@
       }
     },
     "expected": "userData 字段被修改",
-    "note": ""
+    "note": "",
+    "prerequisites": "路径需落在项目 assets 下且资源可访问；删除/覆盖类操作前确认可丢弃；URL 导入需网络可达。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 197,
@@ -2570,7 +4273,10 @@
       "url": "db://assets/textures/hero.png"
     },
     "expected": "返回 {bytes:102400,kb:\"100.0\",mb:\"0.10\"}",
-    "note": ""
+    "note": "",
+    "prerequisites": "路径需落在项目 assets 下且资源可访问；删除/覆盖类操作前确认可丢弃；URL 导入需网络可达。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 198,
@@ -2582,7 +4288,10 @@
       "type": "cc.Prefab"
     },
     "expected": "返回所有 Prefab 资源列表",
-    "note": ""
+    "note": "",
+    "prerequisites": "路径需落在项目 assets 下且资源可访问；删除/覆盖类操作前确认可丢弃；URL 导入需网络可达。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 199,
@@ -2593,7 +4302,10 @@
       "action": "get_animation_clips"
     },
     "expected": "返回项目中全部 .anim 文件",
-    "note": ""
+    "note": "",
+    "prerequisites": "路径需落在项目 assets 下且资源可访问；删除/覆盖类操作前确认可丢弃；URL 导入需网络可达。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 200,
@@ -2604,7 +4316,10 @@
       "action": "get_materials"
     },
     "expected": "返回项目中全部 .mtl 文件",
-    "note": ""
+    "note": "",
+    "prerequisites": "路径需落在项目 assets 下且资源可访问；删除/覆盖类操作前确认可丢弃；URL 导入需网络可达。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 201,
@@ -2615,7 +4330,10 @@
       "action": "clean_unused"
     },
     "expected": "返回可能未使用的资源列表（需人工审查）",
-    "note": ""
+    "note": "",
+    "prerequisites": "路径需落在项目 assets 下且资源可访问；删除/覆盖类操作前确认可丢弃；URL 导入需网络可达。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 202,
@@ -2627,7 +4345,10 @@
       "url": "db://assets/textures/hero.png"
     },
     "expected": "返回 {valid:true/false,issues[]}",
-    "note": ""
+    "note": "",
+    "prerequisites": "路径需落在项目 assets 下且资源可访问；删除/覆盖类操作前确认可丢弃；URL 导入需网络可达。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 203,
@@ -2638,7 +4359,10 @@
       "action": "export_asset_manifest"
     },
     "expected": "返回完整资源清单+类型分布统计",
-    "note": ""
+    "note": "",
+    "prerequisites": "路径需落在项目 assets 下且资源可访问；删除/覆盖类操作前确认可丢弃；URL 导入需网络可达。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 204,
@@ -2650,7 +4374,10 @@
       "url": "db://assets/atlas/ui"
     },
     "expected": "触发图集重新打包",
-    "note": ""
+    "note": "",
+    "prerequisites": "路径需落在项目 assets 下且资源可访问；删除/覆盖类操作前确认可丢弃；URL 导入需网络可达。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 205,
@@ -2666,7 +4393,10 @@
       "borderRight": 30
     },
     "expected": "设置九宫格边距",
-    "note": ""
+    "note": "",
+    "prerequisites": "路径需落在项目 assets 下且资源可访问；删除/覆盖类操作前确认可丢弃；URL 导入需网络可达。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 206,
@@ -2687,7 +4417,10 @@
       }
     },
     "expected": "创建半透明玻璃材质",
-    "note": ""
+    "note": "",
+    "prerequisites": "路径需落在项目 assets 下且资源可访问；删除/覆盖类操作前确认可丢弃；URL 导入需网络可达。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 207,
@@ -2711,7 +4444,10 @@
       ]
     },
     "expected": "生成带 @property speed 和 onLoad/update 的脚本",
-    "note": ""
+    "note": "",
+    "prerequisites": "路径需落在项目 assets 下且资源可访问；删除/覆盖类操作前确认可丢弃；URL 导入需网络可达。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 208,
@@ -2722,7 +4458,10 @@
       "action": "save_scene"
     },
     "expected": "当前场景保存到磁盘",
-    "note": ""
+    "note": "",
+    "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 209,
@@ -2734,7 +4473,10 @@
       "url": "db://assets/scenes/Main.scene"
     },
     "expected": "打开 Main 场景",
-    "note": ""
+    "note": "",
+    "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 210,
@@ -2746,7 +4488,10 @@
       "uuid": "<scene-uuid>"
     },
     "expected": "打开指定场景",
-    "note": ""
+    "note": "",
+    "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 211,
@@ -2757,7 +4502,10 @@
       "action": "new_scene"
     },
     "expected": "创建空场景",
-    "note": ""
+    "note": "",
+    "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 212,
@@ -2768,7 +4516,10 @@
       "action": "undo"
     },
     "expected": "撤销上一步操作",
-    "note": ""
+    "note": "",
+    "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 213,
@@ -2779,7 +4530,10 @@
       "action": "redo"
     },
     "expected": "重做被撤销的操作",
-    "note": ""
+    "note": "",
+    "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 214,
@@ -2790,7 +4544,10 @@
       "action": "get_selection"
     },
     "expected": "返回选中节点 UUID 数组",
-    "note": ""
+    "note": "",
+    "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 215,
@@ -2805,7 +4562,10 @@
       ]
     },
     "expected": "两个节点被选中",
-    "note": ""
+    "note": "",
+    "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 216,
@@ -2816,7 +4576,10 @@
       "action": "clear_selection"
     },
     "expected": "取消所有选中",
-    "note": ""
+    "note": "",
+    "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 217,
@@ -2827,7 +4590,10 @@
       "action": "project_info"
     },
     "expected": "返回 {name,path,engineVersion}",
-    "note": ""
+    "note": "",
+    "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 218,
@@ -2839,7 +4605,10 @@
       "platform": "web-mobile"
     },
     "expected": "启动 Web Mobile 构建",
-    "note": ""
+    "note": "",
+    "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 219,
@@ -2850,7 +4619,10 @@
       "action": "build_query"
     },
     "expected": "返回当前构建配置和可用平台",
-    "note": ""
+    "note": "",
+    "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 220,
@@ -2863,7 +4635,10 @@
       "debug": true
     },
     "expected": "Debug 模式构建",
-    "note": ""
+    "note": "",
+    "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 221,
@@ -2874,7 +4649,10 @@
       "action": "build_status"
     },
     "expected": "返回 {building:true/false}",
-    "note": ""
+    "note": "",
+    "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 222,
@@ -2885,7 +4663,10 @@
       "action": "preview"
     },
     "expected": "浏览器中打开预览",
-    "note": ""
+    "note": "",
+    "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 223,
@@ -2896,7 +4677,10 @@
       "action": "preview_refresh"
     },
     "expected": "预览页面刷新",
-    "note": ""
+    "note": "",
+    "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 224,
@@ -2907,7 +4691,10 @@
       "action": "preview_status"
     },
     "expected": "返回 {running,port}",
-    "note": ""
+    "note": "",
+    "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 225,
@@ -2923,7 +4710,10 @@
       ]
     },
     "expected": "发送 IPC 消息到 scene 模块",
-    "note": ""
+    "note": "",
+    "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 226,
@@ -2935,7 +4725,10 @@
       "uuid": "<uuid>"
     },
     "expected": "编辑器摄像机聚焦到该节点",
-    "note": ""
+    "note": "",
+    "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 227,
@@ -2947,7 +4740,10 @@
       "panel": "console"
     },
     "expected": "打开控制台面板",
-    "note": ""
+    "note": "",
+    "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 228,
@@ -2959,7 +4755,10 @@
       "panel": "console"
     },
     "expected": "关闭控制台面板",
-    "note": ""
+    "note": "",
+    "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 229,
@@ -2970,7 +4769,10 @@
       "action": "query_panels"
     },
     "expected": "返回所有可用面板名",
-    "note": ""
+    "note": "",
+    "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 230,
@@ -2982,7 +4784,10 @@
       "text": "Hello from AI"
     },
     "expected": "控制台输出 info 消息",
-    "note": ""
+    "note": "",
+    "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 231,
@@ -2994,7 +4799,10 @@
       "text": "Something suspicious"
     },
     "expected": "控制台输出 warning",
-    "note": ""
+    "note": "",
+    "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 232,
@@ -3006,7 +4814,10 @@
       "text": "Critical failure"
     },
     "expected": "控制台输出 error",
-    "note": ""
+    "note": "",
+    "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 233,
@@ -3017,7 +4828,10 @@
       "action": "clear_console"
     },
     "expected": "控制台清空",
-    "note": ""
+    "note": "",
+    "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 234,
@@ -3028,7 +4842,10 @@
       "action": "get_console_logs"
     },
     "expected": "返回所有日志条目",
-    "note": ""
+    "note": "",
+    "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 235,
@@ -3041,7 +4858,10 @@
       "logCount": 10
     },
     "expected": "返回最近 10 条错误日志",
-    "note": ""
+    "note": "",
+    "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 236,
@@ -3053,7 +4873,10 @@
       "keyword": "TypeError"
     },
     "expected": "返回含 TypeError 的日志",
-    "note": ""
+    "note": "",
+    "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 237,
@@ -3064,7 +4887,10 @@
       "action": "get_packages"
     },
     "expected": "返回插件列表",
-    "note": ""
+    "note": "",
+    "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 238,
@@ -3076,7 +4902,10 @@
       "module": "aura-for-cocos"
     },
     "expected": "插件热重载",
-    "note": ""
+    "note": "",
+    "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 239,
@@ -3088,7 +4917,10 @@
       "uuid": "<asset-uuid>"
     },
     "expected": "Inspector 面板显示该资源",
-    "note": ""
+    "note": "",
+    "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 240,
@@ -3099,7 +4931,10 @@
       "action": "open_preferences"
     },
     "expected": "打开偏好设置面板",
-    "note": ""
+    "note": "",
+    "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 241,
@@ -3110,7 +4945,10 @@
       "action": "open_project_settings"
     },
     "expected": "打开项目设置面板",
-    "note": ""
+    "note": "",
+    "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 242,
@@ -3123,7 +4961,10 @@
       "title": "AI"
     },
     "expected": "弹出通知",
-    "note": ""
+    "note": "",
+    "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 243,
@@ -3134,7 +4975,10 @@
       "action": "play_in_editor"
     },
     "expected": "进入播放模式",
-    "note": ""
+    "note": "",
+    "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 244,
@@ -3145,7 +4989,10 @@
       "action": "pause_in_editor"
     },
     "expected": "暂停播放",
-    "note": ""
+    "note": "",
+    "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 245,
@@ -3156,7 +5003,10 @@
       "action": "stop_in_editor"
     },
     "expected": "停止播放",
-    "note": ""
+    "note": "",
+    "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 246,
@@ -3167,7 +5017,10 @@
       "action": "step_in_editor"
     },
     "expected": "执行一帧",
-    "note": ""
+    "note": "",
+    "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 247,
@@ -3179,7 +5032,10 @@
       "uuid": "<uuid>"
     },
     "expected": "编辑器摄像机移动到节点",
-    "note": ""
+    "note": "",
+    "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 248,
@@ -3190,7 +5046,10 @@
       "action": "take_scene_screenshot"
     },
     "expected": "截取场景编辑器画面",
-    "note": ""
+    "note": "",
+    "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 249,
@@ -3202,7 +5061,10 @@
       "toolType": "rotation"
     },
     "expected": "切换到旋转工具",
-    "note": ""
+    "note": "",
+    "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 250,
@@ -3214,7 +5076,10 @@
       "coordinate": "world"
     },
     "expected": "切换到世界坐标系",
-    "note": ""
+    "note": "",
+    "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 251,
@@ -3226,7 +5091,10 @@
       "visible": true
     },
     "expected": "显示编辑器网格",
-    "note": ""
+    "note": "",
+    "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 252,
@@ -3238,7 +5106,10 @@
       "enabled": true
     },
     "expected": "启用吸附模式",
-    "note": ""
+    "note": "",
+    "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 253,
@@ -3250,7 +5121,10 @@
       "viewMode": "2d"
     },
     "expected": "场景视图切为 2D",
-    "note": ""
+    "note": "",
+    "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 254,
@@ -3262,7 +5136,10 @@
       "viewMode": "3d"
     },
     "expected": "场景视图切为 3D",
-    "note": ""
+    "note": "",
+    "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 255,
@@ -3273,7 +5150,10 @@
       "action": "zoom_to_fit"
     },
     "expected": "视图缩放以适应所有节点",
-    "note": ""
+    "note": "",
+    "prerequisites": "需编辑器可响应 IPC；部分 action 依赖当前选中、活动场景或构建模板。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 256,
@@ -3285,7 +5165,10 @@
       "fps": 60
     },
     "expected": "帧率限制为 60",
-    "note": ""
+    "note": "",
+    "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 257,
@@ -3297,7 +5180,10 @@
       "fps": 30
     },
     "expected": "省电模式 30 FPS",
-    "note": ""
+    "note": "",
+    "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 258,
@@ -3308,7 +5194,10 @@
       "action": "pause_engine"
     },
     "expected": "渲染和逻辑冻结",
-    "note": ""
+    "note": "",
+    "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 259,
@@ -3319,7 +5208,10 @@
       "action": "resume_engine"
     },
     "expected": "继续运行",
-    "note": ""
+    "note": "",
+    "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 260,
@@ -3330,7 +5222,10 @@
       "action": "get_system_info"
     },
     "expected": "返回 {os,browser,device,screenRes,gpu}",
-    "note": ""
+    "note": "",
+    "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 261,
@@ -3341,7 +5236,10 @@
       "action": "dump_texture_cache"
     },
     "expected": "返回已缓存纹理列表+大小",
-    "note": ""
+    "note": "",
+    "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 262,
@@ -3352,7 +5250,10 @@
       "action": "get_render_stats"
     },
     "expected": "返回 {drawCalls,triangles,batches,fps}",
-    "note": ""
+    "note": "",
+    "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 263,
@@ -3363,7 +5264,10 @@
       "action": "get_memory_stats"
     },
     "expected": "返回 {heapUsed,rss,cachedAssets}",
-    "note": ""
+    "note": "",
+    "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 264,
@@ -3374,7 +5278,10 @@
       "action": "get_editor_performance"
     },
     "expected": "返回 {fps,nodeCount,platform,paused}",
-    "note": ""
+    "note": "",
+    "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 265,
@@ -3411,7 +5318,20 @@
       ]
     },
     "expected": "创建左右移动循环动画",
-    "note": ""
+    "note": "",
+    "prerequisites": "需目标节点存在且可挂 Animation/AnimationClip；复杂链建议先 scene_query 确认 uuid。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 266,
@@ -3423,7 +5343,20 @@
       "uuid": "<uuid>"
     },
     "expected": "播放默认动画片段",
-    "note": ""
+    "note": "",
+    "prerequisites": "需目标节点存在且可挂 Animation/AnimationClip；复杂链建议先 scene_query 确认 uuid。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 267,
@@ -3436,7 +5369,20 @@
       "clipName": "walk"
     },
     "expected": "播放 walk 片段",
-    "note": ""
+    "note": "",
+    "prerequisites": "需目标节点存在且可挂 Animation/AnimationClip；复杂链建议先 scene_query 确认 uuid。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 268,
@@ -3448,7 +5394,20 @@
       "uuid": "<uuid>"
     },
     "expected": "动画暂停",
-    "note": ""
+    "note": "",
+    "prerequisites": "需目标节点存在且可挂 Animation/AnimationClip；复杂链建议先 scene_query 确认 uuid。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 269,
@@ -3460,7 +5419,20 @@
       "uuid": "<uuid>"
     },
     "expected": "继续播放",
-    "note": ""
+    "note": "",
+    "prerequisites": "需目标节点存在且可挂 Animation/AnimationClip；复杂链建议先 scene_query 确认 uuid。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 270,
@@ -3472,7 +5444,20 @@
       "uuid": "<uuid>"
     },
     "expected": "停止并重置",
-    "note": ""
+    "note": "",
+    "prerequisites": "需目标节点存在且可挂 Animation/AnimationClip；复杂链建议先 scene_query 确认 uuid。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 271,
@@ -3484,7 +5469,20 @@
       "uuid": "<uuid>"
     },
     "expected": "返回 {playing,clip,time}",
-    "note": ""
+    "note": "",
+    "prerequisites": "需目标节点存在且可挂 Animation/AnimationClip；复杂链建议先 scene_query 确认 uuid。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 272,
@@ -3496,7 +5494,20 @@
       "uuid": "<uuid>"
     },
     "expected": "返回动画片段名称列表",
-    "note": ""
+    "note": "",
+    "prerequisites": "需目标节点存在且可挂 Animation/AnimationClip；复杂链建议先 scene_query 确认 uuid。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 273,
@@ -3509,7 +5520,20 @@
       "time": 0.5
     },
     "expected": "跳转到 0.5 秒",
-    "note": ""
+    "note": "",
+    "prerequisites": "需目标节点存在且可挂 Animation/AnimationClip；复杂链建议先 scene_query 确认 uuid。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 274,
@@ -3522,7 +5546,20 @@
       "speed": 2
     },
     "expected": "2 倍速播放",
-    "note": ""
+    "note": "",
+    "prerequisites": "需目标节点存在且可挂 Animation/AnimationClip；复杂链建议先 scene_query 确认 uuid。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 275,
@@ -3536,7 +5573,20 @@
       "duration": 0.3
     },
     "expected": "0.3 秒内淡入 run 动画",
-    "note": ""
+    "note": "",
+    "prerequisites": "需目标节点存在且可挂 Animation/AnimationClip；复杂链建议先 scene_query 确认 uuid。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 276,
@@ -3548,7 +5598,20 @@
       "uuid": "<uuid>"
     },
     "expected": "返回碰撞器+刚体信息",
-    "note": ""
+    "note": "",
+    "prerequisites": "需场景中具备刚体/碰撞体等物理前置；2D/3D 与项目设置一致。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 277,
@@ -3561,7 +5624,20 @@
       "colliderType": "box2d"
     },
     "expected": "添加 BoxCollider2D",
-    "note": ""
+    "note": "",
+    "prerequisites": "需场景中具备刚体/碰撞体等物理前置；2D/3D 与项目设置一致。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 278,
@@ -3574,7 +5650,20 @@
       "colliderType": "sphere3d"
     },
     "expected": "添加 SphereCollider",
-    "note": ""
+    "note": "",
+    "prerequisites": "需场景中具备刚体/碰撞体等物理前置；2D/3D 与项目设置一致。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 279,
@@ -3588,7 +5677,20 @@
       "height": 80
     },
     "expected": "Box 碰撞器→100×80",
-    "note": ""
+    "note": "",
+    "prerequisites": "需场景中具备刚体/碰撞体等物理前置；2D/3D 与项目设置一致。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 280,
@@ -3601,7 +5703,20 @@
       "bodyType": "Dynamic"
     },
     "expected": "添加动态刚体",
-    "note": ""
+    "note": "",
+    "prerequisites": "需场景中具备刚体/碰撞体等物理前置；2D/3D 与项目设置一致。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 281,
@@ -3614,7 +5729,20 @@
       "bodyType": "Static"
     },
     "expected": "添加静态刚体",
-    "note": ""
+    "note": "",
+    "prerequisites": "需场景中具备刚体/碰撞体等物理前置；2D/3D 与项目设置一致。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 282,
@@ -3629,7 +5757,20 @@
       "fixedRotation": true
     },
     "expected": "质量 5kg+线性阻尼 0.5+锁定旋转",
-    "note": ""
+    "note": "",
+    "prerequisites": "需场景中具备刚体/碰撞体等物理前置；2D/3D 与项目设置一致。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 283,
@@ -3643,7 +5784,20 @@
       "restitution": 0.8
     },
     "expected": "摩擦 0.3+弹性 0.8",
-    "note": ""
+    "note": "",
+    "prerequisites": "需场景中具备刚体/碰撞体等物理前置；2D/3D 与项目设置一致。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 284,
@@ -3656,7 +5810,20 @@
       "group": 2
     },
     "expected": "碰撞组→2",
-    "note": ""
+    "note": "",
+    "prerequisites": "需场景中具备刚体/碰撞体等物理前置；2D/3D 与项目设置一致。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 285,
@@ -3667,7 +5834,10 @@
       "action": "get_physics_world"
     },
     "expected": "返回重力/时间步等参数",
-    "note": ""
+    "note": "",
+    "prerequisites": "需场景中具备刚体/碰撞体等物理前置；2D/3D 与项目设置一致。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 286,
@@ -3683,7 +5853,10 @@
       }
     },
     "expected": "重力→-20 m/s²",
-    "note": ""
+    "note": "",
+    "prerequisites": "需场景中具备刚体/碰撞体等物理前置；2D/3D 与项目设置一致。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 287,
@@ -3697,7 +5870,20 @@
       "connectedUuid": "<other>"
     },
     "expected": "两节点间添加弹簧关节",
-    "note": ""
+    "note": "",
+    "prerequisites": "需场景中具备刚体/碰撞体等物理前置；2D/3D 与项目设置一致。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 288,
@@ -3710,7 +5896,10 @@
       "scope": "global"
     },
     "expected": "返回 {value:\"zh\"}",
-    "note": ""
+    "note": "",
+    "prerequisites": "插件已加载；写偏好/广播可能影响本地配置，测试后可视需要还原。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 289,
@@ -3724,7 +5913,10 @@
       "scope": "global"
     },
     "expected": "语言改为英文",
-    "note": ""
+    "note": "",
+    "prerequisites": "插件已加载；写偏好/广播可能影响本地配置，测试后可视需要还原。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 290,
@@ -3735,7 +5927,10 @@
       "action": "list"
     },
     "expected": "返回所有偏好设置",
-    "note": ""
+    "note": "",
+    "prerequisites": "插件已加载；写偏好/广播可能影响本地配置，测试后可视需要还原。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 291,
@@ -3747,7 +5942,10 @@
       "key": "general.theme"
     },
     "expected": "返回 {value:\"dark\"}",
-    "note": ""
+    "note": "",
+    "prerequisites": "插件已加载；写偏好/广播可能影响本地配置，测试后可视需要还原。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 292,
@@ -3760,7 +5958,10 @@
       "value": "light"
     },
     "expected": "主题改为亮色",
-    "note": ""
+    "note": "",
+    "prerequisites": "插件已加载；写偏好/广播可能影响本地配置，测试后可视需要还原。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 293,
@@ -3772,7 +5973,10 @@
       "key": "builder.compressTexture"
     },
     "expected": "返回压缩纹理设置",
-    "note": ""
+    "note": "",
+    "prerequisites": "插件已加载；写偏好/广播可能影响本地配置，测试后可视需要还原。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 294,
@@ -3785,7 +5989,10 @@
       "value": 7456
     },
     "expected": "预览端口→7456",
-    "note": ""
+    "note": "",
+    "prerequisites": "插件已加载；写偏好/广播可能影响本地配置，测试后可视需要还原。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 295,
@@ -3797,7 +6004,10 @@
       "since": 1700000000000
     },
     "expected": "返回该时间戳后的新事件列表",
-    "note": ""
+    "note": "",
+    "prerequisites": "插件已加载；写偏好/广播可能影响本地配置，测试后可视需要还原。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 296,
@@ -3809,7 +6019,10 @@
       "limit": 10
     },
     "expected": "返回最近 10 条事件",
-    "note": ""
+    "note": "",
+    "prerequisites": "插件已加载；写偏好/广播可能影响本地配置，测试后可视需要还原。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 297,
@@ -3820,7 +6033,10 @@
       "action": "clear"
     },
     "expected": "事件队列清空",
-    "note": ""
+    "note": "",
+    "prerequisites": "插件已加载；写偏好/广播可能影响本地配置，测试后可视需要还原。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 298,
@@ -3835,7 +6051,10 @@
       }
     },
     "expected": "广播自定义消息",
-    "note": ""
+    "note": "",
+    "prerequisites": "插件已加载；写偏好/广播可能影响本地配置，测试后可视需要还原。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 299,
@@ -3848,7 +6067,10 @@
       "message": "soft-reload"
     },
     "expected": "发送场景重载 IPC",
-    "note": ""
+    "note": "",
+    "prerequisites": "插件已加载；写偏好/广播可能影响本地配置，测试后可视需要还原。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 300,
@@ -3860,7 +6082,10 @@
       "opacity": 0.5
     },
     "expected": "参考图叠加层显示，透明度 50%",
-    "note": ""
+    "note": "",
+    "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 参考图路径或剪贴板图像需可用；依赖 Pro。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 301,
@@ -3871,7 +6096,10 @@
       "action": "clear"
     },
     "expected": "隐藏所有参考图叠加",
-    "note": ""
+    "note": "",
+    "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 参考图路径或剪贴板图像需可用；依赖 Pro。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 302,
@@ -3882,7 +6110,10 @@
       "action": "list"
     },
     "expected": "返回场景中参考图节点列表",
-    "note": ""
+    "note": "",
+    "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 参考图路径或剪贴板图像需可用；依赖 Pro。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 303,
@@ -3895,7 +6126,10 @@
       "opacity": 0.4
     },
     "expected": "添加参考图节点",
-    "note": ""
+    "note": "",
+    "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 参考图路径或剪贴板图像需可用；依赖 Pro。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 304,
@@ -3907,7 +6141,20 @@
       "refUuid": "<uuid>"
     },
     "expected": "删除指定参考图节点",
-    "note": ""
+    "note": "",
+    "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 参考图路径或剪贴板图像需可用；依赖 Pro。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 305,
@@ -3922,7 +6169,20 @@
       "scaleX": 0.8
     },
     "expected": "参考图移动+缩放",
-    "note": ""
+    "note": "",
+    "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 参考图路径或剪贴板图像需可用；依赖 Pro。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 306,
@@ -3935,7 +6195,20 @@
       "opacity": 0.3
     },
     "expected": "透明度→30%",
-    "note": ""
+    "note": "",
+    "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 参考图路径或剪贴板图像需可用；依赖 Pro。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 307,
@@ -3946,7 +6219,10 @@
       "action": "list_all"
     },
     "expected": "返回所有工具及启用状态",
-    "note": ""
+    "note": "",
+    "prerequisites": "插件已加载；写偏好/广播可能影响本地配置，测试后可视需要还原。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 308,
@@ -3958,7 +6234,10 @@
       "toolName": "physics_tool"
     },
     "expected": "physics_tool 重新启用",
-    "note": ""
+    "note": "",
+    "prerequisites": "插件已加载；写偏好/广播可能影响本地配置，测试后可视需要还原。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 309,
@@ -3970,7 +6249,10 @@
       "toolName": "physics_tool"
     },
     "expected": "physics_tool 被禁用，减少 Token 消耗",
-    "note": ""
+    "note": "",
+    "prerequisites": "插件已加载；写偏好/广播可能影响本地配置，测试后可视需要还原。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 310,
@@ -3981,7 +6263,10 @@
       "action": "get_stats"
     },
     "expected": "返回 {totalTools:19,enabledTools:19,totalActions:236}",
-    "note": ""
+    "note": "",
+    "prerequisites": "插件已加载；写偏好/广播可能影响本地配置，测试后可视需要还原。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 311,
@@ -3997,7 +6282,10 @@
       ]
     },
     "expected": "返回场景树",
-    "note": ""
+    "note": "",
+    "prerequisites": "需目标脚本/宏在工程内存在或路径有效；在沙箱策略允许时执行。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 312,
@@ -4014,7 +6302,10 @@
       ]
     },
     "expected": "节点位置被设置",
-    "note": ""
+    "note": "",
+    "prerequisites": "需目标脚本/宏在工程内存在或路径有效；在沙箱策略允许时执行。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 313,
@@ -4027,7 +6318,10 @@
       "sceneMethodName": "createChildNode"
     },
     "expected": "注册为 macro_quick_sprite 工具",
-    "note": ""
+    "note": "",
+    "prerequisites": "需目标脚本/宏在工程内存在或路径有效；在沙箱策略允许时执行。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 314,
@@ -4040,7 +6334,10 @@
       "sceneMethodName": "eval"
     },
     "expected": "返回 {error:\"方法不在白名单\"}",
-    "note": ""
+    "note": "",
+    "prerequisites": "需目标脚本/宏在工程内存在或路径有效；在沙箱策略允许时执行。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 315,
@@ -4079,7 +6376,10 @@
       ]
     },
     "expected": "一步创建含 Sprite+碰撞器+子 Label 的预制体",
-    "note": ""
+    "note": "",
+    "prerequisites": "原子宏依赖目标节点与资源路径；纹理/预制体路径需存在或可创建。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 316,
@@ -4090,7 +6390,10 @@
       "prefabPath": "db://invalid/path.prefab"
     },
     "expected": "创建失败，临时节点自动清理",
-    "note": ""
+    "note": "",
+    "prerequisites": "原子宏依赖目标节点与资源路径；纹理/预制体路径需存在或可创建。",
+    "setupSteps": [],
+    "needsRetest": false
   },
   {
     "id": 317,
@@ -4102,7 +6405,20 @@
       "nodeUuid": "<sprite-node>"
     },
     "expected": "图片导入→SpriteFrame 设置→Sprite 显示新图片",
-    "note": ""
+    "note": "",
+    "prerequisites": "原子宏依赖目标节点与资源路径；纹理/预制体路径需存在或可创建。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 318,
@@ -4115,7 +6431,20 @@
       "autoAddSprite": true
     },
     "expected": "自动添加 Sprite 组件+设置纹理",
-    "note": ""
+    "note": "",
+    "prerequisites": "原子宏依赖目标节点与资源路径；纹理/预制体路径需存在或可创建。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 321,
@@ -4145,7 +6474,20 @@
       ]
     },
     "expected": "创建 0.5 秒透明度从 0 到 255 的淡入动画",
-    "note": ""
+    "note": "",
+    "prerequisites": "原子宏依赖目标节点与资源路径；纹理/预制体路径需存在或可创建。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 322,
@@ -4203,7 +6545,20 @@
       ]
     },
     "expected": "创建边移动边旋转的循环动画",
-    "note": ""
+    "note": "",
+    "prerequisites": "原子宏依赖目标节点与资源路径；纹理/预制体路径需存在或可创建。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 323,
@@ -4214,7 +6569,20 @@
       "nodeUuid": "<sprite-node>"
     },
     "expected": "根据 Sprite Alpha 生成 PolygonCollider2D",
-    "note": ""
+    "note": "",
+    "prerequisites": "目标节点须有 Sprite/UITransform 等宏所需组件；否则走错误或降级分支。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 324,
@@ -4226,7 +6594,20 @@
       "colliderType": "box"
     },
     "expected": "根据 UITransform 尺寸创建 BoxCollider2D",
-    "note": ""
+    "note": "",
+    "prerequisites": "目标节点须有 Sprite/UITransform 等宏所需组件；否则走错误或降级分支。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
   {
     "id": 325,
@@ -4238,66 +6619,889 @@
       "colliderType": "circle"
     },
     "expected": "创建 CircleCollider2D，radius=min(w,h)/2",
-    "note": ""
+    "note": "",
+    "prerequisites": "目标节点须有 Sprite/UITransform 等宏所需组件；否则走错误或降级分支。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [
+      {
+        "step": 1,
+        "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
+        "tool": "scene_query",
+        "action": "list",
+        "input": {
+          "action": "list"
+        }
+      }
+    ],
+    "needsRetest": false
   },
-
-  {"id":326,"tool":"script_scaffold","action":"list_templates","title":"列出脚本模板","input":{"action":"list_templates"},"expected":"返回 6 个模板: controller/manager/ui-handler/data-model/singleton/fsm","note":"Pro Phase 4"},
-  {"id":327,"tool":"script_scaffold","action":"generate_component","title":"生成组件脚本","input":{"action":"generate_component","className":"PlayerController","description":"控制角色移动"},"expected":"生成 PlayerController.ts 到 assets/scripts/","note":""},
-  {"id":328,"tool":"script_scaffold","action":"generate_component","title":"缺少 className","input":{"action":"generate_component"},"expected":"返回错误: 缺少 className","note":"参数校验"},
-  {"id":329,"tool":"script_scaffold","action":"from_template","title":"从模板生成","input":{"action":"from_template","className":"GameManager","template":"singleton"},"expected":"生成单例管理器脚本","note":""},
-  {"id":330,"tool":"script_scaffold","action":"generate_and_attach","title":"生成+挂载","input":{"action":"generate_and_attach","className":"EnemyAI","uuid":"<uuid>","properties":[{"name":"speed","type":"number","default":5}]},"expected":"4 步: 生成→刷新→挂载→设属性","note":"核心一体化 action"},
-  {"id":331,"tool":"script_scaffold","action":"generate_and_attach","title":"缺少 uuid","input":{"action":"generate_and_attach","className":"Foo"},"expected":"返回错误: 缺少 uuid","note":"参数校验"},
-  {"id":332,"tool":"script_scaffold","action":"add_properties","title":"追加属性","input":{"action":"add_properties","className":"PlayerController","properties":[{"name":"jumpForce","type":"number","default":12}]},"expected":"追加 @property 声明","note":""},
-  {"id":333,"tool":"script_scaffold","action":"generate_event_handler","title":"生成事件处理","input":{"action":"generate_event_handler","className":"BtnHandler","uuid":"<uuid>","events":[{"event":"click","handler":"onBtnClick"}]},"expected":"生成脚本→挂载→绑定 click","note":""},
-  {"id":334,"tool":"script_scaffold","action":"generate_event_handler","title":"缺少 events","input":{"action":"generate_event_handler","className":"X","uuid":"<uuid>"},"expected":"返回错误: 缺少 events","note":"参数校验"},
-
-  {"id":335,"tool":"animation_workflow","action":"create_transition","title":"淡入过渡","input":{"action":"create_transition","uuid":"<uuid>","transitionType":"fade-in"},"expected":"创建 0.3s opacity 0→255 动画","note":"Pro Phase 4"},
-  {"id":336,"tool":"animation_workflow","action":"create_transition","title":"弹跳进入","input":{"action":"create_transition","uuid":"<uuid>","transitionType":"bounce-in"},"expected":"创建 0.5s scale 0→1.2→1 动画","note":""},
-  {"id":337,"tool":"animation_workflow","action":"create_transition","title":"自定义时长","input":{"action":"create_transition","uuid":"<uuid>","transitionType":"slide-in-left","duration":1.0},"expected":"创建 1.0s 左滑入动画","note":""},
-  {"id":338,"tool":"animation_workflow","action":"create_loop_animation","title":"浮动循环","input":{"action":"create_loop_animation","uuid":"<uuid>","loopType":"float"},"expected":"创建 2s 上下浮动 Loop 动画","note":""},
-  {"id":339,"tool":"animation_workflow","action":"create_loop_animation","title":"旋转循环","input":{"action":"create_loop_animation","uuid":"<uuid>","loopType":"rotate"},"expected":"创建 2s Z 轴 0→360 旋转动画","note":""},
-  {"id":340,"tool":"animation_workflow","action":"apply_preset","title":"idle 预设","input":{"action":"apply_preset","uuid":"<uuid>","preset":"idle"},"expected":"创建 idle 呼吸循环动画","note":""},
-  {"id":341,"tool":"animation_workflow","action":"apply_preset","title":"attack 预设","input":{"action":"apply_preset","uuid":"<uuid>","preset":"attack"},"expected":"创建 attack 缩放+位移动画","note":""},
-  {"id":342,"tool":"animation_workflow","action":"create_ui_animation","title":"按钮点击","input":{"action":"create_ui_animation","uuid":"<uuid>","uiAnimType":"button-press"},"expected":"创建 0.15s 缩放反馈动画","note":""},
-  {"id":343,"tool":"animation_workflow","action":"create_ui_animation","title":"面板弹出","input":{"action":"create_ui_animation","uuid":"<uuid>","uiAnimType":"panel-popup"},"expected":"创建 0.35s scale+opacity 弹出动画","note":""},
-  {"id":344,"tool":"animation_workflow","action":"create_from_description","title":"自然语言动画","input":{"action":"create_from_description","uuid":"<uuid>","prompt":"让按钮弹跳进入"},"expected":"AI 解析→生成关键帧","note":""},
-  {"id":345,"tool":"animation_workflow","action":"create_from_description","title":"缺少 prompt","input":{"action":"create_from_description","uuid":"<uuid>"},"expected":"返回错误: 缺少 prompt","note":"参数校验"},
-  {"id":346,"tool":"animation_workflow","action":"create_sequence","title":"动画序列","input":{"action":"create_sequence","uuid":"<uuid>","clips":[{"clipName":"intro","transitionType":"fade-in"},{"clipName":"loop","loopType":"pulse"}]},"expected":"创建 2 个剪辑","note":""},
-  {"id":347,"tool":"animation_workflow","action":"batch_animate","title":"批量入场","input":{"action":"batch_animate","uuids":["<a>","<b>","<c>"],"transitionType":"fade-in"},"expected":"3 个节点各创建 fade-in 动画","note":""},
-  {"id":348,"tool":"animation_workflow","action":"batch_animate","title":"缺少 uuids","input":{"action":"batch_animate","transitionType":"fade-in"},"expected":"返回错误: 缺少 uuids","note":"参数校验"},
-  {"id":349,"tool":"animation_workflow","action":"preview_animation","title":"预览动画","input":{"action":"preview_animation","uuid":"<uuid>","clipName":"idle"},"expected":"播放 idle 动画","note":""},
-
-  {"id":350,"tool":"ui_generator","action":"create_login_page","title":"一键登录页","input":{"action":"create_login_page"},"expected":"生成完整登录页: Canvas→根容器→邮箱+密码+按钮+社交登录","note":"Pro Phase 4"},
-  {"id":351,"tool":"ui_generator","action":"create_settings_page","title":"一键设置页","input":{"action":"create_settings_page"},"expected":"生成设置页: 音量滑块+开关+语言选择","note":""},
-  {"id":352,"tool":"ui_generator","action":"create_shop_page","title":"一键商店页","input":{"action":"create_shop_page","itemCount":6},"expected":"生成商店: ScrollView + 6 个商品卡片","note":""},
-  {"id":353,"tool":"ui_generator","action":"create_shop_page","title":"自定义商品数","input":{"action":"create_shop_page","itemCount":3},"expected":"生成 3 个商品卡片（少于默认 6 个）","note":""},
-  {"id":354,"tool":"ui_generator","action":"create_hud","title":"一键 HUD","input":{"action":"create_hud"},"expected":"生成 HUD: 血条+分数+技能栏+小地图+暂停按钮","note":""},
-  {"id":355,"tool":"ui_generator","action":"create_dialog","title":"自定义对话框","input":{"action":"create_dialog","title":"退出游戏?","content":"确定要退出吗?"},"expected":"生成对话框含自定义标题和内容","note":""},
-  {"id":356,"tool":"ui_generator","action":"create_inventory","title":"一键背包","input":{"action":"create_inventory","columns":4,"itemCount":16},"expected":"生成 4 列 16 格背包+详情面板","note":""},
-  {"id":357,"tool":"ui_generator","action":"create_custom_ui","title":"自定义 UI","input":{"action":"create_custom_ui","prompt":"一个带标签页和滚动列表的界面"},"expected":"解析关键词→生成 TabBar + ScrollView","note":""},
-  {"id":358,"tool":"ui_generator","action":"create_custom_ui","title":"缺少 prompt","input":{"action":"create_custom_ui"},"expected":"返回错误: 缺少 prompt","note":"参数校验"},
-
-  {"id":359,"tool":"project_linter","action":"check_all","title":"全量检查","input":{"action":"check_all"},"expected":"5 步: 3 个场景查询 + 1 资源查询 + 1 汇总分析","note":"Pro Phase 4"},
-  {"id":360,"tool":"project_linter","action":"check_naming","title":"命名检查","input":{"action":"check_naming"},"expected":"返回不符合 PascalCase/kebab-case 的项","note":""},
-  {"id":361,"tool":"project_linter","action":"check_hierarchy","title":"层级检查","input":{"action":"check_hierarchy"},"expected":"返回深度>10 或子节点>50 的节点","note":""},
-  {"id":362,"tool":"project_linter","action":"check_components","title":"组件检查","input":{"action":"check_components"},"expected":"返回空 Sprite、缺 RigidBody 等问题","note":""},
-  {"id":363,"tool":"project_linter","action":"check_assets","title":"资源检查","input":{"action":"check_assets"},"expected":"返回未使用资源和命名违规","note":""},
-  {"id":364,"tool":"project_linter","action":"check_performance","title":"性能检查","input":{"action":"check_performance"},"expected":"返回节点数/DrawCall/纹理尺寸超标项","note":""},
-  {"id":365,"tool":"project_linter","action":"auto_fix_naming","title":"自动修复命名","input":{"action":"auto_fix_naming"},"expected":"批量重命名违规节点","note":""},
-  {"id":366,"tool":"project_linter","action":"set_rules","title":"设置自定义规则","input":{"action":"set_rules","rules":{"naming":{"nodePattern":"camelCase"}}},"expected":"规则保存到 .mcp-lint-rules.json","note":""},
-  {"id":367,"tool":"project_linter","action":"set_rules","title":"缺少 rules","input":{"action":"set_rules"},"expected":"返回错误: 缺少 rules","note":"参数校验"},
-
-  {"id":368,"tool":"operation_log","action":"get_history","title":"查看历史","input":{"action":"get_history"},"expected":"返回最近 50 条操作记录","note":"Pro Phase 4"},
-  {"id":369,"tool":"operation_log","action":"get_history","title":"过滤历史","input":{"action":"get_history","filter":{"tool":"scene_operation","limit":20}},"expected":"返回最近 20 条 scene_operation 操作","note":""},
-  {"id":370,"tool":"operation_log","action":"get_stats","title":"操作统计","input":{"action":"get_stats"},"expected":"返回按工具/action 分组的统计","note":""},
-  {"id":371,"tool":"operation_log","action":"export_log","title":"导出 JSON","input":{"action":"export_log","format":"json"},"expected":"操作日志保存到 assets/mcp-logs/","note":""},
-  {"id":372,"tool":"operation_log","action":"export_script","title":"导出脚本","input":{"action":"export_script"},"expected":"生成可回放的 TypeScript 脚本","note":""},
-  {"id":373,"tool":"operation_log","action":"replay_last","title":"回放最近 5 步","input":{"action":"replay_last","count":5},"expected":"重放最近 5 个操作","note":""},
-  {"id":374,"tool":"operation_log","action":"replay_last","title":"默认回放 10 步","input":{"action":"replay_last"},"expected":"重放最近 10 个操作","note":""},
-  {"id":375,"tool":"operation_log","action":"replay_from_log","title":"从日志回放","input":{"action":"replay_from_log","log":[{"tool":"scene_operation","action":"create_node"}]},"expected":"按日志逐条重放","note":""},
-  {"id":376,"tool":"operation_log","action":"replay_from_log","title":"缺少 log","input":{"action":"replay_from_log"},"expected":"返回错误: 缺少 log","note":"参数校验"},
-  {"id":377,"tool":"operation_log","action":"clear_history","title":"清空历史","input":{"action":"clear_history","confirmDangerous":true},"expected":"操作历史已清空","note":""},
-  {"id":378,"tool":"operation_log","action":"clear_history","title":"未确认清空","input":{"action":"clear_history"},"expected":"返回错误: 需要 confirmDangerous=true","note":"危险操作拦截"},
-  {"id":379,"tool":"operation_log","action":"bookmark","title":"添加书签","input":{"action":"bookmark","label":"before-refactor"},"expected":"书签 before-refactor 已添加","note":""},
-  {"id":380,"tool":"operation_log","action":"bookmark","title":"缺少 label","input":{"action":"bookmark"},"expected":"返回错误: 缺少 label","note":"参数校验"}
+  {
+    "id": 326,
+    "tool": "script_scaffold",
+    "action": "list_templates",
+    "title": "列出脚本模板",
+    "input": {
+      "action": "list_templates"
+    },
+    "expected": "返回 6 个模板: controller/manager/ui-handler/data-model/singleton/fsm",
+    "note": "Pro Phase 4",
+    "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。",
+    "setupSteps": [],
+    "needsRetest": false
+  },
+  {
+    "id": 327,
+    "tool": "script_scaffold",
+    "action": "generate_component",
+    "title": "生成组件脚本",
+    "input": {
+      "action": "generate_component",
+      "className": "PlayerController",
+      "description": "控制角色移动"
+    },
+    "expected": "生成 PlayerController.ts 到 assets/scripts/",
+    "note": "",
+    "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。",
+    "setupSteps": [],
+    "needsRetest": false
+  },
+  {
+    "id": 328,
+    "tool": "script_scaffold",
+    "action": "generate_component",
+    "title": "缺少 className",
+    "input": {
+      "action": "generate_component"
+    },
+    "expected": "返回错误: 缺少 className",
+    "note": "参数校验",
+    "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。",
+    "setupSteps": [],
+    "needsRetest": false
+  },
+  {
+    "id": 329,
+    "tool": "script_scaffold",
+    "action": "from_template",
+    "title": "从模板生成",
+    "input": {
+      "action": "from_template",
+      "className": "GameManager",
+      "template": "singleton"
+    },
+    "expected": "生成单例管理器脚本",
+    "note": "",
+    "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。",
+    "setupSteps": [],
+    "needsRetest": false
+  },
+  {
+    "id": 330,
+    "tool": "script_scaffold",
+    "action": "generate_and_attach",
+    "title": "生成+挂载",
+    "input": {
+      "action": "generate_and_attach",
+      "className": "EnemyAI",
+      "uuid": "<uuid>",
+      "properties": [
+        {
+          "name": "speed",
+          "type": "number",
+          "default": 5
+        }
+      ]
+    },
+    "expected": "4 步: 生成→刷新→挂载→设属性",
+    "note": "核心一体化 action",
+    "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [],
+    "needsRetest": false
+  },
+  {
+    "id": 331,
+    "tool": "script_scaffold",
+    "action": "generate_and_attach",
+    "title": "缺少 uuid",
+    "input": {
+      "action": "generate_and_attach",
+      "className": "Foo"
+    },
+    "expected": "返回错误: 缺少 uuid",
+    "note": "参数校验",
+    "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。",
+    "setupSteps": [],
+    "needsRetest": false
+  },
+  {
+    "id": 332,
+    "tool": "script_scaffold",
+    "action": "add_properties",
+    "title": "追加属性",
+    "input": {
+      "action": "add_properties",
+      "className": "PlayerController",
+      "properties": [
+        {
+          "name": "jumpForce",
+          "type": "number",
+          "default": 12
+        }
+      ]
+    },
+    "expected": "追加 @property 声明",
+    "note": "",
+    "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。",
+    "setupSteps": [],
+    "needsRetest": false
+  },
+  {
+    "id": 333,
+    "tool": "script_scaffold",
+    "action": "generate_event_handler",
+    "title": "生成事件处理",
+    "input": {
+      "action": "generate_event_handler",
+      "className": "BtnHandler",
+      "uuid": "<uuid>",
+      "events": [
+        {
+          "event": "click",
+          "handler": "onBtnClick"
+        }
+      ]
+    },
+    "expected": "生成脚本→挂载→绑定 click",
+    "note": "",
+    "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [],
+    "needsRetest": false
+  },
+  {
+    "id": 334,
+    "tool": "script_scaffold",
+    "action": "generate_event_handler",
+    "title": "缺少 events",
+    "input": {
+      "action": "generate_event_handler",
+      "className": "X",
+      "uuid": "<uuid>"
+    },
+    "expected": "返回错误: 缺少 events",
+    "note": "参数校验",
+    "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [],
+    "needsRetest": false
+  },
+  {
+    "id": 335,
+    "tool": "animation_workflow",
+    "action": "create_transition",
+    "title": "淡入过渡",
+    "input": {
+      "action": "create_transition",
+      "uuid": "<uuid>",
+      "transitionType": "fade-in"
+    },
+    "expected": "创建 0.3s opacity 0→255 动画",
+    "note": "Pro Phase 4",
+    "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 需目标节点存在且可挂 Animation/AnimationClip；复杂链建议先 scene_query 确认 uuid。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [],
+    "needsRetest": false
+  },
+  {
+    "id": 336,
+    "tool": "animation_workflow",
+    "action": "create_transition",
+    "title": "弹跳进入",
+    "input": {
+      "action": "create_transition",
+      "uuid": "<uuid>",
+      "transitionType": "bounce-in"
+    },
+    "expected": "创建 0.5s scale 0→1.2→1 动画",
+    "note": "",
+    "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 需目标节点存在且可挂 Animation/AnimationClip；复杂链建议先 scene_query 确认 uuid。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [],
+    "needsRetest": false
+  },
+  {
+    "id": 337,
+    "tool": "animation_workflow",
+    "action": "create_transition",
+    "title": "自定义时长",
+    "input": {
+      "action": "create_transition",
+      "uuid": "<uuid>",
+      "transitionType": "slide-in-left",
+      "duration": 1
+    },
+    "expected": "创建 1.0s 左滑入动画",
+    "note": "",
+    "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 需目标节点存在且可挂 Animation/AnimationClip；复杂链建议先 scene_query 确认 uuid。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [],
+    "needsRetest": false
+  },
+  {
+    "id": 338,
+    "tool": "animation_workflow",
+    "action": "create_loop_animation",
+    "title": "浮动循环",
+    "input": {
+      "action": "create_loop_animation",
+      "uuid": "<uuid>",
+      "loopType": "float"
+    },
+    "expected": "创建 2s 上下浮动 Loop 动画",
+    "note": "",
+    "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 需目标节点存在且可挂 Animation/AnimationClip；复杂链建议先 scene_query 确认 uuid。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [],
+    "needsRetest": false
+  },
+  {
+    "id": 339,
+    "tool": "animation_workflow",
+    "action": "create_loop_animation",
+    "title": "旋转循环",
+    "input": {
+      "action": "create_loop_animation",
+      "uuid": "<uuid>",
+      "loopType": "rotate"
+    },
+    "expected": "创建 2s Z 轴 0→360 旋转动画",
+    "note": "",
+    "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 需目标节点存在且可挂 Animation/AnimationClip；复杂链建议先 scene_query 确认 uuid。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [],
+    "needsRetest": false
+  },
+  {
+    "id": 340,
+    "tool": "animation_workflow",
+    "action": "apply_preset",
+    "title": "idle 预设",
+    "input": {
+      "action": "apply_preset",
+      "uuid": "<uuid>",
+      "preset": "idle"
+    },
+    "expected": "创建 idle 呼吸循环动画",
+    "note": "",
+    "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 需目标节点存在且可挂 Animation/AnimationClip；复杂链建议先 scene_query 确认 uuid。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [],
+    "needsRetest": false
+  },
+  {
+    "id": 341,
+    "tool": "animation_workflow",
+    "action": "apply_preset",
+    "title": "attack 预设",
+    "input": {
+      "action": "apply_preset",
+      "uuid": "<uuid>",
+      "preset": "attack"
+    },
+    "expected": "创建 attack 缩放+位移动画",
+    "note": "",
+    "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 需目标节点存在且可挂 Animation/AnimationClip；复杂链建议先 scene_query 确认 uuid。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [],
+    "needsRetest": false
+  },
+  {
+    "id": 342,
+    "tool": "animation_workflow",
+    "action": "create_ui_animation",
+    "title": "按钮点击",
+    "input": {
+      "action": "create_ui_animation",
+      "uuid": "<uuid>",
+      "uiAnimType": "button-press"
+    },
+    "expected": "创建 0.15s 缩放反馈动画",
+    "note": "",
+    "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 需目标节点存在且可挂 Animation/AnimationClip；复杂链建议先 scene_query 确认 uuid。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [],
+    "needsRetest": false
+  },
+  {
+    "id": 343,
+    "tool": "animation_workflow",
+    "action": "create_ui_animation",
+    "title": "面板弹出",
+    "input": {
+      "action": "create_ui_animation",
+      "uuid": "<uuid>",
+      "uiAnimType": "panel-popup"
+    },
+    "expected": "创建 0.35s scale+opacity 弹出动画",
+    "note": "",
+    "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 需目标节点存在且可挂 Animation/AnimationClip；复杂链建议先 scene_query 确认 uuid。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [],
+    "needsRetest": false
+  },
+  {
+    "id": 344,
+    "tool": "animation_workflow",
+    "action": "create_from_description",
+    "title": "自然语言动画",
+    "input": {
+      "action": "create_from_description",
+      "uuid": "<uuid>",
+      "prompt": "让按钮弹跳进入"
+    },
+    "expected": "AI 解析→生成关键帧",
+    "note": "",
+    "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 需目标节点存在且可挂 Animation/AnimationClip；复杂链建议先 scene_query 确认 uuid。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [],
+    "needsRetest": false
+  },
+  {
+    "id": 345,
+    "tool": "animation_workflow",
+    "action": "create_from_description",
+    "title": "缺少 prompt",
+    "input": {
+      "action": "create_from_description",
+      "uuid": "<uuid>"
+    },
+    "expected": "返回错误: 缺少 prompt",
+    "note": "参数校验",
+    "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 需目标节点存在且可挂 Animation/AnimationClip；复杂链建议先 scene_query 确认 uuid。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [],
+    "needsRetest": false
+  },
+  {
+    "id": 346,
+    "tool": "animation_workflow",
+    "action": "create_sequence",
+    "title": "动画序列",
+    "input": {
+      "action": "create_sequence",
+      "uuid": "<uuid>",
+      "clips": [
+        {
+          "clipName": "intro",
+          "transitionType": "fade-in"
+        },
+        {
+          "clipName": "loop",
+          "loopType": "pulse"
+        }
+      ]
+    },
+    "expected": "创建 2 个剪辑",
+    "note": "",
+    "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 需目标节点存在且可挂 Animation/AnimationClip；复杂链建议先 scene_query 确认 uuid。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [],
+    "needsRetest": false
+  },
+  {
+    "id": 347,
+    "tool": "animation_workflow",
+    "action": "batch_animate",
+    "title": "批量入场",
+    "input": {
+      "action": "batch_animate",
+      "uuids": [
+        "<a>",
+        "<b>",
+        "<c>"
+      ],
+      "transitionType": "fade-in"
+    },
+    "expected": "3 个节点各创建 fade-in 动画",
+    "note": "",
+    "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 需目标节点存在且可挂 Animation/AnimationClip；复杂链建议先 scene_query 确认 uuid。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [],
+    "needsRetest": false
+  },
+  {
+    "id": 348,
+    "tool": "animation_workflow",
+    "action": "batch_animate",
+    "title": "缺少 uuids",
+    "input": {
+      "action": "batch_animate",
+      "transitionType": "fade-in"
+    },
+    "expected": "返回错误: 缺少 uuids",
+    "note": "参数校验",
+    "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 需目标节点存在且可挂 Animation/AnimationClip；复杂链建议先 scene_query 确认 uuid。",
+    "setupSteps": [],
+    "needsRetest": false
+  },
+  {
+    "id": 349,
+    "tool": "animation_workflow",
+    "action": "preview_animation",
+    "title": "预览动画",
+    "input": {
+      "action": "preview_animation",
+      "uuid": "<uuid>",
+      "clipName": "idle"
+    },
+    "expected": "播放 idle 动画",
+    "note": "",
+    "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 需目标节点存在且可挂 Animation/AnimationClip；复杂链建议先 scene_query 确认 uuid。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
+    "setupSteps": [],
+    "needsRetest": false
+  },
+  {
+    "id": 350,
+    "tool": "ui_generator",
+    "action": "create_login_page",
+    "title": "一键登录页",
+    "input": {
+      "action": "create_login_page"
+    },
+    "expected": "生成完整登录页: Canvas→根容器→邮箱+密码+按钮+社交登录",
+    "note": "Pro Phase 4",
+    "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。",
+    "setupSteps": [],
+    "needsRetest": false
+  },
+  {
+    "id": 351,
+    "tool": "ui_generator",
+    "action": "create_settings_page",
+    "title": "一键设置页",
+    "input": {
+      "action": "create_settings_page"
+    },
+    "expected": "生成设置页: 音量滑块+开关+语言选择",
+    "note": "",
+    "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。",
+    "setupSteps": [],
+    "needsRetest": false
+  },
+  {
+    "id": 352,
+    "tool": "ui_generator",
+    "action": "create_shop_page",
+    "title": "一键商店页",
+    "input": {
+      "action": "create_shop_page",
+      "itemCount": 6
+    },
+    "expected": "生成商店: ScrollView + 6 个商品卡片",
+    "note": "",
+    "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。",
+    "setupSteps": [],
+    "needsRetest": false
+  },
+  {
+    "id": 353,
+    "tool": "ui_generator",
+    "action": "create_shop_page",
+    "title": "自定义商品数",
+    "input": {
+      "action": "create_shop_page",
+      "itemCount": 3
+    },
+    "expected": "生成 3 个商品卡片（少于默认 6 个）",
+    "note": "",
+    "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。",
+    "setupSteps": [],
+    "needsRetest": false
+  },
+  {
+    "id": 354,
+    "tool": "ui_generator",
+    "action": "create_hud",
+    "title": "一键 HUD",
+    "input": {
+      "action": "create_hud"
+    },
+    "expected": "生成 HUD: 血条+分数+技能栏+小地图+暂停按钮",
+    "note": "",
+    "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。",
+    "setupSteps": [],
+    "needsRetest": false
+  },
+  {
+    "id": 355,
+    "tool": "ui_generator",
+    "action": "create_dialog",
+    "title": "自定义对话框",
+    "input": {
+      "action": "create_dialog",
+      "title": "退出游戏?",
+      "content": "确定要退出吗?"
+    },
+    "expected": "生成对话框含自定义标题和内容",
+    "note": "",
+    "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。",
+    "setupSteps": [],
+    "needsRetest": false
+  },
+  {
+    "id": 356,
+    "tool": "ui_generator",
+    "action": "create_inventory",
+    "title": "一键背包",
+    "input": {
+      "action": "create_inventory",
+      "columns": 4,
+      "itemCount": 16
+    },
+    "expected": "生成 4 列 16 格背包+详情面板",
+    "note": "",
+    "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。",
+    "setupSteps": [],
+    "needsRetest": false
+  },
+  {
+    "id": 357,
+    "tool": "ui_generator",
+    "action": "create_custom_ui",
+    "title": "自定义 UI",
+    "input": {
+      "action": "create_custom_ui",
+      "prompt": "一个带标签页和滚动列表的界面"
+    },
+    "expected": "解析关键词→生成 TabBar + ScrollView",
+    "note": "",
+    "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。",
+    "setupSteps": [],
+    "needsRetest": false
+  },
+  {
+    "id": 358,
+    "tool": "ui_generator",
+    "action": "create_custom_ui",
+    "title": "缺少 prompt",
+    "input": {
+      "action": "create_custom_ui"
+    },
+    "expected": "返回错误: 缺少 prompt",
+    "note": "参数校验",
+    "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。",
+    "setupSteps": [],
+    "needsRetest": false
+  },
+  {
+    "id": 359,
+    "tool": "project_linter",
+    "action": "check_all",
+    "title": "全量检查",
+    "input": {
+      "action": "check_all"
+    },
+    "expected": "5 步: 3 个场景查询 + 1 资源查询 + 1 汇总分析",
+    "note": "Pro Phase 4",
+    "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。",
+    "setupSteps": [],
+    "needsRetest": false
+  },
+  {
+    "id": 360,
+    "tool": "project_linter",
+    "action": "check_naming",
+    "title": "命名检查",
+    "input": {
+      "action": "check_naming"
+    },
+    "expected": "返回不符合 PascalCase/kebab-case 的项",
+    "note": "",
+    "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。",
+    "setupSteps": [],
+    "needsRetest": false
+  },
+  {
+    "id": 361,
+    "tool": "project_linter",
+    "action": "check_hierarchy",
+    "title": "层级检查",
+    "input": {
+      "action": "check_hierarchy"
+    },
+    "expected": "返回深度>10 或子节点>50 的节点",
+    "note": "",
+    "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。",
+    "setupSteps": [],
+    "needsRetest": false
+  },
+  {
+    "id": 362,
+    "tool": "project_linter",
+    "action": "check_components",
+    "title": "组件检查",
+    "input": {
+      "action": "check_components"
+    },
+    "expected": "返回空 Sprite、缺 RigidBody 等问题",
+    "note": "",
+    "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。",
+    "setupSteps": [],
+    "needsRetest": false
+  },
+  {
+    "id": 363,
+    "tool": "project_linter",
+    "action": "check_assets",
+    "title": "资源检查",
+    "input": {
+      "action": "check_assets"
+    },
+    "expected": "返回未使用资源和命名违规",
+    "note": "",
+    "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。",
+    "setupSteps": [],
+    "needsRetest": false
+  },
+  {
+    "id": 364,
+    "tool": "project_linter",
+    "action": "check_performance",
+    "title": "性能检查",
+    "input": {
+      "action": "check_performance"
+    },
+    "expected": "返回节点数/DrawCall/纹理尺寸超标项",
+    "note": "",
+    "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。",
+    "setupSteps": [],
+    "needsRetest": false
+  },
+  {
+    "id": 365,
+    "tool": "project_linter",
+    "action": "auto_fix_naming",
+    "title": "自动修复命名",
+    "input": {
+      "action": "auto_fix_naming"
+    },
+    "expected": "批量重命名违规节点",
+    "note": "",
+    "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。",
+    "setupSteps": [],
+    "needsRetest": false
+  },
+  {
+    "id": 366,
+    "tool": "project_linter",
+    "action": "set_rules",
+    "title": "设置自定义规则",
+    "input": {
+      "action": "set_rules",
+      "rules": {
+        "naming": {
+          "nodePattern": "camelCase"
+        }
+      }
+    },
+    "expected": "规则保存到 .mcp-lint-rules.json",
+    "note": "",
+    "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。",
+    "setupSteps": [],
+    "needsRetest": false
+  },
+  {
+    "id": 367,
+    "tool": "project_linter",
+    "action": "set_rules",
+    "title": "缺少 rules",
+    "input": {
+      "action": "set_rules"
+    },
+    "expected": "返回错误: 缺少 rules",
+    "note": "参数校验",
+    "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。",
+    "setupSteps": [],
+    "needsRetest": false
+  },
+  {
+    "id": 368,
+    "tool": "operation_log",
+    "action": "get_history",
+    "title": "查看历史",
+    "input": {
+      "action": "get_history"
+    },
+    "expected": "返回最近 50 条操作记录",
+    "note": "Pro Phase 4",
+    "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。",
+    "setupSteps": [],
+    "needsRetest": false
+  },
+  {
+    "id": 369,
+    "tool": "operation_log",
+    "action": "get_history",
+    "title": "过滤历史",
+    "input": {
+      "action": "get_history",
+      "filter": {
+        "tool": "scene_operation",
+        "limit": 20
+      }
+    },
+    "expected": "返回最近 20 条 scene_operation 操作",
+    "note": "",
+    "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。",
+    "setupSteps": [],
+    "needsRetest": false
+  },
+  {
+    "id": 370,
+    "tool": "operation_log",
+    "action": "get_stats",
+    "title": "操作统计",
+    "input": {
+      "action": "get_stats"
+    },
+    "expected": "返回按工具/action 分组的统计",
+    "note": "",
+    "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。",
+    "setupSteps": [],
+    "needsRetest": false
+  },
+  {
+    "id": 371,
+    "tool": "operation_log",
+    "action": "export_log",
+    "title": "导出 JSON",
+    "input": {
+      "action": "export_log",
+      "format": "json"
+    },
+    "expected": "操作日志保存到 assets/mcp-logs/",
+    "note": "",
+    "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。",
+    "setupSteps": [],
+    "needsRetest": false
+  },
+  {
+    "id": 372,
+    "tool": "operation_log",
+    "action": "export_script",
+    "title": "导出脚本",
+    "input": {
+      "action": "export_script"
+    },
+    "expected": "生成可回放的 TypeScript 脚本",
+    "note": "",
+    "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。",
+    "setupSteps": [],
+    "needsRetest": false
+  },
+  {
+    "id": 373,
+    "tool": "operation_log",
+    "action": "replay_last",
+    "title": "回放最近 5 步",
+    "input": {
+      "action": "replay_last",
+      "count": 5
+    },
+    "expected": "重放最近 5 个操作",
+    "note": "",
+    "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。",
+    "setupSteps": [],
+    "needsRetest": false
+  },
+  {
+    "id": 374,
+    "tool": "operation_log",
+    "action": "replay_last",
+    "title": "默认回放 10 步",
+    "input": {
+      "action": "replay_last"
+    },
+    "expected": "重放最近 10 个操作",
+    "note": "",
+    "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。",
+    "setupSteps": [],
+    "needsRetest": false
+  },
+  {
+    "id": 375,
+    "tool": "operation_log",
+    "action": "replay_from_log",
+    "title": "从日志回放",
+    "input": {
+      "action": "replay_from_log",
+      "log": [
+        {
+          "tool": "scene_operation",
+          "action": "create_node"
+        }
+      ]
+    },
+    "expected": "按日志逐条重放",
+    "note": "",
+    "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。",
+    "setupSteps": [],
+    "needsRetest": false
+  },
+  {
+    "id": 376,
+    "tool": "operation_log",
+    "action": "replay_from_log",
+    "title": "缺少 log",
+    "input": {
+      "action": "replay_from_log"
+    },
+    "expected": "返回错误: 缺少 log",
+    "note": "参数校验",
+    "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。",
+    "setupSteps": [],
+    "needsRetest": false
+  },
+  {
+    "id": 377,
+    "tool": "operation_log",
+    "action": "clear_history",
+    "title": "清空历史",
+    "input": {
+      "action": "clear_history",
+      "confirmDangerous": true
+    },
+    "expected": "操作历史已清空",
+    "note": "",
+    "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。",
+    "setupSteps": [],
+    "needsRetest": false
+  },
+  {
+    "id": 378,
+    "tool": "operation_log",
+    "action": "clear_history",
+    "title": "未确认清空",
+    "input": {
+      "action": "clear_history"
+    },
+    "expected": "返回错误: 需要 confirmDangerous=true",
+    "note": "危险操作拦截",
+    "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。",
+    "setupSteps": [],
+    "needsRetest": false
+  },
+  {
+    "id": 379,
+    "tool": "operation_log",
+    "action": "bookmark",
+    "title": "添加书签",
+    "input": {
+      "action": "bookmark",
+      "label": "before-refactor"
+    },
+    "expected": "书签 before-refactor 已添加",
+    "note": "",
+    "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。",
+    "setupSteps": [],
+    "needsRetest": false
+  },
+  {
+    "id": 380,
+    "tool": "operation_log",
+    "action": "bookmark",
+    "title": "缺少 label",
+    "input": {
+      "action": "bookmark"
+    },
+    "expected": "返回错误: 缺少 label",
+    "note": "参数校验",
+    "prerequisites": "Pro：需 native 模块与有效 License；社区版未注册该工具时跳过或改测等价能力。 按 tool/action 准备最小场景或资源；含占位符时见说明替换为真实值。",
+    "setupSteps": [],
+    "needsRetest": false
+  }
 ]

@@ -54,6 +54,22 @@ for tool, actions in grouped.items():
             if case['note']:
                 md_content.append(f'**备注:** {case["note"]}\n')
 
+            # 前置条件（可选）
+            if case.get('prerequisites'):
+                md_content.append(f'**前置条件:** {case["prerequisites"]}\n')
+            if case.get('setupSteps'):
+                md_content.append('**建议前置步骤（MCP）:**\n```json\n')
+                md_content.append(json.dumps(case['setupSteps'], ensure_ascii=False, indent=2))
+                md_content.append('\n```\n')
+
+            if case.get('needsRetest'):
+                rr = case.get('retestReason') or ''
+                md_content.append(f'**需复测:** 是 — {rr}\n')
+
+            # 人工测试结论（可选，与 tests/test-cases.csv 等同步维护）
+            if case.get('manualVerification'):
+                md_content.append(f'**人工测试结果:** {case["manualVerification"]}\n')
+
             md_content.append('---\n')
 
 # 保存 Markdown

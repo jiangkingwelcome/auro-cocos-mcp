@@ -181,6 +181,8 @@
 | `set_anchor_point` | `uuid`, `anchorX`, `anchorY` | 设置 UITransform 锚点 |
 | `set_content_size` | `uuid`, `width`, `height` | 设置 UITransform 内容尺寸 |
 
+> `create_ui_widget` / 一键 UI 组件创建不属于 Community Edition，需升级 Pro 解锁。
+
 ### Prefab 操作
 
 | Action | 关键参数 | 说明 |
