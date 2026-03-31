@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import type { LocalToolServer } from './local-tool-server';
 import type { BridgeToolContext } from './tools-shared';
-import { toInputSchema, normalizeDbUrl, sanitizeDbUrl, ensureAssetDirectory, extractSelectedNodeUuid, errorMessage, beginSceneRecording, endSceneRecording } from './tools-shared';
+import { toInputSchema, normalizeDbUrl, sanitizeDbUrl, ensureAssetDirectory, extractSelectedNodeUuid, errorMessage, beginSceneRecording, endSceneRecording, buildAnimJson } from './tools-shared';
 import { ErrorCategory, logIgnored } from '../error-utils';
 
 const keyframeSchema = z.object({
@@ -362,52 +362,4 @@ Prerequisites: Node must exist. If nodeUuid omitted, uses current selection. tra
   );
 }
 
-// Build a minimal Cocos .anim JSON structure for asset-db save
-function buildAnimJson(
-  name: string, duration: number, wrapMode: string, speed: number, sample: number,
-  tracks: Array<Record<string, unknown>>,
-): Record<string, unknown> {
-  const wrapModeMap: Record<string, number> = {
-    normal: 1, loop: 2, pingpong: 22, reverse: 36, loopreverse: 38,
-  };
-
-  const allTimes = new Set<number>();
-  for (const t of tracks) {
-    const kfs = t.keyframes as Array<{ time: number }>;
-    if (Array.isArray(kfs)) for (const kf of kfs) allTimes.add(kf.time);
-  }
-  const sortedTimes = [...allTimes].sort((a, b) => a - b);
-
-  const curves = tracks.map(track => {
-    const kfs = (track.keyframes as Array<{ time: number; value: unknown }>) || [];
-    const modifiers: unknown[] = [];
-    if (track.path) modifiers.push({ __type__: 'cc.animation.HierarchyPath', path: track.path });
-    if (track.component) modifiers.push({ __type__: 'cc.animation.ComponentPath', component: track.component });
-    modifiers.push(track.property);
-
-    const timeToValue = new Map<number, unknown>();
-    for (const kf of kfs) timeToValue.set(kf.time, kf.value);
-
-    const filteredTimes: number[] = [];
-    const filteredValues: unknown[] = [];
-    for (const t of sortedTimes) {
-      if (timeToValue.has(t)) {
-        filteredTimes.push(t);
-        filteredValues.push(timeToValue.get(t));
-      }
-    }
-
-    return { modifiers, data: { keys: 0, values: filteredValues } };
-  });
-
-  return {
-    __type__: 'cc.AnimationClip',
-    _name: name,
-    _duration: duration,
-    sample,
-    speed,
-    wrapMode: wrapModeMap[wrapMode.toLowerCase()] ?? 1,
-    keys: [sortedTimes],
-    curves,
-  };
-}
+// buildAnimJson 已统一迁移至 tools-shared.ts（_tracks 格式），此处不再重复定义。

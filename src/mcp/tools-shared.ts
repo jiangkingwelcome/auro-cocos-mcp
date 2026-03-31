@@ -565,3 +565,157 @@ export function validateRequiredParams(
     `action "${action}" 缺少必需参数: ${miss}`,
   );
 }
+
+// ── Animation JSON builder (Cocos Creator 3.x _tracks format) ────────────────
+//
+// 生成 Cocos Creator 3.x 新版 AnimationClip JSON（_tracks 格式），
+// 可被动画编辑器正确解析并在属性列表中显示轨道和关键帧。
+// 旧版 curves 格式运行时可播放但编辑器无法展示属性，因此统一使用新格式。
+//
+// 支持的属性类型：
+//   VectorTrack  — position / scale / eulerAngles（值为 {x,y,z}）
+//   ColorTrack   — color（值为 {r,g,b,a}）
+//   RealTrack    — 数值属性：opacity / position.x 等
+
+type AnimKf = { time: number; value: unknown; easing?: string };
+type AnimTrackDef = {
+  path?: string;
+  component?: string;
+  property: string;
+  keyframes: AnimKf[];
+};
+
+export function buildAnimJson(
+  name: string,
+  duration: number,
+  wrapMode: string,
+  speed: number,
+  sample: number,
+  tracks: Array<Record<string, unknown>>,
+): Record<string, unknown> {
+  const wrapModeMap: Record<string, number> = {
+    normal: 1, loop: 2, pingpong: 22, reverse: 36, loopreverse: 38,
+  };
+
+  // 将 easing 字符串映射为 interpolationMode:
+  //   0 = Constant(step), 1 = Linear, 2 = Cubic(smooth)
+  const toInterpMode = (easing?: string): number => {
+    if (!easing || easing === 'linear') return 1;
+    if (easing === 'constant') return 0;
+    return 2;
+  };
+
+  const makeRealCurve = (
+    kfs: Array<{ time: number; value: number }>,
+    easing?: string,
+  ) => ({
+    __type__: 'cc.animation.RealCurve',
+    preExtrapolation: 1,
+    postExtrapolation: 1,
+    keyframes: kfs.map(({ time, value }) => [
+      time,
+      {
+        __type__: 'cc.animation.RealKeyframeValue',
+        interpolationMode: toInterpMode(easing),
+        tangentWeightMode: 0,
+        value,
+        leftTangent: 0,
+        leftTangentWeight: 0,
+        rightTangent: 0,
+        rightTangentWeight: 0,
+      },
+    ]),
+  });
+
+  const makeColorCurve = (kfs: AnimKf[]) => ({
+    __type__: 'cc.animation.ColorCurve',
+    preExtrapolation: 1,
+    postExtrapolation: 1,
+    keyframes: kfs.map((kf) => {
+      const cv = (kf.value as Record<string, number>) ?? {};
+      return [
+        kf.time,
+        {
+          __type__: 'cc.animation.ColorKeyframeValue',
+          interpolationMode: toInterpMode(kf.easing),
+          value: {
+            __type__: 'cc.Color',
+            r: cv.r ?? 255,
+            g: cv.g ?? 255,
+            b: cv.b ?? 255,
+            a: cv.a ?? 255,
+          },
+        },
+      ];
+    }),
+  });
+
+  const ch = (curve: unknown) => ({ __type__: 'cc.animation.Channel', _curve: curve });
+
+  const makeBinding = (nodePath: string | undefined, component: string | undefined, property: string) => ({
+    __type__: 'cc.animation.TrackBinding',
+    path: {
+      __type__: 'cc.animation.TrackPath',
+      _paths: [
+        ...(nodePath ? [{ __type__: 'cc.animation.HierarchyPath', path: nodePath }] : []),
+        ...(component ? [{ __type__: 'cc.animation.ComponentPath', component }] : []),
+        property,
+      ],
+    },
+    proxy: null,
+  });
+
+  const VEC3_PROPS = new Set(['position', 'scale', 'eulerAngles', 'worldPosition', 'worldScale', 'worldEulerAngles']);
+
+  const animTracks: unknown[] = [];
+
+  for (const rawTrack of tracks) {
+    const track = rawTrack as AnimTrackDef;
+    const kfs = track.keyframes ?? [];
+    const property = String(track.property ?? '');
+    const nodePath = track.path;
+    const component = track.component;
+    const easing = kfs[0]?.easing;
+    const sampleVal = kfs[0]?.value;
+    const binding = makeBinding(nodePath, component, property);
+
+    const isVec3 = VEC3_PROPS.has(property)
+      || (sampleVal !== null && typeof sampleVal === 'object' && 'x' in (sampleVal as object) && !('r' in (sampleVal as object)));
+    const isColor = property === 'color'
+      || (sampleVal !== null && typeof sampleVal === 'object' && 'r' in (sampleVal as object) && 'g' in (sampleVal as object));
+
+    if (isVec3) {
+      const axis = (ax: 'x' | 'y' | 'z') =>
+        kfs.map(kf => ({ time: kf.time, value: ((kf.value as Record<string, number>) ?? {})[ax] ?? 0 }));
+      animTracks.push({
+        __type__: 'cc.animation.VectorTrack',
+        _binding: binding,
+        _channels: [ch(makeRealCurve(axis('x'), easing)), ch(makeRealCurve(axis('y'), easing)), ch(makeRealCurve(axis('z'), easing))],
+        _componentsCount: 3,
+      });
+    } else if (isColor) {
+      animTracks.push({
+        __type__: 'cc.animation.ColorTrack',
+        _binding: binding,
+        _channels: [ch(makeColorCurve(kfs))],
+      });
+    } else {
+      // RealTrack：数值属性（opacity, position.x 等）
+      animTracks.push({
+        __type__: 'cc.animation.RealTrack',
+        _binding: binding,
+        _channels: [ch(makeRealCurve(kfs.map(kf => ({ time: kf.time, value: typeof kf.value === 'number' ? kf.value : Number(kf.value) || 0 })), easing))],
+      });
+    }
+  }
+
+  return {
+    __type__: 'cc.AnimationClip',
+    _name: name,
+    _duration: duration,
+    sample,
+    speed,
+    wrapMode: wrapModeMap[wrapMode.toLowerCase()] ?? 1,
+    _tracks: animTracks,
+  };
+}

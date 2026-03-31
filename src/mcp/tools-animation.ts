@@ -10,6 +10,7 @@ import {
   normalizeDbUrl,
   sanitizeDbUrl,
   ensureAssetDirectory,
+  buildAnimJson,
 } from './tools-shared';
 
 export function registerAnimationTools(server: LocalToolServer, ctx: BridgeToolContext): void {
@@ -21,79 +22,6 @@ export function registerAnimationTools(server: LocalToolServer, ctx: BridgeToolC
       && (('error' in result && result.error) || ('success' in result && result.success === false))
     );
   };
-
-  function buildAnimJson(
-    name: string,
-    duration: number,
-    wrapMode: string,
-    speed: number,
-    sample: number,
-    tracks: Array<Record<string, unknown>>,
-  ): Record<string, unknown> {
-    const wrapModeMap: Record<string, number> = {
-      normal: 1,
-      loop: 2,
-      pingpong: 22,
-      reverse: 36,
-      loopreverse: 38,
-    };
-
-    const allTimes = new Set<number>();
-    for (const t of tracks) {
-      const keyframes = t.keyframes as Array<{ time: number }> | undefined;
-      if (!Array.isArray(keyframes)) continue;
-      for (const keyframe of keyframes) allTimes.add(keyframe.time);
-    }
-    const sortedTimes = [...allTimes].sort((a, b) => a - b);
-
-    const curves = tracks.map((track) => {
-      const keyframes = (track.keyframes as Array<{ time: number; value: unknown }> | undefined) || [];
-      const modifiers: unknown[] = [];
-      if (track.path) modifiers.push({ __type__: 'cc.animation.HierarchyPath', path: track.path });
-      if (track.component) modifiers.push({ __type__: 'cc.animation.ComponentPath', component: track.component });
-      modifiers.push(track.property);
-
-      const timeToValue = new Map<number, unknown>();
-      for (const keyframe of keyframes) timeToValue.set(keyframe.time, keyframe.value);
-
-      const filteredTimes: number[] = [];
-      const filteredValues: unknown[] = [];
-      for (const time of sortedTimes) {
-        if (!timeToValue.has(time)) continue;
-        filteredTimes.push(time);
-        filteredValues.push(timeToValue.get(time));
-      }
-
-      return { modifiers, data: { keys: 0, values: filteredValues, interpolate: true }, filteredTimes };
-    });
-
-    const keys: number[][] = [sortedTimes];
-    const normalizedCurves = curves.map((curve) => {
-      let keysIndex = 0;
-      if (curve.filteredTimes.length !== sortedTimes.length) {
-        keysIndex = keys.length;
-        keys.push(curve.filteredTimes);
-      }
-      return {
-        modifiers: curve.modifiers,
-        data: {
-          ...(curve.data as Record<string, unknown>),
-          keys: keysIndex,
-        },
-      };
-    });
-
-    return {
-      __type__: 'cc.AnimationClip',
-      _name: name,
-      _duration: duration,
-      sample,
-      speed,
-      wrapMode: wrapModeMap[wrapMode.toLowerCase()] ?? 1,
-      keys,
-      curves: normalizedCurves,
-    };
-  }
 
   async function saveAnimationAsset(params: {
     savePath: string;
