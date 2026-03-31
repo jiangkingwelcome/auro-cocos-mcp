@@ -1538,20 +1538,22 @@ export const methods = {
         for (const kf of track.keyframes) timeToValue.set(kf.time, kf.value);
 
         const values: unknown[] = [];
-        const easings: (string | undefined)[] = [];
+        const allEasings: (string | undefined)[] = [];
         for (const t of sortedTimes) {
           values.push(timeToValue.has(t) ? timeToValue.get(t) : undefined);
           const kf = track.keyframes.find(k => k.time === t);
-          easings.push(kf?.easing);
+          allEasings.push(kf?.easing);
         }
 
         // Filter to only times that have values for this track
         const filteredTimes: number[] = [];
         const filteredValues: unknown[] = [];
+        const filteredEasingValues: (string | undefined)[] = [];
         for (let i = 0; i < sortedTimes.length; i++) {
           if (values[i] !== undefined) {
             filteredTimes.push(sortedTimes[i]);
             filteredValues.push(values[i]);
+            filteredEasingValues.push(allEasings[i]);
           }
         }
 
@@ -1562,11 +1564,24 @@ export const methods = {
           clip.keys.push(filteredTimes);
         }
 
-        const curveData: { keys: number; values: unknown[]; interpolate: boolean } = {
+        // interpolate=false only when ALL keyframes use constant/step easing
+        const allConstant = filteredEasingValues.length > 0 && filteredEasingValues.every(e => e === 'constant');
+        const curveData: Record<string, unknown> = {
           keys: keysIdx,
           values: filteredValues,
-          interpolate: true,
+          interpolate: !allConstant,
+          // 注意：curves 格式不支持逐帧 easing，easing 信息由 buildAnimJson(_tracks) 在 .anim 文件中保存
         };
+
+        // If any non-linear easing specified, attach easingMethods for Cocos compatibility
+        if (!allConstant && filteredEasingValues.some(e => e && e !== 'linear')) {
+          curveData.easingMethods = filteredEasingValues.map(e => {
+            if (!e || e === 'linear') return null;
+            if (e === 'constant') return null;
+            // Cocos easingMethod format: e.g. 'quadIn', 'bounceOut'
+            return e;
+          });
+        }
 
         curves.push({ modifiers, data: curveData });
       }

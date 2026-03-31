@@ -68,18 +68,41 @@ export function registerAnimationTools(server: LocalToolServer, ctx: BridgeToolC
     };
   }
 
-  async function attachSavedClipAsset(nodeUuid: string, assetUuid: string): Promise<Record<string, unknown>> {
+  async function attachSavedClipAsset(
+    nodeUuid: string,
+    assetUuid: string,
+    playOnLoad = false,
+  ): Promise<Record<string, unknown>> {
     // setComponentProperty 运行在 execute-scene-script 上下文中，不会自动触发 dirty。
     // 用 begin-recording + force-dirty + end-recording 从扩展主进程确保 dirty 被正确标记。
     const recordId = await beginSceneRecording(editorMsg, [nodeUuid]);
+    let clipsResult: Record<string, unknown>;
     let defaultClipResult: Record<string, unknown>;
+    let playOnLoadResult: Record<string, unknown> | null = null;
     try {
-      defaultClipResult = await sceneMethod('setComponentProperty', [
-        nodeUuid,
-        'Animation',
-        'defaultClip',
-        { __uuid__: assetUuid },
+      clipsResult = await sceneMethod('setComponentProperty', [
+        nodeUuid, 'Animation', 'clips', [{ __uuid__: assetUuid }],
       ]) as Record<string, unknown>;
+      if (clipsResult?.error) {
+        return { error: `已保存 .anim 资产，但回绑 Animation.clips 失败: ${clipsResult.error}` };
+      }
+
+      defaultClipResult = await sceneMethod('setComponentProperty', [
+        nodeUuid, 'Animation', 'defaultClip', { __uuid__: assetUuid },
+      ]) as Record<string, unknown>;
+      if (defaultClipResult?.error) {
+        return { error: `已保存 .anim 资产，但回绑 Animation.defaultClip 失败: ${defaultClipResult.error}` };
+      }
+
+      if (playOnLoad) {
+        playOnLoadResult = await sceneMethod('setComponentProperty', [
+          nodeUuid, 'Animation', 'playOnLoad', true,
+        ]) as Record<string, unknown>;
+        if (playOnLoadResult?.error) {
+          return { error: `已保存 .anim 资产，但设置 Animation.playOnLoad 失败: ${playOnLoadResult.error}` };
+        }
+      }
+
       // force-dirty
       try {
         const dump = await editorMsg('scene', 'query-node', nodeUuid) as Record<string, unknown>;
@@ -94,15 +117,14 @@ export function registerAnimationTools(server: LocalToolServer, ctx: BridgeToolC
     } finally {
       await endSceneRecording(editorMsg, recordId);
     }
-    if (defaultClipResult?.error) {
-      return { error: `已保存 .anim 资产，但回绑 Animation.defaultClip 失败: ${defaultClipResult.error}` };
-    }
 
     const stateAfter = await queryAnimationState(nodeUuid);
     return {
       bound: true,
       assetUuid,
+      clipsResult,
       defaultClipResult,
+      ...(playOnLoadResult ? { playOnLoadResult } : {}),
       stateAfter,
     };
   }
@@ -267,7 +289,7 @@ export function registerAnimationTools(server: LocalToolServer, ctx: BridgeToolC
     `Manage Animation components and clips on Cocos Creator nodes. Create keyframe animations, control playback, and inspect animation state.
 
 Actions & required parameters:
-- create_clip: uuid(REQUIRED, target node), duration(optional, default 1), wrapMode(optional: Normal/Loop/PingPong), speed(optional, default 1), tracks(REQUIRED, array of keyframe tracks), savePath(optional, db://... .anim). Create and attach an AnimationClip, optionally save as asset.
+- create_clip: uuid(REQUIRED, target node), duration(optional, default 1), wrapMode(optional: Normal/Loop/PingPong), speed(optional, default 1), tracks(REQUIRED, array of keyframe tracks), savePath(STRONGLY RECOMMENDED, db://assets/animations/xxx.anim), autoPlay(optional, set Animation.playOnLoad=true). Create and attach an AnimationClip; without savePath the clip only lives in runtime memory and will be lost on scene reload.
 - play: uuid(REQUIRED), clipName(optional, plays default clip if omitted). Start playing an animation clip.
 - pause: uuid(REQUIRED). Pause current animation.
 - resume: uuid(REQUIRED). Resume paused animation.
@@ -314,7 +336,10 @@ Returns: create_clip→{success,clipName,duration}. play/pause/resume/stop→{su
         'Animation tracks. REQUIRED for: create_clip. Each track defines keyframes for one property.'
       ),
       savePath: z.string().optional().describe(
-        'Optional db:// path to save the created clip as a .anim asset. Example: "db://assets/animations/idle.anim".'
+        'STRONGLY RECOMMENDED db:// path to save the clip as a .anim asset. Without this the clip only exists in runtime memory and will be lost on scene reload. Example: "db://assets/animations/idle.anim".'
+      ),
+      autoPlay: z.boolean().optional().describe(
+        'For create_clip only. If true, sets Animation.playOnLoad=true so the clip auto-plays when the scene loads.'
       ),
     }),
     async (params) => {
@@ -363,7 +388,7 @@ Returns: create_clip→{success,clipName,duration}. play/pause/resume/stop→{su
                 warnings: ['.anim 文件已写入，但未能解析出资源 UUID，尚未完成节点资产回绑。'],
               });
             }
-            const attachAssetResult = await attachSavedClipAsset(uuid, assetUuid);
+            const attachAssetResult = await attachSavedClipAsset(uuid, assetUuid, Boolean(p.autoPlay));
 
             // .anim 已落地、defaultClip 已通过编辑器 IPC 回绑，保存场景以完全持久化
             let sceneSaved = false;
