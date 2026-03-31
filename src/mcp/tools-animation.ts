@@ -339,7 +339,7 @@ export function registerAnimationTools(server: LocalToolServer, ctx: BridgeToolC
     `Manage Animation components and clips on Cocos Creator nodes. Create keyframe animations, control playback, and inspect animation state.
 
 Actions & required parameters:
-- create_clip: uuid(REQUIRED, target node), duration(optional, default 1), wrapMode(optional: Normal/Loop/PingPong), speed(optional, default 1), tracks(REQUIRED, array of keyframe tracks), savePath(optional, db://... .anim). Create and attach an AnimationClip, optionally save as asset.
+- create_clip: uuid(REQUIRED, target node), duration(optional, default 1), wrapMode(optional: Normal/Loop/PingPong), speed(optional, default 1), tracks(REQUIRED, array of keyframe tracks), savePath(STRONGLY RECOMMENDED, db://assets/animations/xxx.anim). Create and attach an AnimationClip. WITHOUT savePath the clip only exists in runtime memory and CANNOT be persisted even via manual Ctrl+S — always provide savePath to write a .anim file, bind it to the component, and auto-save the scene.
 - play: uuid(REQUIRED), clipName(optional, plays default clip if omitted). Start playing an animation clip.
 - pause: uuid(REQUIRED). Pause current animation.
 - resume: uuid(REQUIRED). Resume paused animation.
@@ -402,7 +402,15 @@ Returns: create_clip→{success,clipName,duration}. play/pause/resume/stop→{su
               return text(result, true);
             }
             const savePath = typeof p.savePath === 'string' ? p.savePath : '';
-            if (!savePath) return text(result);
+            if (!savePath) {
+              // createAnimationClip 在 execute-scene-script 中直接操作运行时对象（editorSyncSkipped=true），
+              // 编辑器场景模型不感知此 clip，即使手动 Ctrl+S 也无法持久化。
+              // 必须提供 savePath 才能真正落地。
+              return text({
+                ...(result as Record<string, unknown>),
+                _persistenceWarning: '动画 clip 仅存在于运行时内存，重载场景后将丢失。请提供 savePath（如 "db://assets/animations/xxx.anim"）参数以保存为 .anim 文件并落地到场景。',
+              });
+            }
 
             const saveResult = await saveAnimationAsset({
               savePath,
@@ -429,18 +437,35 @@ Returns: create_clip→{success,clipName,duration}. play/pause/resume/stop→{su
               });
             }
             const attachAssetResult = await attachSavedClipAsset(uuid, assetUuid);
+
+            // .anim 已落地、defaultClip 已通过编辑器 IPC 回绑，必须保存场景才能真正持久化。
+            let sceneSaved = false;
+            let sceneSaveWarning: string | undefined;
+            try {
+              await editorMsg('scene', 'save-scene');
+              sceneSaved = true;
+            } catch (saveErr: unknown) {
+              sceneSaveWarning = `场景自动保存失败（请手动 Ctrl+S）: ${errorMessage(saveErr)}`;
+            }
+
             if (attachAssetResult.error) {
               return text({
                 ...(result as Record<string, unknown>),
                 savedAsset: saveResult,
                 assetBinding: null,
-                warnings: [String(attachAssetResult.error)],
+                warnings: [
+                  String(attachAssetResult.error),
+                  ...(sceneSaveWarning ? [sceneSaveWarning] : []),
+                ],
+                sceneSaved,
               });
             }
             return text({
               ...(result as Record<string, unknown>),
               savedAsset: saveResult,
               assetBinding: attachAssetResult,
+              sceneSaved,
+              ...(sceneSaveWarning ? { warnings: [sceneSaveWarning] } : {}),
             });
           }
           case 'play': {

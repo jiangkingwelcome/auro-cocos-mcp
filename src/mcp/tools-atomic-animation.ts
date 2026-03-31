@@ -165,7 +165,7 @@ Prerequisites: Node must exist. If nodeUuid omitted, uses current selection. tra
           }, true);
         }
 
-        // ── Stage 3: best-effort save as .anim asset ──
+        // ── Stage 3: best-effort save as .anim asset + bind defaultClip + save scene ──
         let saveResult: Record<string, unknown> | null = null;
         const savePath = typeof p.savePath === 'string' ? p.savePath : '';
         if (savePath) {
@@ -199,10 +199,53 @@ Prerequisites: Node must exist. If nodeUuid omitted, uses current selection. tra
               try {
                 await bridgePost('/api/asset-db/refresh', { url: finalPath.substring(0, finalPath.lastIndexOf('/')) });
               } catch (e) { logIgnored(ErrorCategory.ASSET_OPERATION, '动画保存后刷新资源数据库失败（非关键）', e); }
+
+              // 查询资产 UUID，回绑到 Animation.defaultClip（编辑器模型）
+              stages.push('bind_default_clip');
+              let assetUuid: string | null = null;
+              try {
+                const info = await editorMsg('asset-db', 'query-asset-info', finalPath) as { uuid?: string } | null;
+                assetUuid = info?.uuid ?? null;
+              } catch { /* best-effort */ }
+
+              if (assetUuid) {
+                // 用 begin/end-recording 包裹，确保编辑器模型正确接收 defaultClip 变更
+                const recordId = await beginSceneRecording(editorMsg, [nodeUuid]);
+                try {
+                  await sceneMethod('setComponentProperty', [
+                    nodeUuid, 'Animation', 'defaultClip', { __uuid__: assetUuid },
+                  ]);
+                  // force-dirty：从主进程 touch 节点名称，触发 dirty 标记
+                  try {
+                    const dump = await editorMsg('scene', 'query-node', nodeUuid) as Record<string, unknown>;
+                    const nameVal = (dump as { value?: { name?: { value?: string } } })?.value?.name?.value;
+                    if (typeof nameVal === 'string' && nameVal) {
+                      await editorMsg('scene', 'set-property', {
+                        uuid: nodeUuid, path: 'name',
+                        dump: { type: 'string', value: nameVal },
+                      });
+                    }
+                  } catch { /* best-effort */ }
+                } finally {
+                  await endSceneRecording(editorMsg, recordId);
+                }
+                // .anim 已落地且 defaultClip 已回绑，保存场景以完全持久化
+                stages.push('save_scene');
+                try {
+                  await editorMsg('scene', 'save-scene');
+                } catch (saveSceneErr: unknown) {
+                  warnings.push(`场景自动保存失败（请手动 Ctrl+S）: ${errorMessage(saveSceneErr)}`);
+                }
+              } else {
+                warnings.push('.anim 文件已写入，但未能查询到资源 UUID，defaultClip 回绑跳过，请手动在编辑器中绑定。');
+              }
             }
           } catch (saveErr: unknown) {
             warnings.push(`保存 .anim 资产异常: ${errorMessage(saveErr)}，动画已在场景中生效但未落盘`);
           }
+        } else {
+          // 无 savePath：clip 仅在运行时内存（editorSyncSkipped=true），无法持久化
+          warnings.push('未提供 savePath，动画 clip 仅存在于运行时内存，重载场景后将丢失。请提供 savePath 参数。');
         }
 
         // ── Stage 4: auto-play if requested ──
