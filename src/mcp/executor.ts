@@ -14,9 +14,22 @@ export type CallInstruction =
 /**
  * Execution plan — returned by Rust's process_tool_call().
  * Contains the IPC calls to make and optional rollback instructions.
+ *
+ * Parallel execution:
+ *   If `parallelGroups` is present, each group is a set of IPC calls that
+ *   can run concurrently (Promise.all). Groups themselves are executed
+ *   sequentially — later groups may depend on results from earlier ones.
+ *   `calls` is kept for backwards compatibility; when `parallelGroups` is
+ *   provided it takes precedence.
+ *
+ *   Rust side: populate `parallelGroups` instead of `calls` for operations
+ *   whose IPC calls are provably independent (e.g. setting properties on
+ *   multiple unrelated nodes in one tool invocation).
  */
 export interface ExecutionPlan {
   calls: CallInstruction[];
+  /** Optional: parallel-grouped calls (overrides serial `calls` when present). */
+  parallelGroups?: CallInstruction[][];
   rollback?: CallInstruction[];
   error?: string;
   suggestion?: string;
@@ -91,9 +104,14 @@ function collectUuids(calls: CallInstruction[], results: unknown[]): string[] {
  * Cocos Creator 3.8.x: set-property with the SAME value is a no-op (Cocos skips unchanged values),
  * so it does NOT trigger dirty. Toggling `active` (false → true) guarantees a real recorded change
  * in the undo stack, which is what actually marks the scene dirty and prompts the user to save.
+ *
+ * Perf: All UUIDs are processed in PARALLEL via Promise.all.
+ * Within each UUID, false→true must remain sequential (order matters for undo stack),
+ * but different UUIDs are fully independent and can run concurrently.
+ * This cuts worst-case latency from ~(N × 2 × IPC_RTT) down to ~(2 × IPC_RTT).
  */
 async function forceDirty(ctx: BridgeToolContext, uuids: string[]): Promise<void> {
-  for (const uuid of uuids.slice(0, 3)) {
+  await Promise.all(uuids.slice(0, 3).map(async (uuid) => {
     try {
       await ctx.editorMsg('scene', 'set-property', {
         uuid, path: 'active',
@@ -104,7 +122,7 @@ async function forceDirty(ctx: BridgeToolContext, uuids: string[]): Promise<void
         dump: { type: 'Boolean', value: true },
       });
     } catch (_ignored) { /* best-effort */ }
-  }
+  }));
 }
 
 /**
@@ -155,10 +173,23 @@ export async function executePlan(
 
   const results: unknown[] = [];
   try {
-    for (const call of plan.calls) {
-      const result = await executeCall(ctx, call);
-      results.push(result);
+    if (plan.parallelGroups && plan.parallelGroups.length > 0) {
+      // Parallel-group execution: calls within a group run concurrently,
+      // groups themselves are executed sequentially (later groups may depend
+      // on results produced by earlier groups).
+      for (const group of plan.parallelGroups) {
+        const groupResults = await Promise.all(group.map(call => executeCall(ctx, call)));
+        results.push(...groupResults);
+      }
+    } else {
+      // Legacy serial execution — preserves exact ordering for plans where
+      // each call may depend on the result of the previous one.
+      for (const call of plan.calls) {
+        const result = await executeCall(ctx, call);
+        results.push(result);
+      }
     }
+
     if (needsDirty) {
       // Collect UUIDs from BOTH call args AND results — newly created node
       // UUIDs are returned in results, not present in the original call args.
