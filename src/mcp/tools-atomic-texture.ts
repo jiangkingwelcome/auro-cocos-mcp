@@ -2,7 +2,17 @@ import fs from 'fs';
 import { z } from 'zod';
 import type { LocalToolServer } from './local-tool-server';
 import type { BridgeToolContext } from './tools-shared';
-import { toInputSchema, normalizeDbUrl, sanitizeDbUrl, sanitizeOsPath, extractSelectedNodeUuid, errorMessage } from './tools-shared';
+import {
+  toInputSchema,
+  normalizeDbUrl,
+  sanitizeDbUrl,
+  sanitizeOsPath,
+  extractSelectedNodeUuid,
+  errorMessage,
+  attachScenePersistenceWarnings,
+  persistenceModeSchema,
+  withPersistenceGuard,
+} from './tools-shared';
 import { ErrorCategory, logIgnored } from '../error-utils';
 
 export function registerTextureAtomicTool(server: LocalToolServer, ctx: BridgeToolContext): void {
@@ -76,9 +86,10 @@ Parameters:
 - nodeUuid(optional): Target node UUID. If omitted, uses current editor selection.
 - autoAddSprite(optional, default true): Automatically add Sprite component if target node doesn't have one.
 - refreshAssetDb(optional, default true): Refresh AssetDB after import.
+- persistenceMode(optional: warn/auto-save/strict). Controls whether successful scene writes only warn, auto-save, or fail in strict persistence mode.
 
 Auto-behavior: This tool automatically sets the image meta type to "sprite-frame" and reimports, ensuring a SpriteFrame sub-asset is generated. It then applies the SpriteFrame to the Sprite component via Editor IPC.
-Returns: {success, nodeUuid, targetUrl, stages:["validate_input","import_texture","ensure_sprite_frame_type","ensure_ui_transform","ensure_sprite_component","resolve_sprite_frame_uuid","apply_sprite_frame","refresh_asset_db","highlight"], importResult:{uuid,subAssets}}. On error: {success:false, error:"message", stages}.
+Returns: {success, nodeUuid, targetUrl, stages:["validate_input","import_texture","ensure_sprite_frame_type","ensure_ui_transform","ensure_sprite_component","resolve_sprite_frame_uuid","apply_sprite_frame","refresh_asset_db","highlight"], importResult:{uuid,subAssets}}. Successful write results may include persistenceStatus{mode,target,requiresPersistence,saveAttempted,...}. On error: {success:false, error:"message", stages}.
 Prerequisites: Target node must exist. In 3D scenes, call scene_operation action=ensure_2d_canvas first, create a child node under canvasUuid with layer=33554432, then pass that node's UUID.
 Common errors: "未选中节点"=no nodeUuid and nothing selected; sourcePath file not found; SpriteFrame UUID resolution may retry up to 5 times.`,
     toInputSchema({
@@ -101,10 +112,12 @@ Common errors: "未选中节点"=no nodeUuid and nothing selected; sourcePath fi
       refreshAssetDb: z.boolean().optional().describe(
         'Whether to refresh the AssetDB after import. Default: true. Set false for batch operations.'
       ),
+      persistenceMode: persistenceModeSchema,
     }),
     async (params) => {
       const p = params as Record<string, unknown>;
       const stages: string[] = [];
+      const warnings: string[] = [];
       try {
         if (!p.sourcePath) return text({ success: false, error: '缺少 sourcePath 参数' }, true);
         const osPathErr = sanitizeOsPath(String(p.sourcePath));
@@ -265,12 +278,37 @@ Common errors: "未选中节点"=no nodeUuid and nothing selected; sourcePath fi
         }
         try { await bridgePost('/api/console/log', { text: `import_and_apply_texture 已执行: ${targetUrl}` }); } catch { /* ignore */ }
 
-        return text({
-          success: true, nodeUuid, sourcePath: p.sourcePath, targetUrl, stages, importResult,
-        });
+        const { result, isError } = await withPersistenceGuard(
+          { editorMsg, bridgePost },
+          {
+            mode: p.persistenceMode,
+            target: {
+              kind: 'multi',
+              targets: [
+                { kind: 'asset', url: targetUrl },
+                { kind: 'scene', saveStrategy: 'save_scene' },
+              ],
+            },
+            strictFailureMessage: 'import_and_apply_texture 写入成功，但持久化失败（strict 模式）',
+          },
+          async () => {
+            const response: Record<string, unknown> = {
+              success: true, nodeUuid, sourcePath: p.sourcePath, targetUrl, stages, importResult,
+              ...(warnings.length ? { warnings } : {}),
+            };
+            await attachScenePersistenceWarnings(editorMsg, response, {
+              action: 'import_and_apply_texture',
+              affectedUuid: nodeUuid,
+              includeSceneSaveWarning: false,
+            });
+            return response;
+          },
+        );
+        return text(result, isError ? true : undefined);
       } catch (err: unknown) {
         return text({
           success: false, error: errorMessage(err), stages,
+          ...(warnings.length ? { warnings } : {}),
         }, true);
       }
     },

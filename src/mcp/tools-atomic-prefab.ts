@@ -1,7 +1,16 @@
 import { z } from 'zod';
 import type { LocalToolServer } from './local-tool-server';
 import type { BridgeToolContext } from './tools-shared';
-import { toInputSchema, normalizeDbUrl, sanitizeDbUrl, ensureAssetDirectory, errorMessage } from './tools-shared';
+import {
+  toInputSchema,
+  normalizeDbUrl,
+  sanitizeDbUrl,
+  ensureAssetDirectory,
+  errorMessage,
+  attachScenePersistenceWarnings,
+  persistenceModeSchema,
+  withPersistenceGuard,
+} from './tools-shared';
 import { ErrorCategory, logIgnored } from '../error-utils';
 
 export function registerPrefabAtomicTool(server: LocalToolServer, ctx: BridgeToolContext): void {
@@ -48,9 +57,10 @@ Parameters:
 - children(optional): Array of child node definitions, each with name and optional components.
 - position(optional): Initial position {x, y, z} for the root node.
 - cleanupSourceNode(optional, default true): Remove temp node from scene after prefab creation.
+- persistenceMode(optional: warn/auto-save/strict). Controls whether successful scene writes only warn, auto-save, or fail in strict persistence mode.
 
 ASSET REFERENCES in components.properties: For spriteFrame/font/material properties, use {__uuid__:"asset-uuid"}. Get UUID via asset_operation action=url_to_uuid.
-Returns: {success, prefabPath, rootNodeUuid, stages:["create_root_node","add_component:X","create_prefab","cleanup_temp_node"], completedStages?, rollback?:[]}. On error: {success:false, error, stage, rollback}.
+Returns: {success, prefabPath, rootNodeUuid, stages:["create_root_node","add_component:X","create_prefab","cleanup_temp_node"], completedStages?, rollback?:[]}. Successful write results may include persistenceStatus{mode,target,requiresPersistence,saveAttempted,...}. On error: {success:false, error, stage, rollback}.
 Auto-rollback: If prefab creation fails, the temp node is automatically destroyed. Set cleanupSourceNode=false to keep it for debugging.`,
     toInputSchema({
       prefabPath: z.string().describe(
@@ -94,6 +104,7 @@ Auto-rollback: If prefab creation fails, the temp node is automatically destroye
         'Whether to remove the temporary node from the scene after prefab creation. ' +
         'Default: true. Set false to keep the node in scene as a prefab instance.'
       ),
+      persistenceMode: persistenceModeSchema,
     }),
     async (params) => {
       const p = params as Record<string, unknown>;
@@ -187,12 +198,37 @@ Auto-rollback: If prefab creation fails, the temp node is automatically destroye
           }
         }
 
-        return text({
-          success: true, prefabPath,
-          rootNodeUuid: shouldCleanup ? '(已清理)' : tempNodeUuid,
-          stages, prefabResult,
-          ...(warnings.length ? { warnings } : {}),
-        });
+        const { result, isError } = await withPersistenceGuard(
+          { editorMsg, bridgePost },
+          {
+            mode: p.persistenceMode,
+            target: shouldCleanup
+              ? { kind: 'asset', url: prefabPath }
+              : {
+                kind: 'multi',
+                targets: [
+                  { kind: 'asset', url: prefabPath },
+                  { kind: 'scene', saveStrategy: 'save_scene' },
+                ],
+              },
+            strictFailureMessage: 'create_prefab_atomic 写入成功，但持久化失败（strict 模式）',
+          },
+          async () => {
+            const response: Record<string, unknown> = {
+              success: true, prefabPath,
+              rootNodeUuid: shouldCleanup ? '(已清理)' : tempNodeUuid,
+              stages, prefabResult,
+              ...(warnings.length ? { warnings } : {}),
+            };
+            await attachScenePersistenceWarnings(editorMsg, response, {
+              action: 'create_prefab_atomic',
+              includePrefabWarning: false,
+              includeSceneSaveWarning: false,
+            });
+            return response;
+          },
+        );
+        return text(result, isError ? true : undefined);
 
       } catch (err: unknown) {
         const rollbackResult: string[] = [];

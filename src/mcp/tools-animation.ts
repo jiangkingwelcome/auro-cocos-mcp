@@ -11,6 +11,9 @@ import {
   sanitizeDbUrl,
   ensureAssetDirectory,
   buildAnimJson,
+  persistenceModeSchema,
+  withPersistenceGuard,
+  attachScenePersistenceWarnings,
 } from './tools-shared';
 
 export function registerAnimationTools(server: LocalToolServer, ctx: BridgeToolContext): void {
@@ -299,9 +302,10 @@ Actions & required parameters:
 - set_current_time: uuid(REQUIRED), time(REQUIRED, seconds). Seek animation to a specific time.
 - set_speed: uuid(REQUIRED), speed(REQUIRED). Set animation playback speed (1.0 = normal).
 - crossfade: uuid(REQUIRED), clipName(REQUIRED), duration(optional, default 0.3). Crossfade to another animation clip.
+- persistenceMode(optional: warn/auto-save/strict). Controls whether successful scene writes only warn, auto-save, or fail in strict persistence mode.
 
 Prerequisites: Node must have an Animation component. Use scene_operation action=add_component component="Animation" first if needed.
-Returns: create_clip→{success,clipName,duration}. play/pause/resume/stop→{success}. get_state→{isPlaying,currentClip,time,speed}. list_clips→{clips:[{name,duration}]}. On error: {error:"message"}.` + AI_RULES,
+Returns: create_clip→{success,clipName,duration}. play/pause/resume/stop→{success}. get_state→{isPlaying,currentClip,time,speed}. list_clips→{clips:[{name,duration}]}. Successful write results may include persistenceStatus{mode,target,requiresPersistence,saveAttempted,...}. On error: {error:"message"}.` + AI_RULES,
     toInputSchema({
       action: z.enum([
         'create_clip', 'play', 'pause', 'resume', 'stop',
@@ -341,6 +345,7 @@ Returns: create_clip→{success,clipName,duration}. play/pause/resume/stop→{su
       autoPlay: z.boolean().optional().describe(
         'For create_clip only. If true, sets Animation.playOnLoad=true so the clip auto-plays when the scene loads.'
       ),
+      persistenceMode: persistenceModeSchema,
     }),
     async (params) => {
       try {
@@ -358,10 +363,18 @@ Returns: create_clip→{success,clipName,duration}. play/pause/resume/stop→{su
             if (!savePath) {
               // createAnimationClip 在 execute-scene-script 中直接操作运行时对象（editorSyncSkipped=true），
               // 编辑器场景模型不感知此 clip，即使手动 Ctrl+S 也无法持久化。
-              return text({
+              const response = {
                 ...(result as Record<string, unknown>),
                 _persistenceWarning: '动画 clip 仅存在于运行时内存，重载场景后将丢失。请提供 savePath（如 "db://assets/animations/xxx.anim"）参数以保存为 .anim 文件并落地到场景。',
-              });
+              };
+              if (p.persistenceMode === 'strict') {
+                return text({
+                  ...response,
+                  success: false,
+                  error: 'create_clip 未提供 savePath，无法在 strict 模式下保证持久化。',
+                }, true);
+              }
+              return text(response);
             }
 
             const saveResult = await saveAnimationAsset({
@@ -374,51 +387,82 @@ Returns: create_clip→{success,clipName,duration}. play/pause/resume/stop→{su
               tracks: (p.tracks as Array<Record<string, unknown>> | undefined) || [],
             });
             if (saveResult.error) {
-              return text({
+              const response = {
                 ...(result as Record<string, unknown>),
                 savedAsset: null,
                 warnings: [`保存 .anim 资产失败: ${saveResult.error}`],
-              });
+              };
+              if (p.persistenceMode === 'strict') {
+                return text({
+                  ...response,
+                  success: false,
+                  error: `create_clip 保存 .anim 资产失败（strict 模式）: ${saveResult.error}`,
+                }, true);
+              }
+              return text(response);
             }
             const assetUuid = typeof saveResult.uuid === 'string' ? saveResult.uuid : '';
             if (!assetUuid) {
-              return text({
+              const response = {
                 ...(result as Record<string, unknown>),
                 savedAsset: saveResult,
                 warnings: ['.anim 文件已写入，但未能解析出资源 UUID，尚未完成节点资产回绑。'],
-              });
+              };
+              if (p.persistenceMode === 'strict') {
+                return text({
+                  ...response,
+                  success: false,
+                  error: 'create_clip 已写入 .anim 文件，但未能解析资源 UUID，strict 模式下视为持久化失败。',
+                }, true);
+              }
+              return text(response);
             }
             const attachAssetResult = await attachSavedClipAsset(uuid, assetUuid, Boolean(p.autoPlay));
 
-            // .anim 已落地、defaultClip 已通过编辑器 IPC 回绑，保存场景以完全持久化
-            let sceneSaved = false;
-            let sceneSaveWarning: string | undefined;
-            try {
-              await editorMsg('scene', 'save-scene');
-              sceneSaved = true;
-            } catch (saveErr: unknown) {
-              sceneSaveWarning = `场景自动保存失败（请手动 Ctrl+S）: ${errorMessage(saveErr)}`;
-            }
-
             if (attachAssetResult.error) {
-              return text({
+              const response = {
                 ...(result as Record<string, unknown>),
                 savedAsset: saveResult,
                 assetBinding: null,
-                warnings: [
-                  String(attachAssetResult.error),
-                  ...(sceneSaveWarning ? [sceneSaveWarning] : []),
-                ],
-                sceneSaved,
-              });
+                warnings: [String(attachAssetResult.error)],
+              };
+              if (p.persistenceMode === 'strict') {
+                return text({
+                  ...response,
+                  success: false,
+                  error: `create_clip 资产回绑失败（strict 模式）: ${attachAssetResult.error}`,
+                }, true);
+              }
+              return text(response);
             }
-            return text({
-              ...(result as Record<string, unknown>),
-              savedAsset: saveResult,
-              assetBinding: attachAssetResult,
-              sceneSaved,
-              ...(sceneSaveWarning ? { warnings: [sceneSaveWarning] } : {}),
-            });
+            const persistenceWrapped = await withPersistenceGuard(
+              { editorMsg, bridgePost },
+              {
+                mode: p.persistenceMode,
+                target: {
+                  kind: 'multi',
+                  targets: [
+                    { kind: 'asset', url: saveResult.path as string | undefined },
+                    { kind: 'scene', saveStrategy: 'save_scene' },
+                  ],
+                },
+                strictFailureMessage: 'animation_tool.create_clip 写入成功，但场景持久化失败（strict 模式）',
+              },
+              async () => {
+                const response = {
+                  ...(result as Record<string, unknown>),
+                  savedAsset: saveResult,
+                  assetBinding: attachAssetResult,
+                };
+                await attachScenePersistenceWarnings(editorMsg, response, {
+                  action: 'animation_tool.create_clip',
+                  affectedUuid: uuid,
+                  includeSceneSaveWarning: false,
+                });
+                return response;
+              },
+            );
+            return text(persistenceWrapped.result, persistenceWrapped.isError ? true : undefined);
           }
           case 'play': {
             const result = await dispatchAnimatorPlayback('play', uuid, typeof p.clipName === 'string' ? p.clipName : undefined);

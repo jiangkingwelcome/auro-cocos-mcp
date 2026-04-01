@@ -1,7 +1,20 @@
 import { z } from 'zod';
 import type { LocalToolServer } from './local-tool-server';
 import type { BridgeToolContext } from './tools-shared';
-import { toInputSchema, normalizeDbUrl, sanitizeDbUrl, ensureAssetDirectory, extractSelectedNodeUuid, errorMessage, beginSceneRecording, endSceneRecording, buildAnimJson } from './tools-shared';
+import {
+  toInputSchema,
+  normalizeDbUrl,
+  sanitizeDbUrl,
+  ensureAssetDirectory,
+  extractSelectedNodeUuid,
+  errorMessage,
+  beginSceneRecording,
+  endSceneRecording,
+  buildAnimJson,
+  persistenceModeSchema,
+  withPersistenceGuard,
+  attachScenePersistenceWarnings,
+} from './tools-shared';
 import { ErrorCategory, logIgnored } from '../error-utils';
 
 const keyframeSchema = z.object({
@@ -142,9 +155,10 @@ Parameters:
 - tracks(REQUIRED): Array of animation property tracks with keyframes.
 - savePath(optional): db:// path to save .anim file. If omitted, clip exists only in scene memory.
 - autoPlay(optional, default false): Start playing the animation immediately after creation.
+- persistenceMode(optional: warn/auto-save/strict). Controls whether successful scene writes only warn, auto-save, or fail in strict persistence mode.
 
 tracks format: [{property:"position", keyframes:[{time:0, value:{x:0,y:0,z:0}}, {time:1, value:{x:100,y:0,z:0}}]}]. Supported properties: position, scale, rotation, opacity, color, eulerAngles.
-Returns: {success, nodeUuid, clipDuration, trackCount, keyframeTimesCount, wrapMode, speed, attach:{attached}, savedAsset?, stages:["validate_node","create_clip","highlight"]}. On error: {success:false, error}.
+Returns: {success, nodeUuid, clipDuration, trackCount, keyframeTimesCount, wrapMode, speed, attach:{attached}, savedAsset?, stages:["validate_node","create_clip","highlight"]}. Successful write results may include persistenceStatus{mode,target,requiresPersistence,saveAttempted,...}. On error: {success:false, error}.
 Prerequisites: Node must exist. If nodeUuid omitted, uses current selection. tracks array must have at least one track with keyframes.`,
     toInputSchema({
       nodeUuid: z.string().optional().describe(
@@ -178,6 +192,7 @@ Prerequisites: Node must exist. If nodeUuid omitted, uses current selection. tra
       autoPlay: z.boolean().optional().describe(
         'Whether to immediately play the animation after creation. Default: false.'
       ),
+      persistenceMode: persistenceModeSchema,
     }),
     async (params) => {
       const p = params as Record<string, unknown>;
@@ -297,13 +312,6 @@ Prerequisites: Node must exist. If nodeUuid omitted, uses current selection. tra
                   warnings.push(String(assetBinding.error));
                   assetBinding = null;
                 }
-                // .anim 已落地且 defaultClip 已回绑，保存场景以完全持久化
-                stages.push('save_scene');
-                try {
-                  await editorMsg('scene', 'save-scene');
-                } catch (saveSceneErr: unknown) {
-                  warnings.push(`场景自动保存失败（请手动 Ctrl+S）: ${errorMessage(saveSceneErr)}`);
-                }
               } else {
                 warnings.push('动画资产已保存，但未能获取 UUID，无法回绑到 Animation 组件。');
               }
@@ -314,6 +322,15 @@ Prerequisites: Node must exist. If nodeUuid omitted, uses current selection. tra
         } else {
           // 无 savePath：clip 仅在运行时内存（editorSyncSkipped=true），无法持久化
           warnings.push('未提供 savePath，动画 clip 仅存在于运行时内存，重载场景后将丢失。请提供 savePath 参数。');
+          if (p.persistenceMode === 'strict') {
+            return text({
+              success: false,
+              nodeUuid,
+              stages,
+              error: 'create_tween_animation_atomic 未提供 savePath，无法在 strict 模式下保证持久化。',
+              warnings,
+            }, true);
+          }
         }
 
         // ── Stage 4: auto-play if requested ──
@@ -338,20 +355,66 @@ Prerequisites: Node must exist. If nodeUuid omitted, uses current selection. tra
           text: `[AI Animation] create_tween_animation_atomic 完成: ${(clipResult as Record<string, unknown>).trackCount} 轨道, ${(clipResult as Record<string, unknown>).clipDuration}s`,
         }); } catch { /* ignore */ }
 
-        return text({
-          success: true,
-          nodeUuid,
-          clipDuration: clipResult.clipDuration,
-          trackCount: clipResult.trackCount,
-          keyframeTimesCount: clipResult.keyframeTimesCount,
-          wrapMode: clipResult.wrapMode,
-          speed: clipResult.speed,
-          attach: clipResult.attach,
-          savedAsset: saveResult ? { saved: true, path: savePath } : null,
-          assetBinding,
-          stages,
-          ...(warnings.length ? { warnings } : {}),
-        });
+        if (p.persistenceMode === 'strict' && savePath && !saveResult) {
+          return text({
+            success: false,
+            nodeUuid,
+            stages,
+            error: 'create_tween_animation_atomic 保存 .anim 资产失败（strict 模式）。',
+            ...(warnings.length ? { warnings } : {}),
+          }, true);
+        }
+        if (p.persistenceMode === 'strict' && saveResult && !assetBinding) {
+          return text({
+            success: false,
+            nodeUuid,
+            stages,
+            error: 'create_tween_animation_atomic 动画资产已保存但未能回绑到节点（strict 模式）。',
+            ...(warnings.length ? { warnings } : {}),
+          }, true);
+        }
+
+        const persistenceTarget = saveResult
+          ? {
+            kind: 'multi' as const,
+            targets: [
+              { kind: 'asset' as const, url: savePath || undefined },
+              { kind: 'scene' as const, saveStrategy: 'save_scene' as const },
+            ],
+          }
+          : { kind: 'none' as const };
+
+        const { result, isError } = await withPersistenceGuard(
+          { editorMsg, bridgePost },
+          {
+            mode: p.persistenceMode,
+            target: persistenceTarget,
+            strictFailureMessage: 'create_tween_animation_atomic 写入成功，但场景持久化失败（strict 模式）',
+          },
+          async () => {
+            const response: Record<string, unknown> = {
+              success: true,
+              nodeUuid,
+              clipDuration: clipResult.clipDuration,
+              trackCount: clipResult.trackCount,
+              keyframeTimesCount: clipResult.keyframeTimesCount,
+              wrapMode: clipResult.wrapMode,
+              speed: clipResult.speed,
+              attach: clipResult.attach,
+              savedAsset: saveResult ? { saved: true, path: savePath } : null,
+              assetBinding,
+              stages,
+              ...(warnings.length ? { warnings } : {}),
+            };
+            await attachScenePersistenceWarnings(editorMsg, response, {
+              action: 'create_tween_animation_atomic',
+              affectedUuid: nodeUuid,
+              includeSceneSaveWarning: false,
+            });
+            return response;
+          },
+        );
+        return text(result, isError ? true : undefined);
       } catch (err: unknown) {
         return text({
           success: false, error: errorMessage(err), stages,

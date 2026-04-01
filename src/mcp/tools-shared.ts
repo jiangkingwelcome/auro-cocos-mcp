@@ -11,6 +11,35 @@ export interface ToolErrorResult {
 
 export type ToolSuccessResult<T extends Record<string, unknown> = Record<string, never>> = T & { success: true };
 export type ToolResult<T extends Record<string, unknown> = Record<string, never>> = ToolSuccessResult<T> | ToolErrorResult;
+export type PersistenceMode = 'warn' | 'auto-save' | 'strict';
+export type PersistenceGuarantee = 'not-needed' | 'tracked' | 'degraded';
+
+export type PersistenceTarget =
+  | { kind: 'none' }
+  | { kind: 'scene'; sceneUrl?: string; saveStrategy?: 'save_scene' }
+  | { kind: 'prefab'; prefabUrl?: string; saveStrategy?: 'save_scene' }
+  | { kind: 'asset'; url?: string; saveStrategy?: 'none' }
+  | { kind: 'multi'; targets: Array<Exclude<PersistenceTarget, { kind: 'multi' }>> };
+
+export interface PersistenceStatus {
+  mode: PersistenceMode;
+  target: PersistenceTarget;
+  guarantee: PersistenceGuarantee;
+  requiresPersistence: boolean;
+  dirtyBefore?: boolean;
+  dirtyAfterWrite?: boolean;
+  writeIntroducedDirty?: boolean;
+  saveAttempted: boolean;
+  saveSucceeded?: boolean;
+  dirtyAfterSave?: boolean;
+  degradedReason?: string;
+  warning?: string;
+}
+
+export interface PersistenceGuardResult<T extends Record<string, unknown>> {
+  result: T;
+  isError: boolean;
+}
 
 /**
  * AI_RULES version — bump when rule semantics change so clients can
@@ -138,6 +167,70 @@ export function extractSelectedNodeUuid(selectionResult: unknown): string {
   return typeof first === 'string' ? first : '';
 }
 
+export const PREFAB_PERSISTENCE_WARNING = '检测到目标可能属于 Prefab 实例。若要把当前实例修改回写到预制体资源，请调用 scene_operation.apply_prefab；若需确保重开编辑器后仍保留，再调用 editor_action.save_scene。';
+export const SCENE_SAVE_WARNING = '当前场景存在未保存修改；如需在重开编辑器后保留，请调用 editor_action.save_scene。';
+export const STRICT_PERSISTENCE_DEGRADED_WARNING = 'strict 模式下目标在本次调用前已处于 dirty 状态，当前仅能 best-effort 尝试保存，无法仅凭全局 dirty 精确判断是否由本次调用引入未持久化变更。';
+export const PERSISTENCE_MODE_DESCRIPTION =
+  'Persistence behavior for write actions. "warn" keeps current behavior and only returns warnings for unpersisted changes; ' +
+  '"auto-save" attempts to save the corresponding persistence target after a successful write and downgrades save failures to warnings; ' +
+  '"strict" fails the whole tool result only when this call can be tracked as introducing unpersisted changes and saving that target fails or remains dirty.';
+export const persistenceModeSchema = z.enum(['warn', 'auto-save', 'strict']).optional().describe(PERSISTENCE_MODE_DESCRIPTION);
+
+export function appendWarning(target: Record<string, unknown>, warning: string): void {
+  const existing = Array.isArray(target.warnings)
+    ? target.warnings.filter((item): item is string => typeof item === 'string')
+    : [];
+  if (!existing.includes(warning)) target.warnings = [...existing, warning];
+}
+
+function hasPrefabMarker(input: unknown, depth = 0, seen = new Set<object>()): boolean {
+  if (input === null || input === undefined || depth > 4) return false;
+  if (typeof input !== 'object') return false;
+  if (seen.has(input)) return false;
+  seen.add(input);
+  if (Array.isArray(input)) return input.some(item => hasPrefabMarker(item, depth + 1, seen));
+  const obj = input as Record<string, unknown>;
+  for (const [key, value] of Object.entries(obj)) {
+    const normalizedKey = key.toLowerCase();
+    if (normalizedKey === '_prefab' || normalizedKey === '__prefab' || normalizedKey === 'prefab' || normalizedKey === 'prefabinfo') {
+      if (value !== null && value !== undefined && value !== false && value !== '') return true;
+    }
+  }
+  return Object.values(obj).some(value => hasPrefabMarker(value, depth + 1, seen));
+}
+
+export async function attachScenePersistenceWarnings(
+  editorMsg: BridgeToolContext['editorMsg'],
+  target: Record<string, unknown>,
+  options: {
+    action?: string;
+    affectedUuid?: string;
+    includeSceneSaveWarning?: boolean;
+    includePrefabWarning?: boolean;
+  } = {},
+): Promise<void> {
+  const {
+    action = '',
+    affectedUuid = '',
+    includeSceneSaveWarning = true,
+    includePrefabWarning = true,
+  } = options;
+  if (includeSceneSaveWarning) {
+    try {
+      if (await editorMsg('scene', 'query-dirty')) appendWarning(target, SCENE_SAVE_WARNING);
+    } catch (e) {
+      logIgnored(ErrorCategory.EDITOR_IPC, `query-dirty 失败${action ? ` (${action})` : ''}`, e);
+    }
+  }
+  if (!includePrefabWarning || !affectedUuid) return;
+  try {
+    const dump = await editorMsg('scene', 'query-node', affectedUuid);
+    if (hasPrefabMarker(dump)) appendWarning(target, PREFAB_PERSISTENCE_WARNING);
+  } catch (e) {
+    logIgnored(ErrorCategory.EDITOR_IPC, `Prefab 实例检测失败${action ? ` (${action}:${affectedUuid})` : ` (${affectedUuid})`}`, e);
+  }
+}
+
 export function normalizeRecordingTargets(targets: Array<string | null | undefined>): string[] {
   return targets
     .map((item) => String(item ?? '').trim())
@@ -170,6 +263,140 @@ export async function endSceneRecording(
   } catch {
     /* ignore */
   }
+}
+
+function normalizePersistenceMode(mode: unknown): PersistenceMode {
+  return mode === 'auto-save' || mode === 'strict' ? mode : 'warn';
+}
+
+function isStructuredFailure(result: unknown): boolean {
+  return Boolean(
+    result
+    && typeof result === 'object'
+    && (
+      ('error' in result && (result as Record<string, unknown>).error)
+      || ('success' in result && (result as Record<string, unknown>).success === false)
+    )
+  );
+}
+
+function targetNeedsExplicitSave(target: PersistenceTarget): boolean {
+  if (target.kind === 'multi') return target.targets.some(item => targetNeedsExplicitSave(item));
+  return target.kind === 'scene' || target.kind === 'prefab';
+}
+
+async function queryTargetDirty(
+  editorMsg: BridgeToolContext['editorMsg'],
+  target: PersistenceTarget,
+): Promise<boolean | undefined> {
+  if (!targetNeedsExplicitSave(target)) return false;
+  try {
+    return Boolean(await editorMsg('scene', 'query-dirty'));
+  } catch {
+    return undefined;
+  }
+}
+
+async function saveTarget(
+  bridgePost: BridgeToolContext['bridgePost'],
+  target: PersistenceTarget,
+): Promise<unknown> {
+  if (target.kind === 'multi') {
+    const saveResults: unknown[] = [];
+    for (const item of target.targets) {
+      if (!targetNeedsExplicitSave(item)) continue;
+      saveResults.push(await saveTarget(bridgePost, item));
+    }
+    return saveResults.length === 1 ? saveResults[0] : { success: true, results: saveResults };
+  }
+  if (!targetNeedsExplicitSave(target)) return { success: true, skipped: true };
+  return bridgePost('/api/editor/save-scene', { force: false });
+}
+
+export async function withPersistenceGuard<T extends Record<string, unknown>>(
+  ctx: Pick<BridgeToolContext, 'editorMsg' | 'bridgePost'>,
+  options: {
+    mode?: unknown;
+    target: PersistenceTarget;
+    strictFailureMessage?: string;
+    unsavedWarning?: string;
+  },
+  execute: () => Promise<T>,
+): Promise<PersistenceGuardResult<T>> {
+  const mode = normalizePersistenceMode(options.mode);
+  const unsavedWarning = options.unsavedWarning || SCENE_SAVE_WARNING;
+  const dirtyBefore = await queryTargetDirty(ctx.editorMsg, options.target);
+  const result = await execute();
+  const failed = isStructuredFailure(result);
+  if (failed) {
+    (result as Record<string, unknown>).persistenceStatus = {
+      mode,
+      target: options.target,
+      guarantee: 'not-needed',
+      requiresPersistence: false,
+      dirtyBefore,
+      saveAttempted: false,
+    } satisfies PersistenceStatus;
+    return { result, isError: true };
+  }
+
+  const dirtyAfterWrite = await queryTargetDirty(ctx.editorMsg, options.target);
+  const requiresPersistence = Boolean(targetNeedsExplicitSave(options.target) && dirtyAfterWrite);
+  const trackedWrite = dirtyBefore === false && dirtyAfterWrite === true;
+  const degraded = dirtyBefore === true && dirtyAfterWrite === true;
+  const persistenceStatus: PersistenceStatus = {
+    mode,
+    target: options.target,
+    guarantee: !requiresPersistence ? 'not-needed' : (trackedWrite ? 'tracked' : 'degraded'),
+    requiresPersistence,
+    dirtyBefore,
+    dirtyAfterWrite,
+    ...(dirtyBefore === false && dirtyAfterWrite !== undefined ? { writeIntroducedDirty: dirtyAfterWrite } : {}),
+    saveAttempted: false,
+    ...(degraded ? { degradedReason: STRICT_PERSISTENCE_DEGRADED_WARNING } : {}),
+  };
+
+  (result as Record<string, unknown>).persistenceStatus = persistenceStatus;
+
+  if (!requiresPersistence) {
+    return { result, isError: false };
+  }
+
+  if (mode === 'warn') {
+    appendWarning(result as Record<string, unknown>, unsavedWarning);
+    persistenceStatus.warning = unsavedWarning;
+    return { result, isError: false };
+  }
+
+  persistenceStatus.saveAttempted = true;
+  const saveResult = await saveTarget(ctx.bridgePost, options.target);
+  const dirtyAfterSave = await queryTargetDirty(ctx.editorMsg, options.target);
+  const saveSucceeded = !isStructuredFailure(saveResult) && dirtyAfterSave !== true;
+  persistenceStatus.saveSucceeded = saveSucceeded;
+  persistenceStatus.dirtyAfterSave = dirtyAfterSave;
+
+  if (saveSucceeded) {
+    return { result, isError: false };
+  }
+
+  const failureWarning = mode === 'strict' && degraded
+    ? `自动保存失败，且 ${STRICT_PERSISTENCE_DEGRADED_WARNING}`
+    : '自动保存失败，变更仍未持久化。';
+
+  persistenceStatus.warning = failureWarning;
+
+  if (mode === 'strict' && trackedWrite) {
+    const failedResult = {
+      ...result,
+      success: false,
+      error: options.strictFailureMessage || 'Write succeeded but persistence failed in strict mode.',
+      persistenceStatus,
+    } as T;
+    return { result: failedResult, isError: true };
+  }
+
+  appendWarning(result as Record<string, unknown>, failureWarning);
+  return { result, isError: false };
 }
 
 export interface NormalizeResult {

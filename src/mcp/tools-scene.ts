@@ -5,6 +5,7 @@ import {
   toInputSchema,
   beginSceneRecording,
   endSceneRecording,
+  type PersistenceTarget,
   normalizeParams,
   normalizeComponentName,
   withGuardrailHints,
@@ -13,6 +14,10 @@ import {
   errorMessage,
   normalizeDbUrl,
   AI_RULES,
+  persistenceModeSchema,
+  withPersistenceGuard,
+  PREFAB_PERSISTENCE_WARNING,
+  SCENE_SAVE_WARNING,
   validateRequiredParams,
 } from './tools-shared';
 import type { LocalToolServer } from './local-tool-server';
@@ -20,13 +25,16 @@ import type { LocalToolServer } from './local-tool-server';
 export function registerSceneTools(server: LocalToolServer, ctx: BridgeToolContext): void {
   const { bridgeGet, bridgePost, sceneMethod, editorMsg, text } = ctx;
   const sceneOp = ctx.sceneOp ?? ((params: Record<string, unknown>) => sceneMethod('dispatchOperation', [params]));
-  const toStructuredToolResult = (result: unknown, successMeta: Record<string, unknown>, fallbackResult?: unknown) => {
+  const toStructuredResultRecord = (result: unknown, successMeta: Record<string, unknown>, fallbackResult?: unknown): Record<string, unknown> => {
     if (result && typeof result === 'object' && ('success' in result || 'error' in result)) {
-      const merged = { ...successMeta, ...(result as Record<string, unknown>) };
-      const failed = ('error' in merged && merged.error) || ('success' in merged && merged.success === false);
-      return text(merged, Boolean(failed));
+      return { ...successMeta, ...(result as Record<string, unknown>) };
     }
-    return text({ success: true, ...successMeta, ...(result === undefined ? (fallbackResult === undefined ? {} : { result: fallbackResult }) : { result }) });
+    return { success: true, ...successMeta, ...(result === undefined ? (fallbackResult === undefined ? {} : { result: fallbackResult }) : { result }) };
+  };
+  const toStructuredToolResult = (result: unknown, successMeta: Record<string, unknown>, fallbackResult?: unknown) => {
+    const merged = toStructuredResultRecord(result, successMeta, fallbackResult);
+    const failed = ('error' in merged && merged.error) || ('success' in merged && merged.success === false);
+    return text(merged, Boolean(failed));
   };
   const forceDirtyNodeTouch = async (uuid: string, name: string): Promise<void> => {
     if (!uuid || !name) return;
@@ -35,6 +43,84 @@ export function registerSceneTools(server: LocalToolServer, ctx: BridgeToolConte
       path: 'name',
       dump: { type: 'string', value: name },
     });
+  };
+  const PREFAB_SAVE_SCENE_WARNING = 'Prefab 变更已应用；若当前场景仍有未保存修改，请再调用 editor_action.save_scene，避免重开后丢失。';
+  const PREFAB_EDIT_MODE_WARNING = '已进入 Prefab 编辑模式。对该 Prefab 的修改完成后，请调用 editor_action.save_scene；若只是场景中的 Prefab 实例改动，仍需按需调用 scene_operation.apply_prefab。';
+  const PREFAB_EXIT_DIRTY_WARNING = '当前 Prefab/场景资源仍有未保存修改；切换前建议先调用 editor_action.save_scene，避免重开后丢失。';
+  const NODE_POSTPROCESS_SKIPPED_ACTIONS = new Set(['destroy_node', 'cut_node']);
+  const appendWarning = (target: Record<string, unknown>, warning: string): void => {
+    const existing = Array.isArray(target.warnings)
+      ? target.warnings.filter((item): item is string => typeof item === 'string')
+      : [];
+    if (!existing.includes(warning)) target.warnings = [...existing, warning];
+  };
+  const hasPrefabMarker = (input: unknown, depth = 0, seen = new Set<object>()): boolean => {
+    if (input === null || input === undefined || depth > 4) return false;
+    if (typeof input !== 'object') return false;
+    if (seen.has(input)) return false;
+    seen.add(input);
+    if (Array.isArray(input)) return input.some(item => hasPrefabMarker(item, depth + 1, seen));
+    const obj = input as Record<string, unknown>;
+    for (const [key, value] of Object.entries(obj)) {
+      const normalizedKey = key.toLowerCase();
+      if (normalizedKey === '_prefab' || normalizedKey === '__prefab' || normalizedKey === 'prefab' || normalizedKey === 'prefabinfo') {
+        if (value !== null && value !== undefined && value !== false && value !== '') return true;
+      }
+    }
+    return Object.values(obj).some(value => hasPrefabMarker(value, depth + 1, seen));
+  };
+  const maybeAttachPrefabPersistenceWarning = async (
+    target: Record<string, unknown>,
+    action: string,
+    affectedUuid: string,
+  ): Promise<void> => {
+    if (!affectedUuid || ['create_prefab', 'instantiate_prefab', 'apply_prefab', 'restore_prefab', 'validate_prefab', 'enter_prefab_edit', 'exit_prefab_edit'].includes(action)) {
+      return;
+    }
+    try {
+      const dump = await editorMsg('scene', 'query-node', affectedUuid);
+      if (hasPrefabMarker(dump)) appendWarning(target, PREFAB_PERSISTENCE_WARNING);
+    } catch (e) {
+      logIgnored(ErrorCategory.EDITOR_IPC, `Prefab 实例检测失败 (${action}:${affectedUuid})`, e);
+    }
+  };
+  const finalizeSceneOperationResult = async (
+    result: Record<string, unknown>,
+    action: string,
+    input: Record<string, unknown>,
+  ): Promise<void> => {
+    if (!result?.success) return;
+    const affectedUuid =
+      (typeof result.uuid === 'string' && result.uuid) ||
+      (typeof result.clonedUuid === 'string' && result.clonedUuid) ||
+      (typeof input.uuid === 'string' && input.uuid) ||
+      '';
+    if (NODE_POSTPROCESS_SKIPPED_ACTIONS.has(action)) return;
+    if (action === 'create_node' && affectedUuid) {
+      const touchedName =
+        (typeof result.name === 'string' && result.name) ||
+        (typeof input.name === 'string' && input.name) ||
+        'New Node';
+      try {
+        await forceDirtyNodeTouch(affectedUuid, touchedName);
+        result._forcedDirty = true;
+      } catch (e) {
+        logIgnored(ErrorCategory.EDITOR_IPC, 'create_node 后补记 dirty 失败', e);
+      }
+    }
+    if (affectedUuid) {
+      await maybeAttachPrefabPersistenceWarning(result, action, affectedUuid);
+      try {
+        await bridgePost('/api/editor/select', { uuids: [affectedUuid], forceRefresh: true });
+      } catch (e) {
+        logIgnored(ErrorCategory.EDITOR_IPC, '操作后高亮节点失败', e);
+      }
+      try {
+        await bridgePost('/api/console/log', { text: `已高亮节点: ${affectedUuid} (${action})` });
+      } catch {
+        /* ignore */
+      }
+    }
   };
 
   const NEW_QUERY_ACTIONS = new Set(['measure_distance', 'scene_snapshot', 'scene_diff', 'performance_audit', 'export_scene_json', 'deep_validate_scene', 'get_node_bounds', 'find_nodes_by_layer', 'get_animation_state', 'get_collider_info', 'get_material_info', 'get_light_info', 'get_scene_environment', 'screen_to_world', 'world_to_screen', 'check_script_ready', 'get_script_properties']);
@@ -306,13 +392,16 @@ Actions & required parameters:
 - move_array_element: uuid(REQUIRED), path(REQUIRED), target(REQUIRED, number). Move array element within a component property array.
 - remove_array_element: uuid(REQUIRED), path(REQUIRED). Remove an array element from a component property array.
 - execute_component_method: uuid(REQUIRED), component(REQUIRED), methodName(REQUIRED), args(optional). Execute a component method via native Editor IPC.
+- persistenceMode(optional: warn/auto-save/strict). Controls whether successful write operations only warn, auto-save, or fail in strict persistence mode.
+
+PREFAB PERSISTENCE: If you modify a Prefab instance via generic scene write actions, those edits are NOT auto-applied back to the prefab asset. Call apply_prefab when you explicitly want to commit instance changes to the prefab asset, and call editor_action.save_scene when you need the current scene/prefab edit to survive reopening the editor.
 
 ASSET REFERENCES: For set_property on spriteFrame/font/material, value MUST be {__uuid__:"asset-uuid-here"}. Get the UUID via asset_operation action=url_to_uuid. NEVER pass raw file paths or plain strings for asset properties.
 NODE REFERENCES: For set_property on properties that expect a Node (e.g. ScrollView.content, ScrollView.view), value MUST be {"__refType__":"cc.Node","uuid":"target-node-uuid"}. The bridge resolves this via Editor IPC or runtime lookup.
 COMPONENT REFERENCES: For set_property on properties that expect a Component, value MUST be {"__refType__":"cc.Component","uuid":"node-uuid","component":"ComponentName"}. The bridge resolves the node then gets the component.
 PREREQUISITES: set_property requires the component to exist first (use add_component). For 2D UI nodes (Sprite/Label/Canvas), the node's layer should be UI_2D (33554432). If the scene has no Canvas, you MUST ask the user if they want one, then call ensure_2d_canvas.
 PARENT RESOLUTION: parentUuid accepts both UUID and node name. The bridge auto-resolves names to nodes. If not found, error includes available top-level nodes for guidance.
-Returns: create_node→{success,uuid,name,parent}. set_property→{success,uuid,component,property}. duplicate_node→{success,clonedUuid}. ensure_2d_canvas→{success,canvasUuid,cameraUuid,created,layer}. On error: {error:"message"}.
+Returns: create_node→{success,uuid,name,parent}. set_property→{success,uuid,component,property}. duplicate_node→{success,clonedUuid}. ensure_2d_canvas→{success,canvasUuid,cameraUuid,created,layer}. Successful write results may include persistenceStatus{mode,target,requiresPersistence,saveAttempted,...}. On error: {error:"message"}.
 Common errors: "未找到节点"=bad UUID; "未找到父节点"=parent not found (check name spelling or use scene_query action=tree); "未找到组件类"=wrong component name (use scene_query action=list_available_components); "危险操作已拦截"=missing confirmDangerous=true for destroy_node.` + AI_RULES,
     toInputSchema({
       action: z.enum([
@@ -478,6 +567,7 @@ Common errors: "未找到节点"=bad UUID; "未找到父节点"=parent not found
       height: z.number().min(0).optional().describe(
         'Content height in pixels. REQUIRED for: set_content_size.'
       ),
+      persistenceMode: persistenceModeSchema,
     }),
     async (params) => {
       try {
@@ -499,6 +589,62 @@ Common errors: "未找到节点"=bad UUID; "未找到父节点"=parent not found
         const { warnings, pathError } = normalizeParams(p);
         if (pathError) return text({ error: `路径安全校验失败: ${pathError}` }, true);
         const guardrailWarnings = [...warnings];
+        const resolveScenePersistenceTarget = (action: string, input: Record<string, unknown>, result?: Record<string, unknown>): PersistenceTarget => {
+          switch (action) {
+            case 'copy_node':
+            case 'enter_prefab_edit':
+            case 'exit_prefab_edit':
+            case 'validate_prefab':
+              return { kind: 'none' };
+            case 'create_prefab':
+              return { kind: 'asset', url: String(result?.savePath || input.savePath || '') || undefined };
+            case 'apply_prefab':
+              return { kind: 'none' };
+            default:
+              return { kind: 'scene', saveStrategy: 'save_scene' };
+          }
+        };
+        const finalizeWriteResult = async (
+          action: string,
+          input: Record<string, unknown>,
+          record: Record<string, unknown>,
+        ): Promise<Record<string, unknown>> => {
+          if (guardrailWarnings.length) record._pathWarnings = guardrailWarnings;
+          if (record.success) await finalizeSceneOperationResult(record, action, input);
+          return record;
+        };
+        const runSceneWriteWithPersistence = async (
+          action: string,
+          input: Record<string, unknown>,
+          execute: () => Promise<Record<string, unknown>>,
+          targetResolver?: (result: Record<string, unknown>) => PersistenceTarget,
+        ) => {
+          if (targetResolver) {
+            const raw = await execute();
+            const { result, isError } = await withPersistenceGuard(
+              { editorMsg, bridgePost },
+              {
+                mode: input.persistenceMode,
+                target: targetResolver(raw),
+                unsavedWarning: SCENE_SAVE_WARNING,
+                strictFailureMessage: `scene_operation.${action} 写入成功，但持久化失败（strict 模式）`,
+              },
+              async () => finalizeWriteResult(action, input, raw),
+            );
+            return text(result, isError);
+          }
+          const { result, isError } = await withPersistenceGuard(
+            { editorMsg, bridgePost },
+            {
+              mode: input.persistenceMode,
+              target: resolveScenePersistenceTarget(action, input),
+              unsavedWarning: SCENE_SAVE_WARNING,
+              strictFailureMessage: `scene_operation.${action} 写入成功，但持久化失败（strict 模式）`,
+            },
+            async () => finalizeWriteResult(action, input, await execute()),
+          );
+          return text(result, isError);
+        };
 
         if (DANGEROUS_SCENE_ACTIONS.has(String(p.action || '')) && p.confirmDangerous !== true) {
           return text({
@@ -522,14 +668,17 @@ Common errors: "未找到节点"=bad UUID; "未找到父节点"=parent not found
           const normalized = normalizeDbUrl(savePath);
           const finalPath = normalized.url;
           try {
-            const result = await editorMsg('scene', 'create-prefab', p.uuid, finalPath);
-            return toStructuredToolResult(
-              result,
-              {
-                uuid: p.uuid,
-                savePath: finalPath,
-                ...(guardrailWarnings.length ? { warnings: guardrailWarnings } : {}),
-              },
+            return runSceneWriteWithPersistence(
+              'create_prefab',
+              p,
+              async () => toStructuredResultRecord(
+                await editorMsg('scene', 'create-prefab', p.uuid, finalPath),
+                {
+                  uuid: p.uuid,
+                  savePath: finalPath,
+                },
+              ),
+              () => ({ kind: 'asset', url: finalPath }),
             );
           } catch (err: unknown) {
             return text(withGuardrailHints({ error: `创建预制体失败: ${errorMessage(err)}`, uuid: p.uuid, savePath: finalPath }), true);
@@ -572,7 +721,11 @@ Common errors: "未找到节点"=bad UUID; "未找到父节点"=parent not found
             } finally {
               await endSceneRecording(editorMsg, recordId);
             }
-            return toStructuredToolResult(result, { action: 'instantiate_prefab', prefabUrl, method: 'scene-script' }, 'instantiated');
+            return runSceneWriteWithPersistence(
+              'instantiate_prefab',
+              p,
+              async () => toStructuredResultRecord(result, { action: 'instantiate_prefab', prefabUrl, method: 'scene-script' }, 'instantiated'),
+            );
           } catch (err: unknown) {
             return text({ error: `实例化预制体失败: ${errorMessage(err)}` }, true);
           }
@@ -583,25 +736,47 @@ Common errors: "未找到节点"=bad UUID; "未找到父节点"=parent not found
             const prefabUuid = await editorMsg('asset-db', 'query-uuid', prefabUrl);
             if (!prefabUuid) return text({ error: `预制体不存在: ${prefabUrl}` }, true);
             await editorMsg('asset-db', 'open-asset', String(prefabUuid));
-            return text({ success: true, action: 'enter_prefab_edit', prefabUrl, prefabUuid: String(prefabUuid) });
+            return text({
+              success: true,
+              action: 'enter_prefab_edit',
+              prefabUrl,
+              prefabUuid: String(prefabUuid),
+              warnings: [PREFAB_EDIT_MODE_WARNING],
+            });
           } catch (err: unknown) {
             return text({ error: `进入预制体编辑模式失败: ${errorMessage(err)}` }, true);
           }
         }
         if (p.action === 'exit_prefab_edit') {
           try {
+            let dirtyBeforeExit = false;
+            try {
+              dirtyBeforeExit = Boolean(await editorMsg('scene', 'query-dirty'));
+            } catch {
+              dirtyBeforeExit = false;
+            }
             const sceneUrl = String(p.sceneUrl || '');
             if (sceneUrl) {
               const sceneUuid = await editorMsg('asset-db', 'query-uuid', sceneUrl);
               if (!sceneUuid) return text({ error: `场景不存在: ${sceneUrl}` }, true);
               await editorMsg('asset-db', 'open-asset', String(sceneUuid));
-              return text({ success: true, action: 'exit_prefab_edit', sceneUrl });
+              return text({
+                success: true,
+                action: 'exit_prefab_edit',
+                sceneUrl,
+                ...(dirtyBeforeExit ? { warnings: [PREFAB_EXIT_DIRTY_WARNING] } : {}),
+              });
             }
             const scenes = await editorMsg('asset-db', 'query-assets', { pattern: 'db://assets/**/*.scene' }) as Array<{ uuid?: string; url?: string }> | null;
             if (scenes && scenes.length > 0) {
               const first = scenes[0];
               await editorMsg('asset-db', 'open-asset', String(first.uuid));
-              return text({ success: true, action: 'exit_prefab_edit', sceneUrl: first.url });
+              return text({
+                success: true,
+                action: 'exit_prefab_edit',
+                sceneUrl: first.url,
+                ...(dirtyBeforeExit ? { warnings: [PREFAB_EXIT_DIRTY_WARNING] } : {}),
+              });
             }
             return text({ error: '没有找到可用的场景文件' }, true);
           } catch (err: unknown) {
@@ -611,7 +786,15 @@ Common errors: "未找到节点"=bad UUID; "未找到父节点"=parent not found
         if (p.action === 'apply_prefab') {
           try {
             const result = await editorMsg('scene', 'apply-prefab', p.uuid);
-            return toStructuredToolResult(result, { action: 'apply_prefab', uuid: p.uuid }, 'applied');
+            const response = result && typeof result === 'object'
+              ? { success: true, ...(result as Record<string, unknown>) }
+              : { success: true, result };
+            appendWarning(response, PREFAB_SAVE_SCENE_WARNING);
+            return runSceneWriteWithPersistence(
+              'apply_prefab',
+              p,
+              async () => toStructuredResultRecord(response, { action: 'apply_prefab', uuid: p.uuid }, 'applied'),
+            );
           } catch (err: unknown) {
             return text({ error: `应用预制体更改失败: ${errorMessage(err)}` }, true);
           }
@@ -619,7 +802,11 @@ Common errors: "未找到节点"=bad UUID; "未找到父节点"=parent not found
         if (p.action === 'restore_prefab') {
           try {
             const result = await editorMsg('scene', 'restore-prefab', p.uuid);
-            return toStructuredToolResult(result, { action: 'restore_prefab', uuid: p.uuid }, 'restored');
+            return runSceneWriteWithPersistence(
+              'restore_prefab',
+              p,
+              async () => toStructuredResultRecord(result, { action: 'restore_prefab', uuid: p.uuid }, 'restored'),
+            );
           } catch (err: unknown) {
             return text({ error: `恢复预制体失败: ${errorMessage(err)}` }, true);
           }
@@ -653,7 +840,11 @@ Common errors: "未找到节点"=bad UUID; "未找到父节点"=parent not found
         if (p.action === 'paste_node') {
           try {
             const result = await editorMsg('scene', 'paste-node', p.parentUuid || undefined);
-            return toStructuredToolResult(result, { action: 'paste_node', parentUuid: p.parentUuid }, 'pasted');
+            return runSceneWriteWithPersistence(
+              'paste_node',
+              p,
+              async () => toStructuredResultRecord(result, { action: 'paste_node', parentUuid: p.parentUuid }, 'pasted'),
+            );
           } catch (err: unknown) {
             return text({ error: `粘贴节点失败: ${errorMessage(err)}` }, true);
           }
@@ -661,7 +852,11 @@ Common errors: "未找到节点"=bad UUID; "未找到父节点"=parent not found
         if (p.action === 'cut_node') {
           try {
             const result = await editorMsg('scene', 'cut-node', [p.uuid]);
-            return toStructuredToolResult(result, { action: 'cut_node', uuid: p.uuid }, 'cut');
+            return runSceneWriteWithPersistence(
+              'cut_node',
+              p,
+              async () => toStructuredResultRecord(result, { action: 'cut_node', uuid: p.uuid }, 'cut'),
+            );
           } catch (err: unknown) {
             return text({ error: `剪切节点失败: ${errorMessage(err)}` }, true);
           }
@@ -670,7 +865,11 @@ Common errors: "未找到节点"=bad UUID; "未找到父节点"=parent not found
         if (p.action === 'move_array_element') {
           try {
             const result = await editorMsg('scene', 'move-array-element', { uuid: p.uuid, path: p.path, target: p.target });
-            return toStructuredToolResult(result, { action: 'move_array_element' }, 'moved');
+            return runSceneWriteWithPersistence(
+              'move_array_element',
+              p,
+              async () => toStructuredResultRecord(result, { action: 'move_array_element' }, 'moved'),
+            );
           } catch (err: unknown) {
             return text({ error: `移动数组元素失败: ${errorMessage(err)}` }, true);
           }
@@ -678,7 +877,11 @@ Common errors: "未找到节点"=bad UUID; "未找到父节点"=parent not found
         if (p.action === 'remove_array_element') {
           try {
             const result = await editorMsg('scene', 'remove-array-element', { uuid: p.uuid, path: p.path });
-            return toStructuredToolResult(result, { action: 'remove_array_element' }, 'removed');
+            return runSceneWriteWithPersistence(
+              'remove_array_element',
+              p,
+              async () => toStructuredResultRecord(result, { action: 'remove_array_element' }, 'removed'),
+            );
           } catch (err: unknown) {
             return text({ error: `删除数组元素失败: ${errorMessage(err)}` }, true);
           }
@@ -690,7 +893,11 @@ Common errors: "未找到节点"=bad UUID; "未找到父节点"=parent not found
               uuid: p.uuid, component: p.component, method: p.methodName,
               args: Array.isArray(p.args) ? p.args : [],
             });
-            return toStructuredToolResult(result, { action: 'execute_component_method' }, 'executed');
+            return runSceneWriteWithPersistence(
+              'execute_component_method',
+              p,
+              async () => toStructuredResultRecord(result, { action: 'execute_component_method' }, 'executed'),
+            );
           } catch (err: unknown) {
             return text({ error: `执行组件方法失败: ${errorMessage(err)}` }, true);
           }
@@ -700,7 +907,14 @@ Common errors: "未找到节点"=bad UUID; "未找到父节点"=parent not found
         if (p.action === 'destroy_node') {
           try {
             const result = await editorMsg('scene', 'remove-node', { uuid: p.uuid });
-            return toStructuredToolResult(result, { uuid: p.uuid, _editorIPC: true }, 'removed');
+            const response = result && typeof result === 'object'
+              ? { success: true, ...(result as Record<string, unknown>) }
+              : { success: true, result };
+            return runSceneWriteWithPersistence(
+              'destroy_node',
+              p,
+              async () => toStructuredResultRecord(response, { uuid: p.uuid, _editorIPC: true }, 'removed'),
+            );
           } catch (err: unknown) {
             return text({ error: `删除节点失败: ${errorMessage(err)}` }, true);
           }
@@ -713,7 +927,12 @@ Common errors: "未找到节点"=bad UUID; "未找到父节点"=parent not found
             for (const child of children) {
               try { await editorMsg('scene', 'remove-node', { uuid: child.uuid }); removed++; } catch { /* skip */ }
             }
-            return text({ success: true, uuid: p.uuid, removedCount: removed, totalChildren: children.length, _editorIPC: true });
+            const result = { success: true, uuid: p.uuid, removedCount: removed, totalChildren: children.length, _editorIPC: true };
+            return runSceneWriteWithPersistence(
+              'clear_children',
+              p,
+              async () => result,
+            );
           } catch (err: unknown) {
             return text({ error: `清除子节点失败: ${errorMessage(err)}` }, true);
           }
@@ -721,7 +940,11 @@ Common errors: "未找到节点"=bad UUID; "未找到父节点"=parent not found
         if (p.action === 'reset_property') {
           try {
             const result = await editorMsg('scene', 'reset-property', { uuid: p.uuid, path: `${p.component}.${p.property}` });
-            return toStructuredToolResult(result, { uuid: p.uuid, component: p.component, property: p.property, _editorIPC: true }, 'reset');
+            return runSceneWriteWithPersistence(
+              'reset_property',
+              p,
+              async () => toStructuredResultRecord(result, { uuid: p.uuid, component: p.component, property: p.property, _editorIPC: true }, 'reset'),
+            );
           } catch (err: unknown) {
             return text({ error: `重置属性失败: ${errorMessage(err)}` }, true);
           }
@@ -736,7 +959,12 @@ Common errors: "未找到节点"=bad UUID; "未找到父节点"=parent not found
               if (targetComp && comp.type !== targetComp && comp.type !== `cc.${targetComp}`) continue;
               try { await editorMsg('scene', 'reset-component', { uuid: p.uuid, component: comp.type }); resetCount++; } catch { /* skip */ }
             }
-            return text({ success: true, uuid: p.uuid, componentsReset: resetCount, _editorIPC: true });
+            const result = { success: true, uuid: p.uuid, componentsReset: resetCount, _editorIPC: true };
+            return runSceneWriteWithPersistence(
+              'reset_node_properties',
+              p,
+              async () => result,
+            );
           } catch (err: unknown) {
             return text({ error: `重置节点属性失败: ${errorMessage(err)}` }, true);
           }
@@ -748,7 +976,11 @@ Common errors: "未找到节点"=bad UUID; "未找到父节点"=parent not found
               uuid: p.uuid, component: p.component, method: p.methodName,
               args: Array.isArray(p.args) ? p.args : [],
             });
-            return toStructuredToolResult(result, { uuid: p.uuid, component: p.component, method: p.methodName, _editorIPC: true }, 'executed');
+            return runSceneWriteWithPersistence(
+              'call_component_method',
+              p,
+              async () => toStructuredResultRecord(result, { uuid: p.uuid, component: p.component, method: p.methodName, _editorIPC: true }, 'executed'),
+            );
           } catch (err: unknown) {
             return text({ error: `调用组件方法失败: ${errorMessage(err)}` }, true);
           }
@@ -759,61 +991,32 @@ Common errors: "未找到节点"=bad UUID; "未找到父节点"=parent not found
           'ensure_2d_canvas',
           'set_anchor_point', 'set_content_size',
         ]);
-        const COMPONENT_CHANGING_OPS = new Set([
-          'ensure_2d_canvas',
-        ]);
         if (NEW_SCENE_OPS.has(String(p.action))) {
           const tryResult = withGuardrailHints(await sceneOp(p as Record<string, unknown>)) as Record<string, unknown>;
           if (!tryResult?.error || !String(tryResult.error).includes('未知的操作 action')) {
-            if (tryResult?.success && COMPONENT_CHANGING_OPS.has(String(p.action))) {
-              const affUuid = String(tryResult.uuid ?? p.uuid ?? '');
-              if (affUuid) {
-                try { await bridgePost('/api/editor/select', { uuids: [affUuid], forceRefresh: true }); } catch { /* ignore */ }
-              }
-            }
-            return text(tryResult);
+            return runSceneWriteWithPersistence(
+              String(p.action),
+              p,
+              async () => tryResult,
+            );
           }
           // Fallback: implement at MCP layer using basic scene methods
           const fallbackResult = withGuardrailHints(
             await fallbackSceneOperation(String(p.action), p, { sceneMethod, editorMsg, bridgePost, text })
           ) as Record<string, unknown>;
-          return text(fallbackResult, Boolean(fallbackResult?.error));
+          return runSceneWriteWithPersistence(
+            String(p.action),
+            p,
+            async () => fallbackResult,
+          );
         }
 
         const result = withGuardrailHints(await sceneOp(p as Record<string, unknown>)) as Record<string, unknown>;
-        // 如果有路径规范化警告，附加到返回值
-        if (guardrailWarnings.length && result && typeof result === 'object') {
-          (result as Record<string, unknown>)._pathWarnings = guardrailWarnings;
-        }
-        if (result && result.success) {
-          const affectedUuid =
-            (typeof result.uuid === 'string' && result.uuid) ||
-            (typeof result.clonedUuid === 'string' && result.clonedUuid) ||
-            '';
-          if (String(p.action) === 'create_node' && affectedUuid) {
-            const touchedName =
-              (typeof result.name === 'string' && result.name) ||
-              (typeof p.name === 'string' && p.name) ||
-              'New Node';
-            try {
-              await forceDirtyNodeTouch(affectedUuid, touchedName);
-              (result as Record<string, unknown>)._forcedDirty = true;
-            } catch (e) {
-              logIgnored(ErrorCategory.EDITOR_IPC, 'create_node 后补记 dirty 失败', e);
-            }
-          }
-          if (affectedUuid) {
-            try {
-              await bridgePost('/api/editor/select', { uuids: [affectedUuid], forceRefresh: true });
-            } catch (e) {
-              logIgnored(ErrorCategory.EDITOR_IPC, '操作后高亮节点失败', e);
-            }
-            try {
-              await bridgePost('/api/console/log', { text: `已高亮节点: ${affectedUuid} (${p.action})` });
-            } catch { /* ignore */ }
-          }
-        }
-        return text(result);
+        return runSceneWriteWithPersistence(
+          String(p.action),
+          p,
+          async () => result,
+        );
       } catch (err: unknown) {
         return text(withGuardrailHints({ tool: 'scene_operation', error: errorMessage(err) }), true);
       }

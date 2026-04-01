@@ -1,7 +1,16 @@
 import { z } from 'zod';
 import type { LocalToolServer } from './local-tool-server';
 import type { BridgeToolContext } from './tools-shared';
-import { toInputSchema, extractSelectedNodeUuid, errorMessage, beginSceneRecording, endSceneRecording } from './tools-shared';
+import {
+  toInputSchema,
+  extractSelectedNodeUuid,
+  errorMessage,
+  beginSceneRecording,
+  endSceneRecording,
+  attachScenePersistenceWarnings,
+  persistenceModeSchema,
+  withPersistenceGuard,
+} from './tools-shared';
 import { ErrorCategory, logIgnored } from '../error-utils';
 
 export function registerPhysicsAtomicTool(server: LocalToolServer, ctx: BridgeToolContext): void {
@@ -27,9 +36,10 @@ Parameters:
 - friction(optional): Surface friction coefficient (0.0-1.0).
 - restitution(optional): Bounciness coefficient (0.0=no bounce, 1.0=full bounce).
 - density(optional): Physics material density.
+- persistenceMode(optional: warn/auto-save/strict). Controls whether successful scene writes only warn, auto-save, or fail in strict persistence mode.
 
 Prerequisites: Node must exist and ideally have a Sprite or UITransform for size detection. Without these, collider defaults to 100x100.
-Returns: {success, uuid, nodeName, colliderType:"BoxCollider2D"|"PolygonCollider2D", outlineMethod, size?:{width,height}, pointCount?, points?:[{x,y}], stages}. On error: {success:false, error}.
+Returns: {success, uuid, nodeName, colliderType:"BoxCollider2D"|"PolygonCollider2D", outlineMethod, size?:{width,height}, pointCount?, points?:[{x,y}], stages}. Successful write results may include persistenceStatus{mode,target,requiresPersistence,saveAttempted,...}. On error: {success:false, error}.
 colliderType: "box"(default)=BoxCollider2D, "polygon"=PolygonCollider2D (attempts alpha outline from Sprite texture).`,
     toInputSchema({
       nodeUuid: z.string().optional().describe(
@@ -72,6 +82,7 @@ colliderType: "box"(default)=BoxCollider2D, "polygon"=PolygonCollider2D (attempt
         'Physics material density. Default: engine default (~1.0). ' +
         'Affects mass calculation: mass = density × area. Higher = heavier object.'
       ),
+      persistenceMode: persistenceModeSchema,
     }),
     async (params) => {
       const p = params as Record<string, unknown>;
@@ -181,19 +192,36 @@ colliderType: "box"(default)=BoxCollider2D, "polygon"=PolygonCollider2D (attempt
           text: `[AI Physics] auto_fit_physics_collider 完成: ${fitResult.colliderType} (${fitResult.outlineMethod})`,
         }); } catch { /* ignore */ }
 
-        return text({
-          success: true,
-          nodeUuid,
-          nodeName: fitResult.nodeName,
-          colliderType: fitResult.colliderType,
-          outlineMethod: fitResult.outlineMethod,
-          pointCount: fitResult.pointCount,
-          points: fitResult.points,
-          size: fitResult.size,
-          radius: fitResult.radius,
-          stages,
-          ...(warnings.length ? { warnings } : {}),
-        });
+        const { result, isError } = await withPersistenceGuard(
+          { editorMsg, bridgePost },
+          {
+            mode: p.persistenceMode,
+            target: { kind: 'scene', saveStrategy: 'save_scene' },
+            strictFailureMessage: 'auto_fit_physics_collider 写入成功，但持久化失败（strict 模式）',
+          },
+          async () => {
+            const response: Record<string, unknown> = {
+              success: true,
+              nodeUuid,
+              nodeName: fitResult.nodeName,
+              colliderType: fitResult.colliderType,
+              outlineMethod: fitResult.outlineMethod,
+              pointCount: fitResult.pointCount,
+              points: fitResult.points,
+              size: fitResult.size,
+              radius: fitResult.radius,
+              stages,
+              ...(warnings.length ? { warnings } : {}),
+            };
+            await attachScenePersistenceWarnings(editorMsg, response, {
+              action: 'auto_fit_physics_collider',
+              affectedUuid: nodeUuid,
+              includeSceneSaveWarning: false,
+            });
+            return response;
+          },
+        );
+        return text(result, isError ? true : undefined);
       } catch (err: unknown) {
         return text({
           success: false, error: errorMessage(err), stages,

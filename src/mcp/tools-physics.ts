@@ -1,10 +1,20 @@
 import { z } from 'zod';
 import { LocalToolServer } from './local-tool-server';
 import type { BridgeToolContext } from './tools-shared';
-import { toInputSchema, errorMessage, AI_RULES, beginSceneRecording, endSceneRecording, validateRequiredParams } from './tools-shared';
+import {
+  toInputSchema,
+  errorMessage,
+  AI_RULES,
+  beginSceneRecording,
+  endSceneRecording,
+  validateRequiredParams,
+  attachScenePersistenceWarnings,
+  persistenceModeSchema,
+  withPersistenceGuard,
+} from './tools-shared';
 
 export function registerPhysicsTools(server: LocalToolServer, ctx: BridgeToolContext): void {
-  const { sceneMethod, editorMsg, text } = ctx;
+  const { sceneMethod, editorMsg, bridgePost, text } = ctx;
   const sceneOp = ctx.sceneOp ?? ((params: Record<string, unknown>) => sceneMethod('dispatchOperation', [params]));
 
   // 物理写操作：从主进程包裹 begin-recording + dispatchPhysicsAction + force-dirty + end-recording
@@ -31,6 +41,44 @@ export function registerPhysicsTools(server: LocalToolServer, ctx: BridgeToolCon
     }
   }
 
+  async function finalizeWriteResult(
+    result: unknown,
+    action: string,
+    affectedUuid = '',
+  ): Promise<Record<string, unknown>> {
+    if (!result || typeof result !== 'object') {
+      return { success: true, result };
+    }
+    const response = result as Record<string, unknown>;
+    if (!response.error && response.success !== false) {
+      await attachScenePersistenceWarnings(editorMsg, response, {
+        action,
+        affectedUuid,
+        includeSceneSaveWarning: false,
+        includePrefabWarning: Boolean(affectedUuid),
+      });
+    }
+    return response;
+  }
+
+  async function runPhysicsWriteWithPersistence(
+    mode: unknown,
+    action: string,
+    affectedUuid: string,
+    execute: () => Promise<Record<string, unknown>>,
+  ) {
+    const { result, isError } = await withPersistenceGuard(
+      { editorMsg, bridgePost },
+      {
+        mode,
+        target: { kind: 'scene', saveStrategy: 'save_scene' },
+        strictFailureMessage: `${action} 写入成功，但持久化失败（strict 模式）`,
+      },
+      async () => finalizeWriteResult(await execute(), action, affectedUuid),
+    );
+    return text(result, isError ? true : undefined);
+  }
+
   server.tool(
     'physics_tool',
     `Manage physics components, materials, and collision settings on Cocos Creator nodes. Inspect and configure colliders, rigid bodies, joints, and physics world.
@@ -46,9 +94,10 @@ Actions & required parameters:
 - get_physics_world: no params. Get current physics world configuration (gravity, timestep, etc.).
 - set_physics_world: gravity(optional {x,y,z}), allowSleep(optional), fixedTimeStep(optional). Configure physics world.
 - add_joint: uuid(REQUIRED), jointType(REQUIRED: distance/spring/hinge/fixed/slider), connectedUuid(optional), props(optional). Add a 2D physics joint.
+- persistenceMode(optional: warn/auto-save/strict). Controls whether successful scene writes only warn, auto-save, or fail in strict persistence mode.
 
 Prerequisites: add_collider/add_rigidbody require node to exist. add_rigidbody before add_collider for proper physics simulation. bodyType: 0=STATIC, 1=KINEMATIC, 2=DYNAMIC(default).
-Returns: add_collider→{success,uuid,colliderType}. add_rigidbody→{success,uuid,bodyType}. get_collider_info→{colliders:[{type,size,offset}],rigidBody?:{type,mass}}. get_physics_world→{gravity,allowSleep}. On error: {error:"message"}.` + AI_RULES,
+Returns: add_collider→{success,uuid,colliderType}. add_rigidbody→{success,uuid,bodyType}. get_collider_info→{colliders:[{type,size,offset}],rigidBody?:{type,mass}}. get_physics_world→{gravity,allowSleep}. Successful write results may include persistenceStatus{mode,target,requiresPersistence,saveAttempted,...}. On error: {error:"message"}.` + AI_RULES,
     toInputSchema({
       action: z.enum([
         'get_collider_info', 'add_collider', 'set_collider_size',
@@ -112,6 +161,7 @@ Returns: add_collider→{success,uuid,colliderType}. add_rigidbody→{success,uu
       props: z.record(z.string(), z.unknown()).optional().describe(
         'Additional properties for the joint. For add_joint.'
       ),
+      persistenceMode: persistenceModeSchema,
     }),
     async (params) => {
       try {
@@ -131,41 +181,82 @@ Returns: add_collider→{success,uuid,colliderType}. add_rigidbody→{success,uu
             };
             const compName = TYPE_MAP[String(p.colliderType ?? '')] ?? '';
             if (!compName) return text({ error: `未知 colliderType: ${p.colliderType}` }, true);
-            return text(await sceneOp({ action: 'add_component', uuid: p.uuid, component: compName }));
+            return runPhysicsWriteWithPersistence(
+              p.persistenceMode,
+              'physics_tool.add_collider',
+              String(p.uuid ?? ''),
+              async () => await sceneOp({ action: 'add_component', uuid: p.uuid, component: compName }) as Record<string, unknown>,
+            );
           }
           case 'set_collider_size': {
             // Dispatch to scene script which can read the node's collider and set size
-            return text(await physicsWriteOp(p));
+            return runPhysicsWriteWithPersistence(
+              p.persistenceMode,
+              'physics_tool.set_collider_size',
+              String(p.uuid ?? ''),
+              async () => await physicsWriteOp(p),
+            );
           }
           case 'add_rigidbody': {
             const is2d = p.is2d !== false; // default 2D
             const compName = is2d ? 'RigidBody2D' : 'RigidBody';
-            const addResult = await sceneOp({ action: 'add_component', uuid: p.uuid, component: compName });
-            // Set body type if specified
-            if (p.bodyType) {
-              const typeMap: Record<string, number> = { Dynamic: 2, Static: 0, Kinematic: 1 };
-              const typeVal = typeMap[String(p.bodyType)] ?? 2;
-              await sceneOp({ action: 'set_property', uuid: p.uuid, component: compName, property: 'type', value: typeVal });
-            }
-            return text(addResult);
+            return runPhysicsWriteWithPersistence(
+              p.persistenceMode,
+              'physics_tool.add_rigidbody',
+              String(p.uuid ?? ''),
+              async () => {
+                const addResult = await sceneOp({ action: 'add_component', uuid: p.uuid, component: compName }) as Record<string, unknown>;
+                if (!addResult?.error && addResult?.success !== false && p.bodyType) {
+                  const typeMap: Record<string, number> = { Dynamic: 2, Static: 0, Kinematic: 1 };
+                  const typeVal = typeMap[String(p.bodyType)] ?? 2;
+                  await sceneOp({ action: 'set_property', uuid: p.uuid, component: compName, property: 'type', value: typeVal });
+                }
+                return addResult;
+              },
+            );
           }
           case 'set_rigidbody_props': {
-            return text(await physicsWriteOp(p));
+            return runPhysicsWriteWithPersistence(
+              p.persistenceMode,
+              'physics_tool.set_rigidbody_props',
+              String(p.uuid ?? ''),
+              async () => await physicsWriteOp(p),
+            );
           }
           case 'set_physics_material': {
-            return text(await physicsWriteOp(p));
+            return runPhysicsWriteWithPersistence(
+              p.persistenceMode,
+              'physics_tool.set_physics_material',
+              String(p.uuid ?? ''),
+              async () => await physicsWriteOp(p),
+            );
           }
           case 'set_collision_group': {
-            return text(await physicsWriteOp(p));
+            return runPhysicsWriteWithPersistence(
+              p.persistenceMode,
+              'physics_tool.set_collision_group',
+              String(p.uuid ?? ''),
+              async () => await physicsWriteOp(p),
+            );
           }
           case 'get_physics_world': {
             return text(await sceneMethod('dispatchPhysicsAction', [{ action: 'get_physics_world' }]));
           }
           case 'set_physics_world': {
-            return text(await sceneOp({ action: 'setup_physics_world', gravity: p.gravity, allowSleep: p.allowSleep, fixedTimeStep: p.fixedTimeStep }));
+            return runPhysicsWriteWithPersistence(
+              p.persistenceMode,
+              'physics_tool.set_physics_world',
+              '',
+              async () => await sceneOp({ action: 'setup_physics_world', gravity: p.gravity, allowSleep: p.allowSleep, fixedTimeStep: p.fixedTimeStep }) as Record<string, unknown>,
+            );
           }
           case 'add_joint': {
-            return text(await physicsWriteOp(p));
+            return runPhysicsWriteWithPersistence(
+              p.persistenceMode,
+              'physics_tool.add_joint',
+              String(p.uuid ?? ''),
+              async () => await physicsWriteOp(p),
+            );
           }
           default:
             return text({ error: `未知的物理 action: ${p.action}` }, true);

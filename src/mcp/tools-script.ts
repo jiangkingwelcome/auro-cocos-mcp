@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import type { LocalToolServer } from './local-tool-server';
 import type { BridgeToolContext } from './tools-shared';
-import { toInputSchema, errorMessage } from './tools-shared';
+import { toInputSchema, errorMessage, persistenceModeSchema, withPersistenceGuard } from './tools-shared';
 
 const ALLOWED_MACRO_METHODS = new Set([
   'getSceneTree', 'getAllNodesList', 'getSceneStats', 'getNodeDetail',
@@ -12,7 +12,16 @@ const ALLOWED_MACRO_METHODS = new Set([
 ]);
 
 export function registerScriptTools(server: LocalToolServer, ctx: BridgeToolContext): void {
-  const { bridgePost, sceneMethod, text } = ctx;
+  const { bridgePost, sceneMethod, editorMsg, text } = ctx;
+  const QUERY_LIKE_METHODS = new Set([
+    'dispatchQuery',
+    'getSceneTree',
+    'getAllNodesList',
+    'getSceneStats',
+    'getNodeDetail',
+    'findNodeByPath',
+    'getNodeComponents',
+  ]);
 
   server.tool(
     'execute_script',
@@ -23,6 +32,7 @@ The method runs inside the editor scene process with full access to the engine A
 Parameters:
 - method(REQUIRED): Name of the scene-script method to call. Common methods: "dispatchQuery", "dispatchOperation", "createChildNode", "setNodePosition".
 - args(optional): Array of arguments to pass to the method. Each element is a positional argument.
+- persistenceMode(optional: warn/auto-save/strict). For mutating scene methods, controls whether successful writes only warn, auto-save, or fail in strict persistence mode.
 
 WARNING: This tool has NO validation. Prefer using the specific tools (scene_query, scene_operation) when possible.
 
@@ -39,13 +49,31 @@ Prerequisites: The method must be exposed by scene.ts (see listMethods for avail
         'Arguments array to pass to the method. Each element is a positional argument. ' +
         'Example for dispatchQuery: [{"action": "tree"}]. Example for setNodePosition: ["uuid-here", 100, 200, 0].'
       ),
+      persistenceMode: persistenceModeSchema,
     }),
     async (params) => {
       try {
         const p = params as Record<string, unknown>;
         const methodText = typeof p.method === 'string' ? p.method : '';
         const forwardedArgs = Array.isArray(p.args) ? p.args : [];
-        return text(await sceneMethod(methodText, forwardedArgs));
+        if (QUERY_LIKE_METHODS.has(methodText)) {
+          return text(await sceneMethod(methodText, forwardedArgs));
+        }
+        const { result, isError } = await withPersistenceGuard(
+          { editorMsg, bridgePost },
+          {
+            mode: p.persistenceMode,
+            target: { kind: 'scene', saveStrategy: 'save_scene' },
+            strictFailureMessage: `execute_script.${methodText} 写入成功，但持久化失败（strict 模式）`,
+          },
+          async () => {
+            const raw = await sceneMethod(methodText, forwardedArgs);
+            return raw && typeof raw === 'object'
+              ? raw as Record<string, unknown>
+              : { success: true, result: raw };
+          },
+        );
+        return text(result, isError ? true : undefined);
       } catch (err: unknown) {
         return text({ tool: 'execute_script', error: errorMessage(err) }, true);
       }

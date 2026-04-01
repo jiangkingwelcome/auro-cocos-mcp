@@ -365,6 +365,79 @@ describe('scene_operation — standard dispatchOperation actions', () => {
     expect(sceneMethod).toHaveBeenCalledWith('dispatchOperation', [expect.objectContaining({ action: 'set_property' })]);
   });
 
+  it('set_property on prefab-like node returns apply/save warning', async () => {
+    const sceneMethod = vi.fn().mockResolvedValue({ success: true, uuid: 'u1' });
+    const editorMsg = vi.fn(async (_channel: string, message: string) => {
+      if (message === 'query-node') return { value: { _prefab: { assetUuid: 'prefab-1' } } };
+      if (message === 'query-dirty') return true;
+      return {};
+    });
+    const server = buildCocosToolServer(makeCtx({ sceneMethod, editorMsg }));
+    const result = await server.callTool('scene_operation', {
+      action: 'set_property',
+      uuid: 'u1',
+      component: 'Label',
+      property: 'string',
+      value: 'Hello',
+    });
+    expect(result.isError).toBeFalsy();
+    const data = parse(result);
+    expect(data.warnings).toContain('检测到目标可能属于 Prefab 实例。若要把当前实例修改回写到预制体资源，请调用 scene_operation.apply_prefab；若需确保重开编辑器后仍保留，再调用 editor_action.save_scene。');
+    expect(data.warnings).toContain('当前场景存在未保存修改；如需在重开编辑器后保留，请调用 editor_action.save_scene。');
+  });
+
+  it('set_property on normal node returns scene save warning when dirty', async () => {
+    const sceneMethod = vi.fn().mockResolvedValue({ success: true, uuid: 'u1' });
+    const editorMsg = vi.fn(async (_channel: string, message: string) => {
+      if (message === 'query-node') return { value: { name: { value: 'Node' } } };
+      if (message === 'query-dirty') return true;
+      return {};
+    });
+    const server = buildCocosToolServer(makeCtx({ sceneMethod, editorMsg }));
+    const result = await server.callTool('scene_operation', {
+      action: 'set_property',
+      uuid: 'u1',
+      component: 'Label',
+      property: 'string',
+      value: 'Hello',
+    });
+    const data = parse(result);
+    expect(data.warnings).toContain('当前场景存在未保存修改；如需在重开编辑器后保留，请调用 editor_action.save_scene。');
+    expect(data.warnings).not.toContain('检测到目标可能属于 Prefab 实例。若要把当前实例修改回写到预制体资源，请调用 scene_operation.apply_prefab；若需确保重开编辑器后仍保留，再调用 editor_action.save_scene。');
+  });
+
+  it('set_property with persistenceMode auto-save saves scene and returns persistenceStatus', async () => {
+    const sceneMethod = vi.fn().mockResolvedValue({ success: true, uuid: 'u1' });
+    const editorMsg = vi.fn(async (_channel: string, message: string) => {
+      if (message === 'query-node') return { value: { name: { value: 'Node' } } };
+      if (message === 'query-dirty') return false;
+      return {};
+    });
+    const bridgePost = vi.fn(async (path: string) => {
+      if (path === '/api/editor/save-scene') return { success: true };
+      return {};
+    });
+    editorMsg
+      .mockResolvedValueOnce(false)
+      .mockResolvedValueOnce(true)
+      .mockResolvedValueOnce({ value: { name: { value: 'Node' } } })
+      .mockResolvedValueOnce(false);
+    const server = buildCocosToolServer(makeCtx({ sceneMethod, editorMsg, bridgePost }));
+    const result = await server.callTool('scene_operation', {
+      action: 'set_property',
+      uuid: 'u1',
+      component: 'Label',
+      property: 'string',
+      value: 'Hello',
+      persistenceMode: 'auto-save',
+    });
+    const data = parse(result);
+    expect(result.isError).toBeFalsy();
+    expect(bridgePost).toHaveBeenCalledWith('/api/editor/save-scene', { force: false });
+    expect(data.persistenceStatus.saveAttempted).toBe(true);
+    expect(data.persistenceStatus.saveSucceeded).toBe(true);
+  });
+
   it('reset_property calls editorMsg reset-property', async () => {
     const editorMsg = vi.fn().mockResolvedValue({});
     const server = buildCocosToolServer(makeCtx({ editorMsg }));
@@ -436,12 +509,32 @@ describe('scene_operation — prefab & clipboard actions (editorMsg)', () => {
     expect(editorMsg).toHaveBeenCalledWith('asset-db', 'query-uuid', 'db://assets/prefabs/P.prefab');
   });
 
+  it('enter_prefab_edit returns save guidance warning', async () => {
+    const editorMsg = vi.fn().mockResolvedValue('prefab-uuid');
+    const server = buildCocosToolServer(makeCtx({ editorMsg }));
+    const result = await server.callTool('scene_operation', { action: 'enter_prefab_edit', prefabUrl: 'db://assets/prefabs/P.prefab' });
+    const data = parse(result);
+    expect(data.warnings).toContain('已进入 Prefab 编辑模式。对该 Prefab 的修改完成后，请调用 editor_action.save_scene；若只是场景中的 Prefab 实例改动，仍需按需调用 scene_operation.apply_prefab。');
+  });
+
+  it('exit_prefab_edit returns dirty warning when current asset is unsaved', async () => {
+    const editorMsg = vi.fn()
+      .mockResolvedValueOnce(true)
+      .mockResolvedValueOnce('scene-uuid');
+    const server = buildCocosToolServer(makeCtx({ editorMsg }));
+    const result = await server.callTool('scene_operation', { action: 'exit_prefab_edit', sceneUrl: 'db://assets/scenes/Main.scene' });
+    const data = parse(result);
+    expect(data.warnings).toContain('当前 Prefab/场景资源仍有未保存修改；切换前建议先调用 editor_action.save_scene，避免重开后丢失。');
+  });
+
   it('apply_prefab calls editorMsg', async () => {
     const editorMsg = vi.fn().mockResolvedValue({});
     const server = buildCocosToolServer(makeCtx({ editorMsg }));
     const result = await server.callTool('scene_operation', { action: 'apply_prefab', uuid: 'u1' });
     expect(result.isError).toBeFalsy();
     expect(editorMsg).toHaveBeenCalledWith('scene', 'apply-prefab', 'u1');
+    const data = parse(result);
+    expect(data.warnings).toContain('Prefab 变更已应用；若当前场景仍有未保存修改，请再调用 editor_action.save_scene，避免重开后丢失。');
   });
 
   it('restore_prefab calls editorMsg', async () => {
@@ -605,6 +698,39 @@ describe('scene_operation — ensure_2d_canvas', () => {
     expect(data.created).toBe(true);
     expect(data.layer).toBe(33554432);
     expect(data.camera.projection).toBe('ortho');
+  });
+
+  it('fallback 创建 Canvas 后会补充 save_scene 提示', async () => {
+    let createNodeCount = 0;
+    const sceneMethod = vi.fn().mockImplementation((method: string, args: unknown[]) => {
+      const params = Array.isArray(args) ? args[0] as Record<string, unknown> : {};
+      if (method === 'dispatchOperation' && params.action === 'ensure_2d_canvas') {
+        return Promise.resolve({ error: '未知的操作 action: ensure_2d_canvas' });
+      }
+      if (method === 'dispatchQuery' && params.action === 'get_canvas_info') {
+        return Promise.resolve({ canvases: [] });
+      }
+      return Promise.resolve({ success: true });
+    });
+    const editorMsg = vi.fn().mockImplementation((_channel: string, action: string) => {
+      if (action === 'begin-recording') return Promise.resolve('record-1');
+      if (action === 'end-recording') return Promise.resolve({ success: true });
+      if (action === 'create-node') {
+        createNodeCount++;
+        return Promise.resolve({ uuid: createNodeCount === 1 ? 'canvas-uuid' : 'camera-uuid' });
+      }
+      if (action === 'create-component') return Promise.resolve({ success: true });
+      if (action === 'query-dirty') return Promise.resolve(true);
+      if (action === 'query-node') return Promise.resolve({});
+      return Promise.resolve({});
+    });
+    const server = buildCocosToolServer(makeCtx({ sceneMethod, editorMsg }));
+
+    const result = await server.callTool('scene_operation', { action: 'ensure_2d_canvas', confirmCreateCanvas: true });
+    const data = parse(result);
+    expect(data.canvasUuid).toBe('canvas-uuid');
+    expect(data.created).toBe(true);
+    expect(data.warnings).toContain('当前场景存在未保存修改；如需在重开编辑器后保留，请调用 editor_action.save_scene。');
   });
 
   it('自定义 designHeight 影响 orthoHeight', async () => {

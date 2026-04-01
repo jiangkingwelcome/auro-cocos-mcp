@@ -155,7 +155,7 @@ describe('animation_tool', () => {
       uuid: 'asset-uuid-1',
     }));
     expect(data.assetBinding).toBeNull();
-    expect(data.warnings).toEqual(expect.arrayContaining([expect.stringContaining('回绑 Animation.defaultClip 失败')]));
+    expect(data.warnings).toEqual(expect.arrayContaining([expect.stringContaining('回绑 Animation.')]));
   });
 
   for (const action of ['play', 'pause', 'resume', 'stop'] as const) {

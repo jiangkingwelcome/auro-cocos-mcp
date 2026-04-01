@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { z } from 'zod';
 import {
   toStr,
@@ -10,6 +10,9 @@ import {
   normalizeComponentName,
   validateRequiredParams,
   toInputSchema,
+  withPersistenceGuard,
+  SCENE_SAVE_WARNING,
+  STRICT_PERSISTENCE_DEGRADED_WARNING,
 } from '../../src/mcp/tools-shared';
 
 describe('tools-shared', () => {
@@ -146,6 +149,82 @@ describe('tools-shared', () => {
       expect(schema.$schema).toBeUndefined();
       expect(schema.additionalProperties).toBeUndefined();
       expect(schema.properties).toBeTruthy();
+    });
+  });
+
+  describe('withPersistenceGuard', () => {
+    it('warn mode keeps success and appends scene save warning', async () => {
+      const editorMsg = vi.fn()
+        .mockResolvedValueOnce(false)
+        .mockResolvedValueOnce(true);
+      const bridgePost = vi.fn();
+
+      const { result, isError } = await withPersistenceGuard(
+        { editorMsg, bridgePost },
+        { mode: 'warn', target: { kind: 'scene', saveStrategy: 'save_scene' } },
+        async () => ({ success: true }),
+      );
+
+      expect(isError).toBe(false);
+      expect((result as any).warnings).toContain(SCENE_SAVE_WARNING);
+      expect((result as any).persistenceStatus.saveAttempted).toBe(false);
+      expect(bridgePost).not.toHaveBeenCalled();
+    });
+
+    it('strict mode fails when tracked dirty write cannot be saved', async () => {
+      const editorMsg = vi.fn()
+        .mockResolvedValueOnce(false)
+        .mockResolvedValueOnce(true)
+        .mockResolvedValueOnce(true);
+      const bridgePost = vi.fn().mockResolvedValue({ success: false, error: 'save failed' });
+
+      const { result, isError } = await withPersistenceGuard(
+        { editorMsg, bridgePost },
+        { mode: 'strict', target: { kind: 'scene', saveStrategy: 'save_scene' } },
+        async () => ({ success: true, uuid: 'u1' }),
+      );
+
+      expect(isError).toBe(true);
+      expect((result as any).success).toBe(false);
+      expect((result as any).persistenceStatus.guarantee).toBe('tracked');
+      expect((result as any).persistenceStatus.saveAttempted).toBe(true);
+      expect(bridgePost).toHaveBeenCalledWith('/api/editor/save-scene', { force: false });
+    });
+
+    it('strict mode degrades to warning when target was already dirty before write', async () => {
+      const editorMsg = vi.fn()
+        .mockResolvedValueOnce(true)
+        .mockResolvedValueOnce(true)
+        .mockResolvedValueOnce(true);
+      const bridgePost = vi.fn().mockResolvedValue({ success: false, error: 'save failed' });
+
+      const { result, isError } = await withPersistenceGuard(
+        { editorMsg, bridgePost },
+        { mode: 'strict', target: { kind: 'scene', saveStrategy: 'save_scene' } },
+        async () => ({ success: true, uuid: 'u1' }),
+      );
+
+      expect(isError).toBe(false);
+      expect((result as any).warnings[0]).toContain('自动保存失败');
+      expect((result as any).persistenceStatus.guarantee).toBe('degraded');
+      expect((result as any).persistenceStatus.degradedReason).toBe(STRICT_PERSISTENCE_DEGRADED_WARNING);
+    });
+
+    it('asset target does not trigger scene save even in strict mode', async () => {
+      const editorMsg = vi.fn();
+      const bridgePost = vi.fn();
+
+      const { result, isError } = await withPersistenceGuard(
+        { editorMsg, bridgePost },
+        { mode: 'strict', target: { kind: 'asset', url: 'db://assets/foo.ts' } },
+        async () => ({ success: true, url: 'db://assets/foo.ts' }),
+      );
+
+      expect(isError).toBe(false);
+      expect((result as any).persistenceStatus.requiresPersistence).toBe(false);
+      expect((result as any).persistenceStatus.target.kind).toBe('asset');
+      expect(bridgePost).not.toHaveBeenCalled();
+      expect(editorMsg).not.toHaveBeenCalled();
     });
   });
 });

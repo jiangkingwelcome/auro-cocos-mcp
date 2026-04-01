@@ -1,7 +1,20 @@
 import { z } from 'zod';
 import { LocalToolServer } from './local-tool-server';
 import type { BridgeToolContext } from './tools-shared';
-import { toInputSchema, normalizeParams, errorMessage, AI_RULES, validateRequiredParams, toStr, type AssetInfo, type AssetMeta, type AssetEntry } from './tools-shared';
+import {
+  toInputSchema,
+  normalizeParams,
+  errorMessage,
+  AI_RULES,
+  validateRequiredParams,
+  toStr,
+  type AssetInfo,
+  type AssetMeta,
+  type AssetEntry,
+  persistenceModeSchema,
+  withPersistenceGuard,
+  type PersistenceTarget,
+} from './tools-shared';
 
 export function registerAssetTools(server: LocalToolServer, ctx: BridgeToolContext): void {
   const { bridgeGet, bridgePost, editorMsg, text } = ctx;
@@ -36,10 +49,11 @@ Actions & required parameters:
 - get_meta: url(REQUIRED). Get full .meta file content as JSON.
 - set_meta_property: url(REQUIRED), property(REQUIRED), value(REQUIRED). Modify a .meta property.
 - search_by_type: type(REQUIRED, e.g. "cc.ImageAsset", "cc.Prefab"), pattern(optional).
+- persistenceMode(optional: warn/auto-save/strict). Controls whether successful write operations only warn, auto-save, or fail in strict persistence mode.
 
 IMAGE IMPORT WORKFLOW: After importing a .png/.jpg via "import", the image defaults to type "texture" (no SpriteFrame). To use it with Sprite components, either: (A) use import_and_apply_texture which handles this automatically, or (B) manually: 1) import, 2) set_meta_property url=<img> property="userData.type" value="sprite-frame", 3) reimport url=<img>. This generates the SpriteFrame sub-asset at <img>/spriteFrame.
 set_meta_property: Supports dot-separated nested paths (e.g. "userData.type" sets meta.userData.type). Use get_meta first to see the structure.
-Returns: info→{uuid,type,importer,subAssets{}}. list→[{url,uuid,type}]. create/save/delete/move→{success}. url_to_uuid→"uuid-string". On error: {error:"message"}.
+Returns: info→{uuid,type,importer,subAssets{}}. list→[{url,uuid,type}]. create/save/delete/move→{success}. Successful write results may include persistenceStatus{mode,target,requiresPersistence,saveAttempted,...}. url_to_uuid→"uuid-string". On error: {error:"message"}.
 Common errors: "资源不存在"=wrong db:// URL; create blocked for .spriteframe/.texture (auto-generated sub-assets).` + AI_RULES,
     toInputSchema({
       action: z.enum([
@@ -91,6 +105,7 @@ Common errors: "资源不存在"=wrong db:// URL; create blocked for .spritefram
       value: z.union([z.string(), z.number(), z.boolean(), z.record(z.string(), z.unknown()), z.array(z.unknown()), z.null()]).optional().describe(
         'Property value. REQUIRED for: set_meta_property. Type must match the property being set.'
       ),
+      persistenceMode: persistenceModeSchema,
     }),
     async (params) => {
       try {
@@ -104,6 +119,38 @@ Common errors: "资源不存在"=wrong db:// URL; create blocked for .spritefram
             Object.assign(result, { _pathWarnings: warnings });
           }
           return result;
+        };
+        const resolveAssetPersistenceTarget = (action: string, input: Record<string, unknown>): PersistenceTarget => {
+          switch (action) {
+            case 'create':
+            case 'save':
+            case 'delete':
+            case 'create_folder':
+            case 'set_meta_property':
+            case 'rename':
+              return { kind: 'asset', url: toStr(input.url) || undefined };
+            case 'move':
+            case 'copy':
+            case 'import':
+              return { kind: 'asset', url: toStr(input.targetUrl) || undefined };
+            default:
+              return { kind: 'none' };
+          }
+        };
+        const runAssetWriteWithPersistence = async (
+          action: string,
+          execute: () => Promise<Record<string, unknown>>,
+        ) => {
+          const { result, isError } = await withPersistenceGuard(
+            { editorMsg, bridgePost },
+            {
+              mode: p.persistenceMode,
+              target: resolveAssetPersistenceTarget(action, p),
+              strictFailureMessage: `asset_operation.${action} 写入成功，但持久化失败（strict 模式）`,
+            },
+            execute,
+          );
+          return text(result, isError);
         };
         // ── API 调用规则 ──────────────────────────────────────────
         //   bridgeGet / bridgePost : 有 HTTP 路由 → 自带超时、锁、回滚
@@ -125,14 +172,28 @@ Common errors: "资源不存在"=wrong db:// URL; create blocked for .spritefram
                   `使用 import_and_apply_texture 工具可一步完成导入+应用。`,
               }, true);
             }
-            return text(addWarnings(await bridgePost('/api/asset-db/create-asset', { url: createUrl, content: p.content ?? null })));
+            return runAssetWriteWithPersistence(
+              'create',
+              async () => addWarnings(await bridgePost('/api/asset-db/create-asset', { url: createUrl, content: p.content ?? null })) as Record<string, unknown>,
+            );
           }
-          case 'save': return text(addWarnings(await bridgePost('/api/asset-db/save-asset', { url: p.url, content: p.content || '' })));
-          case 'delete': return text(addWarnings(await bridgePost('/api/asset-db/delete-asset', { url: p.url })));
-          case 'move': return text(addWarnings(await bridgePost('/api/asset-db/move-asset', { sourceUrl: p.sourceUrl, targetUrl: p.targetUrl })));
+          case 'save': return runAssetWriteWithPersistence(
+            'save',
+            async () => addWarnings(await bridgePost('/api/asset-db/save-asset', { url: p.url, content: p.content || '' })) as Record<string, unknown>,
+          );
+          case 'delete': return runAssetWriteWithPersistence(
+            'delete',
+            async () => addWarnings(await bridgePost('/api/asset-db/delete-asset', { url: p.url })) as Record<string, unknown>,
+          );
+          case 'move': return runAssetWriteWithPersistence(
+            'move',
+            async () => addWarnings(await bridgePost('/api/asset-db/move-asset', { sourceUrl: p.sourceUrl, targetUrl: p.targetUrl })) as Record<string, unknown>,
+          );
           case 'import': {
-            const importResult = addWarnings(await bridgePost('/api/asset-db/import-asset', { sourcePath: p.sourcePath, targetUrl: p.targetUrl }));
-            return text(importResult, isFailedResult(importResult));
+            return runAssetWriteWithPersistence(
+              'import',
+              async () => addWarnings(await bridgePost('/api/asset-db/import-asset', { sourcePath: p.sourcePath, targetUrl: p.targetUrl })) as Record<string, unknown>,
+            );
           }
           case 'open': return text(addWarnings(await bridgePost('/api/asset-db/open-asset', { url: p.url })));
           case 'refresh': return text(addWarnings(await bridgePost('/api/asset-db/refresh', { url: p.url })));
@@ -140,20 +201,33 @@ Common errors: "资源不存在"=wrong db:// URL; create blocked for .spritefram
           case 'uuid_to_url': return text(await editorMsg('asset-db', 'query-url', p.uuid));
           case 'url_to_uuid': return text(await editorMsg('asset-db', 'query-uuid', p.url));
           // ── 写操作走 HTTP 路由（带锁 + 回滚） ──
-          case 'create_folder': return text(addWarnings(await bridgePost('/api/asset-db/create-asset', { url: p.url, content: null })));
+          case 'create_folder': return runAssetWriteWithPersistence(
+            'create_folder',
+            async () => addWarnings(await bridgePost('/api/asset-db/create-asset', { url: p.url, content: null })) as Record<string, unknown>,
+          );
           case 'copy': {
             const copyInfo = await bridgeGet('/api/asset-db/query-asset-info', { url: toStr(p.sourceUrl) });
             if (!copyInfo) return text({ error: `源资源不存在: ${p.sourceUrl}` }, true);
             // copy-asset 无 HTTP 路由，直接 IPC
-            await editorMsg('asset-db', 'copy-asset', p.sourceUrl, p.targetUrl);
-            return text(addWarnings({ success: true, sourceUrl: p.sourceUrl, targetUrl: p.targetUrl }));
+            return runAssetWriteWithPersistence(
+              'copy',
+              async () => {
+                await editorMsg('asset-db', 'copy-asset', p.sourceUrl, p.targetUrl);
+                return addWarnings({ success: true, sourceUrl: p.sourceUrl, targetUrl: p.targetUrl }) as Record<string, unknown>;
+              },
+            );
           }
           case 'rename': {
             const parts = toStr(p.url).split('/');
             parts[parts.length - 1] = toStr(p.newName);
             const newUrl = parts.join('/');
-            await bridgePost('/api/asset-db/move-asset', { sourceUrl: toStr(p.url), targetUrl: newUrl });
-            return text(addWarnings({ success: true, oldUrl: p.url, newUrl }));
+            return runAssetWriteWithPersistence(
+              'rename',
+              async () => {
+                await bridgePost('/api/asset-db/move-asset', { sourceUrl: toStr(p.url), targetUrl: newUrl });
+                return addWarnings({ success: true, oldUrl: p.url, newUrl }) as Record<string, unknown>;
+              },
+            );
           }
           case 'get_meta': {
             // query-asset-meta 无 HTTP 路由，直接 IPC
@@ -175,8 +249,13 @@ Common errors: "资源不存在"=wrong db:// URL; create blocked for .spritefram
               }
               target[segments[segments.length - 1]] = p.value;
             }
-            await editorMsg('asset-db', 'save-asset-meta', p.url, JSON.stringify(meta));
-            return text(addWarnings({ success: true, url: p.url, property: p.property, value: p.value }));
+            return runAssetWriteWithPersistence(
+              'set_meta_property',
+              async () => {
+                await editorMsg('asset-db', 'save-asset-meta', p.url, JSON.stringify(meta));
+                return addWarnings({ success: true, url: p.url, property: p.property, value: p.value }) as Record<string, unknown>;
+              },
+            );
           }
           case 'search_by_type': {
             const stPattern = toStr(p.pattern, 'db://assets/**/*');

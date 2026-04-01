@@ -82,6 +82,56 @@ describe('create_prefab_atomic — 正常流程', () => {
     expect(sceneMethod).toHaveBeenCalledTimes(1);
   });
 
+  it('cleanupSourceNode=false 且场景已 dirty 时返回 save_scene 提示', async () => {
+    const sceneMethod = vi.fn().mockResolvedValueOnce({ uuid: 'temp-uuid' });
+    const editorMsg = vi.fn().mockImplementation(async (_module: string, action: string) => {
+      if (action === 'query-asset-info') return { type: 'directory' };
+      if (action === 'create-prefab') return { prefabUuid: 'prefab-uuid' };
+      if (action === 'query-dirty') return true;
+      return {};
+    });
+    const server = buildCocosToolServer(makeCtx({ sceneMethod, editorMsg }));
+
+    const result = await server.callTool('create_prefab_atomic', {
+      prefabPath: 'db://assets/prefabs/Hero.prefab',
+      cleanupSourceNode: false,
+    });
+
+    const data = parse(result) as any;
+    expect(data.success).toBe(true);
+    expect(data.warnings).toContain('当前场景存在未保存修改；如需在重开编辑器后保留，请调用 editor_action.save_scene。');
+  });
+
+  it('cleanupSourceNode=false 且 persistenceMode=auto-save 时自动保存场景', async () => {
+    const sceneMethod = vi.fn().mockResolvedValueOnce({ uuid: 'temp-uuid' });
+    const queryDirtyResults = [false, true, false];
+    const editorMsg = vi.fn().mockImplementation(async (_module: string, action: string) => {
+      if (action === 'query-asset-info') return { type: 'directory' };
+      if (action === 'create-prefab') return { prefabUuid: 'prefab-uuid' };
+      if (action === 'query-dirty') return queryDirtyResults.shift() ?? false;
+      return {};
+    });
+    const bridgePost = vi.fn().mockResolvedValue({ success: true });
+    const server = buildCocosToolServer(makeCtx({ sceneMethod, editorMsg, bridgePost }));
+
+    const result = await server.callTool('create_prefab_atomic', {
+      prefabPath: 'db://assets/prefabs/Hero.prefab',
+      cleanupSourceNode: false,
+      persistenceMode: 'auto-save',
+    });
+
+    const data = parse(result) as any;
+    expect(result.isError).toBeFalsy();
+    expect(data.persistenceStatus).toEqual(expect.objectContaining({
+      mode: 'auto-save',
+      target: expect.objectContaining({ kind: 'multi' }),
+      requiresPersistence: true,
+      saveAttempted: true,
+      saveSucceeded: true,
+    }));
+    expect(bridgePost).toHaveBeenCalledWith('/api/editor/save-scene', { force: false });
+  });
+
   it('带组件：添加 Sprite 组件', async () => {
     const sceneMethod = vi.fn()
       .mockResolvedValueOnce({ uuid: 'temp-uuid' }) // createChildNode
@@ -289,6 +339,32 @@ describe('import_and_apply_texture — 正常流程', () => {
     expect(data.nodeUuid).toBe('target-node-uuid');
     expect(data.stages).toContain('import_texture');
     expect(data.stages).not.toContain('resolve_selection');
+  });
+
+  it('成功挂图后若节点属于 Prefab 且场景 dirty，则返回 apply/save 提示', async () => {
+    const bridgeGet = vi.fn().mockResolvedValue({});
+    const bridgePost = vi.fn().mockResolvedValue({ success: true });
+    const sceneMethod = makeImportTextureSceneMethod({ components: ['Sprite', 'UITransform'] });
+    const editorMsg = vi.fn().mockImplementation(async (_module: string, action: string) => {
+      if (action === 'query-asset-info') return { uuid: 'imported-uuid', url: 'db://assets/textures/icon.png' };
+      if (action === 'query-asset-meta') return { userData: { type: 'sprite-frame' } };
+      if (action === 'query-uuid') return 'sprite-frame-uuid';
+      if (action === 'query-dirty') return true;
+      if (action === 'query-node') return { value: { name: { value: 'Node' } }, _prefab: { assetUuid: 'prefab-1' } };
+      return {};
+    });
+    const server = buildCocosToolServer(makeCtx({ bridgeGet, bridgePost, sceneMethod, editorMsg }));
+
+    const result = await server.callTool('import_and_apply_texture', {
+      sourcePath: 'C:/images/icon.png',
+      nodeUuid: 'target-node-uuid',
+      targetUrl: 'db://assets/textures/icon.png',
+    });
+
+    const data = parse(result) as any;
+    expect(data.success).toBe(true);
+    expect(data.warnings).toContain('当前场景存在未保存修改；如需在重开编辑器后保留，请调用 editor_action.save_scene。');
+    expect(data.warnings).toContain('检测到目标可能属于 Prefab 实例。若要把当前实例修改回写到预制体资源，请调用 scene_operation.apply_prefab；若需确保重开编辑器后仍保留，再调用 editor_action.save_scene。');
   });
 
   it('未指定 nodeUuid 时从 selection 中获取', async () => {
@@ -685,6 +761,45 @@ describe('create_tween_animation_atomic — 正常流程', () => {
     expect(data.error).toContain('未选中节点');
   });
 
+  it('strict 模式下未提供 savePath 时直接失败', async () => {
+    const sceneMethod = vi.fn().mockImplementation((method: string) => {
+      if (method === 'dispatchQuery') return Promise.resolve({ uuid: 'node-uuid', name: 'Hero' });
+      if (method === 'createAnimationClip') {
+        return Promise.resolve({
+          success: true,
+          clipDuration: 1,
+          trackCount: 1,
+          keyframeTimesCount: 2,
+          wrapMode: 'Normal',
+          speed: 1,
+          attach: { attached: true },
+        });
+      }
+      return Promise.resolve({ success: true });
+    });
+    const editorMsg = vi.fn().mockImplementation(async (_module: string, action: string) => {
+      if (action === 'begin-recording') return 'record-1';
+      if (action === 'query-node') return { value: { name: { value: 'Hero' } } };
+      if (action === 'set-property') return { success: true };
+      if (action === 'end-recording') return { success: true };
+      return {};
+    });
+    const server = buildCocosToolServer(makeCtx({ sceneMethod, editorMsg }));
+
+    const result = await server.callTool('create_tween_animation_atomic', {
+      nodeUuid: 'node-uuid',
+      persistenceMode: 'strict',
+      tracks: [{ property: 'position', keyframes: [{ time: 0, value: 0 }, { time: 1, value: 100 }] }],
+    });
+
+    const data = parse(result) as any;
+    expect(result.isError).toBe(true);
+    expect(data.error).toContain('strict');
+    expect(data.warnings).toEqual(expect.arrayContaining([
+      expect.stringContaining('未提供 savePath'),
+    ]));
+  });
+
   it('带 savePath 时尝试保存 .anim 资产', async () => {
     const sceneMethod = vi.fn().mockImplementation((method: string, args?: unknown[]) => {
       if (method === 'dispatchQuery') return Promise.resolve({ uuid: 'node-uuid', name: 'Hero' });
@@ -872,6 +987,39 @@ describe('auto_fit_physics_collider — 正常流程', () => {
     expect(data.stages).toContain('detect_components');
     expect(data.stages).toContain('auto_fit_collider');
     expect(data.stages).toContain('highlight');
+  });
+
+  it('成功适配碰撞体后若节点属于 Prefab 且场景 dirty，则返回 apply/save 提示', async () => {
+    const sceneMethod = vi.fn().mockImplementation((method: string) => {
+      if (method === 'dispatchQuery') {
+        return Promise.resolve({ uuid: 'node-uuid', name: 'Sprite', components: [{ name: 'Sprite' }, { name: 'UITransform' }] });
+      }
+      if (method === 'autoFitCollider') return Promise.resolve({
+        success: true, uuid: 'node-uuid', nodeName: 'Sprite',
+        colliderType: 'BoxCollider2D', outlineMethod: 'box_from_size',
+        size: { width: 100, height: 100 },
+      });
+      return Promise.resolve({ success: true });
+    });
+    const editorMsg = vi.fn().mockImplementation(async (_module: string, action: string) => {
+      if (action === 'begin-recording') return 'record-1';
+      if (action === 'query-node') return { value: { name: { value: 'Sprite' } }, _prefab: { assetUuid: 'prefab-1' } };
+      if (action === 'set-property') return { success: true };
+      if (action === 'end-recording') return { success: true };
+      if (action === 'query-dirty') return true;
+      return {};
+    });
+    const bridgePost = vi.fn().mockResolvedValue({ success: true });
+    const server = buildCocosToolServer(makeCtx({ sceneMethod, editorMsg, bridgePost }));
+
+    const result = await server.callTool('auto_fit_physics_collider', {
+      nodeUuid: 'node-uuid',
+    });
+
+    const data = parse(result) as any;
+    expect(data.success).toBe(true);
+    expect(data.warnings).toContain('当前场景存在未保存修改；如需在重开编辑器后保留，请调用 editor_action.save_scene。');
+    expect(data.warnings).toContain('检测到目标可能属于 Prefab 实例。若要把当前实例修改回写到预制体资源，请调用 scene_operation.apply_prefab；若需确保重开编辑器后仍保留，再调用 editor_action.save_scene。');
   });
 
   it('polygon 类型结果包含 points', async () => {

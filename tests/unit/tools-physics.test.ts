@@ -35,6 +35,79 @@ describe('physics_tool', () => {
     expect(ctx.sceneMethod).toHaveBeenCalledWith('dispatchOperation', [expect.objectContaining({ component: 'BoxCollider2D' })]);
   });
 
+  it('add_collider on prefab-like node returns apply/save warnings when dirty', async () => {
+    const editorMsg = vi.fn().mockImplementation(async (_module: string, action: string) => {
+      if (action === 'query-dirty') return true;
+      if (action === 'query-node') return { value: { name: { value: 'Node' } }, _prefab: { assetUuid: 'prefab-1' } };
+      return {};
+    });
+    const ctx = makeCtx({ editorMsg });
+    const server = buildCocosToolServer(ctx);
+    const result = await server.callTool('physics_tool', { action: 'add_collider', uuid: 'n1', colliderType: 'box2d' });
+    const data = parse(result);
+    expect(data.warnings).toContain('当前场景存在未保存修改；如需在重开编辑器后保留，请调用 editor_action.save_scene。');
+    expect(data.warnings).toContain('检测到目标可能属于 Prefab 实例。若要把当前实例修改回写到预制体资源，请调用 scene_operation.apply_prefab；若需确保重开编辑器后仍保留，再调用 editor_action.save_scene。');
+  });
+
+  it('add_collider with persistenceMode auto-save saves scene and returns persistenceStatus', async () => {
+    const queryDirtyResults = [false, true, false];
+    const editorMsg = vi.fn().mockImplementation(async (_module: string, action: string) => {
+      if (action === 'query-dirty') return queryDirtyResults.shift() ?? false;
+      if (action === 'query-node') return { value: { name: { value: 'Node' } } };
+      return {};
+    });
+    const bridgePost = vi.fn().mockResolvedValue({ success: true });
+    const ctx = makeCtx({ editorMsg, bridgePost });
+    const server = buildCocosToolServer(ctx);
+
+    const result = await server.callTool('physics_tool', {
+      action: 'add_collider',
+      uuid: 'n1',
+      colliderType: 'box2d',
+      persistenceMode: 'auto-save',
+    });
+
+    const data = parse(result);
+    expect(result.isError).toBeUndefined();
+    expect(data.persistenceStatus).toEqual(expect.objectContaining({
+      mode: 'auto-save',
+      requiresPersistence: true,
+      saveAttempted: true,
+      saveSucceeded: true,
+    }));
+    expect(bridgePost).toHaveBeenCalledWith('/api/editor/save-scene', { force: false });
+  });
+
+  it('add_collider with persistenceMode strict fails when tracked dirty write cannot be saved', async () => {
+    const queryDirtyResults = [false, true, true];
+    const editorMsg = vi.fn().mockImplementation(async (_module: string, action: string) => {
+      if (action === 'query-dirty') return queryDirtyResults.shift() ?? true;
+      if (action === 'query-node') return { value: { name: { value: 'Node' } } };
+      return {};
+    });
+    const bridgePost = vi.fn().mockResolvedValue({ success: false, error: 'save failed' });
+    const ctx = makeCtx({ editorMsg, bridgePost });
+    const server = buildCocosToolServer(ctx);
+
+    const result = await server.callTool('physics_tool', {
+      action: 'add_collider',
+      uuid: 'n1',
+      colliderType: 'box2d',
+      persistenceMode: 'strict',
+    });
+
+    const data = parse(result);
+    expect(result.isError).toBe(true);
+    expect(data.error).toContain('strict');
+    expect(data.persistenceStatus).toEqual(expect.objectContaining({
+      mode: 'strict',
+      guarantee: 'tracked',
+      saveAttempted: true,
+      saveSucceeded: false,
+    }));
+    expect(bridgePost).toHaveBeenCalledWith('/api/editor/save-scene', { force: false });
+  });
+
   it('add_collider returns error for unknown type', async () => {
     const ctx = makeCtx();
     const server = buildCocosToolServer(ctx);

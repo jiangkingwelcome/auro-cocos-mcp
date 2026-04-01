@@ -28,11 +28,56 @@ describe('execute_script', () => {
     expect(ctx.sceneMethod).toHaveBeenCalledWith('dispatchQuery', [{ action: 'tree' }]);
   });
 
+  it('query-like methods ignore persistenceMode and do not save scene', async () => {
+    const bridgePost = vi.fn().mockResolvedValue({ success: true });
+    const ctx = makeCtx({ bridgePost });
+    const server = buildCocosToolServer(ctx);
+
+    const result = await server.callTool('execute_script', {
+      method: 'dispatchQuery',
+      args: [{ action: 'tree' }],
+      persistenceMode: 'auto-save',
+    });
+
+    expect(result.isError).toBeUndefined();
+    expect(ctx.sceneMethod).toHaveBeenCalledWith('dispatchQuery', [{ action: 'tree' }]);
+    expect(bridgePost).not.toHaveBeenCalledWith('/api/editor/save-scene', { force: false });
+  });
+
   it('handles missing args gracefully', async () => {
     const ctx = makeCtx();
     const server = buildCocosToolServer(ctx);
     await server.callTool('execute_script', { method: 'getSceneTree' });
     expect(ctx.sceneMethod).toHaveBeenCalledWith('getSceneTree', []);
+  });
+
+  it('mutating methods with persistenceMode auto-save save scene and return persistenceStatus', async () => {
+    const queryDirtyResults = [false, true, false];
+    const editorMsg = vi.fn().mockImplementation(async (_module: string, action: string) => {
+      if (action === 'query-dirty') return queryDirtyResults.shift() ?? false;
+      return {};
+    });
+    const bridgePost = vi.fn().mockResolvedValue({ success: true });
+    const ctx = makeCtx({ editorMsg, bridgePost });
+    const server = buildCocosToolServer(ctx);
+
+    const result = await server.callTool('execute_script', {
+      method: 'setNodePosition',
+      args: ['node-1', 10, 20, 0],
+      persistenceMode: 'auto-save',
+    });
+
+    const data = parse(result);
+    expect(result.isError).toBeUndefined();
+    expect(ctx.sceneMethod).toHaveBeenCalledWith('setNodePosition', ['node-1', 10, 20, 0]);
+    expect(data.persistenceStatus).toEqual(expect.objectContaining({
+      mode: 'auto-save',
+      target: expect.objectContaining({ kind: 'scene' }),
+      requiresPersistence: true,
+      saveAttempted: true,
+      saveSucceeded: true,
+    }));
+    expect(bridgePost).toHaveBeenCalledWith('/api/editor/save-scene', { force: false });
   });
 
   it('returns error on exception', async () => {
