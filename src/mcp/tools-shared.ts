@@ -833,13 +833,12 @@ export function buildAnimJson(
   };
 
   const makeRealCurve = (
-    kfs: Array<{ time: number; value: number }>,
-    easing?: string,
+    kfs: Array<{ time: number; value: number; easing?: string }>,
   ) => ({
     __type__: 'cc.animation.RealCurve',
     preExtrapolation: 1,
     postExtrapolation: 1,
-    keyframes: kfs.map(({ time, value }) => [
+    keyframes: kfs.map(({ time, value, easing }) => [
       time,
       {
         __type__: 'cc.animation.RealKeyframeValue',
@@ -902,7 +901,6 @@ export function buildAnimJson(
     const property = String(track.property ?? '');
     const nodePath = track.path;
     const component = track.component;
-    const easing = kfs[0]?.easing;
     const sampleVal = kfs[0]?.value;
     const binding = makeBinding(nodePath, component, property);
 
@@ -913,11 +911,11 @@ export function buildAnimJson(
 
     if (isVec3) {
       const axis = (ax: 'x' | 'y' | 'z') =>
-        kfs.map(kf => ({ time: kf.time, value: ((kf.value as Record<string, number>) ?? {})[ax] ?? 0 }));
+        kfs.map(kf => ({ time: kf.time, value: ((kf.value as Record<string, number>) ?? {})[ax] ?? 0, easing: kf.easing }));
       animTracks.push({
         __type__: 'cc.animation.VectorTrack',
         _binding: binding,
-        _channels: [ch(makeRealCurve(axis('x'), easing)), ch(makeRealCurve(axis('y'), easing)), ch(makeRealCurve(axis('z'), easing))],
+        _channels: [ch(makeRealCurve(axis('x'))), ch(makeRealCurve(axis('y'))), ch(makeRealCurve(axis('z')))],
         _componentsCount: 3,
       });
     } else if (isColor) {
@@ -931,7 +929,7 @@ export function buildAnimJson(
       animTracks.push({
         __type__: 'cc.animation.RealTrack',
         _binding: binding,
-        _channels: [ch(makeRealCurve(kfs.map(kf => ({ time: kf.time, value: typeof kf.value === 'number' ? kf.value : Number(kf.value) || 0 })), easing))],
+        _channels: [ch(makeRealCurve(kfs.map(kf => ({ time: kf.time, value: typeof kf.value === 'number' ? kf.value : Number(kf.value) || 0, easing: kf.easing }))))],
       });
     }
   }
@@ -939,10 +937,15 @@ export function buildAnimJson(
   return {
     __type__: 'cc.AnimationClip',
     _name: name,
+    _objFlags: 0,
+    '__editorExtras__': {},
     _duration: duration,
     sample,
     speed,
     wrapMode: wrapModeMap[wrapMode.toLowerCase()] ?? 1,
+    _events: [],
+    _commonTargets: [],
     _tracks: animTracks,
+    _id: '',
   };
 }
