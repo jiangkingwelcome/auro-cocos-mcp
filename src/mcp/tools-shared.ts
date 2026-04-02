@@ -946,6 +946,5 @@ export function buildAnimJson(
     _events: [],
     _commonTargets: [],
     _tracks: animTracks,
-    _id: '',
   };
 }
