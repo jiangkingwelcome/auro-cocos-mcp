@@ -1498,8 +1498,6 @@ export const methods = {
       if ('_speed' in clipRecord) clipRecord._speed = speed;
       clip.sample = sample;
       if ('_sample' in clipRecord) clipRecord._sample = sample;
-      clip.keys = [sortedTimes];
-
       // Resolve wrap mode
       const animationWrapMode = (AnimClip as { WrapMode?: Record<string, number> }).WrapMode || cc.WrapMode;
       let resolvedWrapModeValue: number | null = null;
@@ -1519,74 +1517,151 @@ export const methods = {
         }
       }
 
-      const curves: unknown[] = [];
-      for (const track of tracks) {
-        const modifiers: unknown[] = [];
-        if (track.path) {
-          if (cc.animation.HierarchyPath) modifiers.push(new cc.animation.HierarchyPath(track.path));
-          else modifiers.push(track.path);
+      // easing string → interpolationMode: 0=Constant, 1=Linear, 2=Cubic
+      const toInterpMode = (easing?: string): number => {
+        if (!easing || easing === 'linear') return 1;
+        if (easing === 'constant') return 0;
+        return 2;
+      };
+
+      const VEC3_PROPS = new Set(['position', 'scale', 'eulerAngles', 'worldPosition', 'worldScale', 'worldEulerAngles']);
+      const animNS = cc.animation as Record<string, unknown>;
+      const hasNewApi = typeof (animNS.VectorTrack as { new?(): unknown } | undefined)?.['new'] !== 'undefined'
+        || typeof animNS.VectorTrack === 'function';
+
+      // Helper: apply keyframes to a RealCurve channel via assignSorted
+      const applyRealCurve = (chan: Record<string, unknown>, kfData: Array<[number, Record<string, unknown>]>) => {
+        const curve = (chan['_curve'] ?? chan['curve']) as Record<string, unknown> | undefined;
+        if (curve && typeof curve['assignSorted'] === 'function') {
+          (curve['assignSorted'] as (kfs: unknown) => void)(kfData);
         }
-        if (track.component) {
-          if (cc.animation.ComponentPath) {
+      };
+
+      // Helper: set up track binding path
+      const applyPath = (trackObj: Record<string, unknown>, nodePath?: string, component?: string, property?: string) => {
+        const p = trackObj['path'] as Record<string, unknown> | undefined;
+        if (!p) return;
+        if (nodePath && typeof p['toHierarchy'] === 'function')
+          (p['toHierarchy'] as (s: string) => unknown)(nodePath);
+        if (component && typeof p['toComponent'] === 'function')
+          (p['toComponent'] as (s: string) => unknown)(component);
+        if (property && typeof p['toProperty'] === 'function')
+          (p['toProperty'] as (s: string) => unknown)(property);
+      };
+
+      if (hasNewApi) {
+        // ── Cocos 3.8 新 _tracks API（避免 legacy curves 转换产生 null channel）──
+        for (const track of tracks) {
+          const property = track.property;
+          const kfs = track.keyframes;
+          const sampleVal = kfs[0]?.value;
+
+          const isVec3 = VEC3_PROPS.has(property)
+            || (sampleVal !== null && typeof sampleVal === 'object' && sampleVal !== undefined
+              && 'x' in (sampleVal as object) && !('r' in (sampleVal as object)));
+          const isColor = property === 'color'
+            || (sampleVal !== null && typeof sampleVal === 'object' && sampleVal !== undefined
+              && 'r' in (sampleVal as object) && 'g' in (sampleVal as object));
+
+          if (isVec3 && typeof animNS['VectorTrack'] === 'function') {
+            const vt = new (animNS['VectorTrack'] as new() => Record<string, unknown>)();
+            (vt as { componentsCount: number })['componentsCount'] = 3;
+            applyPath(vt, track.path, track.component, property);
+            const channels = typeof vt['channels'] === 'function'
+              ? (vt['channels'] as () => Record<string, unknown>[])() : [];
+            const axes = ['x', 'y', 'z'] as const;
+            for (let i = 0; i < 3; i++) {
+              if (channels[i]) {
+                applyRealCurve(channels[i], kfs.map(kf => [kf.time, {
+                  interpolationMode: toInterpMode(kf.easing),
+                  tangentWeightMode: 0,
+                  value: ((kf.value as Record<string, number>) ?? {})[axes[i]] ?? 0,
+                  leftTangent: 0, leftTangentWeight: 0, rightTangent: 0, rightTangentWeight: 0,
+                }]));
+              }
+            }
+            if (typeof (clip as Record<string, unknown>)['addTrack'] === 'function')
+              ((clip as Record<string, unknown>)['addTrack'] as (t: unknown) => void)(vt);
+
+          } else if (isColor && typeof animNS['ColorTrack'] === 'function') {
+            const ct = new (animNS['ColorTrack'] as new() => Record<string, unknown>)();
+            applyPath(ct, track.path, track.component, property);
+            const channels = typeof ct['channels'] === 'function'
+              ? (ct['channels'] as () => Record<string, unknown>[])() : [];
+            const colorCurve = channels[0] ? (channels[0]['_curve'] ?? channels[0]['curve']) as Record<string, unknown> | undefined : undefined;
+            if (colorCurve && typeof colorCurve['assignSorted'] === 'function') {
+              (colorCurve['assignSorted'] as (kfs: unknown) => void)(kfs.map(kf => {
+                const cv = (kf.value as Record<string, number>) ?? {};
+                return [kf.time, {
+                  interpolationMode: toInterpMode(kf.easing),
+                  value: { r: cv['r'] ?? 255, g: cv['g'] ?? 255, b: cv['b'] ?? 255, a: cv['a'] ?? 255 },
+                }];
+              }));
+            }
+            if (typeof (clip as Record<string, unknown>)['addTrack'] === 'function')
+              ((clip as Record<string, unknown>)['addTrack'] as (t: unknown) => void)(ct);
+
+          } else if (typeof animNS['RealTrack'] === 'function') {
+            const rt = new (animNS['RealTrack'] as new() => Record<string, unknown>)();
+            applyPath(rt, track.path, track.component, property);
+            const channels = typeof rt['channels'] === 'function'
+              ? (rt['channels'] as () => Record<string, unknown>[])() : [];
+            if (channels[0]) {
+              applyRealCurve(channels[0], kfs.map(kf => [kf.time, {
+                interpolationMode: toInterpMode(kf.easing),
+                tangentWeightMode: 0,
+                value: typeof kf.value === 'number' ? kf.value : Number(kf.value) || 0,
+                leftTangent: 0, leftTangentWeight: 0, rightTangent: 0, rightTangentWeight: 0,
+              }]));
+            }
+            if (typeof (clip as Record<string, unknown>)['addTrack'] === 'function')
+              ((clip as Record<string, unknown>)['addTrack'] as (t: unknown) => void)(rt);
+          }
+        }
+      } else {
+        // ── Legacy curves fallback（Cocos < 3.8）──
+        clip.keys = [sortedTimes];
+        const curves: unknown[] = [];
+        for (const track of tracks) {
+          const modifiers: unknown[] = [];
+          if (track.path) {
+            if (cc.animation.HierarchyPath) modifiers.push(new cc.animation.HierarchyPath(track.path));
+            else modifiers.push(track.path);
+          }
+          if (track.component && cc.animation.ComponentPath)
             modifiers.push(new cc.animation.ComponentPath(track.component));
+          modifiers.push(track.property);
+
+          const timeToValue = new Map<number, unknown>();
+          for (const kf of track.keyframes) timeToValue.set(kf.time, kf.value);
+          const filteredTimes: number[] = [];
+          const filteredValues: unknown[] = [];
+          const filteredEasings: (string | undefined)[] = [];
+          for (let i = 0; i < sortedTimes.length; i++) {
+            const t = sortedTimes[i];
+            if (timeToValue.has(t)) {
+              filteredTimes.push(t);
+              filteredValues.push(timeToValue.get(t));
+              filteredEasings.push(track.keyframes.find(k => k.time === t)?.easing);
+            }
           }
-        }
-        modifiers.push(track.property);
-
-        // Build per-curve values aligned to sortedTimes
-        const timeToValue = new Map<number, unknown>();
-        for (const kf of track.keyframes) timeToValue.set(kf.time, kf.value);
-
-        const values: unknown[] = [];
-        const allEasings: (string | undefined)[] = [];
-        for (const t of sortedTimes) {
-          values.push(timeToValue.has(t) ? timeToValue.get(t) : undefined);
-          const kf = track.keyframes.find(k => k.time === t);
-          allEasings.push(kf?.easing);
-        }
-
-        // Filter to only times that have values for this track
-        const filteredTimes: number[] = [];
-        const filteredValues: unknown[] = [];
-        const filteredEasingValues: (string | undefined)[] = [];
-        for (let i = 0; i < sortedTimes.length; i++) {
-          if (values[i] !== undefined) {
-            filteredTimes.push(sortedTimes[i]);
-            filteredValues.push(values[i]);
-            filteredEasingValues.push(allEasings[i]);
+          let keysIdx = 0;
+          if (filteredTimes.length !== sortedTimes.length) {
+            keysIdx = clip.keys.length;
+            clip.keys.push(filteredTimes);
           }
+          const allConstant = filteredEasings.length > 0 && filteredEasings.every(e => e === 'constant');
+          const curveData: Record<string, unknown> = {
+            keys: keysIdx, values: filteredValues, interpolate: !allConstant,
+          };
+          if (!allConstant && filteredEasings.some(e => e && e !== 'linear')) {
+            curveData['easingMethods'] = filteredEasings.map(e =>
+              (!e || e === 'linear' || e === 'constant') ? null : e);
+          }
+          curves.push({ modifiers, data: curveData });
         }
-
-        // Use a dedicated keys entry for this curve if it differs from global
-        let keysIdx = 0;
-        if (filteredTimes.length !== sortedTimes.length) {
-          keysIdx = clip.keys.length;
-          clip.keys.push(filteredTimes);
-        }
-
-        // interpolate=false only when ALL keyframes use constant/step easing
-        const allConstant = filteredEasingValues.length > 0 && filteredEasingValues.every(e => e === 'constant');
-        const curveData: Record<string, unknown> = {
-          keys: keysIdx,
-          values: filteredValues,
-          interpolate: !allConstant,
-          // 注意：curves 格式不支持逐帧 easing，easing 信息由 buildAnimJson(_tracks) 在 .anim 文件中保存
-        };
-
-        // If any non-linear easing specified, attach easingMethods for Cocos compatibility
-        if (!allConstant && filteredEasingValues.some(e => e && e !== 'linear')) {
-          curveData.easingMethods = filteredEasingValues.map(e => {
-            if (!e || e === 'linear') return null;
-            if (e === 'constant') return null;
-            // Cocos easingMethod format: e.g. 'quadIn', 'bounceOut'
-            return e;
-          });
-        }
-
-        curves.push({ modifiers, data: curveData });
+        clip.curves = curves;
       }
-
-      clip.curves = curves;
 
       // Attach to node if provided
       let attachResult: {
