@@ -231,20 +231,12 @@ export function registerEditorControlRoutes(get: RouteRegistrar, post: RouteRegi
 
   post('/api/preview/open', async () => {
     try {
-      let platform = 'browser';
-      try {
-        platform = await (Editor.Profile.getConfig as (...args: unknown[]) => Promise<unknown>)('preview', 'preview.current.platform', 'local') as string || 'browser';
-      } catch {
-        logIgnored(ErrorCategory.EDITOR_IPC, 'Editor.Profile.getConfig 不可用（Cocos < 3.6），使用默认 platform=browser');
-      }
-      if (platform === 'gameView') {
-        const res = await safeEditorMsg('scene', 'editor-preview-set-play', [true]);
-        return res.ok ? { success: true, platform, result: res.data } : { error: res.error };
-      }
+      // 始终使用浏览器 Web 预览（open-terminal），跳过 gameView 模式。
+      // gameView 依赖 scene > editor-preview-set-play，在 Cocos 3.8 中不稳定，放弃。
       const res = await safeEditorMsg('preview', 'open-terminal', [undefined], [
         { module: 'preview', message: 'open' },
       ]);
-      return res.ok ? { success: true, platform } : { error: res.error };
+      return res.ok ? { success: true, platform: 'browser' } : { error: res.error };
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : String(err);
       return { error: `启动预览失败: ${msg}` };
