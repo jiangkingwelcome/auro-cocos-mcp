@@ -19,6 +19,7 @@ const REQUEST_TIMEOUT_MS = Number(process.env.COCOS_MCP_SHIM_TIMEOUT_MS || 15000
 
 let discoveredEndpoint = process.env.COCOS_MCP_ENDPOINT || '';
 let discoveredToken = process.env.COCOS_MCP_TOKEN || '';
+let discoveredPort = 0;
 let readBuffer = Buffer.alloc(0);
 
 // 项目身份追踪：记住当前连接的项目，切换时通知用户
@@ -141,7 +142,7 @@ function readTokenFromLocalSources(port) {
 }
 
 async function discoverHost() {
-  if (discoveredEndpoint) return { endpoint: discoveredEndpoint, token: discoveredToken };
+  if (discoveredEndpoint) return { endpoint: discoveredEndpoint, token: discoveredToken, port: discoveredPort };
   const ports = resolvePortCandidates(process.env.COCOS_BRIDGE_PORT || process.env.BRIDGE_PORT, DEFAULT_PORTS);
   log(`discovering host, trying ports: ${ports.join(', ')}`);
   for (const port of ports) {
@@ -150,16 +151,14 @@ async function discoverHost() {
       const info = await requestJson(`${base}/api/mcp/connection-info`, { method: 'GET' });
       if (info && info.endpoint) {
         discoveredEndpoint = String(info.endpoint);
-        // Read token from local files (API response is masked)
+        discoveredPort = port;
+        // Token 仅信任本地来源，不使用接口返回值（可能脱敏或过期）
         const localToken = readTokenFromLocalSources(port);
-        if (localToken) {
-          discoveredToken = localToken;
-        } else if (typeof info.token === 'string' && /^[0-9a-f]+$/i.test(info.token)) {
-          discoveredToken = info.token;
-        }
+        discoveredToken = localToken || '';
+
         log(`discovered host: ${discoveredEndpoint} (token: ${discoveredToken ? discoveredToken.slice(0, 8) + '...' : 'none'})`);
         await checkProjectSwitch(port);
-        return { endpoint: discoveredEndpoint, token: discoveredToken };
+        return { endpoint: discoveredEndpoint, token: discoveredToken, port: discoveredPort };
       }
     } catch (e) {
       log(`port ${port} failed: ${e.message || e}`);
@@ -179,8 +178,7 @@ let originalClientInfo = null;
 
 /**
  * 向 MCP 服务端发送心跳，刷新 session 时间戳。
- * 每 15 秒由健康检查触发，服务端收到后更新 lastSeen，
- * 若 shim 进程死亡（编辑器关闭），45 秒内 session 会自动超时。
+ * 每 8 秒由健康检查触发，服务端收到后更新 lastSeen。
  */
 async function sendHeartbeat(host) {
   try {
@@ -200,7 +198,7 @@ async function sendHeartbeat(host) {
   }
 }
 
-async function autoReInitialize(host, port) {
+async function autoReInitialize(host, portHint) {
   log('auto re-initializing with new MCP host...');
   try {
     const clientInfo = originalClientInfo || { name: 'aura-stdio-shim-reconnect', version: '1.0.0' };
@@ -222,8 +220,9 @@ async function autoReInitialize(host, port) {
       body: JSON.stringify(initPayload),
     });
     log('auto re-initialize succeeded, connection count restored');
-    // 重连成功后检查项目是否切换
-    if (port) await checkProjectSwitch(port);
+    // 重连成功后检查项目是否切换（优先用调用方端口，否则回退到已发现端口）
+    const effectivePort = Number(portHint) || Number(host.port) || Number(discoveredPort);
+    if (effectivePort) await checkProjectSwitch(effectivePort);
   } catch (e) {
     log(`auto re-initialize failed: ${e.message || e}`);
   }
@@ -264,6 +263,7 @@ async function forwardToHost(payload, _retryCount = 0) {
       log('token rejected, re-discovering host...');
       discoveredEndpoint = '';
       discoveredToken = '';
+      discoveredPort = 0;
       needsReInitialize = true;
       return forwardToHost(payload, _retryCount + 1);
     }
@@ -281,6 +281,7 @@ async function forwardToHost(payload, _retryCount = 0) {
       log(`connection failed: ${err.message || err}, clearing cache and re-discovering... (attempt ${_retryCount + 1})`);
       discoveredEndpoint = '';
       discoveredToken = '';
+      discoveredPort = 0;
       needsReInitialize = true;
       // 等待一小段时间，给 Cocos 启动的缓冲
       await new Promise(r => setTimeout(r, 1500));
@@ -475,7 +476,7 @@ log(`started, node=${process.version}, pid=${process.pid}, COCOS_BRIDGE_PORT=${p
 // 后台保活探针：主动检测 MCP 服务是否在线
 // Cocos 重启后，不用等 AI 发请求，shim 自己就能感知并自动重连。
 // ---------------------------------------------------------------------------
-const HEALTH_CHECK_INTERVAL_MS = 8_000; // 每 8 秒探测一次（同时作为心跳，配合服务端 20s 超时）
+const HEALTH_CHECK_INTERVAL_MS = 8_000; // 每 8 秒探测一次（同时作为心跳，配合服务端 45s 超时）
 let serverAlive = false;
 /** 上次健康检查看到的服务启动 ID，变化时说明服务重启过（即使重启极快也能感知）。 */
 let lastStartupId = '';
@@ -488,23 +489,26 @@ const healthTimer = setInterval(async () => {
       if (info && info.endpoint) {
         const oldEndpoint = discoveredEndpoint;
         discoveredEndpoint = String(info.endpoint);
+        discoveredPort = port;
         const localToken = readTokenFromLocalSources(port);
-        if (localToken) {
-          discoveredToken = localToken;
-        } else if (typeof info.token === 'string' && /^[0-9a-f]+$/i.test(info.token)) {
-          discoveredToken = info.token;
-        }
+        discoveredToken = localToken || '';
 
         const currentStartupId = (info && typeof info.startupId === 'string') ? info.startupId : '';
         const serverRestarted = currentStartupId && currentStartupId !== lastStartupId;
         if (currentStartupId) lastStartupId = currentStartupId;
 
-        if (!serverAlive || oldEndpoint !== discoveredEndpoint || serverRestarted) {
+        const wasServerAlive = serverAlive;
+        const endpointChanged = oldEndpoint !== discoveredEndpoint;
+        if (!wasServerAlive || endpointChanged || serverRestarted) {
           // 服务刚上线、端口变了、或 startupId 变化（说明重启过）→ 补发 initialize
+          const reason = serverRestarted
+            ? 'server restarted (startupId changed)'
+            : !wasServerAlive
+              ? 'server came online'
+              : 'endpoint changed';
           serverAlive = true;
-          const reason = serverRestarted ? 'server restarted (startupId changed)' : !serverAlive ? 'server came online' : 'endpoint changed';
           log(`[healthcheck] MCP host detected at port ${port} (${reason}), auto re-initializing...`);
-          await autoReInitialize({ endpoint: discoveredEndpoint, token: discoveredToken }, port);
+          await autoReInitialize({ endpoint: discoveredEndpoint, token: discoveredToken, port: discoveredPort }, port);
         } else if (originalClientInfo) {
           // 服务正常运行 → 发心跳，让服务端刷新 session 时间戳（防止超时断开）
           await sendHeartbeat({ endpoint: discoveredEndpoint, token: discoveredToken });

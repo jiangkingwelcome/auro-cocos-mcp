@@ -17,6 +17,14 @@ type JsonRpcResponse = {
   error?: { code: number; message: string; data?: unknown };
 };
 
+type ClientSession = {
+  key: string;
+  name: string;
+  version: string;
+  isShim: boolean;
+  lastSeenMs: number;
+};
+
 function isRecord(value: unknown): value is Record<string, unknown> {
   return !!value && typeof value === 'object' && !Array.isArray(value);
 }
@@ -31,22 +39,17 @@ function rpcError(id: JsonRpcId, code: number, message: string, data?: unknown):
 
 /**
  * 超过此时长未收到 initialize 或心跳的会话视为已断连。
- * stdio shim 每 15 秒发一次心跳（notifications/client-heartbeat），
- * 因此 20 秒超时 = 2.5 个心跳周期容错，编辑器关闭后最多 20 秒内计数归零。
- * SSE 长连接不受此限制，断线立即感知。
+ * stdio shim 每 15 秒发一次心跳，45 秒超时可覆盖 3 个心跳周期，
+ * 兼顾短暂抖动与连接状态收敛速度。
  */
-const SESSION_TIMEOUT_MS = 20 * 1000;
+const SESSION_TIMEOUT_MS = 45 * 1000;
 
 export class StandaloneMcpHost {
   private readonly protocolVersion = '2024-11-05';
   private toolListVersion = 1;
 
-  /**
-   * 按 clientInfo 去重的客户端会话。
-   * key: `${clientInfo.name}:${clientInfo.version}`（同一 AI 编辑器多次 initialize 视为同一连接）。
-   * value: 该客户端上次 initialize 的时间戳。
-   */
-  private clientSessions = new Map<string, number>();
+  /** 按会话 key 存储客户端会话。 */
+  private clientSessions = new Map<string, ClientSession>();
   /** 仅当真实 AI 客户端（非 shim）发过 initialize 时才为 true，用于插件重载后的计数补偿。 */
   private hasReceivedRealClientRequest = false;
 
@@ -104,27 +107,72 @@ export class StandaloneMcpHost {
     return { ...result, toolListVersion: this.toolListVersion };
   }
 
+  /** shim 纯转发会话，不计入连接数。 */
+  private isShimClient(name: string): boolean {
+    return name.startsWith('cocos-stdio-shim');
+  }
+
   /**
-   * shim 纯转发会话，不计入连接数。
-   * aura-stdio-shim-reconnect 是重连心跳，代表真实 AI 编辑器在线，不在此列。
+   * 解析客户端会话标识。
+   * 优先使用实例级 id（clientInfo.instanceId/clientSessionId/sessionId），
+   * 解决同名同版本编辑器并发连接时的冲突。
    */
-  private isShimClient(key: string): boolean {
-    return key.startsWith('cocos-stdio-shim');
+  private parseClientSession(params: unknown): ClientSession {
+    const now = Date.now();
+    if (!isRecord(params)) {
+      return {
+        key: 'unknown:unknown:legacy',
+        name: 'unknown',
+        version: '',
+        isShim: false,
+        lastSeenMs: now,
+      };
+    }
+
+    const info = isRecord(params.clientInfo) ? params.clientInfo : {};
+    const name = typeof info.name === 'string' ? info.name : 'unknown';
+    const version = typeof info.version === 'string' ? info.version : '';
+
+    const instanceIdCandidates = [
+      isRecord(info) ? info.instanceId : undefined,
+      isRecord(info) ? info.clientSessionId : undefined,
+      params.sessionId,
+      params.clientSessionId,
+    ];
+
+    let instanceId = '';
+    for (const candidate of instanceIdCandidates) {
+      if (typeof candidate === 'string' && candidate.trim()) {
+        instanceId = candidate.trim();
+        break;
+      }
+    }
+
+    // 兼容旧客户端：没有实例 ID 时保留 legacy key（行为与历史一致）。
+    const key = instanceId
+      ? `${name}:${version}:instance:${instanceId}`
+      : `${name}:${version}:legacy`;
+
+    return {
+      key,
+      name,
+      version,
+      isShim: this.isShimClient(name),
+      lastSeenMs: now,
+    };
   }
 
   /**
    * 返回已连接的 AI 客户端数量。
    * SSE 长连接优先：有 SSE 客户端时直接返回 SSE 连接数（持久连接，最准确）。
-   * 否则按 clientInfo 去重的 HTTP 会话计数（同一编辑器多次 initialize 计为 1 个）。
-   * stdio shim 内部重连会话不计入用户可见的连接数。
+   * 否则按 HTTP 会话计数（过滤 shim）。
    */
   getConnectionCount(): number {
-    // SSE 连接是持久的，最能反映真实在线状态
     if (this.sseClients.size > 0) return this.sseClients.size;
     this.pruneStaleSessions();
     let count = 0;
-    for (const key of this.clientSessions.keys()) {
-      if (!this.isShimClient(key)) count++;
+    for (const session of this.clientSessions.values()) {
+      if (!session.isShim) count++;
     }
     return count;
   }
@@ -152,9 +200,7 @@ export class StandaloneMcpHost {
     this.sseClients.clear();
   }
 
-  /**
-   * 向所有 SSE 客户端广播 JSON-RPC 通知。
-   */
+  /** 向所有 SSE 客户端广播 JSON-RPC 通知。 */
   private broadcastSse(method: string, params: Record<string, unknown> = {}): void {
     if (this.sseClients.size === 0) return;
     const msg = `data: ${JSON.stringify({ jsonrpc: '2.0', method, params })}\n\n`;
@@ -168,18 +214,17 @@ export class StandaloneMcpHost {
     }
   }
 
-  /**
-   * 返回已连接的 AI 客户端列表（同 getConnectionCount 的过滤规则）。
-   */
+  /** 返回已连接的 AI 客户端列表（同 getConnectionCount 的过滤规则）。 */
   getConnectedClients(): Array<{ name: string; version: string; lastSeenMs: number }> {
     this.pruneStaleSessions();
     const result: Array<{ name: string; version: string; lastSeenMs: number }> = [];
-    for (const [key, ts] of this.clientSessions) {
-      if (this.isShimClient(key)) continue;
-      const colonIdx = key.indexOf(':');
-      const name = colonIdx >= 0 ? key.slice(0, colonIdx) : key;
-      const version = colonIdx >= 0 ? key.slice(colonIdx + 1) : '';
-      result.push({ name, version, lastSeenMs: ts });
+    for (const session of this.clientSessions.values()) {
+      if (session.isShim) continue;
+      result.push({
+        name: session.name,
+        version: session.version,
+        lastSeenMs: session.lastSeenMs,
+      });
     }
     return result;
   }
@@ -189,19 +234,10 @@ export class StandaloneMcpHost {
     this.hasReceivedRealClientRequest = false;
   }
 
-  private getClientKey(params: unknown): string {
-    if (!isRecord(params)) return 'unknown:';
-    const info = params.clientInfo;
-    if (!isRecord(info)) return 'unknown:';
-    const name = typeof info.name === 'string' ? info.name : 'unknown';
-    const version = typeof info.version === 'string' ? info.version : '';
-    return `${name}:${version}`;
-  }
-
   private pruneStaleSessions(): void {
     const now = Date.now();
-    for (const [k, t] of this.clientSessions) {
-      if (now - t > SESSION_TIMEOUT_MS) this.clientSessions.delete(k);
+    for (const [k, session] of this.clientSessions) {
+      if (now - session.lastSeenMs > SESSION_TIMEOUT_MS) this.clientSessions.delete(k);
     }
   }
 
@@ -238,9 +274,9 @@ export class StandaloneMcpHost {
       switch (method) {
         case 'initialize': {
           this.pruneStaleSessions();
-          const clientKey = this.getClientKey(req.params);
-          this.clientSessions.set(clientKey, Date.now());
-          if (!this.isShimClient(clientKey)) {
+          const session = this.parseClientSession(req.params);
+          this.clientSessions.set(session.key, session);
+          if (!session.isShim) {
             this.hasReceivedRealClientRequest = true;
           }
           const result = {
@@ -254,24 +290,24 @@ export class StandaloneMcpHost {
         case 'notifications/initialized':
           return null;
         case 'notifications/client-heartbeat': {
-          // shim 每 15 秒发一次心跳，刷新 session 时间戳防止超时
-          const heartbeatKey = this.getClientKey(req.params);
-          if (heartbeatKey && heartbeatKey !== 'unknown:' && this.clientSessions.has(heartbeatKey)) {
-            this.clientSessions.set(heartbeatKey, Date.now());
+          const session = this.parseClientSession(req.params);
+          const existing = this.clientSessions.get(session.key);
+          if (existing) {
+            existing.lastSeenMs = Date.now();
+            this.clientSessions.set(session.key, existing);
           }
           return null;
         }
         case 'notifications/client-disconnect': {
-          // 优先用 params.clientInfo 精确删除对应 session（shim 断连时携带）
-          const disconnectKey = this.getClientKey(req.params);
-          if (disconnectKey && disconnectKey !== 'unknown:' && this.clientSessions.has(disconnectKey)) {
-            this.clientSessions.delete(disconnectKey);
+          const session = this.parseClientSession(req.params);
+          if (this.clientSessions.has(session.key)) {
+            this.clientSessions.delete(session.key);
           } else {
             // 兜底：删除最老的 session
             let oldest: string | null = null;
             let oldestT = Infinity;
-            for (const [k, t] of this.clientSessions) {
-              if (t < oldestT) { oldestT = t; oldest = k; }
+            for (const [k, s] of this.clientSessions) {
+              if (s.lastSeenMs < oldestT) { oldestT = s.lastSeenMs; oldest = k; }
             }
             if (oldest !== null) this.clientSessions.delete(oldest);
           }
