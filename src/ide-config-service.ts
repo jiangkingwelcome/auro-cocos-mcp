@@ -23,6 +23,12 @@ type ExecAsyncOptions = {
   stdio?: ['pipe', 'pipe', 'pipe'];
 };
 
+type NodeRuntimeDetection = {
+  ok: boolean;
+  nodeCommand: string;
+  message?: string;
+};
+
 function execAsync(command: string, options: ExecAsyncOptions = {}): Promise<{ stdout: string; stderr: string }> {
   return new Promise((resolve, reject) => {
     exec(command, options, (err, stdout, stderr) => {
@@ -175,7 +181,50 @@ function getShimPath(): string {
   return path.join(__dirname, '..', 'stdio-shim', 'mcp-stdio-shim.cjs').replace(/\\/g, '/');
 }
 
-function writeJsonConfig(configPath: string, targetIDE: string, activePort: number): { success: boolean; message: string; configPath?: string } {
+async function detectNodeRuntime(): Promise<NodeRuntimeDetection> {
+  const candidates = process.platform === 'win32'
+    ? [
+      process.env.NODE_EXE,
+      path.join(process.env.ProgramFiles || '', 'nodejs', 'node.exe'),
+      path.join(process.env['ProgramFiles(x86)'] || '', 'nodejs', 'node.exe'),
+      'node',
+    ]
+    : [process.env.NODE_EXE, '/usr/local/bin/node', '/opt/homebrew/bin/node', 'node'];
+
+  for (const rawCandidate of candidates) {
+    const candidate = String(rawCandidate || '').trim();
+    if (!candidate) continue;
+
+    if ((candidate.includes('/') || candidate.includes('\\')) && !fs.existsSync(candidate)) {
+      continue;
+    }
+
+    const escaped = candidate.includes(' ') ? `"${candidate}"` : candidate;
+    try {
+      const { stdout } = await execAsync(`${escaped} -v`, { encoding: 'utf-8', timeout: 5000 });
+      const version = (stdout || '').trim();
+      if (version) {
+        return {
+          ok: true,
+          nodeCommand: candidate,
+          message: `检测到 Node.js ${version}`,
+        };
+      }
+    } catch {
+      // try next candidate
+    }
+  }
+
+  return {
+    ok: false,
+    nodeCommand: 'node',
+    message: process.platform === 'win32'
+      ? '未检测到 Node.js。请先安装 Node.js LTS（建议 v20+），安装后重启 IDE 再重试。可使用命令：winget install OpenJS.NodeJS.LTS'
+      : '未检测到 Node.js。请先安装 Node.js LTS（建议 v20+），安装后重启 IDE 再重试。',
+  };
+}
+
+function writeJsonConfig(configPath: string, targetIDE: string, activePort: number, nodeCommand: string): { success: boolean; message: string; configPath?: string } {
   const dirPath = path.dirname(configPath);
   if (!fs.existsSync(dirPath)) {
     try {
@@ -205,7 +254,7 @@ function writeJsonConfig(configPath: string, targetIDE: string, activePort: numb
     if (key !== CANONICAL_KEY) delete servers[key];
   }
   servers[CANONICAL_KEY] = {
-    command: 'node',
+    command: nodeCommand,
     args: [shimPath],
     env: {
       COCOS_BRIDGE_PORT: String(activePort),
@@ -222,7 +271,7 @@ function writeJsonConfig(configPath: string, targetIDE: string, activePort: numb
   };
 }
 
-function writeTomlConfig(configPath: string, targetIDE: string, activePort: number): { success: boolean; message: string; configPath?: string } {
+function writeTomlConfig(configPath: string, targetIDE: string, activePort: number, nodeCommand: string): { success: boolean; message: string; configPath?: string } {
   const dirPath = path.dirname(configPath);
   if (!fs.existsSync(dirPath)) {
     try {
@@ -246,18 +295,20 @@ function writeTomlConfig(configPath: string, targetIDE: string, activePort: numb
 
   if (existing.includes(sectionHeader)) {
     const sectionRegex = /\[mcp_servers\.aura-cocos\][\s\S]*?(?=\n\[|$)/;
+    const escapedNodeCommand = nodeCommand.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
     const newSection =
       `${sectionHeader}\n` +
-      `command = "node"\n` +
+      `command = "${escapedNodeCommand}"\n` +
       `args = ["${shimPath}"]\n` +
       `\n` +
       `[mcp_servers.aura-cocos.env]\n` +
       `COCOS_BRIDGE_PORT = "${activePort}"\n`;
     existing = existing.replace(sectionRegex, newSection);
   } else {
+    const escapedNodeCommand = nodeCommand.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
     const newSection =
       `\n${sectionHeader}\n` +
-      `command = "node"\n` +
+      `command = "${escapedNodeCommand}"\n` +
       `args = ["${shimPath}"]\n` +
       `\n` +
       `[mcp_servers.aura-cocos.env]\n` +
@@ -275,15 +326,16 @@ function writeTomlConfig(configPath: string, targetIDE: string, activePort: numb
   };
 }
 
-async function configureClaudeCode(activePort: number): Promise<{ success: boolean; message: string }> {
+async function configureClaudeCode(activePort: number, nodeCommand: string): Promise<{ success: boolean; message: string }> {
   const shimPath = getShimPath();
+  const escapedNodeCommand = nodeCommand.includes(' ') ? `"${nodeCommand}"` : nodeCommand;
   try {
     try {
       await execAsync('claude mcp remove --scope user aura-cocos', { encoding: 'utf-8', timeout: 10000, stdio: ['pipe', 'pipe', 'pipe'] });
     } catch { /* may not exist yet */ }
 
     await execAsync(
-      `claude mcp add --scope user aura-cocos -e COCOS_BRIDGE_PORT=${activePort} -- node "${shimPath}"`,
+      `claude mcp add --scope user aura-cocos -e COCOS_BRIDGE_PORT=${activePort} -- ${escapedNodeCommand} "${shimPath}"`,
       { encoding: 'utf-8', timeout: 10000, stdio: ['pipe', 'pipe', 'pipe'] },
     );
 
@@ -383,9 +435,17 @@ export async function configureIDE(targetIDE: string, activePort: number, isRunn
     return { success: false, message: '服务未启动，请先启动 Aura 服务' };
   }
 
+  const nodeRuntime = await detectNodeRuntime();
+  if (!nodeRuntime.ok) {
+    return {
+      success: false,
+      message: `${nodeRuntime.message || '未检测到 Node.js'}\n\n安装完成后，请重启目标 IDE，再点击“注入配置”。`,
+    };
+  }
+
   let result;
   if (CLI_IDES.has(targetIDE)) {
-    result = await configureClaudeCode(activePort);
+    result = await configureClaudeCode(activePort, nodeRuntime.nodeCommand);
   } else {
     const configPath = getIdeConfigPath(targetIDE);
     if (!configPath) {
@@ -393,10 +453,14 @@ export async function configureIDE(targetIDE: string, activePort: number, isRunn
     }
 
     result = TOML_IDES.has(targetIDE)
-      ? writeTomlConfig(configPath, targetIDE, activePort)
-      : writeJsonConfig(configPath, targetIDE, activePort);
+      ? writeTomlConfig(configPath, targetIDE, activePort, nodeRuntime.nodeCommand)
+      : writeJsonConfig(configPath, targetIDE, activePort, nodeRuntime.nodeCommand);
   }
 
-  if (result.success) invalidateConfigStatusCache();
+  if (result.success) {
+    const detectMsg = nodeRuntime.message ? `\n\n${nodeRuntime.message}` : '';
+    result.message = `${result.message}${detectMsg}`;
+    invalidateConfigStatusCache();
+  }
   return result;
 }
