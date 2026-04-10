@@ -2696,7 +2696,12 @@ export function buildOperationHandlers(deps: SceneOperationDeps): Map<string, Op
                     while (json._props.length <= techIdx)
                         json._props.push({});
                     const changed = {};
-                    for (const [uName, uVal] of Object.entries(uniforms)) {
+                    for (const [uName, rawUniformValue] of Object.entries(uniforms)) {
+                        // 支持 Inspector/查询结果中的包装格式：{ value: [...] }
+                        const uVal = (rawUniformValue && typeof rawUniformValue === 'object' && !Array.isArray(rawUniformValue) && 'value' in rawUniformValue)
+                            ? rawUniformValue.value
+                            : rawUniformValue;
+
                         if (uVal && typeof uVal === 'object' && !Array.isArray(uVal)) {
                             const v = uVal;
                             if ('r' in v) {
@@ -2708,12 +2713,12 @@ export function buildOperationHandlers(deps: SceneOperationDeps): Map<string, Op
                                 ];
                             }
                             else if ('x' in v || 'y' in v || 'z' in v || 'w' in v) {
-                                json._props[techIdx][uName] = [
-                                    Number(v.x ?? 0),
-                                    Number(v.y ?? 0),
-                                    Number(v.z ?? 0),
-                                    Number(v.w ?? 0),
-                                ];
+                                const vec = [Number(v.x ?? 0), Number(v.y ?? 0)];
+                                if ('z' in v)
+                                    vec.push(Number(v.z ?? 0));
+                                if ('w' in v)
+                                    vec.push(Number(v.w ?? 0));
+                                json._props[techIdx][uName] = vec;
                             }
                             else {
                                 json._props[techIdx][uName] = deepCloneJson(uVal);

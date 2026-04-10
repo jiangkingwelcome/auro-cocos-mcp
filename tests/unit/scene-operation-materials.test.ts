@@ -358,6 +358,63 @@ describe('scene-operation materials', () => {
     });
   });
 
+  it('set_material_property 会解包 { value: [...] } 并写入数组形式的 uniform', async () => {
+    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'aura-mat-prop-value-wrap-'));
+    tempDirs.push(tempDir);
+    const materialUrl = 'db://assets/materials/RuntimeEditable.mtl';
+    const materialFile = path.join(tempDir, 'assets', 'materials', 'RuntimeEditable.mtl');
+    writeJson(materialFile, {
+      __type__: 'cc.Material',
+      _name: 'RuntimeEditable',
+      _effectAsset: { __uuid__: 'effect-uuid' },
+      _techIdx: 0,
+      _defines: [{}],
+      _props: [{}],
+    });
+
+    const renderer = {
+      constructor: { name: 'MeshRenderer' },
+      sharedMaterials: [{ _uuid: 'project-mat-uuid' }],
+      customMaterial: null,
+    };
+    const node = makeNode(renderer);
+    const deps = makeDeps(node);
+    const handlers = buildOperationHandlers(deps);
+    const setComponentProperty = vi.fn().mockResolvedValue({ success: true, resolvedViaEditorIPC: true });
+
+    (globalThis as any).Editor = {
+      Message: {
+        request: makeAssetDbRequestMock({
+          urlByUuid: {
+            'project-mat-uuid': materialUrl,
+          },
+          infoByUrl: {
+            [materialUrl]: { uuid: 'project-mat-uuid', url: materialUrl, file: materialFile, readonly: false },
+          },
+        }),
+      },
+    };
+
+    const result = await handlers.get('set_material_property')!(
+      { setComponentProperty } as any,
+      {} as any,
+      {
+        uuid: 'node-1',
+        materialIndex: 0,
+        uniforms: { mainColor: { value: [0, 1, 0, 1] } },
+      },
+    );
+
+    expect(result).toMatchObject({
+      success: true,
+      materialUrl,
+      materialUuid: 'project-mat-uuid',
+    });
+    expect(readJson(materialFile)).toMatchObject({
+      _props: [{ mainColor: [0, 1, 0, 1] }],
+    });
+  });
+
   it('set_material_define 会修改项目材质资产的 defines', async () => {
     const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'aura-mat-define-'));
     tempDirs.push(tempDir);

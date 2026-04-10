@@ -1585,6 +1585,9 @@ module.exports = Editor.Panel.define({
             button.removeAttribute('disabled');
             setTimeout(() => self.refreshStatus(), 500);
           } else {
+            if (self.shouldPromptNodeInstall(result)) {
+              self.showNodeInstallDialog(result.message || '未检测到 Node.js，请先安装后重试。');
+            }
             button.removeAttribute('disabled');
             button.textContent = isActive ? '取消注入' : '注入配置';
             button.classList.add('inject-fail');
@@ -1938,6 +1941,35 @@ module.exports = Editor.Panel.define({
       el.className = `config-result ${result.success ? 'success' : 'error'}`;
       self.$.configIcon.textContent = result.success ? '✓' : '✗';
       self.$.configMessage.textContent = result.message || '';
+    },
+
+    shouldPromptNodeInstall(result) {
+      if (!result || result.success) return false;
+      const msg = String(result.message || '').toLowerCase();
+      return msg.includes('node.js') || msg.includes('nodejs') || msg.includes('未检测到 node');
+    },
+
+    showNodeInstallDialog(message) {
+      const self = this;
+      const text = String(message || '未检测到 Node.js，请先安装后重试。');
+      try {
+        Editor.Dialog.info(text, {
+          title: '缺少 Node.js 运行环境',
+          buttons: ['去下载 Node.js', '我已安装，稍后重试'],
+          default: 0,
+          cancel: 1,
+        }).then((index) => {
+          if (index === 0) {
+            try {
+              Editor.Message.send('editor', 'open-url', 'https://nodejs.org/en/download');
+            } catch {
+              // ignore
+            }
+          }
+        });
+      } catch {
+        self.showSettingsResult(false, text);
+      }
     },
 
     applySettingsToUI(settings) {
