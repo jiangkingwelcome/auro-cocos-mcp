@@ -127,12 +127,12 @@ describe('tool_management', () => {
   it('disable and enable a tool', async () => {
     const ctx = makeCtx();
     const server = buildCocosToolServer(ctx);
-    await server.callTool('tool_management', { action: 'disable', toolName: 'animation_tool' });
+    await server.callTool('tool_management', { action: 'disable', toolName: 'physics_tool' });
     const listResult = await server.callTool('tool_management', { action: 'list_all' });
     const tools = (parse(listResult).tools as Array<{ name: string; enabled: boolean }>);
-    expect(tools.find(t => t.name === 'animation_tool')?.enabled).toBe(false);
+    expect(tools.find(t => t.name === 'physics_tool')?.enabled).toBe(false);
 
-    await server.callTool('tool_management', { action: 'enable', toolName: 'animation_tool' });
+    await server.callTool('tool_management', { action: 'enable', toolName: 'physics_tool' });
   });
 
   it('cannot disable tool_management itself', async () => {

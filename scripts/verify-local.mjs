@@ -14,7 +14,6 @@ async function checkPort(port) {
 let found = null;
 for (const port of ports) {
   try {
-    // eslint-disable-next-line no-await-in-loop
     const result = await checkPort(port);
     if (result) {
       found = result;

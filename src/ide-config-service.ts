@@ -435,7 +435,13 @@ export async function configureIDE(targetIDE: string, activePort: number, isRunn
     return { success: false, message: '服务未启动，请先启动 Aura 服务' };
   }
 
-  const nodeRuntime = await detectNodeRuntime();
+  const nodeRuntime = CLI_IDES.has(targetIDE)
+    ? {
+        ok: true,
+        nodeCommand: process.env.NODE_EXE?.trim() || 'node',
+        message: '',
+      }
+    : await detectNodeRuntime();
   if (!nodeRuntime.ok) {
     return {
       success: false,

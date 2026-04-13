@@ -58,6 +58,13 @@ describe('buildCocosToolServer — 工具注册完整性', () => {
     expect(names).not.toContain('setup_ui_layout');
   });
 
+  it('社区版不注册 animation_tool 和 create_tween_animation_atomic', () => {
+    const server = buildCocosToolServer(makeCtx());
+    const names = server.listTools().map((t) => t.name);
+    expect(names).not.toContain('animation_tool');
+    expect(names).not.toContain('create_tween_animation_atomic');
+  });
+
   it('每个工具都有 description 和 inputSchema', () => {
     const server = buildCocosToolServer(makeCtx());
     for (const tool of server.listTools()) {

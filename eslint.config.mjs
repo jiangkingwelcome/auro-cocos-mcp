@@ -5,9 +5,17 @@ export default tseslint.config(
   // 全局忽略
   {
     ignores: [
+      '.claude/**',
+      '.cursor/**',
       'dist/**',
+      'dist-release/**',
+      'dist-plugin-pro/**',
+      'dist-plugin-release/**',
       'coverage/**',
       'node_modules/**',
+      'native/target/**',
+      'scripts/update_theme*.js',
+      'static/**',
       '*.config.*',
       'stdio-shim/*.cjs',
     ],

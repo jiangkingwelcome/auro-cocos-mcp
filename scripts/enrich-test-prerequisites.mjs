@@ -54,9 +54,7 @@ function stepResolvePlaceholders() {
 }
 
 function inferPrerequisites(c) {
-  const { tool, action, title, expected, note, id } = c;
-  const input = c.input || {};
-  const s = str(c).toLowerCase();
+  const { tool, action, title, id } = c;
   const pp = proPrefix(tool);
   const gu = genericUuidLine(c);
 

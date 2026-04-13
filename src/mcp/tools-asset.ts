@@ -8,7 +8,6 @@ import {
   AI_RULES,
   validateRequiredParams,
   toStr,
-  type AssetInfo,
   type AssetMeta,
   type AssetEntry,
   persistenceModeSchema,
@@ -18,13 +17,6 @@ import {
 
 export function registerAssetTools(server: LocalToolServer, ctx: BridgeToolContext): void {
   const { bridgeGet, bridgePost, editorMsg, text } = ctx;
-  const isFailedResult = (result: unknown): boolean => {
-    return Boolean(
-      result
-      && typeof result === 'object'
-      && (('error' in result && result.error) || ('success' in result && result.success === false))
-    );
-  };
 
   // asset_operation (17 actions — Community Edition)
   server.tool(

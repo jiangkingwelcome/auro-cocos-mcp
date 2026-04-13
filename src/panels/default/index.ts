@@ -1236,6 +1236,8 @@ module.exports = Editor.Panel.define({
     // Pro 独占工具（社区版永远不会注册的）
     const PRO_EXCLUSIVE_TOOLS = new Set([
       'setup_ui_layout',
+      'animation_tool',
+      'create_tween_animation_atomic',
       'engine_action', 'reference_image',
       'scene_generator', 'batch_engine', 'scene_audit',
     ]);
@@ -1304,7 +1306,6 @@ module.exports = Editor.Panel.define({
       mergedNames.forEach(name => {
         const isRegistered = registeredSet.has(name);
         const isProExclusive = !isRegistered && PRO_EXCLUSIVE_TOOLS.has(name);
-        const isProTool = PRO_EXCLUSIVE_TOOLS.has(name);
         const isCore = CORE_TOOLS.includes(name);
         const enabled = isRegistered
           ? (toolStates && Object.prototype.hasOwnProperty.call(toolStates, name) ? !!toolStates[name] : self._toolEnabled[name] !== false)
@@ -1321,7 +1322,6 @@ module.exports = Editor.Panel.define({
         // Determine how many extra Pro actions exist for this tool
         const currentActionSet = registeredActionSets[name] || new Set();
         const hasProExtras = !proLicensed && isRegistered && proActions.length > currentActions.length;
-        const usingServerActions = proLicensed && isRegistered && currentActions.length > 0;
 
         const wrapper = document.createElement('div');
         wrapper.className = 'tool-wrapper';
@@ -1419,7 +1419,6 @@ module.exports = Editor.Panel.define({
           actionGrid.className = 'action-grid';
           displayActions.forEach(a => {
             const chip = document.createElement('span');
-            const isAvailable = isRegistered && (usingServerActions ? currentActionSet.has(a) : (proLicensed || currentActionSet.has(a)));
             const isProOnlyAction = isRegistered && !proLicensed && !currentActionSet.has(a);
             chip.className = 'action-chip'
               + (isProExclusive ? ' action-chip-locked' : '')

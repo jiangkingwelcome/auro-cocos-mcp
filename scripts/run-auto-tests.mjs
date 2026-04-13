@@ -111,7 +111,7 @@ async function main() {
   try {
     token = await getAuthToken();
     log(colors.green, '✓', `已连接到 ${BRIDGE_URL}`);
-  } catch (error) {
+  } catch {
     process.exit(1);
   }
 
@@ -323,7 +323,7 @@ async function main() {
     await sendMcpRequest('scene_operation', { action: 'destroy_node', uuid: sliderUuid, confirmDangerous: true }, token);
     await sendMcpRequest('asset_operation', { action: 'delete', url: 'db://assets/test-mcp-asset.txt' }, token);
     fs.unlinkSync(testImg1); fs.unlinkSync(testImg2); fs.rmdirSync(tempDir);
-  } catch (e) { }
+  } catch { }
 
   console.log('');
   process.exit(stats.failed > 0 ? 1 : 0);

@@ -74,7 +74,7 @@ const CORE_OBFUSCATOR_OPTIONS = {
   ],
 };
 
-const PANEL_OBFUSCATOR_OPTIONS = {
+const _PANEL_OBFUSCATOR_OPTIONS = {
   compact: true,
   controlFlowFlattening: false,
   deadCodeInjection: false,

@@ -46,12 +46,14 @@ Verify that scene-changing MCP operations in Cocos Creator 3.8.8:
 3. `create_prefab_atomic`
    Expected: temporary scene edits complete without save-state loss; generated prefab asset is valid.
 
-## Animation Cases
+## Pro-only Animation Cases
 1. `animation_tool.create_clip` with `savePath`
    Expected: clip asset created, `Animation.defaultClip` bound, scene marked dirty if component binding changed.
 
 2. `create_tween_animation_atomic`
    Expected: clip created/bound, scene marked dirty, reopen scene keeps animation binding.
+
+Community baseline should instead verify `scene_query.get_animation_state` remains readable.
 
 ## Physics Cases
 1. `physics_tool.add_collider`

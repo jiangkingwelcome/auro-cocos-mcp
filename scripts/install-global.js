@@ -73,7 +73,7 @@ function validatePluginSource() {
         try {
             execSync('npm run build', { cwd: PLUGIN_SOURCE_DIR, stdio: 'inherit' });
             success('自动构建完成！');
-        } catch (e) {
+        } catch {
             error('自动构建失败！请先手动执行: npm run build');
             process.exit(1);
         }
@@ -111,7 +111,7 @@ function installToProject(projectPath) {
                 // Windows Junction 使用 rmdir 删除
                 try {
                     execSync(`cmd /c rmdir "${targetLink}"`, { stdio: 'pipe' });
-                } catch (e) {
+                } catch {
                     // 如果 rmdir 失败，可能是普通目录
                     fs.rmSync(targetLink, { recursive: true, force: true });
                 }

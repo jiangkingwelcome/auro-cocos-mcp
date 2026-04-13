@@ -1,19 +1,19 @@
 # Aura 对外可信资产（功能矩阵 + 兼容矩阵 + 基准数据）
 
-> 快照日期：2026-03-20  
-> 数据来源：`docs/trust-metrics.json`、`COMPATIBILITY.md`、`package.json`、本地质量门禁实测
+> 快照日期：2026-04-13  
+> 数据来源：`docs/business/trust-metrics.json`、`COMPATIBILITY.md`、`package.json`、本地质量门禁实测
 
 ## 1) 功能矩阵（统一口径）
 
 ### 1.1 社区版（JS 运行时，已发布）
 
-**总览：16 tools / 187 actions**
+**总览：14 tools / 174 actions**
 
 | Tool | Actions | 状态 |
 |---|---:|---|
 | bridge_status | 1 | 已发布 |
 | scene_query | 50 | 已发布 |
-| scene_operation | 39 | 已发布 |
+| scene_operation | 37 | 已发布 |
 | asset_operation | 17 | 已发布 |
 | editor_action | 38 | 已发布 |
 | preferences | 7 | 已发布 |
@@ -21,30 +21,32 @@
 | tool_management | 4 | 已发布 |
 | create_prefab_atomic | 1 | 已发布 |
 | import_and_apply_texture | 1 | 已发布 |
-| create_tween_animation_atomic | 1 | 已发布 |
 | auto_fit_physics_collider | 1 | 已发布 |
 | execute_script | 1 | 已发布 |
 | register_custom_macro | 1 | 已发布 |
-| animation_tool | 10 | 已发布 |
 | physics_tool | 10 | 已发布 |
+
+补充：
+- 社区版保留动画查询能力：`scene_query.get_animation_state`
+- 动画创建、播放控制与补间动画原子工具已收敛到 Pro 版
 
 ### 1.2 Pro（Native 模块注册快照）
 
-**Native 代码注册总量：28 tools / 408 actions（含后续 phase）**
+**Native 代码注册总量：28 tools / 412 actions（含后续 phase）**
 
 | Phase | Tool 数 | Action 数 | 说明 |
 |---|---:|---:|---|
-| Phase 1 | 12 | 58 | Pro 独占基础能力（engine/script/animation/physics/reference/atomic） |
-| Phase 2 | 7 | 279 | 社区能力 Native 重写与扩展 |
+| Phase 1 | 12 | 60 | Pro 独占基础能力（engine/script/animation/physics/reference/atomic） |
+| Phase 2 | 7 | 281 | 社区能力 Native 重写与扩展 |
 | Phase 3 | 3 | 24 | AI 工具（scene_generator/batch_engine/scene_audit） |
 | Phase 4 | 5 | 37 | 高级工作流能力（脚手架/UI/动画工作流等） |
 | Phase 5 | 1 | 10 | 知识库能力 |
 
 ### 1.3 对外承诺口径（用于销售/官网）
 
-- 社区版：**187 actions**（JS，开源）
+- 社区版：**174 actions**（JS，开源）
 - Pro 版：**270+ 生产可用 actions（Phase 1-3）**
-- Native 注册快照：**最高 408 actions（含 Phase 4-5，分阶段发布）**
+- Native 注册快照：**最高 412 actions（含 Phase 4-5，分阶段发布）**
 
 ## 2) 兼容矩阵
 
@@ -58,7 +60,7 @@
 | < 3.4 | unsupported | ❌ | 不支持 |
 
 补充：
-- `package.json` 声明编辑器要求为 `>=3.6.0`（商店分发口径）
+- `package.json` 声明编辑器要求为 `>=3.8.0`
 - 3.7+ 扩展需位于项目 `extensions/`（安装脚本会处理软链接/映射）
 
 ### 2.2 操作系统
@@ -79,27 +81,27 @@
 
 ## 3) 基准数据（本地可复现）
 
-### 3.1 质量门禁结果（2026-03-20）
+### 3.1 质量门禁结果（2026-04-13）
 
 | 项目 | 结果 |
 |---|---|
 | `npm run typecheck` | ✅ 通过 |
-| `npm run lint` | ✅ 0 error / 7 warning |
-| `npm run test` | ✅ 25 files / 601 passed / 0 failed / 0 skipped |
+| `npm run lint` | ✅ 0 error / 0 warning |
+| `npm run test` | ✅ 38 files / 686 passed / 0 failed / 32 skipped |
 
 ### 3.2 执行时长（同机实测）
 
 | 命令 | 用时 |
 |---|---:|
-| `npm run typecheck` | 3.04s |
-| `npm run lint` | 3.68s |
-| `npm run test` | 16.25s |
+| `npm run typecheck` | 2.40s |
+| `npm run lint` | 3.30s |
+| `npm run test` | 11.62s |
 
 ### 3.3 跳过用例压缩
 
 - 历史基线：104 skipped
-- 当前状态：**0 skipped**
-- 做法：将历史 `it.skip/describe.skip` 转为社区版边界断言（明确 Pro action 在社区版返回 isError 或工具未注册）
+- 当前状态：**32 skipped**
+- 原因：保留了一组 Pro 动画历史用例作为参考实现，社区版边界则已转为 guardrail 断言
 
 ## 4) 复现命令
 
@@ -107,7 +109,7 @@
 # 1) 生成 Vitest JSON 报告
 npx vitest run --reporter=json --outputFile .vitest-report.json
 
-# 2) 采集功能矩阵/测试统计（输出 docs/trust-metrics.json）
+# 2) 采集功能矩阵/测试统计（输出 docs/business/trust-metrics.json）
 node scripts/collect-trust-metrics.mjs
 
 # 3) 质量门禁
@@ -119,5 +121,5 @@ npm run test
 ## 5) 口径治理规则
 
 1. 对外页、README、商业文档引用本文件为准，不单独维护分叉数字。  
-2. 版本发布前先更新 `docs/trust-metrics.json`，再同步 README/商业文档。  
+2. 版本发布前先更新 `docs/business/trust-metrics.json`，再同步 README/商业文档。  
 3. 若 Pro 某能力仅“Native 已注册但未公开发布”，状态必须写“分阶段发布”，不得写“已全面上线”。

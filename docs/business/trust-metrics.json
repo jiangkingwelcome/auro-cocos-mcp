@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-03-20T08:17:37.617Z",
+  "generatedAt": "2026-04-13T14:19:30.821Z",
   "community": {
-    "toolCount": 16,
-    "totalActions": 187,
+    "toolCount": 14,
+    "totalActions": 174,
     "rows": [
       {
         "tool": "bridge_status",
@@ -14,7 +14,7 @@
       },
       {
         "tool": "scene_operation",
-        "actions": 39
+        "actions": 37
       },
       {
         "tool": "asset_operation",
@@ -45,10 +45,6 @@
         "actions": 1
       },
       {
-        "tool": "create_tween_animation_atomic",
-        "actions": 1
-      },
-      {
         "tool": "auto_fit_physics_collider",
         "actions": 1
       },
@@ -61,10 +57,6 @@
         "actions": 1
       },
       {
-        "tool": "animation_tool",
-        "actions": 10
-      },
-      {
         "tool": "physics_tool",
         "actions": 10
       }
@@ -72,15 +64,15 @@
   },
   "proNative": {
     "toolCount": 28,
-    "totalActions": 408,
+    "totalActions": 412,
     "phaseSummary": {
       "phase1": {
         "toolCount": 12,
-        "totalActions": 58
+        "totalActions": 60
       },
       "phase2": {
         "toolCount": 7,
-        "totalActions": 279
+        "totalActions": 281
       },
       "phase3": {
         "toolCount": 3,
@@ -99,7 +91,7 @@
       {
         "file": "animation.rs",
         "tool": "animation_tool",
-        "actions": 18
+        "actions": 19
       },
       {
         "file": "anim_workflow.rs",
@@ -169,7 +161,7 @@
       {
         "file": "physics.rs",
         "tool": "physics_tool",
-        "actions": 12
+        "actions": 13
       },
       {
         "file": "atomic.rs",
@@ -209,7 +201,7 @@
       {
         "file": "scene.rs",
         "tool": "scene_operation",
-        "actions": 86
+        "actions": 88
       },
       {
         "file": "scene.rs",
@@ -239,11 +231,11 @@
     ]
   },
   "tests": {
-    "testFileCount": 25,
-    "passed": 601,
+    "testFileCount": 38,
+    "passed": 686,
     "failed": 0,
-    "skipped": 0,
+    "skipped": 32,
     "todo": 0,
-    "total": 601
+    "total": 718
   }
 }

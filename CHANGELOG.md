@@ -4,6 +4,14 @@ All notable changes to this project are documented in this file.
 
 ---
 
+## Unreleased
+
+### Changed
+- **Edition split (animation)**: Community now keeps animation inspection only (`scene_query.get_animation_state`), while animation creation and playback controls are positioned as Pro capabilities.
+- **Edition split (animation, zh-CN)**: 社区版仅保留动画查询能力（`scene_query.get_animation_state`），动画创建与播放控制能力定位到 Pro 版。
+
+---
+
 ## 1.0.14 — 2026-03-17
 
 ### Fixed

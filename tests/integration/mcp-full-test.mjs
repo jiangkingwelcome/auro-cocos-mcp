@@ -115,6 +115,7 @@ let testNodeUuid2 = '';
 let childNodeUuid = '';
 let snapshotA = null;
 let createdAssetUrl = '';
+let registeredTools = new Set();
 
 // =============================================================================
 // TEST GROUPS
@@ -142,6 +143,7 @@ async function testBasicConnectivity() {
     const result = await mcpCall('tools/list');
     assert(Array.isArray(result.tools), 'tools is not array');
     assert(result.tools.length >= 14, `only ${result.tools.length} tools`);
+    registeredTools = new Set(result.tools.map((tool) => tool.name));
     console.log(`    (${result.tools.length} tools registered, ${result.tools.reduce((s, t) => s + (t.name === 'scene_query' || t.name === 'scene_operation' || t.name === 'asset_operation' || t.name === 'editor_action' ? 1 : 0), 0)} multi-action tools)`);
   });
 }
@@ -1001,6 +1003,16 @@ async function testAtomicTools() {
   });
 
   await test('create_tween_animation_atomic', async () => {
+    if (!registeredTools.has('create_tween_animation_atomic')) {
+      const { parsed } = await callTool('create_tween_animation_atomic', {
+        nodeUuid: 'community-locked-check',
+        duration: 1,
+        tracks: [{ property: 'position', keyframes: [{ time: 0, value: { x: 0, y: 0, z: 0 } }, { time: 1, value: { x: 100, y: 0, z: 0 } }] }],
+      });
+      assertCommunityLocked(parsed, 'create_tween_animation_atomic');
+      return;
+    }
+
     // Create a temp node first
     const { parsed: node } = await callTool('scene_operation', { action: 'create_node', name: '__mcp_anim_test__' });
     if (!node.uuid) { skip('create_tween_animation_atomic', 'could not create node'); return; }

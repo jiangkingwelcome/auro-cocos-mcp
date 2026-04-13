@@ -8,14 +8,14 @@ export interface ColorLike { r: number; g: number; b: number; a: number }
 export interface AnimationComponentLike extends CocosComponent {
   clips?: AnimClipRef[];
   defaultClip?: AnimClipRef | null;
-  play?(name?: string): void;
+  play?(name?: string): AnimationStateLike | void;
   pause?(): void;
   resume?(): void;
   stop?(): void;
   crossFade?(name: string, duration: number): void;
   getState?(name: string): AnimationStateLike | null;
-  addClip?(clip: unknown, name?: string): void;
-  createState?(clip: unknown, name?: string): void;
+  addClip?(clip: unknown, name?: string): AnimationStateLike | null | void;
+  createState?(clip: unknown, name?: string): AnimationStateLike | null | void;
 }
 
 export interface AnimClipRef {
@@ -29,6 +29,16 @@ export interface AnimationStateLike {
   speed: number;
   isPlaying?: boolean;
   name?: string;
+  duration?: number;
+  repeatCount?: number;
+  wrapMode?: number;
+  sample?: number;
+  play?(): void;
+  pause?(): void;
+  resume?(): void;
+  stop?(): void;
+  setTime?(time: number): void;
+  update?(delta: number): void;
   [key: string]: unknown;
 }
 

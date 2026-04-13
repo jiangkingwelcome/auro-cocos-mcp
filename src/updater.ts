@@ -830,7 +830,11 @@ class AuraUpdater {
         if (SKIP_ON_UPDATE.has(e.name)) continue;
         const src  = path.join(extRoot, e.name);
         const dest = path.join(root, e.name);
-        e.isDirectory() ? safeMergeDir(src, dest, txLog) : safeReplaceFile(src, dest, txLog);
+        if (e.isDirectory()) {
+          safeMergeDir(src, dest, txLog);
+        } else {
+          safeReplaceFile(src, dest, txLog);
+        }
       }
 
       // ⑥ 提交事务 + 清理残留

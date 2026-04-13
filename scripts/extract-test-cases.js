@@ -23,7 +23,7 @@ let caseId = 1;
 for (const [toolName, toolData] of Object.entries(TC)) {
   for (const [actionName, cases] of Object.entries(toolData)) {
     if (Array.isArray(cases)) {
-      cases.forEach((testCase, index) => {
+      cases.forEach((testCase) => {
         testCases.push({
           id: caseId++,
           tool: toolName,

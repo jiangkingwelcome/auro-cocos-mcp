@@ -151,6 +151,6 @@ const metrics = {
   tests: collectTestMetrics(),
 };
 
-const outPath = path.resolve('docs/trust-metrics.json');
+const outPath = path.resolve('docs/business/trust-metrics.json');
 fs.writeFileSync(outPath, `${JSON.stringify(metrics, null, 2)}\n`, 'utf8');
 console.log(`Wrote ${outPath}`);

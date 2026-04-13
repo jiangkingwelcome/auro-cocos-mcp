@@ -26,6 +26,8 @@ export default defineConfig({
         'src/console-capture.ts',
         'src/ide-config-service.ts',
         'src/routes/**',
+        'src/mcp/tools-animation.ts',
+        'src/mcp/tools-atomic-animation.ts',
         'src/mcp/tools-atomic-stubs.ts',
       ],
       reporter: ['text', 'html'],

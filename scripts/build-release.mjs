@@ -31,11 +31,6 @@ function log(step, msg) {
   console.log(`\x1b[36m[${step}]\x1b[0m ${msg}`);
 }
 
-function copyFileSync(src, dest) {
-  fs.mkdirSync(path.dirname(dest), { recursive: true });
-  fs.copyFileSync(src, dest);
-}
-
 function copyDirSync(src, dest, filter) {
   if (!fs.existsSync(src)) return;
   fs.mkdirSync(dest, { recursive: true });

@@ -498,7 +498,12 @@ export function buildOperationHandlers(deps: SceneOperationDeps): Map<string, Op
     }
 
     function sanitizeFileName(name) {
-        return String(name ?? 'material').replace(/[<>:"/\\|?*\x00-\x1F]/g, '-').replace(/\s+/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '') || 'material';
+        const invalidChars = new Set(['<', '>', ':', '"', '/', '\\', '|', '?', '*']);
+        const sanitized = Array.from(String(name ?? 'material'), (char) => {
+            const code = char.charCodeAt(0);
+            return code <= 31 || invalidChars.has(char) ? '-' : char;
+        }).join('');
+        return sanitized.replace(/\s+/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '') || 'material';
     }
 
     function deepCloneJson(value) {
@@ -1351,19 +1356,12 @@ export function buildOperationHandlers(deps: SceneOperationDeps): Map<string, Op
                 const DEFAULT_NAMES = { box: 'Cube', sphere: 'Sphere', cylinder: 'Cylinder', cone: 'Cone', plane: 'Plane', torus: 'Torus', capsule: 'Capsule', quad: 'Quad' };
                 const name = String(p.name ?? DEFAULT_NAMES[resolvedType] ?? 'Primitive');
                 return (async () => {
-                    let createRes;
-                    let nodeUuid = '';
                     try {
-                        createRes = await expectSuccessfulResult(self.createChildNode(parentUuid, name), 'createChildNode 失败');
-                        nodeUuid = String(createRes.uuid ?? '');
+                        const createRes = await expectSuccessfulResult(self.createChildNode(parentUuid, name), 'createChildNode 失败');
+                        const nodeUuid = String(createRes.uuid ?? '');
                         if (!nodeUuid)
                             return { error: 'createChildNode 未返回 uuid' };
                         await expectSuccessfulResult(self.addComponent(nodeUuid, 'MeshRenderer'), '添加 MeshRenderer 失败');
-                    }
-                    catch (err) {
-                        return { error: err instanceof Error ? err.message : String(err) };
-                    }
-                    try {
                         let mesh;
                         // Try primitives API (Cocos 3.x)
                         const primFn = prims?.[resolvedType];
@@ -1420,28 +1418,28 @@ export function buildOperationHandlers(deps: SceneOperationDeps): Map<string, Op
                                 logIgnored(ErrorCategory.ENGINE_API, '设置几何体材质/颜色失败（部分版本路径不同，可能显示默认色）', e);
                             }
                         }
+                        const result = {
+                            success: true,
+                            uuid: nodeUuid,
+                            name,
+                            type: resolvedType,
+                            _structureViaEditorIPC: true,
+                            _meshMaterialViaRuntime: true,
+                            _note: 'Mesh/shadow/材质实例在运行时生成，仅 sharedMaterials 等通过 IPC 同步',
+                        };
+                        const rr = requireNode(scene, nodeUuid);
+                        if (!('error' in rr)) {
+                            const MR = cc.MeshRenderer;
+                            const mrComp = MR ? rr.node.getComponent(MR) : null;
+                            if (mrComp)
+                                await deps.notifyEditorComponentProperty(nodeUuid, rr.node, mrComp, 'sharedMaterials', { type: 'array', value: mrComp.sharedMaterials });
+                        }
+                        result._inspectorRefreshed = true;
+                        return result;
                     }
                     catch (err) {
                         return { error: `创建 ${resolvedType} 网格失败: ${err instanceof Error ? err.message : String(err)}` };
                     }
-                    const result = {
-                        success: true,
-                        uuid: nodeUuid,
-                        name,
-                        type: resolvedType,
-                        _structureViaEditorIPC: true,
-                        _meshMaterialViaRuntime: true,
-                        _note: 'Mesh/shadow/材质实例在运行时生成，仅 sharedMaterials 等通过 IPC 同步',
-                    };
-                    const rr = requireNode(scene, nodeUuid);
-                    if (!('error' in rr)) {
-                        const MR = cc.MeshRenderer;
-                        const mrComp = MR ? rr.node.getComponent(MR) : null;
-                        if (mrComp)
-                            await deps.notifyEditorComponentProperty(nodeUuid, rr.node, mrComp, 'sharedMaterials', { type: 'array', value: mrComp.sharedMaterials });
-                    }
-                    result._inspectorRefreshed = true;
-                    return result;
                 })();
             }],
         ['set_camera_look_at', (_self, scene, p) => {
@@ -3501,7 +3499,6 @@ export function buildOperationHandlers(deps: SceneOperationDeps): Map<string, Op
             }],
         ['attach_script', (self, scene, p) => {
                 const cc = getCC();
-                const { js } = cc;
                 const uuid = String(p.uuid ?? '');
                 if (!uuid)
                     return { error: '缺少 uuid 参数（目标节点 UUID）' };

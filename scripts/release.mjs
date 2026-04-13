@@ -97,7 +97,11 @@ function copyDir(src, dest) {
   fs.mkdirSync(dest, { recursive: true });
   for (const e of fs.readdirSync(src, { withFileTypes: true })) {
     const s = path.join(src, e.name), d = path.join(dest, e.name);
-    e.isDirectory() ? copyDir(s, d) : fs.copyFileSync(s, d);
+    if (e.isDirectory()) {
+      copyDir(s, d);
+    } else {
+      fs.copyFileSync(s, d);
+    }
   }
 }
 
@@ -344,13 +348,18 @@ async function main() {
 
   // ── 预检 ──────────────────────────────────────────────────────────────────
   console.log(hdr('预检'));
-  gitClean()
-    ? console.log(ok('Git 工作区干净'))
-    : console.log(wrn('工作区有未提交更改，请确认所有更改均已包含在本次发布中'));
-  ghAvail()
-    ? console.log(ok('gh CLI 可用'))
-    : OPT.skipPush ? console.log(inf('gh CLI 不可用（--skip-push 已跳过）'))
-    : console.log(wrn('gh CLI 未安装，将跳过 GitHub Release 创建'));
+  if (gitClean()) {
+    console.log(ok('Git 工作区干净'));
+  } else {
+    console.log(wrn('工作区有未提交更改，请确认所有更改均已包含在本次发布中'));
+  }
+  if (ghAvail()) {
+    console.log(ok('gh CLI 可用'));
+  } else if (OPT.skipPush) {
+    console.log(inf('gh CLI 不可用（--skip-push 已跳过）'));
+  } else {
+    console.log(wrn('gh CLI 未安装，将跳过 GitHub Release 创建'));
+  }
 
   // ── 交互收集配置 ───────────────────────────────────────────────────────────
   console.log(hdr('发布配置'));

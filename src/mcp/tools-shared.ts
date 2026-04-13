@@ -835,13 +835,13 @@ export function buildAnimJson(
   const makeRealCurve = (
     kfs: Array<{ time: number; value: number; easing?: string }>,
   ) => ({
-    __type__: 'cc.animation.RealCurve',
+    __type__: 'cc.RealCurve',
     preExtrapolation: 1,
     postExtrapolation: 1,
     keyframes: kfs.map(({ time, value, easing }) => [
       time,
       {
-        __type__: 'cc.animation.RealKeyframeValue',
+        __type__: 'cc.RealKeyframeValue',
         interpolationMode: toInterpMode(easing),
         tangentWeightMode: 0,
         value,
@@ -854,7 +854,7 @@ export function buildAnimJson(
   });
 
   const makeColorCurve = (kfs: AnimKf[]) => ({
-    __type__: 'cc.animation.ColorCurve',
+    __type__: 'cc.ColorCurve',
     preExtrapolation: 1,
     postExtrapolation: 1,
     keyframes: kfs.map((kf) => {
@@ -862,7 +862,7 @@ export function buildAnimJson(
       return [
         kf.time,
         {
-          __type__: 'cc.animation.ColorKeyframeValue',
+          __type__: 'cc.ColorKeyframeValue',
           interpolationMode: toInterpMode(kf.easing),
           value: {
             __type__: 'cc.Color',
@@ -892,6 +892,15 @@ export function buildAnimJson(
   });
 
   const VEC3_PROPS = new Set(['position', 'scale', 'eulerAngles', 'worldPosition', 'worldScale', 'worldEulerAngles']);
+  const parseVec3AxisProperty = (prop: string): { base: string; axis: 'x' | 'y' | 'z' } | null => {
+    const m = /^(position|scale|eulerAngles|worldPosition|worldScale|worldEulerAngles)\.(x|y|z)$/.exec(prop);
+    if (!m) return null;
+    return { base: m[1], axis: m[2] as 'x' | 'y' | 'z' };
+  };
+  const defaultVecAxis = (base: string, axis: 'x' | 'y' | 'z'): number => {
+    if (base === 'scale' || base === 'worldScale') return 1;
+    return axis === 'z' ? 0 : 0;
+  };
 
   const animTracks: unknown[] = [];
 
@@ -902,16 +911,33 @@ export function buildAnimJson(
     const nodePath = track.path;
     const component = track.component;
     const sampleVal = kfs[0]?.value;
-    const binding = makeBinding(nodePath, component, property);
+    const vecAxisProp = parseVec3AxisProperty(property);
+    const binding = makeBinding(nodePath, component, vecAxisProp ? vecAxisProp.base : property);
 
     const isVec3 = VEC3_PROPS.has(property)
+      || Boolean(vecAxisProp)
       || (sampleVal !== null && typeof sampleVal === 'object' && 'x' in (sampleVal as object) && !('r' in (sampleVal as object)));
     const isColor = property === 'color'
       || (sampleVal !== null && typeof sampleVal === 'object' && 'r' in (sampleVal as object) && 'g' in (sampleVal as object));
 
     if (isVec3) {
+      const axisFromVec = (ax: 'x' | 'y' | 'z') =>
+        kfs.map(kf => ({
+          time: kf.time,
+          value: ((kf.value as Record<string, number>) ?? {})[ax] ?? defaultVecAxis(vecAxisProp?.base ?? property, ax),
+          easing: kf.easing,
+        }));
+      const axisFromScalar = (ax: 'x' | 'y' | 'z') =>
+        kfs.map(kf => ({
+          time: kf.time,
+          value: vecAxisProp && vecAxisProp.axis === ax
+            ? (typeof kf.value === 'number' ? kf.value : Number(kf.value) || 0)
+            : defaultVecAxis(vecAxisProp?.base ?? property, ax),
+          easing: kf.easing,
+        }));
       const axis = (ax: 'x' | 'y' | 'z') =>
-        kfs.map(kf => ({ time: kf.time, value: ((kf.value as Record<string, number>) ?? {})[ax] ?? 0, easing: kf.easing }));
+        vecAxisProp ? axisFromScalar(ax) : axisFromVec(ax);
+
       animTracks.push({
         __type__: 'cc.animation.VectorTrack',
         _binding: binding,
@@ -925,7 +951,7 @@ export function buildAnimJson(
         _channels: [ch(makeColorCurve(kfs))],
       });
     } else {
-      // RealTrack：数值属性（opacity, position.x 等）
+      // RealTrack：数值属性（opacity 等）
       animTracks.push({
         __type__: 'cc.animation.RealTrack',
         _binding: binding,

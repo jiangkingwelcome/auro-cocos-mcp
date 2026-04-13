@@ -1,10 +1,10 @@
 window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
-  "generatedAt": "2026-03-28T08:45:44.596Z",
+  "generatedAt": "2026-04-13T14:16:31.004Z",
   "project": {
     "name": "Aura for Cocos Creator",
     "repoRelativeCasesPath": "tests/test-cases.json",
     "repoRelativeReportPath": "tests/test-report.json",
-    "totalCases": 378
+    "totalCases": 365
   },
   "plan": {
     "goals": [
@@ -59,11 +59,11 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       {
         "key": "动画工作流",
-        "count": 26
+        "count": 15
       },
       {
         "key": "核心改写",
-        "count": 112
+        "count": 110
       },
       {
         "key": "环境与连通",
@@ -96,10 +96,6 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
     ],
     "tools": [
       {
-        "key": "animation_tool",
-        "count": 11
-      },
-      {
         "key": "animation_workflow",
         "count": 15
       },
@@ -121,10 +117,6 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       {
         "key": "create_prefab_atomic",
-        "count": 2
-      },
-      {
-        "key": "create_tween_animation_atomic",
         "count": 2
       },
       {
@@ -191,7 +183,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
     "editions": [
       {
         "key": "community",
-        "count": 277
+        "count": 264
       },
       {
         "key": "pro",
@@ -201,7 +193,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
     "aiBaseline": {
       "pass": 223,
       "fail": 0,
-      "blocked": 155,
+      "blocked": 142,
       "pending": 0
     }
   },
@@ -924,8 +916,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "aiDoc": {
         "toolSummary": "Read-only inspection of the Cocos Creator scene graph. NEVER modifies anything.",
         "zhToolSummary": "对 Cocos Creator 场景图进行只读检查，不会执行任何修改。",
-        "actionDescription": "uuid(REQUIRED). List all components on a node. Each entry has name (full/engine name) and type (short name without cc. prefix, e.g. UITransform, Camera).",
-        "zhActionDescription": "uuid（必填）。列出节点上的全部组件。Each entry has name (full/engine name) and type (short name without cc. prefix, e.g. UITransform, Camera)。",
+        "actionDescription": "uuid(REQUIRED). List all components on a node.",
+        "zhActionDescription": "uuid（必填）。列出节点上的全部组件。",
         "sourceFile": "src/mcp/tools-scene.ts",
         "matched": true,
         "toolFound": true,
@@ -4258,8 +4250,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "name(REQUIRED), parentUuid(recommended, omit=scene root), siblingIndex(optional, -1=append). Returns {uuid}.",
         "zhActionDescription": "name（必填），parentUuid（推荐，省略时为场景根节点），siblingIndex（可选，-1=append）。返回{uuid}。",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -4322,8 +4314,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "name(REQUIRED), parentUuid(recommended, omit=scene root), siblingIndex(optional, -1=append). Returns {uuid}.",
         "zhActionDescription": "name（必填），parentUuid（推荐，省略时为场景根节点），siblingIndex（可选，-1=append）。返回{uuid}。",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -4387,8 +4379,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "name(REQUIRED), parentUuid(recommended, omit=scene root), siblingIndex(optional, -1=append). Returns {uuid}.",
         "zhActionDescription": "name（必填），parentUuid（推荐，省略时为场景根节点），siblingIndex（可选，-1=append）。返回{uuid}。",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -4451,8 +4443,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "uuid(REQUIRED), confirmDangerous=true(REQUIRED). Permanently removes a node.",
         "zhActionDescription": "uuid（必填），confirmDangerous=true（必填）。永久删除一个节点。",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -4514,8 +4506,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "uuid(REQUIRED), confirmDangerous=true(REQUIRED). Permanently removes a node.",
         "zhActionDescription": "uuid（必填），confirmDangerous=true（必填）。永久删除一个节点。",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -4578,8 +4570,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "uuid(REQUIRED), parentUuid(REQUIRED). Move node under a new parent.",
         "zhActionDescription": "uuid（必填），parentUuid（必填）。将节点移动到新的父节点下。",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -4641,8 +4633,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "uuid(REQUIRED), includeChildren(optional, default true). Clone node (and optionally children), returns {clonedUuid}.",
         "zhActionDescription": "uuid（必填），includeChildren（可选，默认 true）。克隆节点（可选包含子节点），并返回 {clonedUuid}。",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -4705,8 +4697,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "uuid(REQUIRED), includeChildren(optional, default true). Clone node (and optionally children), returns {clonedUuid}.",
         "zhActionDescription": "uuid（必填），includeChildren（可选，默认 true）。克隆节点（可选包含子节点），并返回 {clonedUuid}。",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -4769,16 +4761,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
-        "actionDescription": "uuid(REQUIRED), confirmDangerous=true(REQUIRED). Remove all child nodes.",
-        "zhActionDescription": "uuid（必填），confirmDangerous=true（必填）。删除该节点下的全部子节点。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
+        "actionDescription": "",
+        "zhActionDescription": "",
         "sourceFile": "src/mcp/tools-scene.ts",
-        "matched": true,
+        "matched": false,
         "toolFound": true,
         "naturalLanguageSpec": {
           "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 clear_children 动作，处理“清空子节点”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 confirmDangerous 设为 true。调用完成后重点检查：删除全部子节点。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
-          "actionGoal": "删除该节点下的全部子节点",
+          "actionGoal": "Modify the Cocos Creator scene graph (write operations)",
           "scenarioType": "参数场景",
           "scenarioTitle": "清空子节点",
           "scenarioCondition": "使用该参数组合执行一次调用",
@@ -4836,8 +4828,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "",
         "zhActionDescription": "",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -4845,7 +4837,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "toolFound": true,
         "naturalLanguageSpec": {
           "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 group_nodes 动作，处理“编组”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请传入 uuids=[\"<a>\",\"<b>\"]，把 name 设为“Group”。调用完成后重点检查：创建 Group 节点并将两个节点移入。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
-          "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
+          "actionGoal": "Modify the Cocos Creator scene graph (write operations)",
           "scenarioType": "参数场景",
           "scenarioTitle": "编组",
           "scenarioCondition": "使用该参数组合执行一次调用",
@@ -4902,8 +4894,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "uuid(REQUIRED), x/y/z(REQUIRED). Set LOCAL position.",
         "zhActionDescription": "uuid（必填），x/y/z（必填）。设置本地坐标。",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -4968,8 +4960,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "uuid(REQUIRED), x/y/z(REQUIRED). Set LOCAL euler rotation in degrees.",
         "zhActionDescription": "uuid（必填），x/y/z（必填）。设置本地欧拉旋转，单位为度。",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -5034,8 +5026,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "uuid(REQUIRED), x/y/z(REQUIRED). Set LOCAL scale (1=100%).",
         "zhActionDescription": "uuid（必填），x/y/z（必填）。设置本地缩放（1=100%）。",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -5100,8 +5092,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "uuid(REQUIRED), x/y/z(REQUIRED). Set WORLD position.",
         "zhActionDescription": "uuid（必填），x/y/z（必填）。设置世界坐标。",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -5166,8 +5158,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "uuid(REQUIRED), x/y/z(REQUIRED). Set WORLD euler rotation.",
         "zhActionDescription": "uuid（必填），x/y/z（必填）。设置世界欧拉旋转。",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -5232,8 +5224,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "uuid(REQUIRED), x/y/z(REQUIRED). Set WORLD scale.",
         "zhActionDescription": "uuid（必填），x/y/z（必填）。设置世界缩放。",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -5295,8 +5287,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "uuid(REQUIRED). Reset position/rotation/scale to defaults. resetPosition/resetRotation/resetScale(optional, default true).",
         "zhActionDescription": "uuid（必填）。Reset position/rotation/scale to defaults. resetPosition/resetRotation/resetScale(optional, default true)。",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -5360,8 +5352,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "uuid(REQUIRED). Reset position/rotation/scale to defaults. resetPosition/resetRotation/resetScale(optional, default true).",
         "zhActionDescription": "uuid（必填）。Reset position/rotation/scale to defaults. resetPosition/resetRotation/resetScale(optional, default true)。",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -5424,8 +5416,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "uuid(REQUIRED), name(REQUIRED). Rename a node.",
         "zhActionDescription": "uuid（必填），name（必填）。重命名节点。",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -5488,8 +5480,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "uuid(REQUIRED), active(REQUIRED). Enable/disable a node.",
         "zhActionDescription": "uuid（必填），active（必填）。启用或禁用节点。",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -5552,8 +5544,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "uuid(REQUIRED), active(REQUIRED). Enable/disable a node.",
         "zhActionDescription": "uuid（必填），active（必填）。启用或禁用节点。",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -5616,8 +5608,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "",
         "zhActionDescription": "",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -5625,7 +5617,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "toolFound": true,
         "naturalLanguageSpec": {
           "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 set_layer 动作，处理“设为 UI_2D”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 layer 设为 33554432。调用完成后重点检查：Layer→UI_2D。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
-          "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
+          "actionGoal": "Modify the Cocos Creator scene graph (write operations)",
           "scenarioType": "参数场景",
           "scenarioTitle": "设为 UI_2D",
           "scenarioCondition": "使用该参数组合执行一次调用",
@@ -5681,8 +5673,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "uuid(REQUIRED), anchorX/anchorY(optional, default 0.5). Set UITransform anchor point directly.",
         "zhActionDescription": "uuid（必填），anchorX/anchorY（可选，默认 0.5）。直接设置 UITransform 锚点。",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -5746,8 +5738,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "uuid(REQUIRED), width(REQUIRED), height(REQUIRED). Set UITransform content size directly.",
         "zhActionDescription": "uuid（必填），width（必填），height（必填）。直接设置 UITransform 内容尺寸。",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -5809,8 +5801,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "uuid(REQUIRED). Reorder in sibling list.",
         "zhActionDescription": "uuid（必填）。调整同级列表中的顺序。",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -5872,8 +5864,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "uuid(REQUIRED). Reorder in sibling list.",
         "zhActionDescription": "uuid（必填）。调整同级列表中的顺序。",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -5936,8 +5928,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "uuid(REQUIRED), index(REQUIRED). Set exact sibling position (0-based).",
         "zhActionDescription": "uuid（必填），index（必填）。设置精确的同级位置（从 0 开始）。",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -5999,8 +5991,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "",
         "zhActionDescription": "",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -6008,7 +6000,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "toolFound": true,
         "naturalLanguageSpec": {
           "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 lock_node 动作，处理“锁定”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：层级面板中锁定。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
-          "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
+          "actionGoal": "Modify the Cocos Creator scene graph (write operations)",
           "scenarioType": "参数场景",
           "scenarioTitle": "锁定",
           "scenarioCondition": "使用该参数组合执行一次调用",
@@ -6062,8 +6054,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "",
         "zhActionDescription": "",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -6071,7 +6063,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "toolFound": true,
         "naturalLanguageSpec": {
           "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 unlock_node 动作，处理“解锁”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：解除锁定。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
-          "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
+          "actionGoal": "Modify the Cocos Creator scene graph (write operations)",
           "scenarioType": "参数场景",
           "scenarioTitle": "解锁",
           "scenarioCondition": "使用该参数组合执行一次调用",
@@ -6125,8 +6117,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "",
         "zhActionDescription": "",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -6134,7 +6126,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "toolFound": true,
         "naturalLanguageSpec": {
           "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 hide_node 动作，处理“隐藏”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：编辑器中不可见（运行时不影响）。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
-          "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
+          "actionGoal": "Modify the Cocos Creator scene graph (write operations)",
           "scenarioType": "参数场景",
           "scenarioTitle": "隐藏",
           "scenarioCondition": "使用该参数组合执行一次调用",
@@ -6188,8 +6180,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "",
         "zhActionDescription": "",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -6197,7 +6189,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "toolFound": true,
         "naturalLanguageSpec": {
           "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 unhide_node 动作，处理“取消隐藏”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：恢复可见。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
-          "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
+          "actionGoal": "Modify the Cocos Creator scene graph (write operations)",
           "scenarioType": "参数场景",
           "scenarioTitle": "取消隐藏",
           "scenarioCondition": "使用该参数组合执行一次调用",
@@ -6252,8 +6244,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "uuid(REQUIRED), component(REQUIRED, e.g. \"Sprite\",\"Label\",\"RigidBody2D\"). Add component.",
         "zhActionDescription": "uuid（必填），component（必填，例如 \"Sprite\"、\"Label\"、\"RigidBody2D\"）。添加组件。",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -6316,8 +6308,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "uuid(REQUIRED), component(REQUIRED, e.g. \"Sprite\",\"Label\",\"RigidBody2D\"). Add component.",
         "zhActionDescription": "uuid（必填），component（必填，例如 \"Sprite\"、\"Label\"、\"RigidBody2D\"）。添加组件。",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -6380,8 +6372,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "uuid(REQUIRED), component(REQUIRED). Remove component from node.",
         "zhActionDescription": "uuid（必填），component（必填）。从节点上移除组件。",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -6446,8 +6438,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "uuid(REQUIRED), component(REQUIRED), property(REQUIRED), value(REQUIRED). Set a component property.",
         "zhActionDescription": "uuid（必填），component（必填），property（必填），value（必填）。设置组件属性。",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -6517,8 +6509,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "uuid(REQUIRED), component(REQUIRED), property(REQUIRED), value(REQUIRED). Set a component property.",
         "zhActionDescription": "uuid（必填），component（必填），property（必填），value（必填）。设置组件属性。",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -6582,8 +6574,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "uuid(REQUIRED), component(REQUIRED), property(REQUIRED). Reset property to default.",
         "zhActionDescription": "uuid（必填），component（必填），property（必填）。将属性重置为默认值。",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -6645,16 +6637,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
-        "actionDescription": "uuid(REQUIRED), component(optional). Reset all component properties to defaults. If component specified, only reset that component.",
-        "zhActionDescription": "uuid（必填），component（可选）。将所有组件属性重置为默认值。如果传入 component，则只重置该组件。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
+        "actionDescription": "",
+        "zhActionDescription": "",
         "sourceFile": "src/mcp/tools-scene.ts",
-        "matched": true,
+        "matched": false,
         "toolFound": true,
         "naturalLanguageSpec": {
           "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 reset_node_properties 动作，处理“重置全部”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：所有组件属性恢复默认。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
-          "actionGoal": "将所有组件属性重置为默认值",
+          "actionGoal": "Modify the Cocos Creator scene graph (write operations)",
           "scenarioType": "参数场景",
           "scenarioTitle": "重置全部",
           "scenarioCondition": "使用该参数组合执行一次调用",
@@ -6709,16 +6701,16 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
-        "actionDescription": "uuid(REQUIRED), component(optional). Reset all component properties to defaults. If component specified, only reset that component.",
-        "zhActionDescription": "uuid（必填），component（可选）。将所有组件属性重置为默认值。如果传入 component，则只重置该组件。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
+        "actionDescription": "",
+        "zhActionDescription": "",
         "sourceFile": "src/mcp/tools-scene.ts",
-        "matched": true,
+        "matched": false,
         "toolFound": true,
         "naturalLanguageSpec": {
           "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 reset_node_properties 动作，处理“重置指定”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 component 设为“Sprite”。调用完成后重点检查：仅 Sprite 属性重置。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
-          "actionGoal": "将所有组件属性重置为默认值",
+          "actionGoal": "Modify the Cocos Creator scene graph (write operations)",
           "scenarioType": "参数场景",
           "scenarioTitle": "重置指定",
           "scenarioCondition": "使用该参数组合执行一次调用",
@@ -6777,8 +6769,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "uuid(REQUIRED), component(REQUIRED), methodName(REQUIRED), args(optional).",
         "zhActionDescription": "uuid（必填），component（必填），methodName（必填），args（可选）。",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -6846,8 +6838,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "",
         "zhActionDescription": "",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -6855,7 +6847,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "toolFound": true,
         "naturalLanguageSpec": {
           "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 batch_set_property 动作，处理“批量设属性”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请传入 uuids=[\"<a>\",\"<b>\"]，把 component 设为“Label”，把 property 设为“fontSize”，把 value 设为 24。调用完成后重点检查：两个 Label.fontSize→24。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
-          "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
+          "actionGoal": "Modify the Cocos Creator scene graph (write operations)",
           "scenarioType": "参数场景",
           "scenarioTitle": "批量设属性",
           "scenarioCondition": "使用该参数组合执行一次调用",
@@ -6914,8 +6906,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "",
         "zhActionDescription": "",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -6923,7 +6915,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "toolFound": true,
         "naturalLanguageSpec": {
           "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 attach_script 动作，处理“一键挂载+设属性”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 script 设为“PlayerController”，传入 properties={\"speed\":15,\"maxHp\":100}。调用完成后重点检查：添加组件+设 speed=15,maxHp=100。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
-          "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
+          "actionGoal": "Modify the Cocos Creator scene graph (write operations)",
           "scenarioType": "参数场景",
           "scenarioTitle": "一键挂载+设属性",
           "scenarioCondition": "使用该参数组合执行一次调用",
@@ -6978,8 +6970,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "",
         "zhActionDescription": "",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -6987,7 +6979,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "toolFound": true,
         "naturalLanguageSpec": {
           "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 attach_script 动作，处理“防重复”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 script 设为“PlayerController”。调用完成后重点检查：已存在→{alreadyAttached:true}。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
-          "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
+          "actionGoal": "Modify the Cocos Creator scene graph (write operations)",
           "scenarioType": "参数场景",
           "scenarioTitle": "防重复",
           "scenarioCondition": "使用该参数组合执行一次调用",
@@ -7043,8 +7035,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "",
         "zhActionDescription": "",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -7052,7 +7044,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "toolFound": true,
         "naturalLanguageSpec": {
           "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 attach_script 动作，处理“允许重复”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 script 设为“PlayerController”，把 allowDuplicate 设为 true。调用完成后重点检查：再添加一个实例。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
-          "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
+          "actionGoal": "Modify the Cocos Creator scene graph (write operations)",
           "scenarioType": "参数场景",
           "scenarioTitle": "允许重复",
           "scenarioCondition": "使用该参数组合执行一次调用",
@@ -7107,8 +7099,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "",
         "zhActionDescription": "",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -7116,7 +7108,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "toolFound": true,
         "naturalLanguageSpec": {
           "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 attach_script 动作，处理“脚本未编译”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 script 设为“NewScript”。调用完成后重点检查：返回 {error:\"脚本类未注册\"}。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
-          "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
+          "actionGoal": "Modify the Cocos Creator scene graph (write operations)",
           "scenarioType": "参数场景",
           "scenarioTitle": "脚本未编译",
           "scenarioCondition": "使用该参数组合执行一次调用",
@@ -7175,8 +7167,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "",
         "zhActionDescription": "",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -7184,7 +7176,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "toolFound": true,
         "naturalLanguageSpec": {
           "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 set_component_properties 动作，处理“批量设属性”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 component 设为“Label”，传入 properties={\"string\":\"Hi\",\"fontSize\":32}。调用完成后重点检查：一次设 string+fontSize。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
-          "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
+          "actionGoal": "Modify the Cocos Creator scene graph (write operations)",
           "scenarioType": "参数场景",
           "scenarioTitle": "批量设属性",
           "scenarioCondition": "使用该参数组合执行一次调用",
@@ -7248,8 +7240,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "",
         "zhActionDescription": "",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -7257,7 +7249,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "toolFound": true,
         "naturalLanguageSpec": {
           "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 set_component_properties 动作，处理“部分失败”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 component 设为“Sprite”，传入 properties={\"spriteFrame\":\"bad\",\"color\":{\"r\":0,\"g\":255,\"b\":0,\"a\":255}}。调用完成后重点检查：color 成功,spriteFrame 报错。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
-          "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
+          "actionGoal": "Modify the Cocos Creator scene graph (write operations)",
           "scenarioType": "参数场景",
           "scenarioTitle": "部分失败",
           "scenarioCondition": "使用该参数组合执行一次调用",
@@ -7312,8 +7304,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "",
         "zhActionDescription": "",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -7321,7 +7313,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "toolFound": true,
         "naturalLanguageSpec": {
           "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 detach_script 动作，处理“移除脚本”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 script 设为“PlayerController”。调用完成后重点检查：返回 {success:true}。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
-          "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
+          "actionGoal": "Modify the Cocos Creator scene graph (write operations)",
           "scenarioType": "参数场景",
           "scenarioTitle": "移除脚本",
           "scenarioCondition": "使用该参数组合执行一次调用",
@@ -7376,8 +7368,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "",
         "zhActionDescription": "",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -7385,7 +7377,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "toolFound": true,
         "naturalLanguageSpec": {
           "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 detach_script 动作，处理“不存在”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 script 设为“NotExist”。调用完成后重点检查：返回 {error:\"没有脚本\"}。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
-          "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
+          "actionGoal": "Modify the Cocos Creator scene graph (write operations)",
           "scenarioType": "参数场景",
           "scenarioTitle": "不存在",
           "scenarioCondition": "使用该参数组合执行一次调用",
@@ -7444,8 +7436,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "",
         "zhActionDescription": "",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -7453,7 +7445,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "toolFound": true,
         "naturalLanguageSpec": {
           "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 align_nodes 动作，处理“水平居中”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请传入 uuids=[\"<a>\",\"<b>\",\"<c>\"]，把 alignment 设为“center_h”。调用完成后重点检查：三节点水平居中对齐。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
-          "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
+          "actionGoal": "Modify the Cocos Creator scene graph (write operations)",
           "scenarioType": "参数场景",
           "scenarioTitle": "水平居中",
           "scenarioCondition": "使用该参数组合执行一次调用",
@@ -7512,8 +7504,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "",
         "zhActionDescription": "",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -7521,7 +7513,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "toolFound": true,
         "naturalLanguageSpec": {
           "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 align_nodes 动作，处理“均匀分布”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请传入 uuids=[\"<a>\",\"<b>\",\"<c>\"]，把 alignment 设为“distribute_h”。调用完成后重点检查：水平均匀分布。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
-          "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
+          "actionGoal": "Modify the Cocos Creator scene graph (write operations)",
           "scenarioType": "参数场景",
           "scenarioTitle": "均匀分布",
           "scenarioCondition": "使用该参数组合执行一次调用",
@@ -7575,8 +7567,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "",
         "zhActionDescription": "",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -7584,7 +7576,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "toolFound": true,
         "naturalLanguageSpec": {
           "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 clipboard_copy 动作，处理“复制”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：节点存入剪贴板。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
-          "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
+          "actionGoal": "Modify the Cocos Creator scene graph (write operations)",
           "scenarioType": "参数场景",
           "scenarioTitle": "复制",
           "scenarioCondition": "使用该参数组合执行一次调用",
@@ -7638,8 +7630,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "",
         "zhActionDescription": "",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -7647,7 +7639,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "toolFound": true,
         "naturalLanguageSpec": {
           "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 clipboard_paste 动作，处理“粘贴”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 parentUuid 指向 <p>。调用完成后重点检查：从剪贴板粘贴到父节点下。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
-          "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
+          "actionGoal": "Modify the Cocos Creator scene graph (write operations)",
           "scenarioType": "参数场景",
           "scenarioTitle": "粘贴",
           "scenarioCondition": "使用该参数组合执行一次调用",
@@ -7702,8 +7694,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "uuid(REQUIRED), savePath(recommended, e.g. \"db://assets/prefabs/X.prefab\").",
         "zhActionDescription": "uuid（必填），savePath（推荐，例如 \"db://assets/prefabs/X.prefab\"）。",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -7755,8 +7747,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "prefabUrl(REQUIRED, db:// path to .prefab file), parentUuid(optional).",
         "zhActionDescription": "prefabUrl（必填，指向 .prefab 文件的 db：// 路径），parentUuid（可选）。",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -7819,8 +7811,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "prefabUrl(REQUIRED, db:// path to .prefab file), parentUuid(optional).",
         "zhActionDescription": "prefabUrl（必填，指向 .prefab 文件的 db：// 路径），parentUuid（可选）。",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -7882,8 +7874,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "prefabUrl(REQUIRED). Enter prefab editing mode (opens prefab as a scene). Use asset-db open-asset internally.",
         "zhActionDescription": "prefabUrl（必填）。进入预制体编辑模式（将 prefab 作为场景打开）。内部通过 asset-db open-asset 打开资源。",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -7934,8 +7926,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "sceneUrl(optional). Exit prefab editing mode and return to the previous scene. If sceneUrl omitted, opens the most recently opened scene.",
         "zhActionDescription": "sceneUrl（可选）。退出预制体编辑模式并返回上一场景。如果省略 sceneUrl，则打开最近一次打开的场景。",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -7997,8 +7989,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "uuid(REQUIRED). Apply changes to prefab asset.",
         "zhActionDescription": "uuid（必填）。将修改应用到 prefab 资源。",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -8060,8 +8052,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "uuid(REQUIRED). Restore prefab instance to original.",
         "zhActionDescription": "uuid（必填）。将 prefab 实例恢复为原始状态。",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -8113,8 +8105,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "prefabUrl(REQUIRED). Check prefab file integrity.",
         "zhActionDescription": "prefabUrl（必填）。检查 prefab 文件完整性。",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -8159,37 +8151,37 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "widgetType": "button",
         "text": "点击"
       },
-      "expected": "创建完整 Button 层级",
-      "note": "",
+      "expected": "Pro 已激活时创建完整 Button 层级；社区版应返回未开放 / 未知 action",
+      "note": "Pro only",
       "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。",
       "setupSteps": [],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "",
         "zhActionDescription": "",
         "sourceFile": "src/mcp/tools-scene.ts",
         "matched": false,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 create_ui_widget 动作，处理“创建 Button”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 widgetType 设为“button”，把 text 设为“点击”。调用完成后重点检查：创建完整 Button 层级。",
-          "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
+          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 create_ui_widget 动作，处理“创建 Button”这个参数场景。这个场景通常用于Pro only。这次请把 widgetType 设为“button”，把 text 设为“点击”。调用完成后重点检查：Pro 已激活时创建完整 Button 层级；社区版应返回未开放 / 未知 action。",
+          "actionGoal": "Modify the Cocos Creator scene graph (write operations)",
           "scenarioType": "参数场景",
           "scenarioTitle": "创建 Button",
-          "scenarioCondition": "使用该参数组合执行一次调用",
-          "scenarioNarrative": "这个场景通常用于使用该参数组合执行一次调用。",
+          "scenarioCondition": "Pro only",
+          "scenarioNarrative": "这个场景通常用于Pro only。",
           "mcpCall": "scene_operation.create_ui_widget",
           "fullPayload": "{\"action\":\"create_ui_widget\",\"widgetType\":\"button\",\"text\":\"点击\"}",
           "inputText": "widgetType=button；text=点击",
           "executionStep": "调用 scene_operation.create_ui_widget",
           "parameterNarrative": "这次请把 widgetType 设为“button”，把 text 设为“点击”。",
-          "verificationFocus": "创建完整 Button 层级",
-          "expectedText": "创建完整 Button 层级"
+          "verificationFocus": "Pro 已激活时创建完整 Button 层级；社区版应返回未开放 / 未知 action",
+          "expectedText": "Pro 已激活时创建完整 Button 层级；社区版应返回未开放 / 未知 action"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 create_ui_widget 动作，处理“创建 Button”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 widgetType 设为“button”，把 text 设为“点击”。调用完成后重点检查：创建完整 Button 层级。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 create_ui_widget 动作，处理“创建 Button”这个参数场景。这个场景通常用于Pro only。这次请把 widgetType 设为“button”，把 text 设为“点击”。调用完成后重点检查：Pro 已激活时创建完整 Button 层级；社区版应返回未开放 / 未知 action。"
       },
       "aiBaseline": {
         "status": "pass",
@@ -8213,37 +8205,37 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "widgetType": "label",
         "text": "Hello"
       },
-      "expected": "创建 Label 节点",
-      "note": "",
+      "expected": "Pro 已激活时创建 Label 节点；社区版应返回未开放 / 未知 action",
+      "note": "Pro only",
       "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。",
       "setupSteps": [],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "",
         "zhActionDescription": "",
         "sourceFile": "src/mcp/tools-scene.ts",
         "matched": false,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 create_ui_widget 动作，处理“创建 Label”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 widgetType 设为“label”，把 text 设为“Hello”。调用完成后重点检查：创建 Label 节点。",
-          "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
+          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 create_ui_widget 动作，处理“创建 Label”这个参数场景。这个场景通常用于Pro only。这次请把 widgetType 设为“label”，把 text 设为“Hello”。调用完成后重点检查：Pro 已激活时创建 Label 节点；社区版应返回未开放 / 未知 action。",
+          "actionGoal": "Modify the Cocos Creator scene graph (write operations)",
           "scenarioType": "参数场景",
           "scenarioTitle": "创建 Label",
-          "scenarioCondition": "使用该参数组合执行一次调用",
-          "scenarioNarrative": "这个场景通常用于使用该参数组合执行一次调用。",
+          "scenarioCondition": "Pro only",
+          "scenarioNarrative": "这个场景通常用于Pro only。",
           "mcpCall": "scene_operation.create_ui_widget",
           "fullPayload": "{\"action\":\"create_ui_widget\",\"widgetType\":\"label\",\"text\":\"Hello\"}",
           "inputText": "widgetType=label；text=Hello",
           "executionStep": "调用 scene_operation.create_ui_widget",
           "parameterNarrative": "这次请把 widgetType 设为“label”，把 text 设为“Hello”。",
-          "verificationFocus": "创建 Label 节点",
-          "expectedText": "创建 Label 节点"
+          "verificationFocus": "Pro 已激活时创建 Label 节点；社区版应返回未开放 / 未知 action",
+          "expectedText": "Pro 已激活时创建 Label 节点；社区版应返回未开放 / 未知 action"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 create_ui_widget 动作，处理“创建 Label”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 widgetType 设为“label”，把 text 设为“Hello”。调用完成后重点检查：创建 Label 节点。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 create_ui_widget 动作，处理“创建 Label”这个参数场景。这个场景通常用于Pro only。这次请把 widgetType 设为“label”，把 text 设为“Hello”。调用完成后重点检查：Pro 已激活时创建 Label 节点；社区版应返回未开放 / 未知 action。"
       },
       "aiBaseline": {
         "status": "pass",
@@ -8266,37 +8258,37 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "action": "create_ui_widget",
         "widgetType": "slider"
       },
-      "expected": "创建 Slider 层级",
-      "note": "",
+      "expected": "Pro 已激活时创建 Slider 层级；社区版应返回未开放 / 未知 action",
+      "note": "Pro only",
       "prerequisites": "改写场景前保存工程；destroy_node/clear_children 等须 confirmDangerous:true；ensure_2d_canvas 须用户同意后 confirmCreateCanvas:true。",
       "setupSteps": [],
       "phase": "核心改写",
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "",
         "zhActionDescription": "",
         "sourceFile": "src/mcp/tools-scene.ts",
         "matched": false,
         "toolFound": true,
         "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 create_ui_widget 动作，处理“创建 Slider”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 widgetType 设为“slider”。调用完成后重点检查：创建 Slider 层级。",
-          "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
+          "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 create_ui_widget 动作，处理“创建 Slider”这个参数场景。这个场景通常用于Pro only。这次请把 widgetType 设为“slider”。调用完成后重点检查：Pro 已激活时创建 Slider 层级；社区版应返回未开放 / 未知 action。",
+          "actionGoal": "Modify the Cocos Creator scene graph (write operations)",
           "scenarioType": "参数场景",
           "scenarioTitle": "创建 Slider",
-          "scenarioCondition": "使用该参数组合执行一次调用",
-          "scenarioNarrative": "这个场景通常用于使用该参数组合执行一次调用。",
+          "scenarioCondition": "Pro only",
+          "scenarioNarrative": "这个场景通常用于Pro only。",
           "mcpCall": "scene_operation.create_ui_widget",
           "fullPayload": "{\"action\":\"create_ui_widget\",\"widgetType\":\"slider\"}",
           "inputText": "widgetType=slider",
           "executionStep": "调用 scene_operation.create_ui_widget",
           "parameterNarrative": "这次请把 widgetType 设为“slider”。",
-          "verificationFocus": "创建 Slider 层级",
-          "expectedText": "创建 Slider 层级"
+          "verificationFocus": "Pro 已激活时创建 Slider 层级；社区版应返回未开放 / 未知 action",
+          "expectedText": "Pro 已激活时创建 Slider 层级；社区版应返回未开放 / 未知 action"
         },
-        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 create_ui_widget 动作，处理“创建 Slider”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 widgetType 设为“slider”。调用完成后重点检查：创建 Slider 层级。"
+        "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 create_ui_widget 动作，处理“创建 Slider”这个参数场景。这个场景通常用于Pro only。这次请把 widgetType 设为“slider”。调用完成后重点检查：Pro 已激活时创建 Slider 层级；社区版应返回未开放 / 未知 action。"
       },
       "aiBaseline": {
         "status": "pass",
@@ -8327,8 +8319,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "",
         "zhActionDescription": "",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -8336,7 +8328,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "toolFound": true,
         "naturalLanguageSpec": {
           "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 setup_particle 动作，处理“火焰粒子”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 preset 设为“fire”。调用完成后重点检查：创建火焰效果。",
-          "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
+          "actionGoal": "Modify the Cocos Creator scene graph (write operations)",
           "scenarioType": "参数场景",
           "scenarioTitle": "火焰粒子",
           "scenarioCondition": "使用该参数组合执行一次调用",
@@ -8379,8 +8371,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "",
         "zhActionDescription": "",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -8388,7 +8380,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "toolFound": true,
         "naturalLanguageSpec": {
           "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 setup_particle 动作，处理“默认粒子”这个状态场景。这个场景用于验证当前对象状态或默认状态下的表现。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：创建默认粒子节点。",
-          "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
+          "actionGoal": "Modify the Cocos Creator scene graph (write operations)",
           "scenarioType": "状态场景",
           "scenarioTitle": "默认粒子",
           "scenarioCondition": "无额外前置条件",
@@ -8432,8 +8424,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "",
         "zhActionDescription": "",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -8441,7 +8433,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "toolFound": true,
         "naturalLanguageSpec": {
           "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 create_skeleton_node 动作，处理“Spine”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 skeletonType 设为“spine”。调用完成后重点检查：创建 Spine 节点。",
-          "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
+          "actionGoal": "Modify the Cocos Creator scene graph (write operations)",
           "scenarioType": "参数场景",
           "scenarioTitle": "Spine",
           "scenarioCondition": "使用该参数组合执行一次调用",
@@ -8485,8 +8477,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "",
         "zhActionDescription": "",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -8494,7 +8486,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "toolFound": true,
         "naturalLanguageSpec": {
           "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 create_skeleton_node 动作，处理“DragonBones”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 skeletonType 设为“dragonbones”。调用完成后重点检查：创建龙骨节点。",
-          "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
+          "actionGoal": "Modify the Cocos Creator scene graph (write operations)",
           "scenarioType": "参数场景",
           "scenarioTitle": "DragonBones",
           "scenarioCondition": "使用该参数组合执行一次调用",
@@ -8538,8 +8530,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "",
         "zhActionDescription": "",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -8547,7 +8539,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "toolFound": true,
         "naturalLanguageSpec": {
           "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 generate_tilemap 动作，处理“瓦片地图”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 name 设为“Level1”。调用完成后重点检查：创建 TiledMap 节点。",
-          "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
+          "actionGoal": "Modify the Cocos Creator scene graph (write operations)",
           "scenarioType": "参数场景",
           "scenarioTitle": "瓦片地图",
           "scenarioCondition": "使用该参数组合执行一次调用",
@@ -8597,8 +8589,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "",
         "zhActionDescription": "",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -8606,7 +8598,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "toolFound": true,
         "naturalLanguageSpec": {
           "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 create_primitive 动作，处理“Box+颜色”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 type 设为“box”，传入 color={\"r\":255,\"g\":100,\"b\":50,\"a\":255}。调用完成后重点检查：创建橙色 Box。",
-          "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
+          "actionGoal": "Modify the Cocos Creator scene graph (write operations)",
           "scenarioType": "参数场景",
           "scenarioTitle": "Box+颜色",
           "scenarioCondition": "使用该参数组合执行一次调用",
@@ -8652,8 +8644,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "",
         "zhActionDescription": "",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -8661,7 +8653,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "toolFound": true,
         "naturalLanguageSpec": {
           "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 create_primitive 动作，处理“Sphere+阴影”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 type 设为“sphere”，把 shadowCasting 设为 true，把 receiveShadow 设为 true。调用完成后重点检查：创建可投射阴影球体。",
-          "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
+          "actionGoal": "Modify the Cocos Creator scene graph (write operations)",
           "scenarioType": "参数场景",
           "scenarioTitle": "Sphere+阴影",
           "scenarioCondition": "使用该参数组合执行一次调用",
@@ -8705,8 +8697,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "",
         "zhActionDescription": "",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -8714,7 +8706,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "toolFound": true,
         "naturalLanguageSpec": {
           "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 create_primitive 动作，处理“Cylinder”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 type 设为“cylinder”。调用完成后重点检查：创建圆柱体。",
-          "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
+          "actionGoal": "Modify the Cocos Creator scene graph (write operations)",
           "scenarioType": "参数场景",
           "scenarioTitle": "Cylinder",
           "scenarioCondition": "使用该参数组合执行一次调用",
@@ -8761,8 +8753,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "",
         "zhActionDescription": "",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -8770,7 +8762,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "toolFound": true,
         "naturalLanguageSpec": {
           "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 create_camera 动作，处理“透视摄像机”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 name 设为“MainCam”，把 fov 设为 60，把 near 设为 0.1，把 far 设为 1000。调用完成后重点检查：创建 FOV=60 摄像机。",
-          "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
+          "actionGoal": "Modify the Cocos Creator scene graph (write operations)",
           "scenarioType": "参数场景",
           "scenarioTitle": "透视摄像机",
           "scenarioCondition": "使用该参数组合执行一次调用",
@@ -8825,8 +8817,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "",
         "zhActionDescription": "",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -8834,7 +8826,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "toolFound": true,
         "naturalLanguageSpec": {
           "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 set_camera_property 动作，处理“改 FOV”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <cam>，把 fov 设为 45。调用完成后重点检查：FOV→45°。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
-          "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
+          "actionGoal": "Modify the Cocos Creator scene graph (write operations)",
           "scenarioType": "参数场景",
           "scenarioTitle": "改 FOV",
           "scenarioCondition": "使用该参数组合执行一次调用",
@@ -8894,8 +8886,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "",
         "zhActionDescription": "",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -8903,7 +8895,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "toolFound": true,
         "naturalLanguageSpec": {
           "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 set_camera_property 动作，处理“设背景色”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <cam>，传入 clearColor={\"r\":30,\"g\":30,\"b\":60,\"a\":255}。调用完成后重点检查：背景色→深蓝。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
-          "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
+          "actionGoal": "Modify the Cocos Creator scene graph (write operations)",
           "scenarioType": "参数场景",
           "scenarioTitle": "设背景色",
           "scenarioCondition": "使用该参数组合执行一次调用",
@@ -8960,8 +8952,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "",
         "zhActionDescription": "",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -8969,7 +8961,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "toolFound": true,
         "naturalLanguageSpec": {
           "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 set_camera_look_at 动作，处理“朝向原点”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <cam>，把 targetX 设为 0，把 targetY 设为 0，把 targetZ 设为 0。调用完成后重点检查：摄像机旋转朝向原点。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
-          "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
+          "actionGoal": "Modify the Cocos Creator scene graph (write operations)",
           "scenarioType": "参数场景",
           "scenarioTitle": "朝向原点",
           "scenarioCondition": "使用该参数组合执行一次调用",
@@ -9014,8 +9006,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "",
         "zhActionDescription": "",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -9023,7 +9015,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "toolFound": true,
         "naturalLanguageSpec": {
           "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 camera_screenshot 动作，处理“默认截图”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 width 设为 1024，把 height 设为 768。调用完成后重点检查：返回截图数据。",
-          "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
+          "actionGoal": "Modify the Cocos Creator scene graph (write operations)",
           "scenarioType": "参数场景",
           "scenarioTitle": "默认截图",
           "scenarioCondition": "使用该参数组合执行一次调用",
@@ -9079,8 +9071,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "",
         "zhActionDescription": "",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -9088,7 +9080,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "toolFound": true,
         "naturalLanguageSpec": {
           "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 camera_screenshot 动作，处理“指定摄像机”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <cam>，把 width 设为 512，把 height 设为 512。调用完成后重点检查：使用指定摄像机截图。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
-          "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
+          "actionGoal": "Modify the Cocos Creator scene graph (write operations)",
           "scenarioType": "参数场景",
           "scenarioTitle": "指定摄像机",
           "scenarioCondition": "使用该参数组合执行一次调用",
@@ -9150,8 +9142,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "",
         "zhActionDescription": "",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -9159,7 +9151,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "toolFound": true,
         "naturalLanguageSpec": {
           "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 set_material_property 动作，处理“设材质颜色”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，传入 uniforms={\"mainColor\":{\"r\":255,\"g\":0,\"b\":0,\"a\":255}}。调用完成后重点检查：主颜色变红。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
-          "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
+          "actionGoal": "Modify the Cocos Creator scene graph (write operations)",
           "scenarioType": "参数场景",
           "scenarioTitle": "设材质颜色",
           "scenarioCondition": "使用该参数组合执行一次调用",
@@ -9217,8 +9209,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "",
         "zhActionDescription": "",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -9226,7 +9218,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "toolFound": true,
         "naturalLanguageSpec": {
           "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 set_material_property 动作，处理“设粗糙度”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，传入 uniforms={\"roughness\":0.3,\"metallic\":0.8}。调用完成后重点检查：光滑金属质感。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
-          "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
+          "actionGoal": "Modify the Cocos Creator scene graph (write operations)",
           "scenarioType": "参数场景",
           "scenarioTitle": "设粗糙度",
           "scenarioCondition": "使用该参数组合执行一次调用",
@@ -9281,8 +9273,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "",
         "zhActionDescription": "",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -9290,7 +9282,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "toolFound": true,
         "naturalLanguageSpec": {
           "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 assign_builtin_material 动作，处理“Unlit 材质”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 effectName 设为“builtin-unlit”。调用完成后重点检查：切换到无光照材质。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
-          "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
+          "actionGoal": "Modify the Cocos Creator scene graph (write operations)",
           "scenarioType": "参数场景",
           "scenarioTitle": "Unlit 材质",
           "scenarioCondition": "使用该参数组合执行一次调用",
@@ -9351,8 +9343,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "",
         "zhActionDescription": "",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -9360,7 +9352,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "toolFound": true,
         "naturalLanguageSpec": {
           "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 assign_builtin_material 动作，处理“带颜色”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 effectName 设为“builtin-standard”，传入 color={\"r\":0,\"g\":255,\"b\":0,\"a\":255}。调用完成后重点检查：标准材质+绿色。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
-          "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
+          "actionGoal": "Modify the Cocos Creator scene graph (write operations)",
           "scenarioType": "参数场景",
           "scenarioTitle": "带颜色",
           "scenarioCondition": "使用该参数组合执行一次调用",
@@ -9415,8 +9407,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "",
         "zhActionDescription": "",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -9424,7 +9416,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "toolFound": true,
         "naturalLanguageSpec": {
           "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 assign_project_material 动作，处理“自定义材质”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 materialUrl 设为“db://assets/materials/Glass.mtl”。调用完成后重点检查：使用项目材质。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
-          "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
+          "actionGoal": "Modify the Cocos Creator scene graph (write operations)",
           "scenarioType": "参数场景",
           "scenarioTitle": "自定义材质",
           "scenarioCondition": "使用该参数组合执行一次调用",
@@ -9481,8 +9473,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "",
         "zhActionDescription": "",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -9490,7 +9482,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "toolFound": true,
         "naturalLanguageSpec": {
           "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 set_material_define 动作，处理“启用法线贴图”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，传入 defines={\"USE_NORMAL_MAP\":true}。调用完成后重点检查：Shader 宏启用并重编译。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
-          "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
+          "actionGoal": "Modify the Cocos Creator scene graph (write operations)",
           "scenarioType": "参数场景",
           "scenarioTitle": "启用法线贴图",
           "scenarioCondition": "使用该参数组合执行一次调用",
@@ -9544,8 +9536,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "",
         "zhActionDescription": "",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -9553,7 +9545,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "toolFound": true,
         "naturalLanguageSpec": {
           "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 clone_material 动作，处理“克隆材质”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：共享材质→独立实例。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
-          "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
+          "actionGoal": "Modify the Cocos Creator scene graph (write operations)",
           "scenarioType": "参数场景",
           "scenarioTitle": "克隆材质",
           "scenarioCondition": "使用该参数组合执行一次调用",
@@ -9608,8 +9600,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "",
         "zhActionDescription": "",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -9617,7 +9609,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "toolFound": true,
         "naturalLanguageSpec": {
           "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 swap_technique 动作，处理“切换 Technique”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 technique 设为 1。调用完成后重点检查：切换到第 2 个渲染技术。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
-          "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
+          "actionGoal": "Modify the Cocos Creator scene graph (write operations)",
           "scenarioType": "参数场景",
           "scenarioTitle": "切换 Technique",
           "scenarioCondition": "使用该参数组合执行一次调用",
@@ -9672,8 +9664,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "",
         "zhActionDescription": "",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -9681,7 +9673,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "toolFound": true,
         "naturalLanguageSpec": {
           "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 sprite_grayscale 动作，处理“启用灰度”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 enable 设为 true。调用完成后重点检查：Sprite 变灰色。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
-          "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
+          "actionGoal": "Modify the Cocos Creator scene graph (write operations)",
           "scenarioType": "参数场景",
           "scenarioTitle": "启用灰度",
           "scenarioCondition": "使用该参数组合执行一次调用",
@@ -9736,8 +9728,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "",
         "zhActionDescription": "",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -9745,7 +9737,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "toolFound": true,
         "naturalLanguageSpec": {
           "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 sprite_grayscale 动作，处理“恢复彩色”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 enable 设为 false。调用完成后重点检查：Sprite 恢复彩色。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
-          "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
+          "actionGoal": "Modify the Cocos Creator scene graph (write operations)",
           "scenarioType": "参数场景",
           "scenarioTitle": "恢复彩色",
           "scenarioCondition": "使用该参数组合执行一次调用",
@@ -9790,8 +9782,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "",
         "zhActionDescription": "",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -9799,7 +9791,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "toolFound": true,
         "naturalLanguageSpec": {
           "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 create_light 动作，处理“平行光”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 lightType 设为“directional”，把 rotationX 设为 -45。调用完成后重点检查：创建 45° 平行光。",
-          "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
+          "actionGoal": "Modify the Cocos Creator scene graph (write operations)",
           "scenarioType": "参数场景",
           "scenarioTitle": "平行光",
           "scenarioCondition": "使用该参数组合执行一次调用",
@@ -9848,8 +9840,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "",
         "zhActionDescription": "",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -9857,7 +9849,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "toolFound": true,
         "naturalLanguageSpec": {
           "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 create_light 动作，处理“聚光灯”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 lightType 设为“spot”，把 x 设为 0，把 y 设为 5，把 z 设为 0，把 spotAngle 设为 60，把 range 设为 20。调用完成后重点检查：创建聚光灯。",
-          "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
+          "actionGoal": "Modify the Cocos Creator scene graph (write operations)",
           "scenarioType": "参数场景",
           "scenarioTitle": "聚光灯",
           "scenarioCondition": "使用该参数组合执行一次调用",
@@ -9912,8 +9904,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "",
         "zhActionDescription": "",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -9921,7 +9913,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "toolFound": true,
         "naturalLanguageSpec": {
           "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 set_light_property 动作，处理“调亮度”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <light>，把 illuminance 设为 150000。调用完成后重点检查：亮度→150000 lux。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
-          "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
+          "actionGoal": "Modify the Cocos Creator scene graph (write operations)",
           "scenarioType": "参数场景",
           "scenarioTitle": "调亮度",
           "scenarioCondition": "使用该参数组合执行一次调用",
@@ -9977,8 +9969,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "",
         "zhActionDescription": "",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -9986,7 +9978,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "toolFound": true,
         "naturalLanguageSpec": {
           "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 set_light_property 动作，处理“开阴影”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <light>，把 shadowEnabled 设为 true，把 shadowPcf 设为 2。调用完成后重点检查：启用 PCF2 阴影。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
-          "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
+          "actionGoal": "Modify the Cocos Creator scene graph (write operations)",
           "scenarioType": "参数场景",
           "scenarioTitle": "开阴影",
           "scenarioCondition": "使用该参数组合执行一次调用",
@@ -10030,8 +10022,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "",
         "zhActionDescription": "",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -10039,7 +10031,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "toolFound": true,
         "naturalLanguageSpec": {
           "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 set_scene_environment 动作，处理“用预设”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 preset 设为“outdoor_day”。调用完成后重点检查：一键应用户外白天环境。",
-          "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
+          "actionGoal": "Modify the Cocos Creator scene graph (write operations)",
           "scenarioType": "参数场景",
           "scenarioTitle": "用预设",
           "scenarioCondition": "使用该参数组合执行一次调用",
@@ -10091,8 +10083,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "",
         "zhActionDescription": "",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -10100,7 +10092,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "toolFound": true,
         "naturalLanguageSpec": {
           "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 set_scene_environment 动作，处理“设雾效”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 subsystem 设为“fog”，把 enabled 设为 true，把 fogDensity 设为 0.05，传入 fogColor={\"r\":200,\"g\":200,\"b\":220,\"a\":255}。调用完成后重点检查：启用淡蓝雾效。",
-          "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
+          "actionGoal": "Modify the Cocos Creator scene graph (write operations)",
           "scenarioType": "参数场景",
           "scenarioTitle": "设雾效",
           "scenarioCondition": "使用该参数组合执行一次调用",
@@ -10151,8 +10143,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "",
         "zhActionDescription": "",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -10160,7 +10152,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "toolFound": true,
         "naturalLanguageSpec": {
           "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 set_scene_environment 动作，处理“设环境光”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 subsystem 设为“ambient”，把 skyIllum 设为 30000，传入 skyColor={\"r\":128,\"g\":160,\"b\":255,\"a\":255}。调用完成后重点检查：天空颜色→淡蓝。",
-          "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
+          "actionGoal": "Modify the Cocos Creator scene graph (write operations)",
           "scenarioType": "参数场景",
           "scenarioTitle": "设环境光",
           "scenarioCondition": "使用该参数组合执行一次调用",
@@ -10217,8 +10209,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "",
         "zhActionDescription": "",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -10226,7 +10218,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "toolFound": true,
         "naturalLanguageSpec": {
           "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 bind_event 动作，处理“绑定点击”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <btn>，把 eventType 设为“click”，把 component 设为“GameUI”，把 handler 设为“onClickStart”。调用完成后重点检查：Button 绑定 click→GameUI.onClickStart。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
-          "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
+          "actionGoal": "Modify the Cocos Creator scene graph (write operations)",
           "scenarioType": "参数场景",
           "scenarioTitle": "绑定点击",
           "scenarioCondition": "使用该参数组合执行一次调用",
@@ -10283,8 +10275,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "",
         "zhActionDescription": "",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -10292,7 +10284,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "toolFound": true,
         "naturalLanguageSpec": {
           "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 bind_event 动作，处理“绑定滑块”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <slider>，把 eventType 设为“slider”，把 component 设为“Settings”，把 handler 设为“onVolumeChange”。调用完成后重点检查：Slider 绑定回调。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
-          "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
+          "actionGoal": "Modify the Cocos Creator scene graph (write operations)",
           "scenarioType": "参数场景",
           "scenarioTitle": "绑定滑块",
           "scenarioCondition": "使用该参数组合执行一次调用",
@@ -10348,8 +10340,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "",
         "zhActionDescription": "",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -10357,7 +10349,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "toolFound": true,
         "naturalLanguageSpec": {
           "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 unbind_event 动作，处理“移除指定”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <btn>，把 eventType 设为“click”，把 handler 设为“onClickStart”。调用完成后重点检查：移除匹配的 handler。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
-          "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
+          "actionGoal": "Modify the Cocos Creator scene graph (write operations)",
           "scenarioType": "参数场景",
           "scenarioTitle": "移除指定",
           "scenarioCondition": "使用该参数组合执行一次调用",
@@ -10412,8 +10404,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "",
         "zhActionDescription": "",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -10421,7 +10413,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "toolFound": true,
         "naturalLanguageSpec": {
           "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 unbind_event 动作，处理“清空全部”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <btn>，把 eventType 设为“click”。调用完成后重点检查：移除所有 click 事件。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
-          "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
+          "actionGoal": "Modify the Cocos Creator scene graph (write operations)",
           "scenarioType": "参数场景",
           "scenarioTitle": "清空全部",
           "scenarioCondition": "使用该参数组合执行一次调用",
@@ -10475,8 +10467,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "",
         "zhActionDescription": "",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -10484,7 +10476,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "toolFound": true,
         "naturalLanguageSpec": {
           "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 list_events 动作，处理“列出事件”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <btn>。调用完成后重点检查：返回所有已绑定 UI 事件。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
-          "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
+          "actionGoal": "Modify the Cocos Creator scene graph (write operations)",
           "scenarioType": "参数场景",
           "scenarioTitle": "列出事件",
           "scenarioCondition": "使用该参数组合执行一次调用",
@@ -10541,8 +10533,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "",
         "zhActionDescription": "",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -10550,7 +10542,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "toolFound": true,
         "naturalLanguageSpec": {
           "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 audio_setup 动作，处理“添加音频”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 volume 设为 0.8，把 loop 设为 true，把 playOnAwake 设为 true。调用完成后重点检查：添加 AudioSource+配置。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
-          "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
+          "actionGoal": "Modify the Cocos Creator scene graph (write operations)",
           "scenarioType": "参数场景",
           "scenarioTitle": "添加音频",
           "scenarioCondition": "使用该参数组合执行一次调用",
@@ -10598,8 +10590,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "",
         "zhActionDescription": "",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -10607,7 +10599,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "toolFound": true,
         "naturalLanguageSpec": {
           "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 setup_physics_world 动作，处理“设重力”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请传入 gravity={\"x\":0,\"y\":-20,\"z\":0}。调用完成后重点检查：物理世界重力加倍。",
-          "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
+          "actionGoal": "Modify the Cocos Creator scene graph (write operations)",
           "scenarioType": "参数场景",
           "scenarioTitle": "设重力",
           "scenarioCondition": "使用该参数组合执行一次调用",
@@ -10661,8 +10653,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading.",
-        "zhToolSummary": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query。",
+        "toolSummary": "Modify the Cocos Creator scene graph (write operations). Use scene_query for reading. Community Edition only exposes the core scene graph actions below. Advanced batch/layout/material/camera/light/event/script helpers are Pro-only and are intentionally not registered here.",
+        "zhToolSummary": "Modify the Cocos Creator scene graph (write operations)。Use 场景_query for reading。Community Edition only exposes the core 场景 graph actions below。Advanced batch/layout/material/camera/light/事件/script helpers are Pro-only and are intentionally not registered here。",
         "actionDescription": "",
         "zhActionDescription": "",
         "sourceFile": "src/mcp/tools-scene.ts",
@@ -10670,7 +10662,7 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "toolFound": true,
         "naturalLanguageSpec": {
           "aiInstruction": "请通过 MCP 调用 scene_operation 工具，执行 batch 动作，处理“批量操作”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请传入 operations=[{\"action\":\"create_node\",\"name\":\"A\"},{\"action\":\"add_component\",\"uuid\":\"$0.uuid\",\"component\":\"Sprite\"}]。调用完成后重点检查：创建节点 A 并添加 Sprite，$0.uuid 引用上一步结果。",
-          "actionGoal": "修改 Cocos Creator 场景图中的内容，属于写操作；只读查询请使用 scene_query",
+          "actionGoal": "Modify the Cocos Creator scene graph (write operations)",
           "scenarioType": "参数场景",
           "scenarioTitle": "批量操作",
           "scenarioCondition": "使用该参数组合执行一次调用",
@@ -15486,729 +15478,6 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "retestReason": ""
     },
     {
-      "id": 265,
-      "tool": "animation_tool",
-      "action": "create_clip",
-      "title": "创建动画",
-      "input": {
-        "action": "create_clip",
-        "uuid": "<uuid>",
-        "duration": 1,
-        "wrapMode": "Loop",
-        "tracks": [
-          {
-            "property": "position",
-            "keyframes": [
-              {
-                "time": 0,
-                "value": {
-                  "x": 0,
-                  "y": 0,
-                  "z": 0
-                }
-              },
-              {
-                "time": 1,
-                "value": {
-                  "x": 100,
-                  "y": 0,
-                  "z": 0
-                }
-              }
-            ]
-          }
-        ]
-      },
-      "expected": "创建左右移动循环动画",
-      "note": "",
-      "prerequisites": "需目标节点存在且可挂 Animation/AnimationClip；复杂链建议先 scene_query 确认 uuid。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
-      "setupSteps": [
-        {
-          "step": 1,
-          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
-          "tool": "scene_query",
-          "action": "list",
-          "input": {
-            "action": "list"
-          }
-        }
-      ],
-      "phase": "动画工作流",
-      "priority": "P2",
-      "edition": "community",
-      "aiDoc": {
-        "toolSummary": "Manage Animation components and clips on Cocos Creator nodes. Create keyframe animations, control playback, and inspect animation state.",
-        "zhToolSummary": "Manage Animation 组件 and clips on Cocos Creator 节点s。创建keyframe 动画s, control playback, and inspect 动画 state。",
-        "actionDescription": "uuid(REQUIRED, target node), duration(optional, default 1), wrapMode(optional: Normal/Loop/PingPong), speed(optional, default 1), tracks(REQUIRED, array of keyframe tracks), savePath(optional, db://... .anim). Create and attach an AnimationClip, optionally save as asset.",
-        "zhActionDescription": "uuid（必填，目标节点），duration（可选，默认 1），wrapMode（可选：Normal/Loop/PingPong），speed（可选，默认 1），tracks（必填，关键帧轨道数组），savePath（可选，db：//... .anim 资源路径）。创建并挂载 AnimationClip，可选保存为资源。",
-        "sourceFile": "src/mcp/tools-animation.ts",
-        "matched": true,
-        "toolFound": true,
-        "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 animation_tool 工具，执行 create_clip 动作，处理“创建动画”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 duration 设为 1，把 wrapMode 设为“Loop”，传入 tracks=[{\"property\":\"position\",\"keyframes\":[{\"time\":0,\"value\":{\"x\":0,\"y\":0,\"z\":0}},{\"time\":1,\"value\":{\"x\":100,\"y\":0,\"z\":0}}]}]。调用完成后重点检查：创建左右移动循环动画。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
-          "actionGoal": "anim 资源路径）",
-          "scenarioType": "参数场景",
-          "scenarioTitle": "创建动画",
-          "scenarioCondition": "使用该参数组合执行一次调用",
-          "scenarioNarrative": "这个场景通常用于使用该参数组合执行一次调用。",
-          "mcpCall": "animation_tool.create_clip",
-          "fullPayload": "{\"action\":\"create_clip\",\"uuid\":\"<uuid>\",\"duration\":1,\"wrapMode\":\"Loop\",\"tracks\":[{\"property\":\"position\",\"keyframes\":[{\"time\":0,\"value\":{\"x\":0,\"y\":0,\"z\":0}},{\"time\":1,\"value\":{\"x\":100,\"y\":0,\"z\":0}}]}]}",
-          "inputText": "uuid=<uuid>；duration=1；wrapMode=Loop；tracks=[{\"property\":\"position\",\"keyframes\":[{\"time\":0,\"value\":{\"x\":0,\"y\":0,\"z\":0}},{\"time\":1,\"value\":{\"x\":100,\"y\":0,\"z\":0}}]}]",
-          "executionStep": "调用 animation_tool.create_clip",
-          "parameterNarrative": "这次请将 uuid 指向 <uuid>，把 duration 设为 1，把 wrapMode 设为“Loop”，传入 tracks=[{\"property\":\"position\",\"keyframes\":[{\"time\":0,\"value\":{\"x\":0,\"y\":0,\"z\":0}},{\"time\":1,\"value\":{\"x\":100,\"y\":0,\"z\":0}}]}]。",
-          "verificationFocus": "创建左右移动循环动画",
-          "expectedText": "创建左右移动循环动画"
-        },
-        "naturalLanguageTest": "请通过 MCP 调用 animation_tool 工具，执行 create_clip 动作，处理“创建动画”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 duration 设为 1，把 wrapMode 设为“Loop”，传入 tracks=[{\"property\":\"position\",\"keyframes\":[{\"time\":0,\"value\":{\"x\":0,\"y\":0,\"z\":0}},{\"time\":1,\"value\":{\"x\":100,\"y\":0,\"z\":0}}]}]。调用完成后重点检查：创建左右移动循环动画。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
-      },
-      "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
-      },
-      "manualBaseline": {
-        "status": "pending",
-        "note": ""
-      },
-      "needsRetest": false,
-      "retestReason": ""
-    },
-    {
-      "id": 266,
-      "tool": "animation_tool",
-      "action": "play",
-      "title": "播放默认",
-      "input": {
-        "action": "play",
-        "uuid": "<uuid>"
-      },
-      "expected": "播放默认动画片段",
-      "note": "",
-      "prerequisites": "需目标节点存在且可挂 Animation/AnimationClip；复杂链建议先 scene_query 确认 uuid。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
-      "setupSteps": [
-        {
-          "step": 1,
-          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
-          "tool": "scene_query",
-          "action": "list",
-          "input": {
-            "action": "list"
-          }
-        }
-      ],
-      "phase": "动画工作流",
-      "priority": "P2",
-      "edition": "community",
-      "aiDoc": {
-        "toolSummary": "Manage Animation components and clips on Cocos Creator nodes. Create keyframe animations, control playback, and inspect animation state.",
-        "zhToolSummary": "Manage Animation 组件 and clips on Cocos Creator 节点s。创建keyframe 动画s, control playback, and inspect 动画 state。",
-        "actionDescription": "uuid(REQUIRED), clipName(optional, plays default clip if omitted). Start playing an animation clip.",
-        "zhActionDescription": "uuid（必填），clipName（可选，plays 默认 clip if omitted）。开始播放动画 clip。",
-        "sourceFile": "src/mcp/tools-animation.ts",
-        "matched": true,
-        "toolFound": true,
-        "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 animation_tool 工具，执行 play 动作，处理“播放默认”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：播放默认动画片段。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
-          "actionGoal": "开始播放动画 clip",
-          "scenarioType": "参数场景",
-          "scenarioTitle": "播放默认",
-          "scenarioCondition": "使用该参数组合执行一次调用",
-          "scenarioNarrative": "这个场景通常用于使用该参数组合执行一次调用。",
-          "mcpCall": "animation_tool.play",
-          "fullPayload": "{\"action\":\"play\",\"uuid\":\"<uuid>\"}",
-          "inputText": "uuid=<uuid>",
-          "executionStep": "调用 animation_tool.play",
-          "parameterNarrative": "这次请将 uuid 指向 <uuid>。",
-          "verificationFocus": "播放默认动画片段",
-          "expectedText": "播放默认动画片段"
-        },
-        "naturalLanguageTest": "请通过 MCP 调用 animation_tool 工具，执行 play 动作，处理“播放默认”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：播放默认动画片段。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
-      },
-      "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
-      },
-      "manualBaseline": {
-        "status": "pending",
-        "note": ""
-      },
-      "needsRetest": false,
-      "retestReason": ""
-    },
-    {
-      "id": 267,
-      "tool": "animation_tool",
-      "action": "play",
-      "title": "播放指定",
-      "input": {
-        "action": "play",
-        "uuid": "<uuid>",
-        "clipName": "walk"
-      },
-      "expected": "播放 walk 片段",
-      "note": "",
-      "prerequisites": "需目标节点存在且可挂 Animation/AnimationClip；复杂链建议先 scene_query 确认 uuid。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
-      "setupSteps": [
-        {
-          "step": 1,
-          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
-          "tool": "scene_query",
-          "action": "list",
-          "input": {
-            "action": "list"
-          }
-        }
-      ],
-      "phase": "动画工作流",
-      "priority": "P2",
-      "edition": "community",
-      "aiDoc": {
-        "toolSummary": "Manage Animation components and clips on Cocos Creator nodes. Create keyframe animations, control playback, and inspect animation state.",
-        "zhToolSummary": "Manage Animation 组件 and clips on Cocos Creator 节点s。创建keyframe 动画s, control playback, and inspect 动画 state。",
-        "actionDescription": "uuid(REQUIRED), clipName(optional, plays default clip if omitted). Start playing an animation clip.",
-        "zhActionDescription": "uuid（必填），clipName（可选，plays 默认 clip if omitted）。开始播放动画 clip。",
-        "sourceFile": "src/mcp/tools-animation.ts",
-        "matched": true,
-        "toolFound": true,
-        "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 animation_tool 工具，执行 play 动作，处理“播放指定”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 clipName 设为“walk”。调用完成后重点检查：播放 walk 片段。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
-          "actionGoal": "开始播放动画 clip",
-          "scenarioType": "参数场景",
-          "scenarioTitle": "播放指定",
-          "scenarioCondition": "使用该参数组合执行一次调用",
-          "scenarioNarrative": "这个场景通常用于使用该参数组合执行一次调用。",
-          "mcpCall": "animation_tool.play",
-          "fullPayload": "{\"action\":\"play\",\"uuid\":\"<uuid>\",\"clipName\":\"walk\"}",
-          "inputText": "uuid=<uuid>；clipName=walk",
-          "executionStep": "调用 animation_tool.play",
-          "parameterNarrative": "这次请将 uuid 指向 <uuid>，把 clipName 设为“walk”。",
-          "verificationFocus": "播放 walk 片段",
-          "expectedText": "播放 walk 片段"
-        },
-        "naturalLanguageTest": "请通过 MCP 调用 animation_tool 工具，执行 play 动作，处理“播放指定”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 clipName 设为“walk”。调用完成后重点检查：播放 walk 片段。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
-      },
-      "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
-      },
-      "manualBaseline": {
-        "status": "pending",
-        "note": ""
-      },
-      "needsRetest": false,
-      "retestReason": ""
-    },
-    {
-      "id": 268,
-      "tool": "animation_tool",
-      "action": "pause",
-      "title": "暂停",
-      "input": {
-        "action": "pause",
-        "uuid": "<uuid>"
-      },
-      "expected": "动画暂停",
-      "note": "",
-      "prerequisites": "需目标节点存在且可挂 Animation/AnimationClip；复杂链建议先 scene_query 确认 uuid。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
-      "setupSteps": [
-        {
-          "step": 1,
-          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
-          "tool": "scene_query",
-          "action": "list",
-          "input": {
-            "action": "list"
-          }
-        }
-      ],
-      "phase": "动画工作流",
-      "priority": "P2",
-      "edition": "community",
-      "aiDoc": {
-        "toolSummary": "Manage Animation components and clips on Cocos Creator nodes. Create keyframe animations, control playback, and inspect animation state.",
-        "zhToolSummary": "Manage Animation 组件 and clips on Cocos Creator 节点s。创建keyframe 动画s, control playback, and inspect 动画 state。",
-        "actionDescription": "uuid(REQUIRED). Pause current animation.",
-        "zhActionDescription": "uuid（必填）。暂停当前动画。",
-        "sourceFile": "src/mcp/tools-animation.ts",
-        "matched": true,
-        "toolFound": true,
-        "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 animation_tool 工具，执行 pause 动作，处理“暂停”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：动画暂停。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
-          "actionGoal": "暂停当前动画",
-          "scenarioType": "参数场景",
-          "scenarioTitle": "暂停",
-          "scenarioCondition": "使用该参数组合执行一次调用",
-          "scenarioNarrative": "这个场景通常用于使用该参数组合执行一次调用。",
-          "mcpCall": "animation_tool.pause",
-          "fullPayload": "{\"action\":\"pause\",\"uuid\":\"<uuid>\"}",
-          "inputText": "uuid=<uuid>",
-          "executionStep": "调用 animation_tool.pause",
-          "parameterNarrative": "这次请将 uuid 指向 <uuid>。",
-          "verificationFocus": "动画暂停",
-          "expectedText": "动画暂停"
-        },
-        "naturalLanguageTest": "请通过 MCP 调用 animation_tool 工具，执行 pause 动作，处理“暂停”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：动画暂停。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
-      },
-      "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
-      },
-      "manualBaseline": {
-        "status": "pending",
-        "note": ""
-      },
-      "needsRetest": false,
-      "retestReason": ""
-    },
-    {
-      "id": 269,
-      "tool": "animation_tool",
-      "action": "resume",
-      "title": "恢复",
-      "input": {
-        "action": "resume",
-        "uuid": "<uuid>"
-      },
-      "expected": "继续播放",
-      "note": "",
-      "prerequisites": "需目标节点存在且可挂 Animation/AnimationClip；复杂链建议先 scene_query 确认 uuid。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
-      "setupSteps": [
-        {
-          "step": 1,
-          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
-          "tool": "scene_query",
-          "action": "list",
-          "input": {
-            "action": "list"
-          }
-        }
-      ],
-      "phase": "动画工作流",
-      "priority": "P2",
-      "edition": "community",
-      "aiDoc": {
-        "toolSummary": "Manage Animation components and clips on Cocos Creator nodes. Create keyframe animations, control playback, and inspect animation state.",
-        "zhToolSummary": "Manage Animation 组件 and clips on Cocos Creator 节点s。创建keyframe 动画s, control playback, and inspect 动画 state。",
-        "actionDescription": "uuid(REQUIRED). Resume paused animation.",
-        "zhActionDescription": "uuid（必填）。继续播放已暂停的动画。",
-        "sourceFile": "src/mcp/tools-animation.ts",
-        "matched": true,
-        "toolFound": true,
-        "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 animation_tool 工具，执行 resume 动作，处理“恢复”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：继续播放。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
-          "actionGoal": "继续播放已暂停的动画",
-          "scenarioType": "参数场景",
-          "scenarioTitle": "恢复",
-          "scenarioCondition": "使用该参数组合执行一次调用",
-          "scenarioNarrative": "这个场景通常用于使用该参数组合执行一次调用。",
-          "mcpCall": "animation_tool.resume",
-          "fullPayload": "{\"action\":\"resume\",\"uuid\":\"<uuid>\"}",
-          "inputText": "uuid=<uuid>",
-          "executionStep": "调用 animation_tool.resume",
-          "parameterNarrative": "这次请将 uuid 指向 <uuid>。",
-          "verificationFocus": "继续播放",
-          "expectedText": "继续播放"
-        },
-        "naturalLanguageTest": "请通过 MCP 调用 animation_tool 工具，执行 resume 动作，处理“恢复”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：继续播放。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
-      },
-      "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
-      },
-      "manualBaseline": {
-        "status": "pending",
-        "note": ""
-      },
-      "needsRetest": false,
-      "retestReason": ""
-    },
-    {
-      "id": 270,
-      "tool": "animation_tool",
-      "action": "stop",
-      "title": "停止",
-      "input": {
-        "action": "stop",
-        "uuid": "<uuid>"
-      },
-      "expected": "停止并重置",
-      "note": "",
-      "prerequisites": "需目标节点存在且可挂 Animation/AnimationClip；复杂链建议先 scene_query 确认 uuid。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
-      "setupSteps": [
-        {
-          "step": 1,
-          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
-          "tool": "scene_query",
-          "action": "list",
-          "input": {
-            "action": "list"
-          }
-        }
-      ],
-      "phase": "动画工作流",
-      "priority": "P2",
-      "edition": "community",
-      "aiDoc": {
-        "toolSummary": "Manage Animation components and clips on Cocos Creator nodes. Create keyframe animations, control playback, and inspect animation state.",
-        "zhToolSummary": "Manage Animation 组件 and clips on Cocos Creator 节点s。创建keyframe 动画s, control playback, and inspect 动画 state。",
-        "actionDescription": "uuid(REQUIRED). Stop and reset animation to beginning.",
-        "zhActionDescription": "uuid（必填）。停止动画并将时间重置到起点。",
-        "sourceFile": "src/mcp/tools-animation.ts",
-        "matched": true,
-        "toolFound": true,
-        "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 animation_tool 工具，执行 stop 动作，处理“停止”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：停止并重置。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
-          "actionGoal": "停止动画并将时间重置到起点",
-          "scenarioType": "参数场景",
-          "scenarioTitle": "停止",
-          "scenarioCondition": "使用该参数组合执行一次调用",
-          "scenarioNarrative": "这个场景通常用于使用该参数组合执行一次调用。",
-          "mcpCall": "animation_tool.stop",
-          "fullPayload": "{\"action\":\"stop\",\"uuid\":\"<uuid>\"}",
-          "inputText": "uuid=<uuid>",
-          "executionStep": "调用 animation_tool.stop",
-          "parameterNarrative": "这次请将 uuid 指向 <uuid>。",
-          "verificationFocus": "停止并重置",
-          "expectedText": "停止并重置"
-        },
-        "naturalLanguageTest": "请通过 MCP 调用 animation_tool 工具，执行 stop 动作，处理“停止”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：停止并重置。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
-      },
-      "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
-      },
-      "manualBaseline": {
-        "status": "pending",
-        "note": ""
-      },
-      "needsRetest": false,
-      "retestReason": ""
-    },
-    {
-      "id": 271,
-      "tool": "animation_tool",
-      "action": "get_state",
-      "title": "查状态",
-      "input": {
-        "action": "get_state",
-        "uuid": "<uuid>"
-      },
-      "expected": "返回 {playing,clip,time}",
-      "note": "",
-      "prerequisites": "需目标节点存在且可挂 Animation/AnimationClip；复杂链建议先 scene_query 确认 uuid。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
-      "setupSteps": [
-        {
-          "step": 1,
-          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
-          "tool": "scene_query",
-          "action": "list",
-          "input": {
-            "action": "list"
-          }
-        }
-      ],
-      "phase": "动画工作流",
-      "priority": "P2",
-      "edition": "community",
-      "aiDoc": {
-        "toolSummary": "Manage Animation components and clips on Cocos Creator nodes. Create keyframe animations, control playback, and inspect animation state.",
-        "zhToolSummary": "Manage Animation 组件 and clips on Cocos Creator 节点s。创建keyframe 动画s, control playback, and inspect 动画 state。",
-        "actionDescription": "uuid(REQUIRED). Get current animation state (playing, paused, current clip, time).",
-        "zhActionDescription": "uuid（必填）。获取当前动画状态（playing、paused、current clip、time）。",
-        "sourceFile": "src/mcp/tools-animation.ts",
-        "matched": true,
-        "toolFound": true,
-        "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 animation_tool 工具，执行 get_state 动作，处理“查状态”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：返回 {playing,clip,time}。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
-          "actionGoal": "获取当前动画状态（playing、paused、current clip、time）",
-          "scenarioType": "参数场景",
-          "scenarioTitle": "查状态",
-          "scenarioCondition": "使用该参数组合执行一次调用",
-          "scenarioNarrative": "这个场景通常用于使用该参数组合执行一次调用。",
-          "mcpCall": "animation_tool.get_state",
-          "fullPayload": "{\"action\":\"get_state\",\"uuid\":\"<uuid>\"}",
-          "inputText": "uuid=<uuid>",
-          "executionStep": "调用 animation_tool.get_state",
-          "parameterNarrative": "这次请将 uuid 指向 <uuid>。",
-          "verificationFocus": "返回 {playing,clip,time}",
-          "expectedText": "返回 {playing,clip,time}"
-        },
-        "naturalLanguageTest": "请通过 MCP 调用 animation_tool 工具，执行 get_state 动作，处理“查状态”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：返回 {playing,clip,time}。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
-      },
-      "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
-      },
-      "manualBaseline": {
-        "status": "pending",
-        "note": ""
-      },
-      "needsRetest": false,
-      "retestReason": ""
-    },
-    {
-      "id": 272,
-      "tool": "animation_tool",
-      "action": "list_clips",
-      "title": "列出片段",
-      "input": {
-        "action": "list_clips",
-        "uuid": "<uuid>"
-      },
-      "expected": "返回动画片段名称列表",
-      "note": "",
-      "prerequisites": "需目标节点存在且可挂 Animation/AnimationClip；复杂链建议先 scene_query 确认 uuid。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
-      "setupSteps": [
-        {
-          "step": 1,
-          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
-          "tool": "scene_query",
-          "action": "list",
-          "input": {
-            "action": "list"
-          }
-        }
-      ],
-      "phase": "动画工作流",
-      "priority": "P2",
-      "edition": "community",
-      "aiDoc": {
-        "toolSummary": "Manage Animation components and clips on Cocos Creator nodes. Create keyframe animations, control playback, and inspect animation state.",
-        "zhToolSummary": "Manage Animation 组件 and clips on Cocos Creator 节点s。创建keyframe 动画s, control playback, and inspect 动画 state。",
-        "actionDescription": "uuid(REQUIRED). List all animation clips on a node.",
-        "zhActionDescription": "uuid（必填）。列出节点上的全部动画 clip。",
-        "sourceFile": "src/mcp/tools-animation.ts",
-        "matched": true,
-        "toolFound": true,
-        "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 animation_tool 工具，执行 list_clips 动作，处理“列出片段”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：返回动画片段名称列表。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
-          "actionGoal": "列出节点上的全部动画 clip",
-          "scenarioType": "参数场景",
-          "scenarioTitle": "列出片段",
-          "scenarioCondition": "使用该参数组合执行一次调用",
-          "scenarioNarrative": "这个场景通常用于使用该参数组合执行一次调用。",
-          "mcpCall": "animation_tool.list_clips",
-          "fullPayload": "{\"action\":\"list_clips\",\"uuid\":\"<uuid>\"}",
-          "inputText": "uuid=<uuid>",
-          "executionStep": "调用 animation_tool.list_clips",
-          "parameterNarrative": "这次请将 uuid 指向 <uuid>。",
-          "verificationFocus": "返回动画片段名称列表",
-          "expectedText": "返回动画片段名称列表"
-        },
-        "naturalLanguageTest": "请通过 MCP 调用 animation_tool 工具，执行 list_clips 动作，处理“列出片段”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：返回动画片段名称列表。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
-      },
-      "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
-      },
-      "manualBaseline": {
-        "status": "pending",
-        "note": ""
-      },
-      "needsRetest": false,
-      "retestReason": ""
-    },
-    {
-      "id": 273,
-      "tool": "animation_tool",
-      "action": "set_current_time",
-      "title": "跳转时间",
-      "input": {
-        "action": "set_current_time",
-        "uuid": "<uuid>",
-        "time": 0.5
-      },
-      "expected": "跳转到 0.5 秒",
-      "note": "",
-      "prerequisites": "需目标节点存在且可挂 Animation/AnimationClip；复杂链建议先 scene_query 确认 uuid。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
-      "setupSteps": [
-        {
-          "step": 1,
-          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
-          "tool": "scene_query",
-          "action": "list",
-          "input": {
-            "action": "list"
-          }
-        }
-      ],
-      "phase": "动画工作流",
-      "priority": "P2",
-      "edition": "community",
-      "aiDoc": {
-        "toolSummary": "Manage Animation components and clips on Cocos Creator nodes. Create keyframe animations, control playback, and inspect animation state.",
-        "zhToolSummary": "Manage Animation 组件 and clips on Cocos Creator 节点s。创建keyframe 动画s, control playback, and inspect 动画 state。",
-        "actionDescription": "uuid(REQUIRED), time(REQUIRED, seconds). Seek animation to a specific time.",
-        "zhActionDescription": "uuid（必填），time（必填，秒）。将动画跳转到指定时间。",
-        "sourceFile": "src/mcp/tools-animation.ts",
-        "matched": true,
-        "toolFound": true,
-        "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 animation_tool 工具，执行 set_current_time 动作，处理“跳转时间”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 time 设为 0.5。调用完成后重点检查：跳转到 0.5 秒。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
-          "actionGoal": "将动画跳转到指定时间",
-          "scenarioType": "参数场景",
-          "scenarioTitle": "跳转时间",
-          "scenarioCondition": "使用该参数组合执行一次调用",
-          "scenarioNarrative": "这个场景通常用于使用该参数组合执行一次调用。",
-          "mcpCall": "animation_tool.set_current_time",
-          "fullPayload": "{\"action\":\"set_current_time\",\"uuid\":\"<uuid>\",\"time\":0.5}",
-          "inputText": "uuid=<uuid>；time=0.5",
-          "executionStep": "调用 animation_tool.set_current_time",
-          "parameterNarrative": "这次请将 uuid 指向 <uuid>，把 time 设为 0.5。",
-          "verificationFocus": "跳转到 0.5 秒",
-          "expectedText": "跳转到 0.5 秒"
-        },
-        "naturalLanguageTest": "请通过 MCP 调用 animation_tool 工具，执行 set_current_time 动作，处理“跳转时间”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 time 设为 0.5。调用完成后重点检查：跳转到 0.5 秒。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
-      },
-      "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
-      },
-      "manualBaseline": {
-        "status": "pending",
-        "note": ""
-      },
-      "needsRetest": false,
-      "retestReason": ""
-    },
-    {
-      "id": 274,
-      "tool": "animation_tool",
-      "action": "set_speed",
-      "title": "倍速播放",
-      "input": {
-        "action": "set_speed",
-        "uuid": "<uuid>",
-        "speed": 2
-      },
-      "expected": "2 倍速播放",
-      "note": "",
-      "prerequisites": "需目标节点存在且可挂 Animation/AnimationClip；复杂链建议先 scene_query 确认 uuid。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
-      "setupSteps": [
-        {
-          "step": 1,
-          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
-          "tool": "scene_query",
-          "action": "list",
-          "input": {
-            "action": "list"
-          }
-        }
-      ],
-      "phase": "动画工作流",
-      "priority": "P2",
-      "edition": "community",
-      "aiDoc": {
-        "toolSummary": "Manage Animation components and clips on Cocos Creator nodes. Create keyframe animations, control playback, and inspect animation state.",
-        "zhToolSummary": "Manage Animation 组件 and clips on Cocos Creator 节点s。创建keyframe 动画s, control playback, and inspect 动画 state。",
-        "actionDescription": "uuid(REQUIRED), speed(REQUIRED). Set animation playback speed (1.0 = normal).",
-        "zhActionDescription": "uuid（必填），speed（必填）。设置动画播放速度（1.0 为正常速度）。",
-        "sourceFile": "src/mcp/tools-animation.ts",
-        "matched": true,
-        "toolFound": true,
-        "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 animation_tool 工具，执行 set_speed 动作，处理“倍速播放”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 speed 设为 2。调用完成后重点检查：2 倍速播放。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
-          "actionGoal": "设置动画播放速度（1",
-          "scenarioType": "参数场景",
-          "scenarioTitle": "倍速播放",
-          "scenarioCondition": "使用该参数组合执行一次调用",
-          "scenarioNarrative": "这个场景通常用于使用该参数组合执行一次调用。",
-          "mcpCall": "animation_tool.set_speed",
-          "fullPayload": "{\"action\":\"set_speed\",\"uuid\":\"<uuid>\",\"speed\":2}",
-          "inputText": "uuid=<uuid>；speed=2",
-          "executionStep": "调用 animation_tool.set_speed",
-          "parameterNarrative": "这次请将 uuid 指向 <uuid>，把 speed 设为 2。",
-          "verificationFocus": "2 倍速播放",
-          "expectedText": "2 倍速播放"
-        },
-        "naturalLanguageTest": "请通过 MCP 调用 animation_tool 工具，执行 set_speed 动作，处理“倍速播放”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 speed 设为 2。调用完成后重点检查：2 倍速播放。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
-      },
-      "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
-      },
-      "manualBaseline": {
-        "status": "pending",
-        "note": ""
-      },
-      "needsRetest": false,
-      "retestReason": ""
-    },
-    {
-      "id": 275,
-      "tool": "animation_tool",
-      "action": "crossfade",
-      "title": "交叉淡入",
-      "input": {
-        "action": "crossfade",
-        "uuid": "<uuid>",
-        "clipName": "run",
-        "duration": 0.3
-      },
-      "expected": "0.3 秒内淡入 run 动画",
-      "note": "",
-      "prerequisites": "需目标节点存在且可挂 Animation/AnimationClip；复杂链建议先 scene_query 确认 uuid。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
-      "setupSteps": [
-        {
-          "step": 1,
-          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
-          "tool": "scene_query",
-          "action": "list",
-          "input": {
-            "action": "list"
-          }
-        }
-      ],
-      "phase": "动画工作流",
-      "priority": "P2",
-      "edition": "community",
-      "aiDoc": {
-        "toolSummary": "Manage Animation components and clips on Cocos Creator nodes. Create keyframe animations, control playback, and inspect animation state.",
-        "zhToolSummary": "Manage Animation 组件 and clips on Cocos Creator 节点s。创建keyframe 动画s, control playback, and inspect 动画 state。",
-        "actionDescription": "uuid(REQUIRED), clipName(REQUIRED), duration(optional, default 0.3). Crossfade to another animation clip.",
-        "zhActionDescription": "uuid（必填），clipName（必填），duration（可选，默认 0.3）。淡入淡出切换到另一个动画 clip。",
-        "sourceFile": "src/mcp/tools-animation.ts",
-        "matched": true,
-        "toolFound": true,
-        "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 animation_tool 工具，执行 crossfade 动作，处理“交叉淡入”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 clipName 设为“run”，把 duration 设为 0.3。调用完成后重点检查：0.3 秒内淡入 run 动画。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
-          "actionGoal": "3）",
-          "scenarioType": "参数场景",
-          "scenarioTitle": "交叉淡入",
-          "scenarioCondition": "使用该参数组合执行一次调用",
-          "scenarioNarrative": "这个场景通常用于使用该参数组合执行一次调用。",
-          "mcpCall": "animation_tool.crossfade",
-          "fullPayload": "{\"action\":\"crossfade\",\"uuid\":\"<uuid>\",\"clipName\":\"run\",\"duration\":0.3}",
-          "inputText": "uuid=<uuid>；clipName=run；duration=0.3",
-          "executionStep": "调用 animation_tool.crossfade",
-          "parameterNarrative": "这次请将 uuid 指向 <uuid>，把 clipName 设为“run”，把 duration 设为 0.3。",
-          "verificationFocus": "0.3 秒内淡入 run 动画",
-          "expectedText": "0.3 秒内淡入 run 动画"
-        },
-        "naturalLanguageTest": "请通过 MCP 调用 animation_tool 工具，执行 crossfade 动作，处理“交叉淡入”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 clipName 设为“run”，把 duration 设为 0.3。调用完成后重点检查：0.3 秒内淡入 run 动画。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
-      },
-      "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
-      },
-      "manualBaseline": {
-        "status": "pending",
-        "note": ""
-      },
-      "needsRetest": false,
-      "retestReason": ""
-    },
-    {
       "id": 276,
       "tool": "physics_tool",
       "action": "get_collider_info",
@@ -18239,8 +17508,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P3",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Execute arbitrary scene-script methods in the Cocos Creator scene context. Use this as an ESCAPE HATCH when the other tools (scene_query, scene_operation, asset_operation, editor_action) do not cover your needs. The method runs inside the editor scene process with full access to the engine API (cc.*, nodes, components). Parameters: - method(REQUIRED): Name of the scene-script method to call. Common methods: \"dispatchQuery\", \"dispatchOperation\", \"createChildNode\", \"setNodePosition\". - args(optional): Array of arguments to pass to the method. Each element is a positional argument. WARNING: This tool has NO validation. Prefer using the specific tools (scene_query, scene_operation) when possible. Returns: The raw return value from the scene method, JSON-serialized. On error: {error:\"message\"}. Prerequisites: The method must be exposed by scene.ts (see listMethods for available methods). For dispatchQuery/dispatchOperation, args is [{action:\"...\", ...params}].",
-        "zhToolSummary": "Execute arbitrary 场景-script methods in the Cocos Creator 场景 context。Use this as an ESCAPE HATCH when the other 工具s (场景_query, 场景_operation, 资源_operation, editor_action) do not cover your needs。The method runs inside the editor 场景 process with full access to the engine API (cc.*, 节点s, 组件)。Parameters: - method(REQUIRED): Name of the 场景-script method to call。Common methods: \"dispatchQuery\", \"dispatchOperation\", \"createChildNode\", \"setNodePosition\". - args(optional): Array of arguments to pass to the method。Each element is a positional argument。WARNING: This 工具 has NO validation。Prefer using the specific 工具s (场景_query, 场景_operation) when possible。Returns: The raw return value from the 场景 method, JSON-serialized。On error: {error:\"message\"}。Prerequisites: The method must be exposed by 场景.ts (see listMethods for available methods)。For dispatchQuery/dispatchOperation, args is [{action:\"...\", ...params}]。",
+        "toolSummary": "Execute arbitrary scene-script methods in the Cocos Creator scene context. Use this as an ESCAPE HATCH when the other tools (scene_query, scene_operation, asset_operation, editor_action) do not cover your needs. The method runs inside the editor scene process with full access to the engine API (cc.*, nodes, components). Parameters: - method(REQUIRED): Name of the scene-script method to call. Common methods: \"dispatchQuery\", \"dispatchOperation\", \"createChildNode\", \"setNodePosition\". - args(optional): Array of arguments to pass to the method. Each element is a positional argument. - persistenceMode(optional: warn/auto-save/strict). For mutating scene methods, controls whether successful writes only warn, auto-save, or fail in strict persistence mode. WARNING: This tool has NO validation. Prefer using the specific tools (scene_query, scene_operation) when possible. Returns: The raw return value from the scene method, JSON-serialized. On error: {error:\"message\"}. Prerequisites: The method must be exposed by scene.ts (see listMethods for available methods). For dispatchQuery/dispatchOperation, args is [{action:\"...\", ...params}].",
+        "zhToolSummary": "Execute arbitrary 场景-script methods in the Cocos Creator 场景 context。Use this as an ESCAPE HATCH when the other 工具s (场景_query, 场景_operation, 资源_operation, editor_action) do not cover your needs。The method runs inside the editor 场景 process with full access to the engine API (cc.*, 节点s, 组件)。Parameters: - method(REQUIRED): Name of the 场景-script method to call。Common methods: \"dispatchQuery\", \"dispatchOperation\", \"createChildNode\", \"setNodePosition\". - args(optional): Array of arguments to pass to the method。Each element is a positional argument. - persistenceMode(optional: warn/auto-save/strict)。For mutating 场景 methods, controls whether successful writes only warn, auto-save, or fail in strict persistence mode。WARNING: This 工具 has NO validation。Prefer using the specific 工具s (场景_query, 场景_operation) when possible。Returns: The raw return value from the 场景 method, JSON-serialized。On error: {error:\"message\"}。Prerequisites: The method must be exposed by 场景.ts (see listMethods for available methods)。For dispatchQuery/dispatchOperation, args is [{action:\"...\", ...params}]。",
         "actionDescription": "",
         "zhActionDescription": "",
         "sourceFile": "src/mcp/tools-script.ts",
@@ -18297,8 +17566,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P3",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Execute arbitrary scene-script methods in the Cocos Creator scene context. Use this as an ESCAPE HATCH when the other tools (scene_query, scene_operation, asset_operation, editor_action) do not cover your needs. The method runs inside the editor scene process with full access to the engine API (cc.*, nodes, components). Parameters: - method(REQUIRED): Name of the scene-script method to call. Common methods: \"dispatchQuery\", \"dispatchOperation\", \"createChildNode\", \"setNodePosition\". - args(optional): Array of arguments to pass to the method. Each element is a positional argument. WARNING: This tool has NO validation. Prefer using the specific tools (scene_query, scene_operation) when possible. Returns: The raw return value from the scene method, JSON-serialized. On error: {error:\"message\"}. Prerequisites: The method must be exposed by scene.ts (see listMethods for available methods). For dispatchQuery/dispatchOperation, args is [{action:\"...\", ...params}].",
-        "zhToolSummary": "Execute arbitrary 场景-script methods in the Cocos Creator 场景 context。Use this as an ESCAPE HATCH when the other 工具s (场景_query, 场景_operation, 资源_operation, editor_action) do not cover your needs。The method runs inside the editor 场景 process with full access to the engine API (cc.*, 节点s, 组件)。Parameters: - method(REQUIRED): Name of the 场景-script method to call。Common methods: \"dispatchQuery\", \"dispatchOperation\", \"createChildNode\", \"setNodePosition\". - args(optional): Array of arguments to pass to the method。Each element is a positional argument。WARNING: This 工具 has NO validation。Prefer using the specific 工具s (场景_query, 场景_operation) when possible。Returns: The raw return value from the 场景 method, JSON-serialized。On error: {error:\"message\"}。Prerequisites: The method must be exposed by 场景.ts (see listMethods for available methods)。For dispatchQuery/dispatchOperation, args is [{action:\"...\", ...params}]。",
+        "toolSummary": "Execute arbitrary scene-script methods in the Cocos Creator scene context. Use this as an ESCAPE HATCH when the other tools (scene_query, scene_operation, asset_operation, editor_action) do not cover your needs. The method runs inside the editor scene process with full access to the engine API (cc.*, nodes, components). Parameters: - method(REQUIRED): Name of the scene-script method to call. Common methods: \"dispatchQuery\", \"dispatchOperation\", \"createChildNode\", \"setNodePosition\". - args(optional): Array of arguments to pass to the method. Each element is a positional argument. - persistenceMode(optional: warn/auto-save/strict). For mutating scene methods, controls whether successful writes only warn, auto-save, or fail in strict persistence mode. WARNING: This tool has NO validation. Prefer using the specific tools (scene_query, scene_operation) when possible. Returns: The raw return value from the scene method, JSON-serialized. On error: {error:\"message\"}. Prerequisites: The method must be exposed by scene.ts (see listMethods for available methods). For dispatchQuery/dispatchOperation, args is [{action:\"...\", ...params}].",
+        "zhToolSummary": "Execute arbitrary 场景-script methods in the Cocos Creator 场景 context。Use this as an ESCAPE HATCH when the other 工具s (场景_query, 场景_operation, 资源_operation, editor_action) do not cover your needs。The method runs inside the editor 场景 process with full access to the engine API (cc.*, 节点s, 组件)。Parameters: - method(REQUIRED): Name of the 场景-script method to call。Common methods: \"dispatchQuery\", \"dispatchOperation\", \"createChildNode\", \"setNodePosition\". - args(optional): Array of arguments to pass to the method。Each element is a positional argument. - persistenceMode(optional: warn/auto-save/strict)。For mutating 场景 methods, controls whether successful writes only warn, auto-save, or fail in strict persistence mode。WARNING: This 工具 has NO validation。Prefer using the specific 工具s (场景_query, 场景_operation) when possible。Returns: The raw return value from the 场景 method, JSON-serialized。On error: {error:\"message\"}。Prerequisites: The method must be exposed by 场景.ts (see listMethods for available methods)。For dispatchQuery/dispatchOperation, args is [{action:\"...\", ...params}]。",
         "actionDescription": "",
         "zhActionDescription": "",
         "sourceFile": "src/mcp/tools-script.ts",
@@ -18485,8 +17754,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Atomically create a Cocos Creator prefab in ONE call with automatic rollback on failure. Pipeline: 1) ensure target directory exists, 2) create root node with components, 3) create child nodes with components, 4) set properties on all components, 5) save as .prefab asset, 6) refresh AssetDB, 7) cleanup temp node from scene. Use this INSTEAD of manually chaining scene_operation calls for prefab creation. On failure at any stage, all temporary nodes are automatically cleaned up (rolled back). Parameters: - prefabPath(REQUIRED): db:// path where the .prefab will be saved. Directories are auto-created. Path auto-normalized. - nodeName(optional): Root node name. Default: derived from prefabPath filename. - components(optional): Array of components to add to root node, each with type and optional properties. - children(optional): Array of child node definitions, each with name and optional components. - position(optional): Initial position {x, y, z} for the root node. - cleanupSourceNode(optional, default true): Remove temp node from scene after prefab creation. ASSET REFERENCES in components.properties: For spriteFrame/font/material properties, use {__uuid__:\"asset-uuid\"}. Get UUID via asset_operation action=url_to_uuid. Returns: {success, prefabPath, rootNodeUuid, stages:[\"create_root_node\",\"add_component:X\",\"create_prefab\",\"cleanup_temp_node\"], completedStages?, rollback?:[]}. On error: {success:false, error, stage, rollback}. Auto-rollback: If prefab creation fails, the temp node is automatically destroyed. Set cleanupSourceNode=false to keep it for debugging.",
-        "zhToolSummary": "Atomically create a Cocos Creator prefab in ONE call with automatic rollback on failure。Pipeline: 1) ensure target directory exists, 2) create root 节点 with 组件, 3) create child 节点s with 组件, 4) set properties on all 组件, 5) save as .prefab 资源, 6) refresh AssetDB, 7) cleanup temp 节点 from 场景。Use this INSTEAD of manually chaining 场景_operation calls for prefab creation。On failure at any stage, all temporary 节点s are automatically cleaned up (rolled back)。Parameters: - prefabPath(REQUIRED): db:// path where the .prefab will be saved。Directories are auto-created。Path auto-normalized. - 节点Name(optional): Root 节点 name。Default: derived from prefabPath filename. - 组件(optional): Array of 组件 to add to root 节点, each with type and optional properties. - children(optional): Array of child 节点 definitions, each with name and optional 组件. - position(optional): Initial position {x, y, z} for the root 节点. - cleanupSourceNode(optional, default true): Remove temp 节点 from 场景 after prefab creation。ASSET REFERENCES in 组件.properties: For spriteFrame/font/material properties, use {__uuid__:\"资源-uuid\"}。获取UUID via 资源_operation action=url_to_uuid。Returns: {success, prefabPath, rootNodeUuid, stages:[\"create_root_节点\",\"add_组件:X\",\"create_prefab\",\"cleanup_temp_节点\"], completedStages?, rollback?:[]}。On error: {success:false, error, stage, rollback}。Auto-rollback: If prefab creation fails, the temp 节点 is automatically destroyed。Set cleanupSourceNode=false to keep it for debugging。",
+        "toolSummary": "Atomically create a Cocos Creator prefab in ONE call with automatic rollback on failure. Pipeline: 1) ensure target directory exists, 2) create root node with components, 3) create child nodes with components, 4) set properties on all components, 5) save as .prefab asset, 6) refresh AssetDB, 7) cleanup temp node from scene. Use this INSTEAD of manually chaining scene_operation calls for prefab creation. On failure at any stage, all temporary nodes are automatically cleaned up (rolled back). Parameters: - prefabPath(REQUIRED): db:// path where the .prefab will be saved. Directories are auto-created. Path auto-normalized. - nodeName(optional): Root node name. Default: derived from prefabPath filename. - components(optional): Array of components to add to root node, each with type and optional properties. - children(optional): Array of child node definitions, each with name and optional components. - position(optional): Initial position {x, y, z} for the root node. - cleanupSourceNode(optional, default true): Remove temp node from scene after prefab creation. - persistenceMode(optional: warn/auto-save/strict). Controls whether successful scene writes only warn, auto-save, or fail in strict persistence mode. ASSET REFERENCES in components.properties: For spriteFrame/font/material properties, use {__uuid__:\"asset-uuid\"}. Get UUID via asset_operation action=url_to_uuid. Returns: {success, prefabPath, rootNodeUuid, stages:[\"create_root_node\",\"add_component:X\",\"create_prefab\",\"cleanup_temp_node\"], completedStages?, rollback?:[]}. Successful write results may include persistenceStatus{mode,target,requiresPersistence,saveAttempted,...}. On error: {success:false, error, stage, rollback}. Auto-rollback: If prefab creation fails, the temp node is automatically destroyed. Set cleanupSourceNode=false to keep it for debugging.",
+        "zhToolSummary": "Atomically create a Cocos Creator prefab in ONE call with automatic rollback on failure。Pipeline: 1) ensure target directory exists, 2) create root 节点 with 组件, 3) create child 节点s with 组件, 4) set properties on all 组件, 5) save as .prefab 资源, 6) refresh AssetDB, 7) cleanup temp 节点 from 场景。Use this INSTEAD of manually chaining 场景_operation calls for prefab creation。On failure at any stage, all temporary 节点s are automatically cleaned up (rolled back)。Parameters: - prefabPath(REQUIRED): db:// path where the .prefab will be saved。Directories are auto-created。Path auto-normalized. - 节点Name(optional): Root 节点 name。Default: derived from prefabPath filename. - 组件(optional): Array of 组件 to add to root 节点, each with type and optional properties. - children(optional): Array of child 节点 definitions, each with name and optional 组件. - position(optional): Initial position {x, y, z} for the root 节点. - cleanupSourceNode(optional, default true): Remove temp 节点 from 场景 after prefab creation. - persistenceMode(optional: warn/auto-save/strict)。Controls whether successful 场景 writes only warn, auto-save, or fail in strict persistence mode。ASSET REFERENCES in 组件.properties: For spriteFrame/font/material properties, use {__uuid__:\"资源-uuid\"}。获取UUID via 资源_operation action=url_to_uuid。Returns: {success, prefabPath, rootNodeUuid, stages:[\"create_root_节点\",\"add_组件:X\",\"create_prefab\",\"cleanup_temp_节点\"], completedStages?, rollback?:[]}。Successful write results may include persistenceStatus{mode,target,requiresPersistence,saveAttempted,...}。On error: {success:false, error, stage, rollback}。Auto-rollback: If prefab creation fails, the temp 节点 is automatically destroyed。Set cleanupSourceNode=false to keep it for debugging。",
         "actionDescription": "",
         "zhActionDescription": "",
         "sourceFile": "src/mcp/tools-atomic-prefab.ts",
@@ -18537,8 +17806,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Atomically create a Cocos Creator prefab in ONE call with automatic rollback on failure. Pipeline: 1) ensure target directory exists, 2) create root node with components, 3) create child nodes with components, 4) set properties on all components, 5) save as .prefab asset, 6) refresh AssetDB, 7) cleanup temp node from scene. Use this INSTEAD of manually chaining scene_operation calls for prefab creation. On failure at any stage, all temporary nodes are automatically cleaned up (rolled back). Parameters: - prefabPath(REQUIRED): db:// path where the .prefab will be saved. Directories are auto-created. Path auto-normalized. - nodeName(optional): Root node name. Default: derived from prefabPath filename. - components(optional): Array of components to add to root node, each with type and optional properties. - children(optional): Array of child node definitions, each with name and optional components. - position(optional): Initial position {x, y, z} for the root node. - cleanupSourceNode(optional, default true): Remove temp node from scene after prefab creation. ASSET REFERENCES in components.properties: For spriteFrame/font/material properties, use {__uuid__:\"asset-uuid\"}. Get UUID via asset_operation action=url_to_uuid. Returns: {success, prefabPath, rootNodeUuid, stages:[\"create_root_node\",\"add_component:X\",\"create_prefab\",\"cleanup_temp_node\"], completedStages?, rollback?:[]}. On error: {success:false, error, stage, rollback}. Auto-rollback: If prefab creation fails, the temp node is automatically destroyed. Set cleanupSourceNode=false to keep it for debugging.",
-        "zhToolSummary": "Atomically create a Cocos Creator prefab in ONE call with automatic rollback on failure。Pipeline: 1) ensure target directory exists, 2) create root 节点 with 组件, 3) create child 节点s with 组件, 4) set properties on all 组件, 5) save as .prefab 资源, 6) refresh AssetDB, 7) cleanup temp 节点 from 场景。Use this INSTEAD of manually chaining 场景_operation calls for prefab creation。On failure at any stage, all temporary 节点s are automatically cleaned up (rolled back)。Parameters: - prefabPath(REQUIRED): db:// path where the .prefab will be saved。Directories are auto-created。Path auto-normalized. - 节点Name(optional): Root 节点 name。Default: derived from prefabPath filename. - 组件(optional): Array of 组件 to add to root 节点, each with type and optional properties. - children(optional): Array of child 节点 definitions, each with name and optional 组件. - position(optional): Initial position {x, y, z} for the root 节点. - cleanupSourceNode(optional, default true): Remove temp 节点 from 场景 after prefab creation。ASSET REFERENCES in 组件.properties: For spriteFrame/font/material properties, use {__uuid__:\"资源-uuid\"}。获取UUID via 资源_operation action=url_to_uuid。Returns: {success, prefabPath, rootNodeUuid, stages:[\"create_root_节点\",\"add_组件:X\",\"create_prefab\",\"cleanup_temp_节点\"], completedStages?, rollback?:[]}。On error: {success:false, error, stage, rollback}。Auto-rollback: If prefab creation fails, the temp 节点 is automatically destroyed。Set cleanupSourceNode=false to keep it for debugging。",
+        "toolSummary": "Atomically create a Cocos Creator prefab in ONE call with automatic rollback on failure. Pipeline: 1) ensure target directory exists, 2) create root node with components, 3) create child nodes with components, 4) set properties on all components, 5) save as .prefab asset, 6) refresh AssetDB, 7) cleanup temp node from scene. Use this INSTEAD of manually chaining scene_operation calls for prefab creation. On failure at any stage, all temporary nodes are automatically cleaned up (rolled back). Parameters: - prefabPath(REQUIRED): db:// path where the .prefab will be saved. Directories are auto-created. Path auto-normalized. - nodeName(optional): Root node name. Default: derived from prefabPath filename. - components(optional): Array of components to add to root node, each with type and optional properties. - children(optional): Array of child node definitions, each with name and optional components. - position(optional): Initial position {x, y, z} for the root node. - cleanupSourceNode(optional, default true): Remove temp node from scene after prefab creation. - persistenceMode(optional: warn/auto-save/strict). Controls whether successful scene writes only warn, auto-save, or fail in strict persistence mode. ASSET REFERENCES in components.properties: For spriteFrame/font/material properties, use {__uuid__:\"asset-uuid\"}. Get UUID via asset_operation action=url_to_uuid. Returns: {success, prefabPath, rootNodeUuid, stages:[\"create_root_node\",\"add_component:X\",\"create_prefab\",\"cleanup_temp_node\"], completedStages?, rollback?:[]}. Successful write results may include persistenceStatus{mode,target,requiresPersistence,saveAttempted,...}. On error: {success:false, error, stage, rollback}. Auto-rollback: If prefab creation fails, the temp node is automatically destroyed. Set cleanupSourceNode=false to keep it for debugging.",
+        "zhToolSummary": "Atomically create a Cocos Creator prefab in ONE call with automatic rollback on failure。Pipeline: 1) ensure target directory exists, 2) create root 节点 with 组件, 3) create child 节点s with 组件, 4) set properties on all 组件, 5) save as .prefab 资源, 6) refresh AssetDB, 7) cleanup temp 节点 from 场景。Use this INSTEAD of manually chaining 场景_operation calls for prefab creation。On failure at any stage, all temporary 节点s are automatically cleaned up (rolled back)。Parameters: - prefabPath(REQUIRED): db:// path where the .prefab will be saved。Directories are auto-created。Path auto-normalized. - 节点Name(optional): Root 节点 name。Default: derived from prefabPath filename. - 组件(optional): Array of 组件 to add to root 节点, each with type and optional properties. - children(optional): Array of child 节点 definitions, each with name and optional 组件. - position(optional): Initial position {x, y, z} for the root 节点. - cleanupSourceNode(optional, default true): Remove temp 节点 from 场景 after prefab creation. - persistenceMode(optional: warn/auto-save/strict)。Controls whether successful 场景 writes only warn, auto-save, or fail in strict persistence mode。ASSET REFERENCES in 组件.properties: For spriteFrame/font/material properties, use {__uuid__:\"资源-uuid\"}。获取UUID via 资源_operation action=url_to_uuid。Returns: {success, prefabPath, rootNodeUuid, stages:[\"create_root_节点\",\"add_组件:X\",\"create_prefab\",\"cleanup_temp_节点\"], completedStages?, rollback?:[]}。Successful write results may include persistenceStatus{mode,target,requiresPersistence,saveAttempted,...}。On error: {success:false, error, stage, rollback}。Auto-rollback: If prefab creation fails, the temp 节点 is automatically destroyed。Set cleanupSourceNode=false to keep it for debugging。",
         "actionDescription": "",
         "zhActionDescription": "",
         "sourceFile": "src/mcp/tools-atomic-prefab.ts",
@@ -18600,8 +17869,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Atomic macro: import an external image file into AssetDB AND apply it to a node's Sprite component in ONE call. IMPORTANT: If the scene has no Canvas (e.g. a 3D-only scene), call scene_operation action=ensure_2d_canvas FIRST to create the 2D rendering environment, then create a child node under the returned canvasUuid with layer=33554432 (UI_2D). Pipeline: 1) resolve target node (from nodeUuid or current selection), 2) import image to AssetDB, 3) auto-set meta type to sprite-frame, 4) ensure UITransform + Sprite exist, 5) resolve SpriteFrame UUID, 6) set spriteFrame property, 7) refresh & highlight. Parameters: - sourcePath(REQUIRED): Absolute OS file path of the image to import. - targetUrl(optional): db:// destination path. Default: \"db://assets/textures/{filename}\". - nodeUuid(optional): Target node UUID. If omitted, uses current editor selection. - autoAddSprite(optional, default true): Automatically add Sprite component if target node doesn't have one. - refreshAssetDb(optional, default true): Refresh AssetDB after import. Auto-behavior: This tool automatically sets the image meta type to \"sprite-frame\" and reimports, ensuring a SpriteFrame sub-asset is generated. It then applies the SpriteFrame to the Sprite component via Editor IPC. Returns: {success, nodeUuid, targetUrl, stages:[\"validate_input\",\"import_texture\",\"ensure_sprite_frame_type\",\"ensure_ui_transform\",\"ensure_sprite_component\",\"resolve_sprite_frame_uuid\",\"apply_sprite_frame\",\"refresh_asset_db\",\"highlight\"], importResult:{uuid,subAssets}}. On error: {success:false, error:\"message\", stages}. Prerequisites: Target node must exist. In 3D scenes, call scene_operation action=ensure_2d_canvas first, create a child node under canvasUuid with layer=33554432, then pass that node's UUID. Common errors: \"未选中节点\"=no nodeUuid and nothing selected; sourcePath file not found; SpriteFrame UUID resolution may retry up to 5 times.",
-        "zhToolSummary": "Atomic macro: import an external image file into AssetDB AND apply it to a 节点's Sprite 组件 in ONE call。IMPORTANT: If the 场景 has no Canvas (e.g. a 3D-only 场景), call 场景_operation action=ensure_2d_canvas FIRST to create the 2D rendering environment, then create a child 节点 under the returned canvasUuid with layer=33554432 (UI_2D)。Pipeline: 1) resolve target 节点 (from 节点Uuid or current selection), 2) import image to AssetDB, 3) auto-set meta type to sprite-frame, 4) ensure UITransform + Sprite exist, 5) resolve SpriteFrame UUID, 6) set spriteFrame 属性, 7) refresh & highlight。Parameters: - sourcePath(REQUIRED): Absolute OS file path of the image to import. - targetUrl(optional): db:// destination path。Default: \"db://资源s/textures/{filename}\". - 节点Uuid(optional): Target 节点 UUID。如果省略参数, uses current editor selection. - autoAddSprite(optional, default true): Automatically add Sprite 组件 if target 节点 doesn't have one. - refreshAssetDb(optional, default true): Refresh AssetDB after import。Auto-behavior: This 工具 automatically sets the image meta type to \"sprite-frame\" and reimports, ensuring a SpriteFrame sub-资源 is generated。It then applies the SpriteFrame to the Sprite 组件 via Editor IPC。Returns: {success, 节点Uuid, targetUrl, stages:[\"validate_input\",\"import_texture\",\"ensure_sprite_frame_type\",\"ensure_ui_transform\",\"ensure_sprite_组件\",\"resolve_sprite_frame_uuid\",\"apply_sprite_frame\",\"refresh_资源_db\",\"highlight\"], importResult:{uuid,subAssets}}。On error: {success:false, error:\"message\", stages}。Prerequisites: Target 节点 must exist。In 3D 场景s, call 场景_operation action=ensure_2d_canvas first, create a child 节点 under canvasUuid with layer=33554432, then pass that 节点's UUID。Common errors: \"未选中节点\"=no 节点Uuid and nothing selected; sourcePath file not found; SpriteFrame UUID resolution may retry up to 5 times。",
+        "toolSummary": "Atomic macro: import an external image file into AssetDB AND apply it to a node's Sprite component in ONE call. IMPORTANT: If the scene has no Canvas (e.g. a 3D-only scene), call scene_operation action=ensure_2d_canvas FIRST to create the 2D rendering environment, then create a child node under the returned canvasUuid with layer=33554432 (UI_2D). Pipeline: 1) resolve target node (from nodeUuid or current selection), 2) import image to AssetDB, 3) auto-set meta type to sprite-frame, 4) ensure UITransform + Sprite exist, 5) resolve SpriteFrame UUID, 6) set spriteFrame property, 7) refresh & highlight. Parameters: - sourcePath(REQUIRED): Absolute OS file path of the image to import. - targetUrl(optional): db:// destination path. Default: \"db://assets/textures/{filename}\". - nodeUuid(optional): Target node UUID. If omitted, uses current editor selection. - autoAddSprite(optional, default true): Automatically add Sprite component if target node doesn't have one. - refreshAssetDb(optional, default true): Refresh AssetDB after import. - persistenceMode(optional: warn/auto-save/strict). Controls whether successful scene writes only warn, auto-save, or fail in strict persistence mode. Auto-behavior: This tool automatically sets the image meta type to \"sprite-frame\" and reimports, ensuring a SpriteFrame sub-asset is generated. It then applies the SpriteFrame to the Sprite component via Editor IPC. Returns: {success, nodeUuid, targetUrl, stages:[\"validate_input\",\"import_texture\",\"ensure_sprite_frame_type\",\"ensure_ui_transform\",\"ensure_sprite_component\",\"resolve_sprite_frame_uuid\",\"apply_sprite_frame\",\"refresh_asset_db\",\"highlight\"], importResult:{uuid,subAssets}}. Successful write results may include persistenceStatus{mode,target,requiresPersistence,saveAttempted,...}. On error: {success:false, error:\"message\", stages}. Prerequisites: Target node must exist. In 3D scenes, call scene_operation action=ensure_2d_canvas first, create a child node under canvasUuid with layer=33554432, then pass that node's UUID. Common errors: \"未选中节点\"=no nodeUuid and nothing selected; sourcePath file not found; SpriteFrame UUID resolution may retry up to 5 times.",
+        "zhToolSummary": "Atomic macro: import an external image file into AssetDB AND apply it to a 节点's Sprite 组件 in ONE call。IMPORTANT: If the 场景 has no Canvas (e.g. a 3D-only 场景), call 场景_operation action=ensure_2d_canvas FIRST to create the 2D rendering environment, then create a child 节点 under the returned canvasUuid with layer=33554432 (UI_2D)。Pipeline: 1) resolve target 节点 (from 节点Uuid or current selection), 2) import image to AssetDB, 3) auto-set meta type to sprite-frame, 4) ensure UITransform + Sprite exist, 5) resolve SpriteFrame UUID, 6) set spriteFrame 属性, 7) refresh & highlight。Parameters: - sourcePath(REQUIRED): Absolute OS file path of the image to import. - targetUrl(optional): db:// destination path。Default: \"db://资源s/textures/{filename}\". - 节点Uuid(optional): Target 节点 UUID。如果省略参数, uses current editor selection. - autoAddSprite(optional, default true): Automatically add Sprite 组件 if target 节点 doesn't have one. - refreshAssetDb(optional, default true): Refresh AssetDB after import. - persistenceMode(optional: warn/auto-save/strict)。Controls whether successful 场景 writes only warn, auto-save, or fail in strict persistence mode。Auto-behavior: This 工具 automatically sets the image meta type to \"sprite-frame\" and reimports, ensuring a SpriteFrame sub-资源 is generated。It then applies the SpriteFrame to the Sprite 组件 via Editor IPC。Returns: {success, 节点Uuid, targetUrl, stages:[\"validate_input\",\"import_texture\",\"ensure_sprite_frame_type\",\"ensure_ui_transform\",\"ensure_sprite_组件\",\"resolve_sprite_frame_uuid\",\"apply_sprite_frame\",\"refresh_资源_db\",\"highlight\"], importResult:{uuid,subAssets}}。Successful write results may include persistenceStatus{mode,target,requiresPersistence,saveAttempted,...}。On error: {success:false, error:\"message\", stages}。Prerequisites: Target 节点 must exist。In 3D 场景s, call 场景_operation action=ensure_2d_canvas first, create a child 节点 under canvasUuid with layer=33554432, then pass that 节点's UUID。Common errors: \"未选中节点\"=no 节点Uuid and nothing selected; sourcePath file not found; SpriteFrame UUID resolution may retry up to 5 times。",
         "actionDescription": "",
         "zhActionDescription": "",
         "sourceFile": "src/mcp/tools-atomic-texture.ts",
@@ -18664,8 +17933,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Atomic macro: import an external image file into AssetDB AND apply it to a node's Sprite component in ONE call. IMPORTANT: If the scene has no Canvas (e.g. a 3D-only scene), call scene_operation action=ensure_2d_canvas FIRST to create the 2D rendering environment, then create a child node under the returned canvasUuid with layer=33554432 (UI_2D). Pipeline: 1) resolve target node (from nodeUuid or current selection), 2) import image to AssetDB, 3) auto-set meta type to sprite-frame, 4) ensure UITransform + Sprite exist, 5) resolve SpriteFrame UUID, 6) set spriteFrame property, 7) refresh & highlight. Parameters: - sourcePath(REQUIRED): Absolute OS file path of the image to import. - targetUrl(optional): db:// destination path. Default: \"db://assets/textures/{filename}\". - nodeUuid(optional): Target node UUID. If omitted, uses current editor selection. - autoAddSprite(optional, default true): Automatically add Sprite component if target node doesn't have one. - refreshAssetDb(optional, default true): Refresh AssetDB after import. Auto-behavior: This tool automatically sets the image meta type to \"sprite-frame\" and reimports, ensuring a SpriteFrame sub-asset is generated. It then applies the SpriteFrame to the Sprite component via Editor IPC. Returns: {success, nodeUuid, targetUrl, stages:[\"validate_input\",\"import_texture\",\"ensure_sprite_frame_type\",\"ensure_ui_transform\",\"ensure_sprite_component\",\"resolve_sprite_frame_uuid\",\"apply_sprite_frame\",\"refresh_asset_db\",\"highlight\"], importResult:{uuid,subAssets}}. On error: {success:false, error:\"message\", stages}. Prerequisites: Target node must exist. In 3D scenes, call scene_operation action=ensure_2d_canvas first, create a child node under canvasUuid with layer=33554432, then pass that node's UUID. Common errors: \"未选中节点\"=no nodeUuid and nothing selected; sourcePath file not found; SpriteFrame UUID resolution may retry up to 5 times.",
-        "zhToolSummary": "Atomic macro: import an external image file into AssetDB AND apply it to a 节点's Sprite 组件 in ONE call。IMPORTANT: If the 场景 has no Canvas (e.g. a 3D-only 场景), call 场景_operation action=ensure_2d_canvas FIRST to create the 2D rendering environment, then create a child 节点 under the returned canvasUuid with layer=33554432 (UI_2D)。Pipeline: 1) resolve target 节点 (from 节点Uuid or current selection), 2) import image to AssetDB, 3) auto-set meta type to sprite-frame, 4) ensure UITransform + Sprite exist, 5) resolve SpriteFrame UUID, 6) set spriteFrame 属性, 7) refresh & highlight。Parameters: - sourcePath(REQUIRED): Absolute OS file path of the image to import. - targetUrl(optional): db:// destination path。Default: \"db://资源s/textures/{filename}\". - 节点Uuid(optional): Target 节点 UUID。如果省略参数, uses current editor selection. - autoAddSprite(optional, default true): Automatically add Sprite 组件 if target 节点 doesn't have one. - refreshAssetDb(optional, default true): Refresh AssetDB after import。Auto-behavior: This 工具 automatically sets the image meta type to \"sprite-frame\" and reimports, ensuring a SpriteFrame sub-资源 is generated。It then applies the SpriteFrame to the Sprite 组件 via Editor IPC。Returns: {success, 节点Uuid, targetUrl, stages:[\"validate_input\",\"import_texture\",\"ensure_sprite_frame_type\",\"ensure_ui_transform\",\"ensure_sprite_组件\",\"resolve_sprite_frame_uuid\",\"apply_sprite_frame\",\"refresh_资源_db\",\"highlight\"], importResult:{uuid,subAssets}}。On error: {success:false, error:\"message\", stages}。Prerequisites: Target 节点 must exist。In 3D 场景s, call 场景_operation action=ensure_2d_canvas first, create a child 节点 under canvasUuid with layer=33554432, then pass that 节点's UUID。Common errors: \"未选中节点\"=no 节点Uuid and nothing selected; sourcePath file not found; SpriteFrame UUID resolution may retry up to 5 times。",
+        "toolSummary": "Atomic macro: import an external image file into AssetDB AND apply it to a node's Sprite component in ONE call. IMPORTANT: If the scene has no Canvas (e.g. a 3D-only scene), call scene_operation action=ensure_2d_canvas FIRST to create the 2D rendering environment, then create a child node under the returned canvasUuid with layer=33554432 (UI_2D). Pipeline: 1) resolve target node (from nodeUuid or current selection), 2) import image to AssetDB, 3) auto-set meta type to sprite-frame, 4) ensure UITransform + Sprite exist, 5) resolve SpriteFrame UUID, 6) set spriteFrame property, 7) refresh & highlight. Parameters: - sourcePath(REQUIRED): Absolute OS file path of the image to import. - targetUrl(optional): db:// destination path. Default: \"db://assets/textures/{filename}\". - nodeUuid(optional): Target node UUID. If omitted, uses current editor selection. - autoAddSprite(optional, default true): Automatically add Sprite component if target node doesn't have one. - refreshAssetDb(optional, default true): Refresh AssetDB after import. - persistenceMode(optional: warn/auto-save/strict). Controls whether successful scene writes only warn, auto-save, or fail in strict persistence mode. Auto-behavior: This tool automatically sets the image meta type to \"sprite-frame\" and reimports, ensuring a SpriteFrame sub-asset is generated. It then applies the SpriteFrame to the Sprite component via Editor IPC. Returns: {success, nodeUuid, targetUrl, stages:[\"validate_input\",\"import_texture\",\"ensure_sprite_frame_type\",\"ensure_ui_transform\",\"ensure_sprite_component\",\"resolve_sprite_frame_uuid\",\"apply_sprite_frame\",\"refresh_asset_db\",\"highlight\"], importResult:{uuid,subAssets}}. Successful write results may include persistenceStatus{mode,target,requiresPersistence,saveAttempted,...}. On error: {success:false, error:\"message\", stages}. Prerequisites: Target node must exist. In 3D scenes, call scene_operation action=ensure_2d_canvas first, create a child node under canvasUuid with layer=33554432, then pass that node's UUID. Common errors: \"未选中节点\"=no nodeUuid and nothing selected; sourcePath file not found; SpriteFrame UUID resolution may retry up to 5 times.",
+        "zhToolSummary": "Atomic macro: import an external image file into AssetDB AND apply it to a 节点's Sprite 组件 in ONE call。IMPORTANT: If the 场景 has no Canvas (e.g. a 3D-only 场景), call 场景_operation action=ensure_2d_canvas FIRST to create the 2D rendering environment, then create a child 节点 under the returned canvasUuid with layer=33554432 (UI_2D)。Pipeline: 1) resolve target 节点 (from 节点Uuid or current selection), 2) import image to AssetDB, 3) auto-set meta type to sprite-frame, 4) ensure UITransform + Sprite exist, 5) resolve SpriteFrame UUID, 6) set spriteFrame 属性, 7) refresh & highlight。Parameters: - sourcePath(REQUIRED): Absolute OS file path of the image to import. - targetUrl(optional): db:// destination path。Default: \"db://资源s/textures/{filename}\". - 节点Uuid(optional): Target 节点 UUID。如果省略参数, uses current editor selection. - autoAddSprite(optional, default true): Automatically add Sprite 组件 if target 节点 doesn't have one. - refreshAssetDb(optional, default true): Refresh AssetDB after import. - persistenceMode(optional: warn/auto-save/strict)。Controls whether successful 场景 writes only warn, auto-save, or fail in strict persistence mode。Auto-behavior: This 工具 automatically sets the image meta type to \"sprite-frame\" and reimports, ensuring a SpriteFrame sub-资源 is generated。It then applies the SpriteFrame to the Sprite 组件 via Editor IPC。Returns: {success, 节点Uuid, targetUrl, stages:[\"validate_input\",\"import_texture\",\"ensure_sprite_frame_type\",\"ensure_ui_transform\",\"ensure_sprite_组件\",\"resolve_sprite_frame_uuid\",\"apply_sprite_frame\",\"refresh_资源_db\",\"highlight\"], importResult:{uuid,subAssets}}。Successful write results may include persistenceStatus{mode,target,requiresPersistence,saveAttempted,...}。On error: {success:false, error:\"message\", stages}。Prerequisites: Target 节点 must exist。In 3D 场景s, call 场景_operation action=ensure_2d_canvas first, create a child 节点 under canvasUuid with layer=33554432, then pass that 节点's UUID。Common errors: \"未选中节点\"=no 节点Uuid and nothing selected; sourcePath file not found; SpriteFrame UUID resolution may retry up to 5 times。",
         "actionDescription": "",
         "zhActionDescription": "",
         "sourceFile": "src/mcp/tools-atomic-texture.ts",
@@ -18687,196 +17956,6 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
           "expectedText": "自动添加 Sprite 组件+设置纹理"
         },
         "naturalLanguageTest": "请通过 MCP 调用 import_and_apply_texture 工具，执行 import_and_apply_texture 动作，处理“自动添加 Sprite”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 sourcePath 设为“C:/art/bg.jpg”，将 nodeUuid 指向 <empty-node>，把 autoAddSprite 设为 true。调用完成后重点检查：自动添加 Sprite 组件+设置纹理。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
-      },
-      "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
-      },
-      "manualBaseline": {
-        "status": "pending",
-        "note": ""
-      },
-      "needsRetest": false,
-      "retestReason": ""
-    },
-    {
-      "id": 321,
-      "tool": "create_tween_animation_atomic",
-      "action": "create_tween_animation_atomic",
-      "title": "淡入动画",
-      "input": {
-        "nodeUuid": "<uuid>",
-        "clipName": "fadeIn",
-        "duration": 0.5,
-        "tracks": [
-          {
-            "component": "cc.UIOpacity",
-            "property": "opacity",
-            "keyframes": [
-              {
-                "time": 0,
-                "value": 0
-              },
-              {
-                "time": 0.5,
-                "value": 255,
-                "easing": "quadOut"
-              }
-            ]
-          }
-        ]
-      },
-      "expected": "创建 0.5 秒透明度从 0 到 255 的淡入动画",
-      "note": "",
-      "prerequisites": "原子宏依赖目标节点与资源路径；纹理/预制体路径需存在或可创建。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
-      "setupSteps": [
-        {
-          "step": 1,
-          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
-          "tool": "scene_query",
-          "action": "list",
-          "input": {
-            "action": "list"
-          }
-        }
-      ],
-      "phase": "核心改写",
-      "priority": "P1",
-      "edition": "community",
-      "aiDoc": {
-        "toolSummary": "Atomic macro: create an AnimationClip with keyframe tracks and attach it to a target node in ONE call. Pipeline: 1) validate target node, 2) create AnimationClip with tracks via scene script, 3) attach Animation component if needed, 4) best-effort save as .anim asset to AssetDB, 5) refresh & highlight. Supports multiple property tracks (position, scale, rotation, opacity, custom component properties). If nodeUuid is omitted, uses current editor selection. Parameters: - nodeUuid(optional): Target node UUID. If omitted, uses current selection. - clipName(optional): Animation clip name. Default: derived from savePath filename. - duration(optional, default 1.0): Total clip duration in seconds. - wrapMode(optional, default \"Normal\"): Playback mode. - speed(optional, default 1.0): Playback speed multiplier. - sample(optional, default 60): Sampling rate in frames per second. - tracks(REQUIRED): Array of animation property tracks with keyframes. - savePath(optional): db:// path to save .anim file. If omitted, clip exists only in scene memory. - autoPlay(optional, default false): Start playing the animation immediately after creation. tracks format: [{property:\"position\", keyframes:[{time:0, value:{x:0,y:0,z:0}}, {time:1, value:{x:100,y:0,z:0}}]}]. Supported properties: position, scale, rotation, opacity, color, eulerAngles. Returns: {success, nodeUuid, clipDuration, trackCount, keyframeTimesCount, wrapMode, speed, attach:{attached}, savedAsset?, stages:[\"validate_node\",\"create_clip\",\"highlight\"]}. On error: {success:false, error}. Prerequisites: Node must exist. If nodeUuid omitted, uses current selection. tracks array must have at least one track with keyframes.",
-        "zhToolSummary": "Atomic macro: create an AnimationClip with keyframe tracks and attach it to a target 节点 in ONE call。Pipeline: 1) validate target 节点, 2) create AnimationClip with tracks via 场景 script, 3) attach Animation 组件 if needed, 4) best-effort save as .anim 资源 to AssetDB, 5) refresh & highlight。Supports multiple 属性 tracks (position, scale, rotation, opacity, custom 组件 properties)。If 节点Uuid is omitted, uses current editor selection。Parameters: - 节点Uuid(optional): Target 节点 UUID。如果省略参数, uses current selection. - clipName(optional): Animation clip name。Default: derived from savePath filename. - duration(optional, default 1.0): Total clip duration in seconds. - wrapMode(optional, default \"Normal\"): Playback mode. - speed(optional, default 1.0): Playback speed multiplier. - sample(optional, default 60): Sampling rate in frames per second. - tracks(REQUIRED): Array of 动画 属性 tracks with keyframes. - savePath(optional): db:// path to save .anim file。如果省略参数, clip exists only in 场景 memory. - autoPlay(optional, default false): Start playing the 动画 immediately after creation. tracks format: [{属性:\"position\", keyframes:[{time:0, value:{x:0,y:0,z:0}}, {time:1, value:{x:100,y:0,z:0}}]}]。Supported properties: position, scale, rotation, opacity, color, eulerAngles。Returns: {success, 节点Uuid, clipDuration, trackCount, keyframeTimesCount, wrapMode, speed, attach:{attached}, savedAsset?, stages:[\"validate_节点\",\"create_clip\",\"highlight\"]}。On error: {success:false, error}。Prerequisites: Node must exist。If 节点Uuid omitted, uses current selection. tracks array must have at least one track with keyframes。",
-        "actionDescription": "",
-        "zhActionDescription": "",
-        "sourceFile": "src/mcp/tools-atomic-animation.ts",
-        "matched": false,
-        "toolFound": true,
-        "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 create_tween_animation_atomic 工具，执行 create_tween_animation_atomic 动作，处理“淡入动画”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 nodeUuid 指向 <uuid>，把 clipName 设为“fadeIn”，把 duration 设为 0.5，传入 tracks=[{\"component\":\"cc.UIOpacity\",\"property\":\"opacity\",\"keyframes\":[{\"time\":0,\"value\":0},{\"time\":0.5,\"value\":255,\"easing\":\"quadOut\"}]}]。调用完成后重点检查：创建 0.5 秒透明度从 0 到 255 的淡入动画。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
-          "actionGoal": "Atomic macro: create an AnimationClip with keyframe tracks and attach it to a target 节点 in ONE call",
-          "scenarioType": "参数场景",
-          "scenarioTitle": "淡入动画",
-          "scenarioCondition": "使用该参数组合执行一次调用",
-          "scenarioNarrative": "这个场景通常用于使用该参数组合执行一次调用。",
-          "mcpCall": "create_tween_animation_atomic.create_tween_animation_atomic",
-          "fullPayload": "{\"nodeUuid\":\"<uuid>\",\"clipName\":\"fadeIn\",\"duration\":0.5,\"tracks\":[{\"component\":\"cc.UIOpacity\",\"property\":\"opacity\",\"keyframes\":[{\"time\":0,\"value\":0},{\"time\":0.5,\"value\":255,\"easing\":\"quadOut\"}]}]}",
-          "inputText": "nodeUuid=<uuid>；clipName=fadeIn；duration=0.5；tracks=[{\"component\":\"cc.UIOpacity\",\"property\":\"opacity\",\"keyframes\":[{\"time\":0,\"value\":0},{\"time\":0.5,\"value\":255,\"easing\":\"quadOut\"}]}]",
-          "executionStep": "调用 create_tween_animation_atomic.create_tween_animation_atomic",
-          "parameterNarrative": "这次请将 nodeUuid 指向 <uuid>，把 clipName 设为“fadeIn”，把 duration 设为 0.5，传入 tracks=[{\"component\":\"cc.UIOpacity\",\"property\":\"opacity\",\"keyframes\":[{\"time\":0,\"value\":0},{\"time\":0.5,\"value\":255,\"easing\":\"quadOut\"}]}]。",
-          "verificationFocus": "创建 0.5 秒透明度从 0 到 255 的淡入动画",
-          "expectedText": "创建 0.5 秒透明度从 0 到 255 的淡入动画"
-        },
-        "naturalLanguageTest": "请通过 MCP 调用 create_tween_animation_atomic 工具，执行 create_tween_animation_atomic 动作，处理“淡入动画”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 nodeUuid 指向 <uuid>，把 clipName 设为“fadeIn”，把 duration 设为 0.5，传入 tracks=[{\"component\":\"cc.UIOpacity\",\"property\":\"opacity\",\"keyframes\":[{\"time\":0,\"value\":0},{\"time\":0.5,\"value\":255,\"easing\":\"quadOut\"}]}]。调用完成后重点检查：创建 0.5 秒透明度从 0 到 255 的淡入动画。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
-      },
-      "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
-      },
-      "manualBaseline": {
-        "status": "pending",
-        "note": ""
-      },
-      "needsRetest": false,
-      "retestReason": ""
-    },
-    {
-      "id": 322,
-      "tool": "create_tween_animation_atomic",
-      "action": "create_tween_animation_atomic",
-      "title": "位移+旋转",
-      "input": {
-        "nodeUuid": "<uuid>",
-        "clipName": "move",
-        "duration": 2,
-        "wrapMode": "Loop",
-        "tracks": [
-          {
-            "property": "position",
-            "keyframes": [
-              {
-                "time": 0,
-                "value": {
-                  "x": 0,
-                  "y": 0,
-                  "z": 0
-                }
-              },
-              {
-                "time": 2,
-                "value": {
-                  "x": 200,
-                  "y": 0,
-                  "z": 0
-                }
-              }
-            ]
-          },
-          {
-            "property": "eulerAngles",
-            "keyframes": [
-              {
-                "time": 0,
-                "value": {
-                  "x": 0,
-                  "y": 0,
-                  "z": 0
-                }
-              },
-              {
-                "time": 2,
-                "value": {
-                  "x": 0,
-                  "y": 0,
-                  "z": 360
-                }
-              }
-            ]
-          }
-        ]
-      },
-      "expected": "创建边移动边旋转的循环动画",
-      "note": "",
-      "prerequisites": "原子宏依赖目标节点与资源路径；纹理/预制体路径需存在或可创建。 将 input 中形如 <uuid>、<node-uuid>、<canvas-uuid> 等占位符替换为 scene_query.list/tree、node_detail、find_by_path 或上一步 scene_operation 返回的真实值。",
-      "setupSteps": [
-        {
-          "step": 1,
-          "description": "解析占位符：scene_query.list 或 tree 获取目标节点/资源上下文，替换本用例 input 中所有 <...> 模板（必要时先 scene_operation 创建对象）。",
-          "tool": "scene_query",
-          "action": "list",
-          "input": {
-            "action": "list"
-          }
-        }
-      ],
-      "phase": "核心改写",
-      "priority": "P1",
-      "edition": "community",
-      "aiDoc": {
-        "toolSummary": "Atomic macro: create an AnimationClip with keyframe tracks and attach it to a target node in ONE call. Pipeline: 1) validate target node, 2) create AnimationClip with tracks via scene script, 3) attach Animation component if needed, 4) best-effort save as .anim asset to AssetDB, 5) refresh & highlight. Supports multiple property tracks (position, scale, rotation, opacity, custom component properties). If nodeUuid is omitted, uses current editor selection. Parameters: - nodeUuid(optional): Target node UUID. If omitted, uses current selection. - clipName(optional): Animation clip name. Default: derived from savePath filename. - duration(optional, default 1.0): Total clip duration in seconds. - wrapMode(optional, default \"Normal\"): Playback mode. - speed(optional, default 1.0): Playback speed multiplier. - sample(optional, default 60): Sampling rate in frames per second. - tracks(REQUIRED): Array of animation property tracks with keyframes. - savePath(optional): db:// path to save .anim file. If omitted, clip exists only in scene memory. - autoPlay(optional, default false): Start playing the animation immediately after creation. tracks format: [{property:\"position\", keyframes:[{time:0, value:{x:0,y:0,z:0}}, {time:1, value:{x:100,y:0,z:0}}]}]. Supported properties: position, scale, rotation, opacity, color, eulerAngles. Returns: {success, nodeUuid, clipDuration, trackCount, keyframeTimesCount, wrapMode, speed, attach:{attached}, savedAsset?, stages:[\"validate_node\",\"create_clip\",\"highlight\"]}. On error: {success:false, error}. Prerequisites: Node must exist. If nodeUuid omitted, uses current selection. tracks array must have at least one track with keyframes.",
-        "zhToolSummary": "Atomic macro: create an AnimationClip with keyframe tracks and attach it to a target 节点 in ONE call。Pipeline: 1) validate target 节点, 2) create AnimationClip with tracks via 场景 script, 3) attach Animation 组件 if needed, 4) best-effort save as .anim 资源 to AssetDB, 5) refresh & highlight。Supports multiple 属性 tracks (position, scale, rotation, opacity, custom 组件 properties)。If 节点Uuid is omitted, uses current editor selection。Parameters: - 节点Uuid(optional): Target 节点 UUID。如果省略参数, uses current selection. - clipName(optional): Animation clip name。Default: derived from savePath filename. - duration(optional, default 1.0): Total clip duration in seconds. - wrapMode(optional, default \"Normal\"): Playback mode. - speed(optional, default 1.0): Playback speed multiplier. - sample(optional, default 60): Sampling rate in frames per second. - tracks(REQUIRED): Array of 动画 属性 tracks with keyframes. - savePath(optional): db:// path to save .anim file。如果省略参数, clip exists only in 场景 memory. - autoPlay(optional, default false): Start playing the 动画 immediately after creation. tracks format: [{属性:\"position\", keyframes:[{time:0, value:{x:0,y:0,z:0}}, {time:1, value:{x:100,y:0,z:0}}]}]。Supported properties: position, scale, rotation, opacity, color, eulerAngles。Returns: {success, 节点Uuid, clipDuration, trackCount, keyframeTimesCount, wrapMode, speed, attach:{attached}, savedAsset?, stages:[\"validate_节点\",\"create_clip\",\"highlight\"]}。On error: {success:false, error}。Prerequisites: Node must exist。If 节点Uuid omitted, uses current selection. tracks array must have at least one track with keyframes。",
-        "actionDescription": "",
-        "zhActionDescription": "",
-        "sourceFile": "src/mcp/tools-atomic-animation.ts",
-        "matched": false,
-        "toolFound": true,
-        "naturalLanguageSpec": {
-          "aiInstruction": "请通过 MCP 调用 create_tween_animation_atomic 工具，执行 create_tween_animation_atomic 动作，处理“位移+旋转”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 nodeUuid 指向 <uuid>，把 clipName 设为“move”，把 duration 设为 2，把 wrapMode 设为“Loop”，传入 tracks=[{\"property\":\"position\",\"keyframes\":[{\"time\":0,\"value\":{\"x\":0,\"y\":0,\"z\":0}},{\"time\":2,\"value\":{\"x\":200,\"y\":0,\"z\":0}}]},{\"property\":\"eulerAngles\",\"keyframes\":[{\"time\":0,\"value\":{\"x\":0,\"y\":0,\"z\":0}},{\"time\":2,\"value\":{\"x\":0,\"y\":0,\"z\":360}}]}]。调用完成后重点检查：创建边移动边旋转的循环动画。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。",
-          "actionGoal": "Atomic macro: create an AnimationClip with keyframe tracks and attach it to a target 节点 in ONE call",
-          "scenarioType": "参数场景",
-          "scenarioTitle": "位移+旋转",
-          "scenarioCondition": "使用该参数组合执行一次调用",
-          "scenarioNarrative": "这个场景通常用于使用该参数组合执行一次调用。",
-          "mcpCall": "create_tween_animation_atomic.create_tween_animation_atomic",
-          "fullPayload": "{\"nodeUuid\":\"<uuid>\",\"clipName\":\"move\",\"duration\":2,\"wrapMode\":\"Loop\",\"tracks\":[{\"property\":\"position\",\"keyframes\":[{\"time\":0,\"value\":{\"x\":0,\"y\":0,\"z\":0}},{\"time\":2,\"value\":{\"x\":200,\"y\":0,\"z\":0}}]},{\"property\":\"eulerAngles\",\"keyframes\":[{\"time\":0,\"value\":{\"x\":0,\"y\":0,\"z\":0}},{\"time\":2,\"value\":{\"x\":0,\"y\":0,\"z\":360}}]}]}",
-          "inputText": "nodeUuid=<uuid>；clipName=move；duration=2；wrapMode=Loop；tracks=[{\"property\":\"position\",\"keyframes\":[{\"time\":0,\"value\":{\"x\":0,\"y\":0,\"z\":0}},{\"time\":2,\"value\":{\"x\":200,\"y\":0,\"z\":0}}]},{\"property\":\"eulerAngles\",\"keyframes\":[{\"time\":0,\"value\":{\"x\":0,\"y\":0,\"z\":0}},{\"time\":2,\"value\":{\"x\":0,\"y\":0,\"z\":360}}]}]",
-          "executionStep": "调用 create_tween_animation_atomic.create_tween_animation_atomic",
-          "parameterNarrative": "这次请将 nodeUuid 指向 <uuid>，把 clipName 设为“move”，把 duration 设为 2，把 wrapMode 设为“Loop”，传入 tracks=[{\"property\":\"position\",\"keyframes\":[{\"time\":0,\"value\":{\"x\":0,\"y\":0,\"z\":0}},{\"time\":2,\"value\":{\"x\":200,\"y\":0,\"z\":0}}]},{\"property\":\"eulerAngles\",\"keyframes\":[{\"time\":0,\"value\":{\"x\":0,\"y\":0,\"z\":0}},{\"time\":2,\"value\":{\"x\":0,\"y\":0,\"z\":360}}]}]。",
-          "verificationFocus": "创建边移动边旋转的循环动画",
-          "expectedText": "创建边移动边旋转的循环动画"
-        },
-        "naturalLanguageTest": "请通过 MCP 调用 create_tween_animation_atomic 工具，执行 create_tween_animation_atomic 动作，处理“位移+旋转”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 nodeUuid 指向 <uuid>，把 clipName 设为“move”，把 duration 设为 2，把 wrapMode 设为“Loop”，传入 tracks=[{\"property\":\"position\",\"keyframes\":[{\"time\":0,\"value\":{\"x\":0,\"y\":0,\"z\":0}},{\"time\":2,\"value\":{\"x\":200,\"y\":0,\"z\":0}}]},{\"property\":\"eulerAngles\",\"keyframes\":[{\"time\":0,\"value\":{\"x\":0,\"y\":0,\"z\":0}},{\"time\":2,\"value\":{\"x\":0,\"y\":0,\"z\":360}}]}]。调用完成后重点检查：创建边移动边旋转的循环动画。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
         "status": "blocked",
@@ -18916,8 +17995,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Atomic macro: automatically fit a 2D physics collider to a target node's Sprite/UITransform bounds in ONE call. Pipeline: 1) validate target node, 2) detect Sprite + UITransform components, 3) attempt alpha-outline extraction for PolygonCollider2D, 4) fallback to BoxCollider2D/CircleCollider2D from content size, 5) set physics properties, 6) highlight. If nodeUuid is omitted, uses current editor selection. Parameters: - nodeUuid(optional): Target node UUID. Uses current selection if omitted. - colliderType(optional, default \"auto\"): Collider shape to create. - alphaThreshold(optional, default 0.1): Alpha threshold for polygon outline extraction (0.0-1.0). - simplifyTolerance(optional, default 2.0): Polygon simplification tolerance in pixels. - maxVertices(optional, default 64): Maximum vertex count for polygon collider. - sensor(optional): If true, collider detects overlap but doesn't apply physics response. - friction(optional): Surface friction coefficient (0.0-1.0). - restitution(optional): Bounciness coefficient (0.0=no bounce, 1.0=full bounce). - density(optional): Physics material density. Prerequisites: Node must exist and ideally have a Sprite or UITransform for size detection. Without these, collider defaults to 100x100. Returns: {success, uuid, nodeName, colliderType:\"BoxCollider2D\"|\"PolygonCollider2D\", outlineMethod, size?:{width,height}, pointCount?, points?:[{x,y}], stages}. On error: {success:false, error}. colliderType: \"box\"(default)=BoxCollider2D, \"polygon\"=PolygonCollider2D (attempts alpha outline from Sprite texture).",
-        "zhToolSummary": "Atomic macro: automatically fit a 2D physics collider to a target 节点's Sprite/UITransform bounds in ONE call。Pipeline: 1) validate target 节点, 2) detect Sprite + UITransform 组件, 3) attempt alpha-outline extraction for PolygonCollider2D, 4) fallback to BoxCollider2D/CircleCollider2D from content size, 5) set physics properties, 6) highlight。If 节点Uuid is omitted, uses current editor selection。Parameters: - 节点Uuid(optional): Target 节点 UUID。Uses current selection if omitted. - colliderType(optional, default \"auto\"): Collider shape to create. - alphaThreshold(optional, default 0.1): Alpha threshold for polygon outline extraction (0.0-1.0). - simplifyTolerance(optional, default 2.0): Polygon simplification tolerance in pixels. - maxVertices(optional, default 64): Maximum vertex count for polygon collider. - sensor(optional): If true, collider detects overlap but doesn't apply physics response. - friction(optional): Surface friction coefficient (0.0-1.0). - restitution(optional): Bounciness coefficient (0.0=no bounce, 1.0=full bounce). - density(optional): Physics material density。Prerequisites: Node must exist and ideally have a Sprite or UITransform for size detection。Without these, collider defaults to 100x100。Returns: {success, uuid, 节点Name, colliderType:\"BoxCollider2D\"|\"PolygonCollider2D\", outlineMethod, size?:{width,height}, pointCount?, points?:[{x,y}], stages}。On error: {success:false, error}. colliderType: \"box\"(default)=BoxCollider2D, \"polygon\"=PolygonCollider2D (attempts alpha outline from Sprite texture)。",
+        "toolSummary": "Atomic macro: automatically fit a 2D physics collider to a target node's Sprite/UITransform bounds in ONE call. Pipeline: 1) validate target node, 2) detect Sprite + UITransform components, 3) attempt alpha-outline extraction for PolygonCollider2D, 4) fallback to BoxCollider2D/CircleCollider2D from content size, 5) set physics properties, 6) highlight. If nodeUuid is omitted, uses current editor selection. Parameters: - nodeUuid(optional): Target node UUID. Uses current selection if omitted. - colliderType(optional, default \"auto\"): Collider shape to create. - alphaThreshold(optional, default 0.1): Alpha threshold for polygon outline extraction (0.0-1.0). - simplifyTolerance(optional, default 2.0): Polygon simplification tolerance in pixels. - maxVertices(optional, default 64): Maximum vertex count for polygon collider. - sensor(optional): If true, collider detects overlap but doesn't apply physics response. - friction(optional): Surface friction coefficient (0.0-1.0). - restitution(optional): Bounciness coefficient (0.0=no bounce, 1.0=full bounce). - density(optional): Physics material density. - persistenceMode(optional: warn/auto-save/strict). Controls whether successful scene writes only warn, auto-save, or fail in strict persistence mode. Prerequisites: Node must exist and ideally have a Sprite or UITransform for size detection. Without these, collider defaults to 100x100. Returns: {success, uuid, nodeName, colliderType:\"BoxCollider2D\"|\"PolygonCollider2D\", outlineMethod, size?:{width,height}, pointCount?, points?:[{x,y}], stages}. Successful write results may include persistenceStatus{mode,target,requiresPersistence,saveAttempted,...}. On error: {success:false, error}. colliderType: \"box\"(default)=BoxCollider2D, \"polygon\"=PolygonCollider2D (attempts alpha outline from Sprite texture).",
+        "zhToolSummary": "Atomic macro: automatically fit a 2D physics collider to a target 节点's Sprite/UITransform bounds in ONE call。Pipeline: 1) validate target 节点, 2) detect Sprite + UITransform 组件, 3) attempt alpha-outline extraction for PolygonCollider2D, 4) fallback to BoxCollider2D/CircleCollider2D from content size, 5) set physics properties, 6) highlight。If 节点Uuid is omitted, uses current editor selection。Parameters: - 节点Uuid(optional): Target 节点 UUID。Uses current selection if omitted. - colliderType(optional, default \"auto\"): Collider shape to create. - alphaThreshold(optional, default 0.1): Alpha threshold for polygon outline extraction (0.0-1.0). - simplifyTolerance(optional, default 2.0): Polygon simplification tolerance in pixels. - maxVertices(optional, default 64): Maximum vertex count for polygon collider. - sensor(optional): If true, collider detects overlap but doesn't apply physics response. - friction(optional): Surface friction coefficient (0.0-1.0). - restitution(optional): Bounciness coefficient (0.0=no bounce, 1.0=full bounce). - density(optional): Physics material density. - persistenceMode(optional: warn/auto-save/strict)。Controls whether successful 场景 writes only warn, auto-save, or fail in strict persistence mode。Prerequisites: Node must exist and ideally have a Sprite or UITransform for size detection。Without these, collider defaults to 100x100。Returns: {success, uuid, 节点Name, colliderType:\"BoxCollider2D\"|\"PolygonCollider2D\", outlineMethod, size?:{width,height}, pointCount?, points?:[{x,y}], stages}。Successful write results may include persistenceStatus{mode,target,requiresPersistence,saveAttempted,...}。On error: {success:false, error}. colliderType: \"box\"(default)=BoxCollider2D, \"polygon\"=PolygonCollider2D (attempts alpha outline from Sprite texture)。",
         "actionDescription": "",
         "zhActionDescription": "",
         "sourceFile": "src/mcp/tools-atomic-physics.ts",
@@ -18979,8 +18058,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Atomic macro: automatically fit a 2D physics collider to a target node's Sprite/UITransform bounds in ONE call. Pipeline: 1) validate target node, 2) detect Sprite + UITransform components, 3) attempt alpha-outline extraction for PolygonCollider2D, 4) fallback to BoxCollider2D/CircleCollider2D from content size, 5) set physics properties, 6) highlight. If nodeUuid is omitted, uses current editor selection. Parameters: - nodeUuid(optional): Target node UUID. Uses current selection if omitted. - colliderType(optional, default \"auto\"): Collider shape to create. - alphaThreshold(optional, default 0.1): Alpha threshold for polygon outline extraction (0.0-1.0). - simplifyTolerance(optional, default 2.0): Polygon simplification tolerance in pixels. - maxVertices(optional, default 64): Maximum vertex count for polygon collider. - sensor(optional): If true, collider detects overlap but doesn't apply physics response. - friction(optional): Surface friction coefficient (0.0-1.0). - restitution(optional): Bounciness coefficient (0.0=no bounce, 1.0=full bounce). - density(optional): Physics material density. Prerequisites: Node must exist and ideally have a Sprite or UITransform for size detection. Without these, collider defaults to 100x100. Returns: {success, uuid, nodeName, colliderType:\"BoxCollider2D\"|\"PolygonCollider2D\", outlineMethod, size?:{width,height}, pointCount?, points?:[{x,y}], stages}. On error: {success:false, error}. colliderType: \"box\"(default)=BoxCollider2D, \"polygon\"=PolygonCollider2D (attempts alpha outline from Sprite texture).",
-        "zhToolSummary": "Atomic macro: automatically fit a 2D physics collider to a target 节点's Sprite/UITransform bounds in ONE call。Pipeline: 1) validate target 节点, 2) detect Sprite + UITransform 组件, 3) attempt alpha-outline extraction for PolygonCollider2D, 4) fallback to BoxCollider2D/CircleCollider2D from content size, 5) set physics properties, 6) highlight。If 节点Uuid is omitted, uses current editor selection。Parameters: - 节点Uuid(optional): Target 节点 UUID。Uses current selection if omitted. - colliderType(optional, default \"auto\"): Collider shape to create. - alphaThreshold(optional, default 0.1): Alpha threshold for polygon outline extraction (0.0-1.0). - simplifyTolerance(optional, default 2.0): Polygon simplification tolerance in pixels. - maxVertices(optional, default 64): Maximum vertex count for polygon collider. - sensor(optional): If true, collider detects overlap but doesn't apply physics response. - friction(optional): Surface friction coefficient (0.0-1.0). - restitution(optional): Bounciness coefficient (0.0=no bounce, 1.0=full bounce). - density(optional): Physics material density。Prerequisites: Node must exist and ideally have a Sprite or UITransform for size detection。Without these, collider defaults to 100x100。Returns: {success, uuid, 节点Name, colliderType:\"BoxCollider2D\"|\"PolygonCollider2D\", outlineMethod, size?:{width,height}, pointCount?, points?:[{x,y}], stages}。On error: {success:false, error}. colliderType: \"box\"(default)=BoxCollider2D, \"polygon\"=PolygonCollider2D (attempts alpha outline from Sprite texture)。",
+        "toolSummary": "Atomic macro: automatically fit a 2D physics collider to a target node's Sprite/UITransform bounds in ONE call. Pipeline: 1) validate target node, 2) detect Sprite + UITransform components, 3) attempt alpha-outline extraction for PolygonCollider2D, 4) fallback to BoxCollider2D/CircleCollider2D from content size, 5) set physics properties, 6) highlight. If nodeUuid is omitted, uses current editor selection. Parameters: - nodeUuid(optional): Target node UUID. Uses current selection if omitted. - colliderType(optional, default \"auto\"): Collider shape to create. - alphaThreshold(optional, default 0.1): Alpha threshold for polygon outline extraction (0.0-1.0). - simplifyTolerance(optional, default 2.0): Polygon simplification tolerance in pixels. - maxVertices(optional, default 64): Maximum vertex count for polygon collider. - sensor(optional): If true, collider detects overlap but doesn't apply physics response. - friction(optional): Surface friction coefficient (0.0-1.0). - restitution(optional): Bounciness coefficient (0.0=no bounce, 1.0=full bounce). - density(optional): Physics material density. - persistenceMode(optional: warn/auto-save/strict). Controls whether successful scene writes only warn, auto-save, or fail in strict persistence mode. Prerequisites: Node must exist and ideally have a Sprite or UITransform for size detection. Without these, collider defaults to 100x100. Returns: {success, uuid, nodeName, colliderType:\"BoxCollider2D\"|\"PolygonCollider2D\", outlineMethod, size?:{width,height}, pointCount?, points?:[{x,y}], stages}. Successful write results may include persistenceStatus{mode,target,requiresPersistence,saveAttempted,...}. On error: {success:false, error}. colliderType: \"box\"(default)=BoxCollider2D, \"polygon\"=PolygonCollider2D (attempts alpha outline from Sprite texture).",
+        "zhToolSummary": "Atomic macro: automatically fit a 2D physics collider to a target 节点's Sprite/UITransform bounds in ONE call。Pipeline: 1) validate target 节点, 2) detect Sprite + UITransform 组件, 3) attempt alpha-outline extraction for PolygonCollider2D, 4) fallback to BoxCollider2D/CircleCollider2D from content size, 5) set physics properties, 6) highlight。If 节点Uuid is omitted, uses current editor selection。Parameters: - 节点Uuid(optional): Target 节点 UUID。Uses current selection if omitted. - colliderType(optional, default \"auto\"): Collider shape to create. - alphaThreshold(optional, default 0.1): Alpha threshold for polygon outline extraction (0.0-1.0). - simplifyTolerance(optional, default 2.0): Polygon simplification tolerance in pixels. - maxVertices(optional, default 64): Maximum vertex count for polygon collider. - sensor(optional): If true, collider detects overlap but doesn't apply physics response. - friction(optional): Surface friction coefficient (0.0-1.0). - restitution(optional): Bounciness coefficient (0.0=no bounce, 1.0=full bounce). - density(optional): Physics material density. - persistenceMode(optional: warn/auto-save/strict)。Controls whether successful 场景 writes only warn, auto-save, or fail in strict persistence mode。Prerequisites: Node must exist and ideally have a Sprite or UITransform for size detection。Without these, collider defaults to 100x100。Returns: {success, uuid, 节点Name, colliderType:\"BoxCollider2D\"|\"PolygonCollider2D\", outlineMethod, size?:{width,height}, pointCount?, points?:[{x,y}], stages}。Successful write results may include persistenceStatus{mode,target,requiresPersistence,saveAttempted,...}。On error: {success:false, error}. colliderType: \"box\"(default)=BoxCollider2D, \"polygon\"=PolygonCollider2D (attempts alpha outline from Sprite texture)。",
         "actionDescription": "",
         "zhActionDescription": "",
         "sourceFile": "src/mcp/tools-atomic-physics.ts",
@@ -19042,8 +18121,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       "priority": "P1",
       "edition": "community",
       "aiDoc": {
-        "toolSummary": "Atomic macro: automatically fit a 2D physics collider to a target node's Sprite/UITransform bounds in ONE call. Pipeline: 1) validate target node, 2) detect Sprite + UITransform components, 3) attempt alpha-outline extraction for PolygonCollider2D, 4) fallback to BoxCollider2D/CircleCollider2D from content size, 5) set physics properties, 6) highlight. If nodeUuid is omitted, uses current editor selection. Parameters: - nodeUuid(optional): Target node UUID. Uses current selection if omitted. - colliderType(optional, default \"auto\"): Collider shape to create. - alphaThreshold(optional, default 0.1): Alpha threshold for polygon outline extraction (0.0-1.0). - simplifyTolerance(optional, default 2.0): Polygon simplification tolerance in pixels. - maxVertices(optional, default 64): Maximum vertex count for polygon collider. - sensor(optional): If true, collider detects overlap but doesn't apply physics response. - friction(optional): Surface friction coefficient (0.0-1.0). - restitution(optional): Bounciness coefficient (0.0=no bounce, 1.0=full bounce). - density(optional): Physics material density. Prerequisites: Node must exist and ideally have a Sprite or UITransform for size detection. Without these, collider defaults to 100x100. Returns: {success, uuid, nodeName, colliderType:\"BoxCollider2D\"|\"PolygonCollider2D\", outlineMethod, size?:{width,height}, pointCount?, points?:[{x,y}], stages}. On error: {success:false, error}. colliderType: \"box\"(default)=BoxCollider2D, \"polygon\"=PolygonCollider2D (attempts alpha outline from Sprite texture).",
-        "zhToolSummary": "Atomic macro: automatically fit a 2D physics collider to a target 节点's Sprite/UITransform bounds in ONE call。Pipeline: 1) validate target 节点, 2) detect Sprite + UITransform 组件, 3) attempt alpha-outline extraction for PolygonCollider2D, 4) fallback to BoxCollider2D/CircleCollider2D from content size, 5) set physics properties, 6) highlight。If 节点Uuid is omitted, uses current editor selection。Parameters: - 节点Uuid(optional): Target 节点 UUID。Uses current selection if omitted. - colliderType(optional, default \"auto\"): Collider shape to create. - alphaThreshold(optional, default 0.1): Alpha threshold for polygon outline extraction (0.0-1.0). - simplifyTolerance(optional, default 2.0): Polygon simplification tolerance in pixels. - maxVertices(optional, default 64): Maximum vertex count for polygon collider. - sensor(optional): If true, collider detects overlap but doesn't apply physics response. - friction(optional): Surface friction coefficient (0.0-1.0). - restitution(optional): Bounciness coefficient (0.0=no bounce, 1.0=full bounce). - density(optional): Physics material density。Prerequisites: Node must exist and ideally have a Sprite or UITransform for size detection。Without these, collider defaults to 100x100。Returns: {success, uuid, 节点Name, colliderType:\"BoxCollider2D\"|\"PolygonCollider2D\", outlineMethod, size?:{width,height}, pointCount?, points?:[{x,y}], stages}。On error: {success:false, error}. colliderType: \"box\"(default)=BoxCollider2D, \"polygon\"=PolygonCollider2D (attempts alpha outline from Sprite texture)。",
+        "toolSummary": "Atomic macro: automatically fit a 2D physics collider to a target node's Sprite/UITransform bounds in ONE call. Pipeline: 1) validate target node, 2) detect Sprite + UITransform components, 3) attempt alpha-outline extraction for PolygonCollider2D, 4) fallback to BoxCollider2D/CircleCollider2D from content size, 5) set physics properties, 6) highlight. If nodeUuid is omitted, uses current editor selection. Parameters: - nodeUuid(optional): Target node UUID. Uses current selection if omitted. - colliderType(optional, default \"auto\"): Collider shape to create. - alphaThreshold(optional, default 0.1): Alpha threshold for polygon outline extraction (0.0-1.0). - simplifyTolerance(optional, default 2.0): Polygon simplification tolerance in pixels. - maxVertices(optional, default 64): Maximum vertex count for polygon collider. - sensor(optional): If true, collider detects overlap but doesn't apply physics response. - friction(optional): Surface friction coefficient (0.0-1.0). - restitution(optional): Bounciness coefficient (0.0=no bounce, 1.0=full bounce). - density(optional): Physics material density. - persistenceMode(optional: warn/auto-save/strict). Controls whether successful scene writes only warn, auto-save, or fail in strict persistence mode. Prerequisites: Node must exist and ideally have a Sprite or UITransform for size detection. Without these, collider defaults to 100x100. Returns: {success, uuid, nodeName, colliderType:\"BoxCollider2D\"|\"PolygonCollider2D\", outlineMethod, size?:{width,height}, pointCount?, points?:[{x,y}], stages}. Successful write results may include persistenceStatus{mode,target,requiresPersistence,saveAttempted,...}. On error: {success:false, error}. colliderType: \"box\"(default)=BoxCollider2D, \"polygon\"=PolygonCollider2D (attempts alpha outline from Sprite texture).",
+        "zhToolSummary": "Atomic macro: automatically fit a 2D physics collider to a target 节点's Sprite/UITransform bounds in ONE call。Pipeline: 1) validate target 节点, 2) detect Sprite + UITransform 组件, 3) attempt alpha-outline extraction for PolygonCollider2D, 4) fallback to BoxCollider2D/CircleCollider2D from content size, 5) set physics properties, 6) highlight。If 节点Uuid is omitted, uses current editor selection。Parameters: - 节点Uuid(optional): Target 节点 UUID。Uses current selection if omitted. - colliderType(optional, default \"auto\"): Collider shape to create. - alphaThreshold(optional, default 0.1): Alpha threshold for polygon outline extraction (0.0-1.0). - simplifyTolerance(optional, default 2.0): Polygon simplification tolerance in pixels. - maxVertices(optional, default 64): Maximum vertex count for polygon collider. - sensor(optional): If true, collider detects overlap but doesn't apply physics response. - friction(optional): Surface friction coefficient (0.0-1.0). - restitution(optional): Bounciness coefficient (0.0=no bounce, 1.0=full bounce). - density(optional): Physics material density. - persistenceMode(optional: warn/auto-save/strict)。Controls whether successful 场景 writes only warn, auto-save, or fail in strict persistence mode。Prerequisites: Node must exist and ideally have a Sprite or UITransform for size detection。Without these, collider defaults to 100x100。Returns: {success, uuid, 节点Name, colliderType:\"BoxCollider2D\"|\"PolygonCollider2D\", outlineMethod, size?:{width,height}, pointCount?, points?:[{x,y}], stages}。Successful write results may include persistenceStatus{mode,target,requiresPersistence,saveAttempted,...}。On error: {success:false, error}. colliderType: \"box\"(default)=BoxCollider2D, \"polygon\"=PolygonCollider2D (attempts alpha outline from Sprite texture)。",
         "actionDescription": "",
         "zhActionDescription": "",
         "sourceFile": "src/mcp/tools-atomic-physics.ts",

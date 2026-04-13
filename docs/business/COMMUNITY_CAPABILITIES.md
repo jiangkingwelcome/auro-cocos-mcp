@@ -1,6 +1,6 @@
 # Aura for Cocos Creator — Community Edition Capabilities
 
-> **Community Edition · 16 Tools · ~157 Actions · Open Source (BSL 1.1)**
+> **Community Edition · 14 Tools · 174 Actions · Open Source (BSL 1.1)**
 >
 > 将 AI 能力直接接入 Cocos Creator 编辑器，让 Claude / GPT / Cursor 等 AI 客户端可以读取、修改、管理你的游戏场景。
 
@@ -11,18 +11,16 @@
 | 分类 | 工具 | Actions 数 | 说明 |
 |------|------|:---------:|------|
 | 🔌 连接 | `bridge_status` | — | 连接检测与版本能力查询 |
-| 🔍 场景查询 | `scene_query` | **43** | 只读检查场景图、节点、组件 |
-| ✏️ 场景操作 | `scene_operation` | **31** | 创建/删除/修改场景节点 |
+| 🔍 场景查询 | `scene_query` | **50** | 只读检查场景图、节点、组件 |
+| ✏️ 场景操作 | `scene_operation` | **37** | 创建/删除/修改场景节点 |
 | 📦 资产管理 | `asset_operation` | **17** | 管理项目资产文件 |
-| 🎛️ 编辑器控制 | `editor_action` | **23** | 控制编辑器行为 |
-| 🎬 动画 | `animation_tool` | **10** | 创建关键帧动画、控制播放 |
+| 🎛️ 编辑器控制 | `editor_action` | **38** | 控制编辑器行为 |
 | ⚙️ 物理 | `physics_tool` | **10** | 碰撞体、刚体、关节、物理世界 |
 | ⚡ 偏好设置 | `preferences` | **7** | 读写编辑器偏好 |
 | 📡 广播事件 | `broadcast` | **5** | 监听/发送编辑器事件 |
 | 🔧 工具管理 | `tool_management` | **4** | 动态启用/禁用工具 |
 | 🧩 原子宏 | `create_prefab_atomic` | — | 一键创建 Prefab（含回滚） |
 | 🖼️ 纹理导入 | `import_and_apply_texture` | — | 一键导入图片并应用到 Sprite |
-| 🎞️ 动画宏 | `create_tween_animation_atomic` | — | 一键创建补间动画片段 |
 | 🔮 碰撞宏 | `auto_fit_physics_collider` | — | 自动拟合 Sprite 轮廓碰撞体 |
 | 🔩 脚本执行 | `execute_script` | ∞ | 逃生舱：运行任意场景脚本方法 |
 | 🪝 自定义宏 | `register_custom_macro` | — | 运行时注册自定义宏工具 |
@@ -47,7 +45,7 @@
 
 ---
 
-## 2. 🔍 scene_query — 场景查询（43 Actions）
+## 2. 🔍 scene_query — 场景查询
 
 **只读**。检查场景层级、节点详情、组件属性。不修改任何内容。
 
@@ -119,6 +117,8 @@
 
 ### 脚本集成
 
+> 动画操作边界：社区版只保留 `scene_query.get_animation_state` 用于检查动画状态；创建、播放、暂停、补间生成等操作为 Pro 能力。
+
 | Action | 必填参数 | 说明 |
 |--------|---------|------|
 | `check_script_ready` | `script` | 检查脚本类是否已编译注册 |
@@ -126,7 +126,7 @@
 
 ---
 
-## 3. ✏️ scene_operation — 场景操作（31 Actions）
+## 3. ✏️ scene_operation — 场景操作
 
 修改场景图的写操作。
 
@@ -210,7 +210,7 @@ AI 传入任意大小写均可自动纠正：
 
 ---
 
-## 4. 📦 asset_operation — 资产管理（17 Actions）
+## 4. 📦 asset_operation — 资产管理
 
 通过 AssetDB 管理项目资产。所有路径使用 `db://` 格式。
 
@@ -243,7 +243,7 @@ AI 传入任意大小写均可自动纠正：
 
 ---
 
-## 5. 🎛️ editor_action — 编辑器控制（23 Actions）
+## 5. 🎛️ editor_action — 编辑器控制
 
 ### 场景管理
 
@@ -295,30 +295,13 @@ AI 传入任意大小写均可自动纠正：
 
 ---
 
-## 6. 🎬 animation_tool — 动画工具（10 Actions）
+## 6. 🎬 动画操作说明
 
-为节点上的 Animation 组件创建关键帧动画并控制播放。
-
-| Action | 关键参数 | 说明 |
-|--------|---------|------|
-| `create_clip` | `uuid`, `clipName`, `tracks` | 创建含关键帧轨道的动画片段 |
-| `play` | `uuid`, `clipName` | 播放指定动画片段 |
-| `pause` | `uuid` | 暂停当前动画 |
-| `resume` | `uuid` | 恢复暂停的动画 |
-| `stop` | `uuid` | 停止动画并重置到初始姿态 |
-| `get_state` | `uuid` | 获取当前播放状态（播放中/暂停/速度/片段名） |
-| `list_clips` | `uuid` | 列出节点上所有动画片段 |
-| `set_current_time` | `uuid`, `time` | 跳转到指定时间点 |
-| `set_speed` | `uuid`, `speed` | 设置播放速度倍率 |
-| `crossfade` | `uuid`, `clipName`, `duration` | 渐变过渡到另一片段 |
-
-**支持属性**：`position`、`rotation`、`scale`、`opacity`、`color`、`position.x/y/z`
-
-**循环模式**：`Normal`、`Loop`、`PingPong`、`Reverse`、`LoopReverse`
+社区版不再注册 `animation_tool`。如需查看节点动画状态，请使用 `scene_query.get_animation_state`；如需创建动画片段、播放控制、补间动画原子生成，请升级到 Pro 版。
 
 ---
 
-## 7. ⚙️ physics_tool — 物理工具（10 Actions）
+## 7. ⚙️ physics_tool — 物理工具
 
 创建和配置 2D/3D 物理组件。
 
@@ -337,7 +320,7 @@ AI 传入任意大小写均可自动纠正：
 
 ---
 
-## 8. ⚡ preferences — 偏好设置（7 Actions）
+## 8. ⚡ preferences — 偏好设置
 
 读写 Cocos Creator 编辑器偏好，支持作用域（全局/项目/默认）。
 
@@ -355,7 +338,7 @@ AI 传入任意大小写均可自动纠正：
 
 ---
 
-## 9. 📡 broadcast — 广播事件（5 Actions）
+## 9. 📡 broadcast — 广播事件
 
 监听和发送编辑器广播事件。
 
@@ -371,7 +354,7 @@ AI 传入任意大小写均可自动纠正：
 
 ---
 
-## 10. 🔧 tool_management — 工具管理（4 Actions）
+## 10. 🔧 tool_management — 工具管理
 
 动态启用/禁用 MCP 工具，减少 token 消耗和 AI 混淆。
 
@@ -420,35 +403,9 @@ AI 传入任意大小写均可自动纠正：
 
 ---
 
-## 13. 🎞️ create_tween_animation_atomic — 原子创建补间动画
+## 13. 🎞️ 补间动画原子工具说明
 
-一次调用创建完整动画片段并挂载到节点。
-
-**关键参数**：
-
-| 参数 | 说明 |
-|------|------|
-| `tracks` | ✅ 动画轨道数组（至少 1 个） |
-| `nodeUuid` | 目标节点 UUID |
-| `clipName` | 片段名称（默认 `NewClip`） |
-| `duration` | 总时长（秒，默认 1.0） |
-| `wrapMode` | `Normal`/`Loop`/`PingPong`/`Reverse`/`LoopReverse` |
-| `autoPlay` | 创建后立即播放（默认 `false`） |
-| `savePath` | 保存为 `.anim` 资产的 `db://` 路径（可选） |
-
-**轨道格式示例**：
-
-```json
-{
-  "property": "position",
-  "keyframes": [
-    { "time": 0, "value": { "x": 0, "y": 0, "z": 0 } },
-    { "time": 1, "value": { "x": 200, "y": 0, "z": 0 }, "easing": "cubicInOut" }
-  ]
-}
-```
-
-**支持缓动函数**：`linear`、`quadIn/Out/InOut`、`cubicIn/Out/InOut`、`sineIn/Out/InOut`、`elasticIn/Out`、`bounceIn/Out/InOut`、`backIn/Out/InOut` 等 30+ 种
+社区版不再注册 `create_tween_animation_atomic`。如需一键生成补间动画片段，请使用 Pro 版；社区版仅保留动画状态查询，不提供动画写入能力。
 
 ---
 

@@ -135,8 +135,7 @@ describe('AuraUpdater — 分级热更新', () => {
    * _silentHotpatch catch 分支在下一个微任务里设置 available。
    */
   function stubSilentHotpatch() {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    vi.spyOn(updater as any, '_silentHotpatch').mockResolvedValue(undefined);
+    vi.spyOn(updater as unknown as { _silentHotpatch: () => Promise<void> }, '_silentHotpatch').mockResolvedValue(undefined);
   }
 
   // ─────────────────────────────────────────────────────────────────────────

@@ -38,7 +38,6 @@ function loadMerge() {
     console.error('缺少 dist/updater.js，请先运行: npx tsc');
     process.exit(1);
   }
-  // eslint-disable-next-line import/no-dynamic-require, @typescript-eslint/no-require-imports
   return require(updaterPath).applyLocalHotpatchMerge;
 }
 

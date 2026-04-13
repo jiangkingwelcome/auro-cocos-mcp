@@ -5,6 +5,39 @@
   "title": "Aura for Cocos Creator",
   "description": "AI-powered Cocos Creator editor plugin — query, modify, and control your project via MCP",
   "author": "GameFlowEditor",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "watch": "tsc -p tsconfig.json --watch",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "coverage": "vitest run --coverage",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "ci": "npm run typecheck && npm run lint && npm run coverage",
+    "verify": "node scripts/verify-local.mjs",
+    "build:release": "node scripts/build-release.mjs",
+    "build:native": "node scripts/build-native.mjs",
+    "build:native:release": "node scripts/build-native.mjs --release",
+    "package:pro": "node scripts/package-pro.mjs",
+    "install:global": "node scripts/install-global.js"
+  },
+  "dependencies": {
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^22.14.0",
+    "@vitest/coverage-v8": "^4.0.18",
+    "bytenode": "^1.5.7",
+    "esbuild": "^0.27.3",
+    "eslint": "^10.0.0",
+    "javascript-obfuscator": "^5.3.0",
+    "prettier": "^3.8.1",
+    "typescript": "~5.8.2",
+    "typescript-eslint": "^8.55.0",
+    "vitest": "^4.0.0"
+  },
   "editor": ">=3.8.0",
   "main": "./dist/main.js",
   "panels": {

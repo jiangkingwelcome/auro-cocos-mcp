@@ -1,7 +1,7 @@
 import { join } from 'path';
 import type {
   CocosNode, CocosCC, SceneTreeNode, NodeListRow,
-  AnimationComponentLike, AnimClipRef,
+  AnimationComponentLike, AnimationStateLike, AnimClipRef,
   UITransformLike, SpriteLike, SpriteFrameLike, TextureLike,
   ColliderComponentLike, RigidBodyLike, UIOpacityLike,
   PhysicsSystemInstance, CachedAssetInfo, RenderRootLike,
@@ -1091,7 +1091,27 @@ export const methods = {
           } catch (ipcErr: unknown) {
             const msg = ipcErr instanceof Error ? ipcErr.message : String(ipcErr);
             logIgnored(ErrorCategory.EDITOR_IPC, `set-property 资源数组 IPC 失败 (${propPath})`, ipcErr);
-            return { error: `设置资源数组失败: ${msg}。当前版本未允许仅运行时回退。`, assetUuids };
+
+            // 兼容回退：部分版本在 Animation.clips 赋值期间会抛出 keyFramesCount 空引用错误。
+            // 允许仅运行时回退，至少保证当前会话可播放。
+            try {
+              comp[property] = assets;
+              return {
+                success: true,
+                uuid,
+                component: componentName,
+                property,
+                resolvedViaRuntimeFallback: true,
+                assetUuids,
+                warning: `Editor IPC 设置失败，已回退到运行时赋值: ${msg}`,
+              };
+            } catch (runtimeErr: unknown) {
+              const runtimeMsg = runtimeErr instanceof Error ? runtimeErr.message : String(runtimeErr);
+              return {
+                error: `设置资源数组失败: ${msg}；运行时回退也失败: ${runtimeMsg}`,
+                assetUuids,
+              };
+            }
           }
         } catch (assetErr: unknown) {
           return { error: `设置资源数组失败: ${assetErr instanceof Error ? assetErr.message : String(assetErr)}` };
@@ -1417,7 +1437,7 @@ export const methods = {
             mem.unit = 'MB';
           }
           if (assetManager?.assets) {
-            const assetsMap = assetManager.assets as { count?: number; size?: number; forEach: Function };
+            const assetsMap = assetManager.assets as { count?: number; size?: number };
             mem.cachedAssets = assetsMap.count ?? assetsMap.size ?? 0;
           }
         } catch (e: unknown) {
@@ -1474,6 +1494,7 @@ export const methods = {
         path?: string; component?: string; property: string;
         keyframes: Array<{ time: number; value: unknown; easing?: string }>;
       }> | undefined;
+      const shouldAttachToNode = params.attachToNode !== false;
 
       if (!Array.isArray(tracks) || tracks.length === 0) {
         return { error: '缺少 tracks 参数（至少需要一条动画轨道）' };
@@ -1525,6 +1546,15 @@ export const methods = {
       };
 
       const VEC3_PROPS = new Set(['position', 'scale', 'eulerAngles', 'worldPosition', 'worldScale', 'worldEulerAngles']);
+      const parseVec3AxisProperty = (prop: string): { base: string; axis: 'x' | 'y' | 'z' } | null => {
+        const m = /^(position|scale|eulerAngles|worldPosition|worldScale|worldEulerAngles)\.(x|y|z)$/.exec(prop);
+        if (!m) return null;
+        return { base: m[1], axis: m[2] as 'x' | 'y' | 'z' };
+      };
+      const defaultVecAxis = (base: string, axis: 'x' | 'y' | 'z'): number => {
+        if (base === 'scale' || base === 'worldScale') return 1;
+        return axis === 'z' ? 0 : 0;
+      };
       const animNS = cc.animation as Record<string, unknown>;
       const hasNewApi = typeof (animNS.VectorTrack as { new?(): unknown } | undefined)?.['new'] !== 'undefined'
         || typeof animNS.VectorTrack === 'function';
@@ -1555,8 +1585,10 @@ export const methods = {
           const property = track.property;
           const kfs = track.keyframes;
           const sampleVal = kfs[0]?.value;
+          const vecAxisProp = parseVec3AxisProperty(property);
 
           const isVec3 = VEC3_PROPS.has(property)
+            || Boolean(vecAxisProp)
             || (sampleVal !== null && typeof sampleVal === 'object' && sampleVal !== undefined
               && 'x' in (sampleVal as object) && !('r' in (sampleVal as object)));
           const isColor = property === 'color'
@@ -1566,18 +1598,24 @@ export const methods = {
           if (isVec3 && typeof animNS['VectorTrack'] === 'function') {
             const vt = new (animNS['VectorTrack'] as new() => Record<string, unknown>)();
             (vt as { componentsCount: number })['componentsCount'] = 3;
-            applyPath(vt, track.path, track.component, property);
+            applyPath(vt, track.path, track.component, vecAxisProp ? vecAxisProp.base : property);
             const channels = typeof vt['channels'] === 'function'
               ? (vt['channels'] as () => Record<string, unknown>[])() : [];
             const axes = ['x', 'y', 'z'] as const;
             for (let i = 0; i < 3; i++) {
               if (channels[i]) {
-                applyRealCurve(channels[i], kfs.map(kf => [kf.time, {
-                  interpolationMode: toInterpMode(kf.easing),
-                  tangentWeightMode: 0,
-                  value: ((kf.value as Record<string, number>) ?? {})[axes[i]] ?? 0,
-                  leftTangent: 0, leftTangentWeight: 0, rightTangent: 0, rightTangentWeight: 0,
-                }]));
+                applyRealCurve(channels[i], kfs.map(kf => {
+                  const scalarValue = typeof kf.value === 'number' ? kf.value : Number(kf.value) || 0;
+                  const value = vecAxisProp
+                    ? (vecAxisProp.axis === axes[i] ? scalarValue : defaultVecAxis(vecAxisProp.base, axes[i]))
+                    : (((kf.value as Record<string, number>) ?? {})[axes[i]] ?? defaultVecAxis(property, axes[i]));
+                  return [kf.time, {
+                    interpolationMode: toInterpMode(kf.easing),
+                    tangentWeightMode: 0,
+                    value,
+                    leftTangent: 0, leftTangentWeight: 0, rightTangent: 0, rightTangentWeight: 0,
+                  }];
+                }));
               }
             }
             if (typeof (clip as Record<string, unknown>)['addTrack'] === 'function')
@@ -1671,7 +1709,7 @@ export const methods = {
         error?: string;
         editorSyncSkipped?: boolean;
       } | null = null;
-      if (node) {
+      if (node && shouldAttachToNode) {
         const AnimComp = cc.Animation || cc.AnimationComponent;
         if (AnimComp) {
           let anim = node.getComponent(AnimComp);
@@ -1915,9 +1953,26 @@ export const methods = {
         const anim = node.getComponent(AnimClass) as AnimationComponentLike | null;
         if (!anim) return { error: '节点上没有 Animation 组件' };
         const clipName = params.clipName ? toStr(params.clipName) : undefined;
+        const targetName = clipName || (anim.defaultClip?.name ? String(anim.defaultClip.name) : '');
         if (typeof anim.play === 'function') {
-          anim.play(clipName);
+          const state = anim.play(clipName);
+          if (state && typeof state === 'object' && typeof state.play === 'function') {
+            state.play();
+          }
           return { success: true, uuid, action: 'play', clipName: clipName ?? 'default' };
+        }
+        if (typeof anim.getState === 'function') {
+          if (targetName) {
+            let state = anim.getState(targetName);
+            if (!state && anim.defaultClip && typeof anim.createState === 'function') {
+              const created = anim.createState(anim.defaultClip, targetName);
+              state = (created && typeof created === 'object') ? created as AnimationStateLike : anim.getState(targetName);
+            }
+            if (state && typeof state.play === 'function') {
+              state.play();
+              return { success: true, uuid, action: 'play', clipName: targetName, fallback: 'state.play' };
+            }
+          }
         }
         return { error: 'Animation.play 方法不可用' };
       }
@@ -1929,6 +1984,17 @@ export const methods = {
           anim.pause();
           return { success: true, uuid, action: 'pause' };
         }
+        if (typeof anim.getState === 'function') {
+          const clips: AnimClipRef[] = (anim.clips || []).filter((clip): clip is AnimClipRef => Boolean(clip));
+          for (const clip of clips) {
+            if (!clip?.name) continue;
+            const state = anim.getState(String(clip.name));
+            if (state?.isPlaying && typeof state.pause === 'function') {
+              state.pause();
+              return { success: true, uuid, action: 'pause', fallback: 'state.pause' };
+            }
+          }
+        }
         return { error: 'Animation.pause 方法不可用' };
       }
       case 'resume': {
@@ -1938,6 +2004,17 @@ export const methods = {
         if (typeof anim.resume === 'function') {
           anim.resume();
           return { success: true, uuid, action: 'resume' };
+        }
+        if (typeof anim.getState === 'function') {
+          const clips: AnimClipRef[] = (anim.clips || []).filter((clip): clip is AnimClipRef => Boolean(clip));
+          for (const clip of clips) {
+            if (!clip?.name) continue;
+            const state = anim.getState(String(clip.name));
+            if (state && typeof state.resume === 'function') {
+              state.resume();
+              return { success: true, uuid, action: 'resume', fallback: 'state.resume' };
+            }
+          }
         }
         return { error: 'Animation.resume 方法不可用' };
       }
@@ -1949,6 +2026,19 @@ export const methods = {
           anim.stop();
           return { success: true, uuid, action: 'stop' };
         }
+        if (typeof anim.getState === 'function') {
+          const clips: AnimClipRef[] = (anim.clips || []).filter((clip): clip is AnimClipRef => Boolean(clip));
+          let stopped = false;
+          for (const clip of clips) {
+            if (!clip?.name) continue;
+            const state = anim.getState(String(clip.name));
+            if (state && typeof state.stop === 'function') {
+              state.stop();
+              stopped = true;
+            }
+          }
+          if (stopped) return { success: true, uuid, action: 'stop', fallback: 'state.stop' };
+        }
         return { error: 'Animation.stop 方法不可用' };
       }
       case 'set_current_time': {
@@ -1956,13 +2046,20 @@ export const methods = {
         const anim = node.getComponent(AnimClass) as AnimationComponentLike | null;
         if (!anim) return { error: '节点上没有 Animation 组件' };
         const time = toNum(params.time);
-        // Try to get current state and set time
         if (typeof anim.getState === 'function') {
           const clips: AnimClipRef[] = (anim.clips || []).filter((clip): clip is AnimClipRef => Boolean(clip));
           for (const clip of clips) {
             if (!clip?.name) continue;
-            const state = anim.getState(clip.name);
-            if (state) { state.time = time; return { success: true, uuid, time }; }
+            const state = anim.getState(String(clip.name));
+            if (!state) continue;
+            if (typeof state.setTime === 'function') {
+              state.setTime(time);
+              if (typeof state.update === 'function') state.update(0);
+              return { success: true, uuid, time, fallback: 'state.setTime' };
+            }
+            state.time = time;
+            if (typeof state.update === 'function') state.update(0);
+            return { success: true, uuid, time };
           }
         }
         return { success: false, message: '无法设置当前时间，未找到活跃的动画状态' };
@@ -1972,13 +2069,12 @@ export const methods = {
         const anim = node.getComponent(AnimClass) as AnimationComponentLike | null;
         if (!anim) return { error: '节点上没有 Animation 组件' };
         const speed = toNum(params.speed, 1);
-        // Set speed on all clips' states
         if (typeof anim.getState === 'function') {
           const clips: AnimClipRef[] = (anim.clips || []).filter((clip): clip is AnimClipRef => Boolean(clip));
           let set = false;
           for (const clip of clips) {
             if (!clip?.name) continue;
-            const state = anim.getState(clip.name);
+            const state = anim.getState(String(clip.name));
             if (state) { state.speed = speed; set = true; }
           }
           if (set) return { success: true, uuid, speed };

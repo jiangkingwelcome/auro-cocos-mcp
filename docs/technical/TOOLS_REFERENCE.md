@@ -30,7 +30,7 @@ All Funnel tools enforce these mandatory behavioral rules:
 | [asset_operation](#asset_operation) | Write | 17 | 32 | Manage project assets |
 | [editor_action](#editor_action) | Control | 23 | 45 | Control the editor environment |
 | [engine_action](#engine_action) | Runtime | — | 8 | Engine-level runtime controls (Pro only) |
-| [animation_tool](#animation_tool) | Animation | 10 | 10 | Animation clips and playback control |
+| [animation_tool](#animation_tool) | Animation | — | 10 | Animation clips and playback control (Pro only) |
 | [physics_tool](#physics_tool) | Physics | 10 | 12 | Colliders, rigidbodies, joints, world config, raycast |
 | [preferences](#preferences) | Settings | 7 | 7 | Read/write editor preferences |
 | [broadcast](#broadcast) | Events | 5 | 5 | Poll/manage editor event messages |
@@ -41,10 +41,12 @@ All Funnel tools enforce these mandatory behavioral rules:
 | [create_prefab_atomic](#create_prefab_atomic) | Macro | — | — | Create a prefab in one atomic call |
 | [import_and_apply_texture](#import_and_apply_texture) | Macro | — | — | Import image and apply to Sprite |
 | [setup_ui_layout](#setup_ui_layout) | Macro | — | — | Scaffold a ScrollView UI hierarchy (Pro only) |
-| [create_tween_animation_atomic](#create_tween_animation_atomic) | Macro | — | — | Create animation clip with keyframes |
+| [create_tween_animation_atomic](#create_tween_animation_atomic) | Macro | — | 1 | Create animation clip with keyframes (Pro only) |
 | [auto_fit_physics_collider](#auto_fit_physics_collider) | Macro | — | — | Auto-fit 2D physics collider to sprite |
 
-**Community Edition: 16 tools, ~157 actions · Pro Edition: 22 tools, 270+ actions**
+**Community Edition: 14 tools, 174 actions · Pro Edition: 22 tools, 270+ actions**
+
+> Count note: Community numbers above match the current JS runtime. Native Pro modules evolve in phases; the authoritative registration snapshot lives in `docs/business/trust-metrics.json`.
 
 ---
 
@@ -64,8 +66,8 @@ Check connection health. **Always call this first** to verify the bridge is aliv
   "editorVersion": "3.8.0",
   "projectName": "MyGame",
   "projectPath": "D:/MyGame",
-  "toolCount": 16,
-  "totalActions": 157
+  "toolCount": 14,
+  "totalActions": 174
 }
 ```
 
@@ -521,7 +523,11 @@ Manage MCP tool availability. Enable/disable tools to reduce token consumption a
 
 ## animation_tool
 
+**Pro only. Not registered in the Community JS runtime.**
+
 Create, play, and control animation clips on nodes with Animation components.
+
+Community Edition keeps read-only animation inspection through `scene_query.get_animation_state`.
 
 ### Actions (10)
 
@@ -660,6 +666,8 @@ Create a standard ScrollView list hierarchy in one call. **Selection-aware**.
 ---
 
 ## create_tween_animation_atomic
+
+**Pro only. Not registered in the Community JS runtime.**
 
 Create an animation clip with keyframe tracks and optionally attach to a node.
 

@@ -610,7 +610,9 @@ Common errors: "未找到节点"=bad UUID; "未找到父节点"=parent not found
           record: Record<string, unknown>,
         ): Promise<Record<string, unknown>> => {
           if (guardrailWarnings.length) record._pathWarnings = guardrailWarnings;
-          if (record.success) await finalizeSceneOperationResult(record, action, input);
+          if (record.success) {
+            await finalizeSceneOperationResult(record, action, input);
+          }
           return record;
         };
         const runSceneWriteWithPersistence = async (

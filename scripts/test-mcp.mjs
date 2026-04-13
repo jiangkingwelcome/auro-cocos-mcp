@@ -31,7 +31,7 @@ mcpProcess.stdout.on('data', (data) => {
                 resolve(parsed);
                 pendingRequests.delete(parsed.id);
             }
-        } catch (e) {
+        } catch {
             // Ignore non-JSON output
         }
     }

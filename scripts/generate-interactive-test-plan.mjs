@@ -216,7 +216,7 @@ function parseActionDescriptions(description) {
   const lines = description.split(/\r?\n/);
 
   for (const line of lines) {
-    const match = line.match(/^\s*-\s*([a-zA-Z0-9_\/-]+):\s*(.+)\s*$/);
+    const match = line.match(/^\s*-\s*([a-zA-Z0-9_/-]+):\s*(.+)\s*$/);
     if (!match) {
       continue;
     }

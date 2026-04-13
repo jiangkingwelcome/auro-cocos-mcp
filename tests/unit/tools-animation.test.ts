@@ -30,7 +30,7 @@ function parse(result: ToolCallResult): Record<string, unknown> {
   return JSON.parse(result.content[0].text);
 }
 
-describe('animation_tool', () => {
+describe.skip('animation_tool', () => {
   const sceneActions = [
     'create_clip',
     'get_state', 'list_clips', 'set_current_time', 'set_speed', 'crossfade',
@@ -43,7 +43,7 @@ describe('animation_tool', () => {
       const result = await server.callTool('animation_tool', {
         action,
         uuid: 'test-uuid',
-        ...(action === 'create_clip' ? { tracks: [{ property: 'position', keyframes: [{ time: 0, value: [0, 0, 0] }] }] } : {}),
+        ...(action === 'create_clip' ? { tracks: [{ property: 'position', keyframes: [{ time: 0, value: [0, 0, 0] }, { time: 1, value: [100, 0, 0] }] }] } : {}),
         ...(action === 'crossfade' ? { clipName: 'idle' } : {}),
         ...(action === 'set_current_time' ? { time: 1.5 } : {}),
         ...(action === 'set_speed' ? { speed: 2.0 } : {}),
@@ -80,7 +80,7 @@ describe('animation_tool', () => {
       action: 'create_clip',
       uuid: 'test-uuid',
       savePath: 'db://assets/animations/saved_clip.anim',
-      tracks: [{ property: 'position', keyframes: [{ time: 0, value: [0, 0, 0] }] }],
+      tracks: [{ property: 'position', keyframes: [{ time: 0, value: [0, 0, 0] }, { time: 1, value: [100, 0, 0] }] }],
     });
     const data = parse(result);
     expect(data.savedAsset).toEqual(expect.objectContaining({
@@ -115,7 +115,7 @@ describe('animation_tool', () => {
       action: 'create_clip',
       uuid: 'test-uuid',
       savePath: 'db://assets/animations/saved_clip.anim',
-      tracks: [{ property: 'position', keyframes: [{ time: 0, value: [0, 0, 0] }] }],
+      tracks: [{ property: 'position', keyframes: [{ time: 0, value: [0, 0, 0] }, { time: 1, value: [100, 0, 0] }] }],
     });
     const data = parse(result);
     expect(data.savedAsset).toBeNull();
@@ -146,7 +146,7 @@ describe('animation_tool', () => {
       action: 'create_clip',
       uuid: 'test-uuid',
       savePath: 'db://assets/animations/saved_clip.anim',
-      tracks: [{ property: 'position', keyframes: [{ time: 0, value: [0, 0, 0] }] }],
+      tracks: [{ property: 'position', keyframes: [{ time: 0, value: [0, 0, 0] }, { time: 1, value: [100, 0, 0] }] }],
     });
     const data = parse(result);
     expect(data.savedAsset).toEqual(expect.objectContaining({
@@ -296,6 +296,46 @@ describe('animation_tool', () => {
     expect(data.error).toBeDefined();
   });
 
+  it('create_clip filters invalid tracks and errors when all tracks invalid', async () => {
+    const ctx = makeCtx();
+    const server = buildCocosToolServer(ctx);
+    const result = await server.callTool('animation_tool', {
+      action: 'create_clip',
+      uuid: 'test-uuid',
+      tracks: [
+        { property: '', keyframes: [{ time: 0, value: [0, 0, 0] }] },
+        { property: 'position', keyframes: [{ time: 0 }] },
+      ],
+    });
+    const data = parse(result);
+    expect(result.isError).toBe(true);
+    expect(data.error).toContain('未提供有效 tracks');
+  });
+
+  it('create_clip sends only sanitized valid tracks to scene method', async () => {
+    const sceneMethod = vi.fn().mockResolvedValue({ success: true, clipName: 'clip', clipDuration: 1 });
+    const ctx = makeCtx({ sceneMethod });
+    const server = buildCocosToolServer(ctx);
+
+    const result = await server.callTool('animation_tool', {
+      action: 'create_clip',
+      uuid: 'test-uuid',
+      tracks: [
+        { property: 'position', keyframes: [{ time: 0, value: { x: 0, y: 0, z: 0 } }] },
+        { property: 'scale', keyframes: [{ time: 0, value: { x: 1, y: 1, z: 1 } }, { time: 1, value: { x: 0.5, y: 0.5, z: 1 } }] },
+      ],
+    });
+
+    expect(result.isError).toBeUndefined();
+    const createCall = sceneMethod.mock.calls.find((call) => call[0] === 'createAnimationClip');
+    expect(createCall).toBeTruthy();
+    const payload = createCall?.[1]?.[0] as Record<string, unknown>;
+    const tracks = payload.tracks as Array<Record<string, unknown>>;
+    expect(Array.isArray(tracks)).toBe(true);
+    expect(tracks.length).toBe(1);
+    expect(tracks[0].property).toBe('scale');
+  });
+
   it('returns error for unknown action', async () => {
     const ctx = makeCtx();
     const server = buildCocosToolServer(ctx);
@@ -319,6 +359,20 @@ describe('animation_tool', () => {
     const result = await server.callTool('animation_tool', { action: 'play', uuid: 'u' });
     const data = parse(result);
     expect(data.error).toContain('animator crash');
+    expect(result.isError).toBe(true);
+  });
+});
+
+describe('animation_tool — community guardrail', () => {
+  it('社区版不注册 animation_tool', () => {
+    const server = buildCocosToolServer(makeCtx());
+    const names = server.listTools().map((tool) => tool.name);
+    expect(names).not.toContain('animation_tool');
+  });
+
+  it('社区版调用 animation_tool 返回 isError', async () => {
+    const server = buildCocosToolServer(makeCtx());
+    const result = await server.callTool('animation_tool', { action: 'get_state', uuid: 'u' });
     expect(result.isError).toBe(true);
   });
 });

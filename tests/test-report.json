@@ -1,7 +1,7 @@
 {
-  "total": 378,
+  "total": 365,
   "passed": 223,
-  "failed": 155,
+  "failed": 142,
   "skipped": 0,
   "errors": [
     {
@@ -289,83 +289,6 @@
       "tool": "engine_action",
       "action": "get_editor_performance",
       "title": "性能总览",
-      "error": "HTTP 429: Too Many Requests"
-    },
-    {
-      "id": 265,
-      "tool": "animation_tool",
-      "action": "create_clip",
-      "title": "创建动画",
-      "error": "HTTP 429: Too Many Requests"
-    },
-    {
-      "id": 266,
-      "tool": "animation_tool",
-      "action": "play",
-      "title": "播放默认",
-      "error": "HTTP 429: Too Many Requests"
-    },
-    {
-      "id": 267,
-      "tool": "animation_tool",
-      "action": "play",
-      "title": "播放指定",
-      "error": "HTTP 429: Too Many Requests"
-    },
-    {
-      "id": 268,
-      "tool": "animation_tool",
-      "action": "pause",
-      "title": "暂停",
-      "error": "HTTP 429: Too Many Requests"
-    },
-    {
-      "id": 269,
-      "tool": "animation_tool",
-      "action": "resume",
-      "title": "恢复",
-      "error": "HTTP 429: Too Many Requests"
-    },
-    {
-      "id": 270,
-      "tool": "animation_tool",
-      "action": "stop",
-      "title": "停止",
-      "error": "HTTP 429: Too Many Requests"
-    },
-    {
-      "id": 271,
-      "tool": "animation_tool",
-      "action": "get_state",
-      "title": "查状态",
-      "error": "HTTP 429: Too Many Requests"
-    },
-    {
-      "id": 272,
-      "tool": "animation_tool",
-      "action": "list_clips",
-      "title": "列出片段",
-      "error": "HTTP 429: Too Many Requests"
-    },
-    {
-      "id": 273,
-      "tool": "animation_tool",
-      "action": "set_current_time",
-      "title": "跳转时间",
-      "error": "HTTP 429: Too Many Requests"
-    },
-    {
-      "id": 274,
-      "tool": "animation_tool",
-      "action": "set_speed",
-      "title": "倍速播放",
-      "error": "HTTP 429: Too Many Requests"
-    },
-    {
-      "id": 275,
-      "tool": "animation_tool",
-      "action": "crossfade",
-      "title": "交叉淡入",
       "error": "HTTP 429: Too Many Requests"
     },
     {
@@ -667,20 +590,6 @@
       "tool": "import_and_apply_texture",
       "action": "import_and_apply_texture",
       "title": "自动添加 Sprite",
-      "error": "HTTP 429: Too Many Requests"
-    },
-    {
-      "id": 321,
-      "tool": "create_tween_animation_atomic",
-      "action": "create_tween_animation_atomic",
-      "title": "淡入动画",
-      "error": "HTTP 429: Too Many Requests"
-    },
-    {
-      "id": 322,
-      "tool": "create_tween_animation_atomic",
-      "action": "create_tween_animation_atomic",
-      "title": "位移+旋转",
       "error": "HTTP 429: Too Many Requests"
     },
     {

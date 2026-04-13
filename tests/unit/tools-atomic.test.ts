@@ -283,7 +283,7 @@ describe('import_and_apply_texture — 正常流程', () => {
     spriteFrameValue?: unknown;
     addComponentResults?: Record<string, Record<string, unknown>>;
   } = {}) {
-    let components = [...(options.components ?? [])];
+    const components = [...(options.components ?? [])];
     return vi.fn().mockImplementation(async (method: string, args?: Array<Record<string, unknown>>) => {
       const action = args?.[0]?.action;
       if (method === 'dispatchQuery' && action === 'get_components') {
@@ -682,7 +682,7 @@ describe('import_and_apply_texture — 正常流程', () => {
 // ─────────────────────────────────────────────────────────────────────────────
 // create_tween_animation_atomic
 // ─────────────────────────────────────────────────────────────────────────────
-describe('create_tween_animation_atomic — 正常流程', () => {
+describe.skip('create_tween_animation_atomic — 正常流程', () => {
   it('完整流程：验证节点 → 创建动画 → highlight', async () => {
     const sceneMethod = vi.fn().mockImplementation((method: string) => {
       if (method === 'dispatchQuery') return Promise.resolve({ uuid: 'node-uuid', name: 'Hero' });
@@ -951,6 +951,23 @@ describe('create_tween_animation_atomic — 正常流程', () => {
     expect(result.isError).toBe(true);
     const data = parse(result) as any;
     expect(data.error).toContain('AnimationClip');
+  });
+});
+
+describe('create_tween_animation_atomic — community guardrail', () => {
+  it('社区版不注册 create_tween_animation_atomic', () => {
+    const server = buildCocosToolServer(makeCtx());
+    const names = server.listTools().map((tool) => tool.name);
+    expect(names).not.toContain('create_tween_animation_atomic');
+  });
+
+  it('社区版调用 create_tween_animation_atomic 返回 isError', async () => {
+    const server = buildCocosToolServer(makeCtx());
+    const result = await server.callTool('create_tween_animation_atomic', {
+      nodeUuid: 'node-uuid',
+      tracks: [{ property: 'position', keyframes: [{ time: 0, value: 0 }, { time: 1, value: 100 }] }],
+    });
+    expect(result.isError).toBe(true);
   });
 });
 

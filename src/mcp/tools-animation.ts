@@ -76,20 +76,12 @@ export function registerAnimationTools(server: LocalToolServer, ctx: BridgeToolC
     assetUuid: string,
     playOnLoad = false,
   ): Promise<Record<string, unknown>> {
-    // setComponentProperty 运行在 execute-scene-script 上下文中，不会自动触发 dirty。
-    // 用 begin-recording + force-dirty + end-recording 从扩展主进程确保 dirty 被正确标记。
+    // 3.8.8 在通过 set-property 写 Animation.clips 时容易触发 keyFramesCount 空引用异常。
+    // 产品主干默认走“安全绑定”：仅绑定 defaultClip（必要时附带 playOnLoad）。
     const recordId = await beginSceneRecording(editorMsg, [nodeUuid]);
-    let clipsResult: Record<string, unknown>;
     let defaultClipResult: Record<string, unknown>;
     let playOnLoadResult: Record<string, unknown> | null = null;
     try {
-      clipsResult = await sceneMethod('setComponentProperty', [
-        nodeUuid, 'Animation', 'clips', [{ __uuid__: assetUuid }],
-      ]) as Record<string, unknown>;
-      if (clipsResult?.error) {
-        return { error: `已保存 .anim 资产，但回绑 Animation.clips 失败: ${clipsResult.error}` };
-      }
-
       defaultClipResult = await sceneMethod('setComponentProperty', [
         nodeUuid, 'Animation', 'defaultClip', { __uuid__: assetUuid },
       ]) as Record<string, unknown>;
@@ -125,7 +117,7 @@ export function registerAnimationTools(server: LocalToolServer, ctx: BridgeToolC
     return {
       bound: true,
       assetUuid,
-      clipsResult,
+      bindingMode: 'safe-defaultClip-only',
       defaultClipResult,
       ...(playOnLoadResult ? { playOnLoadResult } : {}),
       stateAfter,
@@ -134,6 +126,121 @@ export function registerAnimationTools(server: LocalToolServer, ctx: BridgeToolC
 
   async function queryAnimationState(uuid: string): Promise<Record<string, unknown>> {
     return await sceneMethod('dispatchQuery', [{ action: 'get_animation_state', uuid }]) as Record<string, unknown>;
+  }
+
+  function sanitizeTracksForClip(rawTracks: unknown): {
+    validTracks: Array<Record<string, unknown>>;
+    droppedTracks: number;
+    droppedKeyframes: number;
+  } {
+    const tracks = Array.isArray(rawTracks) ? rawTracks : [];
+    const validTracks: Array<Record<string, unknown>> = [];
+    let droppedTracks = 0;
+    let droppedKeyframes = 0;
+
+    const vec3Props = new Set([
+      'position', 'scale', 'eulerAngles',
+      'worldPosition', 'worldScale', 'worldEulerAngles',
+    ]);
+
+    const normalizeVec3 = (value: unknown): { x: number; y: number; z: number } | null => {
+      if (Array.isArray(value)) {
+        const x = Number(value[0]);
+        const y = Number(value[1]);
+        const z = Number(value[2] ?? 0);
+        if (!Number.isFinite(x) || !Number.isFinite(y) || !Number.isFinite(z)) return null;
+        return { x, y, z };
+      }
+      if (value && typeof value === 'object') {
+        const raw = value as Record<string, unknown>;
+        const x = Number(raw.x);
+        const y = Number(raw.y);
+        const z = Number(raw.z ?? 0);
+        if (!Number.isFinite(x) || !Number.isFinite(y) || !Number.isFinite(z)) return null;
+        return { x, y, z };
+      }
+      return null;
+    };
+
+    const normalizeColor = (value: unknown): { r: number; g: number; b: number; a: number } | null => {
+      if (Array.isArray(value)) {
+        const r = Number(value[0]);
+        const g = Number(value[1]);
+        const b = Number(value[2]);
+        const a = Number(value[3] ?? 255);
+        if (!Number.isFinite(r) || !Number.isFinite(g) || !Number.isFinite(b) || !Number.isFinite(a)) return null;
+        return { r, g, b, a };
+      }
+      if (value && typeof value === 'object') {
+        const raw = value as Record<string, unknown>;
+        const r = Number(raw.r);
+        const g = Number(raw.g);
+        const b = Number(raw.b);
+        const a = Number(raw.a ?? 255);
+        if (!Number.isFinite(r) || !Number.isFinite(g) || !Number.isFinite(b) || !Number.isFinite(a)) return null;
+        return { r, g, b, a };
+      }
+      return null;
+    };
+
+    for (const item of tracks) {
+      if (!item || typeof item !== 'object') {
+        droppedTracks += 1;
+        continue;
+      }
+      const track = item as Record<string, unknown>;
+      const property = typeof track.property === 'string' ? track.property.trim() : '';
+      if (!property) {
+        droppedTracks += 1;
+        continue;
+      }
+      const keyframesRaw = Array.isArray(track.keyframes) ? track.keyframes : [];
+      const keyframes: Array<Record<string, unknown>> = [];
+
+      for (const kf of keyframesRaw) {
+        if (!kf || typeof kf !== 'object') {
+          droppedKeyframes += 1;
+          continue;
+        }
+        const k = kf as Record<string, unknown>;
+        if (typeof k.time !== 'number' || !Number.isFinite(k.time)) {
+          droppedKeyframes += 1;
+          continue;
+        }
+        if (!("value" in k) || k.value === undefined || k.value === null) {
+          droppedKeyframes += 1;
+          continue;
+        }
+
+        let normalizedValue: unknown = k.value;
+        if (vec3Props.has(property)) {
+          const vec3 = normalizeVec3(k.value);
+          if (!vec3) {
+            droppedKeyframes += 1;
+            continue;
+          }
+          normalizedValue = vec3;
+        } else if (property === 'color') {
+          const color = normalizeColor(k.value);
+          if (!color) {
+            droppedKeyframes += 1;
+            continue;
+          }
+          normalizedValue = color;
+        }
+
+        keyframes.push({ ...k, value: normalizedValue });
+      }
+
+      if (keyframes.length < 2) {
+        droppedTracks += 1;
+        continue;
+      }
+
+      validTracks.push({ ...track, property, keyframes });
+    }
+
+    return { validTracks, droppedTracks, droppedKeyframes };
   }
 
   async function waitForAnimationState(
@@ -355,11 +462,27 @@ Returns: create_clip→{success,clipName,duration}. play/pause/resume/stop→{su
 
         switch (p.action) {
           case 'create_clip': {
-            const result = await sceneMethod('createAnimationClip', [p]);
+            const sanitizedTracks = sanitizeTracksForClip(p.tracks);
+            if (sanitizedTracks.validTracks.length === 0) {
+              return text({
+                success: false,
+                error: 'create_clip 未提供有效 tracks（每条轨道至少需要 2 个有效 keyframe: time + value）。',
+                droppedTracks: sanitizedTracks.droppedTracks,
+                droppedKeyframes: sanitizedTracks.droppedKeyframes,
+              }, true);
+            }
+
+            const savePath = typeof p.savePath === 'string' ? p.savePath : '';
+            const clipPayload = {
+              ...p,
+              tracks: sanitizedTracks.validTracks,
+              ...(savePath ? { attachToNode: false } : {}),
+            };
+
+            const result = await sceneMethod('createAnimationClip', [clipPayload]);
             if (isFailedResult(result)) {
               return text(result, true);
             }
-            const savePath = typeof p.savePath === 'string' ? p.savePath : '';
             if (!savePath) {
               // createAnimationClip 在 execute-scene-script 中直接操作运行时对象（editorSyncSkipped=true），
               // 编辑器场景模型不感知此 clip，即使手动 Ctrl+S 也无法持久化。
@@ -384,7 +507,7 @@ Returns: create_clip→{success,clipName,duration}. play/pause/resume/stop→{su
               wrapMode: String(p.wrapMode ?? 'Normal'),
               speed: Number(p.speed ?? 1),
               sample: Number(p.sample ?? 60),
-              tracks: (p.tracks as Array<Record<string, unknown>> | undefined) || [],
+              tracks: sanitizedTracks.validTracks,
             });
             if (saveResult.error) {
               const response = {

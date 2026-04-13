@@ -5,7 +5,7 @@ import {
   normalizeDbUrl,
   normalizeParams,
 } from './tools-shared';
-import { tryRegisterProTools, isProLoaded, getProLicenseStatus } from './tools-pro-bridge';
+import { tryRegisterProTools, getProLicenseStatus } from './tools-pro-bridge';
 
 // Community Edition JS tools (frozen, open source)
 import { registerSceneTools } from './tools-scene';
@@ -14,7 +14,6 @@ import { registerEditorTools } from './tools-editor';
 import { registerMiscTools } from './tools-misc';
 import { registerAtomicTools } from './tools-atomic';
 import { registerScriptTools } from './tools-script';
-import { registerAnimationTools } from './tools-animation';
 import { registerPhysicsTools } from './tools-physics';
 
 export type { BridgeToolContext };
@@ -30,7 +29,7 @@ export type { BridgeToolContext };
  *     All new features are developed in Rust only.
  *
  *   Community Edition (no .node or no license):
- *     JS community tools are registered (~157 actions).
+ *     JS community tools are registered (~174 actions).
  *     Frozen codebase — bug fixes only, no new features.
  *     Open source on GitHub (BSL 1.1).
  */
@@ -81,7 +80,6 @@ capabilities.aiRulesVersion: current AI Rules version for cache invalidation.`, 
   registerMiscTools(server, normalizedCtx);
   registerAtomicTools(server, normalizedCtx);
   registerScriptTools(server, normalizedCtx);
-  registerAnimationTools(server, normalizedCtx);
   registerPhysicsTools(server, normalizedCtx);
 
   return server;
