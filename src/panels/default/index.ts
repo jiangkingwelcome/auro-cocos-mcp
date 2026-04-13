@@ -243,6 +243,20 @@ module.exports = Editor.Panel.define({
             <div class="divider"></div>
 
             <div class="control-header">
+              <h3 data-i18n="settings.language_title">界面语言</h3>
+              <p data-i18n="settings.language_desc">设置面板显示语言，切换后立即生效。</p>
+            </div>
+            <div class="settings-card" style="gap:0;">
+              <div class="setting-item">
+                <div class="setting-info">
+                  <span class="setting-label" data-i18n="settings.language">语言</span>
+                  <span class="setting-hint" data-i18n="settings.language_hint">选择面板显示语言</span>
+                </div>
+                <select id="settingLanguage" class="setting-select"></select>
+              </div>
+            </div>
+
+            <div class="control-header">
               <h3 data-i18n="settings.title">安全与性能</h3>
               <p data-i18n="settings.desc">配置 MCP Bridge 的安全策略和性能参数。</p>
             </div>
@@ -1028,6 +1042,7 @@ module.exports = Editor.Panel.define({
     langBtn: '#langBtn', toolToggleList: '#toolToggleList',
     settingRateLimit: '#settingRateLimit', settingLoopback: '#settingLoopback',
     settingBodyLimit: '#settingBodyLimit', settingRollback: '#settingRollback',
+    settingLanguage: '#settingLanguage',
     loopbackWarn: '#loopbackWarn',
     saveSettingsBtn: '#saveSettingsBtn', resetSettingsBtn: '#resetSettingsBtn',
     settingsResult: '#settingsResult', settingsIcon: '#settingsIcon', settingsMessage: '#settingsMessage',
@@ -1048,31 +1063,66 @@ module.exports = Editor.Panel.define({
     const I18N = {
       zh: require('./i18n/zh.js'),
       en: require('./i18n/en.js'),
+      ja: require('./i18n/ja.js'),
+      ko: require('./i18n/ko.js'),
+      es: require('./i18n/es.js'),
+      fr: require('./i18n/fr.js'),
+      de: require('./i18n/de.js'),
+      ru: require('./i18n/ru.js'),
     };
+    const LANGUAGE_OPTIONS = [
+      { value: 'zh', label: '简体中文' },
+      { value: 'en', label: 'English' },
+      { value: 'ja', label: '日本語' },
+      { value: 'ko', label: '한국어' },
+      { value: 'es', label: 'Español' },
+      { value: 'fr', label: 'Français' },
+      { value: 'de', label: 'Deutsch' },
+      { value: 'ru', label: 'Русский' },
+    ];
     self._I18N = I18N;
+
+    if (self.$.settingLanguage) {
+      self.$.settingLanguage.innerHTML = LANGUAGE_OPTIONS.map(opt => `<option value="${opt.value}">${opt.label}</option>`).join('');
+    }
+
     let currentLang = 'zh';
     try { currentLang = localStorage.getItem('mcp-lang') || 'zh'; } catch { }
+    if (!I18N[currentLang]) currentLang = 'zh';
     self._currentLang = currentLang;
 
     function applyI18n(lang) {
-      currentLang = lang;
-      self._currentLang = lang;
-      const dict = I18N[lang] || I18N.zh;
+      const nextLang = I18N[lang] ? lang : 'zh';
+      currentLang = nextLang;
+      self._currentLang = nextLang;
+      const dict = I18N[nextLang] || I18N.zh;
+      const fallbackDict = I18N.en || I18N.zh;
       self.$.app.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.getAttribute('data-i18n');
-        if (dict[key]) el.textContent = dict[key];
+        const text = dict[key] || fallbackDict[key];
+        if (text) el.textContent = text;
       });
+      if (self.$.settingLanguage) {
+        self.$.settingLanguage.value = nextLang;
+      }
       // Re-apply license UI with new language
       if (self._lastLicenseStatus) {
         self.updateLicenseUI(self._lastLicenseStatus);
       }
-      try { localStorage.setItem('mcp-lang', lang); } catch { }
+      try { localStorage.setItem('mcp-lang', nextLang); } catch { }
     }
     applyI18n(currentLang);
 
     if (self.$.langBtn) {
       self.$.langBtn.addEventListener('click', () => {
-        applyI18n(currentLang === 'zh' ? 'en' : 'zh');
+        const idx = LANGUAGE_OPTIONS.findIndex(item => item.value === currentLang);
+        const next = LANGUAGE_OPTIONS[(idx + 1) % LANGUAGE_OPTIONS.length];
+        applyI18n(next ? next.value : 'zh');
+      });
+    }
+    if (self.$.settingLanguage) {
+      self.$.settingLanguage.addEventListener('change', (e) => {
+        applyI18n(e.target.value);
       });
     }
 
