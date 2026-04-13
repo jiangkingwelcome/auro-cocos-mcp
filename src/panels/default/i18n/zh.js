@@ -72,6 +72,32 @@ module.exports = {
     'settings.off': '关闭',
     'settings.warn_loopback': '⚠ 关闭回环限制将允许外部网络访问，请确保网络安全',
 
+    // Runtime UI texts
+    'ui.user_center': '用户中心',
+    'status.clients_title': '已连接的 AI 客户端',
+    'status.empty_service_stopped': '服务未启动',
+    'status.empty_service_hint': '请前往「控制」Tab 启动 Aura 服务',
+    'ctrl.current_status_prefix': '当前服务状态：',
+    'ctrl.running': '运行中',
+    'ctrl.stopped': '已停止',
+    'ctrl.stop_confirm': '⚠ 确认停止？',
+    'cfg.detecting': '检测中...',
+    'cfg.remove': '取消注入',
+    'cfg.removing': '⏳ 移除中…',
+    'cfg.inject_button': '注入配置',
+    'copy.copied': '已复制',
+    'copy.title': '复制',
+    'error.operation_failed': '操作失败',
+    'time.just_now': '刚刚',
+    'time.minutes_ago': '分钟前',
+    'time.hours_ago': '小时前',
+
+    // Dialog
+    'dialog.node_missing_title': '缺少 Node.js 运行环境',
+    'dialog.node_missing_msg': '未检测到 Node.js，请先安装后重试。',
+    'dialog.node_download': '去下载 Node.js',
+    'dialog.node_retry_later': '我已安装，稍后重试',
+
     // Guide Tab
     'tab.guide': '指南',
     'guide.title': '快速上手',

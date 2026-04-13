@@ -53,8 +53,7 @@ module.exports = Editor.Panel.define({
           <div class="holo-badge-inner" data-i18n="badge.community">Community</div>
         </div>
         <div class="header-actions">
-          <button id="langBtn" class="ghost-btn">中/EN</button>
-          <div class="user-avatar" id="userBtn" title="用户中心">
+          <div class="user-avatar" id="userBtn" data-i18n-title="ui.user_center" title="用户中心">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
               <circle cx="12" cy="7" r="4"></circle>
@@ -95,12 +94,12 @@ module.exports = Editor.Panel.define({
                 <span class="stat-label" data-i18n="status.actions">ACTIONS</span>
                 <span class="stat-value" id="totalActionCount">-</span>
               </div>
-              <div class="stat-row stat-row-clickable" id="clientsRow" title="点击查看已连接的 AI 客户端">
+              <div class="stat-row stat-row-clickable" id="clientsRow" data-i18n-title="status.clients_title" title="点击查看已连接的 AI 客户端">
                 <span class="stat-label" data-i18n="status.clients">CLIENTS</span>
                 <span class="stat-value" id="connectionCount">-</span>
               </div>
               <div class="clients-popover" id="clientsPopover" style="display:none;">
-                <div class="clients-popover-title">已连接的 AI 客户端</div>
+                <div class="clients-popover-title" data-i18n="status.clients_title">已连接的 AI 客户端</div>
                 <div class="clients-popover-list" id="clientsPopoverList"></div>
               </div>
               <div class="stat-row">
@@ -116,11 +115,11 @@ module.exports = Editor.Panel.define({
               </div>
               <div class="proj-details">
                 <div class="proj-row">
-                  <span class="proj-key">Path</span>
+                  <span class="proj-key" data-i18n="status.path">Path</span>
                   <span class="proj-val" id="projectPath">-</span>
                 </div>
                 <div class="proj-row">
-                  <span class="proj-key">Uptime</span>
+                  <span class="proj-key" data-i18n="status.uptime">Uptime</span>
                   <span class="proj-val proj-uptime" id="uptime">-</span>
                 </div>
               </div>
@@ -128,7 +127,7 @@ module.exports = Editor.Panel.define({
 
             <div class="empty-state" id="emptyState" style="display:none;">
               <div class="empty-state-icon">⏸</div>
-              <div class="empty-state-text">服务未启动<br><span style="font-size:11px;opacity:0.5;">请前往「控制」Tab 启动 Aura 服务</span></div>
+              <div class="empty-state-text"><span data-i18n="status.empty_service_stopped">服务未启动</span><br><span style="font-size:11px;opacity:0.5;" data-i18n="status.empty_service_hint">请前往「控制」Tab 启动 Aura 服务</span></div>
             </div>
 
           </div>
@@ -137,7 +136,7 @@ module.exports = Editor.Panel.define({
           <div class="mcp-tab-content flex-column" id="tabControl">
             <div class="control-header">
               <h3 data-i18n="ctrl.title">服务管理</h3>
-              <p>当前服务状态：<span id="ctrlStatusLabel" style="color:#f14c4c;font-weight:600;">已停止</span></p>
+              <p><span data-i18n="ctrl.current_status_prefix">当前服务状态：</span><span id="ctrlStatusLabel" style="color:#f14c4c;font-weight:600;" data-i18n="ctrl.stopped">已停止</span></p>
             </div>
             <div class="button-grid">
               <button id="startBtn" class="btn btn-success" data-i18n="ctrl.start">▶ 启动服务</button>
@@ -162,55 +161,55 @@ module.exports = Editor.Panel.define({
             </div>
             <div class="ide-status-list">
               <div class="ide-card" id="ideCursor">
-                <div class="ide-info"><span class="ide-title">Cursor</span><span class="ide-status" id="statusCursor">检测中...</span></div>
-                <button class="btn config-ide-btn" data-ide="cursor">注入配置</button>
+                <div class="ide-info"><span class="ide-title">Cursor</span><span class="ide-status" id="statusCursor" data-i18n="cfg.detecting">检测中...</span></div>
+                <button class="btn config-ide-btn" data-ide="cursor" data-i18n="cfg.inject_button">注入配置</button>
               </div>
               <div class="ide-card" id="ideWindsurf">
-                <div class="ide-info"><span class="ide-title">Windsurf</span><span class="ide-status" id="statusWindsurf">检测中...</span></div>
-                <button class="btn config-ide-btn" data-ide="windsurf">注入配置</button>
+                <div class="ide-info"><span class="ide-title">Windsurf</span><span class="ide-status" id="statusWindsurf" data-i18n="cfg.detecting">检测中...</span></div>
+                <button class="btn config-ide-btn" data-ide="windsurf" data-i18n="cfg.inject_button">注入配置</button>
               </div>
               <div class="ide-card" id="ideClaude">
                 <div class="ide-info"><span class="ide-title">Claude Desktop</span><span class="ide-status" id="statusClaude">检测中...</span></div>
                 <button class="btn config-ide-btn" data-ide="claude">注入配置</button>
               </div>
               <div class="ide-card" id="ideTrae">
-                <div class="ide-info"><span class="ide-title">Trae</span><span class="ide-status" id="statusTrae">检测中...</span></div>
-                <button class="btn config-ide-btn" data-ide="trae">注入配置</button>
+                <div class="ide-info"><span class="ide-title">Trae</span><span class="ide-status" id="statusTrae" data-i18n="cfg.detecting">检测中...</span></div>
+                <button class="btn config-ide-btn" data-ide="trae" data-i18n="cfg.inject_button">注入配置</button>
               </div>
               <div class="ide-card" id="ideKiro">
-                <div class="ide-info"><span class="ide-title">Kiro AI IDE</span><span class="ide-status" id="statusKiro">检测中...</span></div>
-                <button class="btn config-ide-btn" data-ide="kiro">注入配置</button>
+                <div class="ide-info"><span class="ide-title">Kiro AI IDE</span><span class="ide-status" id="statusKiro" data-i18n="cfg.detecting">检测中...</span></div>
+                <button class="btn config-ide-btn" data-ide="kiro" data-i18n="cfg.inject_button">注入配置</button>
               </div>
               <div class="ide-card" id="ideAntigravity">
-                <div class="ide-info"><span class="ide-title">Antigravity</span><span class="ide-status" id="statusAntigravity">检测中...</span></div>
-                <button class="btn config-ide-btn" data-ide="antigravity">注入配置</button>
+                <div class="ide-info"><span class="ide-title">Antigravity</span><span class="ide-status" id="statusAntigravity" data-i18n="cfg.detecting">检测中...</span></div>
+                <button class="btn config-ide-btn" data-ide="antigravity" data-i18n="cfg.inject_button">注入配置</button>
               </div>
               <div class="ide-card" id="ideGeminiCli">
-                <div class="ide-info"><span class="ide-title">Gemini CLI</span><span class="ide-status" id="statusGeminiCli">检测中...</span></div>
-                <button class="btn config-ide-btn" data-ide="gemini-cli">注入配置</button>
+                <div class="ide-info"><span class="ide-title">Gemini CLI</span><span class="ide-status" id="statusGeminiCli" data-i18n="cfg.detecting">检测中...</span></div>
+                <button class="btn config-ide-btn" data-ide="gemini-cli" data-i18n="cfg.inject_button">注入配置</button>
               </div>
               <div class="ide-card" id="ideCodex">
-                <div class="ide-info"><span class="ide-title">OpenAI Codex</span><span class="ide-status" id="statusCodex">检测中...</span></div>
-                <button class="btn config-ide-btn" data-ide="codex">注入配置</button>
+                <div class="ide-info"><span class="ide-title">OpenAI Codex</span><span class="ide-status" id="statusCodex" data-i18n="cfg.detecting">检测中...</span></div>
+                <button class="btn config-ide-btn" data-ide="codex" data-i18n="cfg.inject_button">注入配置</button>
               </div>
               <div class="ide-card" id="ideClaudeCode">
-                <div class="ide-info"><span class="ide-title">Claude Code</span><span class="ide-status" id="statusClaudeCode">检测中...</span></div>
-                <button class="btn config-ide-btn" data-ide="claude-code">注入配置</button>
+                <div class="ide-info"><span class="ide-title">Claude Code</span><span class="ide-status" id="statusClaudeCode" data-i18n="cfg.detecting">检测中...</span></div>
+                <button class="btn config-ide-btn" data-ide="claude-code" data-i18n="cfg.inject_button">注入配置</button>
               </div>
               <div class="ide-card" id="ideCodebuddy">
-                <div class="ide-info"><span class="ide-title">CodeBuddy (腾讯)</span><span class="ide-status" id="statusCodebuddy">检测中...</span></div>
-                <button class="btn config-ide-btn" data-ide="codebuddy">注入配置</button>
+                <div class="ide-info"><span class="ide-title">CodeBuddy (腾讯)</span><span class="ide-status" id="statusCodebuddy" data-i18n="cfg.detecting">检测中...</span></div>
+                <button class="btn config-ide-btn" data-ide="codebuddy" data-i18n="cfg.inject_button">注入配置</button>
               </div>
               <div class="ide-card" id="ideComate">
-                <div class="ide-info"><span class="ide-title">Comate (百度)</span><span class="ide-status" id="statusComate">检测中...</span></div>
-                <button class="btn config-ide-btn" data-ide="comate">注入配置</button>
+                <div class="ide-info"><span class="ide-title">Comate (百度)</span><span class="ide-status" id="statusComate" data-i18n="cfg.detecting">检测中...</span></div>
+                <button class="btn config-ide-btn" data-ide="comate" data-i18n="cfg.inject_button">注入配置</button>
               </div>
             </div>
             <div class="config-result" id="configResult" style="display:none;">
               <span id="configIcon"></span>
               <span id="configMessage"></span>
             </div>
-            <div class="info-box">
+            <div class="info-box" data-i18n="cfg.hint">
               本操作将当前端点写入 IDE 的 MCP 配置文件，您需要在目标 IDE 中刷新或重启生效。
             </div>
           </div>
@@ -347,12 +346,12 @@ module.exports = Editor.Panel.define({
               <button class="prompt-card">
                 <span class="prompt-tag" data-i18n="guide.tag_scene">场景查询</span>
                 <div class="prompt-text" data-i18n="guide.prompt1">帮我分析当前场景的根节点结构，列出所有 Canvas 下的子节点。</div>
-                <div class="prompt-copy" title="复制">⎘</div>
+                <div class="prompt-copy" data-i18n-title="copy.title" title="复制">⎘</div>
               </button>
               <button class="prompt-card">
                 <span class="prompt-tag" data-i18n="guide.tag_create">实例创建</span>
                 <div class="prompt-text" data-i18n="guide.prompt2">在当前选中的节点下，创建一个名为 &quot;LoginButton&quot; 的按钮，并添加 Widget 居中。</div>
-                <div class="prompt-copy" title="复制">⎘</div>
+                <div class="prompt-copy" data-i18n-title="copy.title" title="复制">⎘</div>
               </button>
             </div>
             <div class="info-box guide-tips">
@@ -1039,7 +1038,7 @@ module.exports = Editor.Panel.define({
     statusCodebuddy: '#statusCodebuddy', statusComate: '#statusComate',
     configResult: '#configResult', configIcon: '#configIcon', configMessage: '#configMessage',
     versionText: '#versionText', refreshBtn: '#refreshBtn',
-    langBtn: '#langBtn', toolToggleList: '#toolToggleList',
+    toolToggleList: '#toolToggleList',
     settingRateLimit: '#settingRateLimit', settingLoopback: '#settingLoopback',
     settingBodyLimit: '#settingBodyLimit', settingRollback: '#settingRollback',
     settingLanguage: '#settingLanguage',
@@ -1102,6 +1101,11 @@ module.exports = Editor.Panel.define({
         const text = dict[key] || fallbackDict[key];
         if (text) el.textContent = text;
       });
+      self.$.app.querySelectorAll('[data-i18n-title]').forEach(el => {
+        const key = el.getAttribute('data-i18n-title');
+        const text = dict[key] || fallbackDict[key];
+        if (text) el.setAttribute('title', text);
+      });
       if (self.$.settingLanguage) {
         self.$.settingLanguage.value = nextLang;
       }
@@ -1113,13 +1117,6 @@ module.exports = Editor.Panel.define({
     }
     applyI18n(currentLang);
 
-    if (self.$.langBtn) {
-      self.$.langBtn.addEventListener('click', () => {
-        const idx = LANGUAGE_OPTIONS.findIndex(item => item.value === currentLang);
-        const next = LANGUAGE_OPTIONS[(idx + 1) % LANGUAGE_OPTIONS.length];
-        applyI18n(next ? next.value : 'zh');
-      });
-    }
     if (self.$.settingLanguage) {
       self.$.settingLanguage.addEventListener('change', (e) => {
         applyI18n(e.target.value);
@@ -1557,16 +1554,19 @@ module.exports = Editor.Panel.define({
         // Second click - execute
         clearTimeout(_stopConfirmTimer);
         self.$.stopBtn.classList.remove('confirming');
-        self.$.stopBtn.textContent = '■ 停止服务';
+        const dict = I18N[currentLang] || I18N.zh;
+        self.$.stopBtn.textContent = dict['ctrl.stop'] || '■ 停止服务';
         Editor.Message.send(EXTENSION_NAME, 'stop-server');
         setTimeout(() => self.refreshStatus(), 800);
       } else {
         // First click - ask confirm
         self.$.stopBtn.classList.add('confirming');
-        self.$.stopBtn.textContent = '⚠ 确认停止？';
+        const dict = I18N[currentLang] || I18N.zh;
+        self.$.stopBtn.textContent = dict['ctrl.stop_confirm'] || '⚠ 确认停止？';
         _stopConfirmTimer = setTimeout(() => {
           self.$.stopBtn.classList.remove('confirming');
-          self.$.stopBtn.textContent = '■ 停止服务';
+          const dict = I18N[currentLang] || I18N.zh;
+          self.$.stopBtn.textContent = dict['ctrl.stop'] || '■ 停止服务';
         }, 2500);
       }
     });
@@ -1587,14 +1587,19 @@ module.exports = Editor.Panel.define({
         return;
       }
       // 渲染客户端列表
+      const dict = I18N[currentLang] || I18N.zh;
       const clients = self._connectedClients || [];
       const now = Date.now();
       if (clients.length === 0) {
-        self.$.clientsPopoverList.innerHTML = `<div class="clients-popover-empty">暂无已连接的 AI 客户端</div>`;
+        self.$.clientsPopoverList.innerHTML = `<div class="clients-popover-empty">${dict['status.clients_title'] || '已连接的 AI 客户端'}</div>`;
       } else {
         self.$.clientsPopoverList.innerHTML = clients.map(c => {
           const ageSec = Math.floor((now - c.lastSeenMs) / 1000);
-          const agoStr = ageSec < 60 ? '刚刚' : ageSec < 3600 ? `${Math.floor(ageSec / 60)} 分钟前` : `${Math.floor(ageSec / 3600)} 小时前`;
+          const agoStr = ageSec < 60
+            ? (dict['time.just_now'] || '刚刚')
+            : ageSec < 3600
+              ? `${Math.floor(ageSec / 60)} ${dict['time.minutes_ago'] || '分钟前'}`
+              : `${Math.floor(ageSec / 3600)} ${dict['time.hours_ago'] || '小时前'}`;
           const ver = c.version ? `<span class="clients-popover-ver">v${c.version}</span>` : '';
           return `<div class="clients-popover-item">
             <span class="clients-popover-dot"></span>
@@ -1617,17 +1622,22 @@ module.exports = Editor.Panel.define({
         const button = e.currentTarget;
         const targetIDE = button && button.getAttribute ? button.getAttribute('data-ide') : null;
         if (!button || !targetIDE) {
-          self.showConfigResult({ success: false, message: '配置失败: 无法识别目标 IDE' });
+          const dict = I18N[currentLang] || I18N.zh;
+          self.showConfigResult({ success: false, message: dict['cfg.fail_ide'] || '配置失败: 无法识别目标 IDE' });
           return;
         }
 
         const isActive = button.classList.contains('inject-active');
         button.setAttribute('disabled', '');
-        button.textContent = isActive ? '⏳ 移除中…' : '⏳ 注入中…';
+        const dict = I18N[currentLang] || I18N.zh;
+        button.textContent = isActive ? (dict['cfg.removing'] || '⏳ 移除中…') : (dict['cfg.injecting'] || '⏳ 注入中…');
         try {
           const result = await Promise.race([
             Editor.Message.request(EXTENSION_NAME, isActive ? 'remove-ide' : 'configure-ide', targetIDE),
-            new Promise((_, reject) => setTimeout(() => reject(new Error('请求超时，请重试')), CONFIG_REQUEST_TIMEOUT_MS)),
+            new Promise((_, reject) => {
+              const dict = I18N[currentLang] || I18N.zh;
+              setTimeout(() => reject(new Error(dict['cfg.timeout'] || '请求超时，请重试')), CONFIG_REQUEST_TIMEOUT_MS);
+            }),
           ]);
           self.showConfigResult(result);
           if (result.success) {
@@ -1635,17 +1645,20 @@ module.exports = Editor.Panel.define({
             setTimeout(() => self.refreshStatus(), 500);
           } else {
             if (self.shouldPromptNodeInstall(result)) {
-              self.showNodeInstallDialog(result.message || '未检测到 Node.js，请先安装后重试。');
+              const dict = I18N[currentLang] || I18N.zh;
+              self.showNodeInstallDialog(result.message || dict['dialog.node_missing_msg'] || '未检测到 Node.js，请先安装后重试。');
             }
             button.removeAttribute('disabled');
-            button.textContent = isActive ? '取消注入' : '注入配置';
+            const dict = I18N[currentLang] || I18N.zh;
+            button.textContent = isActive ? (dict['cfg.remove'] || '取消注入') : (dict['cfg.inject_button'] || '注入配置');
             button.classList.add('inject-fail');
             setTimeout(() => button.classList.remove('inject-fail'), 2000);
           }
         } catch (err) {
-          self.showConfigResult({ success: false, message: `操作失败: ${err.message || err}` });
+          const dict = I18N[currentLang] || I18N.zh;
+          self.showConfigResult({ success: false, message: `${dict['error.operation_failed'] || '操作失败'}: ${err.message || err}` });
           button.removeAttribute('disabled');
-          button.textContent = isActive ? '取消注入' : '注入配置';
+          button.textContent = isActive ? (dict['cfg.remove'] || '取消注入') : (dict['cfg.inject_button'] || '注入配置');
           button.classList.add('inject-fail');
           setTimeout(() => button.classList.remove('inject-fail'), 2000);
         }
@@ -1741,7 +1754,8 @@ module.exports = Editor.Panel.define({
           navigator.clipboard.writeText(text).then(() => {
             const toast = document.createElement('span');
             toast.className = 'copy-toast';
-            toast.textContent = '已复制';
+            const dict = I18N[currentLang] || I18N.zh;
+            toast.textContent = dict['copy.copied'] || '已复制';
             el.appendChild(toast);
             setTimeout(() => toast.remove(), 1000);
           });
@@ -1862,10 +1876,11 @@ module.exports = Editor.Panel.define({
         if (info && info.running) {
           self.$.statusDot.className = 'status-dot online';
           self.$.statusText.className = 'status-text online';
-          self.$.statusText.textContent = 'Online';
+          const dict = (self._I18N && (self._I18N[self._currentLang] || self._I18N.zh)) || {};
+          self.$.statusText.textContent = dict['status.online'] || 'Online';
           self.$.startBtn.classList.add('btn-disabled');
           self.$.stopBtn.classList.remove('btn-disabled');
-          self.$.ctrlStatusLabel.textContent = '运行中';
+          self.$.ctrlStatusLabel.textContent = dict['ctrl.running'] || '运行中';
           self.$.ctrlStatusLabel.style.color = '#22c55e';
           self.$.bentoGrid.classList.remove('loading');
           self.$.bentoGrid.style.display = '';
@@ -1903,16 +1918,17 @@ module.exports = Editor.Panel.define({
           if (info.configStatus) {
             const updateStat = (id, ideKey, exists) => {
               const el = self.$[id];
-              el.textContent = exists ? '配置已就绪' : '未检测到配置';
+              const dict = (self._I18N && (self._I18N[self._currentLang] || self._I18N.zh)) || {};
+              el.textContent = exists ? (dict['cfg.ready'] || '配置已就绪') : (dict['cfg.unready'] || '未检测到配置');
               el.className = `ide-status ${exists ? 'ready' : 'unready'}`;
               // 同步按钮状态
               const btn = self.$.app.querySelector(`.config-ide-btn[data-ide="${ideKey}"]`);
               if (btn && !btn.hasAttribute('disabled')) {
                 if (exists) {
-                  btn.textContent = '取消注入';
+                  btn.textContent = dict['cfg.remove'] || '取消注入';
                   btn.classList.add('inject-active');
                 } else {
-                  btn.textContent = '注入配置';
+                  btn.textContent = dict['cfg.inject_button'] || '注入配置';
                   btn.classList.remove('inject-active');
                 }
               }
@@ -1963,10 +1979,11 @@ module.exports = Editor.Panel.define({
       const self = this;
       self.$.statusDot.className = 'status-dot offline';
       self.$.statusText.className = 'status-text offline';
-      self.$.statusText.textContent = 'Offline';
+      const dict = (self._I18N && (self._I18N[self._currentLang] || self._I18N.zh)) || {};
+      self.$.statusText.textContent = dict['status.offline'] || 'Offline';
       self.$.startBtn.classList.remove('btn-disabled');
       self.$.stopBtn.classList.add('btn-disabled');
-      self.$.ctrlStatusLabel.textContent = '已停止';
+      self.$.ctrlStatusLabel.textContent = dict['ctrl.stopped'] || '已停止';
       self.$.ctrlStatusLabel.style.color = '#ef4444';
       self.$.bentoGrid.classList.remove('loading');
       self.$.bentoGrid.style.display = 'none';
@@ -1995,16 +2012,17 @@ module.exports = Editor.Panel.define({
     shouldPromptNodeInstall(result) {
       if (!result || result.success) return false;
       const msg = String(result.message || '').toLowerCase();
-      return msg.includes('node.js') || msg.includes('nodejs') || msg.includes('未检测到 node');
+      return msg.includes('node.js') || msg.includes('nodejs') || msg.includes('未检测到 node') || msg.includes('node not detected') || msg.includes('missing node');
     },
 
     showNodeInstallDialog(message) {
       const self = this;
-      const text = String(message || '未检测到 Node.js，请先安装后重试。');
+      const dict = (self._I18N && (self._I18N[self._currentLang] || self._I18N.zh)) || {};
+      const text = String(message || dict['dialog.node_missing_msg'] || '未检测到 Node.js，请先安装后重试。');
       try {
         Editor.Dialog.info(text, {
-          title: '缺少 Node.js 运行环境',
-          buttons: ['去下载 Node.js', '我已安装，稍后重试'],
+          title: dict['dialog.node_missing_title'] || '缺少 Node.js 运行环境',
+          buttons: [dict['dialog.node_download'] || '去下载 Node.js', dict['dialog.node_retry_later'] || '我已安装，稍后重试'],
           default: 0,
           cancel: 1,
         }).then((index) => {
@@ -2152,7 +2170,7 @@ module.exports = Editor.Panel.define({
           ? t('update.install.hotpatch', '立即应用（无需重启）')
           : t('update.install', '安装并重启');
         banner.innerHTML = `
-          <div class="update-header"><span class="update-title">v${info.latestVersion || ''} ${t('update.ready', '下载完成')}</span></div>
+          <div class="update-header"><span class="update-title">v${info.latestVersion || ''} ${t('update.ready', 'Download Ready')}</span></div>
           <div class="update-progress-wrap">
             <div class="update-progress-bar"><div class="update-progress-fill" style="width:100%"></div></div>
             <span class="update-progress-text">✓ SHA256 校验通过</span>
@@ -2204,7 +2222,8 @@ module.exports = Editor.Panel.define({
     },
 
     async handleDownloadUpdate(btn) {
-      if (btn) { btn.setAttribute('disabled', ''); btn.textContent = '下载中...'; }
+      const dict = (self._I18N && (self._I18N[self._currentLang] || self._I18N.zh)) || {};
+      if (btn) { btn.setAttribute('disabled', ''); btn.textContent = dict['update.downloading'] || '下载中...'; }
       try {
         await Editor.Message.request(EXTENSION_NAME, 'download-update');
         // 面板会通过 3s 轮询自动更新进度
@@ -2214,7 +2233,8 @@ module.exports = Editor.Panel.define({
     },
 
     async handleInstallUpdate(btn) {
-      if (btn) { btn.setAttribute('disabled', ''); btn.textContent = '安装中...'; }
+      const dict = (self._I18N && (self._I18N[self._currentLang] || self._I18N.zh)) || {};
+      if (btn) { btn.setAttribute('disabled', ''); btn.textContent = dict['update.installing'] || '安装中...'; }
       try {
         await Editor.Message.request(EXTENSION_NAME, 'install-update');
       } catch (err) {

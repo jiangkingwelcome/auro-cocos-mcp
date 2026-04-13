@@ -6,7 +6,7 @@
   "description": "AI-powered Cocos Creator editor plugin — query, modify, and control your project via MCP",
   "author": "GameFlowEditor",
   "scripts": {
-    "build": "tsc -p tsconfig.json",
+    "build": "tsc -p tsconfig.json && node scripts/copy-panel-i18n.mjs",
     "watch": "tsc -p tsconfig.json --watch",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "vitest run",

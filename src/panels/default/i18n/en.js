@@ -72,6 +72,32 @@ module.exports = {
     'settings.off': 'OFF',
     'settings.warn_loopback': '⚠ Disabling loopback restriction allows external access. Ensure network security.',
 
+    // Runtime UI texts
+    'ui.user_center': 'User Center',
+    'status.clients_title': 'Connected AI Clients',
+    'status.empty_service_stopped': 'Service is stopped',
+    'status.empty_service_hint': 'Go to "Control" tab to start Aura service',
+    'ctrl.current_status_prefix': 'Current service status:',
+    'ctrl.running': 'Running',
+    'ctrl.stopped': 'Stopped',
+    'ctrl.stop_confirm': '⚠ Confirm stop?',
+    'cfg.detecting': 'Detecting...',
+    'cfg.remove': 'Remove Config',
+    'cfg.removing': '⏳ Removing…',
+    'cfg.inject_button': 'Inject Config',
+    'copy.copied': 'Copied',
+    'copy.title': 'Copy',
+    'error.operation_failed': 'Operation failed',
+    'time.just_now': 'just now',
+    'time.minutes_ago': 'min ago',
+    'time.hours_ago': 'h ago',
+
+    // Dialog
+    'dialog.node_missing_title': 'Missing Node.js Runtime',
+    'dialog.node_missing_msg': 'Node.js was not detected. Please install it and retry.',
+    'dialog.node_download': 'Download Node.js',
+    'dialog.node_retry_later': 'Installed already, retry later',
+
     // Guide Tab
     'tab.guide': 'Guide',
     'guide.title': 'Quick Start',
