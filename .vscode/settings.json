@@ -1,0 +1,21 @@
+{
+  "files.watcherExclude": {
+    "**/node_modules/**": true,
+    "**/dist/**": true,
+    "**/dist-release/**": true,
+    "**/dist-plugin/**": true,
+    "**/dist-plugin-pro/**": true,
+    "**/dist-plugin-release/**": true,
+    "**/coverage/**": true
+  },
+  "files.exclude": {
+    "**/node_modules": true
+  },
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/dist": true,
+    "**/dist-release": true,
+    "**/dist-plugin": true,
+    "**/coverage": true
+  }
+}

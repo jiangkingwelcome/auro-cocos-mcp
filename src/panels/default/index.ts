@@ -612,15 +612,27 @@ module.exports = Editor.Panel.define({
       background: #3f3f46; border: 1px solid #52525b; color: #a1a1aa;
     }
     .proj-details { display: flex; flex-direction: column; gap: 4px; }
-    .proj-row { display: flex; align-items: center; gap: 8px; min-width: 0; }
+    .proj-row {
+      display: grid;
+      grid-template-columns: max-content minmax(0, 1fr);
+      align-items: start;
+      gap: 8px;
+      min-width: 0;
+    }
     .proj-key {
       font-size: 10px; font-weight: 600; color: #858585;
-      text-transform: uppercase; letter-spacing: 0.5px; flex-shrink: 0; width: 42px;
+      text-transform: uppercase; letter-spacing: 0.5px;
+      line-height: 1.6;
+      white-space: nowrap;
+      flex-shrink: 0;
     }
     .proj-val {
       font-family: 'SF Mono', Consolas, 'Courier New', monospace; font-size: 11px;
       color: #999;
-      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      min-width: 0;
+      white-space: normal;
+      overflow-wrap: anywhere;
+      line-height: 1.6;
     }
     .proj-uptime { color: #5eead4; }
 
