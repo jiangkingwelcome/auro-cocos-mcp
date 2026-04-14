@@ -1738,8 +1738,7 @@ module.exports = Editor.Panel.define({
         const sitePath = Editor.url('packages://aura-for-cocos/docs/site/index.html');
         Editor.Message.send('editor', 'open-url', `file://${sitePath.replace(/\\/g, '/')}`);
       } catch {
-        // fallback: open GitHub page
-        Editor.Message.send('editor', 'open-url', 'https://github.com/jiangkingwelcome/cocos-mcp-bridge');
+        // silently ignore if site path cannot be resolved
       }
     });
 
