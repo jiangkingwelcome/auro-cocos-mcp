@@ -237,6 +237,7 @@ module.exports = Editor.Panel.define({
                 <button id="activateLicenseBtn" class="btn btn-primary btn-activate" data-i18n="settings.activate">激活</button>
               </div>
               <div class="license-hint" data-i18n="settings.license_hint">输入 License Key 后点击激活，需要重启插件使 Pro 工具生效。</div>
+              <button id="buyProBtn" class="btn btn-buy-pro" style="display:none;" data-i18n="settings.buy_pro">🛒 购买 Pro License</button>
             </div>
 
             <div class="divider"></div>
@@ -635,6 +636,25 @@ module.exports = Editor.Panel.define({
       line-height: 1.6;
     }
     .proj-uptime { color: #5eead4; }
+
+    /* ===== BUY PRO BUTTON ===== */
+    .btn-buy-pro {
+      width: 100%; margin-top: 8px;
+      background: linear-gradient(135deg, rgba(124,92,252,0.15), rgba(99,102,241,0.1));
+      border: 1px solid rgba(124,92,252,0.4);
+      color: #a78bfa; font-size: 12px; padding: 8px 14px;
+      border-radius: 6px; cursor: pointer; font-family: inherit;
+      transition: all 0.2s; font-weight: 600; letter-spacing: 0.3px;
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+    }
+    .btn-buy-pro:hover {
+      background: linear-gradient(135deg, rgba(124,92,252,0.25), rgba(99,102,241,0.2));
+      border-color: rgba(167,139,250,0.7);
+      color: #c4b5fd;
+      box-shadow: 0 4px 16px rgba(124,92,252,0.2);
+      transform: translateY(-1px);
+    }
+    .btn-buy-pro:active { transform: translateY(0); }
 
     /* ===== SECTION HEADERS ===== */
     .control-header { display: flex; flex-direction: column; gap: 4px; }
@@ -1061,6 +1081,7 @@ module.exports = Editor.Panel.define({
     licenseEdition: '#licenseEdition', licenseState: '#licenseState',
     licenseDetail: '#licenseDetail', licenseExpiry: '#licenseExpiry', licenseOwner: '#licenseOwner',
     licenseError: '#licenseError', licenseKeyInput: '#licenseKeyInput', activateLicenseBtn: '#activateLicenseBtn',
+    buyProBtn: '#buyProBtn',
     updateBanner: '#updateBanner',
     updateBtn: '#updateBtn',
     appLoading: '#appLoading',
@@ -1711,6 +1732,17 @@ module.exports = Editor.Panel.define({
       }
     });
 
+    // ---- Buy Pro button ----
+    self.$.buyProBtn.addEventListener('click', () => {
+      try {
+        const sitePath = Editor.url('packages://aura-for-cocos/docs/site/index.html');
+        Editor.Message.send('editor', 'open-url', `file://${sitePath.replace(/\\/g, '/')}`);
+      } catch {
+        // fallback: open GitHub page
+        Editor.Message.send('editor', 'open-url', 'https://github.com/jiangkingwelcome/cocos-mcp-bridge');
+      }
+    });
+
     // ---- License activation ----
     self.$.activateLicenseBtn.addEventListener('click', async () => {
       const key = self.$.licenseKeyInput.value.trim();
@@ -2279,6 +2311,7 @@ module.exports = Editor.Panel.define({
         self.$.licenseError.style.display = 'none';
         if (licenseInputRow) licenseInputRow.style.display = 'flex';
         if (licenseHint) licenseHint.style.display = 'block';
+        if (self.$.buyProBtn) self.$.buyProBtn.style.display = 'none';
         if (badgeInner) badgeInner.textContent = edition === 'enterprise' ? t('badge.enterprise', 'Enterprise') : t('badge.pro', 'Pro');
       } else if (proInstalled && !licenseValid) {
         // 实际 MCP 仍走社区版工具；仅表示本机带有 Pro .node。角标与工具数需一致，避免误显示为 Pro。
@@ -2291,6 +2324,7 @@ module.exports = Editor.Panel.define({
           self.$.licenseState.textContent = t('license.not_activated', 'Not Activated');
           self.$.licenseState.className = 'license-state no-key';
         }
+        if (self.$.buyProBtn) self.$.buyProBtn.style.display = 'flex';
         self.$.licenseDetail.style.display = 'none';
         if (error) {
           self.$.licenseError.style.display = 'block';
@@ -2309,6 +2343,7 @@ module.exports = Editor.Panel.define({
         self.$.licenseError.style.display = 'none';
         if (licenseInputRow) licenseInputRow.style.display = 'none';
         if (licenseHint) licenseHint.style.display = 'none';
+        if (self.$.buyProBtn) self.$.buyProBtn.style.display = 'none';
         if (badgeInner) badgeInner.textContent = t('badge.community', 'Community');
       }
     },
