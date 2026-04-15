@@ -122,6 +122,8 @@ describe('tool_management', () => {
     const result = await server.callTool('tool_management', { action: 'list_all' });
     const data = parse(result);
     expect(data.totalTools).toBeGreaterThan(0);
+    const tools = data.tools as Array<{ name: string; enabled: boolean; actionCount: number }>;
+    expect(tools.every((tool) => typeof tool.actionCount === 'number' && tool.actionCount > 0)).toBe(true);
   });
 
   it('disable and enable a tool', async () => {
@@ -148,5 +150,16 @@ describe('tool_management', () => {
     const result = await server.callTool('tool_management', { action: 'get_stats' });
     const data = parse(result);
     expect(data.totalTools).toBeGreaterThan(0);
+    expect(data.enabledCount).toBeDefined();
+    expect(data.disabledCount).toBeDefined();
+  });
+
+  it('enable/disable unknown tool returns error', async () => {
+    const ctx = makeCtx();
+    const server = buildCocosToolServer(ctx);
+    const disableResult = await server.callTool('tool_management', { action: 'disable', toolName: 'missing_tool' });
+    const enableResult = await server.callTool('tool_management', { action: 'enable', toolName: 'missing_tool' });
+    expect(disableResult.isError).toBe(true);
+    expect(enableResult.isError).toBe(true);
   });
 });

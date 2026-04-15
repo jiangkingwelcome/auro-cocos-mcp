@@ -209,7 +209,7 @@ Actions & required parameters:
 - disable: toolName(REQUIRED). Disable a tool (it won't appear in tool listings).
 - get_stats: no params. Get overall tool statistics (total tools, total actions, enabled/disabled counts).
 
-Returns: list_all→{tools:[{name,enabled,actionCount}]}. enable/disable→{success,toolName,enabled}. get_stats→{totalTools,totalActions,enabledCount,disabledCount}. Note: tool_management itself cannot be disabled.`,
+Returns: list_all→{tools:[{name,enabled,actionCount}]}. enable/disable→{success,toolName,enabled,changed}. get_stats→{totalTools,totalActions,enabledCount,disabledCount}. Note: tool_management itself cannot be disabled.`,
     toInputSchema({
       action: z.enum(['list_all', 'enable', 'disable', 'get_stats']).describe(
         'Tool management action.'
@@ -227,20 +227,34 @@ Returns: list_all→{tools:[{name,enabled,actionCount}]}. enable/disable→{succ
         switch (p.action) {
           case 'list_all': {
             const allNames = server.listAllToolNames();
+            const toolActions = server.getToolActions();
             const tools = allNames.map(name => ({
               name,
               enabled: server.isToolEnabled(name),
+              actionCount: toolActions[name]?.length || 1,
             }));
             return text({ totalTools: tools.length, tools });
           }
           case 'enable': {
-            const result = server.enableTool(String(p.toolName));
-            return text({ success: true, toolName: p.toolName, enabled: true, wasDisabled: result });
+            const toolName = String(p.toolName);
+            const allNames = server.listAllToolNames();
+            if (!allNames.includes(toolName)) {
+              return text({ error: `未知工具: ${toolName}` }, true);
+            }
+            const changed = !server.isToolEnabled(toolName);
+            server.enableTool(toolName);
+            return text({ success: true, toolName, enabled: true, changed });
           }
           case 'disable': {
-            if (p.toolName === 'tool_management') return text({ error: '不能禁用 tool_management 工具本身' }, true);
-            const result = server.disableTool(String(p.toolName));
-            return text({ success: result, toolName: p.toolName, enabled: false });
+            const toolName = String(p.toolName);
+            if (toolName === 'tool_management') return text({ error: '不能禁用 tool_management 工具本身' }, true);
+            const allNames = server.listAllToolNames();
+            if (!allNames.includes(toolName)) {
+              return text({ error: `未知工具: ${toolName}` }, true);
+            }
+            const changed = server.isToolEnabled(toolName);
+            server.disableTool(toolName);
+            return text({ success: true, toolName, enabled: false, changed });
           }
           case 'get_stats': {
             const allNames = server.listAllToolNames();
@@ -248,6 +262,8 @@ Returns: list_all→{tools:[{name,enabled,actionCount}]}. enable/disable→{succ
             const totalActions = server.getTotalActionCount();
             return text({
               totalTools: allNames.length,
+              enabledCount,
+              disabledCount: allNames.length - enabledCount,
               enabledTools: enabledCount,
               disabledTools: allNames.length - enabledCount,
               totalActions,

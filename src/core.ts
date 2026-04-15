@@ -21,6 +21,7 @@ import { registerServiceRoutes } from './routes/service-routes';
 import type { RouteHandler } from './routes/route-types';
 import { updater } from './updater';
 import type { UpdatePhase } from './updater';
+import { resolveEditorComponentIdentifierNode } from './editor-component-identifier';
 
 const EXTENSION_NAME = 'aura-for-cocos';
 const FALLBACK_PKG_VERSION = '0.0.0';
@@ -31,6 +32,10 @@ const SETTINGS_FILE = path.join(__dirname, '..', '.mcp-settings.json');
 
 let currentSettings: BridgeSettings = { ...DEFAULT_SETTINGS };
 let packageVersion = FALLBACK_PKG_VERSION;
+
+function getEditorProjectPath(): string {
+  return String((globalThis as { Editor?: { Project?: { path?: string } } }).Editor?.Project?.path ?? '');
+}
 
 // updateRegistry / removeRegistry 已抽取到 ./registry.ts
 
@@ -389,7 +394,10 @@ function initializeMcpHost(serverVersion = packageVersion) {
           const uuid = String(p.uuid ?? '');
           const component = String(p.component ?? '');
           if (uuid && component) {
-            const compName = component.startsWith('cc.') || component.includes('.') ? component : `cc.${component}`;
+            const compName = await resolveEditorComponentIdentifierNode(component, {
+              editorMsg: _editorMsg,
+              projectPath: getEditorProjectPath(),
+            });
             await _editorMsg('scene', 'create-component', { uuid, component: compName });
             await _forceDirtyNode(uuid);
             return { success: true, uuid, component };

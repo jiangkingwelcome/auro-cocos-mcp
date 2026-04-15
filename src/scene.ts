@@ -11,12 +11,15 @@ import {
   toStr, toNum, getComponentName,
   isAssetRef, isNodeRef, isComponentRef,
 } from './scene-types';
+import { resolveCustomScriptCidFromProject } from './editor-component-identifier';
 import { buildQueryHandlers } from './scene-query-handlers';
 import { buildOperationHandlers } from './scene-operation-handlers';
 import { inspectReparentOutcome, isComponentRemoved } from './scene-mutation-verifier';
 import { ErrorCategory, logIgnored } from './error-utils';
 
-module.paths.push(join(Editor.App.path, 'node_modules'));
+if (Array.isArray(module.paths)) {
+  module.paths.push(join(Editor.App.path, 'node_modules'));
+}
 
 // ─── Alpha outline extraction from pixel data ─────────────────────────────────
 // Marching-squares-lite: walk the alpha boundary and simplify with Ramer-Douglas-Peucker
@@ -224,10 +227,13 @@ async function ipcCreateNode(parentUuid: string, name: string): Promise<string> 
 }
 
 /** 判断 `ctor` 是否为 `cc.Component` 子类（用于区分引擎内置组件名 vs 用户脚本短类名） */
-function isEngineComponentConstructor(ctor: unknown, componentBase: unknown): boolean {
+function isEngineComponentConstructor(
+  ctor: unknown,
+  componentBase: unknown,
+  jsApi?: CocosCC['js'],
+): boolean {
   if (!ctor || !componentBase) return false;
-  const { js } = require('cc') as CocosCC;
-  const isChild = js.isChildClassOf;
+  const isChild = jsApi?.isChildClassOf;
   if (typeof isChild !== 'function') return false;
   try {
     return !!isChild(ctor, componentBase);
@@ -238,7 +244,8 @@ function isEngineComponentConstructor(ctor: unknown, componentBase: unknown): bo
 
 function isComponentConstructor(ctor: unknown, componentBase: unknown): boolean {
   if (!ctor || !componentBase) return false;
-  if (isEngineComponentConstructor(ctor, componentBase)) return true;
+  const cc = getCC();
+  if (isEngineComponentConstructor(ctor, componentBase, cc.js)) return true;
   if (typeof ctor === 'function' && typeof componentBase === 'function') {
     return ctor === componentBase || ctor.prototype instanceof componentBase;
   }
@@ -250,6 +257,25 @@ function resolveComponentClass(cc: CocosCC, componentName: string): unknown {
   if (exactClass) return exactClass;
   if (!componentName.startsWith('cc.')) return cc.js.getClassByName(`cc.${componentName}`);
   return null;
+}
+
+function resolveRuntimeCustomScriptCid(resolvedClass: unknown): string {
+  const proto = (resolvedClass && typeof resolvedClass === 'function'
+    ? (resolvedClass as { prototype?: Record<string, unknown> }).prototype
+    : null) ?? null;
+  const scriptUuid = typeof proto?.__scriptUuid === 'string' ? proto.__scriptUuid.trim() : '';
+  if (!scriptUuid) return '';
+
+  const uuidUtils = (globalThis as {
+    EditorExtends?: { UuidUtils?: { compressUuid?: (uuid: string, min: boolean) => string } }
+  }).EditorExtends?.UuidUtils;
+  if (typeof uuidUtils?.compressUuid !== 'function') return '';
+
+  try {
+    return String(uuidUtils.compressUuid(scriptUuid, true) ?? '').trim();
+  } catch {
+    return '';
+  }
 }
 
 type SerializablePropertyDump =
@@ -356,35 +382,49 @@ function buildNonComponentClassError(cc: CocosCC, componentName: string, label =
   };
 }
 
-/** 编辑器 create-component / remove-component 的组件名字符串（cc.Label / sp.Skeleton 等） */
-function editorComponentIpcName(componentName: string): string {
+/** 编辑器 create-component / remove-component 优先使用 cid；无法解析时再回退到旧的名字规则。 */
+export function resolveEditorComponentIdentifier(cc: CocosCC, componentName: string): string {
+  const resolvedClass = resolveComponentClass(cc, componentName);
+  const runtimeScriptCid = resolveRuntimeCustomScriptCid(resolvedClass);
+  if (runtimeScriptCid) return runtimeScriptCid;
+
+  // 自定义脚本在编辑器环境中往往只有临时 class id；不允许 temp id 会拿不到 cid，
+  // 随后回退到名字链路并被编辑器误解析成 cc.<ScriptName>。
+  const classId = typeof cc.js.getClassId === 'function' ? cc.js.getClassId(resolvedClass, true) : '';
+  if (classId) return classId;
+
+  const projectPath = String((globalThis as { Editor?: { Project?: { path?: string } } }).Editor?.Project?.path ?? '');
+  const compiledScriptCid = resolveCustomScriptCidFromProject(projectPath, componentName);
+  if (compiledScriptCid) return compiledScriptCid;
+
   if (componentName.startsWith('cc.')) return componentName;
   // 扩展模块：sp.*、dragonBones.* — 不可再加 cc. 前缀
   if (componentName.includes('.')) return componentName;
   // 仅当 `cc.${shortName}` 在引擎中确实是 cc.Component 子类时才加 cc. 前缀。
   // 否则（用户脚本 @ccclass('Test')、或 cc.Test 等非 Component 占位）必须原样传递类名，
   // 否则会触发编辑器报错：ctor with name cc.Test is not child class of Component。
-  const { js } = require('cc') as CocosCC;
   const ccPrefixed = `cc.${componentName}`;
-  const ccCls = js.getClassByName(ccPrefixed);
-  const compBase = js.getClassByName('cc.Component');
-  if (ccCls && compBase && isEngineComponentConstructor(ccCls, compBase)) {
+  const ccCls = cc.js.getClassByName(ccPrefixed);
+  const compBase = cc.js.getClassByName('cc.Component');
+  if (ccCls && compBase && isEngineComponentConstructor(ccCls, compBase, cc.js)) {
     return ccPrefixed;
   }
   return componentName;
 }
 
 async function ipcCreateComponent(nodeUuid: string, componentName: string): Promise<void> {
+  const cc = getCC();
   await Editor.Message.request('scene', 'create-component', {
     uuid: nodeUuid,
-    component: editorComponentIpcName(componentName),
+    component: resolveEditorComponentIdentifier(cc, componentName),
   });
 }
 
 async function ipcRemoveComponent(nodeUuid: string, componentName: string): Promise<void> {
+  const cc = getCC();
   await Editor.Message.request('scene', 'remove-component', {
     uuid: nodeUuid,
-    component: editorComponentIpcName(componentName),
+    component: resolveEditorComponentIdentifier(cc, componentName),
   });
 }
 

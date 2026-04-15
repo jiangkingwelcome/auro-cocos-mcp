@@ -167,7 +167,7 @@ export function resolveRefToRuntime(
   scene: CocosNode,
   findNodeByUuid: (root: CocosNode | null, uuid: string) => CocosNode | null,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  js: { getClassByName(name: string): any },
+  js: { getClassByName(name: string): any; getClassId?(obj: unknown, allowTempId?: boolean): string },
 ): CocosNode | CocosComponent | null {
   if (isNodeRef(value)) {
     return findNodeByUuid(scene, value.uuid);
@@ -346,6 +346,7 @@ export interface CocosCC {
   WrapMode?: Record<string, number>;
   js: {
     getClassByName(name: string): any;
+    getClassId?(obj: unknown, allowTempId?: boolean): string;
     getClassName?(cls: any): string;
     /** 若存在，用于判断 `cc.${shortName}` 是否为引擎内置 Component（避免把用户脚本名如 Test 误发成 cc.Test） */
     isChildClassOf?(child: unknown, parent: unknown): boolean;

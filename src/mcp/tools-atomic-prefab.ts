@@ -12,6 +12,11 @@ import {
   withPersistenceGuard,
 } from './tools-shared';
 import { ErrorCategory, logIgnored } from '../error-utils';
+import { resolveEditorComponentIdentifierNode } from '../editor-component-identifier';
+
+function getEditorProjectPath(): string {
+  return String((globalThis as { Editor?: { Project?: { path?: string } } }).Editor?.Project?.path ?? '');
+}
 
 export function registerPrefabAtomicTool(server: LocalToolServer, ctx: BridgeToolContext): void {
   const { bridgePost, sceneMethod, editorMsg, text } = ctx;
@@ -143,7 +148,10 @@ Auto-rollback: If prefab creation fails, the temp node is automatically destroye
         if (Array.isArray(p.components)) {
           for (const comp of p.components as Array<{ type: string; properties?: Record<string, unknown> }>) {
             stages.push(`add_component:${comp.type}`);
-            const compNameFull = comp.type.startsWith('cc.') || comp.type.includes('.') ? comp.type : `cc.${comp.type}`;
+            const compNameFull = await resolveEditorComponentIdentifierNode(comp.type, {
+              editorMsg,
+              projectPath: getEditorProjectPath(),
+            });
             await editorMsg('scene', 'create-component', { uuid: tempNodeUuid, component: compNameFull });
             if (comp.properties && typeof comp.properties === 'object') {
               for (const [propKey, propVal] of Object.entries(comp.properties)) {
@@ -166,7 +174,10 @@ Auto-rollback: If prefab creation fails, the temp node is automatically destroye
             if (Array.isArray(child.components)) {
               for (const comp of child.components) {
                 stages.push(`child_component:${child.name}.${comp.type}`);
-                const childCompFull = comp.type.startsWith('cc.') || comp.type.includes('.') ? comp.type : `cc.${comp.type}`;
+                const childCompFull = await resolveEditorComponentIdentifierNode(comp.type, {
+                  editorMsg,
+                  projectPath: getEditorProjectPath(),
+                });
                 await editorMsg('scene', 'create-component', { uuid: childUuid, component: childCompFull });
                 if (comp.properties && typeof comp.properties === 'object') {
                   for (const [propKey, propVal] of Object.entries(comp.properties)) {

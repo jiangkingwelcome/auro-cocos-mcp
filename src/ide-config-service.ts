@@ -21,6 +21,7 @@ type ExecAsyncOptions = {
   encoding?: BufferEncoding;
   timeout?: number;
   stdio?: ['pipe', 'pipe', 'pipe'];
+  env?: NodeJS.ProcessEnv;
 };
 
 type NodeRuntimeDetection = {
@@ -42,6 +43,56 @@ function execAsync(command: string, options: ExecAsyncOptions = {}): Promise<{ s
       });
     });
   });
+}
+
+/**
+ * 返回包含 npm 全局 bin 目录的环境变量。
+ * Cocos Creator（Electron）进程继承的 PATH 可能不包含 npm 全局 bin，
+ * 导致 `claude` / `claude.cmd` 不可用。
+ */
+function getEnvWithNpmBin(): NodeJS.ProcessEnv {
+  const appData = process.env.APPDATA || path.join(os.homedir(), 'AppData', 'Roaming');
+  const extraPaths = process.platform === 'win32'
+    ? [
+        path.join(appData, 'npm'),                          // npm 默认全局 bin（Windows）
+        path.join(os.homedir(), 'AppData', 'Roaming', 'npm'),
+        path.join(process.env.ProgramFiles || 'C:\\Program Files', 'nodejs'),
+      ]
+    : [
+        path.join(os.homedir(), '.npm-global', 'bin'),
+        '/usr/local/bin',
+        '/usr/bin',
+      ];
+  const currentPath = process.env.PATH || '';
+  const newPath = [...extraPaths, currentPath].join(path.delimiter);
+  return { ...process.env, PATH: newPath };
+}
+
+/**
+ * 在 Windows 上定位 claude.cmd / claude 的完整路径。
+ * Electron 进程 PATH 缺失时 `claude` 找不到，需用完整路径调用。
+ */
+async function resolveClaudeCommand(): Promise<string> {
+  if (process.platform === 'win32') {
+    for (const candidate of ['claude.cmd', 'claude']) {
+      try {
+        const { stdout } = await execAsync(`where.exe ${candidate}`, {
+          encoding: 'utf-8', timeout: 5000, env: getEnvWithNpmBin(),
+        });
+        const found = stdout.trim().split(/\r?\n/)[0]?.trim();
+        if (found) return `"${found}"`;
+      } catch { /* 继续尝试 */ }
+    }
+    return 'claude.cmd'; // 最后兜底，让错误信息更明确
+  }
+  try {
+    const { stdout } = await execAsync('which claude', {
+      encoding: 'utf-8', timeout: 5000, env: getEnvWithNpmBin(),
+    });
+    const found = stdout.trim();
+    if (found) return found;
+  } catch { /* 继续 */ }
+  return 'claude';
 }
 
 function getAppDataPath(appName: string, fileName: string): string {
@@ -329,14 +380,16 @@ function writeTomlConfig(configPath: string, targetIDE: string, activePort: numb
 async function configureClaudeCode(activePort: number, nodeCommand: string): Promise<{ success: boolean; message: string }> {
   const shimPath = getShimPath();
   const escapedNodeCommand = nodeCommand.includes(' ') ? `"${nodeCommand}"` : nodeCommand;
+  const claudeCmd = await resolveClaudeCommand();
+  const execOpts = { encoding: 'utf-8' as BufferEncoding, timeout: 10000, env: getEnvWithNpmBin() };
   try {
     try {
-      await execAsync('claude mcp remove --scope user aura-cocos', { encoding: 'utf-8', timeout: 10000, stdio: ['pipe', 'pipe', 'pipe'] });
+      await execAsync(`${claudeCmd} mcp remove --scope user aura-cocos`, execOpts);
     } catch { /* may not exist yet */ }
 
     await execAsync(
-      `claude mcp add --scope user aura-cocos -e COCOS_BRIDGE_PORT=${activePort} -- ${escapedNodeCommand} "${shimPath}"`,
-      { encoding: 'utf-8', timeout: 10000, stdio: ['pipe', 'pipe', 'pipe'] },
+      `${claudeCmd} mcp add --scope user aura-cocos -e COCOS_BRIDGE_PORT=${activePort} -- ${escapedNodeCommand} "${shimPath}"`,
+      execOpts,
     );
 
     console.log('[Aura] 已通过 claude mcp add 注册 Claude Code MCP 配置');
@@ -356,9 +409,11 @@ async function configureClaudeCode(activePort: number, nodeCommand: string): Pro
 export async function removeIDE(targetIDE: string): Promise<{ success: boolean; message: string }> {
   if (CLI_IDES.has(targetIDE)) {
     try {
+      const claudeCmd = await resolveClaudeCommand();
+      const execOpts = { encoding: 'utf-8' as BufferEncoding, timeout: 10000, env: getEnvWithNpmBin() };
       for (const key of KNOWN_SERVER_KEYS) {
         try {
-          await execAsync(`claude mcp remove --scope user ${key}`, { encoding: 'utf-8', timeout: 10000, stdio: ['pipe', 'pipe', 'pipe'] });
+          await execAsync(`${claudeCmd} mcp remove --scope user ${key}`, execOpts);
         } catch { /* may not exist */ }
       }
       console.log('[Aura] 已通过 claude mcp remove 移除 Claude Code MCP 配置');

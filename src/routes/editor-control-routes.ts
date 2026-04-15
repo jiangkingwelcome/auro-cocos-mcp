@@ -6,6 +6,30 @@ import type { RouteRegistrar } from './route-types';
 import { ipc, safeEditorMsg } from './route-types';
 
 export function registerEditorControlRoutes(get: RouteRegistrar, post: RouteRegistrar): void {
+  /**
+   * 更新 {project}/settings/v2/packages/scene.json 的 current-scene 字段。
+   * Cocos Creator 重新打开项目时靠这个 UUID 决定恢复哪个场景。
+   * open-asset IPC 只在当前会话中打开，不写这个文件，所以必须手动同步。
+   */
+  function persistCurrentScene(uuid: string): void {
+    try {
+      const settingsPath = path.join(
+        Editor.Project.path, 'settings', 'v2', 'packages', 'scene.json'
+      );
+      let settings: Record<string, unknown> = { __version__: '1.0.3' };
+      try {
+        if (fs.existsSync(settingsPath)) {
+          settings = JSON.parse(fs.readFileSync(settingsPath, 'utf-8'));
+        }
+      } catch { /* 文件损坏时从空对象开始 */ }
+      settings['current-scene'] = uuid;
+      fs.mkdirSync(path.dirname(settingsPath), { recursive: true });
+      fs.writeFileSync(settingsPath, JSON.stringify(settings, null, 2), 'utf-8');
+    } catch (e) {
+      logIgnored(ErrorCategory.EDITOR_IPC, 'persistCurrentScene: 写入 scene.json 失败', e);
+    }
+  }
+
   const resolvePreferenceScope = (rawScope: string | undefined): 'global' | 'project' | 'default' => {
     if (rawScope === 'project' || rawScope === 'default') return rawScope;
     return 'global';
@@ -26,12 +50,14 @@ export function registerEditorControlRoutes(get: RouteRegistrar, post: RouteRegi
     const payload = (body && typeof body === 'object' ? body : {}) as { uuid?: string; url?: string };
     if (payload.uuid) {
       await ipc('asset-db', 'open-asset', payload.uuid);
+      persistCurrentScene(payload.uuid);
       return { success: true };
     }
     if (payload.url) {
       const info = await ipc('asset-db', 'query-asset-info', payload.url) as Record<string, unknown> | null;
       if (info && info.uuid) {
-        await ipc('asset-db', 'open-asset', info.uuid);
+        await ipc('asset-db', 'open-asset', info.uuid as string);
+        persistCurrentScene(info.uuid as string);
         return { success: true };
       }
       return { error: `找不到场景: ${payload.url}` };
@@ -65,10 +91,11 @@ export function registerEditorControlRoutes(get: RouteRegistrar, post: RouteRegi
 
     await ipc('asset-db', 'create-asset', sceneUrl, emptyScene);
 
-    // 打开新创建的场景
+    // 打开新创建的场景，并同步持久化 current-scene，确保重启后 Cocos 能恢复到此场景
     const info = await ipc('asset-db', 'query-asset-info', sceneUrl) as { uuid?: string } | null;
     if (info?.uuid) {
       await ipc('asset-db', 'open-asset', info.uuid);
+      persistCurrentScene(info.uuid);
     }
 
     return { success: true, url: sceneUrl, method: 'asset-db-create' };
@@ -128,13 +155,13 @@ export function registerEditorControlRoutes(get: RouteRegistrar, post: RouteRegi
 
   // ── 已知的编辑器全局设置文件映射表 ──────────────────────────────────────────
   // 关键发现：Cocos Creator 3.8.x 将语言等全局设置写在独立磁盘文件里，不走 IPC/Profile API
-  const COCOS_EDITOR_BASE   = path.join(os.homedir(), '.CocosCreator', 'editor');
+  const COCOS_EDITOR_BASE = path.join(os.homedir(), '.CocosCreator', 'editor');
   const COCOS_PROFILES_BASE = path.join(os.homedir(), '.CocosCreator', 'profiles');
 
   const EDITOR_FILE_KEYS: Record<string, { file: string; field: string; restartRequired: boolean }> = {
-    'general.language': { file: path.join(COCOS_EDITOR_BASE,   'i18n.json'),     field: 'language', restartRequired: true  },
-    'language':         { file: path.join(COCOS_EDITOR_BASE,   'i18n.json'),     field: 'language', restartRequired: true  },
-    'general.theme':    { file: path.join(COCOS_PROFILES_BASE, 'settings.json'), field: 'theme',    restartRequired: false },
+    'general.language': { file: path.join(COCOS_EDITOR_BASE, 'i18n.json'), field: 'language', restartRequired: true },
+    'language': { file: path.join(COCOS_EDITOR_BASE, 'i18n.json'), field: 'language', restartRequired: true },
+    'general.theme': { file: path.join(COCOS_PROFILES_BASE, 'settings.json'), field: 'theme', restartRequired: false },
   };
 
   function readEditorFileKey(m: { file: string; field: string }): unknown {

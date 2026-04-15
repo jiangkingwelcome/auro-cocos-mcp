@@ -43,7 +43,7 @@ Actions & required parameters:
 - search_by_type: type(REQUIRED, e.g. "cc.ImageAsset", "cc.Prefab"), pattern(optional).
 - persistenceMode(optional: warn/auto-save/strict). Controls whether successful write operations only warn, auto-save, or fail in strict persistence mode.
 
-IMAGE IMPORT WORKFLOW: After importing a .png/.jpg via "import", the image defaults to type "texture" (no SpriteFrame). To use it with Sprite components, either: (A) use import_and_apply_texture which handles this automatically, or (B) manually: 1) import, 2) set_meta_property url=<img> property="userData.type" value="sprite-frame", 3) reimport url=<img>. This generates the SpriteFrame sub-asset at <img>/spriteFrame.
+IMAGE IMPORT WORKFLOW: After importing a .png/.jpg via "import", the image defaults to type "texture" (no SpriteFrame). In Community Edition, prefer import_and_apply_texture because it performs the required sprite-frame conversion and reimport automatically. asset_operation in Community Edition does NOT expose a manual reimport action, so do not plan a follow-up asset_operation.reimport call here.
 set_meta_property: Supports dot-separated nested paths (e.g. "userData.type" sets meta.userData.type). Use get_meta first to see the structure.
 Returns: info→{uuid,type,importer,subAssets{}}. list→[{url,uuid,type}]. create/save/delete/move→{success}. Successful write results may include persistenceStatus{mode,target,requiresPersistence,saveAttempted,...}. url_to_uuid→"uuid-string". On error: {error:"message"}.
 Common errors: "资源不存在"=wrong db:// URL; create blocked for .spriteframe/.texture (auto-generated sub-assets).` + AI_RULES,

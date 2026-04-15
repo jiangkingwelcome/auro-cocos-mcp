@@ -1,7 +1,10 @@
 import fs from 'fs';
+import os from 'os';
+import path from 'path';
 import { afterEach, beforeEach, describe, it, expect, vi } from 'vitest';
 import { buildCocosToolServer, type BridgeToolContext } from '../../src/mcp/tools';
 import type { ToolCallResult } from '../../src/mcp/local-tool-server';
+import { clearCustomScriptCidCache } from '../../src/editor-component-identifier';
 
 function makeCtx(overrides: Partial<BridgeToolContext> = {}): BridgeToolContext {
   return {
@@ -20,6 +23,34 @@ function makeCtx(overrides: Partial<BridgeToolContext> = {}): BridgeToolContext 
 function parse(result: ToolCallResult): unknown {
   return JSON.parse(result.content[0].text);
 }
+
+const tempProjects: string[] = [];
+
+function makeTempProjectWithScriptCid(): string {
+  const projectPath = fs.mkdtempSync(path.join(os.tmpdir(), 'aura-atomic-prefab-'));
+  tempProjects.push(projectPath);
+  const chunksDir = path.join(projectPath, 'temp', 'programming', 'packer-driver', 'targets', 'editor', 'chunks', '67');
+  fs.mkdirSync(chunksDir, { recursive: true });
+  fs.writeFileSync(
+    path.join(projectPath, 'temp', 'programming', 'packer-driver', 'targets', 'editor', 'main-record.json'),
+    JSON.stringify({ ok: true }),
+    'utf8',
+  );
+  fs.writeFileSync(
+    path.join(chunksDir, '67dfd9ac.js'),
+    '_cclegacy._RF.push({}, "b9a95b60IJFVpp8rg4BwLZ2", "BallAnimation", undefined);',
+    'utf8',
+  );
+  return projectPath;
+}
+
+afterEach(() => {
+  clearCustomScriptCidCache();
+  delete (globalThis as Record<string, unknown>).Editor;
+  while (tempProjects.length > 0) {
+    fs.rmSync(tempProjects.pop() as string, { recursive: true, force: true });
+  }
+});
 
 // ─────────────────────────────────────────────────────────────────────────────
 // create_prefab_atomic
@@ -148,6 +179,34 @@ describe('create_prefab_atomic — 正常流程', () => {
     const data = parse(result) as any;
     expect(data.success).toBe(true);
     expect(data.stages).toContain('add_component:Sprite');
+  });
+
+  it('带组件：自定义脚本使用编译后的 cid', async () => {
+    const projectPath = makeTempProjectWithScriptCid();
+    (globalThis as Record<string, unknown>).Editor = { Project: { path: projectPath } };
+
+    const sceneMethod = vi.fn()
+      .mockResolvedValueOnce({ uuid: 'temp-uuid' })
+      .mockResolvedValueOnce({});
+    const editorMsg = vi.fn().mockImplementation(async (_module: string, action: string, payload?: any) => {
+      if (action === 'query-component-has-script') return true;
+      if (action === 'query-asset-info') return { type: 'directory' };
+      if (action === 'create-component') return { success: true, component: payload?.component };
+      if (action === 'create-prefab') return { prefabUuid: 'prefab-uuid' };
+      return {};
+    });
+    const server = buildCocosToolServer(makeCtx({ sceneMethod, editorMsg }));
+
+    const result = await server.callTool('create_prefab_atomic', {
+      prefabPath: 'db://assets/prefabs/Ball.prefab',
+      components: [{ type: 'BallAnimation' }],
+    });
+
+    expect(result.isError).toBeFalsy();
+    expect(editorMsg).toHaveBeenCalledWith('scene', 'create-component', {
+      uuid: 'temp-uuid',
+      component: 'b9a95b60IJFVpp8rg4BwLZ2',
+    });
   });
 
   it('带子节点：创建 Viewport 子节点', async () => {
