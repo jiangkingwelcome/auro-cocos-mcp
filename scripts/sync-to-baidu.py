@@ -18,7 +18,8 @@ for f in ['main.js', 'core.js', 'scene.js']:
 
 shutil.copy(src + '/dist-release/panels/default/index.js', dst + '/dist/panels/default/index.js')
 shutil.copytree(src + '/dist-release/panels/default/i18n', dst + '/dist/panels/default/i18n', dirs_exist_ok=True)
-shutil.copytree(src + '/dist-release/stdio-shim', dst + '/stdio-shim', dirs_exist_ok=True)
+shim_src = src + '/dist-release/stdio-shim' if os.path.isdir(src + '/dist-release/stdio-shim') else src + '/stdio-shim'
+shutil.copytree(shim_src, dst + '/stdio-shim', dirs_exist_ok=True)
 shutil.copytree(src + '/mcp-config-templates', dst + '/mcp-config-templates', dirs_exist_ok=True)
 shutil.copytree(src + '/docs', dst + '/docs', dirs_exist_ok=True)
 shutil.copy(src + '/LICENSE', dst + '/LICENSE')
