@@ -278,7 +278,7 @@ class AnalyticsService {
 ```javascript
 // 简单的内存速率限制
 class RateLimiter {
-  constructor(maxRequests = 240, windowMs = 60000) {
+  constructor(maxRequests = 1200, windowMs = 60000) {
     this.requests = new Map();
   }
 

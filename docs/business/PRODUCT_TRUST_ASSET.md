@@ -1,6 +1,6 @@
 # Aura 对外可信资产（功能矩阵 + 兼容矩阵 + 基准数据）
 
-> 快照日期：2026-04-13  
+> 快照日期：2026-04-17  
 > 数据来源：`docs/business/trust-metrics.json`、`COMPATIBILITY.md`、`package.json`、本地质量门禁实测
 
 ## 1) 功能矩阵（统一口径）
@@ -81,21 +81,21 @@
 
 ## 3) 基准数据（本地可复现）
 
-### 3.1 质量门禁结果（2026-04-13）
+### 3.1 质量门禁结果（2026-04-17）
 
 | 项目 | 结果 |
 |---|---|
 | `npm run typecheck` | ✅ 通过 |
 | `npm run lint` | ✅ 0 error / 0 warning |
-| `npm run test` | ✅ 38 files / 686 passed / 0 failed / 32 skipped |
+| `npm run test` | ✅ 40 files / 695 passed / 0 failed / 32 skipped |
 
 ### 3.2 执行时长（同机实测）
 
 | 命令 | 用时 |
 |---|---:|
-| `npm run typecheck` | 2.40s |
-| `npm run lint` | 3.30s |
-| `npm run test` | 11.62s |
+| `npm run typecheck` | 3.8s |
+| `npm run lint` | 5.2s |
+| `npm run test` | 11.0s |
 
 ### 3.3 跳过用例压缩
 

@@ -266,7 +266,7 @@ module.exports = Editor.Panel.define({
                   <span class="setting-label" data-i18n="settings.rate_limit">Rate Limit (req/min)</span>
                   <span class="setting-hint" data-i18n="settings.rate_limit_hint">每分钟允许的最大请求数 (10-10000)</span>
                 </div>
-                <input type="number" id="settingRateLimit" class="setting-input" min="10" max="10000" step="10" value="240" />
+                <input type="number" id="settingRateLimit" class="setting-input" min="10" max="10000" step="10" value="1200" />
               </div>
               <div class="setting-item">
                 <div class="setting-info">
@@ -1707,7 +1707,7 @@ module.exports = Editor.Panel.define({
       const dict = I18N[currentLang] || I18N.zh;
       try {
         const settings = {
-          rateLimitPerMinute: parseInt(self.$.settingRateLimit.value, 10) || 240,
+          rateLimitPerMinute: parseInt(self.$.settingRateLimit.value, 10) || 1200,
           loopbackOnly: self.$.settingLoopback.checked,
           maxBodySizeBytes: parseInt(self.$.settingBodyLimit.value, 10) || 1048576,
           autoRollback: self.$.settingRollback.checked,

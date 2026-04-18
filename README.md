@@ -112,7 +112,7 @@ Cursor, Windsurf, Claude Desktop, Trae, Kiro, Antigravity, Gemini CLI, OpenAI Co
 |---------|-------|
 | Binding | `127.0.0.1` loopback only (configurable) |
 | Authentication | 24-byte random token |
-| Rate limit | 240 req/min (configurable, 10–10,000) |
+| Rate limit | 1200 req/min (configurable, 10–10,000) |
 | Request timeout | 20 seconds |
 | Max request body | 1 MB (configurable, 64 KB – 50 MB) |
 | Auto rollback | Enabled (configurable) |
@@ -254,7 +254,7 @@ Cursor、Windsurf、Claude Desktop、Trae、Kiro、Antigravity、Gemini CLI、Op
 |------|-----|
 | 绑定 | `127.0.0.1` 仅回环（可配置） |
 | 认证 | 24 字节随机 Token |
-| 速率限制 | 240 请求/分钟（可配置，10–10,000） |
+| 速率限制 | 1200 请求/分钟（可配置，10–10,000） |
 | 请求超时 | 20 秒 |
 | 最大请求体 | 1 MB（可配置，64 KB – 50 MB） |
 | 自动回滚 | 启用（可配置） |

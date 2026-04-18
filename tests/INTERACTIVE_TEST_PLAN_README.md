@@ -43,6 +43,7 @@ tests/interactive-test-plan.data.js
 ## 说明
 
 - 当前页面预填的是 `tests/test-report.json` 里的 AI 基线结果
+- 重新跑 `node tests/integration/mcp-full-test.mjs` 时，脚本会先把 Bridge 限流提升到 `1200 req/min`，再写回新的集成结果
 - 用例会明确标注 `社区版` 或 `Pro / 扩展`
 - 人工结果默认是 `待测`
 - 页面填写内容保存在浏览器 `localStorage` 中

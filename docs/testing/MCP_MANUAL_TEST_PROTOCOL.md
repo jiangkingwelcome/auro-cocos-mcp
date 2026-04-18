@@ -9,7 +9,7 @@
 满足以下任一方式即视为**经 MCP**：
 
 1. **HTTP JSON-RPC**：向编辑器内插件提供的 `POST http://127.0.0.1:<端口>/mcp` 发送 JSON-RPC，使用 `tools/call` 调用 `tests/test-cases.json` 中对应 tool/action 与参数（请求头携带 `X-MCP-Token`）。
-2. **集成脚本**：在 Cocos 已启动、插件已加载的前提下，运行 `node tests/integration/mcp-full-test.mjs`（内部同样走 `/mcp`），其结果可作为 AI 基线，**不能替代**你对每条用例的人工结论，但可加速冒烟。
+2. **集成脚本**：在 Cocos 已启动、插件已加载的前提下，运行 `node tests/integration/mcp-full-test.mjs`（内部同样走 `/mcp`）。脚本会在开跑前自动将 Bridge 限流提升到测试值 `1200 req/min`，避免旧设置残留导致批量 `429`；其结果可作为 AI 基线，**不能替代**你对每条用例的人工结论，但可加速冒烟。
 
 **不算经 MCP（禁止作为「已测」依据）**：
 

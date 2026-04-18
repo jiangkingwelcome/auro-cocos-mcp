@@ -6,7 +6,7 @@
 |---------|------|--------|-------|
 | Cocos Creator >= 3.8 | `full` | ✅ Full support | Primary development target; all features available |
 | Cocos Creator 3.6 – 3.7 | `supported` | ✅ Supported | Tested; minor IPC name differences handled by fallbacks |
-| Cocos Creator 3.4 – 3.5 | `best-effort` | ⚠️ Best-effort | Core features work; some advanced IPC may be unavailable. `package.json` declares `>=3.6` for Cocos Store compatibility |
+| Cocos Creator 3.4 – 3.5 | `best-effort` | ⚠️ Best-effort | Core features work; some advanced IPC may be unavailable. Current package manifest targets `>=3.8.0` for release distribution |
 | Cocos Creator < 3.4 | `unsupported` | ❌ Not supported | Missing `Editor.Panel.define()` and modern Node.js APIs required by the plugin |
 
 > **Note for 3.7+**: Cocos Creator 3.7 and later only loads extensions from the **project's own** `extensions/` directory. The `install-global.js` script handles this automatically by creating a junction (Windows) or symlink (macOS/Linux) rather than copying files.
@@ -168,7 +168,7 @@ All security settings below are **user-configurable** from the plugin panel's **
 |---------|---------|-------------|-------|
 | Binding | `127.0.0.1` loopback only | Yes (ON/OFF) | When OFF, binds to `0.0.0.0` — use with caution |
 | Authentication | 24-byte random token | No | Required for `/mcp` endpoint, stored in `.mcp-token` |
-| Rate limit | 240 req/min | Yes (10–10,000) | Also overridable via `COCOS_MCP_RATE_LIMIT` env var |
+| Rate limit | 1200 req/min | Yes (10–10,000) | Also overridable via `COCOS_MCP_RATE_LIMIT` env var |
 | Request timeout | 20 seconds | Via env var | `COCOS_MCP_TIMEOUT_MS` |
 | Max request body | 1 MB | Yes (64 KB – 50 MB) | — |
 | Auto rollback | Enabled | Yes (ON/OFF) | Atomic operations auto-cleanup on failure |

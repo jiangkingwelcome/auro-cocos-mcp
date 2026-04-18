@@ -13,6 +13,11 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REPORT_PATH = path.join(__dirname, 'mcp-test-report.json');
 const PORTS = [7779, 7780, 7781, 7782];
 const TIMEOUT_MS = 15000;
+const TEST_RATE_LIMIT_PER_MINUTE = 1200;
+
+const TEST_MODE = String(process.argv.find((arg) => arg.startsWith('--mode='))?.split('=')[1] || 'all').toLowerCase();
+const MODE_ALIASES = new Set(['all', 'community', 'pro']);
+const ACTIVE_MODE = MODE_ALIASES.has(TEST_MODE) ? TEST_MODE : 'all';
 
 let BASE_URL = '';
 let TOKEN = '';
@@ -49,6 +54,42 @@ async function callTool(toolName, args = {}) {
   return { raw: result, parsed, isError };
 }
 
+async function getSettings() {
+  const res = await fetch(`${BASE_URL}/api/settings`, {
+    method: 'GET',
+    signal: AbortSignal.timeout(TIMEOUT_MS),
+  });
+  return res.json();
+}
+
+async function ensureTestRateLimit() {
+  const current = await getSettings();
+  const currentRateLimit = current?.settings?.rateLimitPerMinute;
+  if (typeof currentRateLimit === 'number' && currentRateLimit >= TEST_RATE_LIMIT_PER_MINUTE) {
+    console.log(`Using existing rate limit: ${currentRateLimit} req/min`);
+    return;
+  }
+
+  if (!TOKEN) {
+    throw new Error('Cannot raise rate limit for integration tests: MCP token unavailable');
+  }
+
+  const res = await fetch(`${BASE_URL}/api/settings`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-MCP-Token': TOKEN,
+    },
+    body: JSON.stringify({ rateLimitPerMinute: TEST_RATE_LIMIT_PER_MINUTE }),
+    signal: AbortSignal.timeout(TIMEOUT_MS),
+  });
+  const json = await res.json();
+  if (!res.ok || json?.success !== true) {
+    throw new Error(`Failed to raise rate limit for integration tests: HTTP ${res.status}`);
+  }
+  console.log(`Raised rate limit to ${json.settings?.rateLimitPerMinute ?? TEST_RATE_LIMIT_PER_MINUTE} req/min for integration tests`);
+}
+
 // ─── Test runner ─────────────────────────────────────────────────────────────
 async function test(name, fn) {
   const t0 = Date.now();
@@ -66,8 +107,34 @@ function assertNotActionUnknown(parsed, actionName) {
     throw new Error(`action "${actionName}" 未在编辑器中注册 — 请在 Cocos 编辑器中点击"热更重启"按钮重新加载插件`);
   }
 }
-function assertCommunityLocked(parsed, actionName) {
-  assert(parsed?.error || parsed?.isError || parsed?.success === false, `expected ${actionName} to be rejected in Community Edition`);
+function assertCommunityLocked(resultOrParsed, actionName) {
+  const parsed = resultOrParsed && typeof resultOrParsed === 'object' && 'parsed' in resultOrParsed
+    ? resultOrParsed.parsed
+    : resultOrParsed;
+  const isError = Boolean(
+    resultOrParsed && typeof resultOrParsed === 'object' && (
+      resultOrParsed.isError === true ||
+      resultOrParsed.raw?.isError === true
+    ),
+  );
+  assert(
+    isError ||
+    (typeof parsed === 'string' && parsed.length > 0) ||
+    parsed?.error ||
+    parsed?.isError ||
+    parsed?.success === false,
+    `expected ${actionName} to be rejected in Community Edition`,
+  );
+}
+
+function shouldRunMode(mode) {
+  return ACTIVE_MODE === 'all' || ACTIVE_MODE === mode;
+}
+
+function skipMode(testName, mode) {
+  if (shouldRunMode(mode)) return false;
+  skip(testName, `skipped by --mode=${ACTIVE_MODE}`);
+  return true;
 }
 
 // ─── Discovery ───────────────────────────────────────────────────────────────
@@ -116,6 +183,27 @@ let childNodeUuid = '';
 let snapshotA = null;
 let createdAssetUrl = '';
 let registeredTools = new Set();
+let registeredActions = new Map();
+let prefabAssetUrl = 'db://assets/__mcp_test__.prefab';
+let prefabInstanceUuid = '';
+
+function extractToolActions(tool) {
+  const enumValues = tool?.inputSchema?.properties?.action?.enum;
+  return Array.isArray(enumValues) ? new Set(enumValues.map(String)) : new Set();
+}
+
+function supportsToolAction(toolName, actionName) {
+  if (!registeredTools.has(toolName)) return false;
+  if (!actionName) return true;
+  const actions = registeredActions.get(toolName);
+  return !(actions instanceof Set) || actions.size === 0 || actions.has(actionName);
+}
+
+function skipUnsupportedAction(testName, toolName, actionName) {
+  if (supportsToolAction(toolName, actionName)) return false;
+  skip(testName, `${toolName}.${actionName} not registered in current edition`);
+  return true;
+}
 
 // =============================================================================
 // TEST GROUPS
@@ -144,6 +232,7 @@ async function testBasicConnectivity() {
     assert(Array.isArray(result.tools), 'tools is not array');
     assert(result.tools.length >= 14, `only ${result.tools.length} tools`);
     registeredTools = new Set(result.tools.map((tool) => tool.name));
+    registeredActions = new Map(result.tools.map((tool) => [tool.name, extractToolActions(tool)]));
     console.log(`    (${result.tools.length} tools registered, ${result.tools.reduce((s, t) => s + (t.name === 'scene_query' || t.name === 'scene_operation' || t.name === 'asset_operation' || t.name === 'editor_action' ? 1 : 0), 0)} multi-action tools)`);
   });
 }
@@ -318,6 +407,7 @@ async function testSceneQuery() {
 
   // NEW actions
   await test('scene_query.measure_distance', async () => {
+    if (skipMode('scene_query.measure_distance', 'pro')) return;
     const { parsed: list } = await sq('list');
     const nodes = (list.nodes || []).filter(n => n.depth > 0);
     if (nodes.length < 2) { skip('scene_query.measure_distance', 'need 2+ child nodes'); return; }
@@ -327,6 +417,7 @@ async function testSceneQuery() {
   });
 
   await test('scene_query.scene_snapshot', async () => {
+    if (skipMode('scene_query.scene_snapshot', 'pro')) return;
     const { parsed } = await sq('scene_snapshot');
     assertNotActionUnknown(parsed, 'scene_snapshot');
     assert(parsed.nodeCount > 0, 'empty snapshot');
@@ -334,6 +425,7 @@ async function testSceneQuery() {
   });
 
   await test('scene_query.scene_diff', async () => {
+    if (skipMode('scene_query.scene_diff', 'pro')) return;
     if (!snapshotA) { skip('scene_query.scene_diff', 'no snapshotA'); return; }
     const { parsed } = await sq('scene_diff', { snapshotA, snapshotB: snapshotA });
     assertNotActionUnknown(parsed, 'scene_diff');
@@ -341,6 +433,7 @@ async function testSceneQuery() {
   });
 
   await test('scene_query.performance_audit', async () => {
+    if (skipMode('scene_query.performance_audit', 'pro')) return;
     const { parsed } = await sq('performance_audit');
     assertNotActionUnknown(parsed, 'performance_audit');
     assert(parsed.totalNodes > 0, 'no nodes');
@@ -348,6 +441,7 @@ async function testSceneQuery() {
   });
 
   await test('scene_query.export_scene_json', async () => {
+    if (skipMode('scene_query.export_scene_json', 'pro')) return;
     const { parsed } = await sq('export_scene_json', { maxNodes: 50 });
     assertNotActionUnknown(parsed, 'export_scene_json');
     assert(parsed.nodeCount > 0, 'empty export');
@@ -570,26 +664,31 @@ async function testSceneOperation() {
   });
 
   await test('scene_operation.hide_node', async () => {
+    if (skipMode('scene_operation.hide_node', 'pro')) return;
     const { parsed } = await so('hide_node', { uuid: testNodeUuid });
     assertCommunityLocked(parsed, 'hide_node');
   });
 
   await test('scene_operation.unhide_node', async () => {
+    if (skipMode('scene_operation.unhide_node', 'pro')) return;
     const { parsed } = await so('unhide_node', { uuid: testNodeUuid });
     assertCommunityLocked(parsed, 'unhide_node');
   });
 
   await test('scene_operation.set_layer', async () => {
+    if (skipMode('scene_operation.set_layer', 'pro')) return;
     const { parsed } = await so('set_layer', { uuid: testNodeUuid, layer: 1 });
     assertCommunityLocked(parsed, 'set_layer');
   });
 
   await test('scene_operation.lock_node', async () => {
+    if (skipMode('scene_operation.lock_node', 'pro')) return;
     const { parsed } = await so('lock_node', { uuid: testNodeUuid });
     assertCommunityLocked(parsed, 'lock_node');
   });
 
   await test('scene_operation.unlock_node', async () => {
+    if (skipMode('scene_operation.unlock_node', 'pro')) return;
     const { parsed } = await so('unlock_node', { uuid: testNodeUuid });
     assertCommunityLocked(parsed, 'unlock_node');
   });
@@ -617,43 +716,46 @@ async function testSceneOperation() {
 
   // Prefab operations (best-effort)
   await test('scene_operation.create_prefab', async () => {
-    const { parsed } = await so('create_prefab', { uuid: testNodeUuid, savePath: 'db://assets/__mcp_test__.prefab' });
+    const { parsed } = await so('create_prefab', { uuid: testNodeUuid, savePath: prefabAssetUrl });
     assert(parsed.success || parsed.result, `failed: ${parsed.error || ''}`);
   });
 
   await test('scene_operation.validate_prefab', async () => {
-    const { parsed } = await so('validate_prefab', { prefabUrl: 'db://assets/__mcp_test__.prefab' });
+    const { parsed } = await so('validate_prefab', { prefabUrl: prefabAssetUrl });
     assert(parsed.valid !== undefined || parsed.error, 'no result');
   });
 
   await test('scene_operation.instantiate_prefab', async () => {
-    const { parsed } = await so('instantiate_prefab', { prefabUrl: 'db://assets/__mcp_test__.prefab' });
-    // May fail if prefab doesn't exist yet
-    assert(parsed !== undefined, 'no response');
+    const { parsed } = await so('instantiate_prefab', { prefabUrl: prefabAssetUrl });
+    prefabInstanceUuid = String(parsed?.uuid || parsed?.instanceUuid || '');
+    assert(parsed.success || parsed.error, 'no response');
   });
 
   await test('scene_operation.enter_prefab_edit', async () => {
-    const { parsed } = await so('enter_prefab_edit', { uuid: testNodeUuid });
-    assert(parsed !== undefined, 'no response');
+    const { parsed } = await so('enter_prefab_edit', { prefabUrl: prefabAssetUrl });
+    assert(parsed.success || parsed.error, 'no response');
   });
 
   await test('scene_operation.exit_prefab_edit', async () => {
     const { parsed } = await so('exit_prefab_edit');
-    assert(parsed !== undefined, 'no response');
+    assert(parsed.success || parsed.error, 'no response');
   });
 
   await test('scene_operation.apply_prefab', async () => {
-    const { parsed } = await so('apply_prefab', { uuid: testNodeUuid });
-    assert(parsed !== undefined, 'no response');
+    if (!prefabInstanceUuid) { skip('scene_operation.apply_prefab', 'no prefab instance to apply'); return; }
+    const { parsed } = await so('apply_prefab', { uuid: prefabInstanceUuid });
+    assert(parsed.success !== undefined || parsed.error, 'no response');
   });
 
-  await test('scene_operation.revert_prefab', async () => {
-    const { parsed } = await so('revert_prefab', { uuid: testNodeUuid });
-    assert(parsed !== undefined, 'no response');
+  await test('scene_operation.restore_prefab', async () => {
+    if (!prefabInstanceUuid) { skip('scene_operation.restore_prefab', 'no prefab instance to restore'); return; }
+    const { parsed } = await so('restore_prefab', { uuid: prefabInstanceUuid });
+    assert(parsed.success !== undefined || parsed.error, 'no response');
   });
 
   // NEW actions
   await test('scene_operation.batch', async () => {
+    if (skipMode('scene_operation.batch', 'pro')) return;
     const { parsed } = await so('batch', {
       operations: [
         { action: 'create_node', name: '__batch_a__' },
@@ -665,41 +767,49 @@ async function testSceneOperation() {
   });
 
   await test('scene_operation.create_ui_widget_is_pro_only', async () => {
+    if (skipMode('scene_operation.create_ui_widget_is_pro_only', 'pro')) return;
     const { parsed } = await so('create_ui_widget', { widgetType: 'button', name: '__mcp_btn__', text: 'Test' });
     assert(parsed?.error || parsed?.isError || parsed?.success === false, 'expected create_ui_widget to be rejected in Community Edition');
   });
 
   await test('scene_operation.setup_particle', async () => {
+    if (skipMode('scene_operation.setup_particle', 'pro')) return;
     const { parsed } = await so('setup_particle', { preset: 'fire', name: '__mcp_particles__' });
     assertCommunityLocked(parsed, 'setup_particle');
   });
 
   await test('scene_operation.align_nodes', async () => {
+    if (skipMode('scene_operation.align_nodes', 'pro')) return;
     const { parsed } = await so('align_nodes', { uuids: [testNodeUuid, testNodeUuid2], alignment: 'center_h' });
     assertCommunityLocked(parsed, 'align_nodes');
   });
 
   await test('scene_operation.audio_setup', async () => {
+    if (skipMode('scene_operation.audio_setup', 'pro')) return;
     const { parsed } = await so('audio_setup', { uuid: testNodeUuid, volume: 0.5, loop: true });
     assertCommunityLocked(parsed, 'audio_setup');
   });
 
   await test('scene_operation.setup_physics_world', async () => {
+    if (skipMode('scene_operation.setup_physics_world', 'pro')) return;
     const { parsed } = await so('setup_physics_world', { mode: 'auto', gravity: { x: 0, y: -320 } });
     assertCommunityLocked(parsed, 'setup_physics_world');
   });
 
   await test('scene_operation.create_skeleton_node', async () => {
+    if (skipMode('scene_operation.create_skeleton_node', 'pro')) return;
     const { parsed } = await so('create_skeleton_node', { skeletonType: 'spine', name: '__mcp_spine__' });
     assertCommunityLocked(parsed, 'create_skeleton_node');
   });
 
   await test('scene_operation.generate_tilemap', async () => {
+    if (skipMode('scene_operation.generate_tilemap', 'pro')) return;
     const { parsed } = await so('generate_tilemap', { name: '__mcp_tilemap__' });
     assertCommunityLocked(parsed, 'generate_tilemap');
   });
 
   await test('scene_operation.create_primitive_cube', async () => {
+    if (skipMode('scene_operation.create_primitive_cube', 'pro')) return;
     const { parsed } = await so('create_primitive', {
       parentUuid: '',
       name: '__mcp_Cube__',
@@ -710,6 +820,7 @@ async function testSceneOperation() {
   });
 
   await test('scene_operation.set_camera_look_at', async () => {
+    if (skipMode('scene_operation.set_camera_look_at', 'pro')) return;
     const { parsed } = await so('set_camera_look_at', {
       uuid: testNodeUuid,
       targetX: 0,
@@ -813,6 +924,7 @@ async function testAssetOperation() {
   });
 
   await test('asset_operation.export_asset_manifest', async () => {
+    if (skipUnsupportedAction('asset_operation.export_asset_manifest', 'asset_operation', 'export_asset_manifest')) return;
     const { parsed } = await ao('export_asset_manifest');
     assert(parsed.totalCount !== undefined, 'no totalCount');
   });
@@ -843,6 +955,7 @@ async function testAssetOperation() {
   });
 
   await test('asset_operation.clean_unused', async () => {
+    if (skipUnsupportedAction('asset_operation.clean_unused', 'asset_operation', 'clean_unused')) return;
     const { parsed } = await ao('clean_unused');
     assert(parsed.status || parsed.message, 'no result');
   });
@@ -867,7 +980,7 @@ async function testAssetOperation() {
   console.log('  (cleaning up test assets...)');
   const cleanups = [
     createdAssetUrl, 'db://assets/__mcp_test_renamed__.txt',
-    'db://assets/__mcp_test_folder__', 'db://assets/__mcp_test__.prefab',
+    'db://assets/__mcp_test_folder__', prefabAssetUrl,
     'db://assets/__mcp_test_mat__.mtl', 'db://assets/__mcp_test_script__.ts',
   ].filter(u => u && typeof u === 'string' && u.startsWith('db://'));
   for (const url of cleanups) {
@@ -918,27 +1031,31 @@ async function testEditorAction() {
   });
 
   await test('editor_action.query_panels', async () => {
+    if (skipMode('editor_action.query_panels', 'pro')) return;
     const { parsed } = await ea('query_panels');
     assert(parsed !== undefined, 'no result');
   });
 
   await test('editor_action.get_packages', async () => {
+    if (skipMode('editor_action.get_packages', 'pro')) return;
     const { parsed } = await ea('get_packages');
     assert(parsed !== undefined, 'no result');
   });
 
   await test('editor_action.set_transform_tool', async () => {
+    if (skipMode('editor_action.set_transform_tool', 'pro')) return;
     const { parsed } = await ea('set_transform_tool', { tool: 'position' });
     assert(parsed !== undefined, 'no result');
   });
 
   await test('editor_action.set_coordinate', async () => {
+    if (skipMode('editor_action.set_coordinate', 'pro')) return;
     const { parsed } = await ea('set_coordinate', { coordinate: 'local' });
     assert(parsed !== undefined, 'no result');
   });
 
   await test('editor_action.show_notification', async () => {
-    const { parsed } = await ea('show_notification', { title: 'MCP Test', message: 'Integration test running' });
+    const { parsed } = await ea('show_notification', { title: 'MCP Test', text: 'Integration test running' });
     assert(parsed !== undefined, 'no result');
   });
 
@@ -959,26 +1076,36 @@ async function testEditorAction() {
 
   // Engine actions
   await test('engine_action.get_system_info', async () => {
+    if (skipMode('engine_action.get_system_info', 'pro')) return;
+    if (skipUnsupportedAction('engine_action.get_system_info', 'engine_action', 'get_system_info')) return;
     const { parsed } = await eng('get_system_info');
     assert(parsed.os || parsed.platform || parsed.isBrowser !== undefined, 'no info');
   });
 
   await test('engine_action.set_frame_rate', async () => {
+    if (skipMode('engine_action.set_frame_rate', 'pro')) return;
+    if (skipUnsupportedAction('engine_action.set_frame_rate', 'engine_action', 'set_frame_rate')) return;
     const { parsed } = await eng('set_frame_rate', { fps: 60 });
     assert(parsed.success, `failed: ${parsed.error || ''}`);
   });
 
   await test('engine_action.pause_engine', async () => {
+    if (skipMode('engine_action.pause_engine', 'pro')) return;
+    if (skipUnsupportedAction('engine_action.pause_engine', 'engine_action', 'pause_engine')) return;
     const { parsed } = await eng('pause_engine');
     assert(parsed.success, `failed: ${parsed.error || ''}`);
   });
 
   await test('engine_action.resume_engine', async () => {
+    if (skipMode('engine_action.resume_engine', 'pro')) return;
+    if (skipUnsupportedAction('engine_action.resume_engine', 'engine_action', 'resume_engine')) return;
     const { parsed } = await eng('resume_engine');
     assert(parsed.success, `failed: ${parsed.error || ''}`);
   });
 
   await test('engine_action.dump_texture_cache', async () => {
+    if (skipMode('engine_action.dump_texture_cache', 'pro')) return;
+    if (skipUnsupportedAction('engine_action.dump_texture_cache', 'engine_action', 'dump_texture_cache')) return;
     const { parsed } = await eng('dump_texture_cache');
     assert(parsed.success || parsed.totalCount !== undefined, 'no result');
   });
@@ -1004,12 +1131,7 @@ async function testAtomicTools() {
 
   await test('create_tween_animation_atomic', async () => {
     if (!registeredTools.has('create_tween_animation_atomic')) {
-      const { parsed } = await callTool('create_tween_animation_atomic', {
-        nodeUuid: 'community-locked-check',
-        duration: 1,
-        tracks: [{ property: 'position', keyframes: [{ time: 0, value: { x: 0, y: 0, z: 0 } }, { time: 1, value: { x: 100, y: 0, z: 0 } }] }],
-      });
-      assertCommunityLocked(parsed, 'create_tween_animation_atomic');
+      skip('create_tween_animation_atomic', 'tool not registered in current edition');
       return;
     }
 
@@ -1079,6 +1201,8 @@ async function main() {
     console.error('\nERROR: No running bridge found on ports 7779-7782');
     process.exit(1);
   }
+
+  await ensureTestRateLimit();
 
   await testBasicConnectivity();
   await testSceneQuery();

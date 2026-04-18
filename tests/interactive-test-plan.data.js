@@ -1,5 +1,5 @@
 window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
-  "generatedAt": "2026-04-13T14:16:31.004Z",
+  "generatedAt": "2026-04-17T11:35:10.464Z",
   "project": {
     "name": "Aura for Cocos Creator",
     "repoRelativeCasesPath": "tests/test-cases.json",
@@ -191,9 +191,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       }
     ],
     "aiBaseline": {
-      "pass": 223,
-      "fail": 0,
-      "blocked": 142,
+      "pass": 363,
+      "fail": 2,
+      "blocked": 0,
       "pending": 0
     }
   },
@@ -238,8 +238,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 44,
-        "note": "来自 tests/test-report.json，自动化执行通过（44ms）"
+        "duration": 43,
+        "note": "来自 tests/test-report.json，自动化执行通过（43ms）"
       },
       "manualBaseline": {
         "status": "pass",
@@ -288,8 +288,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 20,
-        "note": "来自 tests/test-report.json，自动化执行通过（20ms）"
+        "duration": 10,
+        "note": "来自 tests/test-report.json，自动化执行通过（10ms）"
       },
       "manualBaseline": {
         "status": "pass",
@@ -340,8 +340,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 43,
-        "note": "来自 tests/test-report.json，自动化执行通过（43ms）"
+        "duration": 7,
+        "note": "来自 tests/test-report.json，自动化执行通过（7ms）"
       },
       "manualBaseline": {
         "status": "pass",
@@ -393,8 +393,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 11,
-        "note": "来自 tests/test-report.json，自动化执行通过（11ms）"
+        "duration": 10,
+        "note": "来自 tests/test-report.json，自动化执行通过（10ms）"
       },
       "manualBaseline": {
         "status": "pass",
@@ -445,8 +445,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 6,
-        "note": "来自 tests/test-report.json，自动化执行通过（6ms）"
+        "duration": 19,
+        "note": "来自 tests/test-report.json，自动化执行通过（19ms）"
       },
       "manualBaseline": {
         "status": "pass",
@@ -497,8 +497,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 7,
-        "note": "来自 tests/test-report.json，自动化执行通过（7ms）"
+        "duration": 10,
+        "note": "来自 tests/test-report.json，自动化执行通过（10ms）"
       },
       "manualBaseline": {
         "status": "pass",
@@ -550,8 +550,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 32,
-        "note": "来自 tests/test-report.json，自动化执行通过（32ms）"
+        "duration": 12,
+        "note": "来自 tests/test-report.json，自动化执行通过（12ms）"
       },
       "manualBaseline": {
         "status": "pass",
@@ -602,8 +602,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 5,
-        "note": "来自 tests/test-report.json，自动化执行通过（5ms）"
+        "duration": 9,
+        "note": "来自 tests/test-report.json，自动化执行通过（9ms）"
       },
       "manualBaseline": {
         "status": "pass",
@@ -655,8 +655,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 7,
-        "note": "来自 tests/test-report.json，自动化执行通过（7ms）"
+        "duration": 9,
+        "note": "来自 tests/test-report.json，自动化执行通过（9ms）"
       },
       "manualBaseline": {
         "status": "pass",
@@ -718,8 +718,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 17,
-        "note": "来自 tests/test-report.json，自动化执行通过（17ms）"
+        "duration": 7,
+        "note": "来自 tests/test-report.json，自动化执行通过（7ms）"
       },
       "manualBaseline": {
         "status": "pass",
@@ -771,8 +771,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 5,
-        "note": "来自 tests/test-report.json，自动化执行通过（5ms）"
+        "duration": 11,
+        "note": "来自 tests/test-report.json，自动化执行通过（11ms）"
       },
       "manualBaseline": {
         "status": "pass",
@@ -824,8 +824,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 7,
-        "note": "来自 tests/test-report.json，自动化执行通过（7ms）"
+        "duration": 12,
+        "note": "来自 tests/test-report.json，自动化执行通过（12ms）"
       },
       "manualBaseline": {
         "status": "pass",
@@ -877,8 +877,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 12,
-        "note": "来自 tests/test-report.json，自动化执行通过（12ms）"
+        "duration": 13,
+        "note": "来自 tests/test-report.json，自动化执行通过（13ms）"
       },
       "manualBaseline": {
         "status": "pass",
@@ -940,8 +940,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 6,
-        "note": "来自 tests/test-report.json，自动化执行通过（6ms）"
+        "duration": 13,
+        "note": "来自 tests/test-report.json，自动化执行通过（13ms）"
       },
       "manualBaseline": {
         "status": "pass",
@@ -1003,8 +1003,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 5,
-        "note": "来自 tests/test-report.json，自动化执行通过（5ms）"
+        "duration": 12,
+        "note": "来自 tests/test-report.json，自动化执行通过（12ms）"
       },
       "manualBaseline": {
         "status": "pass",
@@ -1066,8 +1066,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 13,
-        "note": "来自 tests/test-report.json，自动化执行通过（13ms）"
+        "duration": 12,
+        "note": "来自 tests/test-report.json，自动化执行通过（12ms）"
       },
       "manualBaseline": {
         "status": "pass",
@@ -1129,8 +1129,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 5,
-        "note": "来自 tests/test-report.json，自动化执行通过（5ms）"
+        "duration": 8,
+        "note": "来自 tests/test-report.json，自动化执行通过（8ms）"
       },
       "manualBaseline": {
         "status": "pass",
@@ -1192,8 +1192,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 6,
-        "note": "来自 tests/test-report.json，自动化执行通过（6ms）"
+        "duration": 10,
+        "note": "来自 tests/test-report.json，自动化执行通过（10ms）"
       },
       "manualBaseline": {
         "status": "pass",
@@ -1255,8 +1255,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 14,
-        "note": "来自 tests/test-report.json，自动化执行通过（14ms）"
+        "duration": 11,
+        "note": "来自 tests/test-report.json，自动化执行通过（11ms）"
       },
       "manualBaseline": {
         "status": "pass",
@@ -1318,8 +1318,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 15,
-        "note": "来自 tests/test-report.json，自动化执行通过（15ms）"
+        "duration": 13,
+        "note": "来自 tests/test-report.json，自动化执行通过（13ms）"
       },
       "manualBaseline": {
         "status": "pass",
@@ -1381,8 +1381,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 5,
-        "note": "来自 tests/test-report.json，自动化执行通过（5ms）"
+        "duration": 9,
+        "note": "来自 tests/test-report.json，自动化执行通过（9ms）"
       },
       "manualBaseline": {
         "status": "pass",
@@ -1444,8 +1444,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 9,
-        "note": "来自 tests/test-report.json，自动化执行通过（9ms）"
+        "duration": 12,
+        "note": "来自 tests/test-report.json，自动化执行通过（12ms）"
       },
       "manualBaseline": {
         "status": "pass",
@@ -1507,8 +1507,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 5,
-        "note": "来自 tests/test-report.json，自动化执行通过（5ms）"
+        "duration": 12,
+        "note": "来自 tests/test-report.json，自动化执行通过（12ms）"
       },
       "manualBaseline": {
         "status": "pass",
@@ -1570,8 +1570,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 6,
-        "note": "来自 tests/test-report.json，自动化执行通过（6ms）"
+        "duration": 8,
+        "note": "来自 tests/test-report.json，自动化执行通过（8ms）"
       },
       "manualBaseline": {
         "status": "pass",
@@ -1633,8 +1633,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 15,
-        "note": "来自 tests/test-report.json，自动化执行通过（15ms）"
+        "duration": 10,
+        "note": "来自 tests/test-report.json，自动化执行通过（10ms）"
       },
       "manualBaseline": {
         "status": "pass",
@@ -1686,8 +1686,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 5,
-        "note": "来自 tests/test-report.json，自动化执行通过（5ms）"
+        "duration": 8,
+        "note": "来自 tests/test-report.json，自动化执行通过（8ms）"
       },
       "manualBaseline": {
         "status": "pass",
@@ -1739,8 +1739,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 5,
-        "note": "来自 tests/test-report.json，自动化执行通过（5ms）"
+        "duration": 7,
+        "note": "来自 tests/test-report.json，自动化执行通过（7ms）"
       },
       "manualBaseline": {
         "status": "pass",
@@ -1792,8 +1792,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 16,
-        "note": "来自 tests/test-report.json，自动化执行通过（16ms）"
+        "duration": 30,
+        "note": "来自 tests/test-report.json，自动化执行通过（30ms）"
       },
       "manualBaseline": {
         "status": "pass",
@@ -1845,8 +1845,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 6,
-        "note": "来自 tests/test-report.json，自动化执行通过（6ms）"
+        "duration": 38,
+        "note": "来自 tests/test-report.json，自动化执行通过（38ms）"
       },
       "manualBaseline": {
         "status": "pass",
@@ -1898,8 +1898,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 6,
-        "note": "来自 tests/test-report.json，自动化执行通过（6ms）"
+        "duration": 7,
+        "note": "来自 tests/test-report.json，自动化执行通过（7ms）"
       },
       "manualBaseline": {
         "status": "pass",
@@ -1952,8 +1952,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 12,
-        "note": "来自 tests/test-report.json，自动化执行通过（12ms）"
+        "duration": 10,
+        "note": "来自 tests/test-report.json，自动化执行通过（10ms）"
       },
       "manualBaseline": {
         "status": "pass",
@@ -2065,8 +2065,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 7,
-        "note": "来自 tests/test-report.json，自动化执行通过（7ms）"
+        "duration": 9,
+        "note": "来自 tests/test-report.json，自动化执行通过（9ms）"
       },
       "manualBaseline": {
         "status": "pass",
@@ -2130,8 +2130,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 12,
-        "note": "来自 tests/test-report.json，自动化执行通过（12ms）"
+        "duration": 4,
+        "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -2193,8 +2193,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 7,
-        "note": "来自 tests/test-report.json，自动化执行通过（7ms）"
+        "duration": 9,
+        "note": "来自 tests/test-report.json，自动化执行通过（9ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -2245,8 +2245,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 6,
-        "note": "来自 tests/test-report.json，自动化执行通过（6ms）"
+        "duration": 13,
+        "note": "来自 tests/test-report.json，自动化执行通过（13ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -2308,8 +2308,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 7,
-        "note": "来自 tests/test-report.json，自动化执行通过（7ms）"
+        "duration": 12,
+        "note": "来自 tests/test-report.json，自动化执行通过（12ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -2360,8 +2360,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 5,
-        "note": "来自 tests/test-report.json，自动化执行通过（5ms）"
+        "duration": 19,
+        "note": "来自 tests/test-report.json，自动化执行通过（19ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -2412,8 +2412,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 6,
-        "note": "来自 tests/test-report.json，自动化执行通过（6ms）"
+        "duration": 11,
+        "note": "来自 tests/test-report.json，自动化执行通过（11ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -2464,8 +2464,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 5,
-        "note": "来自 tests/test-report.json，自动化执行通过（5ms）"
+        "duration": 11,
+        "note": "来自 tests/test-report.json，自动化执行通过（11ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -2516,8 +2516,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 7,
-        "note": "来自 tests/test-report.json，自动化执行通过（7ms）"
+        "duration": 8,
+        "note": "来自 tests/test-report.json，自动化执行通过（8ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -2579,8 +2579,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 6,
-        "note": "来自 tests/test-report.json，自动化执行通过（6ms）"
+        "duration": 5,
+        "note": "来自 tests/test-report.json，自动化执行通过（5ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -2642,8 +2642,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 4,
-        "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
+        "duration": 6,
+        "note": "来自 tests/test-report.json，自动化执行通过（6ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -2705,8 +2705,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 5,
-        "note": "来自 tests/test-report.json，自动化执行通过（5ms）"
+        "duration": 6,
+        "note": "来自 tests/test-report.json，自动化执行通过（6ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -2768,8 +2768,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 6,
-        "note": "来自 tests/test-report.json，自动化执行通过（6ms）"
+        "duration": 7,
+        "note": "来自 tests/test-report.json，自动化执行通过（7ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -2951,8 +2951,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 7,
-        "note": "来自 tests/test-report.json，自动化执行通过（7ms）"
+        "duration": 6,
+        "note": "来自 tests/test-report.json，自动化执行通过（6ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -3059,8 +3059,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 15,
-        "note": "来自 tests/test-report.json，自动化执行通过（15ms）"
+        "duration": 9,
+        "note": "来自 tests/test-report.json，自动化执行通过（9ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -3112,8 +3112,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 5,
-        "note": "来自 tests/test-report.json，自动化执行通过（5ms）"
+        "duration": 19,
+        "note": "来自 tests/test-report.json，自动化执行通过（19ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -3165,8 +3165,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 7,
-        "note": "来自 tests/test-report.json，自动化执行通过（7ms）"
+        "duration": 5,
+        "note": "来自 tests/test-report.json，自动化执行通过（5ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -3218,8 +3218,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 6,
-        "note": "来自 tests/test-report.json，自动化执行通过（6ms）"
+        "duration": 7,
+        "note": "来自 tests/test-report.json，自动化执行通过（7ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -3271,8 +3271,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 5,
-        "note": "来自 tests/test-report.json，自动化执行通过（5ms）"
+        "duration": 9,
+        "note": "来自 tests/test-report.json，自动化执行通过（9ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -3324,8 +3324,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 12,
-        "note": "来自 tests/test-report.json，自动化执行通过（12ms）"
+        "duration": 7,
+        "note": "来自 tests/test-report.json，自动化执行通过（7ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -3480,8 +3480,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 6,
-        "note": "来自 tests/test-report.json，自动化执行通过（6ms）"
+        "duration": 7,
+        "note": "来自 tests/test-report.json，自动化执行通过（7ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -3532,8 +3532,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 5,
-        "note": "来自 tests/test-report.json，自动化执行通过（5ms）"
+        "duration": 6,
+        "note": "来自 tests/test-report.json，自动化执行通过（6ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -3584,8 +3584,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 21,
-        "note": "来自 tests/test-report.json，自动化执行通过（21ms）"
+        "duration": 14,
+        "note": "来自 tests/test-report.json，自动化执行通过（14ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -3636,8 +3636,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 5,
-        "note": "来自 tests/test-report.json，自动化执行通过（5ms）"
+        "duration": 10,
+        "note": "来自 tests/test-report.json，自动化执行通过（10ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -3688,8 +3688,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 39,
-        "note": "来自 tests/test-report.json，自动化执行通过（39ms）"
+        "duration": 30,
+        "note": "来自 tests/test-report.json，自动化执行通过（30ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -3740,8 +3740,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 6,
-        "note": "来自 tests/test-report.json，自动化执行通过（6ms）"
+        "duration": 8,
+        "note": "来自 tests/test-report.json，自动化执行通过（8ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -3792,8 +3792,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 7,
-        "note": "来自 tests/test-report.json，自动化执行通过（7ms）"
+        "duration": 9,
+        "note": "来自 tests/test-report.json，自动化执行通过（9ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -3844,8 +3844,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 6,
-        "note": "来自 tests/test-report.json，自动化执行通过（6ms）"
+        "duration": 8,
+        "note": "来自 tests/test-report.json，自动化执行通过（8ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -3896,8 +3896,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 5,
-        "note": "来自 tests/test-report.json，自动化执行通过（5ms）"
+        "duration": 8,
+        "note": "来自 tests/test-report.json，自动化执行通过（8ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -3948,8 +3948,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 6,
-        "note": "来自 tests/test-report.json，自动化执行通过（6ms）"
+        "duration": 8,
+        "note": "来自 tests/test-report.json，自动化执行通过（8ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -4000,8 +4000,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 101,
-        "note": "来自 tests/test-report.json，自动化执行通过（101ms）"
+        "duration": 394,
+        "note": "来自 tests/test-report.json，自动化执行通过（394ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -4053,8 +4053,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 72,
-        "note": "来自 tests/test-report.json，自动化执行通过（72ms）"
+        "duration": 356,
+        "note": "来自 tests/test-report.json，自动化执行通过（356ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -4107,8 +4107,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 6,
-        "note": "来自 tests/test-report.json，自动化执行通过（6ms）"
+        "duration": 11,
+        "note": "来自 tests/test-report.json，自动化执行通过（11ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -4159,8 +4159,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 89,
-        "note": "来自 tests/test-report.json，自动化执行通过（89ms）"
+        "duration": 420,
+        "note": "来自 tests/test-report.json，自动化执行通过（420ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -4223,8 +4223,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 6,
-        "note": "来自 tests/test-report.json，自动化执行通过（6ms）"
+        "duration": 8,
+        "note": "来自 tests/test-report.json，自动化执行通过（8ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -4276,8 +4276,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 23,
-        "note": "来自 tests/test-report.json，自动化执行通过（23ms）"
+        "duration": 44,
+        "note": "来自 tests/test-report.json，自动化执行通过（44ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -4340,8 +4340,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 48,
-        "note": "来自 tests/test-report.json，自动化执行通过（48ms）"
+        "duration": 46,
+        "note": "来自 tests/test-report.json，自动化执行通过（46ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -4405,8 +4405,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 43,
-        "note": "来自 tests/test-report.json，自动化执行通过（43ms）"
+        "duration": 59,
+        "note": "来自 tests/test-report.json，自动化执行通过（59ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -4469,8 +4469,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 14,
-        "note": "来自 tests/test-report.json，自动化执行通过（14ms）"
+        "duration": 21,
+        "note": "来自 tests/test-report.json，自动化执行通过（21ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -4596,8 +4596,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 73,
-        "note": "来自 tests/test-report.json，自动化执行通过（73ms）"
+        "duration": 52,
+        "note": "来自 tests/test-report.json，自动化执行通过（52ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -4659,8 +4659,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 48,
-        "note": "来自 tests/test-report.json，自动化执行通过（48ms）"
+        "duration": 22,
+        "note": "来自 tests/test-report.json，自动化执行通过（22ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -4723,8 +4723,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 28,
-        "note": "来自 tests/test-report.json，自动化执行通过（28ms）"
+        "duration": 34,
+        "note": "来自 tests/test-report.json，自动化执行通过（34ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -4787,8 +4787,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 34,
-        "note": "来自 tests/test-report.json，自动化执行通过（34ms）"
+        "duration": 5,
+        "note": "来自 tests/test-report.json，自动化执行通过（5ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -4854,8 +4854,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 26,
-        "note": "来自 tests/test-report.json，自动化执行通过（26ms）"
+        "duration": 5,
+        "note": "来自 tests/test-report.json，自动化执行通过（5ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -4920,8 +4920,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 66,
-        "note": "来自 tests/test-report.json，自动化执行通过（66ms）"
+        "duration": 194,
+        "note": "来自 tests/test-report.json，自动化执行通过（194ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -4986,8 +4986,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 24,
-        "note": "来自 tests/test-report.json，自动化执行通过（24ms）"
+        "duration": 151,
+        "note": "来自 tests/test-report.json，自动化执行通过（151ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -5052,8 +5052,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 35,
-        "note": "来自 tests/test-report.json，自动化执行通过（35ms）"
+        "duration": 42,
+        "note": "来自 tests/test-report.json，自动化执行通过（42ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -5118,8 +5118,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 13,
-        "note": "来自 tests/test-report.json，自动化执行通过（13ms）"
+        "duration": 50,
+        "note": "来自 tests/test-report.json，自动化执行通过（50ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -5184,8 +5184,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 27,
-        "note": "来自 tests/test-report.json，自动化执行通过（27ms）"
+        "duration": 44,
+        "note": "来自 tests/test-report.json，自动化执行通过（44ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -5250,8 +5250,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 11,
-        "note": "来自 tests/test-report.json，自动化执行通过（11ms）"
+        "duration": 38,
+        "note": "来自 tests/test-report.json，自动化执行通过（38ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -5313,8 +5313,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 41,
-        "note": "来自 tests/test-report.json，自动化执行通过（41ms）"
+        "duration": 55,
+        "note": "来自 tests/test-report.json，自动化执行通过（55ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -5378,8 +5378,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 26,
-        "note": "来自 tests/test-report.json，自动化执行通过（26ms）"
+        "duration": 57,
+        "note": "来自 tests/test-report.json，自动化执行通过（57ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -5442,8 +5442,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 11,
-        "note": "来自 tests/test-report.json，自动化执行通过（11ms）"
+        "duration": 42,
+        "note": "来自 tests/test-report.json，自动化执行通过（42ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -5506,8 +5506,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 17,
-        "note": "来自 tests/test-report.json，自动化执行通过（17ms）"
+        "duration": 41,
+        "note": "来自 tests/test-report.json，自动化执行通过（41ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -5634,8 +5634,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 12,
-        "note": "来自 tests/test-report.json，自动化执行通过（12ms）"
+        "duration": 4,
+        "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -5699,8 +5699,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 48,
-        "note": "来自 tests/test-report.json，自动化执行通过（48ms）"
+        "duration": 24,
+        "note": "来自 tests/test-report.json，自动化执行通过（24ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -5764,8 +5764,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 67,
-        "note": "来自 tests/test-report.json，自动化执行通过（67ms）"
+        "duration": 27,
+        "note": "来自 tests/test-report.json，自动化执行通过（27ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -5827,8 +5827,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 34,
-        "note": "来自 tests/test-report.json，自动化执行通过（34ms）"
+        "duration": 59,
+        "note": "来自 tests/test-report.json，自动化执行通过（59ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -5890,8 +5890,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 19,
-        "note": "来自 tests/test-report.json，自动化执行通过（19ms）"
+        "duration": 43,
+        "note": "来自 tests/test-report.json，自动化执行通过（43ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -5954,8 +5954,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 11,
-        "note": "来自 tests/test-report.json，自动化执行通过（11ms）"
+        "duration": 162,
+        "note": "来自 tests/test-report.json，自动化执行通过（162ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -6017,8 +6017,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 8,
-        "note": "来自 tests/test-report.json，自动化执行通过（8ms）"
+        "duration": 4,
+        "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -6080,8 +6080,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 9,
-        "note": "来自 tests/test-report.json，自动化执行通过（9ms）"
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -6143,8 +6143,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 12,
-        "note": "来自 tests/test-report.json，自动化执行通过（12ms）"
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -6206,8 +6206,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 23,
-        "note": "来自 tests/test-report.json，自动化执行通过（23ms）"
+        "duration": 5,
+        "note": "来自 tests/test-report.json，自动化执行通过（5ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -6270,8 +6270,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 11,
-        "note": "来自 tests/test-report.json，自动化执行通过（11ms）"
+        "duration": 71,
+        "note": "来自 tests/test-report.json，自动化执行通过（71ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -6334,8 +6334,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 7,
-        "note": "来自 tests/test-report.json，自动化执行通过（7ms）"
+        "duration": 162,
+        "note": "来自 tests/test-report.json，自动化执行通过（162ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -6398,8 +6398,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 53,
-        "note": "来自 tests/test-report.json，自动化执行通过（53ms）"
+        "duration": 91,
+        "note": "来自 tests/test-report.json，自动化执行通过（91ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -6464,8 +6464,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 117,
-        "note": "来自 tests/test-report.json，自动化执行通过（117ms）"
+        "duration": 30,
+        "note": "来自 tests/test-report.json，自动化执行通过（30ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -6535,8 +6535,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 25,
-        "note": "来自 tests/test-report.json，自动化执行通过（25ms）"
+        "duration": 45,
+        "note": "来自 tests/test-report.json，自动化执行通过（45ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -6600,8 +6600,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 9,
-        "note": "来自 tests/test-report.json，自动化执行通过（9ms）"
+        "duration": 21,
+        "note": "来自 tests/test-report.json，自动化执行通过（21ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -6663,8 +6663,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 23,
-        "note": "来自 tests/test-report.json，自动化执行通过（23ms）"
+        "duration": 10,
+        "note": "来自 tests/test-report.json，自动化执行通过（10ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -6727,8 +6727,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 65,
-        "note": "来自 tests/test-report.json，自动化执行通过（65ms）"
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -6795,8 +6795,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 5,
-        "note": "来自 tests/test-report.json，自动化执行通过（5ms）"
+        "duration": 21,
+        "note": "来自 tests/test-report.json，自动化执行通过（21ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -6864,8 +6864,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 17,
-        "note": "来自 tests/test-report.json，自动化执行通过（17ms）"
+        "duration": 5,
+        "note": "来自 tests/test-report.json，自动化执行通过（5ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -6932,8 +6932,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 44,
-        "note": "来自 tests/test-report.json，自动化执行通过（44ms）"
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -6996,8 +6996,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 7,
-        "note": "来自 tests/test-report.json，自动化执行通过（7ms）"
+        "duration": 4,
+        "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -7061,8 +7061,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 27,
-        "note": "来自 tests/test-report.json，自动化执行通过（27ms）"
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -7125,8 +7125,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 44,
-        "note": "来自 tests/test-report.json，自动化执行通过（44ms）"
+        "duration": 1,
+        "note": "来自 tests/test-report.json，自动化执行通过（1ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -7193,8 +7193,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 32,
-        "note": "来自 tests/test-report.json，自动化执行通过（32ms）"
+        "duration": 5,
+        "note": "来自 tests/test-report.json，自动化执行通过（5ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -7266,8 +7266,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 92,
-        "note": "来自 tests/test-report.json，自动化执行通过（92ms）"
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -7330,8 +7330,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 21,
-        "note": "来自 tests/test-report.json，自动化执行通过（21ms）"
+        "duration": 4,
+        "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -7394,8 +7394,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 13,
-        "note": "来自 tests/test-report.json，自动化执行通过（13ms）"
+        "duration": 10,
+        "note": "来自 tests/test-report.json，自动化执行通过（10ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -7462,8 +7462,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 10,
-        "note": "来自 tests/test-report.json，自动化执行通过（10ms）"
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -7530,8 +7530,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 24,
-        "note": "来自 tests/test-report.json，自动化执行通过（24ms）"
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -7593,8 +7593,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 21,
-        "note": "来自 tests/test-report.json，自动化执行通过（21ms）"
+        "duration": 6,
+        "note": "来自 tests/test-report.json，自动化执行通过（6ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -7656,8 +7656,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 19,
-        "note": "来自 tests/test-report.json，自动化执行通过（19ms）"
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -7720,8 +7720,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 68,
-        "note": "来自 tests/test-report.json，自动化执行通过（68ms）"
+        "duration": 20006,
+        "note": "来自 tests/test-report.json，自动化执行通过（20006ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -7772,9 +7772,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 instantiate_prefab 动作，处理“实例化”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 prefabUrl 设为“db://assets/prefabs/Hero.prefab”。调用完成后重点检查：在场景根创建实例。"
       },
       "aiBaseline": {
-        "status": "pass",
-        "duration": 81,
-        "note": "来自 tests/test-report.json，自动化执行通过（81ms）"
+        "status": "fail",
+        "duration": "",
+        "note": "来自 tests/test-report.json，自动化失败：HTTP 500: Internal Server Error"
       },
       "manualBaseline": {
         "status": "pending",
@@ -7837,8 +7837,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 4,
-        "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
+        "duration": 13,
+        "note": "来自 tests/test-report.json，自动化执行通过（13ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -7900,8 +7900,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 3,
-        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
+        "duration": 5,
+        "note": "来自 tests/test-report.json，自动化执行通过（5ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -7951,9 +7951,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 scene_operation 工具，执行 exit_prefab_edit 动作，处理“退出编辑”这个通用场景。这个场景用于做通用能力验证。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：返回场景编辑模式。"
       },
       "aiBaseline": {
-        "status": "pass",
-        "duration": 15,
-        "note": "来自 tests/test-report.json，自动化执行通过（15ms）"
+        "status": "fail",
+        "duration": "",
+        "note": "来自 tests/test-report.json，自动化失败：HTTP 500: Internal Server Error"
       },
       "manualBaseline": {
         "status": "pending",
@@ -8015,8 +8015,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 3249,
-        "note": "来自 tests/test-report.json，自动化执行通过（3249ms）"
+        "duration": 20010,
+        "note": "来自 tests/test-report.json，自动化执行通过（20010ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -8078,8 +8078,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 12,
-        "note": "来自 tests/test-report.json，自动化执行通过（12ms）"
+        "duration": 20009,
+        "note": "来自 tests/test-report.json，自动化执行通过（20009ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -8131,8 +8131,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 14,
-        "note": "来自 tests/test-report.json，自动化执行通过（14ms）"
+        "duration": 8,
+        "note": "来自 tests/test-report.json，自动化执行通过（8ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -8185,8 +8185,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 43,
-        "note": "来自 tests/test-report.json，自动化执行通过（43ms）"
+        "duration": 7,
+        "note": "来自 tests/test-report.json，自动化执行通过（7ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -8239,8 +8239,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 28,
-        "note": "来自 tests/test-report.json，自动化执行通过（28ms）"
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -8292,8 +8292,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 193,
-        "note": "来自 tests/test-report.json，自动化执行通过（193ms）"
+        "duration": 4,
+        "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -8345,8 +8345,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 643,
-        "note": "来自 tests/test-report.json，自动化执行通过（643ms）"
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -8397,8 +8397,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 678,
-        "note": "来自 tests/test-report.json，自动化执行通过（678ms）"
+        "duration": 5,
+        "note": "来自 tests/test-report.json，自动化执行通过（5ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -8450,8 +8450,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 298,
-        "note": "来自 tests/test-report.json，自动化执行通过（298ms）"
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -8503,8 +8503,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 107,
-        "note": "来自 tests/test-report.json，自动化执行通过（107ms）"
+        "duration": 4,
+        "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -8556,8 +8556,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 39,
-        "note": "来自 tests/test-report.json，自动化执行通过（39ms）"
+        "duration": 5,
+        "note": "来自 tests/test-report.json，自动化执行通过（5ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -8615,8 +8615,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 105,
-        "note": "来自 tests/test-report.json，自动化执行通过（105ms）"
+        "duration": 4,
+        "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -8670,8 +8670,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 26,
-        "note": "来自 tests/test-report.json，自动化执行通过（26ms）"
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -8723,8 +8723,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 89,
-        "note": "来自 tests/test-report.json，自动化执行通过（89ms）"
+        "duration": 5,
+        "note": "来自 tests/test-report.json，自动化执行通过（5ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -8779,8 +8779,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 41,
-        "note": "来自 tests/test-report.json，自动化执行通过（41ms）"
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -8843,8 +8843,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 52,
-        "note": "来自 tests/test-report.json，自动化执行通过（52ms）"
+        "duration": 5,
+        "note": "来自 tests/test-report.json，自动化执行通过（5ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -8912,8 +8912,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 130,
-        "note": "来自 tests/test-report.json，自动化执行通过（130ms）"
+        "duration": 23,
+        "note": "来自 tests/test-report.json，自动化执行通过（23ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -8978,8 +8978,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 43,
-        "note": "来自 tests/test-report.json，自动化执行通过（43ms）"
+        "duration": 4,
+        "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -9032,8 +9032,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 19,
-        "note": "来自 tests/test-report.json，自动化执行通过（19ms）"
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -9097,8 +9097,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 10,
-        "note": "来自 tests/test-report.json，自动化执行通过（10ms）"
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -9168,8 +9168,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 357,
-        "note": "来自 tests/test-report.json，自动化执行通过（357ms）"
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -9235,8 +9235,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 12,
-        "note": "来自 tests/test-report.json，自动化执行通过（12ms）"
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -9299,8 +9299,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 8,
-        "note": "来自 tests/test-report.json，自动化执行通过（8ms）"
+        "duration": 5,
+        "note": "来自 tests/test-report.json，自动化执行通过（5ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -9369,8 +9369,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 37,
-        "note": "来自 tests/test-report.json，自动化执行通过（37ms）"
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -9433,8 +9433,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 8,
-        "note": "来自 tests/test-report.json，自动化执行通过（8ms）"
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -9499,8 +9499,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 16,
-        "note": "来自 tests/test-report.json，自动化执行通过（16ms）"
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -9562,8 +9562,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 7,
-        "note": "来自 tests/test-report.json，自动化执行通过（7ms）"
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -9626,8 +9626,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 12,
-        "note": "来自 tests/test-report.json，自动化执行通过（12ms）"
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -9690,8 +9690,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 20,
-        "note": "来自 tests/test-report.json，自动化执行通过（20ms）"
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -9754,8 +9754,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 6,
-        "note": "来自 tests/test-report.json，自动化执行通过（6ms）"
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -9808,8 +9808,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 35,
-        "note": "来自 tests/test-report.json，自动化执行通过（35ms）"
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -9866,8 +9866,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 126,
-        "note": "来自 tests/test-report.json，自动化执行通过（126ms）"
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -9930,8 +9930,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 33,
-        "note": "来自 tests/test-report.json，自动化执行通过（33ms）"
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -9995,8 +9995,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 120,
-        "note": "来自 tests/test-report.json，自动化执行通过（120ms）"
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -10048,8 +10048,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 40,
-        "note": "来自 tests/test-report.json，自动化执行通过（40ms）"
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -10109,8 +10109,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 56,
-        "note": "来自 tests/test-report.json，自动化执行通过（56ms）"
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -10169,8 +10169,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 7,
-        "note": "来自 tests/test-report.json，自动化执行通过（7ms）"
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -10235,8 +10235,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 9,
-        "note": "来自 tests/test-report.json，自动化执行通过（9ms）"
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -10301,8 +10301,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 11,
-        "note": "来自 tests/test-report.json，自动化执行通过（11ms）"
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -10366,8 +10366,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 7,
-        "note": "来自 tests/test-report.json，自动化执行通过（7ms）"
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -10430,8 +10430,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 11,
-        "note": "来自 tests/test-report.json，自动化执行通过（11ms）"
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -10493,8 +10493,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 7,
-        "note": "来自 tests/test-report.json，自动化执行通过（7ms）"
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -10559,8 +10559,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 6,
-        "note": "来自 tests/test-report.json，自动化执行通过（6ms）"
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -10616,8 +10616,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 8,
-        "note": "来自 tests/test-report.json，自动化执行通过（8ms）"
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -10679,8 +10679,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 13,
-        "note": "来自 tests/test-report.json，自动化执行通过（13ms）"
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -10732,8 +10732,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 10,
-        "note": "来自 tests/test-report.json，自动化执行通过（10ms）"
+        "duration": 13,
+        "note": "来自 tests/test-report.json，自动化执行通过（13ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -10785,8 +10785,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 3,
-        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
+        "duration": 7,
+        "note": "来自 tests/test-report.json，自动化执行通过（7ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -10839,8 +10839,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 14,
-        "note": "来自 tests/test-report.json，自动化执行通过（14ms）"
+        "duration": 8,
+        "note": "来自 tests/test-report.json，自动化执行通过（8ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -10893,8 +10893,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 10,
-        "note": "来自 tests/test-report.json，自动化执行通过（10ms）"
+        "duration": 8,
+        "note": "来自 tests/test-report.json，自动化执行通过（8ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -11000,8 +11000,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 21,
-        "note": "来自 tests/test-report.json，自动化执行通过（21ms）"
+        "duration": 14,
+        "note": "来自 tests/test-report.json，自动化执行通过（14ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -11054,8 +11054,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 4,
-        "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
+        "duration": 8,
+        "note": "来自 tests/test-report.json，自动化执行通过（8ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -11108,8 +11108,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 8,
-        "note": "来自 tests/test-report.json，自动化执行通过（8ms）"
+        "duration": 7,
+        "note": "来自 tests/test-report.json，自动化执行通过（7ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -11161,8 +11161,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 4,
-        "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
+        "duration": 6,
+        "note": "来自 tests/test-report.json，自动化执行通过（6ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -11215,8 +11215,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 24,
-        "note": "来自 tests/test-report.json，自动化执行通过（24ms）"
+        "duration": 15010,
+        "note": "来自 tests/test-report.json，自动化执行通过（15010ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -11277,8 +11277,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 2,
-        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -11330,8 +11330,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 4,
-        "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
+        "duration": 6,
+        "note": "来自 tests/test-report.json，自动化执行通过（6ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -11382,8 +11382,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 533,
-        "note": "来自 tests/test-report.json，自动化执行通过（533ms）"
+        "duration": 548,
+        "note": "来自 tests/test-report.json，自动化执行通过（548ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -11435,8 +11435,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 513,
-        "note": "来自 tests/test-report.json，自动化执行通过（513ms）"
+        "duration": 515,
+        "note": "来自 tests/test-report.json，自动化执行通过（515ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -11488,8 +11488,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 3,
-        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -11541,8 +11541,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 2,
-        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -11594,8 +11594,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 4,
-        "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
+        "duration": 9,
+        "note": "来自 tests/test-report.json，自动化执行通过（9ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -11647,8 +11647,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 3,
-        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
+        "duration": 7,
+        "note": "来自 tests/test-report.json，自动化执行通过（7ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -11700,8 +11700,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 3,
-        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
+        "duration": 4,
+        "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -11753,8 +11753,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 3,
-        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -11806,8 +11806,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 5,
-        "note": "来自 tests/test-report.json，自动化执行通过（5ms）"
+        "duration": 7,
+        "note": "来自 tests/test-report.json，自动化执行通过（7ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -11863,8 +11863,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 14,
-        "note": "来自 tests/test-report.json，自动化执行通过（14ms）"
+        "duration": 8,
+        "note": "来自 tests/test-report.json，自动化执行通过（8ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -11969,8 +11969,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 13,
-        "note": "来自 tests/test-report.json，自动化执行通过（13ms）"
+        "duration": 12,
+        "note": "来自 tests/test-report.json，自动化执行通过（12ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -12021,8 +12021,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 3,
-        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -12073,8 +12073,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 4,
-        "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -12125,8 +12125,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 8,
-        "note": "来自 tests/test-report.json，自动化执行通过（8ms）"
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -12178,8 +12178,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 11,
-        "note": "来自 tests/test-report.json，自动化执行通过（11ms）"
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -12230,8 +12230,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 2,
-        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -12283,8 +12283,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 3,
-        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -12340,8 +12340,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 3,
-        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -12519,8 +12519,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 34,
-        "note": "来自 tests/test-report.json，自动化执行通过（34ms）"
+        "duration": 15014,
+        "note": "来自 tests/test-report.json，自动化执行通过（15014ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -12572,8 +12572,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 4,
-        "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
+        "duration": 7,
+        "note": "来自 tests/test-report.json，自动化执行通过（7ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -12625,8 +12625,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 5,
-        "note": "来自 tests/test-report.json，自动化执行通过（5ms）"
+        "duration": 8,
+        "note": "来自 tests/test-report.json，自动化执行通过（8ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -12677,8 +12677,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 96,
-        "note": "来自 tests/test-report.json，自动化执行通过（96ms）"
+        "duration": 15101,
+        "note": "来自 tests/test-report.json，自动化执行通过（15101ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -12729,8 +12729,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 71,
-        "note": "来自 tests/test-report.json，自动化执行通过（71ms）"
+        "duration": 261,
+        "note": "来自 tests/test-report.json，自动化执行通过（261ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -12781,8 +12781,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 35,
-        "note": "来自 tests/test-report.json，自动化执行通过（35ms）"
+        "duration": 34,
+        "note": "来自 tests/test-report.json，自动化执行通过（34ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -12889,8 +12889,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 7,
-        "note": "来自 tests/test-report.json，自动化执行通过（7ms）"
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -12941,8 +12941,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 3,
-        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -13046,8 +13046,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 932,
-        "note": "来自 tests/test-report.json，自动化执行通过（932ms）"
+        "duration": 918,
+        "note": "来自 tests/test-report.json，自动化执行通过（918ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -13204,8 +13204,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 2,
-        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
+        "duration": 4,
+        "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -13256,8 +13256,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 6,
-        "note": "来自 tests/test-report.json，自动化执行通过（6ms）"
+        "duration": 5,
+        "note": "来自 tests/test-report.json，自动化执行通过（5ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -13308,8 +13308,8 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
       },
       "aiBaseline": {
         "status": "pass",
-        "duration": 9,
-        "note": "来自 tests/test-report.json，自动化执行通过（9ms）"
+        "duration": 6,
+        "note": "来自 tests/test-report.json，自动化执行通过（6ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -13359,9 +13359,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 editor_action 工具，执行 preview_status 动作，处理“预览状态”这个状态场景。这个场景用于验证当前对象状态或默认状态下的表现。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：返回 {running,port}。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -13416,9 +13416,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 editor_action 工具，执行 send_message 动作，处理“IPC 消息”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 module 设为“scene”，把 message 设为“query-node”，传入 args=[\"<uuid>\"]。调用完成后重点检查：发送 IPC 消息到 scene 模块。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -13469,9 +13469,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 editor_action 工具，执行 focus_node 动作，处理“聚焦节点”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：编辑器摄像机聚焦到该节点。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 15,
+        "note": "来自 tests/test-report.json，自动化执行通过（15ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -13522,9 +13522,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 editor_action 工具，执行 open_panel 动作，处理“打开面板”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 panel 设为“console”。调用完成后重点检查：打开控制台面板。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -13575,9 +13575,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 editor_action 工具，执行 close_panel 动作，处理“关闭面板”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 panel 设为“console”。调用完成后重点检查：关闭控制台面板。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -13627,9 +13627,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 editor_action 工具，执行 query_panels 动作，处理“列出面板”这个通用场景。这个场景用于做通用能力验证。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：返回所有可用面板名。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 1,
+        "note": "来自 tests/test-report.json，自动化执行通过（1ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -13680,9 +13680,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 editor_action 工具，执行 log 动作，处理“输出日志”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 text 设为“Hello from AI”。调用完成后重点检查：控制台输出 info 消息。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -13733,9 +13733,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 editor_action 工具，执行 warn 动作，处理“输出警告”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 text 设为“Something suspicious”。调用完成后重点检查：控制台输出 warning。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 4,
+        "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -13786,9 +13786,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 editor_action 工具，执行 error 动作，处理“输出错误”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 text 设为“Critical failure”。调用完成后重点检查：控制台输出 error。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -13838,9 +13838,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 editor_action 工具，执行 clear_console 动作，处理“清空控制台”这个通用场景。这个场景用于做通用能力验证。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：控制台清空。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -13890,9 +13890,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 editor_action 工具，执行 get_console_logs 动作，处理“全部日志”这个通用场景。这个场景用于做通用能力验证。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：返回所有日志条目。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -13944,9 +13944,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 editor_action 工具，执行 get_console_logs 动作，处理“仅错误”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 logType 设为“error”，把 logCount 设为 10。调用完成后重点检查：返回最近 10 条错误日志。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -13997,9 +13997,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 editor_action 工具，执行 search_logs 动作，处理“搜索日志”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 keyword 设为“TypeError”。调用完成后重点检查：返回含 TypeError 的日志。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -14049,9 +14049,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 editor_action 工具，执行 get_packages 动作，处理“已安装插件”这个环境场景。这个场景用于验证不同编辑器环境或连接状态下的表现。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：返回插件列表。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -14102,9 +14102,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 editor_action 工具，执行 reload_plugin 动作，处理“重载插件”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 module 设为“aura-for-cocos”。调用完成后重点检查：插件热重载。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 4,
+        "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -14155,9 +14155,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 editor_action 工具，执行 inspect_asset 动作，处理“查看资源”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <asset-uuid>。调用完成后重点检查：Inspector 面板显示该资源。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -14207,9 +14207,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 editor_action 工具，执行 open_preferences 动作，处理“偏好设置”这个通用场景。这个场景用于做通用能力验证。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：打开偏好设置面板。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 1,
+        "note": "来自 tests/test-report.json，自动化执行通过（1ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -14259,9 +14259,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 editor_action 工具，执行 open_project_settings 动作，处理“项目设置”这个通用场景。这个场景用于做通用能力验证。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：打开项目设置面板。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -14313,9 +14313,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 editor_action 工具，执行 show_notification 动作，处理“通知”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 text 设为“操作完成！”，把 title 设为“AI”。调用完成后重点检查：弹出通知。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 21,
+        "note": "来自 tests/test-report.json，自动化执行通过（21ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -14365,9 +14365,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 editor_action 工具，执行 play_in_editor 动作，处理“播放”这个通用场景。这个场景用于做通用能力验证。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：进入播放模式。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 7,
+        "note": "来自 tests/test-report.json，自动化执行通过（7ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -14417,9 +14417,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 editor_action 工具，执行 pause_in_editor 动作，处理“暂停”这个通用场景。这个场景用于做通用能力验证。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：暂停播放。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -14469,9 +14469,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 editor_action 工具，执行 stop_in_editor 动作，处理“停止”这个通用场景。这个场景用于做通用能力验证。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：停止播放。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -14521,9 +14521,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 editor_action 工具，执行 step_in_editor 动作，处理“单步帧”这个通用场景。这个场景用于做通用能力验证。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：执行一帧。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -14574,9 +14574,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 editor_action 工具，执行 move_scene_camera 动作，处理“移动场景相机”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：编辑器摄像机移动到节点。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -14626,9 +14626,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 editor_action 工具，执行 take_scene_screenshot 动作，处理“视口截图”这个环境场景。这个场景用于验证不同编辑器环境或连接状态下的表现。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：截取场景编辑器画面。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -14679,9 +14679,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 editor_action 工具，执行 set_transform_tool 动作，处理“切 Gizmo”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 toolType 设为“rotation”。调用完成后重点检查：切换到旋转工具。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -14732,9 +14732,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 editor_action 工具，执行 set_coordinate 动作，处理“切坐标系”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 coordinate 设为“world”。调用完成后重点检查：切换到世界坐标系。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 1,
+        "note": "来自 tests/test-report.json，自动化执行通过（1ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -14785,9 +14785,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 editor_action 工具，执行 toggle_grid 动作，处理“显示网格”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 visible 设为 true。调用完成后重点检查：显示编辑器网格。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -14838,9 +14838,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 editor_action 工具，执行 toggle_snap 动作，处理“启用吸附”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 enabled 设为 true。调用完成后重点检查：启用吸附模式。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -14891,9 +14891,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 editor_action 工具，执行 set_view_mode 动作，处理“切到 2D”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 viewMode 设为“2d”。调用完成后重点检查：场景视图切为 2D。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -14944,9 +14944,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 editor_action 工具，执行 set_view_mode 动作，处理“切到 3D”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 viewMode 设为“3d”。调用完成后重点检查：场景视图切为 3D。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -14996,9 +14996,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 editor_action 工具，执行 zoom_to_fit 动作，处理“缩放适应”这个通用场景。这个场景用于做通用能力验证。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：视图缩放以适应所有节点。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -15049,9 +15049,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 engine_action 工具，执行 set_frame_rate 动作，处理“设 60 FPS”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 fps 设为 60。调用完成后重点检查：帧率限制为 60。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -15102,9 +15102,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 engine_action 工具，执行 set_frame_rate 动作，处理“设 30 FPS”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 fps 设为 30。调用完成后重点检查：省电模式 30 FPS。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 1,
+        "note": "来自 tests/test-report.json，自动化执行通过（1ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -15154,9 +15154,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 engine_action 工具，执行 pause_engine 动作，处理“暂停引擎”这个通用场景。这个场景用于做通用能力验证。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：渲染和逻辑冻结。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 1,
+        "note": "来自 tests/test-report.json，自动化执行通过（1ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -15206,9 +15206,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 engine_action 工具，执行 resume_engine 动作，处理“恢复引擎”这个状态场景。这个场景用于验证当前对象状态或默认状态下的表现。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：继续运行。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 4,
+        "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -15258,9 +15258,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 engine_action 工具，执行 get_system_info 动作，处理“系统信息”这个通用场景。这个场景用于做通用能力验证。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：返回 {os,browser,device,screenRes,gpu}。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 1,
+        "note": "来自 tests/test-report.json，自动化执行通过（1ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -15310,9 +15310,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 engine_action 工具，执行 dump_texture_cache 动作，处理“纹理缓存”这个通用场景。这个场景用于做通用能力验证。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：返回已缓存纹理列表+大小。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 4,
+        "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -15362,9 +15362,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 engine_action 工具，执行 get_render_stats 动作，处理“渲染统计”这个通用场景。这个场景用于做通用能力验证。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：返回 {drawCalls,triangles,batches,fps}。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -15414,9 +15414,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 engine_action 工具，执行 get_memory_stats 动作，处理“内存统计”这个通用场景。这个场景用于做通用能力验证。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：返回 {heapUsed,rss,cachedAssets}。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 1,
+        "note": "来自 tests/test-report.json，自动化执行通过（1ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -15466,9 +15466,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 engine_action 工具，执行 get_editor_performance 动作，处理“性能总览”这个通用场景。这个场景用于做通用能力验证。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：返回 {fps,nodeCount,platform,paused}。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -15529,9 +15529,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 physics_tool 工具，执行 get_collider_info 动作，处理“碰撞器详情”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>。调用完成后重点检查：返回碰撞器+刚体信息。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 10,
+        "note": "来自 tests/test-report.json，自动化执行通过（10ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -15593,9 +15593,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 physics_tool 工具，执行 add_collider 动作，处理“添加 Box2D”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 colliderType 设为“box2d”。调用完成后重点检查：添加 BoxCollider2D。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 49,
+        "note": "来自 tests/test-report.json，自动化执行通过（49ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -15657,9 +15657,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 physics_tool 工具，执行 add_collider 动作，处理“添加 Sphere3D”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 colliderType 设为“sphere3d”。调用完成后重点检查：添加 SphereCollider。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 41,
+        "note": "来自 tests/test-report.json，自动化执行通过（41ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -15722,9 +15722,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 physics_tool 工具，执行 set_collider_size 动作，处理“设 Box 大小”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 width 设为 100，把 height 设为 80。调用完成后重点检查：Box 碰撞器→100×80。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 21,
+        "note": "来自 tests/test-report.json，自动化执行通过（21ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -15786,9 +15786,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 physics_tool 工具，执行 add_rigidbody 动作，处理“动态刚体”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 bodyType 设为“Dynamic”。调用完成后重点检查：添加动态刚体。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 71,
+        "note": "来自 tests/test-report.json，自动化执行通过（71ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -15850,9 +15850,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 physics_tool 工具，执行 add_rigidbody 动作，处理“静态刚体”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 bodyType 设为“Static”。调用完成后重点检查：添加静态刚体。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 75,
+        "note": "来自 tests/test-report.json，自动化执行通过（75ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -15916,9 +15916,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 physics_tool 工具，执行 set_rigidbody_props 动作，处理“设刚体属性”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 mass 设为 5，把 linearDamping 设为 0.5，把 fixedRotation 设为 true。调用完成后重点检查：质量 5kg+线性阻尼 0.5+锁定旋转。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 20,
+        "note": "来自 tests/test-report.json，自动化执行通过（20ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -15981,9 +15981,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 physics_tool 工具，执行 set_physics_material 动作，处理“设物理材质”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 friction 设为 0.3，把 restitution 设为 0.8。调用完成后重点检查：摩擦 0.3+弹性 0.8。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 15,
+        "note": "来自 tests/test-report.json，自动化执行通过（15ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -16045,9 +16045,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 physics_tool 工具，执行 set_collision_group 动作，处理“设碰撞组”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 group 设为 2。调用完成后重点检查：碰撞组→2。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 22,
+        "note": "来自 tests/test-report.json，自动化执行通过（22ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -16097,9 +16097,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 physics_tool 工具，执行 get_physics_world 动作，处理“世界配置”这个通用场景。这个场景用于做通用能力验证。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：返回重力/时间步等参数。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 7,
+        "note": "来自 tests/test-report.json，自动化执行通过（7ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -16154,9 +16154,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 physics_tool 工具，执行 set_physics_world 动作，处理“设重力”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请传入 gravity={\"x\":0,\"y\":-20,\"z\":0}。调用完成后重点检查：重力→-20 m/s²。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 20,
+        "note": "来自 tests/test-report.json，自动化执行通过（20ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -16219,9 +16219,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 physics_tool 工具，执行 add_joint 动作，处理“弹簧关节”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 jointType 设为“spring”，将 connectedUuid 指向 <other>。调用完成后重点检查：两节点间添加弹簧关节。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 13,
+        "note": "来自 tests/test-report.json，自动化执行通过（13ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -16273,9 +16273,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 preferences 工具，执行 get 动作，处理“读偏好”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 key 设为“general.language”，把 scope 设为“global”。调用完成后重点检查：返回 {value:\"zh\"}。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 4,
+        "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -16328,9 +16328,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 preferences 工具，执行 set 动作，处理“写偏好”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 key 设为“general.language”，把 value 设为“en”，把 scope 设为“global”。调用完成后重点检查：语言改为英文。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 6,
+        "note": "来自 tests/test-report.json，自动化执行通过（6ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -16380,9 +16380,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 preferences 工具，执行 list 动作，处理“列出全部”这个通用场景。这个场景用于做通用能力验证。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：返回所有偏好设置。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 5,
+        "note": "来自 tests/test-report.json，自动化执行通过（5ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -16433,9 +16433,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 preferences 工具，执行 get_global 动作，处理“读全局”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 key 设为“general.theme”。调用完成后重点检查：返回 {value:\"dark\"}。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -16487,9 +16487,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 preferences 工具，执行 set_global 动作，处理“写全局”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 key 设为“general.theme”，把 value 设为“light”。调用完成后重点检查：主题改为亮色。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -16540,9 +16540,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 preferences 工具，执行 get_project 动作，处理“读项目级”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 key 设为“builder.compressTexture”。调用完成后重点检查：返回压缩纹理设置。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 9,
+        "note": "来自 tests/test-report.json，自动化执行通过（9ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -16594,9 +16594,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 preferences 工具，执行 set_project 动作，处理“写项目级”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 key 设为“preview.port”，把 value 设为 7456。调用完成后重点检查：预览端口→7456。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 10,
+        "note": "来自 tests/test-report.json，自动化执行通过（10ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -16647,9 +16647,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 broadcast 工具，执行 poll 动作，处理“拉取事件”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 since 设为 1700000000000。调用完成后重点检查：返回该时间戳后的新事件列表。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 4,
+        "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -16700,9 +16700,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 broadcast 工具，执行 history 动作，处理“历史记录”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 limit 设为 10。调用完成后重点检查：返回最近 10 条事件。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -16752,9 +16752,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 broadcast 工具，执行 clear 动作，处理“清空队列”这个通用场景。这个场景用于做通用能力验证。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：事件队列清空。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -16808,9 +16808,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 broadcast 工具，执行 send 动作，处理“广播消息”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 channel 设为“ai:done”，传入 data={\"task\":\"build_ui\"}。调用完成后重点检查：广播自定义消息。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -16862,9 +16862,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 broadcast 工具，执行 send_ipc 动作，处理“IPC 广播”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 module 设为“scene”，把 message 设为“soft-reload”。调用完成后重点检查：发送场景重载 IPC。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 18,
+        "note": "来自 tests/test-report.json，自动化执行通过（18ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -16915,9 +16915,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 reference_image 工具，执行 set 动作，处理“显示参考图”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 opacity 设为 0.5。调用完成后重点检查：参考图叠加层显示，透明度 50%。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -16967,9 +16967,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 reference_image 工具，执行 clear 动作，处理“清除参考图”这个通用场景。这个场景用于做通用能力验证。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：隐藏所有参考图叠加。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -17019,9 +17019,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 reference_image 工具，执行 list 动作，处理“列出参考图”这个通用场景。这个场景用于做通用能力验证。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：返回场景中参考图节点列表。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -17073,9 +17073,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 reference_image 工具，执行 add 动作，处理“添加参考图”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 imagePath 设为“db://assets/ui/mockup.png”，把 opacity 设为 0.4。调用完成后重点检查：添加参考图节点。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -17136,9 +17136,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 reference_image 工具，执行 remove 动作，处理“移除参考图”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 refUuid 指向 <uuid>。调用完成后重点检查：删除指定参考图节点。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -17202,9 +17202,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 reference_image 工具，执行 set_transform 动作，处理“调整位置”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 refUuid 指向 <uuid>，把 x 设为 100，把 y 设为 -50，把 scaleX 设为 0.8。调用完成后重点检查：参考图移动+缩放。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -17266,9 +17266,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 reference_image 工具，执行 set_opacity 动作，处理“调透明度”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 refUuid 指向 <uuid>，把 opacity 设为 0.3。调用完成后重点检查：透明度→30%。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -17318,9 +17318,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 tool_management 工具，执行 list_all 动作，处理“列出工具”这个状态场景。这个场景用于验证当前对象状态或默认状态下的表现。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：返回所有工具及启用状态。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -17371,9 +17371,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 tool_management 工具，执行 enable 动作，处理“启用工具”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 toolName 设为“physics_tool”。调用完成后重点检查：physics_tool 重新启用。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -17424,9 +17424,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 tool_management 工具，执行 disable 动作，处理“禁用工具”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 toolName 设为“physics_tool”。调用完成后重点检查：physics_tool 被禁用，减少 Token 消耗。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 4,
+        "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -17476,9 +17476,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 tool_management 工具，执行 get_stats 动作，处理“工具统计”这个通用场景。这个场景用于做通用能力验证。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：返回 {totalTools:19,enabledTools:19,totalActions:236}。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -17533,9 +17533,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 execute_script 工具，执行 execute_script 动作，处理“调用 dispatchQuery”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 method 设为“dispatchQuery”，传入 args=[{\"action\":\"tree\"}]。调用完成后重点检查：返回场景树。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 9,
+        "note": "来自 tests/test-report.json，自动化执行通过（9ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -17591,9 +17591,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 execute_script 工具，执行 execute_script 动作，处理“调用 setNodePosition”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 method 设为“setNodePosition”，传入 args=[\"<uuid>\",100,200,0]。调用完成后重点检查：节点位置被设置。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 11,
+        "note": "来自 tests/test-report.json，自动化执行通过（11ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -17645,9 +17645,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 register_custom_macro 工具，执行 register_custom_macro 动作，处理“注册快捷宏”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 name 设为“quick_sprite”，把 description 设为“快速创建 Sprite 节点”，把 sceneMethodName 设为“createChildNode”。调用完成后重点检查：注册为 macro_quick_sprite 工具。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 6,
+        "note": "来自 tests/test-report.json，自动化执行通过（6ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -17699,9 +17699,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 register_custom_macro 工具，执行 register_custom_macro 动作，处理“非白名单方法”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 name 设为“bad”，把 description 设为“test”，把 sceneMethodName 设为“eval”。调用完成后重点检查：返回 {error:\"方法不在白名单\"}。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -17779,9 +17779,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 create_prefab_atomic 工具，执行 create_prefab_atomic 动作，处理“完整预制体”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 prefabPath 设为“db://assets/prefabs/Enemy.prefab”，把 nodeName 设为“Enemy”，传入 components=[{\"type\":\"Sprite\"},{\"type\":\"BoxCollider2D\",\"properties\":{\"size\":{\"width\":64,\"height\":64}}}]，传入 children=[{\"name\":\"Label\",\"components\":[{\"type\":\"Label\",\"properties\":{\"string\":\"HP: 100\"}}]}]。调用完成后重点检查：一步创建含 Sprite+碰撞器+子 Label 的预制体。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 657,
+        "note": "来自 tests/test-report.json，自动化执行通过（657ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -17831,9 +17831,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 create_prefab_atomic 工具，执行 create_prefab_atomic 动作，处理“失败回滚”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 prefabPath 设为“db://invalid/path.prefab”。调用完成后重点检查：创建失败，临时节点自动清理。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -17894,9 +17894,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 import_and_apply_texture 工具，执行 import_and_apply_texture 动作，处理“导入+应用”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 sourcePath 设为“C:/art/hero.png”，将 nodeUuid 指向 <sprite-node>。调用完成后重点检查：图片导入→SpriteFrame 设置→Sprite 显示新图片。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 8,
+        "note": "来自 tests/test-report.json，自动化执行通过（8ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -17958,9 +17958,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 import_and_apply_texture 工具，执行 import_and_apply_texture 动作，处理“自动添加 Sprite”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 sourcePath 设为“C:/art/bg.jpg”，将 nodeUuid 指向 <empty-node>，把 autoAddSprite 设为 true。调用完成后重点检查：自动添加 Sprite 组件+设置纹理。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 13,
+        "note": "来自 tests/test-report.json，自动化执行通过（13ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -18020,9 +18020,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 auto_fit_physics_collider 工具，执行 auto_fit_physics_collider 动作，处理“自动适配”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 nodeUuid 指向 <sprite-node>。调用完成后重点检查：根据 Sprite Alpha 生成 PolygonCollider2D。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 15,
+        "note": "来自 tests/test-report.json，自动化执行通过（15ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -18083,9 +18083,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 auto_fit_physics_collider 工具，执行 auto_fit_physics_collider 动作，处理“指定 Box”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 nodeUuid 指向 <uuid>，把 colliderType 设为“box”。调用完成后重点检查：根据 UITransform 尺寸创建 BoxCollider2D。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 10,
+        "note": "来自 tests/test-report.json，自动化执行通过（10ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -18146,9 +18146,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 auto_fit_physics_collider 工具，执行 auto_fit_physics_collider 动作，处理“指定 Circle”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 nodeUuid 指向 <uuid>，把 colliderType 设为“circle”。调用完成后重点检查：创建 CircleCollider2D，radius=min(w,h)/2。 注意：本用例包含「建议前置步骤（MCP）」——请先在页面该区块按顺序执行，再执行下方「请求输入」主调用。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 12,
+        "note": "来自 tests/test-report.json，自动化执行通过（12ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -18198,9 +18198,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 script_scaffold 工具，执行 list_templates 动作，处理“列出脚本模板”这个通用场景。这个场景通常用于Pro Phase 4。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：返回 6 个模板: controller/manager/ui-handler/data-model/singleton/fsm。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -18252,9 +18252,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 script_scaffold 工具，执行 generate_component 动作，处理“生成组件脚本”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 className 设为“PlayerController”，把 description 设为“控制角色移动”。调用完成后重点检查：生成 PlayerController.ts 到 assets/scripts/。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 1,
+        "note": "来自 tests/test-report.json，自动化执行通过（1ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -18304,9 +18304,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 script_scaffold 工具，执行 generate_component 动作，处理“缺少 className”这个通用场景。这个场景通常用于参数校验。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：返回错误: 缺少 className。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -18358,9 +18358,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 script_scaffold 工具，执行 from_template 动作，处理“从模板生成”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 className 设为“GameManager”，把 template 设为“singleton”。调用完成后重点检查：生成单例管理器脚本。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -18419,9 +18419,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 script_scaffold 工具，执行 generate_and_attach 动作，处理“生成+挂载”这个参数场景。这个场景通常用于核心一体化 action。这次请把 className 设为“EnemyAI”，将 uuid 指向 <uuid>，传入 properties=[{\"name\":\"speed\",\"type\":\"number\",\"default\":5}]。调用完成后重点检查：4 步: 生成→刷新→挂载→设属性。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 1,
+        "note": "来自 tests/test-report.json，自动化执行通过（1ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -18472,9 +18472,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 script_scaffold 工具，执行 generate_and_attach 动作，处理“缺少 uuid”这个参数场景。这个场景通常用于参数校验。这次请把 className 设为“Foo”。调用完成后重点检查：返回错误: 缺少 uuid。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -18532,9 +18532,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 script_scaffold 工具，执行 add_properties 动作，处理“追加属性”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 className 设为“PlayerController”，传入 properties=[{\"name\":\"jumpForce\",\"type\":\"number\",\"default\":12}]。调用完成后重点检查：追加 @property 声明。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -18592,9 +18592,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 script_scaffold 工具，执行 generate_event_handler 动作，处理“生成事件处理”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 className 设为“BtnHandler”，将 uuid 指向 <uuid>，传入 events=[{\"event\":\"click\",\"handler\":\"onBtnClick\"}]。调用完成后重点检查：生成脚本→挂载→绑定 click。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -18646,9 +18646,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 script_scaffold 工具，执行 generate_event_handler 动作，处理“缺少 events”这个参数场景。这个场景通常用于参数校验。这次请把 className 设为“X”，将 uuid 指向 <uuid>。调用完成后重点检查：返回错误: 缺少 events。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -18700,9 +18700,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 animation_workflow 工具，执行 create_transition 动作，处理“淡入过渡”这个参数场景。这个场景通常用于Pro Phase 4。这次请将 uuid 指向 <uuid>，把 transitionType 设为“fade-in”。调用完成后重点检查：创建 0.3s opacity 0→255 动画。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 4,
+        "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -18754,9 +18754,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 animation_workflow 工具，执行 create_transition 动作，处理“弹跳进入”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 transitionType 设为“bounce-in”。调用完成后重点检查：创建 0.5s scale 0→1.2→1 动画。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -18809,9 +18809,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 animation_workflow 工具，执行 create_transition 动作，处理“自定义时长”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 transitionType 设为“slide-in-left”，把 duration 设为 1。调用完成后重点检查：创建 1.0s 左滑入动画。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -18863,9 +18863,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 animation_workflow 工具，执行 create_loop_animation 动作，处理“浮动循环”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 loopType 设为“float”。调用完成后重点检查：创建 2s 上下浮动 Loop 动画。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -18917,9 +18917,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 animation_workflow 工具，执行 create_loop_animation 动作，处理“旋转循环”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 loopType 设为“rotate”。调用完成后重点检查：创建 2s Z 轴 0→360 旋转动画。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -18971,9 +18971,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 animation_workflow 工具，执行 apply_preset 动作，处理“idle 预设”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 preset 设为“idle”。调用完成后重点检查：创建 idle 呼吸循环动画。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -19025,9 +19025,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 animation_workflow 工具，执行 apply_preset 动作，处理“attack 预设”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 preset 设为“attack”。调用完成后重点检查：创建 attack 缩放+位移动画。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 1,
+        "note": "来自 tests/test-report.json，自动化执行通过（1ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -19079,9 +19079,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 animation_workflow 工具，执行 create_ui_animation 动作，处理“按钮点击”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 uiAnimType 设为“button-press”。调用完成后重点检查：创建 0.15s 缩放反馈动画。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -19133,9 +19133,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 animation_workflow 工具，执行 create_ui_animation 动作，处理“面板弹出”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 uiAnimType 设为“panel-popup”。调用完成后重点检查：创建 0.35s scale+opacity 弹出动画。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -19187,9 +19187,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 animation_workflow 工具，执行 create_from_description 动作，处理“自然语言动画”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 prompt 设为“让按钮弹跳进入”。调用完成后重点检查：AI 解析→生成关键帧。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 4,
+        "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -19240,9 +19240,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 animation_workflow 工具，执行 create_from_description 动作，处理“缺少 prompt”这个参数场景。这个场景通常用于参数校验。这次请将 uuid 指向 <uuid>。调用完成后重点检查：返回错误: 缺少 prompt。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -19303,9 +19303,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 animation_workflow 工具，执行 create_sequence 动作，处理“动画序列”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，传入 clips=[{\"clipName\":\"intro\",\"transitionType\":\"fade-in\"},{\"clipName\":\"loop\",\"loopType\":\"pulse\"}]。调用完成后重点检查：创建 2 个剪辑。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 4,
+        "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -19361,9 +19361,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 animation_workflow 工具，执行 batch_animate 动作，处理“批量入场”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请传入 uuids=[\"<a>\",\"<b>\",\"<c>\"]，把 transitionType 设为“fade-in”。调用完成后重点检查：3 个节点各创建 fade-in 动画。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -19414,9 +19414,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 animation_workflow 工具，执行 batch_animate 动作，处理“缺少 uuids”这个参数场景。这个场景通常用于参数校验。这次请把 transitionType 设为“fade-in”。调用完成后重点检查：返回错误: 缺少 uuids。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 28,
+        "note": "来自 tests/test-report.json，自动化执行通过（28ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -19468,9 +19468,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 animation_workflow 工具，执行 preview_animation 动作，处理“预览动画”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请将 uuid 指向 <uuid>，把 clipName 设为“idle”。调用完成后重点检查：播放 idle 动画。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 4,
+        "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -19520,9 +19520,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 ui_generator 工具，执行 create_login_page 动作，处理“一键登录页”这个通用场景。这个场景通常用于Pro Phase 4。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：生成完整登录页: Canvas→根容器→邮箱+密码+按钮+社交登录。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 4,
+        "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -19572,9 +19572,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 ui_generator 工具，执行 create_settings_page 动作，处理“一键设置页”这个通用场景。这个场景用于做通用能力验证。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：生成设置页: 音量滑块+开关+语言选择。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 46,
+        "note": "来自 tests/test-report.json，自动化执行通过（46ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -19625,9 +19625,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 ui_generator 工具，执行 create_shop_page 动作，处理“一键商店页”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 itemCount 设为 6。调用完成后重点检查：生成商店: ScrollView + 6 个商品卡片。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 1,
+        "note": "来自 tests/test-report.json，自动化执行通过（1ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -19678,9 +19678,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 ui_generator 工具，执行 create_shop_page 动作，处理“自定义商品数”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 itemCount 设为 3。调用完成后重点检查：生成 3 个商品卡片（少于默认 6 个）。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 1,
+        "note": "来自 tests/test-report.json，自动化执行通过（1ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -19730,9 +19730,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 ui_generator 工具，执行 create_hud 动作，处理“一键 HUD”这个通用场景。这个场景用于做通用能力验证。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：生成 HUD: 血条+分数+技能栏+小地图+暂停按钮。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 161,
+        "note": "来自 tests/test-report.json，自动化执行通过（161ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -19784,9 +19784,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 ui_generator 工具，执行 create_dialog 动作，处理“自定义对话框”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 title 设为“退出游戏?”，把 content 设为“确定要退出吗?”。调用完成后重点检查：生成对话框含自定义标题和内容。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 5,
+        "note": "来自 tests/test-report.json，自动化执行通过（5ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -19838,9 +19838,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 ui_generator 工具，执行 create_inventory 动作，处理“一键背包”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 columns 设为 4，把 itemCount 设为 16。调用完成后重点检查：生成 4 列 16 格背包+详情面板。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 4,
+        "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -19891,9 +19891,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 ui_generator 工具，执行 create_custom_ui 动作，处理“自定义 UI”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 prompt 设为“一个带标签页和滚动列表的界面”。调用完成后重点检查：解析关键词→生成 TabBar + ScrollView。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -19943,9 +19943,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 ui_generator 工具，执行 create_custom_ui 动作，处理“缺少 prompt”这个通用场景。这个场景通常用于参数校验。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：返回错误: 缺少 prompt。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -19995,9 +19995,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 project_linter 工具，执行 check_all 动作，处理“全量检查”这个通用场景。这个场景通常用于Pro Phase 4。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：5 步: 3 个场景查询 + 1 资源查询 + 1 汇总分析。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -20047,9 +20047,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 project_linter 工具，执行 check_naming 动作，处理“命名检查”这个通用场景。这个场景用于做通用能力验证。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：返回不符合 PascalCase/kebab-case 的项。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -20099,9 +20099,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 project_linter 工具，执行 check_hierarchy 动作，处理“层级检查”这个通用场景。这个场景用于做通用能力验证。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：返回深度>10 或子节点>50 的节点。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 4,
+        "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -20151,9 +20151,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 project_linter 工具，执行 check_components 动作，处理“组件检查”这个通用场景。这个场景用于做通用能力验证。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：返回空 Sprite、缺 RigidBody 等问题。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -20203,9 +20203,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 project_linter 工具，执行 check_assets 动作，处理“资源检查”这个通用场景。这个场景用于做通用能力验证。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：返回未使用资源和命名违规。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 4,
+        "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -20255,9 +20255,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 project_linter 工具，执行 check_performance 动作，处理“性能检查”这个通用场景。这个场景用于做通用能力验证。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：返回节点数/DrawCall/纹理尺寸超标项。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 10,
+        "note": "来自 tests/test-report.json，自动化执行通过（10ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -20307,9 +20307,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 project_linter 工具，执行 auto_fix_naming 动作，处理“自动修复命名”这个通用场景。这个场景用于做通用能力验证。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：批量重命名违规节点。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 140,
+        "note": "来自 tests/test-report.json，自动化执行通过（140ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -20364,9 +20364,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 project_linter 工具，执行 set_rules 动作，处理“设置自定义规则”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请传入 rules={\"naming\":{\"nodePattern\":\"camelCase\"}}。调用完成后重点检查：规则保存到 .mcp-lint-rules.json。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 5,
+        "note": "来自 tests/test-report.json，自动化执行通过（5ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -20416,9 +20416,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 project_linter 工具，执行 set_rules 动作，处理“缺少 rules”这个通用场景。这个场景通常用于参数校验。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：返回错误: 缺少 rules。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 4,
+        "note": "来自 tests/test-report.json，自动化执行通过（4ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -20468,9 +20468,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 operation_log 工具，执行 get_history 动作，处理“查看历史”这个通用场景。这个场景通常用于Pro Phase 4。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：返回最近 50 条操作记录。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 1,
+        "note": "来自 tests/test-report.json，自动化执行通过（1ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -20524,9 +20524,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 operation_log 工具，执行 get_history 动作，处理“过滤历史”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请传入 filter={\"tool\":\"scene_operation\",\"limit\":20}。调用完成后重点检查：返回最近 20 条 scene_operation 操作。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -20576,9 +20576,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 operation_log 工具，执行 get_stats 动作，处理“操作统计”这个通用场景。这个场景用于做通用能力验证。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：返回按工具/action 分组的统计。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -20629,9 +20629,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 operation_log 工具，执行 export_log 动作，处理“导出 JSON”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 format 设为“json”。调用完成后重点检查：操作日志保存到 assets/mcp-logs/。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -20681,9 +20681,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 operation_log 工具，执行 export_script 动作，处理“导出脚本”这个通用场景。这个场景用于做通用能力验证。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：生成可回放的 TypeScript 脚本。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 1,
+        "note": "来自 tests/test-report.json，自动化执行通过（1ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -20734,9 +20734,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 operation_log 工具，执行 replay_last 动作，处理“回放最近 5 步”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 count 设为 5。调用完成后重点检查：重放最近 5 个操作。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 5,
+        "note": "来自 tests/test-report.json，自动化执行通过（5ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -20786,9 +20786,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 operation_log 工具，执行 replay_last 动作，处理“默认回放 10 步”这个状态场景。这个场景用于验证当前对象状态或默认状态下的表现。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：重放最近 10 个操作。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 1,
+        "note": "来自 tests/test-report.json，自动化执行通过（1ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -20844,9 +20844,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 operation_log 工具，执行 replay_from_log 动作，处理“从日志回放”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请传入 log=[{\"tool\":\"scene_operation\",\"action\":\"create_node\"}]。调用完成后重点检查：按日志逐条重放。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -20896,9 +20896,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 operation_log 工具，执行 replay_from_log 动作，处理“缺少 log”这个通用场景。这个场景通常用于参数校验。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：返回错误: 缺少 log。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -20949,9 +20949,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 operation_log 工具，执行 clear_history 动作，处理“清空历史”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 confirmDangerous 设为 true。调用完成后重点检查：操作历史已清空。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 1,
+        "note": "来自 tests/test-report.json，自动化执行通过（1ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -21001,9 +21001,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 operation_log 工具，执行 clear_history 动作，处理“未确认清空”这个通用场景。这个场景通常用于危险操作拦截。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：返回错误: 需要 confirmDangerous=true。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 2,
+        "note": "来自 tests/test-report.json，自动化执行通过（2ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -21054,9 +21054,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 operation_log 工具，执行 bookmark 动作，处理“添加书签”这个参数场景。这个场景通常用于使用该参数组合执行一次调用。这次请把 label 设为“before-refactor”。调用完成后重点检查：书签 before-refactor 已添加。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 3,
+        "note": "来自 tests/test-report.json，自动化执行通过（3ms）"
       },
       "manualBaseline": {
         "status": "pending",
@@ -21106,9 +21106,9 @@ window.AURO_INTERACTIVE_TEST_PLAN_DATA = {
         "naturalLanguageTest": "请通过 MCP 调用 operation_log 工具，执行 bookmark 动作，处理“缺少 label”这个通用场景。这个场景通常用于参数校验。这次不需要额外业务参数，直接让 AI 发起 MCP 调用即可。调用完成后重点检查：返回错误: 缺少 label。"
       },
       "aiBaseline": {
-        "status": "blocked",
-        "duration": "",
-        "note": "来自 tests/test-report.json，自动化受限流影响：HTTP 429: Too Many Requests"
+        "status": "pass",
+        "duration": 65,
+        "note": "来自 tests/test-report.json，自动化执行通过（65ms）"
       },
       "manualBaseline": {
         "status": "pending",

@@ -420,18 +420,23 @@ async function ipcCreateComponent(nodeUuid: string, componentName: string): Prom
   });
 }
 
-async function ipcRemoveComponent(nodeUuid: string, componentName: string): Promise<void> {
-  const cc = getCC();
+function getObjectUuid(value: unknown): string {
+  if (!value || typeof value !== 'object') return '';
+  const record = value as { uuid?: unknown; _id?: unknown };
+  const uuid = record.uuid ?? record._id;
+  return typeof uuid === 'string' ? uuid : '';
+}
+
+async function ipcRemoveComponent(componentUuid: string): Promise<void> {
   await Editor.Message.request('scene', 'remove-component', {
-    uuid: nodeUuid,
-    component: resolveEditorComponentIdentifier(cc, componentName),
+    uuid: componentUuid,
   });
 }
 
 async function ipcSetParent(nodeUuid: string, parentUuid: string): Promise<void> {
   await Editor.Message.request('scene', 'set-parent', {
-    uuid: nodeUuid,
-    parentUuid,
+    parent: parentUuid,
+    uuids: [nodeUuid],
   });
 }
 
@@ -446,9 +451,7 @@ async function ipcResetProperty(nodeUuid: string, path: string): Promise<boolean
 }
 
 async function ipcDuplicateNode(nodeUuid: string): Promise<string> {
-  const result = await Editor.Message.request('scene', 'duplicate-node', {
-    uuids: [nodeUuid],
-  });
+  const result = await Editor.Message.request('scene', 'duplicate-node', [nodeUuid]);
   // IPC may return an array of new UUIDs or an object
   if (Array.isArray(result) && result.length > 0) {
     return String(result[0]);
@@ -1032,9 +1035,13 @@ export const methods = {
     if (!compClass) return { error: `未找到组件类: ${componentName}` };
     const comp = node.getComponent(compClass);
     if (!comp) return { success: false, uuid, component: componentName };
+    const componentUuid = getObjectUuid(comp);
+    if (!componentUuid) {
+      return { error: `未找到组件实例 UUID: ${componentName}` };
+    }
 
     return (async () => {
-      await ipcRemoveComponent(uuid, componentName);
+      await ipcRemoveComponent(componentUuid);
       const refreshedScene = getScene();
       if (!refreshedScene) {
         return {

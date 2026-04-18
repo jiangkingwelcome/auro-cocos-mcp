@@ -33,7 +33,7 @@ function getProgrammingRecordMarker(projectPath: string): string {
 }
 
 function collectChunkFiles(dirPath: string, output: string[]): void {
-  let entries: fs.Dirent[] = [];
+  let entries: fs.Dirent[];
   try {
     entries = fs.readdirSync(dirPath, { withFileTypes: true });
   } catch {
@@ -64,7 +64,7 @@ function readCustomScriptCidMap(projectPath: string): Map<string, string> {
 
   const entries = new Map<string, string>();
   for (const filePath of chunkFiles) {
-    let content = '';
+    let content: string;
     try {
       content = fs.readFileSync(filePath, 'utf8');
     } catch {

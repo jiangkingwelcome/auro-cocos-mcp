@@ -9,8 +9,10 @@ export interface BridgeSettings {
   autoRollback: boolean;
 }
 
+export const DEFAULT_RATE_LIMIT_PER_MINUTE = Number(process.env.COCOS_MCP_RATE_LIMIT || 1200);
+
 export const DEFAULT_SETTINGS: BridgeSettings = {
-  rateLimitPerMinute: Number(process.env.COCOS_MCP_RATE_LIMIT || 240),
+  rateLimitPerMinute: DEFAULT_RATE_LIMIT_PER_MINUTE,
   loopbackOnly: true,
   maxBodySizeBytes: 1_048_576,
   autoRollback: true,
