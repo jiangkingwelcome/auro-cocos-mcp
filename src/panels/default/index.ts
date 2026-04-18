@@ -9,6 +9,7 @@ import { mountVueControl } from './ui-control';
 import { mountVueConfig } from './ui-config';
 import { mountVueSettings } from './ui-settings';
 import { mountVueGuide } from './ui-guide';
+import { startPanelHotReload, stopPanelHotReload } from './ui-hot-reload';
 
 // 在 JS 文件执行的第一时间（模板渲染前）把 webview 背景压黑，消除白色第一帧
 try {
@@ -41,6 +42,7 @@ let vueControlApp = null;
 let vueConfigApp = null;
 let vueSettingsApp = null;
 let vueGuideApp = null;
+let hotReloadStopper = null;
 
 module.exports = Editor.Panel.define({
   template: /* html */ `
@@ -929,6 +931,13 @@ module.exports = Editor.Panel.define({
       vueGuideApp = mountVueGuide(vueGuideRoot);
     }
     self.$.versionText.textContent = EXTENSION_VERSION;
+    hotReloadStopper = startPanelHotReload({
+      manifestPath: `${__dirname}/.panel-manifest.json`,
+      intervalMs: 1200,
+      reloadFn: () => {
+        try { window.location.reload(); } catch { try { Editor.Message.send('panel', 'reload'); } catch { } }
+      },
+    });
 
     // ---- i18n setup ----
     const I18N = {
@@ -1728,6 +1737,10 @@ module.exports = Editor.Panel.define({
     if (vueHeaderApp && typeof vueHeaderApp.unmount === 'function') {
       vueHeaderApp.unmount();
       vueHeaderApp = null;
+    }
+    if (hotReloadStopper) {
+      try { hotReloadStopper(); } catch { }
+      hotReloadStopper = null;
     }
   },
 

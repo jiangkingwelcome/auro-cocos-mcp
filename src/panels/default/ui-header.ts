@@ -69,6 +69,7 @@ export function mountVueHeader(targetEl) {
   badge.id = 'holoBadge';
   const badgeInner = document.createElement('div');
   badgeInner.className = 'holo-badge-inner';
+  badgeInner.style.color = '#f59e0b';
   badgeInner.setAttribute('data-i18n', 'badge.community');
   badgeInner.textContent = 'Community';
   badge.appendChild(badgeInner);
