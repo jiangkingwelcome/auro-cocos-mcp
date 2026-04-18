@@ -1,6 +1,15 @@
 // @ts-nocheck
 "use strict";
 
+import { mountVueHeader } from './ui-header';
+import { mountVueTabs } from './ui-tabs';
+import { mountVueStatusBar } from './ui-status-bar';
+import { mountVueStats } from './ui-stats';
+import { mountVueControl } from './ui-control';
+import { mountVueConfig } from './ui-config';
+import { mountVueSettings } from './ui-settings';
+import { mountVueGuide } from './ui-guide';
+
 // 在 JS 文件执行的第一时间（模板渲染前）把 webview 背景压黑，消除白色第一帧
 try {
   document.documentElement.style.background = '#18181b';
@@ -24,6 +33,14 @@ const LOADING_FADE_MS = 260;
 const LOADING_FORCE_HIDE_MS = 5000;
 
 let pollTimer = null;
+let vueHeaderApp = null;
+let vueTabsApp = null;
+let vueStatusBarApp = null;
+let vueStatsApp = null;
+let vueControlApp = null;
+let vueConfigApp = null;
+let vueSettingsApp = null;
+let vueGuideApp = null;
 
 module.exports = Editor.Panel.define({
   template: /* html */ `
@@ -37,39 +54,10 @@ module.exports = Editor.Panel.define({
       </div>
 
       <!-- Header -->
-      <div class="panel-header">
-        <div class="logo-icon">
-          <svg width="100%" height="100%" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M22.95 10.38L21.36 13.14L28.16 24.96H30.43L22.95 12V10.38Z" fill="#A1A1AA"/>
-            <path d="M19.34 6.78003L15.35 13.67L22.14 24.93H24.52L19.34 16.33V6.78003Z" fill="#D4D4D8"/>
-            <path d="M10 24.93L15.75 14L21.5 24.93H10Z" fill="#71717A"/>
-            <text x="20.5" y="32" fill="#71717A" font-size="6.5" font-family="-apple-system, sans-serif" font-weight="700" letter-spacing="0.5" text-anchor="middle">AURA</text>
-          </svg>
-        </div>
-        <div class="brand-container">
-          <span class="brand-txt-aura">Aura</span>
-        </div>
-        <div class="holo-badge" id="holoBadge">
-          <div class="holo-badge-inner" data-i18n="badge.community">Community</div>
-        </div>
-        <div class="header-actions">
-          <div class="user-avatar" id="userBtn" data-i18n-title="ui.user_center" title="用户中心">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-              <circle cx="12" cy="7" r="4"></circle>
-            </svg>
-          </div>
-        </div>
-      </div>
+      <div id="vueHeaderRoot"></div>
 
       <!-- Tab Navigation -->
-      <div class="mcp-tabs-header">
-        <div class="mcp-tab active" data-target="tabStatus" data-i18n="tab.status">状态</div>
-        <div class="mcp-tab" data-target="tabControl" data-i18n="tab.control">控制</div>
-        <div class="mcp-tab" data-target="tabConfig" data-i18n="tab.config">互联</div>
-        <div class="mcp-tab" data-target="tabSettings" data-i18n="tab.settings">设置</div>
-        <div class="mcp-tab" data-target="tabGuide" data-i18n="tab.guide">指南</div>
-      </div>
+      <div id="vueTabsRoot"></div>
 
       <!-- Tab Content -->
       <div class="mcp-tabs-container">
@@ -77,36 +65,11 @@ module.exports = Editor.Panel.define({
           <!-- 1. Status Tab -->
           <div class="mcp-tab-content active" id="tabStatus">
 
-            <div class="status-bar" id="statusBanner">
-              <div id="statusDot" class="status-dot offline"></div>
-              <span id="statusText" class="status-lbl status-text offline">Offline</span>
-              <span id="endpointValue" class="status-port"></span>
-            </div>
+            <div id="vueStatusBarRoot"></div>
 
-            <div id="updateBanner" class="update-banner" style="display:none;"></div>
+            <div id="offlineErrorPanel" class="offline-error-panel" style="display:none;"></div>
 
-            <div class="stats-list" id="bentoGrid">
-              <div class="stat-row">
-                <span class="stat-label" data-i18n="status.tools">TOOLS</span>
-                <span class="stat-value" id="toolCount">-</span>
-              </div>
-              <div class="stat-row">
-                <span class="stat-label" data-i18n="status.actions">ACTIONS</span>
-                <span class="stat-value" id="totalActionCount">-</span>
-              </div>
-              <div class="stat-row stat-row-clickable" id="clientsRow" data-i18n-title="status.clients_title" title="点击查看已连接的 AI 客户端">
-                <span class="stat-label" data-i18n="status.clients">CLIENTS</span>
-                <span class="stat-value" id="connectionCount">-</span>
-              </div>
-              <div class="clients-popover" id="clientsPopover" style="display:none;">
-                <div class="clients-popover-title" data-i18n="status.clients_title">已连接的 AI 客户端</div>
-                <div class="clients-popover-list" id="clientsPopoverList"></div>
-              </div>
-              <div class="stat-row">
-                <span class="stat-label" data-i18n="status.port">PORT</span>
-                <span class="stat-value" id="portValue">-</span>
-              </div>
-            </div>
+            <div id="vueStatsRoot"></div>
 
             <div class="project-card">
               <div class="proj-header">
@@ -133,236 +96,16 @@ module.exports = Editor.Panel.define({
           </div>
 
           <!-- 2. Control Tab -->
-          <div class="mcp-tab-content flex-column" id="tabControl">
-            <div class="control-header">
-              <h3 data-i18n="ctrl.title">服务管理</h3>
-              <p><span data-i18n="ctrl.current_status_prefix">当前服务状态：</span><span id="ctrlStatusLabel" style="color:#f14c4c;font-weight:600;" data-i18n="ctrl.stopped">已停止</span></p>
-            </div>
-            <div class="button-grid">
-              <button id="startBtn" class="btn btn-success" data-i18n="ctrl.start">▶ 启动服务</button>
-              <button id="stopBtn" class="btn btn-danger" data-i18n="ctrl.stop">■ 停止服务</button>
-            </div>
-            <button id="restartBtn" class="btn btn-holo-btn full-width" data-i18n="ctrl.restart">↻ 重启服务</button>
-
-            <div class="divider"></div>
-
-            <div class="control-header">
-              <h3 data-i18n="ctrl.tools_title">工具模块配置</h3>
-              <p data-i18n="ctrl.tools_desc">关闭的工具 AI 将完全无法感知，实时生效。</p>
-            </div>
-            <div id="toolToggleList" class="tool-toggle-list"></div>
-          </div>
+          <div id="vueControlRoot"></div>
 
           <!-- 3. IDE Config Tab -->
-          <div class="mcp-tab-content flex-column" id="tabConfig">
-            <div class="control-header">
-              <h3 data-i18n="cfg.title">IDE 互联配置</h3>
-              <p data-i18n="cfg.desc">一键将 Cocos 环境注入至主流 AI 编程助手。</p>
-            </div>
-            <div class="ide-status-list">
-              <div class="ide-card" id="ideCursor">
-                <div class="ide-info"><span class="ide-title">Cursor</span><span class="ide-status" id="statusCursor" data-i18n="cfg.detecting">检测中...</span></div>
-                <button class="btn config-ide-btn" data-ide="cursor" data-i18n="cfg.inject_button">注入配置</button>
-              </div>
-              <div class="ide-card" id="ideWindsurf">
-                <div class="ide-info"><span class="ide-title">Windsurf</span><span class="ide-status" id="statusWindsurf" data-i18n="cfg.detecting">检测中...</span></div>
-                <button class="btn config-ide-btn" data-ide="windsurf" data-i18n="cfg.inject_button">注入配置</button>
-              </div>
-              <div class="ide-card" id="ideClaude">
-                <div class="ide-info"><span class="ide-title">Claude Desktop</span><span class="ide-status" id="statusClaude">检测中...</span></div>
-                <button class="btn config-ide-btn" data-ide="claude">注入配置</button>
-              </div>
-              <div class="ide-card" id="ideTrae">
-                <div class="ide-info"><span class="ide-title">Trae</span><span class="ide-status" id="statusTrae" data-i18n="cfg.detecting">检测中...</span></div>
-                <button class="btn config-ide-btn" data-ide="trae" data-i18n="cfg.inject_button">注入配置</button>
-              </div>
-              <div class="ide-card" id="ideKiro">
-                <div class="ide-info"><span class="ide-title">Kiro AI IDE</span><span class="ide-status" id="statusKiro" data-i18n="cfg.detecting">检测中...</span></div>
-                <button class="btn config-ide-btn" data-ide="kiro" data-i18n="cfg.inject_button">注入配置</button>
-              </div>
-              <div class="ide-card" id="ideAntigravity">
-                <div class="ide-info"><span class="ide-title">Antigravity</span><span class="ide-status" id="statusAntigravity" data-i18n="cfg.detecting">检测中...</span></div>
-                <button class="btn config-ide-btn" data-ide="antigravity" data-i18n="cfg.inject_button">注入配置</button>
-              </div>
-              <div class="ide-card" id="ideGeminiCli">
-                <div class="ide-info"><span class="ide-title">Gemini CLI</span><span class="ide-status" id="statusGeminiCli" data-i18n="cfg.detecting">检测中...</span></div>
-                <button class="btn config-ide-btn" data-ide="gemini-cli" data-i18n="cfg.inject_button">注入配置</button>
-              </div>
-              <div class="ide-card" id="ideCodex">
-                <div class="ide-info"><span class="ide-title">OpenAI Codex</span><span class="ide-status" id="statusCodex" data-i18n="cfg.detecting">检测中...</span></div>
-                <button class="btn config-ide-btn" data-ide="codex" data-i18n="cfg.inject_button">注入配置</button>
-              </div>
-              <div class="ide-card" id="ideClaudeCode">
-                <div class="ide-info"><span class="ide-title">Claude Code</span><span class="ide-status" id="statusClaudeCode" data-i18n="cfg.detecting">检测中...</span></div>
-                <button class="btn config-ide-btn" data-ide="claude-code" data-i18n="cfg.inject_button">注入配置</button>
-              </div>
-              <div class="ide-card" id="ideCodebuddy">
-                <div class="ide-info"><span class="ide-title">CodeBuddy (腾讯)</span><span class="ide-status" id="statusCodebuddy" data-i18n="cfg.detecting">检测中...</span></div>
-                <button class="btn config-ide-btn" data-ide="codebuddy" data-i18n="cfg.inject_button">注入配置</button>
-              </div>
-              <div class="ide-card" id="ideComate">
-                <div class="ide-info"><span class="ide-title">Comate (百度)</span><span class="ide-status" id="statusComate" data-i18n="cfg.detecting">检测中...</span></div>
-                <button class="btn config-ide-btn" data-ide="comate" data-i18n="cfg.inject_button">注入配置</button>
-              </div>
-            </div>
-            <div class="config-result" id="configResult" style="display:none;">
-              <span id="configIcon"></span>
-              <span id="configMessage"></span>
-            </div>
-            <div class="info-box" data-i18n="cfg.hint">
-              本操作将当前端点写入 IDE 的 MCP 配置文件，您需要在目标 IDE 中刷新或重启生效。
-            </div>
-          </div>
+          <div id="vueConfigRoot"></div>
 
           <!-- 4. Settings Tab -->
-          <div class="mcp-tab-content flex-column" id="tabSettings">
-            <div class="control-header">
-              <h3 data-i18n="settings.license_title">License 授权</h3>
-              <p data-i18n="settings.license_desc">管理 Pro 版 License Key 激活状态。</p>
-            </div>
-            <div class="license-card" id="licenseCard">
-              <div class="license-status" id="licenseStatusSection">
-                <div class="license-badge" id="licenseBadge">
-                  <span class="license-edition" id="licenseEdition">Community</span>
-                  <span class="license-state community" id="licenseState">免费版</span>
-                </div>
-                <div class="license-detail" id="licenseDetail" style="display:none;">
-                  <span class="license-expiry" id="licenseExpiry"></span>
-                  <span class="license-owner" id="licenseOwner"></span>
-                </div>
-                <div class="license-error" id="licenseError" style="display:none;"></div>
-              </div>
-              <div class="license-input-row">
-                <input type="text" id="licenseKeyInput" class="license-input" placeholder="COCOS-PRO-XXXXXXXX-XXXXXXXX-XXXXXXXX" spellcheck="false" autocomplete="off" />
-                <button id="activateLicenseBtn" class="btn btn-primary btn-activate" data-i18n="settings.activate">激活</button>
-              </div>
-              <div class="license-hint" data-i18n="settings.license_hint">输入 License Key 后点击激活，需要重启插件使 Pro 工具生效。</div>
-              <button id="buyProBtn" class="btn btn-buy-pro" style="display:none;" data-i18n="settings.buy_pro">🛒 购买 Pro License</button>
-            </div>
-
-            <div class="divider"></div>
-
-            <div class="control-header">
-              <h3 data-i18n="settings.language_title">界面语言</h3>
-              <p data-i18n="settings.language_desc">设置面板显示语言，切换后立即生效。</p>
-            </div>
-            <div class="settings-card" style="gap:0;">
-              <div class="setting-item">
-                <div class="setting-info">
-                  <span class="setting-label" data-i18n="settings.language">语言</span>
-                  <span class="setting-hint" data-i18n="settings.language_hint">选择面板显示语言</span>
-                </div>
-                <select id="settingLanguage" class="setting-select"></select>
-              </div>
-            </div>
-
-            <div class="control-header">
-              <h3 data-i18n="settings.title">安全与性能</h3>
-              <p data-i18n="settings.desc">配置 MCP Bridge 的安全策略和性能参数。</p>
-            </div>
-            <div class="settings-card">
-              <div class="setting-item">
-                <div class="setting-info">
-                  <span class="setting-label" data-i18n="settings.rate_limit">Rate Limit (req/min)</span>
-                  <span class="setting-hint" data-i18n="settings.rate_limit_hint">每分钟允许的最大请求数 (10-10000)</span>
-                </div>
-                <input type="number" id="settingRateLimit" class="setting-input" min="10" max="10000" step="10" value="1200" />
-              </div>
-              <div class="setting-item">
-                <div class="setting-info">
-                  <span class="setting-label" data-i18n="settings.loopback">Localhost Restrict</span>
-                  <span class="setting-hint" data-i18n="settings.loopback_hint">开启时仅允许 127.0.0.1 访问</span>
-                </div>
-                <input type="checkbox" id="settingLoopback" class="tool-toggle" checked />
-              </div>
-              <div class="setting-warn" id="loopbackWarn" style="display:none;" data-i18n="settings.warn_loopback">⚠ 警告: 关闭回环限制将允许外部网段访问，请确保网络安全。</div>
-              <div class="setting-item">
-                <div class="setting-info">
-                  <span class="setting-label" data-i18n="settings.body_limit">Max Payload Size</span>
-                  <span class="setting-hint" data-i18n="settings.body_limit_hint">单次请求/返回的最大数据体积</span>
-                </div>
-                <select id="settingBodyLimit" class="setting-select">
-                  <option value="65536">64 KB</option>
-                  <option value="262144">256 KB</option>
-                  <option value="524288">512 KB</option>
-                  <option value="1048576" selected>1 MB</option>
-                  <option value="2097152">2 MB</option>
-                  <option value="5242880">5 MB</option>
-                  <option value="10485760">10 MB</option>
-                  <option value="52428800">50 MB</option>
-                </select>
-              </div>
-              <div class="setting-item">
-                <div class="setting-info">
-                  <span class="setting-label" data-i18n="settings.rollback">自动回滚</span>
-                  <span class="setting-hint" data-i18n="settings.rollback_hint">复杂原子操作失败时自动恢复场景</span>
-                </div>
-                <input type="checkbox" id="settingRollback" class="tool-toggle" checked />
-              </div>
-            </div>
-            <div class="button-grid" style="margin-top:12px;">
-              <button id="saveSettingsBtn" class="btn btn-primary" data-i18n="settings.save">保存配置</button>
-              <button id="resetSettingsBtn" class="btn" data-i18n="settings.reset">恢复默认</button>
-            </div>
-            <div class="config-result" id="settingsResult" style="display:none;">
-              <span id="settingsIcon"></span>
-              <span id="settingsMessage"></span>
-            </div>
-          </div>
+          <div id="vueSettingsRoot"></div>
 
           <!-- 5. Guide Tab -->
-          <div class="mcp-tab-content flex-column" id="tabGuide">
-            <div class="control-header">
-              <h3 data-i18n="guide.title">交互指南</h3>
-              <p data-i18n="guide.desc">建议使用如下对话模式驱动引擎工作。</p>
-            </div>
-            <div class="guide-steps">
-              <div class="guide-step">
-                <div class="step-number">1</div>
-                <div class="step-content">
-                  <div class="step-title" data-i18n="guide.step1_title">确认服务连通性</div>
-                  <div class="step-desc" data-i18n="guide.step1_desc">在 IDE 中检查 MCP Status，或提问 &quot;请测试一下 Cocos 桥接状态&quot;。</div>
-                </div>
-              </div>
-              <div class="guide-step">
-                <div class="step-number">2</div>
-                <div class="step-content">
-                  <div class="step-title" data-i18n="guide.step2_title">选定操作目标</div>
-                  <div class="step-desc" data-i18n="guide.step2_desc">若要修改现有节点，请先在层级树选中，再对 AI 说 &quot;把当前选中的节点...&quot;。</div>
-                </div>
-              </div>
-              <div class="guide-step">
-                <div class="step-number">3</div>
-                <div class="step-content">
-                  <div class="step-title" data-i18n="guide.step3_title">检查执行结果</div>
-                  <div class="step-desc" data-i18n="guide.step3_desc">AI 拥有读写双向能力，修改后编辑器内实时刷新，效果不对可说 &quot;撤销刚才的修改&quot;。</div>
-                </div>
-              </div>
-            </div>
-            <div class="divider"></div>
-            <div class="control-header">
-              <h3 data-i18n="guide.examples_title">示例提示词</h3>
-            </div>
-            <div class="prompt-list">
-              <button class="prompt-card">
-                <span class="prompt-tag" data-i18n="guide.tag_scene">场景查询</span>
-                <div class="prompt-text" data-i18n="guide.prompt1">帮我分析当前场景的根节点结构，列出所有 Canvas 下的子节点。</div>
-                <div class="prompt-copy" data-i18n-title="copy.title" title="复制">⎘</div>
-              </button>
-              <button class="prompt-card">
-                <span class="prompt-tag" data-i18n="guide.tag_create">实例创建</span>
-                <div class="prompt-text" data-i18n="guide.prompt2">在当前选中的节点下，创建一个名为 &quot;LoginButton&quot; 的按钮，并添加 Widget 居中。</div>
-                <div class="prompt-copy" data-i18n-title="copy.title" title="复制">⎘</div>
-              </button>
-            </div>
-            <div class="info-box guide-tips">
-              <div class="tips-title" data-i18n="guide.tips_title">开发建议</div>
-              <ul class="tips-list">
-                <li data-i18n="guide.tip1">尽量遵循单指令单操作，避免一条对话发布多个复杂引擎改动。</li>
-                <li data-i18n="guide.tip2">若 AI 提示组件未导入，请先确保项目中已存在继承自 cc.Component 的脚本。</li>
-              </ul>
-            </div>
-          </div>
+          <div id="vueGuideRoot"></div>
 
         </div><!-- /mcp-tabs-container -->
 
@@ -372,7 +115,8 @@ module.exports = Editor.Panel.define({
       </div>
 
     </div>
-\n  `,
+
+  `,
 
   style: /* css */ `\n
     html, body { background: #18181b !important; margin: 0; padding: 0; }
@@ -712,6 +456,10 @@ module.exports = Editor.Panel.define({
       background: linear-gradient(180deg, rgba(239,68,68,0.15), rgba(220,38,38,0.25));
       border-color: rgba(239,68,68,0.6); color: #fca5a5; box-shadow: 0 4px 12px rgba(239,68,68,0.15), inset 0 1px 0 rgba(255,255,255,0.05);
     }
+    .btn-disabled { opacity: 0.35; pointer-events: none; }
+    .btn-restarting { background: linear-gradient(180deg, rgba(125,211,252,0.16), rgba(14,165,233,0.16)); color: #7dd3fc; border-color: rgba(125,211,252,0.35); box-shadow: 0 0 0 1px rgba(125,211,252,0.08) inset, 0 6px 16px rgba(14,165,233,0.12); }
+    .btn-restarting::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent); transform: translateX(-100%); animation: restartSweep 1.4s linear infinite; }
+    @keyframes restartSweep { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
 
     .btn-holo-btn {
       background: linear-gradient(180deg, #27272a, #18181b); color: #7dd3fc;
@@ -910,6 +658,19 @@ module.exports = Editor.Panel.define({
     }
     .config-result.success { background: rgba(94,234,212,0.08); border-color: rgba(94,234,212,0.25); color: #5eead4; }
     .config-result.error { background: rgba(241,76,76,0.08); border-color: rgba(241,76,76,0.25); color: #f14c4c; }
+    .offline-error-panel { margin: 12px 0; }
+    .offline-error-card { width: 100%; background: linear-gradient(180deg, rgba(127,29,29,0.18), rgba(69,10,10,0.12)); border: 1px solid rgba(248,113,113,0.25); border-radius: 12px; padding: 14px; box-shadow: 0 8px 24px rgba(0,0,0,0.24); display: flex; flex-direction: column; gap: 12px; }
+    .offline-error-head { display: flex; align-items: flex-start; gap: 12px; }
+    .offline-error-icon { width: 28px; height: 28px; border-radius: 999px; display: flex; align-items: center; justify-content: center; background: rgba(248,113,113,0.14); color: #fca5a5; border: 1px solid rgba(248,113,113,0.35); font-weight: 800; flex-shrink: 0; }
+    .offline-error-head-text { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+    .offline-error-title { font-size: 14px; font-weight: 700; color: #fecaca; letter-spacing: 0.2px; }
+    .offline-error-subtitle { font-size: 12px; color: #fca5a5; opacity: 0.92; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+    .offline-error-detail { max-height: 120px; overflow: auto; white-space: pre-wrap; word-break: break-word; font-family: 'SF Mono', Consolas, 'Courier New', monospace; font-size: 11px; line-height: 1.5; color: #f8fafc; background: rgba(15,23,42,0.45); border: 1px solid rgba(148,163,184,0.12); border-radius: 10px; padding: 10px 12px; }
+    .offline-error-support { display: flex; flex-direction: column; gap: 8px; }
+    .offline-error-support-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; color: #fecaca; font-size: 12px; }
+    .offline-error-support-row span { color: #fca5a5; }
+    .offline-error-link { border: none; background: transparent; color: #7dd3fc; cursor: pointer; font: inherit; padding: 0; text-align: right; }
+    .offline-error-actions { display: flex; gap: 8px; flex-wrap: wrap; }
 
     /* ===== LICENSE CARD ===== */
     .license-card {
@@ -1055,7 +816,7 @@ module.exports = Editor.Panel.define({
   \n  `,
 
   $: {
-    app: '#app', bentoGrid: '#bentoGrid', holoBadge: '#holoBadge',
+    app: '#app', bentoGrid: '#bentoGrid', holoBadge: '#holoBadge', vueHeaderRoot: '#vueHeaderRoot', vueTabsRoot: '#vueTabsRoot', vueStatusBarRoot: '#vueStatusBarRoot', offlineErrorPanel: '#offlineErrorPanel',
     statusDot: '#statusDot', statusText: '#statusText',
     portValue: '#portValue', endpointValue: '#endpointValue',
     projectName: '#projectName', projectPath: '#projectPath', editorVersion: '#editorVersion', toolCount: '#toolCount', connectionCount: '#connectionCount', totalActionCount: '#totalActionCount',
@@ -1089,6 +850,84 @@ module.exports = Editor.Panel.define({
 
   ready() {
     const self = this;
+    const vueHeaderRoot = self.$.app.querySelector('#vueHeaderRoot');
+    const vueTabsRoot = self.$.app.querySelector('#vueTabsRoot');
+    const vueStatusBarRoot = self.$.app.querySelector('#vueStatusBarRoot');
+    const vueStatsRoot = self.$.app.querySelector('#vueStatsRoot');
+    const vueConfigRoot = self.$.app.querySelector('#vueConfigRoot');
+    const vueSettingsRoot = self.$.app.querySelector('#vueSettingsRoot');
+    const vueGuideRoot = self.$.app.querySelector('#vueGuideRoot');
+    const vueControlRoot = self.$.app.querySelector('#vueControlRoot');
+    if (vueHeaderRoot) {
+      vueHeaderApp = mountVueHeader(vueHeaderRoot);
+      self.$.holoBadge = self.$.app.querySelector('#holoBadge');
+      self.$.userBtn = self.$.app.querySelector('#userBtn');
+    }
+    if (vueTabsRoot) {
+      vueTabsApp = mountVueTabs(vueTabsRoot);
+    }
+    if (vueStatusBarRoot) {
+      vueStatusBarApp = mountVueStatusBar(vueStatusBarRoot);
+      self.$.statusDot = self.$.app.querySelector('#statusDot');
+      self.$.statusText = self.$.app.querySelector('#statusText');
+      self.$.endpointValue = self.$.app.querySelector('#endpointValue');
+      self.$.statusBanner = self.$.app.querySelector('#statusBanner');
+    }
+    if (vueStatsRoot) {
+      vueStatsApp = mountVueStats(vueStatsRoot);
+      self.$.bentoGrid = self.$.app.querySelector('#bentoGrid');
+      self.$.toolCount = self.$.app.querySelector('#toolCount');
+      self.$.connectionCount = self.$.app.querySelector('#connectionCount');
+      self.$.totalActionCount = self.$.app.querySelector('#totalActionCount');
+      self.$.portValue = self.$.app.querySelector('#portValue');
+      self.$.clientsRow = self.$.app.querySelector('#clientsRow');
+      self.$.clientsPopover = self.$.app.querySelector('#clientsPopover');
+      self.$.clientsPopoverList = self.$.app.querySelector('#clientsPopoverList');
+      self.$.updateBanner = self.$.app.querySelector('#updateBanner');
+    }
+    if (vueControlRoot) {
+      vueControlApp = mountVueControl(vueControlRoot);
+      self.$.ctrlStatusLabel = self.$.app.querySelector('#ctrlStatusLabel');
+      self.$.startBtn = self.$.app.querySelector('#startBtn');
+      self.$.stopBtn = self.$.app.querySelector('#stopBtn');
+      self.$.restartBtn = self.$.app.querySelector('#restartBtn');
+    if (self.$.restartBtn) self.$.restartBtn.setAttribute('title', '重启服务并刷新状态');
+      self.$.toolToggleList = self.$.app.querySelector('#toolToggleList');
+    }
+    if (vueConfigRoot) {
+      vueConfigApp = mountVueConfig(vueConfigRoot);
+      self.$.configResult = self.$.app.querySelector('#configResult');
+      self.$.configIcon = self.$.app.querySelector('#configIcon');
+      self.$.configMessage = self.$.app.querySelector('#configMessage');
+    }
+    if (vueSettingsRoot) {
+      vueSettingsApp = mountVueSettings(vueSettingsRoot);
+      self.$.licenseCard = self.$.app.querySelector('#licenseCard');
+      self.$.licenseBadge = self.$.app.querySelector('#licenseBadge');
+      self.$.licenseEdition = self.$.app.querySelector('#licenseEdition');
+      self.$.licenseState = self.$.app.querySelector('#licenseState');
+      self.$.licenseDetail = self.$.app.querySelector('#licenseDetail');
+      self.$.licenseExpiry = self.$.app.querySelector('#licenseExpiry');
+      self.$.licenseOwner = self.$.app.querySelector('#licenseOwner');
+      self.$.licenseError = self.$.app.querySelector('#licenseError');
+      self.$.licenseKeyInput = self.$.app.querySelector('#licenseKeyInput');
+      self.$.activateLicenseBtn = self.$.app.querySelector('#activateLicenseBtn');
+      self.$.buyProBtn = self.$.app.querySelector('#buyProBtn');
+      self.$.settingLanguage = self.$.app.querySelector('#settingLanguage');
+      self.$.settingRateLimit = self.$.app.querySelector('#settingRateLimit');
+      self.$.settingLoopback = self.$.app.querySelector('#settingLoopback');
+      self.$.settingBodyLimit = self.$.app.querySelector('#settingBodyLimit');
+      self.$.settingRollback = self.$.app.querySelector('#settingRollback');
+      self.$.loopbackWarn = self.$.app.querySelector('#loopbackWarn');
+      self.$.saveSettingsBtn = self.$.app.querySelector('#saveSettingsBtn');
+      self.$.resetSettingsBtn = self.$.app.querySelector('#resetSettingsBtn');
+      self.$.settingsResult = self.$.app.querySelector('#settingsResult');
+      self.$.settingsIcon = self.$.app.querySelector('#settingsIcon');
+      self.$.settingsMessage = self.$.app.querySelector('#settingsMessage');
+    }
+    if (vueGuideRoot) {
+      vueGuideApp = mountVueGuide(vueGuideRoot);
+    }
     self.$.versionText.textContent = EXTENSION_VERSION;
 
     // ---- i18n setup ----
@@ -1605,8 +1444,16 @@ module.exports = Editor.Panel.define({
     });
 
     self.$.restartBtn.addEventListener('click', () => {
+      const dict = I18N[currentLang] || I18N.zh;
+      const btn = self.$.restartBtn;
+      if (!btn || btn.classList.contains('btn-disabled')) return;
+      btn.classList.add('btn-disabled', 'btn-restarting');
+      btn.textContent = dict['ctrl.restart_waiting'] || '⏳ 重启中...';
+      self._restartPending = true;
+      self._restartRequestedAt = Date.now();
       Editor.Message.send(EXTENSION_NAME, 'restart-server');
       setTimeout(() => self.refreshStatus(), 1000);
+      setTimeout(() => self.refreshStatus(), 2500);
     });
 
     // ---- Clients Popover ----
@@ -1850,6 +1697,38 @@ module.exports = Editor.Panel.define({
     if (this._loadingHideTimer) { clearTimeout(this._loadingHideTimer); this._loadingHideTimer = null; }
     if (this._loadingFadeTimer) { clearTimeout(this._loadingFadeTimer); this._loadingFadeTimer = null; }
     if (this._loadingForceHideTimer) { clearTimeout(this._loadingForceHideTimer); this._loadingForceHideTimer = null; }
+    if (vueGuideApp && typeof vueGuideApp.unmount === 'function') {
+      vueGuideApp.unmount();
+      vueGuideApp = null;
+    }
+    if (vueSettingsApp && typeof vueSettingsApp.unmount === 'function') {
+      vueSettingsApp.unmount();
+      vueSettingsApp = null;
+    }
+    if (vueConfigApp && typeof vueConfigApp.unmount === 'function') {
+      vueConfigApp.unmount();
+      vueConfigApp = null;
+    }
+    if (vueControlApp && typeof vueControlApp.unmount === 'function') {
+      vueControlApp.unmount();
+      vueControlApp = null;
+    }
+    if (vueStatsApp && typeof vueStatsApp.unmount === 'function') {
+      vueStatsApp.unmount();
+      vueStatsApp = null;
+    }
+    if (vueStatusBarApp && typeof vueStatusBarApp.unmount === 'function') {
+      vueStatusBarApp.unmount();
+      vueStatusBarApp = null;
+    }
+    if (vueTabsApp && typeof vueTabsApp.unmount === 'function') {
+      vueTabsApp.unmount();
+      vueTabsApp = null;
+    }
+    if (vueHeaderApp && typeof vueHeaderApp.unmount === 'function') {
+      vueHeaderApp.unmount();
+      vueHeaderApp = null;
+    }
   },
 
   methods: {
@@ -1917,6 +1796,8 @@ module.exports = Editor.Panel.define({
         const info = await Editor.Message.request(EXTENSION_NAME, 'get-service-info');
         if (requestSeq !== self._refreshSeq) return;
         if (info && info.running) {
+          self._lastServiceInfo = info;
+          self._restartPending = false;
           self.$.statusDot.className = 'status-dot online';
           self.$.statusText.className = 'status-text online';
           const dict = (self._I18N && (self._I18N[self._currentLang] || self._I18N.zh)) || {};
@@ -1930,8 +1811,11 @@ module.exports = Editor.Panel.define({
           self.$.emptyState.style.display = 'none';
           self.$.portValue.textContent = String(info.port);
           self.$.endpointValue.textContent = info.bridgeBase ? `${info.bridgeBase}/mcp` : '-';
-          self.$.projectName.textContent = info.projectName || '-';
-          self.$.projectPath.textContent = info.projectPath || '-';
+          self._lastServiceInfo = info;
+          self._projectFallbackName = info.projectName || self._projectFallbackName || '-';
+          self._projectFallbackPath = info.projectPath || self._projectFallbackPath || '-';
+          self.$.projectName.textContent = info.projectName || self._projectFallbackName || '-';
+          self.$.projectPath.textContent = info.projectPath || self._projectFallbackPath || '-';
           self.$.editorVersion.textContent = info.editorVersion || '-';
 
           self.updateWithFlash(self.$.connectionCount, info.connectionCount ?? 0);
@@ -1960,11 +1844,11 @@ module.exports = Editor.Panel.define({
 
           if (info.configStatus) {
             const updateStat = (id, ideKey, exists) => {
-              const el = self.$[id];
+              const el = self.$[id] || self.$.app.querySelector(`#${id}`);
+              if (!el) return;
               const dict = (self._I18N && (self._I18N[self._currentLang] || self._I18N.zh)) || {};
               el.textContent = exists ? (dict['cfg.ready'] || '配置已就绪') : (dict['cfg.unready'] || '未检测到配置');
               el.className = `ide-status ${exists ? 'ready' : 'unready'}`;
-              // 同步按钮状态
               const btn = self.$.app.querySelector(`.config-ide-btn[data-ide="${ideKey}"]`);
               if (btn && !btn.hasAttribute('disabled')) {
                 if (exists) {
@@ -1989,7 +1873,7 @@ module.exports = Editor.Panel.define({
             updateStat('statusComate', 'comate', info.configStatus.comate);
           }
         } else {
-          self.setOffline();
+          self.setOffline(info);
         }
 
         // Always update license badge regardless of running state
@@ -2003,7 +1887,7 @@ module.exports = Editor.Panel.define({
       } catch (e) {
         if (requestSeq !== self._refreshSeq) return;
         console.warn('[Aura] refreshStatus 异常:', e);
-        self.setOffline();
+        self.setOffline({ error: e });
       } finally {
         self._refreshInFlight = false;
         // 首次加载完成后尽快淡出遮罩，只保留很短的最小显示时间避免闪烁。
@@ -2018,29 +1902,108 @@ module.exports = Editor.Panel.define({
       }
     },
 
-    setOffline() {
+    setOffline(reason = null) {
       const self = this;
-      self.$.statusDot.className = 'status-dot offline';
-      self.$.statusText.className = 'status-text offline';
       const dict = (self._I18N && (self._I18N[self._currentLang] || self._I18N.zh)) || {};
-      self.$.statusText.textContent = dict['status.offline'] || 'Offline';
-      self.$.startBtn.classList.remove('btn-disabled');
-      self.$.stopBtn.classList.add('btn-disabled');
-      self.$.ctrlStatusLabel.textContent = dict['ctrl.stopped'] || '已停止';
-      self.$.ctrlStatusLabel.style.color = '#ef4444';
-      self.$.bentoGrid.classList.remove('loading');
-      self.$.bentoGrid.style.display = 'none';
-      self.$.emptyState.style.display = 'flex';
-      self.$.portValue.textContent = '-';
-      self.$.endpointValue.textContent = '-';
-      self.$.projectName.textContent = '-';
-      self.$.projectPath.textContent = '-';
-      self.$.editorVersion.textContent = '-';
-
-      self.$.connectionCount.textContent = '-';
-      self.$.toolCount.textContent = '-';
-      self.$.totalActionCount.textContent = '-';
-      self.$.uptime.textContent = '-';
+      const safeSet = (el, value) => { if (el) el.textContent = value; };
+      const safeClass = (el, cls) => { if (el) el.className = cls; };
+      const lastInfo = self._lastServiceInfo || {};
+      const offlineText = reason && reason.error
+        ? (dict['status.error'] || 'Error')
+        : (dict['status.offline'] || 'Offline');
+      safeClass(self.$.statusDot, 'status-dot offline');
+      safeClass(self.$.statusText, 'status-text offline');
+      safeSet(self.$.statusText, offlineText);
+      if (self.$.restartBtn) {
+        const restarting = !!self._restartPending;
+        self.$.restartBtn.classList.toggle('btn-disabled', restarting);
+        self.$.restartBtn.classList.toggle('btn-restarting', restarting);
+        self.$.restartBtn.textContent = restarting
+          ? (dict['ctrl.restart_waiting'] || '⏳ 重启中...')
+          : (dict['ctrl.restart'] || '↻ 重启服务');
+      }
+      if (self.$.statusText) {
+        self.$.statusText.style.cursor = reason && reason.error ? 'pointer' : 'default';
+        self.$.statusText.title = reason && reason.error ? (dict['status.click_to_view_error'] || '点击查看报错详情') : '';
+      }
+      if (self.$.offlineErrorPanel) {
+        if (reason && reason.error) {
+          const message = String(reason.error.message || reason.error);
+          const shortMessage = message.split('\n').find(Boolean) || message;
+          const supportQQ = '33855846';
+          const supportEmail = 'jiangkingwelcome@vip.qq.com';
+          const feedbackUrl = `mailto:${supportEmail}?subject=${encodeURIComponent('Aura for Cocos Error Report')}&body=${encodeURIComponent(`QQ: ${supportQQ}\n\nError:\n${message}`)}`;
+          self.$.offlineErrorPanel.style.display = 'flex';
+          self.$.offlineErrorPanel.innerHTML = `
+            <div class="offline-error-card">
+              <div class="offline-error-head">
+                <div class="offline-error-icon">!</div>
+                <div class="offline-error-head-text">
+                  <div class="offline-error-title">${dict['status.error'] || 'Error'}</div>
+                  <div class="offline-error-subtitle">${shortMessage}</div>
+                </div>
+              </div>
+              <div class="offline-error-detail">${message.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</div>
+              <div class="offline-error-support">
+                <div class="offline-error-support-row"><span>QQ</span><button class="offline-error-link" data-support="qq">${supportQQ}</button></div>
+                <div class="offline-error-support-row"><span>Email</span><button class="offline-error-link" data-support="email">${supportEmail}</button></div>
+              </div>
+              <div class="offline-error-actions">
+                <button class="btn btn-holo-btn offline-error-copy">${dict['copy.title'] || '复制'}</button>
+                <button class="btn btn-primary offline-error-feedback">${dict['status.feedback'] || '反馈问题'}</button>
+              </div>
+            </div>
+          `;
+          const copyBtn = self.$.offlineErrorPanel.querySelector('.offline-error-copy');
+          const feedbackBtn = self.$.offlineErrorPanel.querySelector('.offline-error-feedback');
+          const qqBtn = self.$.offlineErrorPanel.querySelector('[data-support="qq"]');
+          const emailBtn = self.$.offlineErrorPanel.querySelector('[data-support="email"]');
+          const copyText = `${shortMessage}\n\n${message}`;
+          if (copyBtn) copyBtn.addEventListener('click', async () => { try { await navigator.clipboard.writeText(copyText); } catch { } });
+          if (feedbackBtn) feedbackBtn.addEventListener('click', () => { try { Editor.Message.send('editor', 'open-url', feedbackUrl); } catch { } });
+          if (qqBtn) qqBtn.addEventListener('click', async () => { try { await navigator.clipboard.writeText(supportQQ); } catch { } });
+          if (emailBtn) emailBtn.addEventListener('click', async () => { try { await navigator.clipboard.writeText(supportEmail); } catch { } });
+        } else {
+          self.$.offlineErrorPanel.style.display = 'none';
+          self.$.offlineErrorPanel.innerHTML = '';
+        }
+      }
+      if (self.$.startBtn) self.$.startBtn.classList.remove('btn-disabled');
+      if (self.$.stopBtn) self.$.stopBtn.classList.add('btn-disabled');
+      safeSet(self.$.ctrlStatusLabel, dict['ctrl.stopped'] || '已停止');
+      if (self.$.ctrlStatusLabel) self.$.ctrlStatusLabel.style.color = '#ef4444';
+      if (self.$.bentoGrid) { self.$.bentoGrid.classList.remove('loading'); self.$.bentoGrid.style.display = 'none'; }
+      if (self.$.emptyState) self.$.emptyState.style.display = 'flex';
+      safeSet(self.$.portValue, lastInfo.port != null ? String(lastInfo.port) : '-');
+      safeSet(self.$.endpointValue, lastInfo.bridgeBase ? `${lastInfo.bridgeBase}/mcp` : '-');
+      safeSet(self.$.projectName, lastInfo.projectName || self._projectFallbackName || '-');
+      safeSet(self.$.projectPath, lastInfo.projectPath || self._projectFallbackPath || (dict['status.offline_hint'] || '本地目录')); 
+      safeSet(self.$.editorVersion, lastInfo.editorVersion || '-');
+      safeSet(self.$.connectionCount, '-');
+      safeSet(self.$.toolCount, '-');
+      safeSet(self.$.totalActionCount, '-');
+      safeSet(self.$.uptime, '-');
+      if (self.$.refreshBtn) {
+        self.$.refreshBtn.textContent = reason && reason.error ? (dict['status.retry'] || '重试') : (dict['status.refresh'] || '刷新');
+      }
+      if (self.$.bentoGrid && reason && reason.error) {
+        self.$.bentoGrid.setAttribute('data-offline-reason', String(reason.error.message || reason.error));
+      }
+      if (self.$.statusText) {
+        self.$.statusText.onclick = reason && reason.error ? () => {
+          const msg = String(reason.error.message || reason.error);
+          try {
+            Editor.Dialog.info(msg, {
+              title: dict['status.error'] || 'Error',
+              buttons: [dict['dialog.ok'] || '确定'],
+              default: 0,
+              cancel: 0,
+            });
+          } catch {
+            console.warn('[Aura] 离线报错详情:', msg);
+          }
+        } : null;
+      }
     },
 
     showConfigResult(result) {
