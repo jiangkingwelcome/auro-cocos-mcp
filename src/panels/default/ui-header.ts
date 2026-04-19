@@ -20,16 +20,6 @@ function renderLogoSvg() {
     svgEl('path', { d: 'M22.95 10.38L21.36 13.14L28.16 24.96H30.43L22.95 12V10.38Z', fill: '#A1A1AA' }),
     svgEl('path', { d: 'M19.34 6.78003L15.35 13.67L22.14 24.93H24.52L19.34 16.33V6.78003Z', fill: '#D4D4D8' }),
     svgEl('path', { d: 'M10 24.93L15.75 14L21.5 24.93H10Z', fill: '#71717A' }),
-    svgEl('text', {
-      x: '20.5',
-      y: '32',
-      fill: '#71717A',
-      'font-size': '6.5',
-      'font-family': '-apple-system, sans-serif',
-      'font-weight': '700',
-      'letter-spacing': '0.5',
-      'text-anchor': 'middle',
-    }, [document.createTextNode('AURA')]),
   ]);
 }
 
@@ -57,7 +47,7 @@ export function mountVueHeader(targetEl) {
   logo.className = 'logo-icon';
   logo.appendChild(renderLogoSvg());
 
-  const brand = document.createElement('div');
+  const brand = document.createElement('span');
   brand.className = 'brand-container';
   const brandText = document.createElement('span');
   brandText.className = 'brand-txt-aura';

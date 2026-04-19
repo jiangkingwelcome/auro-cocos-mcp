@@ -9,7 +9,7 @@ import { mountVueControl } from './ui-control';
 import { mountVueConfig } from './ui-config';
 import { mountVueSettings } from './ui-settings';
 import { mountVueGuide } from './ui-guide';
-import { startPanelHotReload, stopPanelHotReload } from './ui-hot-reload';
+import { startPanelHotReload } from './ui-hot-reload';
 
 // 在 JS 文件执行的第一时间（模板渲染前）把 webview 背景压黑，消除白色第一帧
 try {
@@ -147,7 +147,7 @@ module.exports = Editor.Panel.define({
 
     /* ===== HEADER ===== */
     .panel-header {
-      display: flex; align-items: center; padding: 14px 18px 10px; gap: 10px;
+      display: flex; align-items: center; padding: 14px 18px 10px; gap: 12px;
       background: transparent;
       flex-shrink: 0;
     }
@@ -155,13 +155,22 @@ module.exports = Editor.Panel.define({
       width: 32px; height: 32px; flex-shrink: 0; display: flex; justify-content: center; align-items: center;
     }
     .brand-container {
-      display: flex; align-items: baseline; gap: 4px; padding-left: 2px;
+      display: inline-flex; align-items: center; justify-content: center;
+      padding: 0; margin-left: 2px;
+      background: transparent !important;
+      border: 0 !important;
+      box-shadow: none !important;
+      outline: none !important;
+      min-height: 0;
+      border-radius: 0;
+      appearance: none;
+      -webkit-appearance: none;
     }
-    .brand-txt-aura { font-size: 18px; font-weight: 600; color: #f4f4f5; font-family: -apple-system, sans-serif; letter-spacing: -0.01em; }
+    .brand-txt-aura { display: inline-block; font-size: 16px; font-weight: 700; color: #f4f4f5; font-family: -apple-system, sans-serif; letter-spacing: -0.02em; line-height: 1; margin-left: 0; background: transparent; }
     
     .holo-badge {
       display: inline-flex;
-      margin-left: 8px; align-items: baseline;
+      margin-left: 2px; align-items: baseline;
     }
     .holo-badge-inner {
       color: #71717a; /* Sleek slate gray color */
